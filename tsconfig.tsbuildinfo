@@ -477,13 +477,13 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "4903d5b57425085d4c32816b84e83cdc9d0daef30bff81634998f9d7bec680a2",
-        "signature": "e5f809ea618d7191363e231856d082e3fcd8d999acff12caa3c73db6158df983",
+        "version": "5b9d8f1182f139b6c8e6bf60274980036c22ec18cd08042d7f506057a511baac",
+        "signature": "083043115c7025cb3d347e60d05e9e7614c187df692a06e92d7e96c857671d68",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "8c5ff2302f2437cf82d8e38e0c3add02eef449d181dbac6c7107c99ec6050de6",
-        "signature": "e62a4ffa388523e1beae78b33d0eda92bbdc244ef9425803f5abf104978bc00e",
+        "version": "944877b902fb310f308a7e927940b875be8afdb9b01b530d4f5aff62fc5ea117",
+        "signature": "d894301436246b92038c62aea6538747790a1c57f7e3dc2fab02285740cb8571",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -1137,7 +1137,6 @@
         "./node_modules/interfaces/dist/index.d.ts"
       ],
       "./src/making-order.ts": [
-        "./node_modules/interfaces/dist/data.d.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],

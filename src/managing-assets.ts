@@ -4,7 +4,7 @@ import {
     LimitOrder,
     OrderId,
     RawTrade,
-    Side,
+    Side, ASK,
     LONG, SHORT,
 } from './interfaces';
 import {
@@ -41,13 +41,13 @@ class ManagingAssets extends MakingOrder {
         const cost = volume > this.assets.position[1 - side] - EPSILON
             ? this.assets.cost[1 - side]
             : volume * costPrice;
-        const realizedProfit
-            = (1 - side - side)
-            * (dollarVolume - cost);
+        const realizedProfit = side === ASK
+            ? dollarVolume - cost
+            : cost - dollarVolume;
         this.assets.balance += realizedProfit;
         this.assets.position[1 - side] -= volume;
         this.assets.cost[1 - side] -= cost;
-        this.calcAssets();
+        this.resetMargin();
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
@@ -117,10 +117,10 @@ class ManagingAssets extends MakingOrder {
         this.assets.balance += unrealizedProfit;
         this.assets.cost[LONG] = price * position[LONG];
         this.assets.cost[SHORT] = price * position[SHORT];
-        this.calcAssets();
+        this.resetMargin();
     }
 
-    private calcAssets() {
+    private resetMargin() {
         const {
             cost,
             leverage,

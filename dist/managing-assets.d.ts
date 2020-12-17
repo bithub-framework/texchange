@@ -11,6 +11,6 @@ declare class ManagingAssets extends MakingOrder {
     updateTrades(rawTrades: RawTrade[]): void;
     protected rawTradeTakesOpenOrders(_rawTrade: RawTrade): void;
     private settle;
-    private calcAssets;
+    private resetMargin;
 }
 export { ManagingAssets as default, ManagingAssets, };

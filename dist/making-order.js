@@ -21,9 +21,11 @@ class MakingOrder extends Pushing {
         return [...this.openOrders.values()];
     }
     rawTradeShouldTakeOpenOrder(rawTrade, maker) {
-        return maker.side !== rawTrade.side &&
-            (maker.side - rawTrade.side) * (maker.price - rawTrade.price)
-                > EPSILON;
+        return ((maker.side === BID &&
+            rawTrade.side === ASK &&
+            maker.price > rawTrade.price + EPSILON) || (maker.side === ASK &&
+            rawTrade.side === BID &&
+            rawTrade.price > maker.price + EPSILON));
     }
     rawTradeTakesOpenOrder(rawTrade, maker) {
         let volume;
@@ -82,7 +84,7 @@ class MakingOrder extends Pushing {
             taker,
             rawTrades,
             volume,
-            dollarVolume
+            dollarVolume,
         ];
     }
     orderMakes(order) {

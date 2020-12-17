@@ -1,5 +1,5 @@
 import { MakingOrder } from './making-order';
-import { LONG, SHORT, } from './interfaces';
+import { ASK, LONG, SHORT, } from './interfaces';
 import { EPSILON, } from './config';
 class ManagingAssets extends MakingOrder {
     constructor(assets, now) {
@@ -17,12 +17,13 @@ class ManagingAssets extends MakingOrder {
         const cost = volume > this.assets.position[1 - side] - EPSILON
             ? this.assets.cost[1 - side]
             : volume * costPrice;
-        const realizedProfit = (1 - side - side)
-            * (dollarVolume - cost);
+        const realizedProfit = side === ASK
+            ? dollarVolume - cost
+            : cost - dollarVolume;
         this.assets.balance += realizedProfit;
         this.assets.position[1 - side] -= volume;
         this.assets.cost[1 - side] -= cost;
-        this.calcAssets();
+        this.resetMargin();
     }
     async makeLimitOrder(order) {
         if (!order.open &&
@@ -75,9 +76,9 @@ class ManagingAssets extends MakingOrder {
         this.assets.balance += unrealizedProfit;
         this.assets.cost[LONG] = price * position[LONG];
         this.assets.cost[SHORT] = price * position[SHORT];
-        this.calcAssets();
+        this.resetMargin();
     }
-    calcAssets() {
+    resetMargin() {
         const { cost, leverage, balance, margin, } = this.assets;
         this.assets.margin[LONG] = cost[LONG] / leverage;
         this.assets.margin[SHORT] = cost[SHORT] / leverage;
