@@ -1,17 +1,21 @@
 import { ManagingAssets } from './managing-assets';
+import { clone } from 'ramda';
 import {
     Assets,
     LimitOrder,
-    BID,
     OrderId,
     RawTrade,
+    ContextMarketPublicApiLike,
+    ContextAccountPrivateApiLike,
 } from './interfaces';
 import {
     PING,
     PROCESSING,
 } from './config';
 
-class Texchange extends ManagingAssets {
+class Texchange extends ManagingAssets implements
+    ContextMarketPublicApiLike,
+    ContextAccountPrivateApiLike {
     constructor(
         assets: Assets,
         private sleep: (ms: number) => Promise<void>,
@@ -20,13 +24,10 @@ class Texchange extends ManagingAssets {
         super(assets, now);
     }
 
-    public async makeLimitOrder(
-        order: LimitOrder,
-        open = order.side === BID,
-    ): Promise<OrderId> {
+    public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         await this.sleep(PING);
         await this.sleep(PROCESSING);
-        const oid = await super.makeLimitOrder(order, open);
+        const oid = await super.makeLimitOrder(order);
         await this.sleep(PING);
         return oid;
     }
@@ -36,6 +37,14 @@ class Texchange extends ManagingAssets {
         await this.sleep(PROCESSING);
         await super.cancelOrder(oid);
         await this.sleep(PING);
+    }
+
+    public async getAssets(): Promise<Assets> {
+        await this.sleep(PING);
+        await this.sleep(PROCESSING);
+        const assets = clone(super.getAssets());
+        await this.sleep(PING);
+        return assets;
     }
 
     protected async pushOrderbook(): Promise<void> {

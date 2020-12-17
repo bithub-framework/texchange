@@ -206,44 +206,9 @@
         "signature": "88708fecd155add7405c7fb6795ef99b0ef9205902d7fea98f2883e606a0e571",
         "affectsGlobalScope": false
       },
-      "./node_modules/interfaces/dist/index.d.ts": {
-        "version": "93b99ecef7c7ebb86ce60f3a6eaec0c2f1af21a7e77e0be885793fee0e814b9d",
-        "signature": "93b99ecef7c7ebb86ce60f3a6eaec0c2f1af21a7e77e0be885793fee0e814b9d",
-        "affectsGlobalScope": false
-      },
-      "./src/interfaces.ts": {
-        "version": "8f6c6ec3758b22bb11f8f186eb50e709b9270d379f1bda4cfff6872b248cf131",
-        "signature": "cd9fa24a88f87eebc120ad482e36cabfe030ffa5e86b55013dbbc2a36ecf3ccb",
-        "affectsGlobalScope": false
-      },
-      "./src/incremental-book.ts": {
-        "version": "ef5561aff184b9c6d46c705834563b17f503347bf65089b1325fe5afa39ae4c2",
-        "signature": "8ac37e7d6fcda62a36ab1a2830cfdc0dc09590b640baa4151e1eca664aa210d1",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/@types/events/index.d.ts": {
-        "version": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
-        "signature": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
-        "affectsGlobalScope": false
-      },
-      "./src/pushing.ts": {
-        "version": "e1037aa5784c12ff000188f086da98063ecf326d771812c5d426a912cb69b2ff",
-        "signature": "7d1cb7a02e652d28f803bd5756caa524448aacc25e56eadeee1968138b5ff1e5",
-        "affectsGlobalScope": false
-      },
-      "./src/making-order.ts": {
-        "version": "8c887c532b64b85fad0468826318e7a1077fc4faad18a94ae751358bec94da41",
-        "signature": "cad9c6208ba0d54a0c19eb9591d0551e62992abd1877a5c16445d577c8f8b95d",
-        "affectsGlobalScope": false
-      },
-      "./src/managing-assets.ts": {
-        "version": "85c67b29e148ad4e7d07d9f80553dcb0d52e72abc242418eda35a5d5fd2a36c2",
-        "signature": "e74975c5a98454a86e40ad2d599db7a1f9edea18160fb94077ccd7214de52caf",
-        "affectsGlobalScope": false
-      },
-      "./src/texchange.ts": {
-        "version": "ab9f895b560781b28392c279da684ff02d17fa1b8cb262ceffb10d2ae12dfad7",
-        "signature": "8f244032d83547667826af2515560c5e3ecf1169dcbf248557763a836c9f02f5",
+      "./node_modules/interfaces/dist/data.d.ts": {
+        "version": "f36c72b9e3f9fa3fa6b4ee597f3693c2bf587ffc6d160c8354783844d3b30842",
+        "signature": "f36c72b9e3f9fa3fa6b4ee597f3693c2bf587ffc6d160c8354783844d3b30842",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -259,6 +224,11 @@
       "./node_modules/@types/node/buffer.d.ts": {
         "version": "bc6a78961535181265845bf9b9e8a147ffd0ca275097ceb670a9b92afa825152",
         "signature": "bc6a78961535181265845bf9b9e8a147ffd0ca275097ceb670a9b92afa825152",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/@types/events/index.d.ts": {
+        "version": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
+        "signature": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/child_process.d.ts": {
@@ -479,6 +449,61 @@
       "./node_modules/@types/node/index.d.ts": {
         "version": "5825520e2099309182c6e2a2b3061b060d42a098c58f67d1754880a7e2cce99a",
         "signature": "5825520e2099309182c6e2a2b3061b060d42a098c58f67d1754880a7e2cce99a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/interfaces/dist/context.d.ts": {
+        "version": "a0977e17dcd37615737d5f29dc0756ac11ec1299ec0b3b8e19e4ee44211a7bfe",
+        "signature": "a0977e17dcd37615737d5f29dc0756ac11ec1299ec0b3b8e19e4ee44211a7bfe",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/interfaces/dist/index.d.ts": {
+        "version": "54b215a738551cbb94bfbe599a3101726924eb838ab5f2511962556b8ec39357",
+        "signature": "54b215a738551cbb94bfbe599a3101726924eb838ab5f2511962556b8ec39357",
+        "affectsGlobalScope": false
+      },
+      "./src/interfaces.ts": {
+        "version": "8f6c6ec3758b22bb11f8f186eb50e709b9270d379f1bda4cfff6872b248cf131",
+        "signature": "cd9fa24a88f87eebc120ad482e36cabfe030ffa5e86b55013dbbc2a36ecf3ccb",
+        "affectsGlobalScope": false
+      },
+      "./src/incremental-book.ts": {
+        "version": "ef5561aff184b9c6d46c705834563b17f503347bf65089b1325fe5afa39ae4c2",
+        "signature": "8ac37e7d6fcda62a36ab1a2830cfdc0dc09590b640baa4151e1eca664aa210d1",
+        "affectsGlobalScope": false
+      },
+      "./src/pushing.ts": {
+        "version": "e1037aa5784c12ff000188f086da98063ecf326d771812c5d426a912cb69b2ff",
+        "signature": "7d1cb7a02e652d28f803bd5756caa524448aacc25e56eadeee1968138b5ff1e5",
+        "affectsGlobalScope": false
+      },
+      "./src/making-order.ts": {
+        "version": "4903d5b57425085d4c32816b84e83cdc9d0daef30bff81634998f9d7bec680a2",
+        "signature": "e5f809ea618d7191363e231856d082e3fcd8d999acff12caa3c73db6158df983",
+        "affectsGlobalScope": false
+      },
+      "./src/managing-assets.ts": {
+        "version": "8c5ff2302f2437cf82d8e38e0c3add02eef449d181dbac6c7107c99ec6050de6",
+        "signature": "e62a4ffa388523e1beae78b33d0eda92bbdc244ef9425803f5abf104978bc00e",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/ts-toolbelt/out/index.d.ts": {
+        "version": "9df147746b0cbd11d022b564e6fdd43ac79b643dc579d2123317ee01cc4f0d70",
+        "signature": "9df147746b0cbd11d022b564e6fdd43ac79b643dc579d2123317ee01cc4f0d70",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/@types/ramda/tools.d.ts": {
+        "version": "ffce841ff8b30e136ea9f045f8c3a6b0ebd986d6a670095826d179de13bf626a",
+        "signature": "ffce841ff8b30e136ea9f045f8c3a6b0ebd986d6a670095826d179de13bf626a",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/@types/ramda/index.d.ts": {
+        "version": "5cc20bb11d8d85c9d6826a8bee507ac072f94c5a5de90cd34f6495808de5601c",
+        "signature": "5cc20bb11d8d85c9d6826a8bee507ac072f94c5a5de90cd34f6495808de5601c",
+        "affectsGlobalScope": false
+      },
+      "./src/texchange.ts": {
+        "version": "c74428972785f30b3ff391266b69d0bd54aac12fe28be85d158918edbafda1f0",
+        "signature": "3b2fa0214ff1cd1bc9bf72a2490d50f33e84d1b2673b138b1b64f70f1be8b51e",
         "affectsGlobalScope": false
       },
       "../../../node_modules/@types/accepts/index.d.ts": {
@@ -811,6 +836,25 @@
       "./node_modules/@types/node/zlib.d.ts": [
         "./node_modules/@types/node/stream.d.ts"
       ],
+      "./node_modules/@types/ramda/index.d.ts": [
+        "./node_modules/@types/ramda/tools.d.ts",
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
+      "./node_modules/@types/ramda/tools.d.ts": [
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
+      "./node_modules/interfaces/dist/context.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/index.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts"
+      ],
+      "./node_modules/interfaces/dist/index.d.ts": [
+        "./node_modules/interfaces/dist/context.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts"
+      ],
+      "./node_modules/ts-toolbelt/out/index.d.ts": [
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
       "./src/incremental-book.ts": [
         "./src/config.ts",
         "./src/interfaces.ts"
@@ -834,6 +878,7 @@
         "./src/interfaces.ts"
       ],
       "./src/texchange.ts": [
+        "./node_modules/@types/ramda/index.d.ts",
         "./src/config.ts",
         "./src/interfaces.ts",
         "./src/managing-assets.ts"
@@ -1066,6 +1111,25 @@
       "./node_modules/@types/node/zlib.d.ts": [
         "./node_modules/@types/node/stream.d.ts"
       ],
+      "./node_modules/@types/ramda/index.d.ts": [
+        "./node_modules/@types/ramda/tools.d.ts",
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
+      "./node_modules/@types/ramda/tools.d.ts": [
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
+      "./node_modules/interfaces/dist/context.d.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./node_modules/@types/node/index.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts"
+      ],
+      "./node_modules/interfaces/dist/index.d.ts": [
+        "./node_modules/interfaces/dist/context.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts"
+      ],
+      "./node_modules/ts-toolbelt/out/index.d.ts": [
+        "./node_modules/ts-toolbelt/out/index.d.ts"
+      ],
       "./src/incremental-book.ts": [
         "./src/interfaces.ts"
       ],
@@ -1073,6 +1137,7 @@
         "./node_modules/interfaces/dist/index.d.ts"
       ],
       "./src/making-order.ts": [
+        "./node_modules/interfaces/dist/data.d.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
@@ -1156,7 +1221,12 @@
       "./node_modules/@types/node/wasi.d.ts",
       "./node_modules/@types/node/worker_threads.d.ts",
       "./node_modules/@types/node/zlib.d.ts",
+      "./node_modules/@types/ramda/index.d.ts",
+      "./node_modules/@types/ramda/tools.d.ts",
+      "./node_modules/interfaces/dist/context.d.ts",
+      "./node_modules/interfaces/dist/data.d.ts",
       "./node_modules/interfaces/dist/index.d.ts",
+      "./node_modules/ts-toolbelt/out/index.d.ts",
       "./src/config.ts",
       "./src/incremental-book.ts",
       "./src/interfaces.ts",

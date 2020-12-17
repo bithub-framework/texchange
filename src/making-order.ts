@@ -13,7 +13,7 @@ import {
 
 class MakingOrder extends Pushing {
     private orderCount = 0;
-    private openOrders = new Map<OrderId, OpenOrder>();
+    protected openOrders = new Map<OrderId, OpenOrder>();
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         const [
@@ -30,31 +30,45 @@ class MakingOrder extends Pushing {
         this.openOrders.delete(oid);
     }
 
-    protected rawTradeTakes(_rawTrade: RawTrade) {
+    public async getOpenOrders(): Promise<OpenOrder[]> {
+        return [...this.openOrders.values()];
+    }
+
+    protected rawTradeShouldTakeOpenOrder(rawTrade: RawTrade, maker: OpenOrder): boolean {
+        return maker.side !== rawTrade.side &&
+            (maker.side - rawTrade.side) * (maker.price - rawTrade.price)
+            > EPSILON;
+    }
+
+    protected rawTradeTakesOpenOrder(rawTrade: RawTrade, maker: OpenOrder): number {
+        let volume: number;
+        if (rawTrade.quantity > maker.quantity - EPSILON) {
+            volume = maker.quantity;
+            rawTrade.quantity -= maker.quantity;
+            this.openOrders.delete(maker.id);
+        } else {
+            volume = rawTrade.quantity;
+            maker.quantity -= rawTrade.quantity;
+            rawTrade.quantity = 0;
+        }
+        return volume;
+    }
+
+    protected rawTradeTakesOpenOrders(_rawTrade: RawTrade) {
         const rawTrade: RawTrade = { ..._rawTrade };
-        for (const [oid, order] of this.openOrders)
-            if (
-                order.side !== rawTrade.side &&
-                (order.side - rawTrade.side) * (order.price - rawTrade.price)
-                > EPSILON
-            )
-                if (rawTrade.quantity > order.quantity - EPSILON) {
-                    rawTrade.quantity -= order.quantity;
-                    this.openOrders.delete(oid);
-                } else {
-                    rawTrade.quantity = 0;
-                    order.quantity -= rawTrade.quantity;
-                }
+        for (const order of this.openOrders.values())
+            if (this.rawTradeShouldTakeOpenOrder(rawTrade, order))
+                this.rawTradeTakesOpenOrder(rawTrade, order);
     }
 
     public updateTrades(rawTrades: RawTrade[]): void {
         for (let rawTrade of rawTrades)
-            this.rawTradeTakes(rawTrade);
+            this.rawTradeTakesOpenOrders(rawTrade);
         super.updateTrades(rawTrades);
     }
 
     protected orderTakes(order: LimitOrder): [
-        MakerOrder,
+        LimitOrder,
         RawTrade[],
         number,
         number,
@@ -63,9 +77,9 @@ class MakingOrder extends Pushing {
         const rawTrades: RawTrade[] = [];
         let volume = 0;
         let dollarVolume = 0;
-        for (const [price, quantity] of this.incBook.getQuantity(~taker.side)) {
+        for (const [price, quantity] of this.incBook.getQuantity(1 - taker.side)) {
             const maker: MakerOrder = {
-                side: ~taker.side,
+                side: 1 - taker.side,
                 price,
                 quantity,
             };
@@ -100,11 +114,12 @@ class MakingOrder extends Pushing {
         ];
     }
 
-    protected orderMakes(order: MakerOrder): OpenOrder {
+    protected orderMakes(order: LimitOrder): OpenOrder {
         const openOrder: OpenOrder = {
             side: order.side,
             price: order.price,
             quantity: order.quantity,
+            open: order.open,
             id: ++this.orderCount,
         };
         if (openOrder.quantity > EPSILON)

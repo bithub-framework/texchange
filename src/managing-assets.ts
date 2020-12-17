@@ -2,9 +2,9 @@ import { MakingOrder } from './making-order';
 import {
     Assets,
     LimitOrder,
-    BID,
     OrderId,
     RawTrade,
+    Side,
     LONG, SHORT,
 } from './interfaces';
 import {
@@ -21,17 +21,43 @@ class ManagingAssets extends MakingOrder {
         super(now);
     }
 
-    public async makeLimitOrder(
-        order: LimitOrder,
-        open = order.side === BID,
-    ): Promise<OrderId> {
+    protected openPosition(
+        side: Side,
+        volume: number,
+        dollarVolume: number
+    ): void {
+        this.assets.position[side] += volume;
+        this.assets.cost[side] += dollarVolume;
+    }
+
+    protected closePosition(
+        side: Side,
+        volume: number,
+        dollarVolume: number
+    ): void {
+        const costPrice = Math.round(100 *
+            this.assets.cost[1 - side] / this.assets.position[1 - side]
+        ) / 100;
+        const cost = volume > this.assets.position[1 - side] - EPSILON
+            ? this.assets.cost[1 - side]
+            : volume * costPrice;
+        const realizedProfit
+            = (1 - side - side)
+            * (dollarVolume - cost);
+        this.assets.balance += realizedProfit;
+        this.assets.position[1 - side] -= volume;
+        this.assets.cost[1 - side] -= cost;
+        this.calcAssets();
+    }
+
+    public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         if (
-            !open &&
-            order.quantity > this.assets.position[~order.side] + EPSILON
+            !order.open &&
+            order.quantity > this.assets.position[1 - order.side] + EPSILON
         ) throw new Error('No enough position to close.');
         this.settle();
         if (
-            open &&
+            order.open &&
             order.price * order.quantity
             < this.assets.reserve * this.assets.leverage - EPSILON
         ) throw new Error('No enough available balance as margin.');
@@ -43,27 +69,18 @@ class ManagingAssets extends MakingOrder {
             dollarVolume,
         ] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        if (open) {
-            this.assets.position[order.side] += volume;
-            this.assets.cost[order.side] += dollarVolume;
-        } else {
-            const costPrice = Math.round(100 *
-                this.assets.cost[~order.side] / this.assets.position[~order.side]
-            ) / 100;
-            const cost = volume > this.assets.position[~order.side] - EPSILON
-                ? this.assets.cost[~order.side]
-                : volume * costPrice;
-            const realizedProfit
-                = (~order.side - order.side)
-                * (dollarVolume - cost);
-            this.assets.balance += realizedProfit;
-            this.assets.position[~order.side] -= volume;
-            this.assets.cost[~order.side] -= cost;
-            this.calcAssets();
-        }
+        if (order.open)
+            this.openPosition(order.side, volume, dollarVolume);
+        else
+            this.closePosition(order.side, volume, dollarVolume);
         this.pushRawTrades(rawTrades);
         this.pushOrderbook();
         return openOrder.id;
+    }
+
+    public async getAssets(): Promise<Assets> {
+        this.settle();
+        return this.assets;
     }
 
     public updateTrades(rawTrades: RawTrade[]): void {
@@ -71,9 +88,21 @@ class ManagingAssets extends MakingOrder {
             this.settlementPrice
                 = this.settlementPrice * .9
                 + rawTrade.price + .1;
-            this.rawTradeTakes(rawTrade);
+            this.rawTradeTakesOpenOrders(rawTrade);
         }
         this.pushRawTrades(rawTrades);
+    }
+
+    protected rawTradeTakesOpenOrders(_rawTrade: RawTrade) {
+        const rawTrade: RawTrade = { ..._rawTrade };
+        for (const order of this.openOrders.values())
+            if (this.rawTradeShouldTakeOpenOrder(rawTrade, order)) {
+                const volume = this.rawTradeTakesOpenOrder(rawTrade, order);
+                if (order.open)
+                    this.openPosition(order.side, volume, volume * order.price);
+                else
+                    this.closePosition(order.side, volume, volume * order.price);
+            }
     }
 
     private settle(): void {
