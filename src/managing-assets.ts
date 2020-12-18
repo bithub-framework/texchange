@@ -61,7 +61,8 @@ class ManagingAssets extends MakingOrder {
         this.settle();
         if (
             order.open &&
-            order.price * order.quantity * (1 + this.config.TAKER_FEE)
+            order.price * order.quantity / this.assets.leverage +
+            order.price * order.quantity * this.config.TAKER_FEE
             < this.assets.reserve * this.assets.leverage - EPSILON
         ) throw new Error('No enough available balance as margin.');
 
@@ -79,9 +80,8 @@ class ManagingAssets extends MakingOrder {
         const openOrder = this.orderMakes(makerOrder);
         if (this.openOrders.has(openOrder.id))
             this.assets.frozen +=
-                openOrder.price *
-                openOrder.quantity *
-                (1 + this.config.MAKER_FEE);
+                openOrder.price * openOrder.quantity / this.assets.leverage +
+                openOrder.price * openOrder.quantity * this.config.MAKER_FEE;
         this.calcMargin();
         this.pushRawTrades(rawTrades);
         this.pushOrderbook();
@@ -92,9 +92,8 @@ class ManagingAssets extends MakingOrder {
         let openOrder: OpenOrder | undefined;
         if (openOrder = this.openOrders.get(oid)) {
             this.assets.frozen -=
-                openOrder.price *
-                openOrder.quantity *
-                (1 + this.config.MAKER_FEE);
+                openOrder.price * openOrder.quantity / this.assets.leverage +
+                openOrder.price * openOrder.quantity * this.config.MAKER_FEE;
         }
         this.calcMargin();
         await super.cancelOrder(oid);
@@ -122,7 +121,9 @@ class ManagingAssets extends MakingOrder {
                 const [
                     volume, dollarVolume,
                 ] = this.rawTradeTakesOpenOrder(rawTrade, order);
-                this.assets.frozen -= dollarVolume * (1 + this.config.MAKER_FEE);
+                this.assets.frozen -=
+                    dollarVolume / this.assets.leverage +
+                    dollarVolume * this.config.MAKER_FEE;
                 this.assets.balance -= dollarVolume * this.config.MAKER_FEE;
                 if (order.open)
                     this.openPosition(order.side, volume, dollarVolume);
