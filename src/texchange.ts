@@ -59,4 +59,5 @@ export {
     Texchange as default,
     Texchange,
     Config,
+    RawTrade,
 }

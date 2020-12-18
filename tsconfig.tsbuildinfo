@@ -502,8 +502,8 @@
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
-        "version": "9acf36005495431599e0b0ccfe3da9f34f638e3227282c5e71c7198ee3567846",
-        "signature": "cbe7eb4c4edb61cb69713220f51b96b474009c884b37c9c68574499b4dee02dc",
+        "version": "1210c41c5cc0a837dbd308da87daadc258bc833031db8dff766856090f8de46c",
+        "signature": "a7c1cf1043e89af7064684be16125e2f72aea8d05619cf5c0dc971e3af04e0f1",
         "affectsGlobalScope": false
       },
       "../../../node_modules/@types/accepts/index.d.ts": {
