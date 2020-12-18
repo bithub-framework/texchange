@@ -29,17 +29,20 @@ class MakingOrder extends Pushing {
     }
     rawTradeTakesOpenOrder(rawTrade, maker) {
         let volume;
+        let dollarVolume;
         if (rawTrade.quantity > maker.quantity - EPSILON) {
             volume = maker.quantity;
+            dollarVolume = maker.quantity * maker.price;
             rawTrade.quantity -= maker.quantity;
             this.openOrders.delete(maker.id);
         }
         else {
             volume = rawTrade.quantity;
+            dollarVolume = rawTrade.quantity * maker.price;
             maker.quantity -= rawTrade.quantity;
             rawTrade.quantity = 0;
         }
-        return volume;
+        return [volume, dollarVolume];
     }
     rawTradeTakesOpenOrders(_rawTrade) {
         const rawTrade = { ..._rawTrade };
