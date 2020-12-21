@@ -1,4 +1,4 @@
-import { BID, ASK, trunc, } from './interfaces';
+import { BID, ASK, round, } from './interfaces';
 import { EPSILON, QUANTITY_PRECISION, } from './config';
 class IncrementalBook {
     constructor() {
@@ -20,7 +20,7 @@ class IncrementalBook {
     }
     incQuantity(side, price, increment) {
         const origin = this.increment[side].get(price) || 0;
-        this.increment[side].set(price, trunc(origin + increment, QUANTITY_PRECISION));
+        this.increment[side].set(price, round(origin + increment, QUANTITY_PRECISION));
     }
     getQuantity(side) {
         return this.total[side];

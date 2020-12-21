@@ -13,4 +13,5 @@ export interface Config {
     MAKER_FEE: number;
     TAKER_FEE: number;
 }
+export declare function round(x: number, precision: number): number;
 export declare function trunc(x: number, precision: number): number;

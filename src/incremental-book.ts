@@ -1,7 +1,7 @@
 import {
     Orderbook,
     Side, BID, ASK,
-    trunc,
+    round,
 } from './interfaces';
 import {
     EPSILON,
@@ -28,7 +28,7 @@ class IncrementalBook {
 
     public incQuantity(side: Side, price: number, increment: number) {
         const origin = this.increment[side].get(price) || 0;
-        this.increment[side].set(price, trunc(
+        this.increment[side].set(price, round(
             origin + increment,
             QUANTITY_PRECISION,
         ));

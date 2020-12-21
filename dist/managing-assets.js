@@ -1,5 +1,5 @@
 import { MakingOrder } from './making-order';
-import { ASK, LONG, SHORT, trunc, } from './interfaces';
+import { ASK, LONG, SHORT, round, trunc, } from './interfaces';
 import { EPSILON, PRICE_PRECISION, QUANTITY_PRECISION, COST_PRECISION, BALANCE_PRECISION, } from './config';
 class ManagingAssets extends MakingOrder {
     constructor(config, now) {
@@ -9,8 +9,8 @@ class ManagingAssets extends MakingOrder {
         this.assets = config.initialAssets;
     }
     openPosition(side, volume, dollarVolume) {
-        this.assets.position[side] = trunc(this.assets.position[side] + volume, QUANTITY_PRECISION);
-        this.assets.cost[side] = trunc(this.assets.cost[side] + dollarVolume, COST_PRECISION);
+        this.assets.position[side] = round(this.assets.position[side] + volume, QUANTITY_PRECISION);
+        this.assets.cost[side] = round(this.assets.cost[side] + dollarVolume, COST_PRECISION);
     }
     closePosition(side, volume, dollarVolume) {
         const costPrice = trunc(this.assets.cost[1 - side] / this.assets.position[1 - side], PRICE_PRECISION);
@@ -20,9 +20,9 @@ class ManagingAssets extends MakingOrder {
         const realizedProfit = side === ASK
             ? dollarVolume - cost
             : cost - dollarVolume;
-        this.assets.balance = trunc(this.assets.balance + realizedProfit, BALANCE_PRECISION);
-        this.assets.position[1 - side] = trunc(this.assets.position[1 - side] - volume, QUANTITY_PRECISION);
-        this.assets.cost[1 - side] = trunc(this.assets.cost[1 - side] - cost, COST_PRECISION);
+        this.assets.balance = round(this.assets.balance + realizedProfit, BALANCE_PRECISION);
+        this.assets.position[1 - side] = round(this.assets.position[1 - side] - volume, QUANTITY_PRECISION);
+        this.assets.cost[1 - side] = round(this.assets.cost[1 - side] - cost, COST_PRECISION);
     }
     async makeLimitOrder(order) {
         if (!order.open &&
@@ -35,14 +35,14 @@ class ManagingAssets extends MakingOrder {
                 < this.assets.reserve - EPSILON)
             throw new Error('No enough available balance as margin.');
         const [makerOrder, rawTrades, volume, dollarVolume,] = this.orderTakes(order);
-        this.assets.balance = trunc(this.assets.balance - dollarVolume * this.config.TAKER_FEE, BALANCE_PRECISION);
+        this.assets.balance = round(this.assets.balance - dollarVolume * this.config.TAKER_FEE, BALANCE_PRECISION);
         if (order.open)
             this.openPosition(order.side, volume, dollarVolume);
         else
             this.closePosition(order.side, volume, dollarVolume);
         const openOrder = this.orderMakes(makerOrder);
         if (this.openOrders.has(openOrder.id))
-            this.assets.frozen = trunc(this.assets.frozen +
+            this.assets.frozen = round(this.assets.frozen +
                 openOrder.price * openOrder.quantity / this.assets.leverage +
                 openOrder.price * openOrder.quantity * this.config.MAKER_FEE, BALANCE_PRECISION);
         this.calcMargin();
@@ -53,7 +53,7 @@ class ManagingAssets extends MakingOrder {
     async cancelOrder(oid) {
         let openOrder;
         if (openOrder = this.openOrders.get(oid)) {
-            this.assets.frozen = trunc(this.assets.frozen -
+            this.assets.frozen = round(this.assets.frozen -
                 openOrder.price * openOrder.quantity / this.assets.leverage +
                 openOrder.price * openOrder.quantity * this.config.MAKER_FEE, BALANCE_PRECISION);
         }
@@ -67,7 +67,7 @@ class ManagingAssets extends MakingOrder {
     updateTrades(rawTrades) {
         for (let rawTrade of rawTrades) {
             this.settlementPrice
-                = trunc(this.settlementPrice * .9 + rawTrade.price + .1, PRICE_PRECISION);
+                = round(this.settlementPrice * .9 + rawTrade.price + .1, PRICE_PRECISION);
             this.rawTradeTakesOpenOrders(rawTrade);
         }
         this.pushRawTrades(rawTrades);
@@ -77,10 +77,10 @@ class ManagingAssets extends MakingOrder {
         for (const order of this.openOrders.values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, order)) {
                 const [volume, dollarVolume,] = this.rawTradeTakesOpenOrder(rawTrade, order);
-                this.assets.frozen = trunc(this.assets.frozen -
+                this.assets.frozen = round(this.assets.frozen -
                     dollarVolume / this.assets.leverage +
                     dollarVolume * this.config.MAKER_FEE, BALANCE_PRECISION);
-                this.assets.balance = trunc(this.assets.balance -
+                this.assets.balance = round(this.assets.balance -
                     dollarVolume * this.config.MAKER_FEE, BALANCE_PRECISION);
                 if (order.open)
                     this.openPosition(order.side, volume, dollarVolume);
@@ -94,7 +94,7 @@ class ManagingAssets extends MakingOrder {
         const { position, cost, } = this.assets;
         const unrealizedProfit = (price * position[LONG] - cost[LONG]) +
             (cost[SHORT] - price * position[SHORT]);
-        this.assets.balance = trunc(this.assets.balance + unrealizedProfit, BALANCE_PRECISION);
+        this.assets.balance = round(this.assets.balance + unrealizedProfit, BALANCE_PRECISION);
         this.assets.cost[LONG] = price * position[LONG];
         this.assets.cost[SHORT] = price * position[SHORT];
         this.calcMargin();

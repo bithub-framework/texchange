@@ -1,5 +1,5 @@
 import { Pushing } from './pushing';
-import { BID, ASK, trunc, } from './interfaces';
+import { BID, ASK, round, } from './interfaces';
 import { EPSILON, QUANTITY_PRECISION, PRICE_PRECISION, } from './config';
 class MakingOrder extends Pushing {
     constructor() {
@@ -33,13 +33,13 @@ class MakingOrder extends Pushing {
         if (rawTrade.quantity > maker.quantity - EPSILON) {
             volume = maker.quantity;
             dollarVolume = maker.quantity * maker.price;
-            rawTrade.quantity = trunc(rawTrade.quantity - maker.quantity, QUANTITY_PRECISION);
+            rawTrade.quantity = round(rawTrade.quantity - maker.quantity, QUANTITY_PRECISION);
             this.openOrders.delete(maker.id);
         }
         else {
             volume = rawTrade.quantity;
             dollarVolume = rawTrade.quantity * maker.price;
-            maker.quantity = trunc(maker.quantity - rawTrade.quantity, QUANTITY_PRECISION);
+            maker.quantity = round(maker.quantity - rawTrade.quantity, QUANTITY_PRECISION);
             rawTrade.quantity = 0;
         }
         return [volume, dollarVolume];
@@ -77,9 +77,9 @@ class MakingOrder extends Pushing {
                     time: this.now(),
                 });
                 this.incBook.incQuantity(maker.side, maker.price, -quantity);
-                taker.quantity = trunc(taker.quantity - quantity, QUANTITY_PRECISION);
-                volume = trunc(volume + quantity, QUANTITY_PRECISION);
-                dollarVolume = trunc(dollarVolume + quantity * maker.price, PRICE_PRECISION * QUANTITY_PRECISION);
+                taker.quantity = round(taker.quantity - quantity, QUANTITY_PRECISION);
+                volume = round(volume + quantity, QUANTITY_PRECISION);
+                dollarVolume = round(dollarVolume + quantity * maker.price, PRICE_PRECISION * QUANTITY_PRECISION);
             }
         }
         this.incBook.apply();

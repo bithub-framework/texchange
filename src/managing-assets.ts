@@ -8,6 +8,7 @@ import {
     LONG, SHORT,
     Config,
     OpenOrder,
+    round,
     trunc,
 } from './interfaces';
 import {
@@ -35,11 +36,11 @@ class ManagingAssets extends MakingOrder {
         volume: number,
         dollarVolume: number
     ): void {
-        this.assets.position[side] = trunc(
+        this.assets.position[side] = round(
             this.assets.position[side] + volume,
             QUANTITY_PRECISION,
         );
-        this.assets.cost[side] = trunc(
+        this.assets.cost[side] = round(
             this.assets.cost[side] + dollarVolume,
             COST_PRECISION,
         );
@@ -60,15 +61,15 @@ class ManagingAssets extends MakingOrder {
         const realizedProfit = side === ASK
             ? dollarVolume - cost
             : cost - dollarVolume;
-        this.assets.balance = trunc(
+        this.assets.balance = round(
             this.assets.balance + realizedProfit,
             BALANCE_PRECISION,
         );
-        this.assets.position[1 - side] = trunc(
+        this.assets.position[1 - side] = round(
             this.assets.position[1 - side] - volume,
             QUANTITY_PRECISION,
         );
-        this.assets.cost[1 - side] = trunc(
+        this.assets.cost[1 - side] = round(
             this.assets.cost[1 - side] - cost,
             COST_PRECISION,
         );
@@ -93,7 +94,7 @@ class ManagingAssets extends MakingOrder {
             volume,
             dollarVolume,
         ] = this.orderTakes(order);
-        this.assets.balance = trunc(
+        this.assets.balance = round(
             this.assets.balance - dollarVolume * this.config.TAKER_FEE,
             BALANCE_PRECISION,
         );
@@ -103,7 +104,7 @@ class ManagingAssets extends MakingOrder {
             this.closePosition(order.side, volume, dollarVolume);
         const openOrder = this.orderMakes(makerOrder);
         if (this.openOrders.has(openOrder.id))
-            this.assets.frozen = trunc(
+            this.assets.frozen = round(
                 this.assets.frozen +
                 openOrder.price * openOrder.quantity / this.assets.leverage +
                 openOrder.price * openOrder.quantity * this.config.MAKER_FEE,
@@ -118,7 +119,7 @@ class ManagingAssets extends MakingOrder {
     public async cancelOrder(oid: OrderId): Promise<void> {
         let openOrder: OpenOrder | undefined;
         if (openOrder = this.openOrders.get(oid)) {
-            this.assets.frozen = trunc(
+            this.assets.frozen = round(
                 this.assets.frozen -
                 openOrder.price * openOrder.quantity / this.assets.leverage +
                 openOrder.price * openOrder.quantity * this.config.MAKER_FEE,
@@ -137,7 +138,7 @@ class ManagingAssets extends MakingOrder {
     public updateTrades(rawTrades: RawTrade[]): void {
         for (let rawTrade of rawTrades) {
             this.settlementPrice
-                = trunc(
+                = round(
                     this.settlementPrice * .9 + rawTrade.price + .1,
                     PRICE_PRECISION,
                 );
@@ -153,13 +154,13 @@ class ManagingAssets extends MakingOrder {
                 const [
                     volume, dollarVolume,
                 ] = this.rawTradeTakesOpenOrder(rawTrade, order);
-                this.assets.frozen = trunc(
+                this.assets.frozen = round(
                     this.assets.frozen -
                     dollarVolume / this.assets.leverage +
                     dollarVolume * this.config.MAKER_FEE,
                     BALANCE_PRECISION,
                 );
-                this.assets.balance = trunc(
+                this.assets.balance = round(
                     this.assets.balance -
                     dollarVolume * this.config.MAKER_FEE,
                     BALANCE_PRECISION,
@@ -181,7 +182,7 @@ class ManagingAssets extends MakingOrder {
         const unrealizedProfit =
             (price * position[LONG] - cost[LONG]) +
             (cost[SHORT] - price * position[SHORT]);
-        this.assets.balance = trunc(
+        this.assets.balance = round(
             this.assets.balance + unrealizedProfit,
             BALANCE_PRECISION,
         );
