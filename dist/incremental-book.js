@@ -1,5 +1,5 @@
-import { BID, ASK, } from './interfaces';
-import { EPSILON, } from './config';
+import { BID, ASK, trunc, } from './interfaces';
+import { EPSILON, QUANTITY_PRECISION, } from './config';
 class IncrementalBook {
     constructor() {
         this.baseBook = {
@@ -9,17 +9,18 @@ class IncrementalBook {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
+        // increment 必须是负数
         this.increment = {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
     }
-    setBase(origin) {
-        this.baseBook = origin;
+    setBaseBook(orderbook) {
+        this.baseBook = orderbook;
     }
     incQuantity(side, price, increment) {
         const origin = this.increment[side].get(price) || 0;
-        this.increment[side].set(price, origin + increment);
+        this.increment[side].set(price, trunc(origin + increment, QUANTITY_PRECISION));
     }
     getQuantity(side) {
         return this.total[side];
@@ -29,15 +30,12 @@ class IncrementalBook {
             this.total[side].clear();
             this.baseBook[side].forEach(order => void this.total[side].set(order.price, order.quantity));
             this.increment[side].forEach((increment, price) => {
-                if (Math.abs(increment) < EPSILON)
-                    return void this.increment[side].delete(price);
-                let quantity;
-                if (quantity = this.total[side].get(price)) {
+                let quantity = this.total[side].get(price);
+                if (quantity)
                     if ((quantity += increment) < EPSILON)
                         this.total[side].delete(price);
                     else
                         this.total[side].set(price, quantity);
-                }
                 else
                     this.increment[side].delete(price);
             });

@@ -18,3 +18,7 @@ export interface Config {
     MAKER_FEE: number;
     TAKER_FEE: number;
 }
+
+export function trunc(x: number, precision: number) {
+    return Math.round(x / precision) * precision;
+}

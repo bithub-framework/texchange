@@ -12,6 +12,7 @@ class Pushing extends EventEmitter {
     protected incBook = new IncrementalBook();
 
     constructor(
+        // 必须保证 update 时数据的 time 等于 now()
         protected now: () => number,
     ) {
         super();
@@ -22,7 +23,7 @@ class Pushing extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
-        this.incBook.setBase(orderbook);
+        this.incBook.setBaseBook(orderbook);
         this.incBook.apply();
         this.pushOrderbook();
     }

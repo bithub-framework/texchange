@@ -2,7 +2,9 @@ import { EventEmitter } from 'events';
 import { IncrementalBook } from './incremental-book';
 import { BID, ASK, } from './interfaces';
 class Pushing extends EventEmitter {
-    constructor(now) {
+    constructor(
+    // 必须保证 update 时数据的 time 等于 now()
+    now) {
         super();
         this.now = now;
         this.tradeCount = 0;
@@ -12,7 +14,7 @@ class Pushing extends EventEmitter {
         this.pushRawTrades(rawTrades);
     }
     updateOrderbook(orderbook) {
-        this.incBook.setBase(orderbook);
+        this.incBook.setBaseBook(orderbook);
         this.incBook.apply();
         this.pushOrderbook();
     }

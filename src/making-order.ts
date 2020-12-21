@@ -6,9 +6,12 @@ import {
     OrderId,
     MakerOrder,
     RawTrade,
+    trunc,
 } from './interfaces';
 import {
     EPSILON,
+    QUANTITY_PRECISION,
+    PRICE_PRECISION,
 } from './config';
 
 class MakingOrder extends Pushing {
@@ -57,12 +60,18 @@ class MakingOrder extends Pushing {
         if (rawTrade.quantity > maker.quantity - EPSILON) {
             volume = maker.quantity;
             dollarVolume = maker.quantity * maker.price;
-            rawTrade.quantity -= maker.quantity;
+            rawTrade.quantity = trunc(
+                rawTrade.quantity - maker.quantity,
+                QUANTITY_PRECISION,
+            );
             this.openOrders.delete(maker.id);
         } else {
             volume = rawTrade.quantity;
             dollarVolume = rawTrade.quantity * maker.price;
-            maker.quantity -= rawTrade.quantity;
+            maker.quantity = trunc(
+                maker.quantity - rawTrade.quantity,
+                QUANTITY_PRECISION,
+            );
             rawTrade.quantity = 0;
         }
         return [volume, dollarVolume];
@@ -81,13 +90,13 @@ class MakingOrder extends Pushing {
         super.updateTrades(rawTrades);
     }
 
-    protected orderTakes(order: LimitOrder): [
+    protected orderTakes(_taker: LimitOrder): [
         LimitOrder,
         RawTrade[],
         number,
         number,
     ] {
-        const taker: LimitOrder = { ...order };
+        const taker: LimitOrder = { ..._taker };
         const rawTrades: RawTrade[] = [];
         let volume = 0;
         let dollarVolume = 0;
@@ -114,9 +123,18 @@ class MakingOrder extends Pushing {
                     time: this.now(),
                 });
                 this.incBook.incQuantity(maker.side, maker.price, -quantity);
-                taker.quantity -= quantity;
-                volume += quantity;
-                dollarVolume += quantity * maker.price;
+                taker.quantity = trunc(
+                    taker.quantity - quantity,
+                    QUANTITY_PRECISION,
+                );
+                volume = trunc(
+                    volume + quantity,
+                    QUANTITY_PRECISION,
+                );
+                dollarVolume = trunc(
+                    dollarVolume + quantity * maker.price,
+                    PRICE_PRECISION * QUANTITY_PRECISION,
+                );
             }
         }
         this.incBook.apply();
@@ -130,10 +148,7 @@ class MakingOrder extends Pushing {
 
     protected orderMakes(order: LimitOrder): OpenOrder {
         const openOrder: OpenOrder = {
-            side: order.side,
-            price: order.price,
-            quantity: order.quantity,
-            open: order.open,
+            ...order,
             id: ++this.orderCount,
         };
         if (openOrder.quantity > EPSILON)
