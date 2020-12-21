@@ -1,6 +1,6 @@
 import { Pushing } from './pushing';
 import { BID, ASK, round, } from './interfaces';
-import { EPSILON, QUANTITY_PRECISION, PRICE_PRECISION, } from './config';
+import { EPSILON, QUANTITY_PRECISION, DOLLAR_PRECISION, } from './config';
 class MakingOrder extends Pushing {
     constructor() {
         super(...arguments);
@@ -38,7 +38,9 @@ class MakingOrder extends Pushing {
         }
         else {
             volume = rawTrade.quantity;
-            dollarVolume = rawTrade.quantity * maker.price;
+            dollarVolume = round(
+            // non precision reason
+            rawTrade.quantity * maker.price, DOLLAR_PRECISION);
             maker.quantity = round(maker.quantity - rawTrade.quantity, QUANTITY_PRECISION);
             rawTrade.quantity = 0;
         }
@@ -79,7 +81,9 @@ class MakingOrder extends Pushing {
                 this.incBook.incQuantity(maker.side, maker.price, -quantity);
                 taker.quantity = round(taker.quantity - quantity, QUANTITY_PRECISION);
                 volume = round(volume + quantity, QUANTITY_PRECISION);
-                dollarVolume = round(dollarVolume + quantity * maker.price, PRICE_PRECISION * QUANTITY_PRECISION);
+                dollarVolume = round(
+                // non precision reason
+                dollarVolume + quantity * maker.price, DOLLAR_PRECISION);
             }
         }
         this.incBook.apply();
@@ -94,6 +98,7 @@ class MakingOrder extends Pushing {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
+            frozen: 0,
         };
         if (openOrder.quantity > EPSILON)
             this.openOrders.set(openOrder.id, openOrder);

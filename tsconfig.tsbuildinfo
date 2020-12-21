@@ -202,13 +202,13 @@
         "affectsGlobalScope": true
       },
       "./src/config.ts": {
-        "version": "1a43569a15a101093df50e09ba916f8c7e37ba7d800d7164cf2ad27dd46c1bc4",
-        "signature": "bffb8d81783e88628c6bd2f551b45bebd4c54ae29d4111380b34193324156f6c",
+        "version": "5c17fa83ee3f3b88f13ef03db7ec5d1bcb8d2a88e631d9c1e61463eaf42b95ba",
+        "signature": "71d7de22a6bd29c17a818895a56403c83b3c51b337adde377e32ef12353af4c5",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "22364169198e6d4738498d923d886cb3dda9281e173f984e8b9d002c1a40c0e6",
-        "signature": "22364169198e6d4738498d923d886cb3dda9281e173f984e8b9d002c1a40c0e6",
+        "version": "e250b37ccf69bf311e5dd7300a63bccbd2a479897883a36072283eb7a1de47b4",
+        "signature": "e250b37ccf69bf311e5dd7300a63bccbd2a479897883a36072283eb7a1de47b4",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -462,8 +462,8 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "e8d1bb53932872fbd8cf5ef3dd1c253e51eb8c13375c3bf7f7314c6bb7d3f3a3",
-        "signature": "b0ca7055bb8b6194e3a357db7623143590b0c5e1f806de3893d9410b21860f20",
+        "version": "5b63e618b785dd21c5c0bf2f7b4a0fcb21d5db164480dc03d0f669f36adda4ac",
+        "signature": "aabc0af47a1ceb56579417116077d8e1c422a217bfee19be97cf52abee30daa9",
         "affectsGlobalScope": false
       },
       "./src/incremental-book.ts": {
@@ -477,13 +477,8 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "1173e6d4dd5576a7dfed31a7332a1edf0a958aea0be612d58295086272c77fce",
-        "signature": "47764abe717fccb66726dba0a9c34c6a332cf7336809b480410079613b51f34b",
-        "affectsGlobalScope": false
-      },
-      "./src/managing-assets.ts": {
-        "version": "f62f810d8bb8e1a785fb480bab67825b7babf14db345a07ca6c6f38d67f64fa0",
-        "signature": "4ca34c4ea035ee0e7bf03dea4ee4b4331dcde67362066ade00a47d1031e142fe",
+        "version": "1f2ff5b91ca6f06b5a5396909cb227db923a3b2edfba579109297759e5560bf2",
+        "signature": "db9bc6abe552bb7fd56762246aea7f64d24438934a71c508182ee8c6adea2e2b",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -499,6 +494,11 @@
       "./node_modules/@types/ramda/index.d.ts": {
         "version": "5cc20bb11d8d85c9d6826a8bee507ac072f94c5a5de90cd34f6495808de5601c",
         "signature": "5cc20bb11d8d85c9d6826a8bee507ac072f94c5a5de90cd34f6495808de5601c",
+        "affectsGlobalScope": false
+      },
+      "./src/managing-assets.ts": {
+        "version": "b805430854406a12d1cde0d278bbd5d958ab46d4d4284ca2d7c5a0c130a92547",
+        "signature": "232ad5032c7ee0bf1aeadd98538df822c6f0ab7b6c3cc2aa99f4f74c0306b27d",
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
@@ -868,6 +868,7 @@
         "./src/pushing.ts"
       ],
       "./src/managing-assets.ts": [
+        "./node_modules/@types/ramda/index.d.ts",
         "./src/config.ts",
         "./src/interfaces.ts",
         "./src/making-order.ts"

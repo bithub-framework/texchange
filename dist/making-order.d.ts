@@ -1,7 +1,7 @@
 import { Pushing } from './pushing';
 import { OpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
 declare class MakingOrder extends Pushing {
-    private orderCount;
+    protected orderCount: number;
     protected openOrders: Map<OrderId, OpenOrder>;
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;

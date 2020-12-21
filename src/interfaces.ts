@@ -23,6 +23,10 @@ export function round(x: number, precision: number) {
     return Math.round(x / precision) * precision;
 }
 
-export function trunc(x: number, precision: number) {
-    return Math.trunc(x / precision) * precision;
+export function floor(x: number, precision: number) {
+    return Math.floor(x / precision) * precision;
+}
+
+export function ceil(x: number, precision: number) {
+    return Math.ceil(x / precision) * precision;
 }

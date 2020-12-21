@@ -11,11 +11,11 @@ import {
 import {
     EPSILON,
     QUANTITY_PRECISION,
-    PRICE_PRECISION,
+    DOLLAR_PRECISION,
 } from './config';
 
 class MakingOrder extends Pushing {
-    private orderCount = 0;
+    protected orderCount = 0;
     protected openOrders = new Map<OrderId, OpenOrder>();
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
@@ -67,7 +67,11 @@ class MakingOrder extends Pushing {
             this.openOrders.delete(maker.id);
         } else {
             volume = rawTrade.quantity;
-            dollarVolume = rawTrade.quantity * maker.price;
+            dollarVolume = round(
+                // non precision reason
+                rawTrade.quantity * maker.price,
+                DOLLAR_PRECISION,
+            );
             maker.quantity = round(
                 maker.quantity - rawTrade.quantity,
                 QUANTITY_PRECISION,
@@ -132,8 +136,9 @@ class MakingOrder extends Pushing {
                     QUANTITY_PRECISION,
                 );
                 dollarVolume = round(
+                    // non precision reason
                     dollarVolume + quantity * maker.price,
-                    PRICE_PRECISION * QUANTITY_PRECISION,
+                    DOLLAR_PRECISION,
                 );
             }
         }
@@ -146,10 +151,13 @@ class MakingOrder extends Pushing {
         ];
     }
 
-    protected orderMakes(order: LimitOrder): OpenOrder {
+    protected orderMakes(
+        order: LimitOrder,
+    ): OpenOrder {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
+            frozen: 0,
         };
         if (openOrder.quantity > EPSILON)
             this.openOrders.set(openOrder.id, openOrder);

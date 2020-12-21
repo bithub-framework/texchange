@@ -14,4 +14,5 @@ export interface Config {
     TAKER_FEE: number;
 }
 export declare function round(x: number, precision: number): number;
-export declare function trunc(x: number, precision: number): number;
+export declare function floor(x: number, precision: number): number;
+export declare function ceil(x: number, precision: number): number;
