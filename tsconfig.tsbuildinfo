@@ -202,13 +202,18 @@
         "affectsGlobalScope": true
       },
       "./src/config.ts": {
-        "version": "4f637914658d00d8295dc513be17b744fa9eaad5761a9cffe7a3b4e104187325",
-        "signature": "2094ebbc920e26a33f759cc954c678b4b4c486018b25065952971d3dcdcca731",
+        "version": "5b42a0207ba9ab0242e2168db87eb7fc6d634651f4d85a37f84781233971c3f5",
+        "signature": "575971b9987b41b759127dc907402ac3f23f5da4086c66e582cc0a1136060d71",
         "affectsGlobalScope": false
       },
+      "./node_modules/@types/big.js/index.d.ts": {
+        "version": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
+        "signature": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
+        "affectsGlobalScope": true
+      },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "e250b37ccf69bf311e5dd7300a63bccbd2a479897883a36072283eb7a1de47b4",
-        "signature": "e250b37ccf69bf311e5dd7300a63bccbd2a479897883a36072283eb7a1de47b4",
+        "version": "40ba3f12e8d2675659781cc2ee775f484e53034f4127637acd9ee8ca0e925056",
+        "signature": "40ba3f12e8d2675659781cc2ee775f484e53034f4127637acd9ee8ca0e925056",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -462,23 +467,23 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "5b63e618b785dd21c5c0bf2f7b4a0fcb21d5db164480dc03d0f669f36adda4ac",
-        "signature": "aabc0af47a1ceb56579417116077d8e1c422a217bfee19be97cf52abee30daa9",
+        "version": "cdcf42670557a8ac5cfa133eb8f0d736693ca2ca52c3452484701b398510ea89",
+        "signature": "3e1e482207f2ec92a6c5c52ccead90333b794676977152728d3258e3fe2cf465",
         "affectsGlobalScope": false
       },
       "./src/incremental-book.ts": {
-        "version": "8866aac3705c05672b3673f272e079f348dc5f7388beadf4b863c66f390ba399",
-        "signature": "df861c4b6d4d79a497f9e6331fef194c3b333dc235e8b4158bae55ea7d487ccc",
+        "version": "6767b832efe1b4616d9b2b39978ac9e1fdfc0dab84aed457b3b91343cf890fd4",
+        "signature": "e32f9ba8db5c4483211e8a0c335095ad2617875a173b808d8cb7e6753af20840",
         "affectsGlobalScope": false
       },
       "./src/pushing.ts": {
-        "version": "be87f73ba4fd3ef54e292b2afeeba0a6401c1fb26be5ec59be95e800880e42a0",
+        "version": "7297b76d175a240f687160f7903198d7861be7e349ae9e732afad2820d12cab4",
         "signature": "7d1cb7a02e652d28f803bd5756caa524448aacc25e56eadeee1968138b5ff1e5",
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "92893b73fe9e65d496bdc38d212824c14c387469c8ae808d7f7db6b5a24b4710",
-        "signature": "db9bc6abe552bb7fd56762246aea7f64d24438934a71c508182ee8c6adea2e2b",
+        "version": "341727f19c3c5f358e261217315fc2df24d103397758d5292eb8f3770dcc8750",
+        "signature": "e8c0f3d303794464638698a4f85123ac23bb2791490258e18360f01e30826cbf",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -497,8 +502,8 @@
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "1907812ab8c60b2f1c8560aaf9f6780302e2a8856d3221753eb87f4a6f328afb",
-        "signature": "232ad5032c7ee0bf1aeadd98538df822c6f0ab7b6c3cc2aa99f4f74c0306b27d",
+        "version": "162611a18dd4d9bdbb1d1e1b401129b431f0bf243b2bdae710204119cfcd0552",
+        "signature": "9a05186e23b056c7859291c869f7de8cd002fff24324eee0cc2d1f016e31a322",
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
@@ -848,6 +853,9 @@
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/data.d.ts"
       ],
+      "./node_modules/interfaces/dist/data.d.ts": [
+        "./node_modules/@types/big.js/index.d.ts"
+      ],
       "./node_modules/interfaces/dist/index.d.ts": [
         "./node_modules/interfaces/dist/context.d.ts",
         "./node_modules/interfaces/dist/data.d.ts"
@@ -856,18 +864,22 @@
         "./node_modules/ts-toolbelt/out/index.d.ts"
       ],
       "./src/incremental-book.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/config.ts",
         "./src/interfaces.ts"
       ],
       "./src/interfaces.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
       ],
       "./src/making-order.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/config.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
       "./src/managing-assets.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/ramda/index.d.ts",
         "./src/config.ts",
         "./src/interfaces.ts",
@@ -1123,6 +1135,9 @@
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/data.d.ts"
       ],
+      "./node_modules/interfaces/dist/data.d.ts": [
+        "./node_modules/@types/big.js/index.d.ts"
+      ],
       "./node_modules/interfaces/dist/index.d.ts": [
         "./node_modules/interfaces/dist/context.d.ts",
         "./node_modules/interfaces/dist/data.d.ts"
@@ -1131,16 +1146,20 @@
         "./node_modules/ts-toolbelt/out/index.d.ts"
       ],
       "./src/incremental-book.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
       "./src/interfaces.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
       ],
       "./src/making-order.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
       "./src/managing-assets.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts",
         "./src/making-order.ts"
       ],
@@ -1172,6 +1191,7 @@
       "../../../node_modules/@types/qs/index.d.ts",
       "../../../node_modules/@types/range-parser/index.d.ts",
       "../../../node_modules/@types/serve-static/index.d.ts",
+      "./node_modules/@types/big.js/index.d.ts",
       "./node_modules/@types/events/index.d.ts",
       "./node_modules/@types/node/assert.d.ts",
       "./node_modules/@types/node/async_hooks.d.ts",

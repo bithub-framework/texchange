@@ -1,11 +1,12 @@
 import { Orderbook, Side } from './interfaces';
+import Big from 'big.js';
 declare class IncrementalBook {
     private baseBook;
     private total;
-    private increment;
+    private decrements;
     setBaseBook(orderbook: Orderbook): void;
-    incQuantity(side: Side, price: number, increment: number): void;
-    getQuantity(side: Side): Map<number, number>;
+    decQuantity(side: Side, price: Big, decrement: Big): void;
+    getQuantity(side: Side): Map<string, Big>;
     apply(): void;
 }
 export { IncrementalBook as default, IncrementalBook, };

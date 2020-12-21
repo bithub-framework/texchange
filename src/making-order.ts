@@ -6,14 +6,18 @@ import {
     OrderId,
     MakerOrder,
     RawTrade,
-    round,
-    ceil,
 } from './interfaces';
 import {
-    EPSILON,
-    QUANTITY_PRECISION,
-    DOLLAR_PRECISION,
+    DOLLAR_DP,
 } from './config';
+import {
+    Big,
+    RoundingMode,
+} from 'big.js';
+
+function min(a: Big, b: Big) {
+    return a.lt(b) ? a : b;
+}
 
 class MakingOrder extends Pushing {
     protected orderCount = 0;
@@ -43,11 +47,11 @@ class MakingOrder extends Pushing {
             (
                 maker.side === BID &&
                 rawTrade.side === ASK &&
-                maker.price > rawTrade.price + EPSILON
+                maker.price.gt(rawTrade.price)
             ) || (
                 maker.side === ASK &&
                 rawTrade.side === BID &&
-                rawTrade.price > maker.price + EPSILON
+                maker.price.lt(rawTrade.price)
             )
         );
     }
@@ -55,29 +59,23 @@ class MakingOrder extends Pushing {
     protected rawTradeTakesOpenOrder(
         rawTrade: RawTrade,
         maker: OpenOrder,
-    ): [number, number] {
-        let volume: number;
-        let dollarVolume: number;
-        if (rawTrade.quantity > maker.quantity - EPSILON) {
+    ): [Big, Big] {
+        let volume: Big;
+        let dollarVolume: Big;
+        if (rawTrade.quantity.gte(maker.quantity)) {
             volume = maker.quantity;
-            dollarVolume = maker.quantity * maker.price;
-
-            rawTrade.quantity -= maker.quantity;
-            rawTrade.quantity = round(rawTrade.quantity, QUANTITY_PRECISION);
-
+            dollarVolume = maker.quantity.times(maker.price)
+                .round(DOLLAR_DP, RoundingMode.RoundUp);
+            rawTrade.quantity = rawTrade.quantity.minus(maker.quantity);
             this.openOrders.delete(maker.id);
         } else {
             volume = rawTrade.quantity;
-            dollarVolume = ceil(
-                // non precision reason
-                rawTrade.quantity * maker.price,
-                DOLLAR_PRECISION,
-            );
+            dollarVolume = rawTrade.quantity.times(maker.price)
+                // TODO
+                .round(DOLLAR_DP, RoundingMode.RoundUp);
 
-            maker.quantity -= rawTrade.quantity;
-            maker.quantity = round(maker.quantity, QUANTITY_PRECISION);
-
-            rawTrade.quantity = 0;
+            maker.quantity = maker.quantity.minus(rawTrade.quantity);
+            rawTrade.quantity = new Big(0);
         }
         return [volume, dollarVolume];
     }
@@ -98,48 +96,40 @@ class MakingOrder extends Pushing {
     protected orderTakes(_taker: LimitOrder): [
         LimitOrder,
         RawTrade[],
-        number,
-        number,
+        Big,
+        Big,
     ] {
         const taker: LimitOrder = { ..._taker };
         const rawTrades: RawTrade[] = [];
-        let volume = 0;
-        let dollarVolume = 0;
-        for (const [price, quantity] of this.incBook.getQuantity(1 - taker.side)) {
+        let volume = new Big(0);
+        let dollarVolume = new Big(0);
+        for (const [_price, quantity] of this.incBook.getQuantity(1 - taker.side)) {
             const maker: MakerOrder = {
                 side: 1 - taker.side,
-                price,
+                price: new Big(_price),
                 quantity,
             };
             if (
                 (
                     taker.side === BID &&
-                    taker.price > maker.price - EPSILON
+                    taker.price.gte(maker.price)
                 ) || (
                     taker.side === ASK &&
-                    taker.price < maker.price + EPSILON
+                    taker.price.lte(maker.price)
                 )
             ) {
-                const quantity = Math.min(taker.quantity, maker.quantity);
+                const quantity = min(taker.quantity, maker.quantity);
                 rawTrades.push({
                     side: taker.side,
                     price: maker.price,
                     quantity,
                     time: this.now(),
                 });
-                this.incBook.incQuantity(maker.side, maker.price, -quantity);
-
-                taker.quantity -= quantity;
-                taker.quantity = round(taker.quantity, QUANTITY_PRECISION);
-
-                volume += quantity;
-                volume = round(volume, QUANTITY_PRECISION);
-
-                dollarVolume = ceil(
-                    // non precision reason
-                    dollarVolume + quantity * maker.price,
-                    DOLLAR_PRECISION,
-                );
+                this.incBook.decQuantity(maker.side, maker.price, quantity);
+                taker.quantity = taker.quantity.minus(quantity);
+                volume = volume.plus(quantity);
+                dollarVolume = dollarVolume.plus(quantity.times(maker.price))
+                    .round(DOLLAR_DP);
             }
         }
         this.incBook.apply();
@@ -157,9 +147,9 @@ class MakingOrder extends Pushing {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: 0,
+            frozen: new Big(0),
         };
-        if (openOrder.quantity > EPSILON)
+        if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);
         return openOrder;
     }

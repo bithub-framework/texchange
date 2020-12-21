@@ -3,10 +3,11 @@ import {
     Side,
     Assets,
 } from 'interfaces';
+import Big from 'big.js';
 
 export interface RawTrade {
-    price: number;
-    quantity: number;
+    price: Big;
+    quantity: Big;
     side: Side;
     time: number;
 }
@@ -17,16 +18,4 @@ export interface Config {
     PROCESSING: number;
     MAKER_FEE: number;
     TAKER_FEE: number;
-}
-
-export function round(x: number, precision: number) {
-    return Math.round(x / precision) * precision;
-}
-
-export function floor(x: number, precision: number) {
-    return Math.floor(x / precision) * precision;
-}
-
-export function ceil(x: number, precision: number) {
-    return Math.ceil(x / precision) * precision;
 }

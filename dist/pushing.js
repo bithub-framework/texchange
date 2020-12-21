@@ -21,12 +21,12 @@ class Pushing extends EventEmitter {
     latestOrderbook() {
         return {
             [ASK]: [...this.incBook.getQuantity(ASK)]
-                .map(([price, quantity]) => ({
-                price, quantity, side: ASK,
+                .map(([_price, quantity]) => ({
+                price: new Big(_price), quantity, side: ASK,
             })),
             [BID]: [...this.incBook.getQuantity(BID)]
-                .map(([price, quantity]) => ({
-                price, quantity, side: BID,
+                .map(([_price, quantity]) => ({
+                price: new Big(_price), quantity, side: BID,
             })),
             time: this.now(),
         };

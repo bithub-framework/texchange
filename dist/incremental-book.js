@@ -1,5 +1,7 @@
-import { BID, ASK, round, } from './interfaces';
-import { EPSILON, QUANTITY_PRECISION, } from './config';
+import { BID, ASK, } from './interfaces';
+import { PRICE_DP, } from './config';
+import Big from 'big.js';
+// Big.strict
 class IncrementalBook {
     constructor() {
         this.baseBook = {
@@ -10,7 +12,7 @@ class IncrementalBook {
             [BID]: new Map(),
         };
         // increment 必须是负数
-        this.increment = {
+        this.decrements = {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
@@ -18,9 +20,10 @@ class IncrementalBook {
     setBaseBook(orderbook) {
         this.baseBook = orderbook;
     }
-    incQuantity(side, price, increment) {
-        const origin = this.increment[side].get(price) || 0;
-        this.increment[side].set(price, round(origin + increment, QUANTITY_PRECISION));
+    decQuantity(side, price, decrement) {
+        const _price = price.toFixed(PRICE_DP);
+        const origin = this.decrements[side].get(_price) || new Big(0);
+        this.decrements[side].set(_price, origin.plus(decrement));
     }
     getQuantity(side) {
         return this.total[side];
@@ -28,16 +31,18 @@ class IncrementalBook {
     apply() {
         for (const side of [BID, ASK]) {
             this.total[side].clear();
-            this.baseBook[side].forEach(order => void this.total[side].set(order.price, order.quantity));
-            this.increment[side].forEach((increment, price) => {
-                let quantity = this.total[side].get(price);
-                if (quantity)
-                    if ((quantity += increment) < EPSILON)
-                        this.total[side].delete(price);
+            this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(PRICE_DP), order.quantity));
+            this.decrements[side].forEach((decrement, _price) => {
+                let quantity = this.total[side].get(_price);
+                if (quantity) {
+                    quantity = quantity.minus(decrement);
+                    if (quantity.gt(0))
+                        this.total[side].set(_price, quantity);
                     else
-                        this.total[side].set(price, quantity);
+                        this.total[side].delete(_price);
+                }
                 else
-                    this.increment[side].delete(price);
+                    this.decrements[side].delete(_price);
             });
         }
     }

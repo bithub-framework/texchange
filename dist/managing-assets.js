@@ -1,70 +1,58 @@
 import { MakingOrder } from './making-order';
-import { LONG, SHORT, round, floor, ceil, } from './interfaces';
-import { EPSILON, PRICE_PRECISION, QUANTITY_PRECISION, DOLLAR_PRECISION, } from './config';
+import { LONG, SHORT, } from './interfaces';
+import { PRICE_DP, DOLLAR_DP, } from './config';
 import { clone } from 'ramda';
+import { Big, } from 'big.js';
 class ManagingAssets extends MakingOrder {
     constructor(config, now) {
         super(now);
         this.config = config;
-        this.settlementPrice = 0;
+        this.settlementPrice = new Big(0);
         this.assets = config.initialAssets;
     }
     openPosition(length, volume, dollarVolume) {
-        this.assets.position[length] += volume;
-        this.assets.position[length] = round(this.assets.position[length], QUANTITY_PRECISION);
-        this.assets.cost[length] += dollarVolume;
-        this.assets.cost[length] = round(this.assets.cost[length], DOLLAR_PRECISION);
+        this.assets.position[length] = this.assets.position[length].plus(volume);
+        this.assets.cost[length] = this.assets.cost[length].plus(dollarVolume);
     }
     closePosition(length, volume, dollarVolume) {
-        const costPrice = this.assets.cost[length] / this.assets.position[length];
-        const cost = volume > this.assets.position[length] - EPSILON
+        const costPrice = this.assets.cost[length].div(this.assets.position[length]);
+        const cost = volume.eq(this.assets.position[length])
             ? this.assets.cost[length]
-            : floor(
-            // non precision reason
-            volume * costPrice, DOLLAR_PRECISION);
+            // TODO
+            : volume.times(costPrice).round(DOLLAR_DP);
         const realizedProfit = length === LONG
-            ? dollarVolume - cost
-            : cost - dollarVolume;
-        this.assets.balance += realizedProfit;
-        this.assets.balance = round(this.assets.balance, DOLLAR_PRECISION);
-        this.assets.position[length] -= volume;
-        this.assets.position[length] = round(this.assets.position[length], QUANTITY_PRECISION);
-        this.assets.cost[length] -= cost;
-        this.assets.cost[length] = round(this.assets.cost[length], DOLLAR_PRECISION);
+            ? dollarVolume.minus(cost)
+            : cost.minus(dollarVolume);
+        this.assets.balance = this.assets.balance.plus(realizedProfit);
+        this.assets.position[length] = this.assets.position[length].minus(volume);
+        this.assets.cost[length] = this.assets.cost[length].minus(cost);
     }
     async makeLimitOrder(order) {
         if (!order.open &&
-            order.quantity > this.assets.position[1 - order.side] + EPSILON)
+            order.quantity.gt(this.assets.position[1 - order.side]))
             throw new Error('No enough position to close.');
         this.settle();
         if (order.open &&
-            ceil(
-            // non precision reason
-            order.price * order.quantity / this.assets.leverage, DOLLAR_PRECISION) +
-                ceil(
-                // non precision reason
-                order.price * order.quantity * this.config.TAKER_FEE, DOLLAR_PRECISION)
-                < this.assets.reserve + EPSILON)
+            order.price.times(order.quantity).div(this.assets.leverage)
+                .round(DOLLAR_DP, 3 /* RoundUp */).plus(order.price.times(order.quantity).times(this.config.TAKER_FEE)
+                .round(DOLLAR_DP, 3 /* RoundUp */)).lt(this.assets.reserve))
             throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
         const [makerOrder, rawTrades, volume, dollarVolume,] = this.orderTakes(order);
-        const takerFee = ceil(
-        // non precision reason
-        dollarVolume * this.config.TAKER_FEE, DOLLAR_PRECISION);
-        this.assets.balance -= takerFee;
-        this.assets.balance = round(this.assets.balance, DOLLAR_PRECISION);
+        const takerFee = dollarVolume.times(this.config.TAKER_FEE)
+            .round(DOLLAR_DP, 3 /* RoundUp */);
+        this.assets.balance = this.assets.balance.minus(takerFee);
         if (order.open)
             this.openPosition(order.side, volume, dollarVolume);
         else
             this.closePosition(1 - order.side, volume, dollarVolume);
         const openOrder = this.orderMakes(makerOrder);
         if (this.openOrders.has(openOrder.id)) {
-            this.assets.frozen += ceil(
-            // non precision reason
-            openOrder.price * openOrder.quantity / this.assets.leverage, DOLLAR_PRECISION) + ceil(
-            // non precision reason
-            makerOrder.price * makerOrder.quantity * this.config.MAKER_FEE, DOLLAR_PRECISION);
-            this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
+            this.assets.frozen = this.assets.frozen
+                .plus(openOrder.price.times(openOrder.quantity).div(this.assets.leverage))
+                .round(DOLLAR_DP, 3 /* RoundUp */)
+                .plus(openOrder.price.times(openOrder.quantity).times(this.config.MAKER_FEE))
+                .round(DOLLAR_DP, 3 /* RoundUp */);
         }
         this.calcMargin();
         this.pushRawTrades(rawTrades);
@@ -74,8 +62,8 @@ class ManagingAssets extends MakingOrder {
     async cancelOrder(oid) {
         let openOrder;
         if (openOrder = this.openOrders.get(oid)) {
-            this.assets.frozen -= openOrder.frozen;
-            this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
+            this.assets.frozen = this.assets.frozen
+                .minus(openOrder.frozen);
         }
         this.calcMargin();
         await super.cancelOrder(oid);
@@ -86,10 +74,10 @@ class ManagingAssets extends MakingOrder {
     }
     updateTrades(rawTrades) {
         for (let rawTrade of rawTrades) {
-            this.settlementPrice
-                = round(
-                // non precision reason
-                this.settlementPrice * .9 + rawTrade.price + .1, PRICE_PRECISION);
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(rawTrade.price.times(.1))
+                .round(PRICE_DP);
             this.rawTradeTakesOpenOrders(rawTrade);
         }
         this.pushRawTrades(rawTrades);
@@ -98,13 +86,13 @@ class ManagingAssets extends MakingOrder {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: ceil(
-            // non precision reason
-            order.price * order.quantity / this.assets.leverage, DOLLAR_PRECISION) + ceil(
-            // non precision reason
-            order.price * order.quantity * this.config.MAKER_FEE, DOLLAR_PRECISION),
+            frozen: new Big(0)
+                .plus(order.price.times(order.quantity).div(this.assets.leverage))
+                .round(DOLLAR_DP, 3 /* RoundUp */)
+                .plus(order.price.times(order.quantity).times(this.config.MAKER_FEE))
+                .round(DOLLAR_DP, 3 /* RoundUp */),
         };
-        if (openOrder.quantity > EPSILON)
+        if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);
         return openOrder;
     }
@@ -114,18 +102,18 @@ class ManagingAssets extends MakingOrder {
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, openOrder)) {
                 const [volume, dollarVolume,] = this.rawTradeTakesOpenOrder(rawTrade, openOrder);
                 const released = this.openOrders.has(openOrder.id)
-                    ? floor(
-                    // non precision reason
-                    dollarVolume / this.assets.leverage +
-                        dollarVolume * this.config.MAKER_FEE, DOLLAR_PRECISION) : openOrder.frozen;
-                openOrder.frozen -= released;
-                openOrder.frozen = round(openOrder.frozen, DOLLAR_PRECISION);
-                this.assets.frozen -= released;
-                this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
-                this.assets.balance = floor(
-                // non precision reason
-                this.assets.balance -
-                    dollarVolume * this.config.MAKER_FEE, DOLLAR_PRECISION);
+                    ? new Big(0)
+                        .plus(dollarVolume.div(this.assets.leverage))
+                        .plus(dollarVolume.times(this.config.MAKER_FEE))
+                        .round(DOLLAR_DP, 0 /* RoundDown */)
+                    : openOrder.frozen;
+                openOrder.frozen = openOrder.frozen
+                    .minus(released);
+                this.assets.frozen = this.assets.frozen
+                    .minus(released);
+                this.assets.balance = this.assets.balance
+                    .minus(dollarVolume.times(this.config.MAKER_FEE))
+                    .round(DOLLAR_DP, 0 /* RoundDown */);
                 if (openOrder.open)
                     this.openPosition(openOrder.side, volume, dollarVolume);
                 else
@@ -137,9 +125,9 @@ class ManagingAssets extends MakingOrder {
         const price = this.settlementPrice;
         const assets = clone(this.assets);
         for (const length of [LONG, SHORT]) {
-            const settlementDollarVolume = (length === LONG ? floor : ceil)(
-            // non precision reason
-            price * assets.position[length], DOLLAR_PRECISION);
+            const settlementDollarVolume = new Big(0)
+                .plus(price.times(assets.position[length]))
+                .round(DOLLAR_DP, length === LONG ? 0 /* RoundDown */ : 3 /* RoundUp */);
             this.closePosition(length, assets.position[length], settlementDollarVolume);
             this.openPosition(length, assets.position[length], settlementDollarVolume);
         }
@@ -147,10 +135,12 @@ class ManagingAssets extends MakingOrder {
     }
     calcMargin() {
         const { cost, leverage, balance, margin, frozen, } = this.assets;
-        this.assets.margin = ceil(
-        // non precision reason
-        (cost[LONG] + cost[SHORT]) / leverage, DOLLAR_PRECISION);
-        this.assets.reserve = balance - margin - frozen;
+        this.assets.margin = new Big(0)
+            .plus(cost[LONG])
+            .plus(cost[SHORT])
+            .div(leverage)
+            .round(DOLLAR_DP, 3 /* RoundUp */);
+        this.assets.reserve = balance.minus(margin).minus(frozen);
     }
 }
 export { ManagingAssets as default, ManagingAssets, };
