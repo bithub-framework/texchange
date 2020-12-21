@@ -37,14 +37,11 @@ class ManagingAssets extends MakingOrder {
         volume: number,
         dollarVolume: number
     ): void {
-        this.assets.position[length] = round(
-            this.assets.position[length] + volume,
-            QUANTITY_PRECISION,
-        );
-        this.assets.cost[length] = round(
-            this.assets.cost[length] + dollarVolume,
-            DOLLAR_PRECISION,
-        );
+        this.assets.position[length] += volume;
+        this.assets.position[length] = round(this.assets.position[length], QUANTITY_PRECISION);
+
+        this.assets.cost[length] += dollarVolume;
+        this.assets.cost[length] = round(this.assets.cost[length], DOLLAR_PRECISION);
     }
 
     protected closePosition(
@@ -64,18 +61,15 @@ class ManagingAssets extends MakingOrder {
         const realizedProfit = length === LONG
             ? dollarVolume - cost
             : cost - dollarVolume;
-        this.assets.balance = round(
-            this.assets.balance + realizedProfit,
-            DOLLAR_PRECISION,
-        );
-        this.assets.position[length] = round(
-            this.assets.position[length] - volume,
-            QUANTITY_PRECISION,
-        );
-        this.assets.cost[length] = round(
-            this.assets.cost[length] - cost,
-            DOLLAR_PRECISION,
-        );
+
+        this.assets.balance += realizedProfit;
+        this.assets.balance = round(this.assets.balance, DOLLAR_PRECISION);
+
+        this.assets.position[length] -= volume;
+        this.assets.position[length] = round(this.assets.position[length], QUANTITY_PRECISION);
+
+        this.assets.cost[length] -= cost;
+        this.assets.cost[length] = round(this.assets.cost[length], DOLLAR_PRECISION);
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
@@ -107,33 +101,31 @@ class ManagingAssets extends MakingOrder {
             dollarVolume,
         ] = this.orderTakes(order);
         const takerFee = ceil(
+            // non precision reason
             dollarVolume * this.config.TAKER_FEE,
             DOLLAR_PRECISION,
         );
-        this.assets.balance = round(
-            this.assets.balance - takerFee,
-            DOLLAR_PRECISION,
-        );
+
+        this.assets.balance -= takerFee;
+        this.assets.balance = round(this.assets.balance, DOLLAR_PRECISION);
+
         if (order.open)
             this.openPosition(<number>order.side, volume, dollarVolume);
         else
             this.closePosition(1 - order.side, volume, dollarVolume);
         const openOrder = this.orderMakes(makerOrder);
-        if (this.openOrders.has(openOrder.id))
-            this.assets.frozen = round(
-                this.assets.frozen +
-                ceil(
-                    // non precision reason
-                    openOrder.price * openOrder.quantity / this.assets.leverage,
-                    DOLLAR_PRECISION,
-                ) +
-                ceil(
-                    // non precision reason
-                    makerOrder.price * makerOrder.quantity * this.config.MAKER_FEE,
-                    DOLLAR_PRECISION,
-                ),
+        if (this.openOrders.has(openOrder.id)) {
+            this.assets.frozen += ceil(
+                // non precision reason
+                openOrder.price * openOrder.quantity / this.assets.leverage,
+                DOLLAR_PRECISION,
+            ) + ceil(
+                // non precision reason
+                makerOrder.price * makerOrder.quantity * this.config.MAKER_FEE,
                 DOLLAR_PRECISION,
             );
+            this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
+        }
         this.calcMargin();
         this.pushRawTrades(rawTrades);
         this.pushOrderbook();
@@ -143,10 +135,8 @@ class ManagingAssets extends MakingOrder {
     public async cancelOrder(oid: OrderId): Promise<void> {
         let openOrder: OpenOrder | undefined;
         if (openOrder = this.openOrders.get(oid)) {
-            this.assets.frozen = round(
-                this.assets.frozen - openOrder.frozen,
-                DOLLAR_PRECISION,
-            );
+            this.assets.frozen -= openOrder.frozen;
+            this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
         }
         this.calcMargin();
         await super.cancelOrder(oid);
@@ -161,6 +151,7 @@ class ManagingAssets extends MakingOrder {
         for (let rawTrade of rawTrades) {
             this.settlementPrice
                 = round(
+                    // non precision reason
                     this.settlementPrice * .9 + rawTrade.price + .1,
                     PRICE_PRECISION,
                 );
@@ -204,14 +195,13 @@ class ManagingAssets extends MakingOrder {
                         dollarVolume * this.config.MAKER_FEE,
                         DOLLAR_PRECISION,
                     ) : openOrder.frozen;
-                openOrder.frozen = round(
-                    openOrder.frozen - released,
-                    DOLLAR_PRECISION,
-                );
-                this.assets.frozen = round(
-                    this.assets.frozen - released,
-                    DOLLAR_PRECISION,
-                );
+
+                openOrder.frozen -= released;
+                openOrder.frozen = round(openOrder.frozen, DOLLAR_PRECISION);
+
+                this.assets.frozen -= released;
+                this.assets.frozen = round(this.assets.frozen, DOLLAR_PRECISION);
+
                 this.assets.balance = floor(
                     // non precision reason
                     this.assets.balance -

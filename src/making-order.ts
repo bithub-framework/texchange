@@ -7,6 +7,7 @@ import {
     MakerOrder,
     RawTrade,
     round,
+    ceil,
 } from './interfaces';
 import {
     EPSILON,
@@ -60,22 +61,22 @@ class MakingOrder extends Pushing {
         if (rawTrade.quantity > maker.quantity - EPSILON) {
             volume = maker.quantity;
             dollarVolume = maker.quantity * maker.price;
-            rawTrade.quantity = round(
-                rawTrade.quantity - maker.quantity,
-                QUANTITY_PRECISION,
-            );
+
+            rawTrade.quantity -= maker.quantity;
+            rawTrade.quantity = round(rawTrade.quantity, QUANTITY_PRECISION);
+
             this.openOrders.delete(maker.id);
         } else {
             volume = rawTrade.quantity;
-            dollarVolume = round(
+            dollarVolume = ceil(
                 // non precision reason
                 rawTrade.quantity * maker.price,
                 DOLLAR_PRECISION,
             );
-            maker.quantity = round(
-                maker.quantity - rawTrade.quantity,
-                QUANTITY_PRECISION,
-            );
+
+            maker.quantity -= rawTrade.quantity;
+            maker.quantity = round(maker.quantity, QUANTITY_PRECISION);
+
             rawTrade.quantity = 0;
         }
         return [volume, dollarVolume];
@@ -127,15 +128,14 @@ class MakingOrder extends Pushing {
                     time: this.now(),
                 });
                 this.incBook.incQuantity(maker.side, maker.price, -quantity);
-                taker.quantity = round(
-                    taker.quantity - quantity,
-                    QUANTITY_PRECISION,
-                );
-                volume = round(
-                    volume + quantity,
-                    QUANTITY_PRECISION,
-                );
-                dollarVolume = round(
+
+                taker.quantity -= quantity;
+                taker.quantity = round(taker.quantity, QUANTITY_PRECISION);
+
+                volume += quantity;
+                volume = round(volume, QUANTITY_PRECISION);
+
+                dollarVolume = ceil(
                     // non precision reason
                     dollarVolume + quantity * maker.price,
                     DOLLAR_PRECISION,
