@@ -68,7 +68,7 @@ class ManagingAssets extends MakingOrder {
                 .plus(order.price.times(order.quantity).div(this.assets.leverage))
                 .plus(order.price.times(order.quantity).times(this.config.TAKER_FEE))
                 .round(DOLLAR_DP, RoundingMode.RoundUp)
-                .lt(this.assets.reserve)
+                .gt(this.assets.reserve)
         ) throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
 
