@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "",
     "type": "module",
-    "main": "./texchange.js",
+    "main": "./dist/texchange.js",
     "types": "./dist/texchange.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
