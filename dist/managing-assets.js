@@ -6,7 +6,7 @@ class ManagingAssets extends MakingOrder {
     constructor(config, now) {
         super(now);
         this.config = config;
-        this.settlementPrice = new Big(0);
+        this.settlementPrice = new Big('0');
         this.assets = config.initialAssets;
     }
     openPosition(length, volume, dollarVolume) {
@@ -32,7 +32,7 @@ class ManagingAssets extends MakingOrder {
             order.quantity.gt(this.assets.position[1 - order.side]))
             throw new Error('No enough position to close.');
         this.settle();
-        if (order.open && new Big(0)
+        if (order.open && new Big('0')
             .plus(order.price.times(order.quantity).div(this.assets.leverage))
             .plus(order.price.times(order.quantity).times(this.config.TAKER_FEE))
             .round(DOLLAR_DP, 3 /* RoundUp */)
@@ -70,7 +70,7 @@ class ManagingAssets extends MakingOrder {
     }
     updateTrades(rawTrades) {
         for (let rawTrade of rawTrades) {
-            this.settlementPrice = new Big(0)
+            this.settlementPrice = new Big('0')
                 .plus(this.settlementPrice.times(.9))
                 .plus(rawTrade.price.times(.1))
                 .round(PRICE_DP);
@@ -82,7 +82,7 @@ class ManagingAssets extends MakingOrder {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: new Big(0)
+            frozen: new Big('0')
                 .plus(order.price.times(order.quantity).div(this.assets.leverage))
                 .plus(order.price.times(order.quantity).times(this.config.MAKER_FEE))
                 .round(DOLLAR_DP, 3 /* RoundUp */),
@@ -96,7 +96,7 @@ class ManagingAssets extends MakingOrder {
         for (const openOrder of this.openOrders.values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, openOrder)) {
                 const [volume, dollarVolume,] = this.rawTradeTakesOpenOrder(rawTrade, openOrder);
-                const released = min(new Big(0)
+                const released = min(new Big('0')
                     .plus(dollarVolume.div(this.assets.leverage))
                     .plus(dollarVolume.times(this.config.MAKER_FEE))
                     .round(DOLLAR_DP), openOrder.frozen);
@@ -115,7 +115,7 @@ class ManagingAssets extends MakingOrder {
     settle() {
         const position = { ...this.assets.position };
         for (const length of [LONG, SHORT]) {
-            const settlementDollarVolume = new Big(0)
+            const settlementDollarVolume = new Big('0')
                 .plus(this.settlementPrice.times(position[length]))
                 .round(DOLLAR_DP);
             this.closePosition(length, position[length], settlementDollarVolume);
@@ -124,7 +124,7 @@ class ManagingAssets extends MakingOrder {
         this.calcMargin();
     }
     calcMargin() {
-        this.assets.margin = new Big(0)
+        this.assets.margin = new Big('0')
             .plus(this.assets.cost[LONG])
             .plus(this.assets.cost[SHORT])
             .div(this.assets.leverage)

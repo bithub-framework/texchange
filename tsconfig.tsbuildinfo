@@ -477,7 +477,7 @@
         "affectsGlobalScope": false
       },
       "./src/incremental-book.ts": {
-        "version": "b4d530548471d5a327530c1269d4e2d21049420cc2836b25cfa41c6bc8868249",
+        "version": "b4ea0fa38a2d1f812476a67b16dad50766148dcc11dfe4e20d6b6437534e8713",
         "signature": "e32f9ba8db5c4483211e8a0c335095ad2617875a173b808d8cb7e6753af20840",
         "affectsGlobalScope": false
       },
@@ -487,12 +487,12 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "48e9f458732223cc80526b699ec6ad4f76620ce97fa5a02fdab823a6fbc43972",
+        "version": "b562d362807c6bc634166f9b4f4ea01770d3628cd66359a6558f8a92ce30bb6d",
         "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "aadedd64e80f76fd13be11c6783989064ecb808cb1a1815c7de7a32041cb7425",
+        "version": "09608a73f18db575a04df54618c696725591a36bf7b6252390f83a59308e95b5",
         "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
         "affectsGlobalScope": false
       },

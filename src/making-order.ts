@@ -85,8 +85,8 @@ class MakingOrder extends Pushing {
     ] {
         const taker: LimitOrder = { ..._taker };
         const rawTrades: RawTrade[] = [];
-        let volume = new Big(0);
-        let dollarVolume = new Big(0);
+        let volume = new Big('0');
+        let dollarVolume = new Big('0');
         for (const [_price, quantity] of this.incBook.getQuantity(1 - taker.side)) {
             const maker: MakerOrder = {
                 side: 1 - taker.side,
@@ -131,7 +131,7 @@ class MakingOrder extends Pushing {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: new Big(0),
+            frozen: new Big('0'),
         };
         if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);

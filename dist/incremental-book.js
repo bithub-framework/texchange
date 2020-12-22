@@ -21,7 +21,7 @@ class IncrementalBook {
     }
     decQuantity(side, price, decrement) {
         const _price = price.toFixed(PRICE_DP);
-        const origin = this.decrements[side].get(_price) || new Big(0);
+        const origin = this.decrements[side].get(_price) || new Big('0');
         this.decrements[side].set(_price, origin.plus(decrement));
     }
     getQuantity(side) {
