@@ -201,6 +201,11 @@
         "signature": "cd6efb9467a8b6338ece2e2855e37765700f2cd061ca54b01b33878cf5c7677e",
         "affectsGlobalScope": true
       },
+      "./node_modules/@types/events/index.d.ts": {
+        "version": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
+        "signature": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
+        "affectsGlobalScope": false
+      },
       "./node_modules/@types/big.js/index.d.ts": {
         "version": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
         "signature": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
@@ -224,11 +229,6 @@
       "./node_modules/@types/node/buffer.d.ts": {
         "version": "bc6a78961535181265845bf9b9e8a147ffd0ca275097ceb670a9b92afa825152",
         "signature": "bc6a78961535181265845bf9b9e8a147ffd0ca275097ceb670a9b92afa825152",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/@types/events/index.d.ts": {
-        "version": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
-        "signature": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/child_process.d.ts": {
@@ -467,28 +467,38 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "31d5917d0b6b6087a9f3f030769c26643f99a04a4518d4b6e3096bc9ac224e45",
-        "signature": "e9706a25645c9af2d9e96fd1a7b90b2ef94c71ee5154504ba48eaa048e5b58b1",
+        "version": "401b5fee0f364f3d168b66f142e21cbf4d96ea52cef72f74581b77b606261a95",
+        "signature": "d42aeef9045e7b4a589f7681da13f55c3d5cfcaf3671c33ff8414406482c66b2",
         "affectsGlobalScope": false
       },
-      "./src/incremental-book.ts": {
-        "version": "638325a27294afe3aa26f7a7c2ceeda43dfb1ca2b2f57c1d370073ea9091b955",
-        "signature": "3ef43c14aac3de11e29ce177cc0c26a7551ceb0e37acdf831b8476985bb3fd2a",
+      "./src/orderbook-manager.ts": {
+        "version": "682fb1d2e04a7d98db6bc0f342b1cc6fbcf371217cac678ebf5f8e392509a5c6",
+        "signature": "d7de447df18195024b00e031cd89bae8c360ae52961059e70c8c8816a43e3c78",
         "affectsGlobalScope": false
       },
-      "./src/pushing.ts": {
-        "version": "6ace849ca77dc02d6b8fb1976f90433a44eed3817557b2b6ee888ddf527eb3e6",
-        "signature": "8273103bcb9eb08bb5ebb40d0daf2b0e78bb134cf66e1b2035eb3181814c7a81",
+      "./src/1-pushing.ts": {
+        "version": "6972d88eccc6fdaad07b3ba21bf726159f9a9f29e6c876cf5875204f503324ca",
+        "signature": "d60f1697fc5f21ce7a4eeeb6fee152b0b6d8d2a674403db59d2447ddf50357b1",
         "affectsGlobalScope": false
       },
-      "./src/making-order.ts": {
-        "version": "93012baa84f4723e8210a0f25ded4a727fc3772987b0deeecd3f59a9c702700b",
-        "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
+      "./src/2-ordering.ts": {
+        "version": "dc6403b467f9306b4c69bc94a7db29185e4b978c377084510a02bde6aeb090ec",
+        "signature": "3c88891febb28393e88c36fde015f4e011e19a4e49ea6c2369f78767d836a4f5",
         "affectsGlobalScope": false
       },
-      "./src/managing-assets.ts": {
-        "version": "390fbac17cc6bae310e2a30194435794db8b3b35ecf12a9bc348f5d82b0855d9",
-        "signature": "0de2228bac436a37cca7424bb103417ebd5c6a6b8bb10ac82e8d4bd6306594d6",
+      "./src/3-taken.ts": {
+        "version": "3e9a1aec3338b048f589259b3b1ea3ad60c7ff3e92ab8a6747fc14a6df8a5a3f",
+        "signature": "deb9ca410a6721fc2c1bd7180d4d487cf7291f54990e88d2c3edf2ef91c7c28c",
+        "affectsGlobalScope": false
+      },
+      "./src/assets-manager.ts": {
+        "version": "be54117a6c34e9133d1083744e991d77aeca0fa3c567bbac07c49c882bfe2966",
+        "signature": "58bbc6552cbcf0b16183c61040b2c20ec6f33a97d6253006ccd1197ca4b4fa68",
+        "affectsGlobalScope": false
+      },
+      "./src/4-assets.ts": {
+        "version": "a43b774b3d92c3b706e92497cc454821e0b131ff4103afe2e8b5aae225e05609",
+        "signature": "1e7b75348b606028b71dc223182467dd745d6f963b7f738d2a2d287117514cbf",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -507,8 +517,8 @@
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
-        "version": "4fceb40bb1c84aeab12dadccc7b69e4f2c612eb043ba0edb0c7665067fd29505",
-        "signature": "ff6366f354aba24996ab56cfa0935c7f22c1930da8d327a33cab3a56f5ba9da6",
+        "version": "1925df7acd7c525780eef6a48d5af198408c30aa41f2f98966102e10cf8a20ae",
+        "signature": "654067cca5291d9ab2eb96a0764744a2654c3b3e1129d92d90225f9a0a070a32",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -869,7 +879,28 @@
       "./node_modules/ts-toolbelt/out/index.d.ts": [
         "./node_modules/ts-toolbelt/out/index.d.ts"
       ],
-      "./src/incremental-book.ts": [
+      "./src/1-pushing.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./src/interfaces.ts",
+        "./src/orderbook-manager.ts"
+      ],
+      "./src/2-ordering.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/1-pushing.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/3-taken.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/2-ordering.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/4-assets.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/3-taken.ts",
+        "./src/assets-manager.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/assets-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
@@ -881,26 +912,14 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
       ],
-      "./src/making-order.ts": [
+      "./src/orderbook-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts",
-        "./src/pushing.ts"
-      ],
-      "./src/managing-assets.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts",
-        "./src/making-order.ts"
-      ],
-      "./src/pushing.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/@types/node/events.d.ts",
-        "./src/incremental-book.ts",
         "./src/interfaces.ts"
       ],
       "./src/texchange.ts": [
         "./node_modules/@types/ramda/index.d.ts",
-        "./src/interfaces.ts",
-        "./src/managing-assets.ts"
+        "./src/4-assets.ts",
+        "./src/interfaces.ts"
       ]
     },
     "exportedModulesMap": {
@@ -1153,7 +1172,26 @@
       "./node_modules/ts-toolbelt/out/index.d.ts": [
         "./node_modules/ts-toolbelt/out/index.d.ts"
       ],
-      "./src/incremental-book.ts": [
+      "./src/1-pushing.ts": [
+        "./node_modules/@types/node/events.d.ts",
+        "./src/interfaces.ts",
+        "./src/orderbook-manager.ts"
+      ],
+      "./src/2-ordering.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/1-pushing.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/3-taken.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/2-ordering.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/4-assets.ts": [
+        "./src/3-taken.ts",
+        "./src/interfaces.ts"
+      ],
+      "./src/assets-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
@@ -1165,24 +1203,13 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
       ],
-      "./src/making-order.ts": [
+      "./src/orderbook-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts",
-        "./src/pushing.ts"
-      ],
-      "./src/managing-assets.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts",
-        "./src/making-order.ts"
-      ],
-      "./src/pushing.ts": [
-        "./node_modules/@types/node/events.d.ts",
-        "./src/incremental-book.ts",
         "./src/interfaces.ts"
       ],
       "./src/texchange.ts": [
-        "./src/interfaces.ts",
-        "./src/managing-assets.ts"
+        "./src/4-assets.ts",
+        "./src/interfaces.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -1259,12 +1286,14 @@
       "./node_modules/interfaces/dist/index.d.ts",
       "./node_modules/interfaces/dist/reviver.d.ts",
       "./node_modules/ts-toolbelt/out/index.d.ts",
-      "./src/incremental-book.ts",
+      "./src/1-pushing.ts",
+      "./src/2-ordering.ts",
+      "./src/3-taken.ts",
+      "./src/4-assets.ts",
+      "./src/assets-manager.ts",
       "./src/index.ts",
       "./src/interfaces.ts",
-      "./src/making-order.ts",
-      "./src/managing-assets.ts",
-      "./src/pushing.ts",
+      "./src/orderbook-manager.ts",
       "./src/texchange.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.core.d.ts",

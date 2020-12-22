@@ -5,10 +5,11 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 
-class IncrementalBook {
-    constructor(private config: Config) {
-
-    }
+class OrderbookManager {
+    constructor(
+        private config: Config,
+        private now: () => number,
+    ) { }
 
     private baseBook: Orderbook = {
         [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
@@ -17,13 +18,13 @@ class IncrementalBook {
         [ASK]: new Map<string, Big>(),
         [BID]: new Map<string, Big>(),
     };
-    // increment 必须是负数
+    // decrement 必须是正数
     private decrements = {
         [ASK]: new Map<string, Big>(),
         [BID]: new Map<string, Big>(),
     };
 
-    public setBaseBook(orderbook: Orderbook) {
+    public setBase(orderbook: Orderbook) {
         this.baseBook = orderbook;
     }
 
@@ -36,11 +37,22 @@ class IncrementalBook {
         );
     }
 
-    public getQuantity(side: Side): Map<string, Big> {
-        return this.total[side];
+    public getOrderbook(): Orderbook {
+        this.apply();
+        return {
+            [ASK]: [...this.total[ASK]]
+                .map(([_price, quantity]) => ({
+                    price: new Big(_price), quantity, side: ASK,
+                })),
+            [BID]: [...this.total[BID]]
+                .map(([_price, quantity]) => ({
+                    price: new Big(_price), quantity, side: BID,
+                })),
+            time: this.now(),
+        };
     }
 
-    public apply(): void {
+    private apply(): void {
         for (const side of [BID, ASK]) {
             this.total[side].clear();
             this.baseBook[side].forEach(order =>
@@ -62,6 +74,6 @@ class IncrementalBook {
 }
 
 export {
-    IncrementalBook as default,
-    IncrementalBook,
+    OrderbookManager as default,
+    OrderbookManager,
 }

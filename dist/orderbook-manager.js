@@ -1,8 +1,9 @@
 import { BID, ASK, } from './interfaces';
 import Big from 'big.js';
-class IncrementalBook {
-    constructor(config) {
+class OrderbookManager {
+    constructor(config, now) {
         this.config = config;
+        this.now = now;
         this.baseBook = {
             [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
         };
@@ -10,13 +11,13 @@ class IncrementalBook {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
-        // increment 必须是负数
+        // decrement 必须是正数
         this.decrements = {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
     }
-    setBaseBook(orderbook) {
+    setBase(orderbook) {
         this.baseBook = orderbook;
     }
     decQuantity(side, price, decrement) {
@@ -24,8 +25,19 @@ class IncrementalBook {
         const origin = this.decrements[side].get(_price) || new Big(0);
         this.decrements[side].set(_price, origin.plus(decrement));
     }
-    getQuantity(side) {
-        return this.total[side];
+    getOrderbook() {
+        this.apply();
+        return {
+            [ASK]: [...this.total[ASK]]
+                .map(([_price, quantity]) => ({
+                price: new Big(_price), quantity, side: ASK,
+            })),
+            [BID]: [...this.total[BID]]
+                .map(([_price, quantity]) => ({
+                price: new Big(_price), quantity, side: BID,
+            })),
+            time: this.now(),
+        };
     }
     apply() {
         for (const side of [BID, ASK]) {
@@ -46,5 +58,5 @@ class IncrementalBook {
         }
     }
 }
-export { IncrementalBook as default, IncrementalBook, };
-//# sourceMappingURL=incremental-book.js.map
+export { OrderbookManager as default, OrderbookManager, };
+//# sourceMappingURL=orderbook-manager.js.map

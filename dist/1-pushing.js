@@ -1,7 +1,5 @@
 import { EventEmitter } from 'events';
-import { IncrementalBook } from './incremental-book';
-import { BID, ASK, } from './interfaces';
-import Big from 'big.js';
+import { OrderbookManager } from './orderbook-manager';
 class Pushing extends EventEmitter {
     constructor(config, 
     // 必须保证 update 时数据的 time 等于 now()
@@ -10,31 +8,17 @@ class Pushing extends EventEmitter {
         this.config = config;
         this.now = now;
         this.tradeCount = 0;
-        this.incBook = new IncrementalBook(config);
+        this.orderbookManager = new OrderbookManager(config, now);
     }
     updateTrades(rawTrades) {
         this.pushRawTrades(rawTrades);
     }
     updateOrderbook(orderbook) {
-        this.incBook.setBaseBook(orderbook);
-        this.incBook.apply();
+        this.orderbookManager.setBase(orderbook);
         this.pushOrderbook();
     }
-    latestOrderbook() {
-        return {
-            [ASK]: [...this.incBook.getQuantity(ASK)]
-                .map(([_price, quantity]) => ({
-                price: new Big(_price), quantity, side: ASK,
-            })),
-            [BID]: [...this.incBook.getQuantity(BID)]
-                .map(([_price, quantity]) => ({
-                price: new Big(_price), quantity, side: BID,
-            })),
-            time: this.now(),
-        };
-    }
     async pushOrderbook() {
-        const orderbook = this.latestOrderbook();
+        const orderbook = this.orderbookManager.getOrderbook();
         this.emit('orderbook', orderbook);
     }
     rawTrade2Trade(rawTrades) {
@@ -49,4 +33,4 @@ class Pushing extends EventEmitter {
     }
 }
 export { Pushing as default, Pushing, };
-//# sourceMappingURL=pushing.js.map
+//# sourceMappingURL=1-pushing.js.map

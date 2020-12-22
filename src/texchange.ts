@@ -1,4 +1,4 @@
-import { ManagingAssets } from './managing-assets';
+import { ManagingAssets } from './4-assets';
 import { clone } from 'ramda';
 import {
     Assets,
@@ -45,7 +45,7 @@ class Texchange extends ManagingAssets implements
     }
 
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = this.latestOrderbook();
+        const orderbook = clone(this.orderbookManager.getOrderbook());
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }

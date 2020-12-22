@@ -1,4 +1,4 @@
-import { ManagingAssets } from './managing-assets';
+import { ManagingAssets } from './4-assets';
 import { Assets, LimitOrder, OrderId, RawTrade, ContextMarketPublicApiLike, ContextAccountPrivateApiLike, Config } from './interfaces';
 declare class Texchange extends ManagingAssets implements ContextMarketPublicApiLike, ContextAccountPrivateApiLike {
     private sleep;

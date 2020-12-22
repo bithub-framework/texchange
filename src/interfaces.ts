@@ -13,7 +13,9 @@ export interface RawTrade {
 }
 
 export interface Config {
-    initialAssets: Assets;
+    initialBalance: Big;
+    leverage: number;
+
     PING: number;
     PROCESSING: number;
     MAKER_FEE: number;

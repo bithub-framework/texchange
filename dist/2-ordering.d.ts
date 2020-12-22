@@ -1,16 +1,12 @@
-import { Pushing } from './pushing';
+import { Pushing } from './1-pushing';
 import { OpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
 import Big from 'big.js';
-declare class MakingOrder extends Pushing {
+declare class Ordering extends Pushing {
     protected orderCount: number;
     protected openOrders: Map<OrderId, OpenOrder>;
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getOpenOrders(): Promise<OpenOrder[]>;
-    protected rawTradeShouldTakeOpenOrder(rawTrade: RawTrade, maker: OpenOrder): boolean;
-    protected rawTradeTakesOpenOrder(rawTrade: RawTrade, maker: OpenOrder): [Big, Big];
-    protected rawTradeTakesOpenOrders(_rawTrade: RawTrade): void;
-    updateTrades(rawTrades: RawTrade[]): void;
     protected orderTakes(_taker: LimitOrder): [
         LimitOrder,
         RawTrade[],
@@ -19,4 +15,4 @@ declare class MakingOrder extends Pushing {
     ];
     protected orderMakes(order: LimitOrder): OpenOrder;
 }
-export { MakingOrder as default, MakingOrder, };
+export { Ordering as default, Ordering, };

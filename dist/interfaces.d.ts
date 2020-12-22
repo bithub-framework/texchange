@@ -1,5 +1,5 @@
 export * from 'interfaces';
-import { Side, Assets } from 'interfaces';
+import { Side } from 'interfaces';
 import Big from 'big.js';
 export interface RawTrade {
     price: Big;
@@ -8,7 +8,8 @@ export interface RawTrade {
     time: number;
 }
 export interface Config {
-    initialAssets: Assets;
+    initialBalance: Big;
+    leverage: number;
     PING: number;
     PROCESSING: number;
     MAKER_FEE: number;

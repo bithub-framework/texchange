@@ -1,17 +1,15 @@
 import { EventEmitter } from 'events';
-import { IncrementalBook } from './incremental-book';
+import { OrderbookManager } from './orderbook-manager';
 import {
     Orderbook,
     Trade,
-    BID, ASK,
     RawTrade,
     Config,
 } from './interfaces';
-import Big from 'big.js';
 
 class Pushing extends EventEmitter {
     protected tradeCount = 0;
-    protected incBook: IncrementalBook;
+    protected orderbookManager: OrderbookManager;
 
     constructor(
         protected config: Config,
@@ -19,7 +17,7 @@ class Pushing extends EventEmitter {
         protected now: () => number,
     ) {
         super();
-        this.incBook = new IncrementalBook(config);
+        this.orderbookManager = new OrderbookManager(config, now);
     }
 
     public updateTrades(rawTrades: RawTrade[]): void {
@@ -27,27 +25,12 @@ class Pushing extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
-        this.incBook.setBaseBook(orderbook);
-        this.incBook.apply();
+        this.orderbookManager.setBase(orderbook);
         this.pushOrderbook();
     }
 
-    protected latestOrderbook(): Orderbook {
-        return {
-            [ASK]: [...this.incBook.getQuantity(ASK)]
-                .map(([_price, quantity]) => ({
-                    price: new Big(_price), quantity, side: ASK,
-                })),
-            [BID]: [...this.incBook.getQuantity(BID)]
-                .map(([_price, quantity]) => ({
-                    price: new Big(_price), quantity, side: BID,
-                })),
-            time: this.now(),
-        };
-    }
-
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = this.latestOrderbook();
+        const orderbook = this.orderbookManager.getOrderbook();
         this.emit('orderbook', orderbook);
     }
 

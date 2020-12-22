@@ -1,4 +1,4 @@
-import { ManagingAssets } from './managing-assets';
+import { ManagingAssets } from './4-assets';
 import { clone } from 'ramda';
 class Texchange extends ManagingAssets {
     constructor(config, sleep, now) {
@@ -26,7 +26,7 @@ class Texchange extends ManagingAssets {
         return assets;
     }
     async pushOrderbook() {
-        const orderbook = this.latestOrderbook();
+        const orderbook = clone(this.orderbookManager.getOrderbook());
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
