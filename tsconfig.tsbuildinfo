@@ -492,7 +492,7 @@
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "09608a73f18db575a04df54618c696725591a36bf7b6252390f83a59308e95b5",
+        "version": "208de46367b15e8fe5d692af4c0d1b7989eb832448c070d6ad33497955a35c32",
         "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
         "affectsGlobalScope": false
       },

@@ -71,8 +71,8 @@ class ManagingAssets extends MakingOrder {
     updateTrades(rawTrades) {
         for (let rawTrade of rawTrades) {
             this.settlementPrice = new Big('0')
-                .plus(this.settlementPrice.times(.9))
-                .plus(rawTrade.price.times(.1))
+                .plus(this.settlementPrice.times('.9'))
+                .plus(rawTrade.price.times('.1'))
                 .round(PRICE_DP);
             this.rawTradeTakesOpenOrders(rawTrade);
         }
