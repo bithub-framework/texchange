@@ -1,6 +1,6 @@
 import { Pushing } from './pushing';
 import { OpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
-import { Big } from 'big.js';
+import Big from 'big.js';
 declare class MakingOrder extends Pushing {
     protected orderCount: number;
     protected openOrders: Map<OrderId, OpenOrder>;

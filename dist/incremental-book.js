@@ -1,7 +1,6 @@
 import { BID, ASK, } from './interfaces';
 import { PRICE_DP, } from './config';
 import Big from 'big.js';
-// Big.strict
 class IncrementalBook {
     constructor() {
         this.baseBook = {
@@ -32,18 +31,18 @@ class IncrementalBook {
         for (const side of [BID, ASK]) {
             this.total[side].clear();
             this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(PRICE_DP), order.quantity));
-            this.decrements[side].forEach((decrement, _price) => {
-                let quantity = this.total[side].get(_price);
+            for (const [_price, decrement] of this.decrements[side]) {
+                const quantity = this.total[side].get(_price);
                 if (quantity) {
-                    quantity = quantity.minus(decrement);
+                    const newQuantity = quantity.minus(decrement);
                     if (quantity.gt(0))
-                        this.total[side].set(_price, quantity);
+                        this.total[side].set(_price, newQuantity);
                     else
                         this.total[side].delete(_price);
                 }
                 else
                     this.decrements[side].delete(_price);
-            });
+            }
         }
     }
 }

@@ -19,3 +19,7 @@ export interface Config {
     MAKER_FEE: number;
     TAKER_FEE: number;
 }
+
+export function min(...a: Big[]) {
+    return a.reduce((m, x) => m.lt(x) ? m : x);
+}

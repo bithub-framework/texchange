@@ -1,16 +1,14 @@
 import { Pushing } from './pushing';
-import { BID, ASK, } from './interfaces';
+import { BID, ASK, min, } from './interfaces';
 import { DOLLAR_DP, } from './config';
-import { Big, } from 'big.js';
-function min(a, b) {
-    return a.lt(b) ? a : b;
-}
+import Big from 'big.js';
 class MakingOrder extends Pushing {
     constructor() {
         super(...arguments);
         this.orderCount = 0;
         this.openOrders = new Map();
     }
+    // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
         const [makerOrder, rawTrades,] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
@@ -27,28 +25,18 @@ class MakingOrder extends Pushing {
     rawTradeShouldTakeOpenOrder(rawTrade, maker) {
         return ((maker.side === BID &&
             rawTrade.side === ASK &&
-            maker.price.gt(rawTrade.price)) || (maker.side === ASK &&
+            rawTrade.price.lt(maker.price)) || (maker.side === ASK &&
             rawTrade.side === BID &&
-            maker.price.lt(rawTrade.price)));
+            rawTrade.price.gt(maker.price)));
     }
     rawTradeTakesOpenOrder(rawTrade, maker) {
-        let volume;
-        let dollarVolume;
-        if (rawTrade.quantity.gte(maker.quantity)) {
-            volume = maker.quantity;
-            dollarVolume = maker.quantity.times(maker.price)
-                .round(DOLLAR_DP, 3 /* RoundUp */);
-            rawTrade.quantity = rawTrade.quantity.minus(maker.quantity);
+        const volume = min(rawTrade.quantity, maker.quantity);
+        const dollarVolume = maker.price.times(volume)
+            .round(DOLLAR_DP);
+        rawTrade.quantity = rawTrade.quantity.minus(volume);
+        maker.quantity = maker.quantity.minus(volume);
+        if (maker.quantity.eq(0))
             this.openOrders.delete(maker.id);
-        }
-        else {
-            volume = rawTrade.quantity;
-            dollarVolume = rawTrade.quantity.times(maker.price)
-                // TODO
-                .round(DOLLAR_DP, 3 /* RoundUp */);
-            maker.quantity = maker.quantity.minus(rawTrade.quantity);
-            rawTrade.quantity = new Big(0);
-        }
         return [volume, dollarVolume];
     }
     rawTradeTakesOpenOrders(_rawTrade) {

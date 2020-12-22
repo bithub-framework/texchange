@@ -6,23 +6,18 @@ import {
     OrderId,
     MakerOrder,
     RawTrade,
+    min,
 } from './interfaces';
 import {
     DOLLAR_DP,
 } from './config';
-import {
-    Big,
-    RoundingMode,
-} from 'big.js';
-
-function min(a: Big, b: Big) {
-    return a.lt(b) ? a : b;
-}
+import Big from 'big.js';
 
 class MakingOrder extends Pushing {
     protected orderCount = 0;
     protected openOrders = new Map<OrderId, OpenOrder>();
 
+    // 由于精度原因，实际成本不一定恰好等于 order.price
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         const [
             makerOrder,
@@ -47,11 +42,11 @@ class MakingOrder extends Pushing {
             (
                 maker.side === BID &&
                 rawTrade.side === ASK &&
-                maker.price.gt(rawTrade.price)
+                rawTrade.price.lt(maker.price)
             ) || (
                 maker.side === ASK &&
                 rawTrade.side === BID &&
-                maker.price.lt(rawTrade.price)
+                rawTrade.price.gt(maker.price)
             )
         );
     }
@@ -60,23 +55,12 @@ class MakingOrder extends Pushing {
         rawTrade: RawTrade,
         maker: OpenOrder,
     ): [Big, Big] {
-        let volume: Big;
-        let dollarVolume: Big;
-        if (rawTrade.quantity.gte(maker.quantity)) {
-            volume = maker.quantity;
-            dollarVolume = maker.quantity.times(maker.price)
-                .round(DOLLAR_DP, RoundingMode.RoundUp);
-            rawTrade.quantity = rawTrade.quantity.minus(maker.quantity);
-            this.openOrders.delete(maker.id);
-        } else {
-            volume = rawTrade.quantity;
-            dollarVolume = rawTrade.quantity.times(maker.price)
-                // TODO
-                .round(DOLLAR_DP, RoundingMode.RoundUp);
-
-            maker.quantity = maker.quantity.minus(rawTrade.quantity);
-            rawTrade.quantity = new Big(0);
-        }
+        const volume = min(rawTrade.quantity, maker.quantity);
+        const dollarVolume = maker.price.times(volume)
+            .round(DOLLAR_DP);
+        rawTrade.quantity = rawTrade.quantity.minus(volume);
+        maker.quantity = maker.quantity.minus(volume);
+        if (maker.quantity.eq(0)) this.openOrders.delete(maker.id);
         return [volume, dollarVolume];
     }
 

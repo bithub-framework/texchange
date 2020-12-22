@@ -14,3 +14,4 @@ export interface Config {
     MAKER_FEE: number;
     TAKER_FEE: number;
 }
+export declare function min(...a: Big[]): Big;
