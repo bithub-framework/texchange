@@ -31,7 +31,7 @@ class MakingOrder extends Pushing {
     }
     rawTradeTakesOpenOrder(rawTrade, maker) {
         const volume = min(rawTrade.quantity, maker.quantity);
-        const dollarVolume = maker.price.times(volume)
+        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         rawTrade.quantity = rawTrade.quantity.minus(volume);
         maker.quantity = maker.quantity.minus(volume);
@@ -74,7 +74,8 @@ class MakingOrder extends Pushing {
                 this.incBook.decQuantity(maker.side, maker.price, quantity);
                 taker.quantity = taker.quantity.minus(quantity);
                 volume = volume.plus(quantity);
-                dollarVolume = dollarVolume.plus(quantity.times(maker.price))
+                dollarVolume = dollarVolume
+                    .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
         }
