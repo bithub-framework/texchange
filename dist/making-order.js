@@ -55,9 +55,9 @@ class MakingOrder extends Pushing {
         const rawTrades = [];
         let volume = new Big('0');
         let dollarVolume = new Big('0');
-        for (const [_price, quantity] of this.incBook.getQuantity(1 - taker.side)) {
+        for (const [_price, quantity] of this.incBook.getQuantity(-taker.side)) {
             const maker = {
-                side: 1 - taker.side,
+                side: -taker.side,
                 price: new Big(_price),
                 quantity,
             };

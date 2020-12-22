@@ -60,7 +60,7 @@ class ManagingAssets extends MakingOrder {
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         if (
             !order.open &&
-            order.quantity.gt(this.assets.position[1 - order.side])
+            order.quantity.gt(this.assets.position[-order.side])
         ) throw new Error('No enough position to close.');
         this.settle();
         if (
@@ -85,7 +85,7 @@ class ManagingAssets extends MakingOrder {
         if (order.open)
             this.openPosition(<number>order.side, volume, dollarVolume);
         else
-            this.closePosition(1 - order.side, volume, dollarVolume);
+            this.closePosition(-order.side, volume, dollarVolume);
         const openOrder = this.orderMakes(makerOrder);
         this.assets.frozen = this.assets.frozen
             .plus(openOrder.frozen);
@@ -159,7 +159,7 @@ class ManagingAssets extends MakingOrder {
                 if (openOrder.open)
                     this.openPosition(<number>openOrder.side, volume, dollarVolume);
                 else
-                    this.closePosition(1 - openOrder.side, volume, dollarVolume);
+                    this.closePosition(-openOrder.side, volume, dollarVolume);
                 this.calcMargin();
             }
     }

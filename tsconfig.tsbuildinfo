@@ -487,12 +487,12 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "b562d362807c6bc634166f9b4f4ea01770d3628cd66359a6558f8a92ce30bb6d",
+        "version": "08f183eb706dee66575c8b7fe3843770c43a33878a8cdaa5cee4bf0b8d22b70a",
         "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "208de46367b15e8fe5d692af4c0d1b7989eb832448c070d6ad33497955a35c32",
+        "version": "b73d9b3830e12e4ad23121ab5c5b6ac0c5327817fb3eeccaaca6a1f523799a24",
         "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
         "affectsGlobalScope": false
       },
