@@ -516,14 +516,14 @@
         "signature": "5cc20bb11d8d85c9d6826a8bee507ac072f94c5a5de90cd34f6495808de5601c",
         "affectsGlobalScope": false
       },
-      "./src/texchange.ts": {
+      "./src/5-delay.ts": {
         "version": "1925df7acd7c525780eef6a48d5af198408c30aa41f2f98966102e10cf8a20ae",
         "signature": "654067cca5291d9ab2eb96a0764744a2654c3b3e1129d92d90225f9a0a070a32",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "ddd9ff51ab96d7d23b80ff54895e29fcfa49fdbb6e32be1b8ff07a8d7abe107c",
-        "signature": "162f5fd9120e5442ef0a8d825ad8880fb42794451e947f37d876431cf16d4655",
+        "version": "becbf7feb32d3867555eec7e07ac6885c5b91dd665965a03590280a137043e47",
+        "signature": "980a71bb255e5f2e2da310cc4d8f4169720ed396ea7e4029750c8610b3ac502e",
         "affectsGlobalScope": false
       },
       "../../../node_modules/@types/accepts/index.d.ts": {
@@ -900,13 +900,18 @@
         "./src/assets-manager.ts",
         "./src/interfaces.ts"
       ],
+      "./src/5-delay.ts": [
+        "./node_modules/@types/ramda/index.d.ts",
+        "./src/4-assets.ts",
+        "./src/interfaces.ts"
+      ],
       "./src/assets-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
       "./src/index.ts": [
-        "./src/interfaces.ts",
-        "./src/texchange.ts"
+        "./src/5-delay.ts",
+        "./src/interfaces.ts"
       ],
       "./src/interfaces.ts": [
         "./node_modules/@types/big.js/index.d.ts",
@@ -914,11 +919,6 @@
       ],
       "./src/orderbook-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts"
-      ],
-      "./src/texchange.ts": [
-        "./node_modules/@types/ramda/index.d.ts",
-        "./src/4-assets.ts",
         "./src/interfaces.ts"
       ]
     },
@@ -1191,13 +1191,16 @@
         "./src/3-taken.ts",
         "./src/interfaces.ts"
       ],
+      "./src/5-delay.ts": [
+        "./src/4-assets.ts",
+        "./src/interfaces.ts"
+      ],
       "./src/assets-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
       "./src/index.ts": [
-        "./src/interfaces.ts",
-        "./src/texchange.ts"
+        "./src/interfaces.ts"
       ],
       "./src/interfaces.ts": [
         "./node_modules/@types/big.js/index.d.ts",
@@ -1205,10 +1208,6 @@
       ],
       "./src/orderbook-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/interfaces.ts"
-      ],
-      "./src/texchange.ts": [
-        "./src/4-assets.ts",
         "./src/interfaces.ts"
       ]
     },
@@ -1290,11 +1289,11 @@
       "./src/2-ordering.ts",
       "./src/3-taken.ts",
       "./src/4-assets.ts",
+      "./src/5-delay.ts",
       "./src/assets-manager.ts",
       "./src/index.ts",
       "./src/interfaces.ts",
       "./src/orderbook-manager.ts",
-      "./src/texchange.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.core.d.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.d.ts",

@@ -1,5 +1,5 @@
-export { Texchange as default } from './texchange';
-export * from './texchange';
+export { Texchange as default } from './5-delay';
+export * from './5-delay';
 export {
     RawTrade,
     Config,
