@@ -1,11 +1,9 @@
 import { MakingOrder } from './making-order';
 import { LONG, SHORT, min, } from './interfaces';
-import { PRICE_DP, DOLLAR_DP, } from './config';
 import Big from 'big.js';
 class ManagingAssets extends MakingOrder {
     constructor(config, now) {
-        super(now);
-        this.config = config;
+        super(config, now);
         this.settlementPrice = new Big(0);
         this.assets = config.initialAssets;
     }
@@ -16,10 +14,7 @@ class ManagingAssets extends MakingOrder {
     closePosition(length, volume, dollarVolume) {
         const cost = volume.eq(this.assets.position[length])
             ? this.assets.cost[length]
-            : volume
-                .times(this.assets.cost[length])
-                .div(this.assets.position[length])
-                .round(DOLLAR_DP);
+            : this.config.calcDollarVolume(this.assets.cost[length].div(this.assets.position[length]), volume).round(this.config.CURRENCY_DP);
         const profit = length === LONG
             ? dollarVolume.minus(cost)
             : cost.minus(dollarVolume);
@@ -33,15 +28,15 @@ class ManagingAssets extends MakingOrder {
             throw new Error('No enough position to close.');
         this.settle();
         if (order.open && new Big(0)
-            .plus(order.price.times(order.quantity).div(this.assets.leverage))
-            .plus(order.price.times(order.quantity).times(this.config.TAKER_FEE))
-            .round(DOLLAR_DP, 3 /* RoundUp */)
+            .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.assets.leverage))
+            .plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE))
+            .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
             .gt(this.assets.reserve))
             throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
         const [makerOrder, rawTrades, volume, dollarVolume,] = this.orderTakes(order);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE)
-            .round(DOLLAR_DP, 3 /* RoundUp */);
+            .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         this.assets.balance = this.assets.balance.minus(takerFee);
         if (order.open)
             this.openPosition(order.side, volume, dollarVolume);
@@ -73,7 +68,7 @@ class ManagingAssets extends MakingOrder {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))
                 .plus(rawTrade.price.times(.1))
-                .round(PRICE_DP);
+                .round(this.config.PRICE_DP);
             this.rawTradeTakesOpenOrders(rawTrade);
         }
         this.pushRawTrades(rawTrades);
@@ -83,9 +78,9 @@ class ManagingAssets extends MakingOrder {
             ...order,
             id: ++this.orderCount,
             frozen: new Big(0)
-                .plus(order.price.times(order.quantity).div(this.assets.leverage))
-                .plus(order.price.times(order.quantity).times(this.config.MAKER_FEE))
-                .round(DOLLAR_DP, 3 /* RoundUp */),
+                .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.assets.leverage))
+                .plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.MAKER_FEE))
+                .round(this.config.CURRENCY_DP, 3 /* RoundUp */),
         };
         if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);
@@ -99,12 +94,12 @@ class ManagingAssets extends MakingOrder {
                 const released = min(new Big(0)
                     .plus(dollarVolume.div(this.assets.leverage))
                     .plus(dollarVolume.times(this.config.MAKER_FEE))
-                    .round(DOLLAR_DP), openOrder.frozen);
+                    .round(this.config.CURRENCY_DP), openOrder.frozen);
                 openOrder.frozen = openOrder.frozen.minus(released);
                 this.assets.frozen = this.assets.frozen.minus(released);
                 this.assets.balance = this.assets.balance
                     .minus(dollarVolume.times(this.config.MAKER_FEE))
-                    .round(DOLLAR_DP, 0 /* RoundDown */);
+                    .round(this.config.CURRENCY_DP, 0 /* RoundDown */);
                 if (openOrder.open)
                     this.openPosition(openOrder.side, volume, dollarVolume);
                 else
@@ -115,9 +110,7 @@ class ManagingAssets extends MakingOrder {
     settle() {
         const position = { ...this.assets.position };
         for (const length of [LONG, SHORT]) {
-            const settlementDollarVolume = new Big(0)
-                .plus(this.settlementPrice.times(position[length]))
-                .round(DOLLAR_DP);
+            const settlementDollarVolume = this.config.calcDollarVolume(this.settlementPrice, position[length]).round(this.config.CURRENCY_DP);
             this.closePosition(length, position[length], settlementDollarVolume);
             this.openPosition(length, position[length], settlementDollarVolume);
         }
@@ -128,7 +121,7 @@ class ManagingAssets extends MakingOrder {
             .plus(this.assets.cost[LONG])
             .plus(this.assets.cost[SHORT])
             .div(this.assets.leverage)
-            .round(DOLLAR_DP, 3 /* RoundUp */);
+            .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         this.assets.reserve = this.assets.balance
             .minus(this.assets.margin)
             .minus(this.assets.frozen);

@@ -3,7 +3,7 @@ import { OpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
 import Big from 'big.js';
 declare class MakingOrder extends Pushing {
     protected orderCount: number;
-    protected openOrders: Map<import("interfaces/dist/data").TradeId, OpenOrder>;
+    protected openOrders: Map<OrderId, OpenOrder>;
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getOpenOrders(): Promise<OpenOrder[]>;

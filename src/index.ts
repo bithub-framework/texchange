@@ -4,4 +4,3 @@ export {
     RawTrade,
     Config,
 } from './interfaces';
-export * from './config';

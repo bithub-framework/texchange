@@ -1,8 +1,8 @@
 import { BID, ASK, } from './interfaces';
-import { PRICE_DP, } from './config';
 import Big from 'big.js';
 class IncrementalBook {
-    constructor() {
+    constructor(config) {
+        this.config = config;
         this.baseBook = {
             [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
         };
@@ -20,7 +20,7 @@ class IncrementalBook {
         this.baseBook = orderbook;
     }
     decQuantity(side, price, decrement) {
-        const _price = price.toFixed(PRICE_DP);
+        const _price = price.toFixed(this.config.PRICE_DP);
         const origin = this.decrements[side].get(_price) || new Big(0);
         this.decrements[side].set(_price, origin.plus(decrement));
     }
@@ -30,7 +30,7 @@ class IncrementalBook {
     apply() {
         for (const side of [BID, ASK]) {
             this.total[side].clear();
-            this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(PRICE_DP), order.quantity));
+            this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(this.config.PRICE_DP), order.quantity));
             for (const [_price, decrement] of this.decrements[side]) {
                 const quantity = this.total[side].get(_price);
                 if (quantity) {

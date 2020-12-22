@@ -3,13 +3,14 @@ import { IncrementalBook } from './incremental-book';
 import { BID, ASK, } from './interfaces';
 import Big from 'big.js';
 class Pushing extends EventEmitter {
-    constructor(
+    constructor(config, 
     // 必须保证 update 时数据的 time 等于 now()
     now) {
         super();
+        this.config = config;
         this.now = now;
         this.tradeCount = 0;
-        this.incBook = new IncrementalBook();
+        this.incBook = new IncrementalBook(config);
     }
     updateTrades(rawTrades) {
         this.pushRawTrades(rawTrades);

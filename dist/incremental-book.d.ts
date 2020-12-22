@@ -1,6 +1,8 @@
-import { Orderbook, Side } from './interfaces';
+import { Orderbook, Side, Config } from './interfaces';
 import Big from 'big.js';
 declare class IncrementalBook {
+    private config;
+    constructor(config: Config);
     private baseBook;
     private total;
     private decrements;

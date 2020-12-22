@@ -5,18 +5,21 @@ import {
     Trade,
     BID, ASK,
     RawTrade,
+    Config,
 } from './interfaces';
 import Big from 'big.js';
 
 class Pushing extends EventEmitter {
     protected tradeCount = 0;
-    protected incBook = new IncrementalBook();
+    protected incBook: IncrementalBook;
 
     constructor(
+        protected config: Config,
         // 必须保证 update 时数据的 time 等于 now()
         protected now: () => number,
     ) {
         super();
+        this.incBook = new IncrementalBook(config);
     }
 
     public updateTrades(rawTrades: RawTrade[]): void {

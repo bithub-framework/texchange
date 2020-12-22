@@ -18,6 +18,15 @@ export interface Config {
     PROCESSING: number;
     MAKER_FEE: number;
     TAKER_FEE: number;
+
+    PRICE_DP: number;
+    QUANTITY_DP: number;
+    CURRENCY_DP: number;
+
+    calcDollarVolume: (
+        price: Big,
+        quantity: Big,
+    ) => Big,
 }
 
 export function min(...a: Big[]) {

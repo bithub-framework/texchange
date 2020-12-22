@@ -1,6 +1,5 @@
 import { Pushing } from './pushing';
 import { BID, ASK, min, } from './interfaces';
-import { DOLLAR_DP, } from './config';
 import Big from 'big.js';
 class MakingOrder extends Pushing {
     constructor() {
@@ -32,7 +31,7 @@ class MakingOrder extends Pushing {
     rawTradeTakesOpenOrder(rawTrade, maker) {
         const volume = min(rawTrade.quantity, maker.quantity);
         const dollarVolume = maker.price.times(volume)
-            .round(DOLLAR_DP);
+            .round(this.config.CURRENCY_DP);
         rawTrade.quantity = rawTrade.quantity.minus(volume);
         maker.quantity = maker.quantity.minus(volume);
         if (maker.quantity.eq(0))
@@ -75,7 +74,7 @@ class MakingOrder extends Pushing {
                 taker.quantity = taker.quantity.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume.plus(quantity.times(maker.price))
-                    .round(DOLLAR_DP);
+                    .round(this.config.CURRENCY_DP);
             }
         }
         this.incBook.apply();

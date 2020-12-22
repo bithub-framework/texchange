@@ -201,11 +201,6 @@
         "signature": "cd6efb9467a8b6338ece2e2855e37765700f2cd061ca54b01b33878cf5c7677e",
         "affectsGlobalScope": true
       },
-      "./src/config.ts": {
-        "version": "5b42a0207ba9ab0242e2168db87eb7fc6d634651f4d85a37f84781233971c3f5",
-        "signature": "575971b9987b41b759127dc907402ac3f23f5da4086c66e582cc0a1136060d71",
-        "affectsGlobalScope": false
-      },
       "./node_modules/@types/big.js/index.d.ts": {
         "version": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
         "signature": "90589e3f3eed0a07917117760dc77abb1c6c672eb7d1d3b4ca76b8cb48f73917",
@@ -472,28 +467,28 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "178711f66ee65dd5125ca38d6aa3d77b6615881e177a3e3f296c1fc345b91ef7",
-        "signature": "4718de874cc190c653f0fecb1e487bed67c95a254a384c68082257a091c938af",
+        "version": "31d5917d0b6b6087a9f3f030769c26643f99a04a4518d4b6e3096bc9ac224e45",
+        "signature": "e9706a25645c9af2d9e96fd1a7b90b2ef94c71ee5154504ba48eaa048e5b58b1",
         "affectsGlobalScope": false
       },
       "./src/incremental-book.ts": {
-        "version": "b4d530548471d5a327530c1269d4e2d21049420cc2836b25cfa41c6bc8868249",
-        "signature": "e32f9ba8db5c4483211e8a0c335095ad2617875a173b808d8cb7e6753af20840",
+        "version": "638325a27294afe3aa26f7a7c2ceeda43dfb1ca2b2f57c1d370073ea9091b955",
+        "signature": "3ef43c14aac3de11e29ce177cc0c26a7551ceb0e37acdf831b8476985bb3fd2a",
         "affectsGlobalScope": false
       },
       "./src/pushing.ts": {
-        "version": "ee058d2cc814d95003f1c3e33ed185341f06895e9bae76361562a5eb344daf32",
-        "signature": "7d1cb7a02e652d28f803bd5756caa524448aacc25e56eadeee1968138b5ff1e5",
+        "version": "6ace849ca77dc02d6b8fb1976f90433a44eed3817557b2b6ee888ddf527eb3e6",
+        "signature": "8273103bcb9eb08bb5ebb40d0daf2b0e78bb134cf66e1b2035eb3181814c7a81",
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "29c2b182357473979c5363119e925cd8118aea3d1504bfeedcfff26f18052b74",
-        "signature": "781c285f6877859b0f1691020020e51da3353176b32bbfcfd81219a89d0ee21d",
+        "version": "82683acf2646616215395956402cba8f588993c8c708cce929d9076ab6f11f97",
+        "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "ea0e3b29266dbe983a39235b90387b52f285d9c7ef3129e66f5b17b5a831c85f",
-        "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
+        "version": "e35bbca51bc693da3a84ad3938836494766d910a50bfba651361d3cdb9aca3ec",
+        "signature": "0de2228bac436a37cca7424bb103417ebd5c6a6b8bb10ac82e8d4bd6306594d6",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -517,8 +512,8 @@
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "c766cb0aaff591b97cf377dfc3ece3579b6c0b95477ddd7420917d71e4a4bb58",
-        "signature": "2ace291f75932921264746717d6e0a5273131fc195d373ff48b140a74d507c4f",
+        "version": "ddd9ff51ab96d7d23b80ff54895e29fcfa49fdbb6e32be1b8ff07a8d7abe107c",
+        "signature": "162f5fd9120e5442ef0a8d825ad8880fb42794451e947f37d876431cf16d4655",
         "affectsGlobalScope": false
       },
       "../../../node_modules/@types/accepts/index.d.ts": {
@@ -876,11 +871,9 @@
       ],
       "./src/incremental-book.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/config.ts",
         "./src/interfaces.ts"
       ],
       "./src/index.ts": [
-        "./src/config.ts",
         "./src/interfaces.ts",
         "./src/texchange.ts"
       ],
@@ -890,13 +883,11 @@
       ],
       "./src/making-order.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/config.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
       "./src/managing-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./src/config.ts",
         "./src/interfaces.ts",
         "./src/making-order.ts"
       ],
@@ -1167,7 +1158,6 @@
         "./src/interfaces.ts"
       ],
       "./src/index.ts": [
-        "./src/config.ts",
         "./src/interfaces.ts",
         "./src/texchange.ts"
       ],
@@ -1177,7 +1167,6 @@
       ],
       "./src/making-order.ts": [
         "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
@@ -1270,7 +1259,6 @@
       "./node_modules/interfaces/dist/index.d.ts",
       "./node_modules/interfaces/dist/reviver.d.ts",
       "./node_modules/ts-toolbelt/out/index.d.ts",
-      "./src/config.ts",
       "./src/incremental-book.ts",
       "./src/index.ts",
       "./src/interfaces.ts",

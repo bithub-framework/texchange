@@ -1,12 +1,13 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { IncrementalBook } from './incremental-book';
-import { Orderbook, Trade, RawTrade } from './interfaces';
+import { Orderbook, Trade, RawTrade, Config } from './interfaces';
 declare class Pushing extends EventEmitter {
+    protected config: Config;
     protected now: () => number;
     protected tradeCount: number;
     protected incBook: IncrementalBook;
-    constructor(now: () => number);
+    constructor(config: Config, now: () => number);
     updateTrades(rawTrades: RawTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     protected latestOrderbook(): Orderbook;
