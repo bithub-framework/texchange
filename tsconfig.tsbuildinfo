@@ -512,7 +512,7 @@
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
-        "version": "2e1dda792f7ef7b8ed0b6c85ef33a12a6b0d385d738b81416e93edc314d60e96",
+        "version": "4fceb40bb1c84aeab12dadccc7b69e4f2c612eb043ba0edb0c7665067fd29505",
         "signature": "ff6366f354aba24996ab56cfa0935c7f22c1930da8d327a33cab3a56f5ba9da6",
         "affectsGlobalScope": false
       },

@@ -26,12 +26,14 @@ class Texchange extends ManagingAssets {
         return assets;
     }
     async pushOrderbook() {
+        const orderbook = this.latestOrderbook();
         await this.sleep(this.config.PING);
-        await super.pushOrderbook();
+        this.emit('orderbook', orderbook);
     }
     async pushRawTrades(rawTrades) {
+        const trades = this.rawTrade2Trade(rawTrades);
         await this.sleep(this.config.PING);
-        await super.pushRawTrades(rawTrades);
+        this.emit('trades', trades);
     }
 }
 export { Texchange as default, Texchange, };

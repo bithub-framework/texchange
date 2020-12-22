@@ -45,13 +45,15 @@ class Texchange extends ManagingAssets implements
     }
 
     protected async pushOrderbook(): Promise<void> {
+        const orderbook = this.latestOrderbook();
         await this.sleep(this.config.PING);
-        await super.pushOrderbook();
+        this.emit('orderbook', orderbook);
     }
 
     protected async pushRawTrades(rawTrades: RawTrade[]): Promise<void> {
+        const trades = this.rawTrade2Trade(rawTrades);
         await this.sleep(this.config.PING);
-        await super.pushRawTrades(rawTrades);
+        this.emit('trades', trades);
     }
 }
 
