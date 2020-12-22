@@ -212,8 +212,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "4c811ac13e6187d59008cbabde4789c7662257d33fda24c4e8eae3ca81f5e1ea",
-        "signature": "4c811ac13e6187d59008cbabde4789c7662257d33fda24c4e8eae3ca81f5e1ea",
+        "version": "53c68b4d808ba83525bd022f12fd78ccb7cec79dc9255c720ffee04333f0eb33",
+        "signature": "53c68b4d808ba83525bd022f12fd78ccb7cec79dc9255c720ffee04333f0eb33",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -477,7 +477,7 @@
         "affectsGlobalScope": false
       },
       "./src/incremental-book.ts": {
-        "version": "b4ea0fa38a2d1f812476a67b16dad50766148dcc11dfe4e20d6b6437534e8713",
+        "version": "b4d530548471d5a327530c1269d4e2d21049420cc2836b25cfa41c6bc8868249",
         "signature": "e32f9ba8db5c4483211e8a0c335095ad2617875a173b808d8cb7e6753af20840",
         "affectsGlobalScope": false
       },
@@ -487,12 +487,12 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "08f183eb706dee66575c8b7fe3843770c43a33878a8cdaa5cee4bf0b8d22b70a",
-        "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
+        "version": "29c2b182357473979c5363119e925cd8118aea3d1504bfeedcfff26f18052b74",
+        "signature": "781c285f6877859b0f1691020020e51da3353176b32bbfcfd81219a89d0ee21d",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "b73d9b3830e12e4ad23121ab5c5b6ac0c5327817fb3eeccaaca6a1f523799a24",
+        "version": "3e299c27fa09164a6627f49be7bb6bd018778896cb34a187519e949dbfafe984",
         "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
         "affectsGlobalScope": false
       },
@@ -1177,6 +1177,7 @@
       ],
       "./src/making-order.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts",
         "./src/interfaces.ts",
         "./src/pushing.ts"
       ],
