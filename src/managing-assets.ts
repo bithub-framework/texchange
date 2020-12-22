@@ -14,10 +14,8 @@ import {
     PRICE_DP,
     DOLLAR_DP,
 } from './config';
-import {
-    Big,
-    RoundingMode,
-} from 'big.js';
+import Big from 'big.js';
+import { RoundingMode } from 'big.js';
 
 class ManagingAssets extends MakingOrder {
     private settlementPrice = new Big(0);

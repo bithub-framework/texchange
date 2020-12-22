@@ -1,6 +1,6 @@
 import { MakingOrder } from './making-order';
 import { Assets, LimitOrder, OrderId, RawTrade, Config, OpenOrder, Length } from './interfaces';
-import { Big } from 'big.js';
+import Big from 'big.js';
 declare class ManagingAssets extends MakingOrder {
     protected config: Config;
     private settlementPrice;

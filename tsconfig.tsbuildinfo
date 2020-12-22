@@ -212,8 +212,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "40ba3f12e8d2675659781cc2ee775f484e53034f4127637acd9ee8ca0e925056",
-        "signature": "40ba3f12e8d2675659781cc2ee775f484e53034f4127637acd9ee8ca0e925056",
+        "version": "4c811ac13e6187d59008cbabde4789c7662257d33fda24c4e8eae3ca81f5e1ea",
+        "signature": "4c811ac13e6187d59008cbabde4789c7662257d33fda24c4e8eae3ca81f5e1ea",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -461,9 +461,14 @@
         "signature": "34496b45872ab6d8ec87074f114315460dd15a03e3c0db6ea902504ea719c6b6",
         "affectsGlobalScope": false
       },
+      "./node_modules/interfaces/dist/reviver.d.ts": {
+        "version": "dc80d857e567720142a212e22f7381d16b787731d86f50fe0fb6f6e5d8730864",
+        "signature": "dc80d857e567720142a212e22f7381d16b787731d86f50fe0fb6f6e5d8730864",
+        "affectsGlobalScope": false
+      },
       "./node_modules/interfaces/dist/index.d.ts": {
-        "version": "54b215a738551cbb94bfbe599a3101726924eb838ab5f2511962556b8ec39357",
-        "signature": "54b215a738551cbb94bfbe599a3101726924eb838ab5f2511962556b8ec39357",
+        "version": "67fcb51fb05a8d5581c0c999c058dc7576c45816f9e607768c02df91f82c7e8d",
+        "signature": "67fcb51fb05a8d5581c0c999c058dc7576c45816f9e607768c02df91f82c7e8d",
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
@@ -487,8 +492,8 @@
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "ecaed4d7c7c7f5a303f82cdeef7b66483e605b622da75eff1f270ce68dcac027",
-        "signature": "9a05186e23b056c7859291c869f7de8cd002fff24324eee0cc2d1f016e31a322",
+        "version": "aadedd64e80f76fd13be11c6783989064ecb808cb1a1815c7de7a32041cb7425",
+        "signature": "836202f128f2533c4c225ee3afd7558913cc2b1a96f981c254c820c3789b256e",
         "affectsGlobalScope": false
       },
       "./node_modules/ts-toolbelt/out/index.d.ts": {
@@ -858,7 +863,8 @@
       ],
       "./node_modules/interfaces/dist/index.d.ts": [
         "./node_modules/interfaces/dist/context.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
+        "./node_modules/interfaces/dist/data.d.ts",
+        "./node_modules/interfaces/dist/reviver.d.ts"
       ],
       "./node_modules/ts-toolbelt/out/index.d.ts": [
         "./node_modules/ts-toolbelt/out/index.d.ts"
@@ -1139,7 +1145,8 @@
       ],
       "./node_modules/interfaces/dist/index.d.ts": [
         "./node_modules/interfaces/dist/context.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
+        "./node_modules/interfaces/dist/data.d.ts",
+        "./node_modules/interfaces/dist/reviver.d.ts"
       ],
       "./node_modules/ts-toolbelt/out/index.d.ts": [
         "./node_modules/ts-toolbelt/out/index.d.ts"
@@ -1244,6 +1251,7 @@
       "./node_modules/interfaces/dist/context.d.ts",
       "./node_modules/interfaces/dist/data.d.ts",
       "./node_modules/interfaces/dist/index.d.ts",
+      "./node_modules/interfaces/dist/reviver.d.ts",
       "./node_modules/ts-toolbelt/out/index.d.ts",
       "./src/config.ts",
       "./src/incremental-book.ts",

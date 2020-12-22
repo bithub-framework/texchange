@@ -1,7 +1,7 @@
 import { MakingOrder } from './making-order';
 import { LONG, SHORT, min, } from './interfaces';
 import { PRICE_DP, DOLLAR_DP, } from './config';
-import { Big, } from 'big.js';
+import Big from 'big.js';
 class ManagingAssets extends MakingOrder {
     constructor(config, now) {
         super(now);
