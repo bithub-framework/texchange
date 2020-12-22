@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { IncrementalBook } from './incremental-book';
 import { BID, ASK, } from './interfaces';
+import Big from 'big.js';
 class Pushing extends EventEmitter {
     constructor(
     // 必须保证 update 时数据的 time 等于 now()

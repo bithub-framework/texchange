@@ -6,6 +6,7 @@ import {
     BID, ASK,
     RawTrade,
 } from './interfaces';
+import Big from 'big.js';
 
 class Pushing extends EventEmitter {
     protected tradeCount = 0;

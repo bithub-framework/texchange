@@ -482,7 +482,7 @@
         "affectsGlobalScope": false
       },
       "./src/pushing.ts": {
-        "version": "7297b76d175a240f687160f7903198d7861be7e349ae9e732afad2820d12cab4",
+        "version": "ee058d2cc814d95003f1c3e33ed185341f06895e9bae76361562a5eb344daf32",
         "signature": "7d1cb7a02e652d28f803bd5756caa524448aacc25e56eadeee1968138b5ff1e5",
         "affectsGlobalScope": false
       },
@@ -901,6 +901,7 @@
         "./src/making-order.ts"
       ],
       "./src/pushing.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/events.d.ts",
         "./src/incremental-book.ts",
         "./src/interfaces.ts"
