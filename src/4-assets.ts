@@ -36,12 +36,8 @@ class ManagingAssets extends Taken {
             throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
 
-        const [
-            makerOrder,
-            rawTrades,
-            volume,
-            dollarVolume,
-        ] = this.orderTakes(order);
+        const [makerOrder, rawTrades, volume, dollarVolume] =
+            this.orderTakes(order);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         this.assetsManager.decBalance(takerFee);

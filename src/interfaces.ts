@@ -1,7 +1,6 @@
 export * from 'interfaces';
 import {
     Side,
-    Assets,
 } from 'interfaces';
 import Big from 'big.js';
 
