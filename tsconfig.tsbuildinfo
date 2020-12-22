@@ -482,12 +482,12 @@
         "affectsGlobalScope": false
       },
       "./src/making-order.ts": {
-        "version": "82683acf2646616215395956402cba8f588993c8c708cce929d9076ab6f11f97",
+        "version": "3a7e516c63f73cbc72d35b9b525986210a1823546b0011301af5fd9bcd24be67",
         "signature": "864ee56f77ccdf0f95c7494ab6000e57bf1ff9a1f21bac2588fe138ec26ae9f0",
         "affectsGlobalScope": false
       },
       "./src/managing-assets.ts": {
-        "version": "e35bbca51bc693da3a84ad3938836494766d910a50bfba651361d3cdb9aca3ec",
+        "version": "390fbac17cc6bae310e2a30194435794db8b3b35ecf12a9bc348f5d82b0855d9",
         "signature": "0de2228bac436a37cca7424bb103417ebd5c6a6b8bb10ac82e8d4bd6306594d6",
         "affectsGlobalScope": false
       },

@@ -93,7 +93,7 @@ class ManagingAssets extends MakingOrder {
             .plus(openOrder.frozen);
 
         this.calcMargin();
-        this.pushRawTrades(rawTrades);
+        if (rawTrades.length) this.pushRawTrades(rawTrades);
         this.pushOrderbook();
         return openOrder.id;
     }

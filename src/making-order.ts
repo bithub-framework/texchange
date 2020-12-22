@@ -21,7 +21,7 @@ class MakingOrder extends Pushing {
             rawTrades,
         ] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        this.pushRawTrades(rawTrades);
+        if (rawTrades.length) this.pushRawTrades(rawTrades);
         this.pushOrderbook();
         return openOrder.id;
     }
