@@ -58,6 +58,4 @@ class Texchange extends ManagingAssets implements
 export {
     Texchange as default,
     Texchange,
-    Config,
-    RawTrade,
 }

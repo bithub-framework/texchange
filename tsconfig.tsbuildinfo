@@ -512,8 +512,13 @@
         "affectsGlobalScope": false
       },
       "./src/texchange.ts": {
-        "version": "1210c41c5cc0a837dbd308da87daadc258bc833031db8dff766856090f8de46c",
-        "signature": "a7c1cf1043e89af7064684be16125e2f72aea8d05619cf5c0dc971e3af04e0f1",
+        "version": "2e1dda792f7ef7b8ed0b6c85ef33a12a6b0d385d738b81416e93edc314d60e96",
+        "signature": "ff6366f354aba24996ab56cfa0935c7f22c1930da8d327a33cab3a56f5ba9da6",
+        "affectsGlobalScope": false
+      },
+      "./src/index.ts": {
+        "version": "f535751d9d95f63ecf504fa8bede8996a6328cc50547b2ac10ea1dda32b66f85",
+        "signature": "0e1a96bc9e58c6f794c2c8a1e36dac882f9ab58f347d119dcae7ab7b1b92b8a6",
         "affectsGlobalScope": false
       },
       "../../../node_modules/@types/accepts/index.d.ts": {
@@ -874,6 +879,11 @@
         "./src/config.ts",
         "./src/interfaces.ts"
       ],
+      "./src/index.ts": [
+        "./src/config.ts",
+        "./src/interfaces.ts",
+        "./src/texchange.ts"
+      ],
       "./src/interfaces.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
@@ -1155,6 +1165,11 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
+      "./src/index.ts": [
+        "./src/config.ts",
+        "./src/interfaces.ts",
+        "./src/texchange.ts"
+      ],
       "./src/interfaces.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/interfaces/dist/index.d.ts"
@@ -1255,6 +1270,7 @@
       "./node_modules/ts-toolbelt/out/index.d.ts",
       "./src/config.ts",
       "./src/incremental-book.ts",
+      "./src/index.ts",
       "./src/interfaces.ts",
       "./src/making-order.ts",
       "./src/managing-assets.ts",

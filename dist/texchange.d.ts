@@ -9,4 +9,4 @@ declare class Texchange extends ManagingAssets implements ContextMarketPublicApi
     protected pushOrderbook(): Promise<void>;
     protected pushRawTrades(rawTrades: RawTrade[]): Promise<void>;
 }
-export { Texchange as default, Texchange, Config, RawTrade, };
+export { Texchange as default, Texchange, };
