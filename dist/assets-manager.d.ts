@@ -1,5 +1,6 @@
-import { Assets, Config, Length, Side, DetailedOpenOrder } from './interfaces';
+import { Assets, Config, Length, Side } from './interfaces';
 import Big from 'big.js';
+import { FreezeInfo } from './open-order-manager';
 declare class AssetsManager {
     private config;
     private assets;
@@ -20,15 +21,9 @@ declare class AssetsManager {
     };
     getMargin(): Big;
     getReserve(): Big;
+    freeze({ fee, margin, position, length }: FreezeInfo): void;
+    release({ fee, margin, position, length }: FreezeInfo): void;
     openPosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
     closePosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
-    freeze(margin: Big, fee: Big, position: Big, openOrder: DetailedOpenOrder): void;
-    release(margin: Big, fee: Big, position: Big, openOrder: DetailedOpenOrder): void;
-    private freezeMargin;
-    private releaseMargin;
-    private freezePosition;
-    private releasePosition;
-    private freezeFee;
-    private releaseFee;
 }
 export { AssetsManager as default, AssetsManager, };

@@ -25,6 +25,13 @@ class Texchange extends ManagingAssets {
         await this.sleep(this.config.PING);
         return assets;
     }
+    async getOpenOrders() {
+        await this.sleep(this.config.PING);
+        await this.sleep(this.config.PROCESSING);
+        const openOrders = clone(super.getOpenOrders());
+        await this.sleep(this.config.PING);
+        return openOrders;
+    }
     async pushOrderbook() {
         const orderbook = clone(this.orderbookManager.getOrderbook());
         await this.sleep(this.config.PING);

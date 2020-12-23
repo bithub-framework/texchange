@@ -1,11 +1,12 @@
 import { Pushing } from './1-pushing';
 import { BID, ASK, min, } from './interfaces';
 import Big from 'big.js';
+import { OpenOrderManager } from './open-order-manager';
 class Ordering extends Pushing {
-    constructor() {
-        super(...arguments);
+    constructor(config, now) {
+        super(config, now);
         this.orderCount = 0;
-        this.openOrders = new Map();
+        this.openOrderManager = new OpenOrderManager(config);
     }
     // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
@@ -17,10 +18,11 @@ class Ordering extends Pushing {
         return openOrder.id;
     }
     async cancelOrder(oid) {
-        this.openOrders.delete(oid);
+        if (this.openOrderManager.getOpenOrders().has(oid))
+            this.openOrderManager.delete(oid);
     }
     async getOpenOrders() {
-        return [...this.openOrders.values()];
+        return [...this.openOrderManager.getOpenOrders().values()];
     }
     orderTakes(_taker) {
         const taker = { ..._taker };
@@ -49,14 +51,7 @@ class Ordering extends Pushing {
         return [taker, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const openOrder = {
-            ...order,
-            id: ++this.orderCount,
-            frozenMargin: new Big(0),
-            frozenFee: new Big(0),
-        };
-        if (openOrder.quantity.gt(0))
-            this.openOrders.set(openOrder.id, openOrder);
+        const [openOrder] = this.openOrderManager.create(++this.orderCount, order);
         return openOrder;
     }
 }

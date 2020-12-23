@@ -8,6 +8,7 @@ import {
     ContextMarketPublicApiLike,
     ContextAccountPrivateApiLike,
     Config,
+    OpenOrder,
 } from './interfaces';
 
 class Texchange extends ManagingAssets implements
@@ -42,6 +43,14 @@ class Texchange extends ManagingAssets implements
         const assets = clone(super.getAssets());
         await this.sleep(this.config.PING);
         return assets;
+    }
+
+    public async getOpenOrders(): Promise<OpenOrder[]> {
+        await this.sleep(this.config.PING);
+        await this.sleep(this.config.PROCESSING);
+        const openOrders = clone(super.getOpenOrders());
+        await this.sleep(this.config.PING);
+        return openOrders;
     }
 
     protected async pushOrderbook(): Promise<void> {

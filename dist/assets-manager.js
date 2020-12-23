@@ -61,6 +61,18 @@ class AssetsManager {
             .minus(this.assets.frozenMargin)
             .minus(this.assets.frozenFee);
     }
+    freeze({ fee, margin, position, length }) {
+        this.assets.frozenMargin = this.assets.frozenMargin.plus(margin);
+        this.assets.frozenFee = this.assets.frozenFee.plus(fee);
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+            .plus(position);
+    }
+    release({ fee, margin, position, length }) {
+        this.assets.frozenMargin = this.assets.frozenMargin.minus(margin);
+        this.assets.frozenFee = this.assets.frozenFee.minus(fee);
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+            .minus(position);
+    }
     openPosition(length, volume, dollarVolume, fee) {
         this.assets.position[length] = this.assets.position[length].plus(volume);
         this.assets.cost[length] = this.assets.cost[length].plus(dollarVolume);
@@ -78,67 +90,6 @@ class AssetsManager {
         this.assets.balance = this.assets.balance
             .plus(profit)
             .minus(fee);
-    }
-    // public incBalance(increment: Big) {
-    //     this.assets.balance = this.assets.balance
-    //         .plus(increment);
-    // }
-    // public decBalance(decrement: Big) {
-    //     this.assets.balance = this.assets.balance
-    //         .minus(decrement);
-    // }
-    freeze(margin, fee, position, openOrder) {
-        this.freezeMargin(margin, openOrder);
-        this.freezeFee(fee, openOrder);
-        this.freezePosition(position, openOrder);
-    }
-    release(margin, fee, position, openOrder) {
-        this.releaseMargin(margin, openOrder);
-        this.releaseFee(fee, openOrder);
-        this.releasePosition(position, openOrder);
-    }
-    freezeMargin(increment, openOrder) {
-        if (openOrder.open) {
-            this.assets.frozenMargin = this.assets.frozenMargin
-                .plus(increment);
-            openOrder.frozenMargin = openOrder.frozenMargin
-                .plus(increment);
-        }
-    }
-    releaseMargin(decrement, openOrder) {
-        if (decrement.gt(openOrder.frozenMargin))
-            decrement = openOrder.frozenMargin;
-        openOrder.frozenMargin = openOrder.frozenMargin
-            .minus(decrement);
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .minus(decrement);
-    }
-    freezePosition(increment, openOrder) {
-        if (!openOrder.open)
-            this.assets.frozenPosition[-openOrder.side] =
-                this.assets.frozenPosition[-openOrder.side]
-                    .plus(increment);
-    }
-    releasePosition(decrement, openOrder) {
-        if (!openOrder.open)
-            this.assets.frozenPosition[-openOrder.side] =
-                this.assets.frozenPosition[-openOrder.side]
-                    .minus(decrement);
-    }
-    freezeFee(increment, openOrder) {
-        this.assets.frozenFee = this.assets.frozenFee
-            .plus(increment);
-        if (openOrder)
-            openOrder.frozenFee = openOrder.frozenFee
-                .plus(increment);
-    }
-    releaseFee(decrement, openOrder) {
-        if (decrement.gt(openOrder.frozenFee))
-            decrement = openOrder.frozenFee;
-        openOrder.frozenFee = openOrder.frozenFee
-            .minus(decrement);
-        this.assets.frozenFee = this.assets.frozenFee
-            .minus(decrement);
     }
 }
 export { AssetsManager as default, AssetsManager, };

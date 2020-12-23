@@ -3,13 +3,13 @@ import {
     BID, ASK,
     RawTrade,
     min,
-    DetailedOpenOrder,
+    OpenOrder,
 } from './interfaces';
 import Big from 'big.js';
 
 class Taken extends Ordering {
     protected rawTradeShouldTakeOpenOrder(
-        rawTrade: RawTrade, maker: DetailedOpenOrder,
+        rawTrade: RawTrade, maker: OpenOrder,
     ): boolean {
         return (
             (
@@ -26,20 +26,19 @@ class Taken extends Ordering {
 
     protected rawTradeTakesOpenOrder(
         rawTrade: RawTrade,
-        maker: DetailedOpenOrder,
+        maker: OpenOrder,
     ): [Big, Big] {
         const volume = min(rawTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         rawTrade.quantity = rawTrade.quantity.minus(volume);
-        maker.quantity = maker.quantity.minus(volume);
-        if (maker.quantity.eq(0)) this.openOrders.delete(maker.id);
+        this.openOrderManager.take(maker.id, volume, dollarVolume);
         return [volume, dollarVolume];
     }
 
     protected rawTradeTakesOpenOrders(_rawTrade: RawTrade) {
         const rawTrade: RawTrade = { ..._rawTrade };
-        for (const order of this.openOrders.values())
+        for (const order of this.openOrderManager.getOpenOrders().values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, order))
                 this.rawTradeTakesOpenOrder(rawTrade, order);
     }

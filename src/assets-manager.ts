@@ -4,15 +4,17 @@ import {
     Config,
     Length,
     Side,
-    DetailedOpenOrder,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
+import { FreezeInfo } from './open-order-manager';
 
 class AssetsManager {
     private assets: Assets;
 
-    constructor(private config: Config) {
+    constructor(
+        private config: Config,
+    ) {
         this.assets = {
             position: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
@@ -22,6 +24,7 @@ class AssetsManager {
             cost: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
+
             frozenFee: new Big(0),
             frozenMargin: new Big(0),
             frozenPosition: {
@@ -82,6 +85,20 @@ class AssetsManager {
             .minus(this.assets.frozenFee);
     }
 
+    public freeze({ fee, margin, position, length }: FreezeInfo) {
+        this.assets.frozenMargin = this.assets.frozenMargin.plus(margin);
+        this.assets.frozenFee = this.assets.frozenFee.plus(fee);
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+            .plus(position);
+    }
+
+    public release({ fee, margin, position, length }: FreezeInfo) {
+        this.assets.frozenMargin = this.assets.frozenMargin.minus(margin);
+        this.assets.frozenFee = this.assets.frozenFee.minus(fee);
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+            .minus(position);
+    }
+
     public openPosition(
         length: Length | Side,
         volume: Big,
@@ -113,100 +130,6 @@ class AssetsManager {
         this.assets.balance = this.assets.balance
             .plus(profit)
             .minus(fee);
-    }
-
-    // public incBalance(increment: Big) {
-    //     this.assets.balance = this.assets.balance
-    //         .plus(increment);
-    // }
-
-    // public decBalance(decrement: Big) {
-    //     this.assets.balance = this.assets.balance
-    //         .minus(decrement);
-    // }
-
-    public freeze(
-        margin: Big, fee: Big, position: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        this.freezeMargin(margin, openOrder);
-        this.freezeFee(fee, openOrder);
-        this.freezePosition(position, openOrder);
-    }
-
-    public release(
-        margin: Big, fee: Big, position: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        this.releaseMargin(margin, openOrder);
-        this.releaseFee(fee, openOrder);
-        this.releasePosition(position, openOrder);
-    }
-
-    private freezeMargin(
-        increment: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        if (openOrder.open) {
-            this.assets.frozenMargin = this.assets.frozenMargin
-                .plus(increment);
-            openOrder.frozenMargin = openOrder.frozenMargin
-                .plus(increment);
-        }
-    }
-
-    private releaseMargin(
-        decrement: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        if (decrement.gt(openOrder.frozenMargin))
-            decrement = openOrder.frozenMargin;
-        openOrder.frozenMargin = openOrder.frozenMargin
-            .minus(decrement);
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .minus(decrement);
-    }
-
-    private freezePosition(
-        increment: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        if (!openOrder.open)
-            this.assets.frozenPosition[-openOrder.side] =
-                this.assets.frozenPosition[-openOrder.side]
-                    .plus(increment);
-    }
-
-    private releasePosition(
-        decrement: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        if (!openOrder.open)
-            this.assets.frozenPosition[-openOrder.side] =
-                this.assets.frozenPosition[-openOrder.side]
-                    .minus(decrement);
-    }
-
-    private freezeFee(
-        increment: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        this.assets.frozenFee = this.assets.frozenFee
-            .plus(increment);
-        if (openOrder) openOrder.frozenFee = openOrder.frozenFee
-            .plus(increment);
-    }
-
-    private releaseFee(
-        decrement: Big,
-        openOrder: DetailedOpenOrder,
-    ) {
-        if (decrement.gt(openOrder.frozenFee))
-            decrement = openOrder.frozenFee;
-        openOrder.frozenFee = openOrder.frozenFee
-            .minus(decrement);
-        this.assets.frozenFee = this.assets.frozenFee
-            .minus(decrement);
     }
 }
 

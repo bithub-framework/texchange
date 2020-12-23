@@ -1,18 +1,27 @@
 import { Pushing } from './1-pushing';
 import {
     OpenOrder,
-    DetailedOpenOrder,
     LimitOrder,
     BID, ASK,
     OrderId,
     RawTrade,
     min,
+    Config,
 } from './interfaces';
 import Big from 'big.js';
+import { OpenOrderManager } from './open-order-manager';
 
 class Ordering extends Pushing {
     protected orderCount = 0;
-    protected openOrders = new Map<OrderId, DetailedOpenOrder>();
+    protected openOrderManager: OpenOrderManager;
+
+    constructor(
+        config: Config,
+        now: () => number,
+    ) {
+        super(config, now);
+        this.openOrderManager = new OpenOrderManager(config);
+    }
 
     // 由于精度原因，实际成本不一定恰好等于 order.price
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
@@ -24,11 +33,12 @@ class Ordering extends Pushing {
     }
 
     public async cancelOrder(oid: OrderId): Promise<void> {
-        this.openOrders.delete(oid);
+        if (this.openOrderManager.getOpenOrders().has(oid))
+            this.openOrderManager.delete(oid);
     }
 
     public async getOpenOrders(): Promise<OpenOrder[]> {
-        return [...this.openOrders.values()];
+        return [...this.openOrderManager.getOpenOrders().values()];
     }
 
     protected orderTakes(_taker: LimitOrder): [
@@ -64,15 +74,11 @@ class Ordering extends Pushing {
 
     protected orderMakes(
         order: LimitOrder,
-    ): DetailedOpenOrder {
-        const openOrder: DetailedOpenOrder = {
-            ...order,
-            id: ++this.orderCount,
-            frozenMargin: new Big(0),
-            frozenFee: new Big(0),
-        };
-        if (openOrder.quantity.gt(0))
-            this.openOrders.set(openOrder.id, openOrder);
+    ): OpenOrder {
+        const [openOrder] = this.openOrderManager.create(
+            ++this.orderCount,
+            order,
+        );
         return openOrder;
     }
 }

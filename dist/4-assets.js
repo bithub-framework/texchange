@@ -22,13 +22,6 @@ class ManagingAssets extends Taken {
         this.pushOrderbook();
         return openOrder.id;
     }
-    async cancelOrder(oid) {
-        const openOrder = this.openOrders.get(oid);
-        if (openOrder) {
-            this.assetsManager.release(openOrder.frozenMargin, openOrder.frozenFee, openOrder.quantity, openOrder);
-        }
-        await super.cancelOrder(oid);
-    }
     async getAssets() {
         this.settle();
         return this.assetsManager.getAssets();
@@ -66,26 +59,20 @@ class ManagingAssets extends Taken {
         return [makerOrder, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const openOrder = super.orderMakes(order);
-        const dollarVolume = this.config.calcDollarVolume(openOrder.price, openOrder.quantity);
-        this.assetsManager.freeze(dollarVolume.div(this.assetsManager.getLeverage())
-            .round(this.config.CURRENCY_DP, 3 /* RoundUp */), dollarVolume.times(this.config.MAKER_FEE)
-            .round(this.config.CURRENCY_DP, 3 /* RoundUp */), openOrder.quantity, openOrder);
+        const [openOrder, info] = this.openOrderManager.create(++this.orderCount, order);
+        this.assetsManager.freeze(info);
         return openOrder;
     }
     rawTradeTakesOpenOrders(_rawTrade) {
         const rawTrade = { ..._rawTrade };
-        for (const openOrder of this.openOrders.values())
+        for (const openOrder of this.openOrderManager.getOpenOrders().values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, openOrder)) {
                 const [volume, dollarVolume] = this.rawTradeTakesOpenOrder(rawTrade, openOrder);
-                const makerFee = dollarVolume.times(this.config.MAKER_FEE)
-                    .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
-                this.assetsManager.release(dollarVolume.div(this.assetsManager.getLeverage())
-                    .round(this.config.CURRENCY_DP), makerFee, volume, openOrder);
+                const info = this.openOrderManager.take(openOrder.id, volume, dollarVolume);
                 if (openOrder.open)
-                    this.assetsManager.openPosition(openOrder.side, volume, dollarVolume, makerFee);
+                    this.assetsManager.openPosition(openOrder.side, volume, dollarVolume, info.fee);
                 else
-                    this.assetsManager.closePosition(-openOrder.side, volume, dollarVolume, makerFee);
+                    this.assetsManager.closePosition(-openOrder.side, volume, dollarVolume, info.fee);
             }
     }
     settle() {
