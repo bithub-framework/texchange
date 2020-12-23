@@ -7,12 +7,10 @@ class AssetsManager {
             position: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
-            leverage: config.leverage,
             balance: new Big(config.initialBalance),
             cost: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
-            frozenFee: new Big(0),
             frozenMargin: new Big(0),
             frozenPosition: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
@@ -29,17 +27,11 @@ class AssetsManager {
     getPosition() {
         return this.assets.position;
     }
-    getLeverage() {
-        return this.assets.leverage;
-    }
     getBalance() {
         return this.assets.balance;
     }
     getCost() {
         return this.assets.cost;
-    }
-    getFrozenFee() {
-        return this.assets.frozenFee;
     }
     getFrozenMargin() {
         return this.assets.frozenMargin;
@@ -51,25 +43,22 @@ class AssetsManager {
         return this.assets.margin = new Big(0)
             .plus(this.assets.cost[LONG])
             .plus(this.assets.cost[SHORT])
-            .div(this.assets.leverage)
+            .div(this.config.leverage)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
     }
     getReserve() {
         this.getMargin();
         return this.assets.reserve = this.assets.balance
             .minus(this.assets.margin)
-            .minus(this.assets.frozenMargin)
-            .minus(this.assets.frozenFee);
+            .minus(this.assets.frozenMargin);
     }
-    freeze({ fee, margin, position, length }) {
+    freeze({ margin, position, length }) {
         this.assets.frozenMargin = this.assets.frozenMargin.plus(margin);
-        this.assets.frozenFee = this.assets.frozenFee.plus(fee);
         this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
             .plus(position);
     }
-    release({ fee, margin, position, length }) {
+    thaw({ margin, position, length }) {
         this.assets.frozenMargin = this.assets.frozenMargin.minus(margin);
-        this.assets.frozenFee = this.assets.frozenFee.minus(fee);
         this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
             .minus(position);
     }

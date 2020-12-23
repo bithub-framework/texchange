@@ -33,8 +33,7 @@ class Ordering extends Pushing {
     }
 
     public async cancelOrder(oid: OrderId): Promise<void> {
-        if (this.openOrderManager.getOpenOrders().has(oid))
-            this.openOrderManager.delete(oid);
+        this.openOrderManager.delete(oid);
     }
 
     public async getOpenOrders(): Promise<OpenOrder[]> {
@@ -75,7 +74,7 @@ class Ordering extends Pushing {
     protected orderMakes(
         order: LimitOrder,
     ): OpenOrder {
-        const [openOrder] = this.openOrderManager.create(
+        const [openOrder] = this.openOrderManager.addOrder(
             ++this.orderCount,
             order,
         );

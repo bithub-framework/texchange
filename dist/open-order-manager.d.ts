@@ -1,7 +1,6 @@
 import { OrderId, Config, OpenOrder, LimitOrder, Length } from './interfaces';
 import Big from 'big.js';
-interface FreezeInfo {
-    fee: Big;
+interface Frozen {
     margin: Big;
     position: Big;
     length: Length;
@@ -9,14 +8,12 @@ interface FreezeInfo {
 declare class OpenOrderManager {
     private config;
     private openOrders;
-    private freezeInfos;
+    private frozens;
     constructor(config: Config);
-    create(oid: OrderId, limit: LimitOrder): [OpenOrder, FreezeInfo];
-    take(oid: OrderId, volume: Big, dollarVolume: Big): FreezeInfo;
-    delete(oid: OrderId): FreezeInfo;
-    getOpenOrders(): Map<OrderId, OpenOrder>;
-    private releaseMargin;
-    private releaseFee;
-    private releasePosition;
+    addOrder(oid: OrderId, limit: LimitOrder): [OpenOrder, Frozen];
+    take(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
+    delete(oid: OrderId): Frozen;
+    getOpenOrders(): Map<import("interfaces/dist/data").TradeId, OpenOrder>;
+    private calcReleasedMargin;
 }
-export { OpenOrderManager as default, OpenOrderManager, FreezeInfo, };
+export { OpenOrderManager as default, OpenOrderManager, Frozen, };

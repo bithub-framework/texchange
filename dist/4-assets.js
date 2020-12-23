@@ -1,5 +1,5 @@
 import { Taken } from './3-taken';
-import { LONG, SHORT, } from './interfaces';
+import { LONG, SHORT, min, } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './assets-manager';
 class ManagingAssets extends Taken {
@@ -15,12 +15,11 @@ class ManagingAssets extends Taken {
         if (!this.enoughReserve(order))
             throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
-        const [makerOrder, rawTrades] = this.orderTakes(order);
-        const openOrder = this.orderMakes(makerOrder);
-        if (rawTrades.length)
-            this.pushRawTrades(rawTrades);
-        this.pushOrderbook();
-        return openOrder.id;
+        return super.makeLimitOrder(order);
+    }
+    async cancelOrder(oid) {
+        const toThaw = this.openOrderManager.delete(oid);
+        this.assetsManager.thaw(toThaw);
     }
     async getAssets() {
         this.settle();
@@ -43,7 +42,7 @@ class ManagingAssets extends Taken {
     }
     enoughReserve(order) {
         return order.open && new Big(0)
-            .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.assetsManager.getLeverage()))
+            .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.config.leverage))
             .plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE))
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
             .lte(this.assetsManager.getReserve());
@@ -59,21 +58,23 @@ class ManagingAssets extends Taken {
         return [makerOrder, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder, info] = this.openOrderManager.create(++this.orderCount, order);
-        this.assetsManager.freeze(info);
+        const [openOrder, toFreeze] = this.openOrderManager.addOrder(++this.orderCount, order);
+        this.assetsManager.freeze(toFreeze);
         return openOrder;
     }
-    rawTradeTakesOpenOrders(_rawTrade) {
-        const rawTrade = { ..._rawTrade };
-        for (const openOrder of this.openOrderManager.getOpenOrders().values())
-            if (this.rawTradeShouldTakeOpenOrder(rawTrade, openOrder)) {
-                const [volume, dollarVolume] = this.rawTradeTakesOpenOrder(rawTrade, openOrder);
-                const info = this.openOrderManager.take(openOrder.id, volume, dollarVolume);
-                if (openOrder.open)
-                    this.assetsManager.openPosition(openOrder.side, volume, dollarVolume, info.fee);
-                else
-                    this.assetsManager.closePosition(-openOrder.side, volume, dollarVolume, info.fee);
-            }
+    rawTradeTakesOpenOrder(rawTrade, maker) {
+        const volume = min(rawTrade.quantity, maker.quantity);
+        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
+            .round(this.config.CURRENCY_DP);
+        rawTrade.quantity = rawTrade.quantity.minus(volume);
+        const toThaw = this.openOrderManager.take(maker.id, volume, dollarVolume);
+        this.assetsManager.thaw(toThaw);
+        const makerFee = dollarVolume.times(this.config.MAKER_FEE)
+            .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
+        if (maker.open)
+            this.assetsManager.openPosition(maker.side, volume, dollarVolume, makerFee);
+        else
+            this.assetsManager.closePosition(-maker.side, volume, dollarVolume, makerFee);
     }
     settle() {
         const position = { ...this.assetsManager.getPosition() };

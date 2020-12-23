@@ -18,8 +18,7 @@ class Ordering extends Pushing {
         return openOrder.id;
     }
     async cancelOrder(oid) {
-        if (this.openOrderManager.getOpenOrders().has(oid))
-            this.openOrderManager.delete(oid);
+        this.openOrderManager.delete(oid);
     }
     async getOpenOrders() {
         return [...this.openOrderManager.getOpenOrders().values()];
@@ -51,7 +50,7 @@ class Ordering extends Pushing {
         return [taker, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder] = this.openOrderManager.create(++this.orderCount, order);
+        const [openOrder] = this.openOrderManager.addOrder(++this.orderCount, order);
         return openOrder;
     }
 }

@@ -7,7 +7,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
-import { FreezeInfo } from './open-order-manager';
+import { Frozen } from './open-order-manager';
 
 class AssetsManager {
     private assets: Assets;
@@ -19,13 +19,11 @@ class AssetsManager {
             position: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
-            leverage: config.leverage,
             balance: new Big(config.initialBalance),
             cost: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
 
-            frozenFee: new Big(0),
             frozenMargin: new Big(0),
             frozenPosition: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
@@ -45,20 +43,12 @@ class AssetsManager {
         return this.assets.position;
     }
 
-    public getLeverage() {
-        return this.assets.leverage;
-    }
-
     public getBalance() {
         return this.assets.balance;
     }
 
     public getCost() {
         return this.assets.cost;
-    }
-
-    public getFrozenFee() {
-        return this.assets.frozenFee;
     }
 
     public getFrozenMargin() {
@@ -73,7 +63,7 @@ class AssetsManager {
         return this.assets.margin = new Big(0)
             .plus(this.assets.cost[LONG])
             .plus(this.assets.cost[SHORT])
-            .div(this.assets.leverage)
+            .div(this.config.leverage)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
     }
 
@@ -82,19 +72,16 @@ class AssetsManager {
         return this.assets.reserve = this.assets.balance
             .minus(this.assets.margin)
             .minus(this.assets.frozenMargin)
-            .minus(this.assets.frozenFee);
     }
 
-    public freeze({ fee, margin, position, length }: FreezeInfo) {
+    public freeze({ margin, position, length }: Frozen) {
         this.assets.frozenMargin = this.assets.frozenMargin.plus(margin);
-        this.assets.frozenFee = this.assets.frozenFee.plus(fee);
         this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
             .plus(position);
     }
 
-    public release({ fee, margin, position, length }: FreezeInfo) {
+    public thaw({ margin, position, length }: Frozen) {
         this.assets.frozenMargin = this.assets.frozenMargin.minus(margin);
-        this.assets.frozenFee = this.assets.frozenFee.minus(fee);
         this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
             .minus(position);
     }

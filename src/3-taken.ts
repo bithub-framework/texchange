@@ -5,7 +5,6 @@ import {
     min,
     OpenOrder,
 } from './interfaces';
-import Big from 'big.js';
 
 class Taken extends Ordering {
     protected rawTradeShouldTakeOpenOrder(
@@ -27,13 +26,12 @@ class Taken extends Ordering {
     protected rawTradeTakesOpenOrder(
         rawTrade: RawTrade,
         maker: OpenOrder,
-    ): [Big, Big] {
+    ): void {
         const volume = min(rawTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         rawTrade.quantity = rawTrade.quantity.minus(volume);
         this.openOrderManager.take(maker.id, volume, dollarVolume);
-        return [volume, dollarVolume];
     }
 
     protected rawTradeTakesOpenOrders(_rawTrade: RawTrade) {
