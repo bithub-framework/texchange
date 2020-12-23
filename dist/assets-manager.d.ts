@@ -22,11 +22,13 @@ declare class AssetsManager {
     getReserve(): Big;
     openPosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
     closePosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
-    freezeMargin(increment: Big, openOrder?: DetailedOpenOrder): void;
-    releaseMargin(decrement: Big, openOrder?: DetailedOpenOrder): void;
-    freezePosition(increment: Big, length: Length | Side): void;
-    releasePosition(decrement: Big, length: Length | Side): void;
-    freezeFee(increment: Big, openOrder?: DetailedOpenOrder): void;
-    releaseFee(decrement: Big, openOrder?: DetailedOpenOrder): void;
+    freeze(margin: Big, fee: Big, position: Big, openOrder: DetailedOpenOrder): void;
+    release(margin: Big, fee: Big, position: Big, openOrder: DetailedOpenOrder): void;
+    private freezeMargin;
+    private releaseMargin;
+    private freezePosition;
+    private releasePosition;
+    private freezeFee;
+    private releaseFee;
 }
 export { AssetsManager as default, AssetsManager, };

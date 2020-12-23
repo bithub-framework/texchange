@@ -125,50 +125,71 @@ class AssetsManager {
     //         .minus(decrement);
     // }
 
-    public freezeMargin(
-        increment: Big,
-        openOrder?: DetailedOpenOrder,
+    public freeze(
+        margin: Big, fee: Big, position: Big,
+        openOrder: DetailedOpenOrder,
     ) {
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .plus(increment);
-        if (openOrder) openOrder.frozenMargin = openOrder.frozenMargin
-            .plus(increment);
+        this.freezeMargin(margin, openOrder);
+        this.freezeFee(fee, openOrder);
+        this.freezePosition(position, openOrder);
     }
 
-    public releaseMargin(
-        decrement: Big,
-        openOrder?: DetailedOpenOrder,
+    public release(
+        margin: Big, fee: Big, position: Big,
+        openOrder: DetailedOpenOrder,
     ) {
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .minus(decrement);
-        if (openOrder) {
-            // TODO
-            if (decrement > openOrder.frozenMargin)
-                decrement = openOrder.frozenMargin;
+        this.releaseMargin(margin, openOrder);
+        this.releaseFee(fee, openOrder);
+        this.releasePosition(position, openOrder);
+    }
+
+    private freezeMargin(
+        increment: Big,
+        openOrder: DetailedOpenOrder,
+    ) {
+        if (openOrder.open) {
+            this.assets.frozenMargin = this.assets.frozenMargin
+                .plus(increment);
             openOrder.frozenMargin = openOrder.frozenMargin
-                .minus(decrement);
+                .plus(increment);
         }
     }
 
-    public freezePosition(
-        increment: Big,
-        length: Length | Side,
-    ) {
-        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
-            .plus(increment);
-    }
-
-    public releasePosition(
+    private releaseMargin(
         decrement: Big,
-        length: Length | Side,
+        openOrder: DetailedOpenOrder,
     ) {
-        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+        if (decrement.gt(openOrder.frozenMargin))
+            decrement = openOrder.frozenMargin;
+        openOrder.frozenMargin = openOrder.frozenMargin
+            .minus(decrement);
+        this.assets.frozenMargin = this.assets.frozenMargin
             .minus(decrement);
     }
 
-    public freezeFee(
+    private freezePosition(
         increment: Big,
-        openOrder?: DetailedOpenOrder,
+        openOrder: DetailedOpenOrder,
+    ) {
+        if (!openOrder.open)
+            this.assets.frozenPosition[-openOrder.side] =
+                this.assets.frozenPosition[-openOrder.side]
+                    .plus(increment);
+    }
+
+    private releasePosition(
+        decrement: Big,
+        openOrder: DetailedOpenOrder,
+    ) {
+        if (!openOrder.open)
+            this.assets.frozenPosition[-openOrder.side] =
+                this.assets.frozenPosition[-openOrder.side]
+                    .minus(decrement);
+    }
+
+    private freezeFee(
+        increment: Big,
+        openOrder: DetailedOpenOrder,
     ) {
         this.assets.frozenFee = this.assets.frozenFee
             .plus(increment);
@@ -176,16 +197,14 @@ class AssetsManager {
             .plus(increment);
     }
 
-    public releaseFee(
+    private releaseFee(
         decrement: Big,
-        openOrder?: DetailedOpenOrder,
+        openOrder: DetailedOpenOrder,
     ) {
-        if (openOrder) {
-            if (decrement > openOrder.frozenFee)
-                decrement = openOrder.frozenFee;
-            openOrder.frozenFee = openOrder.frozenFee
-                .minus(decrement);
-        }
+        if (decrement.gt(openOrder.frozenFee))
+            decrement = openOrder.frozenFee;
+        openOrder.frozenFee = openOrder.frozenFee
+            .minus(decrement);
         this.assets.frozenFee = this.assets.frozenFee
             .minus(decrement);
     }

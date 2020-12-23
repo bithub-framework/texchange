@@ -492,12 +492,12 @@
         "affectsGlobalScope": false
       },
       "./src/assets-manager.ts": {
-        "version": "9f4eda4b5399b207f7773adc6a79c1ee313d5de2f7a0df208993f505889d2f30",
-        "signature": "b2d26f43188ef58388fd17ba10256f2eaa3d1a6aa906b45dc154e46947b023d4",
+        "version": "0e6b38ef35d89e8144c03243b2c437bf87e81f1adf2317b9c564867b4ede3e7a",
+        "signature": "84a863517490fdee989a86246f974494685af3d716c3a934363f2af9b7a0b3aa",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "338e7d4b733f82c93fac53946134d6628a7034f884063f6d5fb1776dc93c46b1",
+        "version": "61ea1aebe1843d12883a020a4e65153c4a9c89a1d5509993f6c9ff991c51062e",
         "signature": "56501967388882dc667afab6e350d5df5039c68ba1efd1e2071e6743cea06b24",
         "affectsGlobalScope": false
       },

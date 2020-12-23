@@ -87,31 +87,43 @@ class AssetsManager {
     //     this.assets.balance = this.assets.balance
     //         .minus(decrement);
     // }
+    freeze(margin, fee, position, openOrder) {
+        this.freezeMargin(margin, openOrder);
+        this.freezeFee(fee, openOrder);
+        this.freezePosition(position, openOrder);
+    }
+    release(margin, fee, position, openOrder) {
+        this.releaseMargin(margin, openOrder);
+        this.releaseFee(fee, openOrder);
+        this.releasePosition(position, openOrder);
+    }
     freezeMargin(increment, openOrder) {
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .plus(increment);
-        if (openOrder)
+        if (openOrder.open) {
+            this.assets.frozenMargin = this.assets.frozenMargin
+                .plus(increment);
             openOrder.frozenMargin = openOrder.frozenMargin
                 .plus(increment);
-    }
-    releaseMargin(decrement, openOrder) {
-        this.assets.frozenMargin = this.assets.frozenMargin
-            .minus(decrement);
-        if (openOrder) {
-            // TODO
-            if (decrement > openOrder.frozenMargin)
-                decrement = openOrder.frozenMargin;
-            openOrder.frozenMargin = openOrder.frozenMargin
-                .minus(decrement);
         }
     }
-    freezePosition(increment, length) {
-        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
-            .plus(increment);
-    }
-    releasePosition(decrement, length) {
-        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+    releaseMargin(decrement, openOrder) {
+        if (decrement.gt(openOrder.frozenMargin))
+            decrement = openOrder.frozenMargin;
+        openOrder.frozenMargin = openOrder.frozenMargin
             .minus(decrement);
+        this.assets.frozenMargin = this.assets.frozenMargin
+            .minus(decrement);
+    }
+    freezePosition(increment, openOrder) {
+        if (!openOrder.open)
+            this.assets.frozenPosition[-openOrder.side] =
+                this.assets.frozenPosition[-openOrder.side]
+                    .plus(increment);
+    }
+    releasePosition(decrement, openOrder) {
+        if (!openOrder.open)
+            this.assets.frozenPosition[-openOrder.side] =
+                this.assets.frozenPosition[-openOrder.side]
+                    .minus(decrement);
     }
     freezeFee(increment, openOrder) {
         this.assets.frozenFee = this.assets.frozenFee
@@ -121,12 +133,10 @@ class AssetsManager {
                 .plus(increment);
     }
     releaseFee(decrement, openOrder) {
-        if (openOrder) {
-            if (decrement > openOrder.frozenFee)
-                decrement = openOrder.frozenFee;
-            openOrder.frozenFee = openOrder.frozenFee
-                .minus(decrement);
-        }
+        if (decrement.gt(openOrder.frozenFee))
+            decrement = openOrder.frozenFee;
+        openOrder.frozenFee = openOrder.frozenFee
+            .minus(decrement);
         this.assets.frozenFee = this.assets.frozenFee
             .minus(decrement);
     }
