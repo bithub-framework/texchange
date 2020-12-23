@@ -155,8 +155,6 @@ class ManagingAssets extends Taken {
             );
         }
     }
-
-
 }
 
 export {
