@@ -9,7 +9,7 @@ class Ordering extends Pushing {
     }
     // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
-        const [makerOrder, rawTrades,] = this.orderTakes(order);
+        const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (rawTrades.length)
             this.pushRawTrades(rawTrades);
@@ -52,7 +52,8 @@ class Ordering extends Pushing {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: new Big(0),
+            frozenMargin: new Big(0),
+            frozenFee: new Big(0),
         };
         if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);

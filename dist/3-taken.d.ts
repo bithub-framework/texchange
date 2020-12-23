@@ -1,9 +1,9 @@
 import { Ordering } from './2-ordering';
-import { OpenOrder, RawTrade } from './interfaces';
+import { RawTrade, DetailedOpenOrder } from './interfaces';
 import Big from 'big.js';
 declare class Taken extends Ordering {
-    protected rawTradeShouldTakeOpenOrder(rawTrade: RawTrade, maker: OpenOrder): boolean;
-    protected rawTradeTakesOpenOrder(rawTrade: RawTrade, maker: OpenOrder): [Big, Big];
+    protected rawTradeShouldTakeOpenOrder(rawTrade: RawTrade, maker: DetailedOpenOrder): boolean;
+    protected rawTradeTakesOpenOrder(rawTrade: RawTrade, maker: DetailedOpenOrder): [Big, Big];
     protected rawTradeTakesOpenOrders(_rawTrade: RawTrade): void;
     updateTrades(rawTrades: RawTrade[]): void;
 }

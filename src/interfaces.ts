@@ -1,8 +1,14 @@
 export * from 'interfaces';
 import {
     Side,
+    OpenOrder,
 } from 'interfaces';
 import Big from 'big.js';
+
+export interface DetailedOpenOrder extends OpenOrder {
+    frozenFee: Big;
+    frozenMargin: Big;
+}
 
 export interface RawTrade {
     price: Big;

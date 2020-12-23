@@ -1,14 +1,16 @@
 import { Ordering } from './2-ordering';
 import {
-    OpenOrder,
     BID, ASK,
     RawTrade,
     min,
+    DetailedOpenOrder,
 } from './interfaces';
 import Big from 'big.js';
 
 class Taken extends Ordering {
-    protected rawTradeShouldTakeOpenOrder(rawTrade: RawTrade, maker: OpenOrder): boolean {
+    protected rawTradeShouldTakeOpenOrder(
+        rawTrade: RawTrade, maker: DetailedOpenOrder,
+    ): boolean {
         return (
             (
                 maker.side === BID &&
@@ -24,7 +26,7 @@ class Taken extends Ordering {
 
     protected rawTradeTakesOpenOrder(
         rawTrade: RawTrade,
-        maker: OpenOrder,
+        maker: DetailedOpenOrder,
     ): [Big, Big] {
         const volume = min(rawTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)

@@ -1,9 +1,9 @@
 import { Pushing } from './1-pushing';
-import { OpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
+import { OpenOrder, DetailedOpenOrder, LimitOrder, OrderId, RawTrade } from './interfaces';
 import Big from 'big.js';
 declare class Ordering extends Pushing {
     protected orderCount: number;
-    protected openOrders: Map<OrderId, OpenOrder>;
+    protected openOrders: Map<import("interfaces/dist/data").TradeId, DetailedOpenOrder>;
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getOpenOrders(): Promise<OpenOrder[]>;
@@ -13,6 +13,6 @@ declare class Ordering extends Pushing {
         Big,
         Big
     ];
-    protected orderMakes(order: LimitOrder): OpenOrder;
+    protected orderMakes(order: LimitOrder): DetailedOpenOrder;
 }
 export { Ordering as default, Ordering, };

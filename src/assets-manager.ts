@@ -4,6 +4,7 @@ import {
     Config,
     Length,
     Side,
+    DetailedOpenOrder,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
@@ -21,7 +22,11 @@ class AssetsManager {
             cost: {
                 [LONG]: new Big(0), [SHORT]: new Big(0),
             },
-            frozen: new Big(0),
+            frozenFee: new Big(0),
+            frozenMargin: new Big(0),
+            frozenPosition: {
+                [LONG]: new Big(0), [SHORT]: new Big(0),
+            },
             margin: new Big(0),
             reserve: new Big(0),
         };
@@ -49,8 +54,16 @@ class AssetsManager {
         return this.assets.cost;
     }
 
-    public getFrozen() {
-        return this.assets.frozen;
+    public getFrozenFee() {
+        return this.assets.frozenFee;
+    }
+
+    public getFrozenMargin() {
+        return this.assets.frozenMargin;
+    }
+
+    public getFrozenPosition() {
+        return this.assets.frozenPosition;
     }
 
     public getMargin() {
@@ -65,22 +78,26 @@ class AssetsManager {
         this.getMargin();
         return this.assets.reserve = this.assets.balance
             .minus(this.assets.margin)
-            .minus(this.assets.frozen);
+            .minus(this.assets.frozenMargin)
+            .minus(this.assets.frozenFee);
     }
 
     public openPosition(
         length: Length | Side,
         volume: Big,
         dollarVolume: Big,
+        fee: Big,
     ): void {
         this.assets.position[length] = this.assets.position[length].plus(volume);
         this.assets.cost[length] = this.assets.cost[length].plus(dollarVolume);
+        this.assets.balance = this.assets.balance.minus(fee);
     }
 
     public closePosition(
         length: Length | Side,
         volume: Big,
         dollarVolume: Big,
+        fee: Big,
     ): void {
         const cost = volume.eq(this.assets.position[length])
             ? this.assets.cost[length]
@@ -91,28 +108,85 @@ class AssetsManager {
         const profit = length === LONG
             ? dollarVolume.minus(cost)
             : cost.minus(dollarVolume);
-        this.assets.balance = this.assets.balance.plus(profit);
         this.assets.position[length] = this.assets.position[length].minus(volume);
         this.assets.cost[length] = this.assets.cost[length].minus(cost);
+        this.assets.balance = this.assets.balance
+            .plus(profit)
+            .minus(fee);
     }
 
-    public incBalance(increment: Big) {
-        this.assets.balance = this.assets.balance
+    // public incBalance(increment: Big) {
+    //     this.assets.balance = this.assets.balance
+    //         .plus(increment);
+    // }
+
+    // public decBalance(decrement: Big) {
+    //     this.assets.balance = this.assets.balance
+    //         .minus(decrement);
+    // }
+
+    public freezeMargin(
+        increment: Big,
+        openOrder?: DetailedOpenOrder,
+    ) {
+        this.assets.frozenMargin = this.assets.frozenMargin
+            .plus(increment);
+        if (openOrder) openOrder.frozenMargin = openOrder.frozenMargin
             .plus(increment);
     }
 
-    public decBalance(decrement: Big) {
-        this.assets.balance = this.assets.balance
+    public releaseMargin(
+        decrement: Big,
+        openOrder?: DetailedOpenOrder,
+    ) {
+        this.assets.frozenMargin = this.assets.frozenMargin
+            .minus(decrement);
+        if (openOrder) {
+            // TODO
+            if (decrement > openOrder.frozenMargin)
+                decrement = openOrder.frozenMargin;
+            openOrder.frozenMargin = openOrder.frozenMargin
+                .minus(decrement);
+        }
+    }
+
+    public freezePosition(
+        increment: Big,
+        length: Length | Side,
+    ) {
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
+            .plus(increment);
+    }
+
+    public releasePosition(
+        decrement: Big,
+        length: Length | Side,
+    ) {
+        this.assets.frozenPosition[length] = this.assets.frozenPosition[length]
             .minus(decrement);
     }
 
-    public freeze(increment: Big) {
-        this.assets.frozen = this.assets.frozen
+    public freezeFee(
+        increment: Big,
+        openOrder?: DetailedOpenOrder,
+    ) {
+        this.assets.frozenFee = this.assets.frozenFee
+            .plus(increment);
+        if (openOrder) openOrder.frozenFee = openOrder.frozenFee
             .plus(increment);
     }
 
-    public release(decrement: Big) {
-        this.assets.frozen = this.assets.frozen
+    public releaseFee(
+        decrement: Big,
+        openOrder?: DetailedOpenOrder,
+    ) {
+        if (openOrder) {
+            if (decrement > openOrder.frozenFee)
+                decrement = openOrder.frozenFee;
+            openOrder.frozenFee = openOrder.frozenFee
+                .minus(decrement);
+        }
+        this.assets.frozenFee = this.assets.frozenFee
             .minus(decrement);
     }
 }

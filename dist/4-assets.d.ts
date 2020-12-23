@@ -1,5 +1,6 @@
 import { Taken } from './3-taken';
-import { Assets, LimitOrder, OrderId, RawTrade, Config, OpenOrder } from './interfaces';
+import { Assets, LimitOrder, OrderId, RawTrade, Config, DetailedOpenOrder } from './interfaces';
+import Big from 'big.js';
 declare class ManagingAssets extends Taken {
     private settlementPrice;
     private assetsManager;
@@ -8,8 +9,15 @@ declare class ManagingAssets extends Taken {
     cancelOrder(oid: OrderId): Promise<void>;
     getAssets(): Promise<Assets>;
     updateTrades(rawTrades: RawTrade[]): void;
+    private enoughPosition;
     private enoughReserve;
-    protected orderMakes(order: LimitOrder): OpenOrder;
+    protected orderTakes(taker: LimitOrder): [
+        LimitOrder,
+        RawTrade[],
+        Big,
+        Big
+    ];
+    protected orderMakes(order: LimitOrder): DetailedOpenOrder;
     protected rawTradeTakesOpenOrders(_rawTrade: RawTrade): void;
     private settle;
 }

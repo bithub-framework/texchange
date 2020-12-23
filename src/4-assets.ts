@@ -8,6 +8,7 @@ import {
     Config,
     OpenOrder,
     min,
+    DetailedOpenOrder,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
@@ -26,28 +27,15 @@ class ManagingAssets extends Taken {
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
-        const assets = this.assetsManager.getAssets();
-        if (
-            !order.open &&
-            order.quantity.gt(assets.position[-order.side])
-        ) throw new Error('No enough position to close.');
+        if (!order.open && this.enoughPosition(order))
+            throw new Error('No enough position to close.');
         this.settle();
         if (!this.enoughReserve(order))
             throw new Error('No enough available balance as margin.');
         // 由于精度问题，开仓成功后也可能 reserve 为负。
 
-        const [makerOrder, rawTrades, volume, dollarVolume] =
-            this.orderTakes(order);
-        const takerFee = dollarVolume.times(this.config.TAKER_FEE)
-            .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
-        this.assetsManager.decBalance(takerFee);
-
-        if (order.open)
-            this.assetsManager.openPosition(order.side, volume, dollarVolume);
-        else
-            this.assetsManager.closePosition(-order.side, volume, dollarVolume);
+        const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        this.assetsManager.freeze(openOrder.frozen);
 
         if (rawTrades.length) this.pushRawTrades(rawTrades);
         this.pushOrderbook();
@@ -56,7 +44,13 @@ class ManagingAssets extends Taken {
 
     public async cancelOrder(oid: OrderId): Promise<void> {
         const openOrder = this.openOrders.get(oid);
-        if (openOrder) this.assetsManager.release(openOrder.frozen);
+        if (openOrder) {
+            this.assetsManager.releaseMargin(openOrder.frozenMargin);
+            this.assetsManager.releaseFee(openOrder.frozenFee);
+            if (!openOrder.open)
+                this.assetsManager.releasePosition(
+                    openOrder.quantity, -openOrder.side);
+        }
         await super.cancelOrder(oid);
     }
 
@@ -76,6 +70,12 @@ class ManagingAssets extends Taken {
         this.pushRawTrades(rawTrades);
     }
 
+    private enoughPosition(order: LimitOrder) {
+        return order.quantity.lte(new Big(0)
+            .plus(this.assetsManager.getPosition()[-order.side])
+            .minus(this.assetsManager.getFrozenPosition()[-order.side]));
+    }
+
     private enoughReserve(order: LimitOrder) {
         return order.open && new Big(0)
             .plus(
@@ -90,21 +90,39 @@ class ManagingAssets extends Taken {
             .lte(this.assetsManager.getReserve());
     }
 
+    protected orderTakes(taker: LimitOrder): [
+        LimitOrder, RawTrade[], Big, Big,
+    ] {
+        const [makerOrder, rawTrades, volume, dollarVolume] =
+            super.orderTakes(taker);
+        const takerFee = dollarVolume.times(this.config.TAKER_FEE)
+            .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
+        if (taker.open) this.assetsManager.openPosition(
+            taker.side, volume, dollarVolume, takerFee,
+        ); else this.assetsManager.closePosition(
+            -taker.side, volume, dollarVolume, takerFee,
+        );
+        return [makerOrder, rawTrades, volume, dollarVolume];
+    }
+
     protected orderMakes(
         order: LimitOrder,
-    ): OpenOrder {
-        const dollarVolume = this.config
-            .calcDollarVolume(order.price, order.quantity);
-        const openOrder: OpenOrder = {
-            ...order,
-            id: ++this.orderCount,
-            frozen: new Big(0)
-                .plus(dollarVolume.div(this.assetsManager.getLeverage()))
-                .plus(dollarVolume.times(this.config.MAKER_FEE))
+    ): DetailedOpenOrder {
+        const openOrder = super.orderMakes(order);
+        const dollarVolume = this.config.calcDollarVolume(
+            openOrder.price, openOrder.quantity);
+        if (openOrder.open)
+            this.assetsManager.freezeMargin(
+                dollarVolume.div(this.assetsManager.getLeverage())
+                    .round(this.config.CURRENCY_DP, RoundingMode.RoundUp),
+                openOrder);
+        this.assetsManager.freezeFee(
+            dollarVolume.times(this.config.MAKER_FEE)
                 .round(this.config.CURRENCY_DP, RoundingMode.RoundUp),
-        };
-        if (openOrder.quantity.gt(0))
-            this.openOrders.set(openOrder.id, openOrder);
+            openOrder);
+        if (!openOrder.open)
+            this.assetsManager.freezePosition(
+                openOrder.quantity, -openOrder.side);
         return openOrder;
     }
 
@@ -112,25 +130,28 @@ class ManagingAssets extends Taken {
         const rawTrade: RawTrade = { ..._rawTrade };
         for (const openOrder of this.openOrders.values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, openOrder)) {
-                const [
-                    volume, dollarVolume,
-                ] = this.rawTradeTakesOpenOrder(rawTrade, openOrder);
-                const released = min(
-                    new Big(0)
-                        .plus(dollarVolume.div(this.assetsManager.getLeverage()))
-                        .plus(dollarVolume.times(this.config.MAKER_FEE))
+                const [volume, dollarVolume] =
+                    this.rawTradeTakesOpenOrder(rawTrade, openOrder);
+
+                this.assetsManager.releaseMargin(
+                    dollarVolume.div(this.assetsManager.getLeverage())
                         .round(this.config.CURRENCY_DP),
-                    openOrder.frozen);
-                openOrder.frozen = openOrder.frozen.minus(released);
-                this.assetsManager.release(released);
-                this.assetsManager.decBalance(
-                    dollarVolume.times(this.config.MAKER_FEE)
-                        .round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
-                );
+                    openOrder);
+
+                const makerFee = dollarVolume.times(this.config.MAKER_FEE)
+                    .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
+                this.assetsManager.releaseFee(
+                    makerFee,
+                    openOrder);
+
+                if (!openOrder.open)
+                    this.assetsManager.releasePosition(
+                        volume, -openOrder.side);
+
                 if (openOrder.open) this.assetsManager.openPosition(
-                    openOrder.side, volume, dollarVolume,
+                    openOrder.side, volume, dollarVolume, makerFee,
                 ); else this.assetsManager.closePosition(
-                    -openOrder.side, volume, dollarVolume,
+                    -openOrder.side, volume, dollarVolume, makerFee,
                 );
             }
     }
@@ -147,11 +168,13 @@ class ManagingAssets extends Taken {
                 length,
                 position[length],
                 settlementDollarVolume,
+                new Big(0),
             );
             this.assetsManager.openPosition(
                 length,
                 position[length],
                 settlementDollarVolume,
+                new Big(0),
             );
         }
     }

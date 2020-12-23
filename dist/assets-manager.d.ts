@@ -1,4 +1,4 @@
-import { Assets, Config, Length, Side } from './interfaces';
+import { Assets, Config, Length, Side, DetailedOpenOrder } from './interfaces';
 import Big from 'big.js';
 declare class AssetsManager {
     private config;
@@ -13,14 +13,20 @@ declare class AssetsManager {
     getCost(): {
         [length: number]: Big;
     };
-    getFrozen(): Big;
+    getFrozenFee(): Big;
+    getFrozenMargin(): Big;
+    getFrozenPosition(): {
+        [length: number]: Big;
+    };
     getMargin(): Big;
     getReserve(): Big;
-    openPosition(length: Length | Side, volume: Big, dollarVolume: Big): void;
-    closePosition(length: Length | Side, volume: Big, dollarVolume: Big): void;
-    incBalance(increment: Big): void;
-    decBalance(decrement: Big): void;
-    freeze(increment: Big): void;
-    release(decrement: Big): void;
+    openPosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
+    closePosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
+    freezeMargin(increment: Big, openOrder?: DetailedOpenOrder): void;
+    releaseMargin(decrement: Big, openOrder?: DetailedOpenOrder): void;
+    freezePosition(increment: Big, length: Length | Side): void;
+    releasePosition(decrement: Big, length: Length | Side): void;
+    freezeFee(increment: Big, openOrder?: DetailedOpenOrder): void;
+    releaseFee(decrement: Big, openOrder?: DetailedOpenOrder): void;
 }
 export { AssetsManager as default, AssetsManager, };

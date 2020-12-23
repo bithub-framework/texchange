@@ -1,6 +1,7 @@
 import { Pushing } from './1-pushing';
 import {
     OpenOrder,
+    DetailedOpenOrder,
     LimitOrder,
     BID, ASK,
     OrderId,
@@ -11,14 +12,11 @@ import Big from 'big.js';
 
 class Ordering extends Pushing {
     protected orderCount = 0;
-    protected openOrders = new Map<OrderId, OpenOrder>();
+    protected openOrders = new Map<OrderId, DetailedOpenOrder>();
 
     // 由于精度原因，实际成本不一定恰好等于 order.price
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
-        const [
-            makerOrder,
-            rawTrades,
-        ] = this.orderTakes(order);
+        const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (rawTrades.length) this.pushRawTrades(rawTrades);
         this.pushOrderbook();
@@ -66,11 +64,12 @@ class Ordering extends Pushing {
 
     protected orderMakes(
         order: LimitOrder,
-    ): OpenOrder {
-        const openOrder: OpenOrder = {
+    ): DetailedOpenOrder {
+        const openOrder: DetailedOpenOrder = {
             ...order,
             id: ++this.orderCount,
-            frozen: new Big(0),
+            frozenMargin: new Big(0),
+            frozenFee: new Big(0),
         };
         if (openOrder.quantity.gt(0))
             this.openOrders.set(openOrder.id, openOrder);
