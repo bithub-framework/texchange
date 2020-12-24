@@ -20,14 +20,6 @@ class OrderbookManager {
             [BID]: new Map(),
         };
         this.apply();
-        // @ts-ignore
-        OrderbookManager.prototype.toJSON = function () {
-            return {
-                [BID]: this[BID],
-                [ASK]: this[ASK],
-                time: this.time,
-            };
-        };
     }
     get [ASK]() {
         assert(this.applied);
@@ -77,6 +69,13 @@ class OrderbookManager {
             }));
         }
         this.applied = true;
+    }
+    toJSON() {
+        return {
+            [BID]: this[BID],
+            [ASK]: this[ASK],
+            time: this.time,
+        };
     }
 }
 export { OrderbookManager as default, OrderbookManager, };

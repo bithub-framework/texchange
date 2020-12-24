@@ -212,8 +212,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "e8630be9f54ff17ad15e776ca5a309a2a3ccec68ee47ecea854a7246d8ffb24c",
-        "signature": "e8630be9f54ff17ad15e776ca5a309a2a3ccec68ee47ecea854a7246d8ffb24c",
+        "version": "2dffbe59da71dcb02ce88fb15f90a44e5a11ff2a225979cc092c121f8ec3d8be",
+        "signature": "2dffbe59da71dcb02ce88fb15f90a44e5a11ff2a225979cc092c121f8ec3d8be",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "./src/orderbook-manager.ts": {
-        "version": "c51cfcad33c7e1f9bdb0b376b4f3081e6060519e37bb9821b759260c427135e4",
-        "signature": "c226dee6609f52f894be4efdfddf8d7929cd79a0e92dacf374aa7271c67e8845",
+        "version": "c65115aa7ff6d83cf97fb03b8d4cd21877ef6b56caaa2436771ace80234d88bf",
+        "signature": "0ad60e4ef9ac6b5418dea96e2bd88a2b11c856154a27871d20de044d05881d70",
         "affectsGlobalScope": false
       },
       "./src/1-pushing.ts": {

@@ -15,5 +15,6 @@ declare class OrderbookManager implements Orderbook {
     setBase(orderbook: Orderbook): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
     apply(): void;
+    toJSON(): Orderbook;
 }
 export { OrderbookManager as default, OrderbookManager, };
