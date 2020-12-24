@@ -28,8 +28,10 @@ class Ordering extends Pushing {
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        if (rawTrades.length) this.pushRawTrades(rawTrades);
-        this.pushOrderbook();
+        if (rawTrades.length) {
+            this.pushRawTrades(rawTrades);
+            this.pushOrderbook();
+        }
         return openOrder.id;
     }
 
