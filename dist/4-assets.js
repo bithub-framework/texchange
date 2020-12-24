@@ -10,10 +10,17 @@ class ManagingAssets extends Taken {
         this.assets = new AssetsManager(config);
     }
     async makeLimitOrder(order) {
+        this.validateOrder(order);
         assert(this.enoughPosition(order));
         this.settle();
         assert(this.enoughReserve(order));
-        return super.makeLimitOrder(order);
+        const [makerOrder, rawTrades] = this.orderTakes(order);
+        const openOrder = this.orderMakes(makerOrder);
+        if (rawTrades.length) {
+            this.pushRawTrades(rawTrades);
+            this.pushOrderbook();
+        }
+        return openOrder.id;
     }
     async cancelOrder(oid) {
         const toThaw = this.openOrders.removeOrder(oid);

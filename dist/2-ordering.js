@@ -11,6 +11,7 @@ class Ordering extends Pushing {
     }
     // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
+        this.validateOrder(order);
         const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (rawTrades.length) {

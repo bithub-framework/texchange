@@ -29,11 +29,18 @@ class ManagingAssets extends Taken {
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
+        this.validateOrder(order);
         assert(this.enoughPosition(order));
         this.settle();
         assert(this.enoughReserve(order));
 
-        return super.makeLimitOrder(order);
+        const [makerOrder, rawTrades] = this.orderTakes(order);
+        const openOrder = this.orderMakes(makerOrder);
+        if (rawTrades.length) {
+            this.pushRawTrades(rawTrades);
+            this.pushOrderbook();
+        }
+        return openOrder.id;
     }
 
     public async cancelOrder(oid: OrderId): Promise<void> {
