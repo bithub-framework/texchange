@@ -20,9 +20,7 @@ class ManagingAssets extends Taken {
         this.assets.thaw(toThaw);
     }
     async getAssets() {
-        console.log(4);
         this.settle();
-        console.log(5);
         return this.assets;
     }
     updateTrades(rawTrades) {

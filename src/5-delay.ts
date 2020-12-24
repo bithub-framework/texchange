@@ -38,13 +38,9 @@ class Texchange extends ManagingAssets implements
     }
 
     public async getAssets(): Promise<Assets> {
-        console.log(1);
         await this.sleep(this.config.PING);
-        console.log(2);
         await this.sleep(this.config.PROCESSING);
-        console.log(3);
         const assets = clone(super.getAssets());
-        console.log(6);
         await this.sleep(this.config.PING);
         return assets;
     }
