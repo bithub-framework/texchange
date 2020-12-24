@@ -502,12 +502,12 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "ee3f63c368cd99c912a158a87fefefd200d71c4c4db9e7203fa3861a0d824054",
+        "version": "8862c8da3ff3eca1e1d0c7cff27cd7194b58b5118493c992e37d11502a66d69a",
         "signature": "951bd8c48fe4d515463f2c64521c225421f7e21cc69598b8bc278ba15546e502",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "a7a287e8a96ef4f835dd6ceebb3ff2d73e09143f218a9846674c2a4b2ac25c56",
+        "version": "5747a5182ab84282e559623228dad5770a9dbb595210089c8171b07eaa3c9981",
         "signature": "c20c1799aba789082fd56b16efd489683276ea03feced82429de60cff0fffc7b",
         "affectsGlobalScope": false
       },

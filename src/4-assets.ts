@@ -41,7 +41,9 @@ class ManagingAssets extends Taken {
     }
 
     public async getAssets(): Promise<Assets> {
+        console.log(1);
         this.settle();
+        console.log(2);
         return this.assets;
     }
 

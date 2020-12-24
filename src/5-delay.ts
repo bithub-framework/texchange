@@ -41,6 +41,7 @@ class Texchange extends ManagingAssets implements
         await this.sleep(this.config.PING);
         await this.sleep(this.config.PROCESSING);
         const assets = clone(super.getAssets());
+        console.log(3);
         await this.sleep(this.config.PING);
         return assets;
     }
