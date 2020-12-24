@@ -1217,6 +1217,7 @@
         "./src/interfaces.ts"
       ],
       "./src/index.ts": [
+        "./src/5-delay.ts",
         "./src/interfaces.ts"
       ],
       "./src/interfaces.ts": [
