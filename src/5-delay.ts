@@ -40,7 +40,7 @@ class Texchange extends ManagingAssets implements
     public async getAssets(): Promise<Assets> {
         await this.sleep(this.config.PING);
         await this.sleep(this.config.PROCESSING);
-        const assets = clone(super.getAssets());
+        const assets = clone(await super.getAssets());
         await this.sleep(this.config.PING);
         return assets;
     }
@@ -48,7 +48,7 @@ class Texchange extends ManagingAssets implements
     public async getOpenOrders(): Promise<OpenOrder[]> {
         await this.sleep(this.config.PING);
         await this.sleep(this.config.PROCESSING);
-        const openOrders = clone(super.getOpenOrders());
+        const openOrders = clone(await super.getOpenOrders());
         await this.sleep(this.config.PING);
         return openOrders;
     }

@@ -512,7 +512,7 @@
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "a7a287e8a96ef4f835dd6ceebb3ff2d73e09143f218a9846674c2a4b2ac25c56",
+        "version": "24b50e27880ce46e0708df9ea699aab8002b8394ec04a275b633211e17ddf97f",
         "signature": "c20c1799aba789082fd56b16efd489683276ea03feced82429de60cff0fffc7b",
         "affectsGlobalScope": false
       },

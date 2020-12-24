@@ -21,14 +21,14 @@ class Texchange extends ManagingAssets {
     async getAssets() {
         await this.sleep(this.config.PING);
         await this.sleep(this.config.PROCESSING);
-        const assets = clone(super.getAssets());
+        const assets = clone(await super.getAssets());
         await this.sleep(this.config.PING);
         return assets;
     }
     async getOpenOrders() {
         await this.sleep(this.config.PING);
         await this.sleep(this.config.PROCESSING);
-        const openOrders = clone(super.getOpenOrders());
+        const openOrders = clone(await super.getOpenOrders());
         await this.sleep(this.config.PING);
         return openOrders;
     }
