@@ -26,6 +26,7 @@ class Pushing extends EventEmitter {
 
     public updateOrderbook(orderbook: Orderbook): void {
         this.orderbook.setBase(orderbook);
+        this.orderbook.apply();
         this.pushOrderbook();
     }
 

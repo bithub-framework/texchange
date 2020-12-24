@@ -68,6 +68,7 @@ class Ordering extends Pushing {
                     .round(this.config.CURRENCY_DP);
             }
         }
+        this.orderbook.apply();
         return [taker, rawTrades, volume, dollarVolume];
     }
 

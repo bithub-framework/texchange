@@ -15,6 +15,7 @@ class Pushing extends EventEmitter {
     }
     updateOrderbook(orderbook) {
         this.orderbook.setBase(orderbook);
+        this.orderbook.apply();
         this.pushOrderbook();
     }
     async pushOrderbook() {
