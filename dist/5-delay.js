@@ -6,31 +6,44 @@ class Texchange extends ManagingAssets {
         this.sleep = sleep;
     }
     async makeLimitOrder(order) {
-        await this.sleep(this.config.PING);
-        await this.sleep(this.config.PROCESSING);
-        const oid = await super.makeLimitOrder(order);
-        await this.sleep(this.config.PING);
-        return oid;
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return super.makeLimitOrder(order);
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
     }
     async cancelOrder(oid) {
-        await this.sleep(this.config.PING);
-        await this.sleep(this.config.PROCESSING);
-        await super.cancelOrder(oid);
-        await this.sleep(this.config.PING);
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            await super.cancelOrder(oid);
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
     }
     async getAssets() {
-        await this.sleep(this.config.PING);
-        await this.sleep(this.config.PROCESSING);
-        const assets = clone(await super.getAssets());
-        await this.sleep(this.config.PING);
-        return assets;
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return clone(await super.getAssets());
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
     }
     async getOpenOrders() {
-        await this.sleep(this.config.PING);
-        await this.sleep(this.config.PROCESSING);
-        const openOrders = clone(await super.getOpenOrders());
-        await this.sleep(this.config.PING);
-        return openOrders;
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return clone(await super.getOpenOrders());
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
     }
     async pushOrderbook() {
         const orderbook = clone(this.orderbook);
