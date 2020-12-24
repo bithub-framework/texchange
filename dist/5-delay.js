@@ -1,5 +1,5 @@
 import { ManagingAssets } from './4-assets';
-import clone from './clone';
+import { clone, } from './interfaces';
 class Texchange extends ManagingAssets {
     constructor(config, sleep, now) {
         super(config, now);

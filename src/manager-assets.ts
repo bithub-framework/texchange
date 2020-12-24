@@ -1,27 +1,57 @@
-import { Assets, LONG, } from './interfaces';
+import {
+    Assets,
+    LONG,
+    Config,
+    Length,
+} from './interfaces';
+import Big from 'big.js';
+import { Frozen } from './manager-open-order';
 import util from 'util';
+
 class AssetsManager extends Assets.AutoAssets {
-    constructor(config) {
-        super(config.initialBalance, config.leverage, config.CURRENCY_DP);
-        this.config = config;
+    constructor(
+        private config: Config,
+    ) {
+        super(
+            config.initialBalance,
+            config.leverage,
+            config.CURRENCY_DP,
+        );
     }
-    freeze({ margin, position, length }) {
+
+    public freeze({ margin, position, length }: Frozen) {
         this.frozenMargin = this.frozenMargin.plus(margin);
         this.frozenPosition[length] = this.frozenPosition[length].plus(position);
     }
-    thaw({ margin, position, length }) {
+
+    public thaw({ margin, position, length }: Frozen) {
         this.frozenMargin = this.frozenMargin.minus(margin);
         this.frozenPosition[length] = this.frozenPosition[length].minus(position);
     }
-    openPosition(length, volume, dollarVolume, fee) {
+
+    public openPosition(
+        length: Length,
+        volume: Big,
+        dollarVolume: Big,
+        fee: Big,
+    ): void {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);
         this.balance = this.balance.minus(fee);
     }
-    closePosition(length, volume, dollarVolume, fee) {
+
+    public closePosition(
+        length: Length,
+        volume: Big,
+        dollarVolume: Big,
+        fee: Big,
+    ): void {
         const cost = volume.eq(this.position[length])
             ? this.cost[length]
-            : this.config.calcDollarVolume(this.cost[length].div(this.position[length]), volume).round(this.config.CURRENCY_DP);
+            : this.config.calcDollarVolume(
+                this.cost[length].div(this.position[length]),
+                volume,
+            ).round(this.config.CURRENCY_DP);
         const profit = length === LONG
             ? dollarVolume.minus(cost)
             : cost.minus(dollarVolume);
@@ -31,9 +61,13 @@ class AssetsManager extends Assets.AutoAssets {
             .plus(profit)
             .minus(fee);
     }
-    [util.inspect.custom]() {
+
+    public [util.inspect.custom]() {
         return this.toJSON();
     }
 }
-export { AssetsManager as default, AssetsManager, };
-//# sourceMappingURL=assets-manager.js.map
+
+export {
+    AssetsManager as default,
+    AssetsManager,
+}

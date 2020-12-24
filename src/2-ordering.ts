@@ -7,10 +7,10 @@ import {
     RawTrade,
     min,
     Config,
+    clone,
 } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './open-order-manager';
-import clone from './clone';
+import { OpenOrderManager } from './manager-open-order';
 
 class Ordering extends Pushing {
     protected orderCount = 0;

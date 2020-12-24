@@ -71,4 +71,4 @@ class OpenOrderManager extends Map {
     }
 }
 export { OpenOrderManager as default, OpenOrderManager, };
-//# sourceMappingURL=open-order-manager.js.map
+//# sourceMappingURL=manager-open-order.js.map

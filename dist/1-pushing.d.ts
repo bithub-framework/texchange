@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { OrderbookManager } from './orderbook-manager';
+import { OrderbookManager } from './manager-orderbook';
 import { Orderbook, Trade, RawTrade, Config } from './interfaces';
 declare class Pushing extends EventEmitter {
     protected config: Config;

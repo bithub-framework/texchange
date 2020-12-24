@@ -1,9 +1,8 @@
 import { Taken } from './3-taken';
-import { LONG, SHORT, OPEN, CLOSE, min, } from './interfaces';
+import { LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
 import Big from 'big.js';
-import { AssetsManager } from './assets-manager';
+import { AssetsManager } from './manager-assets';
 import assert from 'assert';
-import clone from './clone';
 class ManagingAssets extends Taken {
     constructor(config, now) {
         super(config, now);

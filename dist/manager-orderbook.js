@@ -79,4 +79,4 @@ class OrderbookManager {
     }
 }
 export { OrderbookManager as default, OrderbookManager, };
-//# sourceMappingURL=orderbook-manager.js.map
+//# sourceMappingURL=manager-orderbook.js.map

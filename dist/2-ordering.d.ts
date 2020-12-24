@@ -1,7 +1,7 @@
 import { Pushing } from './1-pushing';
 import { OpenOrder, LimitOrder, OrderId, RawTrade, Config } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './open-order-manager';
+import { OpenOrderManager } from './manager-open-order';
 declare class Ordering extends Pushing {
     protected orderCount: number;
     protected openOrders: OpenOrderManager;

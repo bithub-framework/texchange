@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { OrderbookManager } from './orderbook-manager';
+import { OrderbookManager } from './manager-orderbook';
 import {
     Orderbook,
     Trade,
