@@ -8,8 +8,8 @@ import {
     ContextAccountPrivateApiLike,
     Config,
     OpenOrder,
-    clone,
 } from './interfaces';
+import clone from './clone';
 
 class Texchange extends ManagingAssets implements
     ContextMarketPublicApiLike,

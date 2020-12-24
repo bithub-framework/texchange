@@ -8,12 +8,13 @@ import {
     OPEN, CLOSE,
     Config,
     OpenOrder,
-    min, clone,
+    min,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './assets-manager';
 import assert from 'assert';
+import clone from './clone';
 
 class ManagingAssets extends Taken {
     private settlementPrice = new Big(0);

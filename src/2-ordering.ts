@@ -2,15 +2,15 @@ import { Pushing } from './1-pushing';
 import {
     OpenOrder,
     LimitOrder,
-    BID, ASK, Side,
+    BID, ASK,
     OrderId,
     RawTrade,
     min,
     Config,
-    clone,
 } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './open-order-manager';
+import clone from './clone';
 
 class Ordering extends Pushing {
     protected orderCount = 0;
