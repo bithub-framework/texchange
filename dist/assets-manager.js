@@ -1,28 +1,10 @@
 import { Assets, LONG, SHORT, } from './interfaces';
 import Big from 'big.js';
 import util from 'util';
-class AssetsManager extends Assets {
+class AssetsManager extends Assets.AutoAssets {
     constructor(config) {
-        super({
-            ...config,
-            balance: new Big(config.initialBalance),
-            position: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-            cost: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-            frozenMargin: new Big(0),
-            frozenPosition: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-        });
+        super(config.initialBalance, config.leverage, config.CURRENCY_DP);
         this.config = config;
-        // @ts-ignore
-        AssetsManager.prototype[util.inspect.custom] = function () {
-            // @ts-ignore
-            return this.toJSON();
-        };
     }
     get margin() {
         return new Big(0)
@@ -63,6 +45,9 @@ class AssetsManager extends Assets {
         this.balance = this.balance
             .plus(profit)
             .minus(fee);
+    }
+    [util.inspect.custom]() {
+        return this.toJSON();
     }
 }
 export { AssetsManager as default, AssetsManager, };

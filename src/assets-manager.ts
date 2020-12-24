@@ -10,29 +10,15 @@ import { RoundingMode } from 'big.js';
 import { Frozen } from './open-order-manager';
 import util from 'util';
 
-class AssetsManager extends Assets {
+class AssetsManager extends Assets.AutoAssets {
     constructor(
         private config: Config,
     ) {
-        super({
-            ...config,
-            balance: new Big(config.initialBalance),
-            position: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-            cost: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-            frozenMargin: new Big(0),
-            frozenPosition: {
-                [LONG]: new Big(0), [SHORT]: new Big(0),
-            },
-        });
-        // @ts-ignore
-        AssetsManager.prototype[util.inspect.custom] = function () {
-            // @ts-ignore
-            return this.toJSON();
-        }
+        super(
+            config.initialBalance,
+            config.leverage,
+            config.CURRENCY_DP,
+        );
     }
 
     public get margin() {
@@ -92,6 +78,10 @@ class AssetsManager extends Assets {
         this.balance = this.balance
             .plus(profit)
             .minus(fee);
+    }
+
+    public [util.inspect.custom]() {
+        return this.toJSON();
     }
 }
 

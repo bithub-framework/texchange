@@ -1,5 +1,5 @@
 import { Taken } from './3-taken';
-import { LONG, SHORT, OPEN, CLOSE, OpenOrder, min, } from './interfaces';
+import { LONG, SHORT, OPEN, CLOSE, min, } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './assets-manager';
 class ManagingAssets extends Taken {
@@ -58,10 +58,10 @@ class ManagingAssets extends Taken {
         return [makerOrder, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder, toFreeze] = this.openOrders.addOrder(new OpenOrder({
+        const [openOrder, toFreeze] = this.openOrders.addOrder({
             ...order,
             id: ++this.orderCount,
-        }));
+        });
         this.assets.freeze(toFreeze);
         return openOrder;
     }

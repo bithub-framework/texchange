@@ -7,6 +7,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
+import assert from 'assert';
 
 interface Frozen {
     margin: Big;
@@ -22,16 +23,6 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
     }
 
     public addOrder(order: OpenOrder): [OpenOrder, Frozen] {
-        if (order.quantity.eq(0)) return [
-            order,
-            {
-                margin: new Big(0),
-                position: new Big(0),
-                length: order.side * order.operation,
-            }
-        ];
-
-        this.set(order.id, order);
         const dollarVolume = this.config.calcDollarVolume(
             order.price, order.quantity);
         const frozen: Frozen = {
@@ -42,9 +33,12 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
             position: order.operation === CLOSE
                 ? order.quantity
                 : new Big(0),
-            length: order.side * order.operation,
+            length: order.length,
         };
-        this.frozens.set(order.id, frozen);
+        if (order.quantity.gt(0)) {
+            this.set(order.id, order);
+            this.frozens.set(order.id, frozen);
+        }
         return [order, frozen];
     }
 
@@ -54,17 +48,16 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         dollarVolume: Big,
     ): Frozen {
         const order = this.get(oid);
+        assert(order);
         const frozen = this.frozens.get(oid)!;
-        if (!order) throw new Error('Order not found.');
-        if (volume.gt(order.quantity))
-            throw new Error('volume > quantity');
+        assert(volume.lte(order.quantity));
 
         const thawed: Frozen = {
             margin: this.calcReleasedMargin(
                 order.quantity, frozen.margin, volume, dollarVolume,
             ),
             position: volume,
-            length: order.side * order.operation,
+            length: order.length,
         };
 
         frozen.margin = frozen.margin.minus(thawed.margin);
@@ -85,13 +78,13 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         if (!order) return {
             margin: new Big(0),
             position: new Big(0),
-            length: 1,
+            length: 1, // meaningless
         }
 
         const thawed: Frozen = {
             margin: frozen.margin,
             position: frozen.position,
-            length: order.side * order.operation,
+            length: order.length,
         };
 
         this.delete(oid);

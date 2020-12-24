@@ -97,10 +97,10 @@ class ManagingAssets extends Taken {
     protected orderMakes(
         order: LimitOrder,
     ): OpenOrder {
-        const [openOrder, toFreeze] = this.openOrders.addOrder(new OpenOrder({
+        const [openOrder, toFreeze] = this.openOrders.addOrder({
             ...order,
             id: ++this.orderCount,
-        }));
+        });
         this.assets.freeze(toFreeze);
         return openOrder;
     }

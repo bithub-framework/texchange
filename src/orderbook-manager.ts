@@ -30,6 +30,15 @@ class OrderbookManager implements Orderbook {
         private now: () => number,
     ) {
         this.apply();
+
+        // @ts-ignore
+        OrderbookManager.prototype.toJSON = function (): Orderbook {
+            return {
+                [BID]: this[BID],
+                [ASK]: this[ASK],
+                time: this.time,
+            }
+        }
     }
 
     private _ASK!: MakerOrder[];

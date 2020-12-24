@@ -43,7 +43,7 @@ class Ordering extends Pushing {
     protected orderTakes(_taker: LimitOrder): [
         LimitOrder, RawTrade[], Big, Big,
     ] {
-        const taker = new LimitOrder(_taker);
+        const taker = { ..._taker };
         const rawTrades: RawTrade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
@@ -73,10 +73,10 @@ class Ordering extends Pushing {
     protected orderMakes(
         order: LimitOrder,
     ): OpenOrder {
-        const [openOrder] = this.openOrders.addOrder(new OpenOrder({
+        const [openOrder] = this.openOrders.addOrder({
             ...order,
             id: ++this.orderCount,
-        }));
+        });
         return openOrder;
     }
 }

@@ -212,8 +212,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "6d416680cc51891dc8fd507a5459a10250a1c1938d78ccabd4231fe0d90d33c1",
-        "signature": "6d416680cc51891dc8fd507a5459a10250a1c1938d78ccabd4231fe0d90d33c1",
+        "version": "e8630be9f54ff17ad15e776ca5a309a2a3ccec68ee47ecea854a7246d8ffb24c",
+        "signature": "e8630be9f54ff17ad15e776ca5a309a2a3ccec68ee47ecea854a7246d8ffb24c",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -472,7 +472,7 @@
         "affectsGlobalScope": false
       },
       "./src/orderbook-manager.ts": {
-        "version": "942340b4a676f763fd2b2fe24b5c83e7dd6028565525ac1b88f0cde026d60fe2",
+        "version": "c51cfcad33c7e1f9bdb0b376b4f3081e6060519e37bb9821b759260c427135e4",
         "signature": "c226dee6609f52f894be4efdfddf8d7929cd79a0e92dacf374aa7271c67e8845",
         "affectsGlobalScope": false
       },
@@ -482,12 +482,12 @@
         "affectsGlobalScope": false
       },
       "./src/open-order-manager.ts": {
-        "version": "d59f4ecc0aeef0fe554e9babceb4ad3c8b23a761666e8f0f812d1d51891c49c7",
+        "version": "a36e09d0aea6e6c18bc48bbf61d55fc5fc8b9af555e1627bb0942715f02dc4fb",
         "signature": "3b227e6fe1e8df7928a57468a06e2c6480a8f4da2adda6c5e4660bc05e678f9b",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "9ce23a53d589b58fca5aede77250655c0d5cd245ed09977effc2f4a63fd8c712",
+        "version": "73f7aedd81fcd11e78cd119a109166ecf4e4fa1d4af60dda85bd8adf47e98431",
         "signature": "fac7b7c22fc9b0d27c08cbf1e0c2688e9912160a5dc45cd5a1e31792f56c01c8",
         "affectsGlobalScope": false
       },
@@ -497,12 +497,12 @@
         "affectsGlobalScope": false
       },
       "./src/assets-manager.ts": {
-        "version": "2c8111f027252e535d8e7cbdd4fe855007eecdf71532683de79874e6a78d2843",
-        "signature": "78ab5b6f49cbfb204048ea45471cb0a4d7a7ab480018d887c8d874b2a442ca0b",
+        "version": "0ab1d5fede03ea50b1b3a2c4ed69ff8e21a8a88f49004941858919ab91e5cc39",
+        "signature": "99ce28d528666be570b6564601eaa9c876c92a48a21ab60c194d9182a7efbb36",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "c1f3978414fa5ac108be85bc938adac0a5f0ad5ad5078c15145a5de03dd04dd0",
+        "version": "8cf4ec706406d2b4733cbd6704c539a1768883f87a287f73fe69a4d01910f0b7",
         "signature": "951bd8c48fe4d515463f2c64521c225421f7e21cc69598b8bc278ba15546e502",
         "affectsGlobalScope": false
       },
@@ -926,6 +926,7 @@
       ],
       "./src/open-order-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/@types/node/assert.d.ts",
         "./src/interfaces.ts"
       ],
       "./src/orderbook-manager.ts": [
@@ -1210,6 +1211,7 @@
       ],
       "./src/assets-manager.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/@types/node/util.d.ts",
         "./src/interfaces.ts",
         "./src/open-order-manager.ts"
       ],

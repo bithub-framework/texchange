@@ -1,5 +1,5 @@
 import { Pushing } from './1-pushing';
-import { OpenOrder, LimitOrder, BID, ASK, min, } from './interfaces';
+import { BID, ASK, min, } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './open-order-manager';
 class Ordering extends Pushing {
@@ -24,7 +24,7 @@ class Ordering extends Pushing {
         return [...this.openOrders.values()];
     }
     orderTakes(_taker) {
-        const taker = new LimitOrder(_taker);
+        const taker = { ..._taker };
         const rawTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
@@ -49,10 +49,10 @@ class Ordering extends Pushing {
         return [taker, rawTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder] = this.openOrders.addOrder(new OpenOrder({
+        const [openOrder] = this.openOrders.addOrder({
             ...order,
             id: ++this.orderCount,
-        }));
+        });
         return openOrder;
     }
 }

@@ -1,5 +1,6 @@
 import { OPEN, CLOSE, } from './interfaces';
 import Big from 'big.js';
+import assert from 'assert';
 class OpenOrderManager extends Map {
     constructor(config) {
         super();
@@ -7,16 +8,6 @@ class OpenOrderManager extends Map {
         this.frozens = new Map();
     }
     addOrder(order) {
-        if (order.quantity.eq(0))
-            return [
-                order,
-                {
-                    margin: new Big(0),
-                    position: new Big(0),
-                    length: order.side * order.operation,
-                }
-            ];
-        this.set(order.id, order);
         const dollarVolume = this.config.calcDollarVolume(order.price, order.quantity);
         const frozen = {
             margin: order.operation === OPEN
@@ -26,22 +17,23 @@ class OpenOrderManager extends Map {
             position: order.operation === CLOSE
                 ? order.quantity
                 : new Big(0),
-            length: order.side * order.operation,
+            length: order.length,
         };
-        this.frozens.set(order.id, frozen);
+        if (order.quantity.gt(0)) {
+            this.set(order.id, order);
+            this.frozens.set(order.id, frozen);
+        }
         return [order, frozen];
     }
     takeOrder(oid, volume, dollarVolume) {
         const order = this.get(oid);
+        assert(order);
         const frozen = this.frozens.get(oid);
-        if (!order)
-            throw new Error('Order not found.');
-        if (volume.gt(order.quantity))
-            throw new Error('volume > quantity');
+        assert(volume.lte(order.quantity));
         const thawed = {
             margin: this.calcReleasedMargin(order.quantity, frozen.margin, volume, dollarVolume),
             position: volume,
-            length: order.side * order.operation,
+            length: order.length,
         };
         frozen.margin = frozen.margin.minus(thawed.margin);
         frozen.position = frozen.position.minus(thawed.position);
@@ -64,7 +56,7 @@ class OpenOrderManager extends Map {
         const thawed = {
             margin: frozen.margin,
             position: frozen.position,
-            length: order.side * order.operation,
+            length: order.length,
         };
         this.delete(oid);
         this.frozens.delete(oid);

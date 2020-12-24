@@ -20,6 +20,14 @@ class OrderbookManager {
             [BID]: new Map(),
         };
         this.apply();
+        // @ts-ignore
+        OrderbookManager.prototype.toJSON = function () {
+            return {
+                [BID]: this[BID],
+                [ASK]: this[ASK],
+                time: this.time,
+            };
+        };
     }
     get [ASK]() {
         assert(this.applied);
