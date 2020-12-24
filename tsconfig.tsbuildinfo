@@ -486,14 +486,14 @@
         "signature": "88d96c284774f03284cbcb8a57447dfc7b12c5af6f4f2d76fb47dcf56081d3ed",
         "affectsGlobalScope": false
       },
-      "./src/manager-open-order.ts": {
+      "./src/manager-open-orders.ts": {
         "version": "a36e09d0aea6e6c18bc48bbf61d55fc5fc8b9af555e1627bb0942715f02dc4fb",
         "signature": "3b227e6fe1e8df7928a57468a06e2c6480a8f4da2adda6c5e4660bc05e678f9b",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "15360b670d4805a3c79f10c0118411fb1a6b8bdbd36004a7c2cda4f4e52f387a",
-        "signature": "0c4f592b9b6f50cc5b362294b3774a6a6b5f992b66b2635ba688e99b93b989c4",
+        "version": "a5805c1d5634ca11634ab77c1f4fc15c049ba9758d538f724d772df40ad7d1b0",
+        "signature": "dcc471e6d2a777feb7bed54ca723b9d451aa2e6bf8511564317245cf6c8832c7",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
@@ -502,8 +502,8 @@
         "affectsGlobalScope": false
       },
       "./src/manager-assets.ts": {
-        "version": "44c9c6e81e07e337f95e633c9fc5c619e07488dbe23972e5d4a42b387724750d",
-        "signature": "39a643c65901208ef8339b19532afb009baaf2870b32235ced03d23154140432",
+        "version": "234aca2bb7b486384e9c5d4b1300c595e6142d6390ae70e0dd47fdb2a37837b5",
+        "signature": "02fe1b37f962f88726dae009a003c6bb6df7d60af410f926103310c7e7af8fd3",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
@@ -900,7 +900,7 @@
         "./node_modules/@types/node/assert.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-order.ts"
+        "./src/manager-open-orders.ts"
       ],
       "./src/3-taken.ts": [
         "./src/2-ordering.ts",
@@ -929,9 +929,9 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-order.ts"
+        "./src/manager-open-orders.ts"
       ],
-      "./src/manager-open-order.ts": [
+      "./src/manager-open-orders.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/assert.d.ts",
         "./src/interfaces.ts"
@@ -1202,7 +1202,7 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-order.ts"
+        "./src/manager-open-orders.ts"
       ],
       "./src/3-taken.ts": [
         "./src/2-ordering.ts",
@@ -1229,9 +1229,9 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-order.ts"
+        "./src/manager-open-orders.ts"
       ],
-      "./src/manager-open-order.ts": [
+      "./src/manager-open-orders.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
@@ -1323,7 +1323,7 @@
       "./src/index.ts",
       "./src/interfaces.ts",
       "./src/manager-assets.ts",
-      "./src/manager-open-order.ts",
+      "./src/manager-open-orders.ts",
       "./src/manager-orderbook.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.core.d.ts",

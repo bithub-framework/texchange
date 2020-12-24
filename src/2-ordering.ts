@@ -12,7 +12,7 @@ import {
     clone,
 } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './manager-open-order';
+import { OpenOrderManager } from './manager-open-orders';
 import assert from 'assert';
 
 class Ordering extends Pushing {

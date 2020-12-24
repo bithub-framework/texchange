@@ -1,7 +1,7 @@
 import { Pushing } from './1-pushing';
 import { BID, ASK, LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './manager-open-order';
+import { OpenOrderManager } from './manager-open-orders';
 import assert from 'assert';
 class Ordering extends Pushing {
     constructor(config, now) {

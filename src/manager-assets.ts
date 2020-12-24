@@ -5,7 +5,7 @@ import {
     Length,
 } from './interfaces';
 import Big from 'big.js';
-import { Frozen } from './manager-open-order';
+import { Frozen } from './manager-open-orders';
 import util from 'util';
 
 class AssetsManager extends Assets.AutoAssets {
