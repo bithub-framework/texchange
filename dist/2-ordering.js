@@ -1,5 +1,5 @@
 import { Pushing } from './1-pushing';
-import { BID, ASK, min, } from './interfaces';
+import { BID, ASK, min, clone, } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './open-order-manager';
 class Ordering extends Pushing {
@@ -23,12 +23,12 @@ class Ordering extends Pushing {
     async getOpenOrders() {
         return [...this.openOrders.values()];
     }
-    orderTakes(_taker) {
-        const taker = { ..._taker };
+    orderTakes(taker) {
+        taker = clone(taker);
         const rawTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of this.orderbook[(-taker.side)]) {
+        for (const maker of this.orderbook[-taker.side]) {
             if (taker.side === BID && taker.price.gte(maker.price) ||
                 taker.side === ASK && taker.price.lte(maker.price)) {
                 const quantity = min(taker.quantity, maker.quantity);

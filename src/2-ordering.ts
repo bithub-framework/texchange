@@ -7,6 +7,7 @@ import {
     RawTrade,
     min,
     Config,
+    clone,
 } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './open-order-manager';
@@ -40,14 +41,14 @@ class Ordering extends Pushing {
         return [...this.openOrders.values()];
     }
 
-    protected orderTakes(_taker: LimitOrder): [
+    protected orderTakes(taker: LimitOrder): [
         LimitOrder, RawTrade[], Big, Big,
     ] {
-        const taker = { ..._taker };
+        taker = clone(taker);
         const rawTrades: RawTrade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of this.orderbook[<Side>(-taker.side)]) {
+        for (const maker of this.orderbook[-taker.side]) {
             if (
                 taker.side === BID && taker.price.gte(maker.price) ||
                 taker.side === ASK && taker.price.lte(maker.price)

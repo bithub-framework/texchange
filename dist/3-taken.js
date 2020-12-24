@@ -1,18 +1,20 @@
 import { Ordering } from './2-ordering';
 import { BID, ASK, min, } from './interfaces';
 class Taken extends Ordering {
-    rawTradeShouldTakeOpenOrder(rawTrade, maker) {
-        return ((maker.side === BID &&
-            rawTrade.side === ASK &&
-            rawTrade.price.lt(maker.price)) || (maker.side === ASK &&
-            rawTrade.side === BID &&
-            rawTrade.price.gt(maker.price)));
+    rawTradeShouldTakeOpenOrder(trade, maker) {
+        return (maker.side === BID &&
+            trade.side === ASK &&
+            trade.price.lt(maker.price)
+            ||
+                maker.side === ASK &&
+                    trade.side === BID &&
+                    trade.price.gt(maker.price));
     }
-    rawTradeTakesOpenOrder(rawTrade, maker) {
-        const volume = min(rawTrade.quantity, maker.quantity);
+    rawTradeTakesOpenOrder(trade, maker) {
+        const volume = min(trade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
-        rawTrade.quantity = rawTrade.quantity.minus(volume);
+        trade.quantity = trade.quantity.minus(volume);
         this.openOrders.takeOrder(maker.id, volume, dollarVolume);
     }
     rawTradeTakesOpenOrders(_rawTrade) {

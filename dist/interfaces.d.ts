@@ -7,8 +7,8 @@ export interface Config {
     leverage: number;
     PING: number;
     PROCESSING: number;
-    MAKER_FEE: number;
-    TAKER_FEE: number;
+    MAKER_FEE_RATE: number;
+    TAKER_FEE_RATE: number;
     PRICE_DP: number;
     QUANTITY_DP: number;
     CURRENCY_DP: number;

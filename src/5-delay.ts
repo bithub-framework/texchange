@@ -1,5 +1,4 @@
 import { ManagingAssets } from './4-assets';
-import { clone } from 'ramda';
 import {
     Assets,
     LimitOrder,
@@ -9,6 +8,7 @@ import {
     ContextAccountPrivateApiLike,
     Config,
     OpenOrder,
+    clone,
 } from './interfaces';
 
 class Texchange extends ManagingAssets implements

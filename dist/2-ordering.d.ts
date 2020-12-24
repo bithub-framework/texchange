@@ -9,7 +9,7 @@ declare class Ordering extends Pushing {
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getOpenOrders(): Promise<OpenOrder[]>;
-    protected orderTakes(_taker: LimitOrder): [
+    protected orderTakes(taker: LimitOrder): [
         LimitOrder,
         RawTrade[],
         Big,

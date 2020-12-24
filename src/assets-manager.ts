@@ -1,12 +1,10 @@
 import {
     Assets,
-    LONG, SHORT,
+    LONG,
     Config,
     Length,
-    Side,
 } from './interfaces';
 import Big from 'big.js';
-import { RoundingMode } from 'big.js';
 import { Frozen } from './open-order-manager';
 import util from 'util';
 
@@ -21,30 +19,14 @@ class AssetsManager extends Assets.AutoAssets {
         );
     }
 
-    public get margin() {
-        return new Big(0)
-            .plus(this.cost[LONG])
-            .plus(this.cost[SHORT])
-            .div(this.config.leverage)
-            .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
-    }
-
-    public get reserve() {
-        return this.balance
-            .minus(this.margin)
-            .minus(this.frozenMargin)
-    }
-
     public freeze({ margin, position, length }: Frozen) {
         this.frozenMargin = this.frozenMargin.plus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length]
-            .plus(position);
+        this.frozenPosition[length] = this.frozenPosition[length].plus(position);
     }
 
     public thaw({ margin, position, length }: Frozen) {
         this.frozenMargin = this.frozenMargin.minus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length]
-            .minus(position);
+        this.frozenPosition[length] = this.frozenPosition[length].minus(position);
     }
 
     public openPosition(
@@ -59,7 +41,7 @@ class AssetsManager extends Assets.AutoAssets {
     }
 
     public closePosition(
-        length: Length | Side,
+        length: Length,
         volume: Big,
         dollarVolume: Big,
         fee: Big,

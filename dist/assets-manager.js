@@ -1,32 +1,17 @@
-import { Assets, LONG, SHORT, } from './interfaces';
-import Big from 'big.js';
+import { Assets, LONG, } from './interfaces';
 import util from 'util';
 class AssetsManager extends Assets.AutoAssets {
     constructor(config) {
         super(config.initialBalance, config.leverage, config.CURRENCY_DP);
         this.config = config;
     }
-    get margin() {
-        return new Big(0)
-            .plus(this.cost[LONG])
-            .plus(this.cost[SHORT])
-            .div(this.config.leverage)
-            .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
-    }
-    get reserve() {
-        return this.balance
-            .minus(this.margin)
-            .minus(this.frozenMargin);
-    }
     freeze({ margin, position, length }) {
         this.frozenMargin = this.frozenMargin.plus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length]
-            .plus(position);
+        this.frozenPosition[length] = this.frozenPosition[length].plus(position);
     }
     thaw({ margin, position, length }) {
         this.frozenMargin = this.frozenMargin.minus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length]
-            .minus(position);
+        this.frozenPosition[length] = this.frozenPosition[length].minus(position);
     }
     openPosition(length, volume, dollarVolume, fee) {
         this.position[length] = this.position[length].plus(volume);
