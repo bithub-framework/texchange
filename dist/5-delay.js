@@ -9,7 +9,7 @@ class Texchange extends ManagingAssets {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return super.makeLimitOrder(order);
+            return await super.makeLimitOrder(order);
         }
         finally {
             await this.sleep(this.config.PING);
