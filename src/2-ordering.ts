@@ -3,6 +3,8 @@ import {
     OpenOrder,
     LimitOrder,
     BID, ASK,
+    LONG, SHORT,
+    OPEN, CLOSE,
     OrderId,
     RawTrade,
     min,
@@ -11,6 +13,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-order';
+import assert from 'assert';
 
 class Ordering extends Pushing {
     protected orderCount = 0;
@@ -41,6 +44,15 @@ class Ordering extends Pushing {
 
     public async getOpenOrders(): Promise<OpenOrder[]> {
         return [...this.openOrders.values()];
+    }
+
+    protected validateOrder(order: LimitOrder) {
+        assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
+        assert(order.quantity.gt(0));
+        assert(order.quantity.eq(order.quantity.round(this.config.QUANTITY_DP)));
+        assert(order.length === LONG || order.length === SHORT);
+        assert(order.operation === OPEN || order.operation === CLOSE);
+        assert(order.operation * order.length === order.side);
     }
 
     protected orderTakes(taker: LimitOrder): [

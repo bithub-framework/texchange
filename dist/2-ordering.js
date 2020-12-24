@@ -1,7 +1,8 @@
 import { Pushing } from './1-pushing';
-import { BID, ASK, min, clone, } from './interfaces';
+import { BID, ASK, LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-order';
+import assert from 'assert';
 class Ordering extends Pushing {
     constructor(config, now) {
         super(config, now);
@@ -23,6 +24,14 @@ class Ordering extends Pushing {
     }
     async getOpenOrders() {
         return [...this.openOrders.values()];
+    }
+    validateOrder(order) {
+        assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
+        assert(order.quantity.gt(0));
+        assert(order.quantity.eq(order.quantity.round(this.config.QUANTITY_DP)));
+        assert(order.length === LONG || order.length === SHORT);
+        assert(order.operation === OPEN || order.operation === CLOSE);
+        assert(order.operation * order.length === order.side);
     }
     orderTakes(taker) {
         taker = clone(taker);

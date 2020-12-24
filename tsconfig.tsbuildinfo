@@ -492,8 +492,8 @@
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "e693da57351d7ac1cb3ebd33256deaabdab6fd6f877c6d449f2be0c7b75d5e39",
-        "signature": "b9d6933294df06549bb992489ae6e4f9ca23baaca0aed9005b501b4b26352d2f",
+        "version": "70c5c35a1eb1bd32da86412d207481afa225904f32bd2dd60768fe9b665ac813",
+        "signature": "0c4f592b9b6f50cc5b362294b3774a6a6b5f992b66b2635ba688e99b93b989c4",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
@@ -897,6 +897,7 @@
       ],
       "./src/2-ordering.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/@types/node/assert.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
         "./src/manager-open-order.ts"
