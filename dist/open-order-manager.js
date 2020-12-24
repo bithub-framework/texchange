@@ -1,57 +1,59 @@
+import { OPEN, CLOSE, } from './interfaces';
 import Big from 'big.js';
-class OpenOrderManager {
+class OpenOrderManager extends Map {
     constructor(config) {
+        super();
         this.config = config;
-        this.openOrders = new Map();
         this.frozens = new Map();
     }
-    addOrder(oid, limit) {
-        const order = { ...limit, id: oid };
+    addOrder(order) {
         if (order.quantity.eq(0))
             return [
                 order,
                 {
                     margin: new Big(0),
                     position: new Big(0),
-                    length: order.open ? order.side : -order.side,
+                    length: order.side * order.operation,
                 }
             ];
-        this.openOrders.set(oid, order);
+        this.set(order.id, order);
         const dollarVolume = this.config.calcDollarVolume(order.price, order.quantity);
-        const info = {
-            margin: order.open
+        const frozen = {
+            margin: order.operation === OPEN
                 ? dollarVolume.div(this.config.leverage)
                     .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
                 : new Big(0),
-            position: order.open
-                ? new Big(0)
-                : order.quantity,
-            length: order.open ? order.side : -order.side,
+            position: order.operation === CLOSE
+                ? order.quantity
+                : new Big(0),
+            length: order.side * order.operation,
         };
-        this.frozens.set(oid, info);
-        return [order, info];
+        this.frozens.set(order.id, frozen);
+        return [order, frozen];
     }
-    take(oid, volume, dollarVolume) {
-        const order = this.openOrders.get(oid);
+    takeOrder(oid, volume, dollarVolume) {
+        const order = this.get(oid);
         const frozen = this.frozens.get(oid);
         if (!order)
-            throw ('Order not found.');
+            throw new Error('Order not found.');
+        if (volume.gt(order.quantity))
+            throw new Error('volume > quantity');
         const thawed = {
             margin: this.calcReleasedMargin(order.quantity, frozen.margin, volume, dollarVolume),
             position: volume,
-            length: order.open ? order.side : -order.side,
+            length: order.side * order.operation,
         };
         frozen.margin = frozen.margin.minus(thawed.margin);
         frozen.position = frozen.position.minus(thawed.position);
         order.quantity = order.quantity.minus(volume);
         if (order.quantity.eq(0)) {
-            this.openOrders.delete(oid);
+            this.delete(oid);
             this.frozens.delete(oid);
         }
         return thawed;
     }
-    delete(oid) {
-        const order = this.openOrders.get(oid);
+    removeOrder(oid) {
+        const order = this.get(oid);
         const frozen = this.frozens.get(oid);
         if (!order)
             return {
@@ -62,20 +64,16 @@ class OpenOrderManager {
         const thawed = {
             margin: frozen.margin,
             position: frozen.position,
-            length: order.open ? order.side : -order.side,
+            length: order.side * order.operation,
         };
-        this.openOrders.delete(oid);
+        this.delete(oid);
         this.frozens.delete(oid);
         return thawed;
-    }
-    getOpenOrders() {
-        return this.openOrders;
     }
     calcReleasedMargin(quantity, frozenMargin, volume, dollarVolume) {
         let thawedMargin = dollarVolume.div(this.config.leverage)
             .round(this.config.CURRENCY_DP);
-        if (thawedMargin.gt(frozenMargin) ||
-            volume.eq(quantity))
+        if (thawedMargin.gt(frozenMargin) || volume.eq(quantity))
             thawedMargin = frozenMargin;
         return thawedMargin;
     }

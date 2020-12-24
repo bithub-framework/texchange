@@ -9,7 +9,7 @@ import {
 
 class Pushing extends EventEmitter {
     protected tradeCount = 0;
-    protected orderbookManager: OrderbookManager;
+    protected orderbook: OrderbookManager;
 
     constructor(
         protected config: Config,
@@ -17,7 +17,7 @@ class Pushing extends EventEmitter {
         protected now: () => number,
     ) {
         super();
-        this.orderbookManager = new OrderbookManager(config, now);
+        this.orderbook = new OrderbookManager(config, now);
     }
 
     public updateTrades(rawTrades: RawTrade[]): void {
@@ -25,13 +25,12 @@ class Pushing extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
-        this.orderbookManager.setBase(orderbook);
+        this.orderbook.setBase(orderbook);
         this.pushOrderbook();
     }
 
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = this.orderbookManager.getOrderbook();
-        this.emit('orderbook', orderbook);
+        this.emit('orderbook', this.orderbook);
     }
 
     protected rawTrade2Trade(rawTrades: RawTrade[]): Trade[] {
@@ -45,6 +44,17 @@ class Pushing extends EventEmitter {
         const trades = this.rawTrade2Trade(rawTrades);
         this.emit('trades', trades);
     }
+}
+
+interface Pushing extends EventEmitter {
+    emit(event: 'orderbook', orderbook: Orderbook): boolean;
+    emit(event: 'trades', trades: Trade[]): boolean;
+    on(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+    on(event: 'trades', listener: (trades: Trade[]) => void): this;
+    off(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+    off(event: 'trades', listener: (trades: Trade[]) => void): this;
+    once(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+    once(event: 'trades', listener: (trades: Trade[]) => void): this;
 }
 
 export {

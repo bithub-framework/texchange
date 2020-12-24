@@ -54,7 +54,7 @@ class Texchange extends ManagingAssets implements
     }
 
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = clone(this.orderbookManager.getOrderbook());
+        const orderbook = clone(this.orderbook);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }

@@ -3,7 +3,7 @@ import { Assets, LimitOrder, OrderId, RawTrade, Config, OpenOrder } from './inte
 import Big from 'big.js';
 declare class ManagingAssets extends Taken {
     private settlementPrice;
-    private assetsManager;
+    private assets;
     constructor(config: Config, now: () => number);
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;

@@ -33,7 +33,7 @@ class Texchange extends ManagingAssets {
         return openOrders;
     }
     async pushOrderbook() {
-        const orderbook = clone(this.orderbookManager.getOrderbook());
+        const orderbook = clone(this.orderbook);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }

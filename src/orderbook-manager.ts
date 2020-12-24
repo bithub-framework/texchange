@@ -2,15 +2,16 @@ import {
     Orderbook,
     Side, BID, ASK,
     Config,
+    MakerOrder,
 } from './interfaces';
 import Big from 'big.js';
+import assert from 'assert';
 
-class OrderbookManager {
-    constructor(
-        private config: Config,
-        private now: () => number,
-    ) { }
+class OrderbookManager implements Orderbook {
+    [side: number]: MakerOrder[];
 
+    private applied = false;
+    public time = Number.NEGATIVE_INFINITY;
     private baseBook: Orderbook = {
         [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
     };
@@ -24,8 +25,35 @@ class OrderbookManager {
         [BID]: new Map<string, Big>(),
     };
 
+    constructor(
+        private config: Config,
+        private now: () => number,
+    ) {
+        this.apply();
+    }
+
+    private _ASK!: MakerOrder[];
+    public get [ASK]() {
+        assert(this.applied);
+        return this._ASK;
+    }
+    private set [ASK](v: MakerOrder[]) {
+        this._ASK = v;
+    }
+
+    private _BID!: MakerOrder[];
+    public get [BID]() {
+        assert(this.applied);
+        return this._BID;
+    }
+    private set [BID](v: MakerOrder[]) {
+        this._BID = v;
+    }
+
     public setBase(orderbook: Orderbook) {
         this.baseBook = orderbook;
+        this.time = this.now();
+        this.applied = false;
     }
 
     public decQuantity(side: Side, price: Big, decrement: Big) {
@@ -35,24 +63,11 @@ class OrderbookManager {
             _price,
             origin.plus(decrement),
         );
+        this.time = this.now();
+        this.applied = false;
     }
 
-    public getOrderbook(): Orderbook {
-        this.apply();
-        return {
-            [ASK]: [...this.total[ASK]]
-                .map(([_price, quantity]) => ({
-                    price: new Big(_price), quantity, side: ASK,
-                })),
-            [BID]: [...this.total[BID]]
-                .map(([_price, quantity]) => ({
-                    price: new Big(_price), quantity, side: BID,
-                })),
-            time: this.now(),
-        };
-    }
-
-    private apply(): void {
+    public apply(): void {
         for (const side of [BID, ASK]) {
             this.total[side].clear();
             this.baseBook[side].forEach(order =>
@@ -69,7 +84,12 @@ class OrderbookManager {
                     else this.total[side].delete(_price);
                 } else this.decrements[side].delete(_price);
             }
+            this[side] = [...this.total[side]]
+                .map(([_price, quantity]) => ({
+                    price: new Big(_price), quantity, side,
+                }));
         }
+        this.applied = true;
     }
 }
 

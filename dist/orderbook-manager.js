@@ -1,9 +1,12 @@
 import { BID, ASK, } from './interfaces';
 import Big from 'big.js';
+import assert from 'assert';
 class OrderbookManager {
     constructor(config, now) {
         this.config = config;
         this.now = now;
+        this.applied = false;
+        this.time = Number.NEGATIVE_INFINITY;
         this.baseBook = {
             [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
         };
@@ -16,28 +19,33 @@ class OrderbookManager {
             [ASK]: new Map(),
             [BID]: new Map(),
         };
+        this.apply();
+    }
+    get [ASK]() {
+        assert(this.applied);
+        return this._ASK;
+    }
+    set [ASK](v) {
+        this._ASK = v;
+    }
+    get [BID]() {
+        assert(this.applied);
+        return this._BID;
+    }
+    set [BID](v) {
+        this._BID = v;
     }
     setBase(orderbook) {
         this.baseBook = orderbook;
+        this.time = this.now();
+        this.applied = false;
     }
     decQuantity(side, price, decrement) {
         const _price = price.toFixed(this.config.PRICE_DP);
         const origin = this.decrements[side].get(_price) || new Big(0);
         this.decrements[side].set(_price, origin.plus(decrement));
-    }
-    getOrderbook() {
-        this.apply();
-        return {
-            [ASK]: [...this.total[ASK]]
-                .map(([_price, quantity]) => ({
-                price: new Big(_price), quantity, side: ASK,
-            })),
-            [BID]: [...this.total[BID]]
-                .map(([_price, quantity]) => ({
-                price: new Big(_price), quantity, side: BID,
-            })),
-            time: this.now(),
-        };
+        this.time = this.now();
+        this.applied = false;
     }
     apply() {
         for (const side of [BID, ASK]) {
@@ -55,7 +63,12 @@ class OrderbookManager {
                 else
                     this.decrements[side].delete(_price);
             }
+            this[side] = [...this.total[side]]
+                .map(([_price, quantity]) => ({
+                price: new Big(_price), quantity, side,
+            }));
         }
+        this.applied = true;
     }
 }
 export { OrderbookManager as default, OrderbookManager, };

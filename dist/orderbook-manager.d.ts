@@ -1,15 +1,19 @@
-import { Orderbook, Side, Config } from './interfaces';
+import { Orderbook, Side, Config, MakerOrder } from './interfaces';
 import Big from 'big.js';
-declare class OrderbookManager {
+declare class OrderbookManager implements Orderbook {
     private config;
     private now;
-    constructor(config: Config, now: () => number);
+    [side: number]: MakerOrder[];
+    private applied;
+    time: number;
     private baseBook;
     private total;
     private decrements;
+    constructor(config: Config, now: () => number);
+    private _ASK;
+    private _BID;
     setBase(orderbook: Orderbook): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
-    getOrderbook(): Orderbook;
-    private apply;
+    apply(): void;
 }
 export { OrderbookManager as default, OrderbookManager, };

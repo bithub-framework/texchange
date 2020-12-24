@@ -13,11 +13,11 @@ class Taken extends Ordering {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         rawTrade.quantity = rawTrade.quantity.minus(volume);
-        this.openOrderManager.take(maker.id, volume, dollarVolume);
+        this.openOrders.takeOrder(maker.id, volume, dollarVolume);
     }
     rawTradeTakesOpenOrders(_rawTrade) {
         const rawTrade = { ..._rawTrade };
-        for (const order of this.openOrderManager.getOpenOrders().values())
+        for (const order of this.openOrders.values())
             if (this.rawTradeShouldTakeOpenOrder(rawTrade, order))
                 this.rawTradeTakesOpenOrder(rawTrade, order);
     }

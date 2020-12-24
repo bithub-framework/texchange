@@ -4,7 +4,7 @@ import Big from 'big.js';
 import { OpenOrderManager } from './open-order-manager';
 declare class Ordering extends Pushing {
     protected orderCount: number;
-    protected openOrderManager: OpenOrderManager;
+    protected openOrders: OpenOrderManager;
     constructor(config: Config, now: () => number);
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;

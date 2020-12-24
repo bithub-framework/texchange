@@ -1,19 +1,17 @@
-import { OrderId, Config, OpenOrder, LimitOrder, Length } from './interfaces';
+import { OrderId, Config, OpenOrder, Length } from './interfaces';
 import Big from 'big.js';
 interface Frozen {
     margin: Big;
     position: Big;
     length: Length;
 }
-declare class OpenOrderManager {
+declare class OpenOrderManager extends Map<OrderId, OpenOrder> {
     private config;
-    private openOrders;
     private frozens;
     constructor(config: Config);
-    addOrder(oid: OrderId, limit: LimitOrder): [OpenOrder, Frozen];
-    take(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
-    delete(oid: OrderId): Frozen;
-    getOpenOrders(): Map<import("interfaces/dist/data").TradeId, OpenOrder>;
+    addOrder(order: OpenOrder): [OpenOrder, Frozen];
+    takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
+    removeOrder(oid: OrderId): Frozen;
     private calcReleasedMargin;
 }
 export { OpenOrderManager as default, OpenOrderManager, Frozen, };

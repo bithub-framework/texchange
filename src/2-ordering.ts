@@ -2,7 +2,7 @@ import { Pushing } from './1-pushing';
 import {
     OpenOrder,
     LimitOrder,
-    BID, ASK,
+    BID, ASK, Side,
     OrderId,
     RawTrade,
     min,
@@ -13,14 +13,14 @@ import { OpenOrderManager } from './open-order-manager';
 
 class Ordering extends Pushing {
     protected orderCount = 0;
-    protected openOrderManager: OpenOrderManager;
+    protected openOrders: OpenOrderManager;
 
     constructor(
         config: Config,
         now: () => number,
     ) {
         super(config, now);
-        this.openOrderManager = new OpenOrderManager(config);
+        this.openOrders = new OpenOrderManager(config);
     }
 
     // 由于精度原因，实际成本不一定恰好等于 order.price
@@ -33,22 +33,21 @@ class Ordering extends Pushing {
     }
 
     public async cancelOrder(oid: OrderId): Promise<void> {
-        this.openOrderManager.delete(oid);
+        this.openOrders.removeOrder(oid);
     }
 
     public async getOpenOrders(): Promise<OpenOrder[]> {
-        return [...this.openOrderManager.getOpenOrders().values()];
+        return [...this.openOrders.values()];
     }
 
     protected orderTakes(_taker: LimitOrder): [
         LimitOrder, RawTrade[], Big, Big,
     ] {
-        const taker: LimitOrder = { ..._taker };
+        const taker = new LimitOrder(_taker);
         const rawTrades: RawTrade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        const orderbook = this.orderbookManager.getOrderbook();
-        for (const maker of orderbook[-taker.side]) {
+        for (const maker of this.orderbook[<Side>(-taker.side)]) {
             if (
                 taker.side === BID && taker.price.gte(maker.price) ||
                 taker.side === ASK && taker.price.lte(maker.price)
@@ -60,7 +59,7 @@ class Ordering extends Pushing {
                     quantity,
                     time: this.now(),
                 });
-                this.orderbookManager.decQuantity(maker.side, maker.price, quantity);
+                this.orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.quantity = taker.quantity.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
@@ -74,10 +73,10 @@ class Ordering extends Pushing {
     protected orderMakes(
         order: LimitOrder,
     ): OpenOrder {
-        const [openOrder] = this.openOrderManager.addOrder(
-            ++this.orderCount,
-            order,
-        );
+        const [openOrder] = this.openOrders.addOrder(new OpenOrder({
+            ...order,
+            id: ++this.orderCount,
+        }));
         return openOrder;
     }
 }

@@ -1,27 +1,14 @@
 import { Assets, Config, Length, Side } from './interfaces';
 import Big from 'big.js';
 import { Frozen } from './open-order-manager';
-declare class AssetsManager {
+declare class AssetsManager extends Assets {
     private config;
-    private assets;
     constructor(config: Config);
-    getAssets(): Assets;
-    getPosition(): {
-        [length: number]: Big;
-    };
-    getBalance(): Big;
-    getCost(): {
-        [length: number]: Big;
-    };
-    getFrozenMargin(): Big;
-    getFrozenPosition(): {
-        [length: number]: Big;
-    };
-    getMargin(): Big;
-    getReserve(): Big;
+    get margin(): Big;
+    get reserve(): Big;
     freeze({ margin, position, length }: Frozen): void;
     thaw({ margin, position, length }: Frozen): void;
-    openPosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
+    openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
     closePosition(length: Length | Side, volume: Big, dollarVolume: Big, fee: Big): void;
 }
 export { AssetsManager as default, AssetsManager, };
