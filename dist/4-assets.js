@@ -11,9 +11,9 @@ class ManagingAssets extends Taken {
     }
     async makeLimitOrder(order) {
         this.validateOrder(order);
-        assert(this.enoughPosition(order));
+        this.enoughPosition(order);
         this.settle();
-        assert(this.enoughReserve(order));
+        this.enoughReserve(order);
         const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (rawTrades.length) {
@@ -39,16 +39,17 @@ class ManagingAssets extends Taken {
                 .round(this.config.PRICE_DP);
     }
     enoughPosition(order) {
-        return order.operation === OPEN || order.quantity.lte(new Big(0)
-            .plus(this.assets.position[order.side * order.operation])
-            .minus(this.assets.frozenPosition[order.side * order.operation]));
+        assert(order.operation === OPEN ||
+            order.quantity.lte(new Big(0)
+                .plus(this.assets.position[order.side * order.operation])
+                .minus(this.assets.frozenPosition[order.side * order.operation])));
     }
     enoughReserve(order) {
-        return order.operation === CLOSE || new Big(0)
+        assert(order.operation === CLOSE || new Big(0)
             .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.config.leverage))
             .plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE))
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
-            .lte(this.assets.reserve);
+            .lte(this.assets.reserve));
     }
     orderTakes(taker) {
         const [makerOrder, rawTrades, volume, dollarVolume] = super.orderTakes(taker);

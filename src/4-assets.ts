@@ -30,9 +30,9 @@ class ManagingAssets extends Taken {
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         this.validateOrder(order);
-        assert(this.enoughPosition(order));
+        this.enoughPosition(order);
         this.settle();
-        assert(this.enoughReserve(order));
+        this.enoughReserve(order);
 
         const [makerOrder, rawTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
@@ -63,23 +63,26 @@ class ManagingAssets extends Taken {
     }
 
     private enoughPosition(order: LimitOrder) {
-        return order.operation === OPEN || order.quantity.lte(new Big(0)
-            .plus(this.assets.position[order.side * order.operation])
-            .minus(this.assets.frozenPosition[order.side * order.operation]));
+        assert(
+            order.operation === OPEN ||
+            order.quantity.lte(new Big(0)
+                .plus(this.assets.position[order.side * order.operation])
+                .minus(this.assets.frozenPosition[order.side * order.operation])));
     }
 
     private enoughReserve(order: LimitOrder) {
-        return order.operation === CLOSE || new Big(0)
-            .plus(
-                this.config.calcDollarVolume(
-                    order.price, order.quantity,
-                ).div(this.config.leverage))
-            .plus(
-                this.config.calcDollarVolume(
-                    order.price, order.quantity,
-                ).times(this.config.TAKER_FEE_RATE))
-            .round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
-            .lte(this.assets.reserve);
+        assert(
+            order.operation === CLOSE || new Big(0)
+                .plus(
+                    this.config.calcDollarVolume(
+                        order.price, order.quantity,
+                    ).div(this.config.leverage))
+                .plus(
+                    this.config.calcDollarVolume(
+                        order.price, order.quantity,
+                    ).times(this.config.TAKER_FEE_RATE))
+                .round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
+                .lte(this.assets.reserve));
     }
 
     protected orderTakes(taker: LimitOrder): [

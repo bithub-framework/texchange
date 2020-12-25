@@ -507,7 +507,7 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "51cc4a0855a4c9135e09672d628b86df54c3732cebd45b9f4a5895d2454ad30f",
+        "version": "5b0bb5ce1d97ae12cb0e5f2c5df1c334d3b1ee63b432c74f469a959f769fa7b5",
         "signature": "951bd8c48fe4d515463f2c64521c225421f7e21cc69598b8bc278ba15546e502",
         "affectsGlobalScope": false
       },
