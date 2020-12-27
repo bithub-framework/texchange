@@ -23,9 +23,10 @@ class ManagingAssets extends Taken {
     constructor(
         config: Config,
         now: () => number,
+        initialTime: number,
     ) {
         super(config, now);
-        this.assets = new AssetsManager(config);
+        this.assets = new AssetsManager(config, initialTime);
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
@@ -50,6 +51,7 @@ class ManagingAssets extends Taken {
 
     public async getAssets(): Promise<Assets> {
         this.settle();
+        this.assets.time = this.now();
         return this.assets;
     }
 

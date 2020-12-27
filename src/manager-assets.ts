@@ -11,11 +11,13 @@ import util from 'util';
 class AssetsManager extends Assets.AutoAssets {
     constructor(
         private config: Config,
+        initialTime: number,
     ) {
         super(
             config.initialBalance,
             config.leverage,
             config.CURRENCY_DP,
+            initialTime,
         );
     }
 

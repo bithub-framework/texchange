@@ -4,7 +4,7 @@ import Big from 'big.js';
 declare class ManagingAssets extends Taken {
     private settlementPrice;
     private assets;
-    constructor(config: Config, now: () => number);
+    constructor(config: Config, now: () => number, initialTime: number);
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getAssets(): Promise<Assets>;

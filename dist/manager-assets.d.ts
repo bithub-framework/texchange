@@ -5,7 +5,7 @@ import { Frozen } from './manager-open-orders';
 import util from 'util';
 declare class AssetsManager extends Assets.AutoAssets {
     private config;
-    constructor(config: Config);
+    constructor(config: Config, initialTime: number);
     freeze({ margin, position, length }: Frozen): void;
     thaw({ margin, position, length }: Frozen): void;
     openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
