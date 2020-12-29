@@ -1,9 +1,9 @@
 export * from 'interfaces';
-import { Trade } from 'interfaces';
+import { Trade, Assets } from 'interfaces';
 import Big from 'big.js';
 export declare type RawTrade = Omit<Trade, 'id'>;
 export interface Config {
-    initialBalance: Big;
+    initialAssets: Assets;
     leverage: number;
     PING: number;
     PROCESSING: number;

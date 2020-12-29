@@ -1,8 +1,8 @@
 import { ManagingAssets } from './4-assets';
 import { clone, } from './interfaces';
 class Texchange extends ManagingAssets {
-    constructor(config, sleep, now, initialTime) {
-        super(config, now, initialTime);
+    constructor(config, sleep, now) {
+        super(config, now);
         this.sleep = sleep;
     }
     async makeLimitOrder(order) {

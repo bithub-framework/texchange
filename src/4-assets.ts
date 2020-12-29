@@ -23,10 +23,9 @@ class ManagingAssets extends Taken {
     constructor(
         config: Config,
         now: () => number,
-        initialTime: number,
     ) {
         super(config, now);
-        this.assets = new AssetsManager(config, initialTime);
+        this.assets = new AssetsManager(config);
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {

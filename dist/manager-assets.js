@@ -1,8 +1,8 @@
-import { Assets, LONG, } from './interfaces';
+import { AutoAssets, LONG, } from './interfaces';
 import util from 'util';
-class AssetsManager extends Assets.AutoAssets {
-    constructor(config, initialTime) {
-        super(config.initialBalance, config.leverage, config.CURRENCY_DP, initialTime);
+class AssetsManager extends AutoAssets {
+    constructor(config) {
+        super(config.initialAssets, config.leverage, config.CURRENCY_DP);
         this.config = config;
     }
     freeze({ margin, position, length }) {

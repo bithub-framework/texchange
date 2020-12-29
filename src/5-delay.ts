@@ -18,9 +18,8 @@ class Texchange extends ManagingAssets implements
         config: Config,
         private sleep: (ms: number) => Promise<void>,
         now: () => number,
-        initialTime: number,
     ) {
-        super(config, now, initialTime);
+        super(config, now);
     }
 
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {

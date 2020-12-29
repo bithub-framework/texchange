@@ -1,5 +1,5 @@
 import {
-    Assets,
+    AutoAssets,
     LONG,
     Config,
     Length,
@@ -8,16 +8,14 @@ import Big from 'big.js';
 import { Frozen } from './manager-open-orders';
 import util from 'util';
 
-class AssetsManager extends Assets.AutoAssets {
+class AssetsManager extends AutoAssets {
     constructor(
         private config: Config,
-        initialTime: number,
     ) {
         super(
-            config.initialBalance,
+            config.initialAssets,
             config.leverage,
             config.CURRENCY_DP,
-            initialTime,
         );
     }
 

@@ -4,10 +4,10 @@ import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import assert from 'assert';
 class ManagingAssets extends Taken {
-    constructor(config, now, initialTime) {
+    constructor(config, now) {
         super(config, now);
         this.settlementPrice = new Big(0);
-        this.assets = new AssetsManager(config, initialTime);
+        this.assets = new AssetsManager(config);
     }
     async makeLimitOrder(order) {
         this.validateOrder(order);
