@@ -1,4 +1,5 @@
-import { AutoAssets, LONG, } from './interfaces';
+import { LONG, } from './interfaces';
+import AutoAssets from './auto-assets';
 import util from 'util';
 class AssetsManager extends AutoAssets {
     constructor(config) {

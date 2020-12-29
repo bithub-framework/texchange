@@ -216,6 +216,11 @@
         "signature": "e9771f6e530bb919bd782b7a87195ed5bb28f63cffd588dd846c9713ac3afe19",
         "affectsGlobalScope": false
       },
+      "./node_modules/interfaces/dist/serialization.d.ts": {
+        "version": "a828d2d685410366b83e3b636fadb971c2def2eb6ec590608c408f05e572b7b2",
+        "signature": "a828d2d685410366b83e3b636fadb971c2def2eb6ec590608c408f05e572b7b2",
+        "affectsGlobalScope": false
+      },
       "./node_modules/@types/node/globals.d.ts": {
         "version": "215d8d9a2c480fd460127edc048d68d9931d3b27f95132253a6e71975f060bb1",
         "signature": "215d8d9a2c480fd460127edc048d68d9931d3b27f95132253a6e71975f060bb1",
@@ -461,19 +466,14 @@
         "signature": "2b6e6541512a6e071c3e3f927844b30cd149bf519901c629a602aea71a74d7ce",
         "affectsGlobalScope": false
       },
-      "./node_modules/interfaces/dist/auto-assets.d.ts": {
-        "version": "44b2bc89571468ea205fd7aa6343f2be28f62b82449cfa4ec94ec927ff8f2614",
-        "signature": "44b2bc89571468ea205fd7aa6343f2be28f62b82449cfa4ec94ec927ff8f2614",
-        "affectsGlobalScope": false
-      },
       "./node_modules/interfaces/dist/index.d.ts": {
-        "version": "bd67529aaa15b57e746e056ad85fc53a654ca43884c1a3b2d174c67fa44ab936",
-        "signature": "bd67529aaa15b57e746e056ad85fc53a654ca43884c1a3b2d174c67fa44ab936",
+        "version": "4c9c0015a9b037901cbfd1bcaf46496fadc0ead2e62a4524a8e9c7bbacbc7634",
+        "signature": "4c9c0015a9b037901cbfd1bcaf46496fadc0ead2e62a4524a8e9c7bbacbc7634",
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "58d3f611d9bef39e036a402a22903668580048c5ca8abe365db8abac9e67c919",
-        "signature": "24f9d49f6ceebc28c6af3efa82e763924c0d74b841617de34bdb9b5107c2660c",
+        "version": "eda55c9b6e94324904339ee88298a9ccc566e0d38eb754c7f5b2eef5beeebe41",
+        "signature": "34431b72633383f4877d3797e17650183fd55ebbf5fba240de609e342f65dfde",
         "affectsGlobalScope": false
       },
       "./src/manager-orderbook.ts": {
@@ -501,9 +501,14 @@
         "signature": "106b9135230488812e5b54059ab90323031779844e75e94f22f3f4f76ce4d824",
         "affectsGlobalScope": false
       },
+      "./src/auto-assets.ts": {
+        "version": "313dd704c0f27c717489877bed6d85d717fa52ec4f7746c03a2a572ddc6d9059",
+        "signature": "6dd5ce98abf8bc92ab4de6b24d00b2462dd5bc33513f7ff6f5cefb1ed8908577",
+        "affectsGlobalScope": false
+      },
       "./src/manager-assets.ts": {
-        "version": "587e4e6a0257c5d2cf568308bf611b00587704ed79ec7f29f0fdc0cf3f7da0f1",
-        "signature": "7b33dbfb24adc2c885eb65ee821703e6c851f0d60ed5351f7315f4a47ccb97c5",
+        "version": "b2217d3b27f7681c0adbce682c98e07c30904fe02cc9ba50259250c1d62e8aec",
+        "signature": "f1ec3c364019c47684f0c9d18ff424eaf179caf7b438a3c9f1748ff4e74a2888",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
@@ -851,10 +856,6 @@
       "./node_modules/@types/node/zlib.d.ts": [
         "./node_modules/@types/node/stream.d.ts"
       ],
-      "./node_modules/interfaces/dist/auto-assets.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
-      ],
       "./node_modules/interfaces/dist/context.d.ts": [
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
@@ -864,9 +865,12 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/index.d.ts": [
-        "./node_modules/interfaces/dist/auto-assets.d.ts",
         "./node_modules/interfaces/dist/clone.d.ts",
         "./node_modules/interfaces/dist/context.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts",
+        "./node_modules/interfaces/dist/serialization.d.ts"
+      ],
+      "./node_modules/interfaces/dist/serialization.d.ts": [
         "./node_modules/interfaces/dist/data.d.ts"
       ],
       "./src/1-pushing.ts": [
@@ -896,6 +900,10 @@
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],
+      "./src/auto-assets.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/interfaces.ts"
+      ],
       "./src/index.ts": [
         "./src/5-delay.ts",
         "./src/interfaces.ts"
@@ -907,6 +915,7 @@
       "./src/manager-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/util.d.ts",
+        "./src/auto-assets.ts",
         "./src/interfaces.ts",
         "./src/manager-open-orders.ts"
       ],
@@ -1148,10 +1157,6 @@
       "./node_modules/@types/node/zlib.d.ts": [
         "./node_modules/@types/node/stream.d.ts"
       ],
-      "./node_modules/interfaces/dist/auto-assets.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
-      ],
       "./node_modules/interfaces/dist/context.d.ts": [
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
@@ -1161,9 +1166,12 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/index.d.ts": [
-        "./node_modules/interfaces/dist/auto-assets.d.ts",
         "./node_modules/interfaces/dist/clone.d.ts",
         "./node_modules/interfaces/dist/context.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts",
+        "./node_modules/interfaces/dist/serialization.d.ts"
+      ],
+      "./node_modules/interfaces/dist/serialization.d.ts": [
         "./node_modules/interfaces/dist/data.d.ts"
       ],
       "./src/1-pushing.ts": [
@@ -1190,6 +1198,10 @@
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],
+      "./src/auto-assets.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
+        "./src/interfaces.ts"
+      ],
       "./src/index.ts": [
         "./src/5-delay.ts",
         "./src/interfaces.ts"
@@ -1202,6 +1214,7 @@
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/interfaces/dist/data.d.ts",
+        "./src/auto-assets.ts",
         "./src/interfaces.ts",
         "./src/manager-open-orders.ts"
       ],
@@ -1281,16 +1294,17 @@
       "./node_modules/@types/node/wasi.d.ts",
       "./node_modules/@types/node/worker_threads.d.ts",
       "./node_modules/@types/node/zlib.d.ts",
-      "./node_modules/interfaces/dist/auto-assets.d.ts",
       "./node_modules/interfaces/dist/clone.d.ts",
       "./node_modules/interfaces/dist/context.d.ts",
       "./node_modules/interfaces/dist/data.d.ts",
       "./node_modules/interfaces/dist/index.d.ts",
+      "./node_modules/interfaces/dist/serialization.d.ts",
       "./src/1-pushing.ts",
       "./src/2-ordering.ts",
       "./src/3-taken.ts",
       "./src/4-assets.ts",
       "./src/5-delay.ts",
+      "./src/auto-assets.ts",
       "./src/index.ts",
       "./src/interfaces.ts",
       "./src/manager-assets.ts",

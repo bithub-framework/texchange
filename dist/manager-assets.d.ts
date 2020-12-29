@@ -1,5 +1,6 @@
 /// <reference types="node" />
-import { AutoAssets, Config, Length } from './interfaces';
+import { Config, Length } from './interfaces';
+import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-orders';
 import util from 'util';

@@ -2,8 +2,9 @@ export * from 'interfaces';
 import { Trade, Assets } from 'interfaces';
 import Big from 'big.js';
 export declare type RawTrade = Omit<Trade, 'id'>;
+export declare type InitialAssets = Pick<Assets, 'balance' | 'cost' | 'position' | 'time'>;
 export interface Config {
-    initialAssets: Assets;
+    initialAssets: InitialAssets;
     leverage: number;
     PING: number;
     PROCESSING: number;

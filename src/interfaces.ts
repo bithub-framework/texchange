@@ -7,8 +7,10 @@ import Big from 'big.js';
 
 export type RawTrade = Omit<Trade, 'id'>;
 
+export type InitialAssets = Pick<Assets, 'balance' | 'cost' | 'position' | 'time'>;
+
 export interface Config {
-    initialAssets: Assets;
+    initialAssets: InitialAssets;
     leverage: number;
 
     PING: number;
