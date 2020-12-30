@@ -1,3 +1,3 @@
-export { Texchange as default } from './5-delay';
+export { default } from './5-delay';
 export * from './5-delay';
-export { UnidentifiedTrade as RawTrade, Config, } from './interfaces';
+export { UnidentifiedTrade, Config, } from './interfaces';
