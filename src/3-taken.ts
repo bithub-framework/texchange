@@ -1,14 +1,14 @@
 import { Ordering } from './2-ordering';
 import {
     BID, ASK,
-    RawTrade,
+    UnidentifiedTrade,
     min,
     OpenOrder,
 } from './interfaces';
 
 class Taken extends Ordering {
-    protected rawTradeShouldTakeOpenOrder(
-        trade: RawTrade, maker: OpenOrder,
+    protected noidTradeShouldTakeOpenOrder(
+        trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
         return (
             maker.side === BID &&
@@ -21,8 +21,8 @@ class Taken extends Ordering {
         );
     }
 
-    protected rawTradeTakesOpenOrder(
-        trade: RawTrade, maker: OpenOrder,
+    protected noidTradeTakesOpenOrder(
+        trade: UnidentifiedTrade, maker: OpenOrder,
     ): void {
         const volume = min(trade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
@@ -31,17 +31,17 @@ class Taken extends Ordering {
         this.openOrders.takeOrder(maker.id, volume, dollarVolume);
     }
 
-    protected rawTradeTakesOpenOrders(_rawTrade: RawTrade) {
-        const rawTrade: RawTrade = { ..._rawTrade };
+    protected noidTradeTakesOpenOrders(_noidTrade: UnidentifiedTrade) {
+        const noidTrade: UnidentifiedTrade = { ..._noidTrade };
         for (const order of this.openOrders.values())
-            if (this.rawTradeShouldTakeOpenOrder(rawTrade, order))
-                this.rawTradeTakesOpenOrder(rawTrade, order);
+            if (this.noidTradeShouldTakeOpenOrder(noidTrade, order))
+                this.noidTradeTakesOpenOrder(noidTrade, order);
     }
 
-    public updateTrades(rawTrades: RawTrade[]): void {
-        for (let rawTrade of rawTrades)
-            this.rawTradeTakesOpenOrders(rawTrade);
-        super.updateTrades(rawTrades);
+    public updateTrades(noidTrades: UnidentifiedTrade[]): void {
+        for (let noidTrade of noidTrades)
+            this.noidTradeTakesOpenOrders(noidTrade);
+        super.updateTrades(noidTrades);
     }
 }
 

@@ -14,10 +14,10 @@ class ManagingAssets extends Taken {
         this.enoughPosition(order);
         this.settle();
         this.enoughReserve(order);
-        const [makerOrder, rawTrades] = this.orderTakes(order);
+        const [makerOrder, noidTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        if (rawTrades.length) {
-            this.pushRawTrades(rawTrades);
+        if (noidTrades.length) {
+            this.pushNoidTrades(noidTrades);
             this.pushOrderbook();
         }
         return openOrder.id;
@@ -31,12 +31,12 @@ class ManagingAssets extends Taken {
         this.assets.time = this.now();
         return this.assets;
     }
-    updateTrades(rawTrades) {
-        super.updateTrades(rawTrades);
-        for (let rawTrade of rawTrades)
+    updateTrades(noidTrades) {
+        super.updateTrades(noidTrades);
+        for (let noidTrade of noidTrades)
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))
-                .plus(rawTrade.price.times(.1))
+                .plus(noidTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
     }
     enoughPosition(order) {
@@ -53,14 +53,14 @@ class ManagingAssets extends Taken {
             .lte(this.assets.reserve));
     }
     orderTakes(taker) {
-        const [makerOrder, rawTrades, volume, dollarVolume] = super.orderTakes(taker);
+        const [makerOrder, noidTrades, volume, dollarVolume] = super.orderTakes(taker);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === OPEN)
             this.assets.openPosition(taker.length, volume, dollarVolume, takerFee);
         else
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
-        return [makerOrder, rawTrades, volume, dollarVolume];
+        return [makerOrder, noidTrades, volume, dollarVolume];
     }
     orderMakes(order) {
         const [openOrder, toFreeze] = this.openOrders.addOrder({
@@ -70,11 +70,11 @@ class ManagingAssets extends Taken {
         this.assets.freeze(toFreeze);
         return openOrder;
     }
-    rawTradeTakesOpenOrder(rawTrade, maker) {
-        const volume = min(rawTrade.quantity, maker.quantity);
+    noidTradeTakesOpenOrder(noidTrade, maker) {
+        const volume = min(noidTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
-        rawTrade.quantity = rawTrade.quantity.minus(volume);
+        noidTrade.quantity = noidTrade.quantity.minus(volume);
         const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)

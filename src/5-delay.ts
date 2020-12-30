@@ -3,7 +3,7 @@ import {
     Assets,
     LimitOrder,
     OrderId,
-    RawTrade,
+    UnidentifiedTrade,
     ContextMarketPublicApiLike,
     ContextAccountPrivateApiLike,
     Config,
@@ -68,8 +68,8 @@ class Texchange extends ManagingAssets implements
         this.emit('orderbook', orderbook);
     }
 
-    protected async pushRawTrades(rawTrades: RawTrade[]): Promise<void> {
-        const trades = this.rawTrade2Trade(rawTrades);
+    protected async pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.noidTrade2Trade(noidTrades);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }

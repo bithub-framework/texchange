@@ -5,7 +5,7 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 
-export type RawTrade = Omit<Trade, 'id'>;
+export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
 export type InitialAssets = Pick<Assets, 'balance' | 'cost' | 'position' | 'time'>;
 

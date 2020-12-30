@@ -10,8 +10,8 @@ class Pushing extends EventEmitter {
         this.tradeCount = 0;
         this.orderbook = new OrderbookManager(config, now);
     }
-    updateTrades(rawTrades) {
-        this.pushRawTrades(rawTrades);
+    updateTrades(noidTrades) {
+        this.pushNoidTrades(noidTrades);
     }
     updateOrderbook(orderbook) {
         this.orderbook.setBase(orderbook);
@@ -21,14 +21,14 @@ class Pushing extends EventEmitter {
     async pushOrderbook() {
         this.emit('orderbook', this.orderbook);
     }
-    rawTrade2Trade(rawTrades) {
-        return rawTrades.map(rawTrade => ({
-            ...rawTrade,
+    noidTrade2Trade(noidTrades) {
+        return noidTrades.map(noidTrade => ({
+            ...noidTrade,
             id: ++this.tradeCount,
         }));
     }
-    async pushRawTrades(rawTrades) {
-        const trades = this.rawTrade2Trade(rawTrades);
+    async pushNoidTrades(noidTrades) {
+        const trades = this.noidTrade2Trade(noidTrades);
         this.emit('trades', trades);
     }
 }

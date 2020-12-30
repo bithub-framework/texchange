@@ -12,10 +12,10 @@ class Ordering extends Pushing {
     // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
         this.validateOrder(order);
-        const [makerOrder, rawTrades] = this.orderTakes(order);
+        const [makerOrder, noidTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        if (rawTrades.length) {
-            this.pushRawTrades(rawTrades);
+        if (noidTrades.length) {
+            this.pushNoidTrades(noidTrades);
             this.pushOrderbook();
         }
         return openOrder.id;
@@ -36,14 +36,14 @@ class Ordering extends Pushing {
     }
     orderTakes(taker) {
         taker = clone(taker);
-        const rawTrades = [];
+        const noidTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
         for (const maker of this.orderbook[-taker.side]) {
             if (taker.side === BID && taker.price.gte(maker.price) ||
                 taker.side === ASK && taker.price.lte(maker.price)) {
                 const quantity = min(taker.quantity, maker.quantity);
-                rawTrades.push({
+                noidTrades.push({
                     side: taker.side,
                     price: maker.price,
                     quantity,
@@ -58,7 +58,7 @@ class Ordering extends Pushing {
             }
         }
         this.orderbook.apply();
-        return [taker, rawTrades, volume, dollarVolume];
+        return [taker, noidTrades, volume, dollarVolume];
     }
     orderMakes(order) {
         const [openOrder] = this.openOrders.addOrder({

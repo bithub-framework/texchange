@@ -3,7 +3,7 @@ import { OrderbookManager } from './manager-orderbook';
 import {
     Orderbook,
     Trade,
-    RawTrade,
+    UnidentifiedTrade,
     Config,
 } from './interfaces';
 
@@ -20,8 +20,8 @@ class Pushing extends EventEmitter {
         this.orderbook = new OrderbookManager(config, now);
     }
 
-    public updateTrades(rawTrades: RawTrade[]): void {
-        this.pushRawTrades(rawTrades);
+    public updateTrades(noidTrades: UnidentifiedTrade[]): void {
+        this.pushNoidTrades(noidTrades);
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
@@ -34,15 +34,15 @@ class Pushing extends EventEmitter {
         this.emit('orderbook', this.orderbook);
     }
 
-    protected rawTrade2Trade(rawTrades: RawTrade[]): Trade[] {
-        return rawTrades.map(rawTrade => ({
-            ...rawTrade,
+    protected noidTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[] {
+        return noidTrades.map(noidTrade => ({
+            ...noidTrade,
             id: ++this.tradeCount,
         }));
     }
 
-    protected async pushRawTrades(rawTrades: RawTrade[]): Promise<void> {
-        const trades = this.rawTrade2Trade(rawTrades);
+    protected async pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.noidTrade2Trade(noidTrades);
         this.emit('trades', trades);
     }
 }

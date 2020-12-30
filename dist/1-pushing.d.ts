@@ -1,18 +1,18 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
-import { Orderbook, Trade, RawTrade, Config } from './interfaces';
+import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
 declare class Pushing extends EventEmitter {
     protected config: Config;
     protected now: () => number;
     protected tradeCount: number;
     protected orderbook: OrderbookManager;
     constructor(config: Config, now: () => number);
-    updateTrades(rawTrades: RawTrade[]): void;
+    updateTrades(noidTrades: UnidentifiedTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     protected pushOrderbook(): Promise<void>;
-    protected rawTrade2Trade(rawTrades: RawTrade[]): Trade[];
-    protected pushRawTrades(rawTrades: RawTrade[]): Promise<void>;
+    protected noidTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[];
+    protected pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
 }
 interface Pushing extends EventEmitter {
     emit(event: 'orderbook', orderbook: Orderbook): boolean;

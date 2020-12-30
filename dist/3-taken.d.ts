@@ -1,9 +1,9 @@
 import { Ordering } from './2-ordering';
-import { RawTrade, OpenOrder } from './interfaces';
+import { UnidentifiedTrade, OpenOrder } from './interfaces';
 declare class Taken extends Ordering {
-    protected rawTradeShouldTakeOpenOrder(trade: RawTrade, maker: OpenOrder): boolean;
-    protected rawTradeTakesOpenOrder(trade: RawTrade, maker: OpenOrder): void;
-    protected rawTradeTakesOpenOrders(_rawTrade: RawTrade): void;
-    updateTrades(rawTrades: RawTrade[]): void;
+    protected noidTradeShouldTakeOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): boolean;
+    protected noidTradeTakesOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): void;
+    protected noidTradeTakesOpenOrders(_noidTrade: UnidentifiedTrade): void;
+    updateTrades(noidTrades: UnidentifiedTrade[]): void;
 }
 export { Taken as default, Taken, };

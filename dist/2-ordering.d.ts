@@ -1,5 +1,5 @@
 import { Pushing } from './1-pushing';
-import { OpenOrder, LimitOrder, OrderId, RawTrade, Config } from './interfaces';
+import { OpenOrder, LimitOrder, OrderId, UnidentifiedTrade, Config } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-orders';
 declare class Ordering extends Pushing {
@@ -12,7 +12,7 @@ declare class Ordering extends Pushing {
     protected validateOrder(order: LimitOrder): void;
     protected orderTakes(taker: LimitOrder): [
         LimitOrder,
-        RawTrade[],
+        UnidentifiedTrade[],
         Big,
         Big
     ];
