@@ -10,13 +10,9 @@ import util from 'util';
 
 class AssetsManager extends AutoAssets {
     constructor(
-        private config: Config,
+        config: Config,
     ) {
-        super(
-            config.initialAssets,
-            config.leverage,
-            config.CURRENCY_DP,
-        );
+        super(config);
     }
 
     public freeze({ margin, position, length }: Frozen) {

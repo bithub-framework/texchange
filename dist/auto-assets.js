@@ -1,27 +1,29 @@
 import { LONG, SHORT, } from './interfaces';
 import Big from 'big.js';
 class AutoAssets {
-    constructor(initialAssets, leverage, CURRENCY_DP) {
+    constructor(config) {
+        this.config = config;
         ({
             balance: this.balance,
             position: this.position,
             cost: this.cost,
             time: this.time,
-        } = initialAssets);
+        } = config.initialAssets);
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
             [SHORT]: new Big(0),
         };
-        this.leverage = leverage;
-        this.CURRENCY_DP = CURRENCY_DP;
     }
+    // public get margin(): Big {
+    //     return new Big(0)
+    //         .plus(this.cost[LONG])
+    //         .plus(this.cost[SHORT])
+    //         .div(this.leverage)
+    //         .round(this.CURRENCY_DP, RoundingMode.RoundUp);
+    // }
     get margin() {
-        return new Big(0)
-            .plus(this.cost[LONG])
-            .plus(this.cost[SHORT])
-            .div(this.leverage)
-            .round(this.CURRENCY_DP, 3 /* RoundUp */);
+        return this.config.calcPositionMargin(this);
     }
     get reserve() {
         return this.balance

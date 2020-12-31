@@ -3,8 +3,7 @@ import AutoAssets from './auto-assets';
 import util from 'util';
 class AssetsManager extends AutoAssets {
     constructor(config) {
-        super(config.initialAssets, config.leverage, config.CURRENCY_DP);
-        this.config = config;
+        super(config);
     }
     freeze({ margin, position, length }) {
         this.frozenMargin = this.frozenMargin.plus(margin);

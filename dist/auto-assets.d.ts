@@ -1,6 +1,7 @@
-import { Assets, InitialAssets } from './interfaces';
+import { ExAssets, InitialAssets, Config } from './interfaces';
 import Big from 'big.js';
-declare class AutoAssets implements Assets {
+declare class AutoAssets implements ExAssets {
+    protected config: Config;
     position: {
         [length: number]: Big;
     };
@@ -13,14 +14,12 @@ declare class AutoAssets implements Assets {
         [length: number]: Big;
     };
     time: number;
-    private leverage;
-    private CURRENCY_DP;
-    constructor(initialAssets: InitialAssets, leverage: number, CURRENCY_DP: number);
+    constructor(config: Config);
     get margin(): Big;
     get reserve(): Big;
     get closable(): {
         [x: number]: Big;
     };
-    toJSON(): Assets;
+    toJSON(): ExAssets;
 }
 export { AutoAssets as default, AutoAssets, InitialAssets, };

@@ -212,8 +212,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "e9771f6e530bb919bd782b7a87195ed5bb28f63cffd588dd846c9713ac3afe19",
-        "signature": "e9771f6e530bb919bd782b7a87195ed5bb28f63cffd588dd846c9713ac3afe19",
+        "version": "7e9d52832f8bc89e007fbbad0e0101fb9d2150d625046549cb1e86f5cb02c692",
+        "signature": "7e9d52832f8bc89e007fbbad0e0101fb9d2150d625046549cb1e86f5cb02c692",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/serialization.d.ts": {
@@ -242,8 +242,8 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "04eb597c4c94c10f0d36ee15e8ddb3bdabeb20a3903af043e873329a42bd39a5",
-        "signature": "e35006829b3422a4424506328d7b2a94651968941e0445b367cbcdb22c7c17d1",
+        "version": "a56087f7df558682b7e99ec2f1af8f7c2879de7fc8c2e204ace1ba5fb0ae6503",
+        "signature": "bba9da006882a6ec576b2c180900062e5444a4a68c867d6ce1b7ec4ad963ef1f",
         "affectsGlobalScope": false
       },
       "./src/manager-orderbook.ts": {
@@ -272,13 +272,13 @@
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
-        "version": "313dd704c0f27c717489877bed6d85d717fa52ec4f7746c03a2a572ddc6d9059",
-        "signature": "6dd5ce98abf8bc92ab4de6b24d00b2462dd5bc33513f7ff6f5cefb1ed8908577",
+        "version": "b156d7b31e6904e91bea436659a3c0ac0056a484c8192a165e1dc839fdb271f8",
+        "signature": "ec824caf717d912b297dd0ed9ec656e8aaa9fa758b9f52ba1bd8c981a76c52d2",
         "affectsGlobalScope": false
       },
       "./src/manager-assets.ts": {
-        "version": "b2217d3b27f7681c0adbce682c98e07c30904fe02cc9ba50259250c1d62e8aec",
-        "signature": "f1ec3c364019c47684f0c9d18ff424eaf179caf7b438a3c9f1748ff4e74a2888",
+        "version": "9f2c2b7f1b1204d3b2e0d315f0f693529ada946288796a126a917638f87e98e9",
+        "signature": "112d3d0661fdf51559b5359a57698a3857e4e0c0a74412ab5b310b985bf5f81f",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
@@ -1025,7 +1025,6 @@
       "./src/manager-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/util.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts",
         "./src/auto-assets.ts",
         "./src/interfaces.ts",
         "./src/manager-open-orders.ts"

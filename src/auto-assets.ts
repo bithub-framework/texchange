@@ -1,13 +1,12 @@
 import {
-    Assets,
+    ExAssets,
     LONG, SHORT,
     InitialAssets,
+    Config,
 } from './interfaces';
 import Big from 'big.js';
-import { RoundingMode } from 'big.js';
 
-
-class AutoAssets implements Assets {
+class AutoAssets implements ExAssets {
     public position: {
         [length: number]: Big;
     };
@@ -20,35 +19,33 @@ class AutoAssets implements Assets {
         [length: number]: Big;
     };
     public time: number;
-    private leverage: number;
-    private CURRENCY_DP: number;
 
     constructor(
-        initialAssets: InitialAssets,
-        leverage: number,
-        CURRENCY_DP: number,
+        protected config: Config,
     ) {
         ({
             balance: this.balance,
             position: this.position,
             cost: this.cost,
             time: this.time,
-        } = initialAssets);
+        } = config.initialAssets);
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
             [SHORT]: new Big(0),
         };
-        this.leverage = leverage;
-        this.CURRENCY_DP = CURRENCY_DP;
     }
 
+    // public get margin(): Big {
+    //     return new Big(0)
+    //         .plus(this.cost[LONG])
+    //         .plus(this.cost[SHORT])
+    //         .div(this.leverage)
+    //         .round(this.CURRENCY_DP, RoundingMode.RoundUp);
+    // }
+
     public get margin(): Big {
-        return new Big(0)
-            .plus(this.cost[LONG])
-            .plus(this.cost[SHORT])
-            .div(this.leverage)
-            .round(this.CURRENCY_DP, RoundingMode.RoundUp);
+        return this.config.calcPositionMargin(this);
     }
 
     public get reserve(): Big {
@@ -66,7 +63,7 @@ class AutoAssets implements Assets {
         };
     }
 
-    public toJSON(): Assets {
+    public toJSON(): ExAssets {
         return {
             balance: this.balance,
             cost: this.cost,
