@@ -22,6 +22,7 @@ class AutoAssets implements ExAssets {
 
     constructor(
         protected config: Config,
+        private getSettlementPrice: () => Big,
     ) {
         ({
             balance: this.balance,
@@ -44,8 +45,14 @@ class AutoAssets implements ExAssets {
     //         .round(this.CURRENCY_DP, RoundingMode.RoundUp);
     // }
 
+    protected _margin = new Big(0);
     public get margin(): Big {
-        return this.config.calcPositionMargin(this);
+        return this.config.calcPositionMargin(
+            this.config,
+            this,
+            this.getSettlementPrice(),
+            this._margin,
+        );
     }
 
     public get reserve(): Big {

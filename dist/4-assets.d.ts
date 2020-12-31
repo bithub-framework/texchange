@@ -8,7 +8,7 @@ declare class ManagingAssets extends Taken {
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getAssets(): Promise<Assets>;
-    updateTrades(noidTrades: UnidentifiedTrade[]): void;
+    updateTrades(uTrades: UnidentifiedTrade[]): void;
     private enoughPosition;
     private enoughReserve;
     protected orderTakes(taker: LimitOrder): [
@@ -18,7 +18,7 @@ declare class ManagingAssets extends Taken {
         Big
     ];
     protected orderMakes(order: LimitOrder): OpenOrder;
-    protected noidTradeTakesOpenOrder(noidTrade: UnidentifiedTrade, maker: OpenOrder): void;
+    protected uTradeTakesOpenOrder(uTrade: UnidentifiedTrade, maker: OpenOrder): void;
     private settle;
 }
 export { ManagingAssets as default, ManagingAssets, };

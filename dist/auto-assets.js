@@ -1,8 +1,17 @@
 import { LONG, SHORT, } from './interfaces';
 import Big from 'big.js';
 class AutoAssets {
-    constructor(config) {
+    constructor(config, getSettlementPrice) {
         this.config = config;
+        this.getSettlementPrice = getSettlementPrice;
+        // public get margin(): Big {
+        //     return new Big(0)
+        //         .plus(this.cost[LONG])
+        //         .plus(this.cost[SHORT])
+        //         .div(this.leverage)
+        //         .round(this.CURRENCY_DP, RoundingMode.RoundUp);
+        // }
+        this._margin = new Big(0);
         ({
             balance: this.balance,
             position: this.position,
@@ -15,15 +24,8 @@ class AutoAssets {
             [SHORT]: new Big(0),
         };
     }
-    // public get margin(): Big {
-    //     return new Big(0)
-    //         .plus(this.cost[LONG])
-    //         .plus(this.cost[SHORT])
-    //         .div(this.leverage)
-    //         .round(this.CURRENCY_DP, RoundingMode.RoundUp);
-    // }
     get margin() {
-        return this.config.calcPositionMargin(this);
+        return this.config.calcPositionMargin(this.config, this, this.getSettlementPrice(), this._margin);
     }
     get reserve() {
         return this.balance

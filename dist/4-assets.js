@@ -7,17 +7,17 @@ class ManagingAssets extends Taken {
     constructor(config, now) {
         super(config, now);
         this.settlementPrice = new Big(0);
-        this.assets = new AssetsManager(config);
+        this.assets = new AssetsManager(config, () => this.settlementPrice);
     }
     async makeLimitOrder(order) {
         this.validateOrder(order);
         this.enoughPosition(order);
         this.settle();
         this.enoughReserve(order);
-        const [makerOrder, noidTrades] = this.orderTakes(order);
+        const [makerOrder, uTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
-        if (noidTrades.length) {
-            this.pushNoidTrades(noidTrades);
+        if (uTrades.length) {
+            this.pushNoidTrades(uTrades);
             this.pushOrderbook();
         }
         return openOrder.id;
@@ -31,12 +31,12 @@ class ManagingAssets extends Taken {
         this.assets.time = this.now();
         return this.assets;
     }
-    updateTrades(noidTrades) {
-        super.updateTrades(noidTrades);
-        for (let noidTrade of noidTrades)
+    updateTrades(uTrades) {
+        super.updateTrades(uTrades);
+        for (let uTrade of uTrades)
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))
-                .plus(noidTrade.price.times(.1))
+                .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
     }
     enoughPosition(order) {
@@ -47,20 +47,23 @@ class ManagingAssets extends Taken {
     }
     enoughReserve(order) {
         assert(order.operation === CLOSE || new Big(0)
-            .plus(this.config.calcDollarVolume(order.price, order.quantity).div(this.config.leverage))
-            .plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE))
+            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE))
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
             .lte(this.assets.reserve));
     }
     orderTakes(taker) {
-        const [makerOrder, noidTrades, volume, dollarVolume] = super.orderTakes(taker);
+        const [makerOrder, uTrades, volume, dollarVolume] = super.orderTakes(taker);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
-        if (taker.operation === OPEN)
+        if (taker.operation === OPEN) {
             this.assets.openPosition(taker.length, volume, dollarVolume, takerFee);
-        else
+            this.assets.incMargin(taker.price, volume, this.settlementPrice);
+        }
+        else {
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
-        return [makerOrder, noidTrades, volume, dollarVolume];
+            this.assets.decMargin(volume);
+        }
+        return [makerOrder, uTrades, volume, dollarVolume];
     }
     orderMakes(order) {
         const [openOrder, toFreeze] = this.openOrders.addOrder({
@@ -70,19 +73,23 @@ class ManagingAssets extends Taken {
         this.assets.freeze(toFreeze);
         return openOrder;
     }
-    noidTradeTakesOpenOrder(noidTrade, maker) {
-        const volume = min(noidTrade.quantity, maker.quantity);
+    uTradeTakesOpenOrder(uTrade, maker) {
+        const volume = min(uTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
-        noidTrade.quantity = noidTrade.quantity.minus(volume);
+        uTrade.quantity = uTrade.quantity.minus(volume);
         const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
-        if (maker.operation === OPEN)
+        if (maker.operation === OPEN) {
             this.assets.openPosition(maker.length, volume, dollarVolume, makerFee);
-        else
+            this.assets.incMargin(maker.price, volume, this.settlementPrice);
+        }
+        else {
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
+            this.assets.decMargin(volume);
+        }
     }
     settle() {
         const position = clone(this.assets.position);

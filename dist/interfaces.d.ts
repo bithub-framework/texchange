@@ -19,12 +19,14 @@ export declare type InitialAssets = Pick<ExAssets, 'balance' | 'cost' | 'positio
 export interface ExMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
-    calcInitialMargin: (order: LimitOrder, settlementPrice: Big) => Big;
-    calcPositionMargin: (assets: ExAssets) => Big;
 }
 export interface ExAccountConfig extends AccountConfig {
     initialAssets: InitialAssets;
 }
 export interface Config extends ExMarketConfig, ExAccountConfig {
+    calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big) => Big;
+    calcIncreasedMargin: (config: MarketConfig & AccountConfig, price: Big, volume: Big, settlementPrice: Big) => Big;
+    calcDecreasedMargin: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;
+    calcPositionMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, originalMargin: Big) => Big;
 }
 export declare function min(...a: Big[]): Big;

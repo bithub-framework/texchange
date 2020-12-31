@@ -7,7 +7,7 @@ import {
 } from './interfaces';
 
 class Taken extends Ordering {
-    protected noidTradeShouldTakeOpenOrder(
+    protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
         return (
@@ -21,7 +21,7 @@ class Taken extends Ordering {
         );
     }
 
-    protected noidTradeTakesOpenOrder(
+    protected uTradeTakesOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): void {
         const volume = min(trade.quantity, maker.quantity);
@@ -31,17 +31,17 @@ class Taken extends Ordering {
         this.openOrders.takeOrder(maker.id, volume, dollarVolume);
     }
 
-    protected noidTradeTakesOpenOrders(_noidTrade: UnidentifiedTrade) {
-        const noidTrade: UnidentifiedTrade = { ..._noidTrade };
+    protected uTradeTakesOpenOrders(_uTrade: UnidentifiedTrade) {
+        const uTrade: UnidentifiedTrade = { ..._uTrade };
         for (const order of this.openOrders.values())
-            if (this.noidTradeShouldTakeOpenOrder(noidTrade, order))
-                this.noidTradeTakesOpenOrder(noidTrade, order);
+            if (this.uTradeShouldTakeOpenOrder(uTrade, order))
+                this.uTradeTakesOpenOrder(uTrade, order);
     }
 
-    public updateTrades(noidTrades: UnidentifiedTrade[]): void {
-        for (let noidTrade of noidTrades)
-            this.noidTradeTakesOpenOrders(noidTrade);
-        super.updateTrades(noidTrades);
+    public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        for (let uTrade of uTrades)
+            this.uTradeTakesOpenOrders(uTrade);
+        super.updateTrades(uTrades);
     }
 }
 

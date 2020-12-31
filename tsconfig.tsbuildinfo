@@ -242,8 +242,8 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "a56087f7df558682b7e99ec2f1af8f7c2879de7fc8c2e204ace1ba5fb0ae6503",
-        "signature": "bba9da006882a6ec576b2c180900062e5444a4a68c867d6ce1b7ec4ad963ef1f",
+        "version": "a1be4e030ce1c25caacd538135162aad9e9697a402f70bf3acf95c2cfce2bcda",
+        "signature": "8f98fd9bb04513b077aa1d9459fe3d0d7ae7877ba3d6b97f6d94fe8618ab2096",
         "affectsGlobalScope": false
       },
       "./src/manager-orderbook.ts": {
@@ -267,23 +267,23 @@
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "016c94fa26299a470446033f95752fc93e65ba64ad9138ae3f68a77a1422f44e",
-        "signature": "6136dc1f1a0da05ff7babf55befafbfa0e1b05016970a660de4f1f88a338eda5",
+        "version": "bc52dd7a9da159755376449f8bf223d023caf03b163957851db7526d777f76b3",
+        "signature": "dccb9e57631ee95b2643cc444f387b7b37eafe8b11c1d8c9228cbbf6c16740c3",
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
-        "version": "b156d7b31e6904e91bea436659a3c0ac0056a484c8192a165e1dc839fdb271f8",
-        "signature": "ec824caf717d912b297dd0ed9ec656e8aaa9fa758b9f52ba1bd8c981a76c52d2",
+        "version": "f354b6595bf69c8edd28e36016bb57280f1a46fc0c589a535c3d26cac6b6ab89",
+        "signature": "c548db795aecd0b87da209c81722045338f3a518ae12b0fc404a168d976e5a2a",
         "affectsGlobalScope": false
       },
       "./src/manager-assets.ts": {
-        "version": "9f2c2b7f1b1204d3b2e0d315f0f693529ada946288796a126a917638f87e98e9",
-        "signature": "112d3d0661fdf51559b5359a57698a3857e4e0c0a74412ab5b310b985bf5f81f",
+        "version": "11a4a6741aafc5a10fb8266f28368fedd1882cf49a04a41c97970491c56f46d5",
+        "signature": "dbf61238715214d3bdb3992dd077b5a8b728299c57f435de8191bb1d3cb401e4",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "00f0e867a4d83ceedd353ef9709bc9249a413b8d917bd7caf4911f35b4e48769",
-        "signature": "35629239121992f918e44b8cd7e11c741bf1b8e056372823258563be3e9ba0a8",
+        "version": "6300adafae13a467d4e2bc0c9a8fbc229d587f39d7721467c21ff884e5bc1ea1",
+        "signature": "659bd2628d25bc02ccbdb4df656222ebcf23acb6cbc5a60ab6f0044393b0949d",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {

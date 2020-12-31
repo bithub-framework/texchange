@@ -1,18 +1,19 @@
 import {
-    LONG,
+    LONG, SHORT, Length,
     Config,
-    Length,
 } from './interfaces';
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-orders';
 import util from 'util';
+import { RoundingMode } from 'big.js';
 
 class AssetsManager extends AutoAssets {
     constructor(
         config: Config,
+        getSettlementPrice: () => Big,
     ) {
-        super(config);
+        super(config, getSettlementPrice);
     }
 
     public freeze({ margin, position, length }: Frozen) {
@@ -23,6 +24,34 @@ class AssetsManager extends AutoAssets {
     public thaw({ margin, position, length }: Frozen) {
         this.frozenMargin = this.frozenMargin.minus(margin);
         this.frozenPosition[length] = this.frozenPosition[length].minus(position);
+    }
+
+    public incMargin(
+        price: Big,
+        volume: Big,
+        settlementPrice: Big,
+    ) {
+        this._margin = this._margin.plus(
+            this.config.calcIncreasedMargin(
+                this.config,
+                price,
+                volume,
+                settlementPrice,
+            ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp),
+        );
+    }
+
+    public decMargin(volume: Big) {
+        const totalPosition = this.position[LONG].plus(this.position[SHORT]);
+        this._margin = totalPosition.eq(volume)
+            ? new Big(0)
+            : this._margin.minus(
+                this.config.calcDecreasedMargin(
+                    this.config,
+                    this,
+                    volume,
+                ),
+            );
     }
 
     public openPosition(
