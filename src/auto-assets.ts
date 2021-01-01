@@ -38,14 +38,14 @@ class AutoAssets implements ExAssets {
         };
     }
 
-    protected _margin = new Big(0);
+    protected autoMargin = new Big(0);
     public get margin(): Big {
         return this.config.calcMargin(
             this.config,
             this,
             this.getSettlementPrice(),
             this.getLatestPrice(),
-            this._margin,
+            this.autoMargin,
         ).round(this.config.CURRENCY_DP);
     }
 

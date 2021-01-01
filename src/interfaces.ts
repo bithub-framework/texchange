@@ -56,7 +56,7 @@ export interface ExAccountConfig extends AccountConfig {
         assets: Omit<ExAssets, 'margin' | 'reserve'>,
         settlementPrice: Big,
         latestPrice: Big,
-        originalMargin: Big,
+        autoMargin: Big,
     ) => Big,
     calcFrozenMargin: (
         config: MarketConfig & AccountConfig,

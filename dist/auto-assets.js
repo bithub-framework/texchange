@@ -5,7 +5,7 @@ class AutoAssets {
         this.config = config;
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
-        this._margin = new Big(0);
+        this.autoMargin = new Big(0);
         ({
             balance: this.balance,
             position: this.position,
@@ -19,7 +19,7 @@ class AutoAssets {
         };
     }
     get margin() {
-        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this._margin).round(this.config.CURRENCY_DP);
+        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this.autoMargin).round(this.config.CURRENCY_DP);
     }
     get reserve() {
         return this.balance

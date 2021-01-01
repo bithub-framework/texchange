@@ -34,7 +34,7 @@ class AssetsManager extends AutoAssets {
         price: Big,
         volume: Big,
     ) {
-        this._margin = this._margin.plus(
+        this.autoMargin = this.autoMargin.plus(
             this.config.calcMarginIncrement(
                 this.config,
                 price,
@@ -45,9 +45,9 @@ class AssetsManager extends AutoAssets {
 
     public decMargin(volume: Big) {
         const totalPosition = this.position[LONG].plus(this.position[SHORT]);
-        this._margin = totalPosition.eq(volume)
+        this.autoMargin = totalPosition.eq(volume)
             ? new Big(0)
-            : this._margin.minus(
+            : this.autoMargin.minus(
                 this.config.calcMarginDecrement(
                     this.config,
                     this,

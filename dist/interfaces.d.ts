@@ -25,7 +25,7 @@ export interface ExAccountConfig extends AccountConfig {
     calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
     calcMarginIncrement: (config: MarketConfig & AccountConfig, price: Big, volume: Big) => Big;
     calcMarginDecrement: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;
-    calcMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, originalMargin: Big) => Big;
+    calcMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
     calcFrozenMargin: (config: MarketConfig & AccountConfig, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
 export interface Config extends ExMarketConfig, ExAccountConfig {
