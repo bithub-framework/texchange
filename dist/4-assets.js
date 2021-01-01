@@ -16,7 +16,7 @@ class ManagingAssets extends Taken {
         const [makerOrder, uTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (uTrades.length) {
-            this.pushNoidTrades(uTrades);
+            this.pushUTrades(uTrades);
             this.pushOrderbook();
         }
         return openOrder.id;
@@ -29,16 +29,6 @@ class ManagingAssets extends Taken {
         this.settle();
         this.assets.time = this.now();
         return this.assets;
-    }
-    updateTrades(uTrades) {
-        super.updateTrades(uTrades);
-        for (let uTrade of uTrades) {
-            this.settlementPrice = new Big(0)
-                .plus(this.settlementPrice.times(.9))
-                .plus(uTrade.price.times(.1))
-                .round(this.config.PRICE_DP);
-            this.latestPrice = uTrade.price;
-        }
     }
     enoughPosition(order) {
         assert(order.operation === OPEN ||
@@ -67,10 +57,11 @@ class ManagingAssets extends Taken {
         return [makerOrder, uTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder, toFreeze] = this.openOrders.addOrder({
+        const openOrder = {
             ...order,
             id: ++this.orderCount,
-        });
+        };
+        const toFreeze = this.openOrders.addOrder(openOrder);
         this.assets.freeze(toFreeze);
         return openOrder;
     }

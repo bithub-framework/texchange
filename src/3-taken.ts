@@ -39,9 +39,9 @@ class Taken extends Ordering {
     }
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        super.updateTrades(uTrades);
         for (let uTrade of uTrades)
             this.uTradeTakesOpenOrders(uTrade);
-        super.updateTrades(uTrades);
     }
 }
 

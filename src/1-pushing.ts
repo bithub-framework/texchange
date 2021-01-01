@@ -21,7 +21,7 @@ class Pushing extends EventEmitter {
     }
 
     public updateTrades(noidTrades: UnidentifiedTrade[]): void {
-        this.pushNoidTrades(noidTrades);
+        this.pushUTrades(noidTrades);
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
@@ -34,15 +34,15 @@ class Pushing extends EventEmitter {
         this.emit('orderbook', this.orderbook);
     }
 
-    protected noidTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[] {
+    protected uTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[] {
         return noidTrades.map(noidTrade => ({
             ...noidTrade,
             id: ++this.tradeCount,
         }));
     }
 
-    protected async pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = this.noidTrade2Trade(noidTrades);
+    protected async pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.uTrade2Trade(noidTrades);
         this.emit('trades', trades);
     }
 }

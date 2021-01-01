@@ -11,8 +11,8 @@ declare class Pushing extends EventEmitter {
     updateTrades(noidTrades: UnidentifiedTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     protected pushOrderbook(): Promise<void>;
-    protected noidTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[];
-    protected pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
+    protected uTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[];
+    protected pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
 }
 interface Pushing extends EventEmitter {
     emit(event: 'orderbook', orderbook: Orderbook): boolean;

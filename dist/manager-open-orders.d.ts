@@ -11,7 +11,7 @@ declare class OpenOrderManager extends Map<OrderId, OpenOrder> {
     private getLatestPrice;
     private frozens;
     constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
-    addOrder(order: OpenOrder): [OpenOrder, Frozen];
+    addOrder(order: OpenOrder): Frozen;
     takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
     removeOrder(oid: OrderId): Frozen;
     private calcThawedMargin;

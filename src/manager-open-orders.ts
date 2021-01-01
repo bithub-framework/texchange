@@ -26,8 +26,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         super();
     }
 
-    public addOrder(order: OpenOrder): [OpenOrder, Frozen] {
-        // TODO
+    public addOrder(order: OpenOrder): Frozen {
         const frozen: Frozen = {
             margin: order.operation === OPEN
                 ? this.config.calcFrozenMargin(
@@ -46,7 +45,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
             this.set(order.id, order);
             this.frozens.set(order.id, frozen);
         }
-        return [order, frozen];
+        return frozen;
     }
 
     public takeOrder(

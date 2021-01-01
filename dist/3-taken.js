@@ -24,9 +24,9 @@ class Taken extends Ordering {
                 this.uTradeTakesOpenOrder(uTrade, order);
     }
     updateTrades(uTrades) {
+        super.updateTrades(uTrades);
         for (let uTrade of uTrades)
             this.uTradeTakesOpenOrders(uTrade);
-        super.updateTrades(uTrades);
     }
 }
 export { Taken as default, Taken, };

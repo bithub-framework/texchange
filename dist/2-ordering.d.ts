@@ -12,6 +12,7 @@ declare class Ordering extends Pushing {
     cancelOrder(oid: OrderId): Promise<void>;
     getOpenOrders(): Promise<OpenOrder[]>;
     protected validateOrder(order: LimitOrder): void;
+    updateTrades(uTrades: UnidentifiedTrade[]): void;
     protected orderTakes(taker: LimitOrder): [
         LimitOrder,
         UnidentifiedTrade[],

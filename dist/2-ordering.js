@@ -17,7 +17,7 @@ class Ordering extends Pushing {
         const [makerOrder, noidTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (noidTrades.length) {
-            this.pushNoidTrades(noidTrades);
+            this.pushUTrades(noidTrades);
             this.pushOrderbook();
         }
         return openOrder.id;
@@ -35,6 +35,16 @@ class Ordering extends Pushing {
         assert(order.length === LONG || order.length === SHORT);
         assert(order.operation === OPEN || order.operation === CLOSE);
         assert(order.operation * order.length === order.side);
+    }
+    updateTrades(uTrades) {
+        super.updateTrades(uTrades);
+        for (let uTrade of uTrades) {
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(uTrade.price.times(.1))
+                .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
     }
     orderTakes(taker) {
         taker = clone(taker);
@@ -63,10 +73,11 @@ class Ordering extends Pushing {
         return [taker, noidTrades, volume, dollarVolume];
     }
     orderMakes(order) {
-        const [openOrder] = this.openOrders.addOrder({
+        const openOrder = {
             ...order,
             id: ++this.orderCount,
-        });
+        };
+        this.openOrders.addOrder(openOrder);
         return openOrder;
     }
 }

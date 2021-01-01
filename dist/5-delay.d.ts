@@ -8,6 +8,6 @@ declare class Texchange extends ManagingAssets implements ContextMarketPublicApi
     getAssets(): Promise<Assets>;
     getOpenOrders(): Promise<OpenOrder[]>;
     protected pushOrderbook(): Promise<void>;
-    protected pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
+    protected pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
 }
 export { Texchange as default, Texchange, };

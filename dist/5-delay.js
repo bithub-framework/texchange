@@ -50,8 +50,8 @@ class Texchange extends ManagingAssets {
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
-    async pushNoidTrades(noidTrades) {
-        const trades = this.noidTrade2Trade(noidTrades);
+    async pushUTrades(noidTrades) {
+        const trades = this.uTrade2Trade(noidTrades);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }

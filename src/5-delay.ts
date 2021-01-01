@@ -68,8 +68,8 @@ class Texchange extends ManagingAssets implements
         this.emit('orderbook', orderbook);
     }
 
-    protected async pushNoidTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = this.noidTrade2Trade(noidTrades);
+    protected async pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.uTrade2Trade(noidTrades);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }

@@ -7,7 +7,6 @@ declare class ManagingAssets extends Taken {
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;
     getAssets(): Promise<Assets>;
-    updateTrades(uTrades: UnidentifiedTrade[]): void;
     private enoughPosition;
     private enoughReserve;
     protected orderTakes(taker: LimitOrder): [
