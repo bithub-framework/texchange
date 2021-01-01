@@ -18,17 +18,24 @@ interface Frozen {
 class OpenOrderManager extends Map<OrderId, OpenOrder>{
     private frozens = new Map<OrderId, Frozen>();
 
-    constructor(private config: Config) {
+    constructor(
+        private config: Config,
+        private getSettlementPrice: () => Big,
+        private getLatestPrice: () => Big,
+    ) {
         super();
     }
 
     public addOrder(order: OpenOrder): [OpenOrder, Frozen] {
-        const dollarVolume = this.config.calcDollarVolume(
-            order.price, order.quantity);
+        // TODO
         const frozen: Frozen = {
             margin: order.operation === OPEN
-                ? dollarVolume.div(this.config.leverage)
-                    .round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
+                ? this.config.calcFrozenMargin(
+                    this.config,
+                    order,
+                    this.getSettlementPrice(),
+                    this.getLatestPrice(),
+                ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
                 : new Big(0),
             position: order.operation === CLOSE
                 ? order.quantity
@@ -53,7 +60,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         assert(volume.lte(order.quantity));
 
         const thawed: Frozen = {
-            margin: this.calcReleasedMargin(
+            margin: this.calcThawedMargin(
                 order.quantity, frozen.margin, volume, dollarVolume,
             ),
             position: volume,
@@ -93,7 +100,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         return thawed;
     }
 
-    private calcReleasedMargin(
+    private calcThawedMargin(
         quantity: Big,
         frozenMargin: Big,
         volume: Big,

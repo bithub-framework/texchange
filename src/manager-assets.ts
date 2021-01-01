@@ -12,8 +12,13 @@ class AssetsManager extends AutoAssets {
     constructor(
         config: Config,
         getSettlementPrice: () => Big,
+        getLatestPrice: () => Big,
     ) {
-        super(config, getSettlementPrice);
+        super(
+            config,
+            getSettlementPrice,
+            getLatestPrice,
+        );
     }
 
     public freeze({ margin, position, length }: Frozen) {
@@ -29,14 +34,12 @@ class AssetsManager extends AutoAssets {
     public incMargin(
         price: Big,
         volume: Big,
-        settlementPrice: Big,
     ) {
         this._margin = this._margin.plus(
-            this.config.calcIncreasedMargin(
+            this.config.calcMarginIncrement(
                 this.config,
                 price,
                 volume,
-                settlementPrice,
             ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp),
         );
     }
@@ -46,7 +49,7 @@ class AssetsManager extends AutoAssets {
         this._margin = totalPosition.eq(volume)
             ? new Big(0)
             : this._margin.minus(
-                this.config.calcDecreasedMargin(
+                this.config.calcMarginDecrement(
                     this.config,
                     this,
                     volume,

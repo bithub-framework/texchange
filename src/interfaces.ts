@@ -5,6 +5,7 @@ import {
     MarketConfig,
     AccountConfig,
     LimitOrder,
+    OpenOrder,
 } from 'interfaces';
 import Big from 'big.js';
 
@@ -33,34 +34,39 @@ export interface ExMarketConfig extends MarketConfig {
 
 export interface ExAccountConfig extends AccountConfig {
     initialAssets: InitialAssets;
-}
 
-// 暂只支持一个用户，所以配置拼一起就行了
-export interface Config extends ExMarketConfig, ExAccountConfig {
-    // 均不需切小数
     calcInitialMargin: (
         config: MarketConfig & AccountConfig,
         order: LimitOrder,
         settlementPrice: Big,
+        latestPrice: Big,
     ) => Big,
-    calcIncreasedMargin: (
+    calcMarginIncrement: (
         config: MarketConfig & AccountConfig,
         price: Big,
         volume: Big,
-        settlementPrice: Big,
     ) => Big,
-    calcDecreasedMargin: (
+    calcMarginDecrement: (
         config: MarketConfig & AccountConfig,
         assets: ExAssets,
         volume: Big,
     ) => Big,
-    calcPositionMargin: (
+    calcMargin: (
         config: MarketConfig & AccountConfig,
         assets: Omit<ExAssets, 'margin' | 'reserve'>,
         settlementPrice: Big,
+        latestPrice: Big,
         originalMargin: Big,
     ) => Big,
+    calcFrozenMargin: (
+        config: MarketConfig & AccountConfig,
+        order: OpenOrder,
+        settlementPrice: Big,
+        latestPrice: Big,
+    ) => Big,
 }
+
+export interface Config extends ExMarketConfig, ExAccountConfig { }
 
 export function min(...a: Big[]) {
     return a.reduce((m, x) => m.lt(x) ? m : x);

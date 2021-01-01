@@ -2,13 +2,13 @@ import {
     Orderbook,
     Side, BID, ASK,
     Config,
-    MakerOrder,
+    BookOrder,
 } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 
 class OrderbookManager implements Orderbook {
-    [side: number]: MakerOrder[];
+    [side: number]: BookOrder[];
 
     private applied = false;
     public time = Number.NEGATIVE_INFINITY;
@@ -32,21 +32,21 @@ class OrderbookManager implements Orderbook {
         this.apply();
     }
 
-    private _ASK!: MakerOrder[];
+    private _ASK!: BookOrder[];
     public get [ASK]() {
         assert(this.applied);
         return this._ASK;
     }
-    private set [ASK](v: MakerOrder[]) {
+    private set [ASK](v: BookOrder[]) {
         this._ASK = v;
     }
 
-    private _BID!: MakerOrder[];
+    private _BID!: BookOrder[];
     public get [BID]() {
         assert(this.applied);
         return this._BID;
     }
-    private set [BID](v: MakerOrder[]) {
+    private set [BID](v: BookOrder[]) {
         this._BID = v;
     }
 

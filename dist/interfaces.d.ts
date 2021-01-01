@@ -1,5 +1,5 @@
 export * from 'interfaces';
-import { Trade, Assets, MarketConfig, AccountConfig, LimitOrder } from 'interfaces';
+import { Trade, Assets, MarketConfig, AccountConfig, LimitOrder, OpenOrder } from 'interfaces';
 import Big from 'big.js';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface ExAssets extends Assets {
@@ -22,11 +22,12 @@ export interface ExMarketConfig extends MarketConfig {
 }
 export interface ExAccountConfig extends AccountConfig {
     initialAssets: InitialAssets;
+    calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
+    calcMarginIncrement: (config: MarketConfig & AccountConfig, price: Big, volume: Big) => Big;
+    calcMarginDecrement: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;
+    calcMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, originalMargin: Big) => Big;
+    calcFrozenMargin: (config: MarketConfig & AccountConfig, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
 export interface Config extends ExMarketConfig, ExAccountConfig {
-    calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big) => Big;
-    calcIncreasedMargin: (config: MarketConfig & AccountConfig, price: Big, volume: Big, settlementPrice: Big) => Big;
-    calcDecreasedMargin: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;
-    calcPositionMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, originalMargin: Big) => Big;
 }
 export declare function min(...a: Big[]): Big;

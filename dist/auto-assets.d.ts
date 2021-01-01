@@ -3,6 +3,7 @@ import Big from 'big.js';
 declare class AutoAssets implements ExAssets {
     protected config: Config;
     private getSettlementPrice;
+    private getLatestPrice;
     position: {
         [length: number]: Big;
     };
@@ -15,7 +16,7 @@ declare class AutoAssets implements ExAssets {
         [length: number]: Big;
     };
     time: number;
-    constructor(config: Config, getSettlementPrice: () => Big);
+    constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     protected _margin: Big;
     get margin(): Big;
     get reserve(): Big;

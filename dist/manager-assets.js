@@ -3,8 +3,8 @@ import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import util from 'util';
 class AssetsManager extends AutoAssets {
-    constructor(config, getSettlementPrice) {
-        super(config, getSettlementPrice);
+    constructor(config, getSettlementPrice, getLatestPrice) {
+        super(config, getSettlementPrice, getLatestPrice);
     }
     freeze({ margin, position, length }) {
         this.frozenMargin = this.frozenMargin.plus(margin);
@@ -14,14 +14,14 @@ class AssetsManager extends AutoAssets {
         this.frozenMargin = this.frozenMargin.minus(margin);
         this.frozenPosition[length] = this.frozenPosition[length].minus(position);
     }
-    incMargin(price, volume, settlementPrice) {
-        this._margin = this._margin.plus(this.config.calcIncreasedMargin(this.config, price, volume, settlementPrice).round(this.config.CURRENCY_DP, 3 /* RoundUp */));
+    incMargin(price, volume) {
+        this._margin = this._margin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP, 3 /* RoundUp */));
     }
     decMargin(volume) {
         const totalPosition = this.position[LONG].plus(this.position[SHORT]);
         this._margin = totalPosition.eq(volume)
             ? new Big(0)
-            : this._margin.minus(this.config.calcDecreasedMargin(this.config, this, volume));
+            : this._margin.minus(this.config.calcMarginDecrement(this.config, this, volume));
     }
     openPosition(length, volume, dollarVolume, fee) {
         this.position[length] = this.position[length].plus(volume);

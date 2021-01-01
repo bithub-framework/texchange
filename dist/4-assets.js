@@ -6,8 +6,7 @@ import assert from 'assert';
 class ManagingAssets extends Taken {
     constructor(config, now) {
         super(config, now);
-        this.settlementPrice = new Big(0);
-        this.assets = new AssetsManager(config, () => this.settlementPrice);
+        this.assets = new AssetsManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     async makeLimitOrder(order) {
         this.validateOrder(order);
@@ -33,11 +32,13 @@ class ManagingAssets extends Taken {
     }
     updateTrades(uTrades) {
         super.updateTrades(uTrades);
-        for (let uTrade of uTrades)
+        for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
     }
     enoughPosition(order) {
         assert(order.operation === OPEN ||
@@ -47,7 +48,7 @@ class ManagingAssets extends Taken {
     }
     enoughReserve(order) {
         assert(order.operation === CLOSE || new Big(0)
-            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE))
+            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE))
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
             .lte(this.assets.reserve));
     }
@@ -57,7 +58,7 @@ class ManagingAssets extends Taken {
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === OPEN) {
             this.assets.openPosition(taker.length, volume, dollarVolume, takerFee);
-            this.assets.incMargin(taker.price, volume, this.settlementPrice);
+            this.assets.incMargin(taker.price, volume);
         }
         else {
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
@@ -84,7 +85,7 @@ class ManagingAssets extends Taken {
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (maker.operation === OPEN) {
             this.assets.openPosition(maker.length, volume, dollarVolume, makerFee);
-            this.assets.incMargin(maker.price, volume, this.settlementPrice);
+            this.assets.incMargin(maker.price, volume);
         }
         else {
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);

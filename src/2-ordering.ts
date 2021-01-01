@@ -18,13 +18,19 @@ import assert from 'assert';
 class Ordering extends Pushing {
     protected orderCount = 0;
     protected openOrders: OpenOrderManager;
+    protected settlementPrice = new Big(0);
+    protected latestPrice = new Big(0);
 
     constructor(
         config: Config,
         now: () => number,
     ) {
         super(config, now);
-        this.openOrders = new OpenOrderManager(config);
+        this.openOrders = new OpenOrderManager(
+            config,
+            () => this.settlementPrice,
+            () => this.latestPrice,
+        );
     }
 
     // 由于精度原因，实际成本不一定恰好等于 order.price

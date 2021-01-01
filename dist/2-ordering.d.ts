@@ -5,6 +5,8 @@ import { OpenOrderManager } from './manager-open-orders';
 declare class Ordering extends Pushing {
     protected orderCount: number;
     protected openOrders: OpenOrderManager;
+    protected settlementPrice: Big;
+    protected latestPrice: Big;
     constructor(config: Config, now: () => number);
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
     cancelOrder(oid: OrderId): Promise<void>;

@@ -7,7 +7,9 @@ class Ordering extends Pushing {
     constructor(config, now) {
         super(config, now);
         this.orderCount = 0;
-        this.openOrders = new OpenOrderManager(config);
+        this.settlementPrice = new Big(0);
+        this.latestPrice = new Big(0);
+        this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {

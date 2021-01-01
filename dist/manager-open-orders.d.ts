@@ -7,11 +7,13 @@ interface Frozen {
 }
 declare class OpenOrderManager extends Map<OrderId, OpenOrder> {
     private config;
+    private getSettlementPrice;
+    private getLatestPrice;
     private frozens;
-    constructor(config: Config);
+    constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     addOrder(order: OpenOrder): [OpenOrder, Frozen];
     takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
     removeOrder(oid: OrderId): Frozen;
-    private calcReleasedMargin;
+    private calcThawedMargin;
 }
 export { OpenOrderManager as default, OpenOrderManager, Frozen, };

@@ -1,9 +1,9 @@
-import { Orderbook, Side, Config, MakerOrder } from './interfaces';
+import { Orderbook, Side, Config, BookOrder } from './interfaces';
 import Big from 'big.js';
 declare class OrderbookManager implements Orderbook {
     private config;
     private now;
-    [side: number]: MakerOrder[];
+    [side: number]: BookOrder[];
     private applied;
     time: number;
     private baseBook;

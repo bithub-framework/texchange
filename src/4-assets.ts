@@ -17,7 +17,6 @@ import { AssetsManager } from './manager-assets';
 import assert from 'assert';
 
 class ManagingAssets extends Taken {
-    private settlementPrice = new Big(0);
     private assets: AssetsManager;
 
     constructor(
@@ -28,6 +27,7 @@ class ManagingAssets extends Taken {
         this.assets = new AssetsManager(
             config,
             () => this.settlementPrice,
+            () => this.latestPrice,
         );
     }
 
@@ -59,11 +59,13 @@ class ManagingAssets extends Taken {
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
         super.updateTrades(uTrades);
-        for (let uTrade of uTrades)
+        for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
     }
 
     private enoughPosition(order: LimitOrder) {
@@ -81,6 +83,7 @@ class ManagingAssets extends Taken {
                     this.config,
                     order,
                     this.settlementPrice,
+                    this.latestPrice,
                 )
                 ).plus(this.config.calcDollarVolume(
                     order.price, order.quantity,
@@ -102,7 +105,6 @@ class ManagingAssets extends Taken {
             this.assets.incMargin(
                 taker.price,
                 volume,
-                this.settlementPrice,
             );
         } else {
             this.assets.closePosition(
@@ -144,7 +146,6 @@ class ManagingAssets extends Taken {
             this.assets.incMargin(
                 maker.price,
                 volume,
-                this.settlementPrice,
             );
         } else {
             this.assets.closePosition(

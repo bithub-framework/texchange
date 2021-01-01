@@ -2,17 +2,18 @@ import { OPEN, CLOSE, } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 class OpenOrderManager extends Map {
-    constructor(config) {
+    constructor(config, getSettlementPrice, getLatestPrice) {
         super();
         this.config = config;
+        this.getSettlementPrice = getSettlementPrice;
+        this.getLatestPrice = getLatestPrice;
         this.frozens = new Map();
     }
     addOrder(order) {
-        const dollarVolume = this.config.calcDollarVolume(order.price, order.quantity);
+        // TODO
         const frozen = {
             margin: order.operation === OPEN
-                ? dollarVolume.div(this.config.leverage)
-                    .round(this.config.CURRENCY_DP, 3 /* RoundUp */)
+                ? this.config.calcFrozenMargin(this.config, order, this.getSettlementPrice(), this.getLatestPrice()).round(this.config.CURRENCY_DP, 3 /* RoundUp */)
                 : new Big(0),
             position: order.operation === CLOSE
                 ? order.quantity
@@ -31,7 +32,7 @@ class OpenOrderManager extends Map {
         const frozen = this.frozens.get(oid);
         assert(volume.lte(order.quantity));
         const thawed = {
-            margin: this.calcReleasedMargin(order.quantity, frozen.margin, volume, dollarVolume),
+            margin: this.calcThawedMargin(order.quantity, frozen.margin, volume, dollarVolume),
             position: volume,
             length: order.length,
         };
@@ -62,7 +63,7 @@ class OpenOrderManager extends Map {
         this.frozens.delete(oid);
         return thawed;
     }
-    calcReleasedMargin(quantity, frozenMargin, volume, dollarVolume) {
+    calcThawedMargin(quantity, frozenMargin, volume, dollarVolume) {
         let thawedMargin = dollarVolume.div(this.config.leverage)
             .round(this.config.CURRENCY_DP);
         if (thawedMargin.gt(frozenMargin) || volume.eq(quantity))

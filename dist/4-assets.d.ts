@@ -2,7 +2,6 @@ import { Taken } from './3-taken';
 import { Assets, LimitOrder, OrderId, UnidentifiedTrade, Config, OpenOrder } from './interfaces';
 import Big from 'big.js';
 declare class ManagingAssets extends Taken {
-    private settlementPrice;
     private assets;
     constructor(config: Config, now: () => number);
     makeLimitOrder(order: LimitOrder): Promise<OrderId>;
