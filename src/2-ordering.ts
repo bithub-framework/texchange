@@ -36,10 +36,10 @@ class Ordering extends Pushing {
     // 由于精度原因，实际成本不一定恰好等于 order.price
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         this.validateOrder(order);
-        const [makerOrder, noidTrades] = this.orderTakes(order);
-        const openOrder = this.orderMakes(makerOrder);
-        if (noidTrades.length) {
-            this.pushUTrades(noidTrades);
+        const [maker, uTrades] = this.orderTakes(order);
+        const openOrder = this.orderMakes(maker);
+        if (uTrades.length) {
+            this.pushUTrades(uTrades);
             this.pushOrderbook();
         }
         return openOrder.id;

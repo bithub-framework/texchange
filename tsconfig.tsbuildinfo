@@ -257,7 +257,7 @@
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "51785a052f1c482b5807c255609672c34afc20cd3cb66da65b03f40384676d27",
+        "version": "8a08683f27ae956e01fac5d9d3513ddf4b0dfb6ed652531e0af7bbf097a49f57",
         "signature": "877e33c5f5f87d6dfb8b0b81f2970ee3f59f39419409eec3d9beb538c446661f",
         "affectsGlobalScope": false
       },
@@ -277,7 +277,7 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "1e3397508ba2888311b30b550b4e8a2e324496983a55711c2866bdc3d363d306",
+        "version": "4a64f1cb22adcd951ffe02466a65745000401ae2cb8657c7846e7df990e2aa17",
         "signature": "216de513afe0c818cb421a8f7406c404013cf8a532233b8d0b0932a591942ee0",
         "affectsGlobalScope": false
       },

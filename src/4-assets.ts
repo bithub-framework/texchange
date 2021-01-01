@@ -62,7 +62,9 @@ class ManagingAssets extends Taken {
             order.operation === OPEN ||
             order.quantity.lte(new Big(0)
                 .plus(this.assets.position[order.side * order.operation])
-                .minus(this.assets.frozenPosition[order.side * order.operation])));
+                .minus(this.assets.frozenPosition[order.side * order.operation])
+            ),
+        );
     }
 
     private enoughReserve(order: LimitOrder) {
@@ -73,12 +75,13 @@ class ManagingAssets extends Taken {
                     order,
                     this.settlementPrice,
                     this.latestPrice,
-                )
-                ).plus(this.config.calcDollarVolume(
-                    order.price, order.quantity,
-                ).times(this.config.TAKER_FEE_RATE))
-                .round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
-                .lte(this.assets.reserve));
+                )).plus(
+                    this.config.calcDollarVolume(
+                        order.price, order.quantity,
+                    ).times(this.config.TAKER_FEE_RATE),
+                ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
+                .lte(this.assets.reserve),
+        );
     }
 
     protected orderTakes(taker: LimitOrder): [
@@ -90,11 +93,9 @@ class ManagingAssets extends Taken {
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === OPEN) {
             this.assets.openPosition(
-                taker.length, volume, dollarVolume, takerFee);
-            this.assets.incMargin(
-                taker.price,
-                volume,
+                taker.length, volume, dollarVolume, takerFee
             );
+            this.assets.incMargin(taker.price, volume);
         } else {
             this.assets.closePosition(
                 taker.length, volume, dollarVolume, takerFee,
@@ -133,10 +134,7 @@ class ManagingAssets extends Taken {
             this.assets.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
-            this.assets.incMargin(
-                maker.price,
-                volume,
-            );
+            this.assets.incMargin(maker.price, volume);
         } else {
             this.assets.closePosition(
                 maker.length, volume, dollarVolume, makerFee,
