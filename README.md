@@ -92,7 +92,6 @@ function calcMarginIncrement(
     config: MarketConfig & AccountConfig,
     price: Big,
     volume: Big,
-    settlementPrice: Big,
 ): Big {
     return new Big(0);
 };
@@ -107,6 +106,7 @@ function calcPositionMargin(
     config: MarketConfig & AccountConfig,
     assets: Omit<ExAssets, 'margin' | 'reserve'>,
     settlementPrice: Big,
+    latestPrice: Big,
     autoMargin: Big,
 ): Big {
     const cost = this.assets.cost[LONG].plus(this.assets.cost[SHORT]);
@@ -121,7 +121,6 @@ function calcMarginIncrement(
     config: MarketConfig & AccountConfig,
     price: Big,
     volume: Big,
-    settlementPrice: Big,
 ): Big {
     return new Big(0);
 };
@@ -136,6 +135,7 @@ function calcMargin(
     config: MarketConfig & AccountConfig,
     assets: Omit<ExAssets, 'margin' | 'reserve'>,
     settlementPrice: Big,
+    latestPrice: Big,
     autoMargin: Big,
 ): Big {
     const totalPosition = assets.position[LONG].plus(assets.position[SHORT]);
@@ -152,7 +152,6 @@ function calcMarginIncrement(
     config: MarketConfig & AccountConfig,
     price: Big,
     volume: Big,
-    settlementPrice: Big,
 ): Big {
     return config.calcDollarVolume(
         price, volume,
@@ -171,6 +170,7 @@ function calcMargin(
     config: MarketConfig & AccountConfig,
     assets: Omit<ExAssets, 'margin' | 'reserve'>,
     settlementPrice: Big,
+    latestPrice: Big,
     autoMargin: Big,
 ): Big {
     return autoMargin;
