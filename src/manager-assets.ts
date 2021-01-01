@@ -6,7 +6,6 @@ import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-orders';
 import util from 'util';
-import { RoundingMode } from 'big.js';
 
 class AssetsManager extends AutoAssets {
     constructor(
@@ -40,7 +39,7 @@ class AssetsManager extends AutoAssets {
                 this.config,
                 price,
                 volume,
-            ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp),
+            ).round(this.config.CURRENCY_DP),
         );
     }
 
@@ -53,7 +52,7 @@ class AssetsManager extends AutoAssets {
                     this.config,
                     this,
                     volume,
-                ),
+                ).round(this.config.CURRENCY_DP),
             );
     }
 

@@ -15,13 +15,13 @@ class AssetsManager extends AutoAssets {
         this.frozenPosition[length] = this.frozenPosition[length].minus(position);
     }
     incMargin(price, volume) {
-        this._margin = this._margin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP, 3 /* RoundUp */));
+        this._margin = this._margin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
     }
     decMargin(volume) {
         const totalPosition = this.position[LONG].plus(this.position[SHORT]);
         this._margin = totalPosition.eq(volume)
             ? new Big(0)
-            : this._margin.minus(this.config.calcMarginDecrement(this.config, this, volume));
+            : this._margin.minus(this.config.calcMarginDecrement(this.config, this, volume).round(this.config.CURRENCY_DP));
     }
     openPosition(length, volume, dollarVolume, fee) {
         this.position[length] = this.position[length].plus(volume);

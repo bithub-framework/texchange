@@ -8,7 +8,6 @@ import {
     OPEN, CLOSE,
     Config,
     OpenOrder,
-    min,
     clone,
 } from './interfaces';
 import Big from 'big.js';
@@ -79,7 +78,7 @@ class ManagingAssets extends Taken {
                     this.config.calcDollarVolume(
                         order.price, order.quantity,
                     ).times(this.config.TAKER_FEE_RATE),
-                ).round(this.config.CURRENCY_DP, RoundingMode.RoundUp)
+                ).round(this.config.CURRENCY_DP)
                 .lte(this.assets.reserve),
         );
     }

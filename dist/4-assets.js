@@ -38,7 +38,7 @@ class ManagingAssets extends Taken {
     }
     enoughReserve(order) {
         assert(order.operation === CLOSE || new Big(0)
-            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP, 3 /* RoundUp */)
+            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
             .lte(this.assets.reserve));
     }
     orderTakes(taker) {

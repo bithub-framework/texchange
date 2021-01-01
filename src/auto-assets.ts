@@ -46,7 +46,7 @@ class AutoAssets implements ExAssets {
             this.getSettlementPrice(),
             this.getLatestPrice(),
             this._margin,
-        );
+        ).round(this.config.CURRENCY_DP);
     }
 
     public get reserve(): Big {

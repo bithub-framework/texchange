@@ -19,7 +19,7 @@ class AutoAssets {
         };
     }
     get margin() {
-        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this._margin);
+        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this._margin).round(this.config.CURRENCY_DP);
     }
     get reserve() {
         return this.balance

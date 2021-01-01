@@ -12,7 +12,7 @@ class OpenOrderManager extends Map {
     addOrder(order) {
         const frozen = {
             margin: order.operation === OPEN
-                ? this.config.calcFrozenMargin(this.config, order, this.getSettlementPrice(), this.getLatestPrice()).round(this.config.CURRENCY_DP, 3 /* RoundUp */)
+                ? this.config.calcFrozenMargin(this.config, order, this.getSettlementPrice(), this.getLatestPrice()).round(this.config.CURRENCY_DP)
                 : new Big(0),
             position: order.operation === CLOSE
                 ? order.quantity
