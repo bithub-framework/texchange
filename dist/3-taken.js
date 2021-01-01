@@ -10,12 +10,13 @@ class Taken extends Ordering {
                     trade.side === BID &&
                     trade.price.gt(maker.price));
     }
-    uTradeTakesOpenOrder(trade, maker) {
-        const volume = min(trade.quantity, maker.quantity);
+    uTradeTakesOpenOrder(uTrade, maker) {
+        const volume = min(uTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
-        trade.quantity = trade.quantity.minus(volume);
-        this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        uTrade.quantity = uTrade.quantity.minus(volume);
+        const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        return [volume, dollarVolume, toThaw];
     }
     uTradeTakesOpenOrders(_uTrade) {
         const uTrade = { ..._uTrade };

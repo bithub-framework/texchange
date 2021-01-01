@@ -257,13 +257,13 @@
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "8a08683f27ae956e01fac5d9d3513ddf4b0dfb6ed652531e0af7bbf097a49f57",
-        "signature": "877e33c5f5f87d6dfb8b0b81f2970ee3f59f39419409eec3d9beb538c446661f",
+        "version": "2fb423a871d1817dbbadcb280780debd89e8870cec06423cb1196cf09f4cd68f",
+        "signature": "747d75a08fa9f34ec03cf3963bac10d2c1b017678a9113c76ce9990f24e97f51",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "3f5e2af927eb07bacda429a50dfb802c5403f839c932fce0fedd9070aeede9bf",
-        "signature": "dccb9e57631ee95b2643cc444f387b7b37eafe8b11c1d8c9228cbbf6c16740c3",
+        "version": "f906da025122f4df6e6e662975c33e606768ec9590451bcd738203d016d5d9dd",
+        "signature": "64ec4c83b378427ce0b4df688c60a06b692340b8c1e8454b3426806f56a88931",
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
@@ -277,8 +277,8 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "4a64f1cb22adcd951ffe02466a65745000401ae2cb8657c7846e7df990e2aa17",
-        "signature": "216de513afe0c818cb421a8f7406c404013cf8a532233b8d0b0932a591942ee0",
+        "version": "2de49d3bdadd49738ddfb955ae191ea6211087afd3be7301973e54800060b2d9",
+        "signature": "99c2276d33da9b815f7849b93a32fc009ec63a885ab6d87340711b7c15dc4ad5",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
@@ -986,18 +986,23 @@
       ],
       "./src/2-ordering.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
         "./src/manager-open-orders.ts"
       ],
       "./src/3-taken.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/2-ordering.ts",
-        "./src/interfaces.ts"
+        "./src/interfaces.ts",
+        "./src/manager-open-orders.ts"
       ],
       "./src/4-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
+        "./node_modules/interfaces/dist/data.d.ts",
         "./src/3-taken.ts",
-        "./src/interfaces.ts"
+        "./src/interfaces.ts",
+        "./src/manager-open-orders.ts"
       ],
       "./src/5-delay.ts": [
         "./src/4-assets.ts",

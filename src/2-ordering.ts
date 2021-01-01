@@ -33,7 +33,6 @@ class Ordering extends Pushing {
         );
     }
 
-    // 由于精度原因，实际成本不一定恰好等于 order.price
     public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
         this.validateOrder(order);
         const [maker, uTrades] = this.orderTakes(order);
@@ -73,9 +72,7 @@ class Ordering extends Pushing {
         }
     }
 
-    protected orderTakes(taker: LimitOrder): [
-        LimitOrder, UnidentifiedTrade[], Big, Big,
-    ] {
+    protected orderTakes(taker: LimitOrder) {
         taker = clone(taker);
         const noidTrades: UnidentifiedTrade[] = [];
         let volume = new Big(0);
@@ -101,7 +98,7 @@ class Ordering extends Pushing {
             }
         }
         this.orderbook.apply();
-        return [taker, noidTrades, volume, dollarVolume];
+        return [taker, noidTrades, volume, dollarVolume] as const;
     }
 
     protected orderMakes(

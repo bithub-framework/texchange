@@ -84,9 +84,7 @@ class ManagingAssets extends Taken {
         );
     }
 
-    protected orderTakes(taker: LimitOrder): [
-        LimitOrder, UnidentifiedTrade[], Big, Big,
-    ] {
+    protected orderTakes(taker: LimitOrder) {
         const [makerOrder, uTrades, volume, dollarVolume] =
             super.orderTakes(taker);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
@@ -102,7 +100,7 @@ class ManagingAssets extends Taken {
             );
             this.assets.decMargin(volume);
         }
-        return [makerOrder, uTrades, volume, dollarVolume];
+        return [makerOrder, uTrades, volume, dollarVolume] as const;
     }
 
     protected orderMakes(
@@ -120,12 +118,8 @@ class ManagingAssets extends Taken {
     protected uTradeTakesOpenOrder(
         uTrade: UnidentifiedTrade,
         maker: OpenOrder,
-    ): void {
-        const volume = min(uTrade.quantity, maker.quantity);
-        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
-            .round(this.config.CURRENCY_DP);
-        uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+    ) {
+        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenOrder(uTrade, maker);
         this.assets.thaw(toThaw);
 
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
@@ -141,6 +135,7 @@ class ManagingAssets extends Taken {
             );
             this.assets.decMargin(volume);
         }
+        return [volume, dollarVolume, toThaw] as const;
     }
 
     private settle(): void {

@@ -1,5 +1,5 @@
 import { Taken } from './3-taken';
-import { LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
+import { LONG, SHORT, OPEN, CLOSE, clone, } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import assert from 'assert';
@@ -65,11 +65,7 @@ class ManagingAssets extends Taken {
         return openOrder;
     }
     uTradeTakesOpenOrder(uTrade, maker) {
-        const volume = min(uTrade.quantity, maker.quantity);
-        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
-            .round(this.config.CURRENCY_DP);
-        uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenOrder(uTrade, maker);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
@@ -81,6 +77,7 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
             this.assets.decMargin(volume);
         }
+        return [volume, dollarVolume, toThaw];
     }
     settle() {
         const position = clone(this.assets.position);

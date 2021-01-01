@@ -11,7 +11,6 @@ class Ordering extends Pushing {
         this.latestPrice = new Big(0);
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    // 由于精度原因，实际成本不一定恰好等于 order.price
     async makeLimitOrder(order) {
         this.validateOrder(order);
         const [maker, uTrades] = this.orderTakes(order);

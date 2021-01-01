@@ -22,13 +22,14 @@ class Taken extends Ordering {
     }
 
     protected uTradeTakesOpenOrder(
-        trade: UnidentifiedTrade, maker: OpenOrder,
-    ): void {
-        const volume = min(trade.quantity, maker.quantity);
+        uTrade: UnidentifiedTrade, maker: OpenOrder,
+    ) {
+        const volume = min(uTrade.quantity, maker.quantity);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
-        trade.quantity = trade.quantity.minus(volume);
-        this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        uTrade.quantity = uTrade.quantity.minus(volume);
+        const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        return [volume, dollarVolume, toThaw] as const;
     }
 
     protected uTradeTakesOpenOrders(_uTrade: UnidentifiedTrade) {
