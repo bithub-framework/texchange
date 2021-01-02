@@ -8,14 +8,18 @@ class AutoAssets {
         this.autoMargin = new Big(0);
         ({
             balance: this.balance,
-            position: this.position,
-            cost: this.cost,
             time: this.time,
         } = config.initialAssets);
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
             [SHORT]: new Big(0),
+        };
+        this.position = {
+            [LONG]: new Big(0), [SHORT]: new Big(0),
+        };
+        this.cost = {
+            [LONG]: new Big(0), [SHORT]: new Big(0),
         };
     }
     get margin() {

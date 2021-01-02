@@ -9,7 +9,7 @@ declare class ManagingAssets extends Taken {
     getAssets(): Promise<Assets>;
     private enoughPosition;
     private enoughReserve;
-    protected orderTakes(taker: LimitOrder): readonly [LimitOrder, Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
+    protected orderTakes(taker: LimitOrder): readonly [LimitOrder, Pick<import("interfaces/dist/data").Trade, "time" | "side" | "price" | "quantity">[], Big, Big];
     protected orderMakes(order: LimitOrder): OpenOrder;
     protected uTradeTakesOpenOrder(uTrade: UnidentifiedTrade, maker: OpenOrder): readonly [Big, Big, import("./manager-open-orders").Frozen];
     private settle;

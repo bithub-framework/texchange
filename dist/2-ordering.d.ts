@@ -13,7 +13,7 @@ declare class Ordering extends Pushing {
     getOpenOrders(): Promise<OpenOrder[]>;
     protected validateOrder(order: LimitOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
-    protected orderTakes(taker: LimitOrder): readonly [LimitOrder, Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
+    protected orderTakes(taker: LimitOrder): readonly [LimitOrder, Pick<import("interfaces/dist/data").Trade, "time" | "side" | "price" | "quantity">[], Big, Big];
     protected orderMakes(order: LimitOrder): OpenOrder;
 }
 export { Ordering as default, Ordering, };

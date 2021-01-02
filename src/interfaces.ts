@@ -25,7 +25,7 @@ export interface ExAssets extends Assets {
     };
 }
 
-export type InitialAssets = Pick<ExAssets, 'balance' | 'cost' | 'position' | 'time'>;
+export type InitialAssets = Pick<ExAssets, 'balance' | 'position' | 'time'>;
 
 export interface ExMarketConfig extends MarketConfig {
     PING: number;

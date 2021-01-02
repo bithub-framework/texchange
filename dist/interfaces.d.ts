@@ -15,7 +15,7 @@ export interface ExAssets extends Assets {
         [length: number]: Big;
     };
 }
-export declare type InitialAssets = Pick<ExAssets, 'balance' | 'cost' | 'position' | 'time'>;
+export declare type InitialAssets = Pick<ExAssets, 'balance' | 'position' | 'time'>;
 export interface ExMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
