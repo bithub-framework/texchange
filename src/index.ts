@@ -3,4 +3,5 @@ export * from './5-delay';
 export {
     UnidentifiedTrade,
     Config,
+    ExAssets,
 } from './interfaces';
