@@ -21,8 +21,8 @@ class Pushing extends EventEmitter {
     async pushOrderbook() {
         this.emit('orderbook', this.orderbook);
     }
-    uTrade2Trade(noidTrades) {
-        return noidTrades.map(noidTrade => ({
+    uTrade2Trade(uTrades) {
+        return uTrades.map(noidTrade => ({
             ...noidTrade,
             id: ++this.tradeCount,
         }));

@@ -11,7 +11,7 @@ declare abstract class Pushing extends EventEmitter {
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     protected pushOrderbook(): Promise<void>;
-    protected uTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[];
+    protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[];
     protected pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
 }
 interface Pushing extends EventEmitter {

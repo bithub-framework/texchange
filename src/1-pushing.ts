@@ -34,8 +34,8 @@ abstract class Pushing extends EventEmitter {
         this.emit('orderbook', this.orderbook);
     }
 
-    protected uTrade2Trade(noidTrades: UnidentifiedTrade[]): Trade[] {
-        return noidTrades.map(noidTrade => ({
+    protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {
+        return uTrades.map(noidTrade => ({
             ...noidTrade,
             id: ++this.tradeCount,
         }));
