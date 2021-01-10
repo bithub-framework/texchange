@@ -19,7 +19,7 @@ import { AssetsManager } from './manager-assets';
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
-class ManagingAssets extends Taken {
+abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;
 
     constructor(

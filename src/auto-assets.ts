@@ -1,7 +1,6 @@
 import {
     ExAssets,
     LONG, SHORT,
-    InitialAssets,
     Config,
 } from './interfaces';
 import Big from 'big.js';
@@ -24,7 +23,7 @@ class AutoAssets implements ExAssets {
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
-        ({ balance: this.balance } = config.initialAssets);
+        this.balance = config.initialBalance;
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
@@ -81,5 +80,4 @@ class AutoAssets implements ExAssets {
 export {
     AutoAssets as default,
     AutoAssets,
-    InitialAssets,
 }

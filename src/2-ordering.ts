@@ -15,10 +15,10 @@ import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-orders';
 import assert from 'assert';
 
-class Ordering extends Pushing {
+abstract class Ordering extends Pushing {
     protected orderCount = 0;
     protected openOrders: OpenOrderManager;
-    protected settlementPrice = new Big(0);
+    protected settlementPrice: Big;
     protected latestPrice = new Big(0);
 
     constructor(
@@ -26,6 +26,7 @@ class Ordering extends Pushing {
         now: () => number,
     ) {
         super(config, now);
+        this.settlementPrice = config.initialSettlementPrice;
         this.openOrders = new OpenOrderManager(
             config,
             () => this.settlementPrice,

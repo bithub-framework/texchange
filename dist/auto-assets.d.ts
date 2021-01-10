@@ -1,4 +1,4 @@
-import { ExAssets, InitialAssets, Config } from './interfaces';
+import { ExAssets, Config } from './interfaces';
 import Big from 'big.js';
 declare class AutoAssets implements ExAssets {
     protected config: Config;
@@ -24,4 +24,4 @@ declare class AutoAssets implements ExAssets {
     };
     toJSON(): ExAssets;
 }
-export { AutoAssets as default, AutoAssets, InitialAssets, };
+export { AutoAssets as default, AutoAssets, };

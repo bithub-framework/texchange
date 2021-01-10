@@ -2,7 +2,7 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
-declare class Pushing extends EventEmitter {
+declare abstract class Pushing extends EventEmitter {
     protected config: Config;
     protected now: () => number;
     protected tradeCount: number;

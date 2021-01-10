@@ -25,15 +25,14 @@ export interface ExAssets extends Omit<Assets, 'time'> {
     };
 }
 
-export type InitialAssets = Pick<Assets, 'balance' | 'time'>;
-
 export interface ExMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
+    initialSettlementPrice: Big;
 }
 
 export interface ExAccountConfig extends AccountConfig {
-    initialAssets: InitialAssets;
+    initialBalance: Big;
 
     calcInitialMargin: (
         config: MarketConfig & AccountConfig,

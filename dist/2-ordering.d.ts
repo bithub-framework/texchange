@@ -2,7 +2,7 @@ import { Pushing } from './1-pushing';
 import { OpenOrder, LimitOrder, OrderId, UnidentifiedTrade, Config } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-orders';
-declare class Ordering extends Pushing {
+declare abstract class Ordering extends Pushing {
     protected orderCount: number;
     protected openOrders: OpenOrderManager;
     protected settlementPrice: Big;

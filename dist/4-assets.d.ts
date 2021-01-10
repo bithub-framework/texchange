@@ -4,7 +4,7 @@ import { LimitOrder, OrderId, UnidentifiedTrade, Config, OpenOrder, Positions, B
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import { EventEmitter } from 'events';
-declare class ManagingAssets extends Taken {
+declare abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;
     constructor(config: Config, now: () => number);
     protected makeLimitOrderSync(order: LimitOrder): OrderId;

@@ -15,13 +15,13 @@ export interface ExAssets extends Omit<Assets, 'time'> {
         [length: number]: Big;
     };
 }
-export declare type InitialAssets = Pick<Assets, 'balance' | 'time'>;
 export interface ExMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
+    initialSettlementPrice: Big;
 }
 export interface ExAccountConfig extends AccountConfig {
-    initialAssets: InitialAssets;
+    initialBalance: Big;
     calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
     calcMarginIncrement: (config: MarketConfig & AccountConfig, price: Big, volume: Big) => Big;
     calcMarginDecrement: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;

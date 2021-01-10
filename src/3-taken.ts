@@ -7,7 +7,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 
-class Taken extends Ordering {
+abstract class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {

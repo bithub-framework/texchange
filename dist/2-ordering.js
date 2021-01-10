@@ -7,8 +7,8 @@ class Ordering extends Pushing {
     constructor(config, now) {
         super(config, now);
         this.orderCount = 0;
-        this.settlementPrice = new Big(0);
         this.latestPrice = new Big(0);
+        this.settlementPrice = config.initialSettlementPrice;
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     makeLimitOrderSync(order) {
