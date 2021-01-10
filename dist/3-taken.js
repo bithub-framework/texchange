@@ -1,5 +1,6 @@
 import { Ordering } from './2-ordering';
 import { BID, ASK, min, } from './interfaces';
+import Big from 'big.js';
 class Taken extends Ordering {
     uTradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === BID &&

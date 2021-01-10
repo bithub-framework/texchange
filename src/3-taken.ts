@@ -4,8 +4,8 @@ import {
     UnidentifiedTrade,
     min,
     OpenOrder,
-    clone,
 } from './interfaces';
+import Big from 'big.js';
 
 class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(

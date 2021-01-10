@@ -492,8 +492,8 @@
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "d0f7f826c7fe52f3b608c5e25dca377399f06293f6e58b120a21aef386cee2a3",
-        "signature": "beb4035a4ffe89aa707ac5c395e5f78107c05c072e81d426d8773d23d1aae14d",
+        "version": "111fcca04f5383ebe30794cf595c5294c13454f8dc7dc965e3bf79d4fcc85f24",
+        "signature": "07e98926422198178a3b768431e5632c47a165ea39993e85d49f00a6a9b9f99d",
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
@@ -742,6 +742,7 @@
         "./src/manager-open-orders.ts"
       ],
       "./src/3-taken.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/2-ordering.ts",
         "./src/interfaces.ts"
       ],
