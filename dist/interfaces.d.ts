@@ -2,7 +2,7 @@ export * from 'interfaces';
 import { Trade, Assets, MarketConfig, AccountConfig, LimitOrder, OpenOrder } from 'interfaces';
 import Big from 'big.js';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
-export interface ExAssets extends Assets {
+export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -15,7 +15,7 @@ export interface ExAssets extends Assets {
         [length: number]: Big;
     };
 }
-export declare type InitialAssets = Pick<ExAssets, 'balance' | 'time'>;
+export declare type InitialAssets = Pick<Assets, 'balance' | 'time'>;
 export interface ExMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;

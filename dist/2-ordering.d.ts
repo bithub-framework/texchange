@@ -8,10 +8,12 @@ declare class Ordering extends Pushing {
     protected settlementPrice: Big;
     protected latestPrice: Big;
     constructor(config: Config, now: () => number);
-    makeLimitOrder(order: LimitOrder): Promise<OrderId>;
-    cancelOrder(oid: OrderId): Promise<void>;
-    getOpenOrders(): Promise<OpenOrder[]>;
+    protected makeLimitOrderSync(order: LimitOrder): OrderId;
+    protected remakeLimitOrderSync(oid: OrderId, order: LimitOrder): OrderId;
+    protected cancelOrderSync(oid: OrderId): OpenOrder | null;
+    protected getOpenOrdersSync(): OpenOrder[];
     protected validateOrder(order: LimitOrder): void;
+    protected onlyOneOpenOrder(): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     protected orderTakes(taker: LimitOrder): readonly [LimitOrder, Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
     protected orderMakes(order: LimitOrder): OpenOrder;

@@ -18,17 +18,13 @@ class AutoAssets implements ExAssets {
     public frozenPosition: {
         [length: number]: Big;
     };
-    public time: number;
 
     constructor(
         protected config: Config,
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
-        ({
-            balance: this.balance,
-            time: this.time,
-        } = config.initialAssets);
+        ({ balance: this.balance } = config.initialAssets);
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
@@ -78,7 +74,6 @@ class AutoAssets implements ExAssets {
             frozenPosition: this.frozenPosition,
             reserve: this.reserve,
             closable: this.closable,
-            time: this.time,
         }
     }
 }

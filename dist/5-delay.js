@@ -9,7 +9,17 @@ class Texchange extends ManagingAssets {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.makeLimitOrder(order);
+            return this.makeLimitOrderSync(order);
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
+    }
+    async remakeLimitOrder(oid, order) {
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return this.remakeLimitOrderSync(oid, order);
         }
         finally {
             await this.sleep(this.config.PING);
@@ -19,17 +29,27 @@ class Texchange extends ManagingAssets {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            await super.cancelOrder(oid);
+            return this.cancelOrderSync(oid);
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getAssets() {
+    async getBalances() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return clone(await super.getAssets());
+            return this.getBalancesSync();
+        }
+        finally {
+            await this.sleep(this.config.PING);
+        }
+    }
+    async getPositions() {
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return this.getPositionsSync();
         }
         finally {
             await this.sleep(this.config.PING);
@@ -39,7 +59,7 @@ class Texchange extends ManagingAssets {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return clone(await super.getOpenOrders());
+            return this.getOpenOrdersSync();
         }
         finally {
             await this.sleep(this.config.PING);
@@ -50,10 +70,26 @@ class Texchange extends ManagingAssets {
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
-    async pushUTrades(noidTrades) {
-        const trades = this.uTrade2Trade(noidTrades);
+    async pushUTrades(uTrades) {
+        const trades = clone(this.uTrade2Trade(uTrades));
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
+    }
+    async pushPositionsAndBalances() {
+        this.settle();
+        const positions = clone({
+            position: this.assets.position,
+            closable: this.assets.closable,
+            time: this.now(),
+        });
+        const balances = clone({
+            balance: this.assets.balance,
+            reserve: this.assets.reserve,
+            time: this.now(),
+        });
+        await this.sleep(this.config.PING);
+        this.emit('positions', positions);
+        this.emit('balances', balances);
     }
 }
 export { Texchange as default, Texchange, };

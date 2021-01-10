@@ -15,7 +15,6 @@ declare class AutoAssets implements ExAssets {
     frozenPosition: {
         [length: number]: Big;
     };
-    time: number;
     constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     protected autoMargin: Big;
     get margin(): Big;

@@ -104,7 +104,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         volume: Big,
         dollarVolume: Big,
     ): Big {
-        let thawedMargin = dollarVolume.div(this.config.leverage)
+        let thawedMargin = dollarVolume.div(this.config.LEVERAGE)
             .round(this.config.CURRENCY_DP);
         if (thawedMargin.gt(frozenMargin) || volume.eq(quantity))
             thawedMargin = frozenMargin;

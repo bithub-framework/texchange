@@ -11,21 +11,28 @@ class Ordering extends Pushing {
         this.latestPrice = new Big(0);
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    async makeLimitOrder(order) {
+    makeLimitOrderSync(order) {
         this.validateOrder(order);
+        if (this.config.UNIDIRECTIONAL)
+            this.onlyOneOpenOrder();
         const [maker, uTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(maker);
         if (uTrades.length) {
-            this.pushUTrades(uTrades);
-            this.pushOrderbook();
+            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+            this.pushOrderbook().catch(err => void this.emit('error', err));
         }
         return openOrder.id;
     }
-    async cancelOrder(oid) {
-        this.openOrders.removeOrder(oid);
+    remakeLimitOrderSync(oid, order) {
+        this.cancelOrderSync(oid);
+        return this.makeLimitOrderSync(order);
     }
-    async getOpenOrders() {
-        return [...this.openOrders.values()];
+    cancelOrderSync(oid) {
+        this.openOrders.removeOrder(oid);
+        return null;
+    }
+    getOpenOrdersSync() {
+        return clone([...this.openOrders.values()]);
     }
     validateOrder(order) {
         assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
@@ -34,6 +41,9 @@ class Ordering extends Pushing {
         assert(order.length === LONG || order.length === SHORT);
         assert(order.operation === OPEN || order.operation === CLOSE);
         assert(order.operation * order.length === order.side);
+    }
+    onlyOneOpenOrder() {
+        assert(!this.openOrders.size);
     }
     updateTrades(uTrades) {
         super.updateTrades(uTrades);
@@ -47,14 +57,14 @@ class Ordering extends Pushing {
     }
     orderTakes(taker) {
         taker = clone(taker);
-        const noidTrades = [];
+        const uTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of this.orderbook[-taker.side]) {
-            if (taker.side === BID && taker.price.gte(maker.price) ||
-                taker.side === ASK && taker.price.lte(maker.price)) {
+        for (const maker of this.orderbook[-taker.side])
+            if ((taker.side === BID && taker.price.gte(maker.price) ||
+                taker.side === ASK && taker.price.lte(maker.price)) && taker.quantity.gt(0)) {
                 const quantity = min(taker.quantity, maker.quantity);
-                noidTrades.push({
+                uTrades.push({
                     side: taker.side,
                     price: maker.price,
                     quantity,
@@ -67,9 +77,8 @@ class Ordering extends Pushing {
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
-        }
         this.orderbook.apply();
-        return [taker, noidTrades, volume, dollarVolume];
+        return [taker, uTrades, volume, dollarVolume];
     }
     orderMakes(order) {
         const openOrder = {

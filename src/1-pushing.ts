@@ -20,14 +20,14 @@ class Pushing extends EventEmitter {
         this.orderbook = new OrderbookManager(config, now);
     }
 
-    public updateTrades(noidTrades: UnidentifiedTrade[]): void {
-        this.pushUTrades(noidTrades);
+    public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
         this.orderbook.setBase(orderbook);
         this.orderbook.apply();
-        this.pushOrderbook();
+        this.pushOrderbook().catch(err => void this.emit('error', err));
     }
 
     protected async pushOrderbook(): Promise<void> {
@@ -50,12 +50,16 @@ class Pushing extends EventEmitter {
 interface Pushing extends EventEmitter {
     emit(event: 'orderbook', orderbook: Orderbook): boolean;
     emit(event: 'trades', trades: Trade[]): boolean;
+    emit(event: 'error', err: Error): boolean;
     on(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
     on(event: 'trades', listener: (trades: Trade[]) => void): this;
+    on(event: 'error', listener: (err: Error) => void): this;
     off(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
     off(event: 'trades', listener: (trades: Trade[]) => void): this;
+    off(event: 'error', listener: (err: Error) => void): this;
     once(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
     once(event: 'trades', listener: (trades: Trade[]) => void): this;
+    once(event: 'error', listener: (err: Error) => void): this;
 }
 
 export {

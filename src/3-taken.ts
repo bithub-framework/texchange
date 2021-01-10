@@ -4,6 +4,7 @@ import {
     UnidentifiedTrade,
     min,
     OpenOrder,
+    clone,
 } from './interfaces';
 
 class Taken extends Ordering {
@@ -32,17 +33,25 @@ class Taken extends Ordering {
         return [volume, dollarVolume, toThaw] as const;
     }
 
-    protected uTradeTakesOpenOrders(_uTrade: UnidentifiedTrade) {
-        const uTrade: UnidentifiedTrade = { ..._uTrade };
+    protected uTradeTakesOpenOrders(uTrade: UnidentifiedTrade) {
+        uTrade = { ...uTrade };
+        let totalVolume = new Big(0);
         for (const order of this.openOrders.values())
-            if (this.uTradeShouldTakeOpenOrder(uTrade, order))
-                this.uTradeTakesOpenOrder(uTrade, order);
+            if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
+                const [volume] = this.uTradeTakesOpenOrder(uTrade, order);
+                totalVolume = totalVolume.plus(volume);
+            }
+        return totalVolume;
     }
 
-    public updateTrades(uTrades: UnidentifiedTrade[]): void {
+    public updateTrades(uTrades: UnidentifiedTrade[]) {
         super.updateTrades(uTrades);
-        for (let uTrade of uTrades)
-            this.uTradeTakesOpenOrders(uTrade);
+        let totalVolume = new Big(0);
+        for (let uTrade of uTrades) {
+            const volume = this.uTradeTakesOpenOrders(uTrade);
+            totalVolume = totalVolume.plus(volume);
+        }
+        return totalVolume;
     }
 }
 

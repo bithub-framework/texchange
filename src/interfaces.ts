@@ -11,7 +11,7 @@ import Big from 'big.js';
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
-export interface ExAssets extends Assets {
+export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -25,7 +25,7 @@ export interface ExAssets extends Assets {
     };
 }
 
-export type InitialAssets = Pick<ExAssets, 'balance' | 'time'>;
+export type InitialAssets = Pick<Assets, 'balance' | 'time'>;
 
 export interface ExMarketConfig extends MarketConfig {
     PING: number;

@@ -18,16 +18,24 @@ class Taken extends Ordering {
         const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
         return [volume, dollarVolume, toThaw];
     }
-    uTradeTakesOpenOrders(_uTrade) {
-        const uTrade = { ..._uTrade };
+    uTradeTakesOpenOrders(uTrade) {
+        uTrade = { ...uTrade };
+        let totalVolume = new Big(0);
         for (const order of this.openOrders.values())
-            if (this.uTradeShouldTakeOpenOrder(uTrade, order))
-                this.uTradeTakesOpenOrder(uTrade, order);
+            if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
+                const [volume] = this.uTradeTakesOpenOrder(uTrade, order);
+                totalVolume = totalVolume.plus(volume);
+            }
+        return totalVolume;
     }
     updateTrades(uTrades) {
         super.updateTrades(uTrades);
-        for (let uTrade of uTrades)
-            this.uTradeTakesOpenOrders(uTrade);
+        let totalVolume = new Big(0);
+        for (let uTrade of uTrades) {
+            const volume = this.uTradeTakesOpenOrders(uTrade);
+            totalVolume = totalVolume.plus(volume);
+        }
+        return totalVolume;
     }
 }
 export { Taken as default, Taken, };

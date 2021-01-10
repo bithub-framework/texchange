@@ -1,6 +1,5 @@
 import { ManagingAssets } from './4-assets';
 import {
-    Assets,
     LimitOrder,
     OrderId,
     UnidentifiedTrade,
@@ -9,6 +8,8 @@ import {
     Config,
     OpenOrder,
     clone,
+    Balances,
+    Positions,
 } from './interfaces';
 
 class Texchange extends ManagingAssets implements
@@ -26,27 +27,47 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.makeLimitOrder(order);
+            return this.makeLimitOrderSync(order);
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async cancelOrder(oid: OrderId): Promise<void> {
+    public async remakeLimitOrder(oid: OrderId, order: LimitOrder): Promise<OrderId> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            await super.cancelOrder(oid);
+            return this.remakeLimitOrderSync(oid, order);
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getAssets(): Promise<Assets> {
+    public async cancelOrder(oid: OrderId): Promise<OpenOrder | null> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return clone(await super.getAssets());
+            return this.cancelOrderSync(oid);
+        } finally {
+            await this.sleep(this.config.PING);
+        }
+    }
+
+    public async getBalances(): Promise<Balances> {
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return this.getBalancesSync();
+        } finally {
+            await this.sleep(this.config.PING);
+        }
+    }
+
+    public async getPositions(): Promise<Positions> {
+        try {
+            await this.sleep(this.config.PING);
+            await this.sleep(this.config.PROCESSING);
+            return this.getPositionsSync();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -56,7 +77,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return clone(await super.getOpenOrders());
+            return this.getOpenOrdersSync();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -68,10 +89,27 @@ class Texchange extends ManagingAssets implements
         this.emit('orderbook', orderbook);
     }
 
-    protected async pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = this.uTrade2Trade(noidTrades);
+    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = clone(this.uTrade2Trade(uTrades));
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
+    }
+
+    protected async pushPositionsAndBalances(): Promise<void> {
+        this.settle();
+        const positions: Positions = clone({
+            position: this.assets.position,
+            closable: this.assets.closable,
+            time: this.now(),
+        });
+        const balances: Balances = clone({
+            balance: this.assets.balance,
+            reserve: this.assets.reserve,
+            time: this.now(),
+        });
+        await this.sleep(this.config.PING);
+        this.emit('positions', positions);
+        this.emit('balances', balances);
     }
 }
 

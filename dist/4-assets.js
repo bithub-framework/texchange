@@ -8,38 +8,63 @@ class ManagingAssets extends Taken {
         super(config, now);
         this.assets = new AssetsManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    async makeLimitOrder(order) {
+    makeLimitOrderSync(order) {
         this.validateOrder(order);
+        if (this.config.UNIDIRECTIONAL)
+            this.onlyOneOpenOrder();
         this.enoughPosition(order);
+        if (this.config.UNIDIRECTIONAL)
+            this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
         const [makerOrder, uTrades] = this.orderTakes(order);
         const openOrder = this.orderMakes(makerOrder);
         if (uTrades.length) {
-            this.pushUTrades(uTrades);
-            this.pushOrderbook();
+            this.pushUTrades(uTrades)
+                .catch(err => void this.emit('error', err));
+            this.pushOrderbook()
+                .catch(err => void this.emit('error', err));
+            this.pushPositionsAndBalances()
+                .catch(err => void this.emit('error', err));
         }
         return openOrder.id;
     }
-    async cancelOrder(oid) {
+    cancelOrderSync(oid) {
+        const openOrder = this.openOrders.get(oid) || null;
         const toThaw = this.openOrders.removeOrder(oid);
         this.assets.thaw(toThaw);
+        return clone(openOrder);
     }
-    async getAssets() {
+    getPositionsSync() {
         this.settle();
-        this.assets.time = this.now();
-        return this.assets;
+        return clone({
+            position: this.assets.position,
+            closable: this.assets.closable,
+            time: this.now(),
+        });
+    }
+    getBalancesSync() {
+        this.settle();
+        return clone({
+            balance: this.assets.balance,
+            reserve: this.assets.reserve,
+            time: this.now(),
+        });
     }
     enoughPosition(order) {
-        assert(order.operation === OPEN ||
-            order.quantity.lte(new Big(0)
+        if (order.operation === CLOSE)
+            assert(order.quantity.lte(new Big(0)
                 .plus(this.assets.position[order.side * order.operation])
                 .minus(this.assets.frozenPosition[order.side * order.operation])));
     }
+    singleLength(order) {
+        assert(this.assets.position[-order.length].eq(0));
+    }
     enoughReserve(order) {
-        assert(order.operation === CLOSE || new Big(0)
-            .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
-            .lte(this.assets.reserve));
+        if (order.operation === OPEN)
+            assert(new Big(0)
+                .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
+                .lte(this.assets.reserve));
     }
     orderTakes(taker) {
         const [makerOrder, uTrades, volume, dollarVolume] = super.orderTakes(taker);
@@ -54,6 +79,21 @@ class ManagingAssets extends Taken {
             this.assets.decMargin(volume);
         }
         return [makerOrder, uTrades, volume, dollarVolume];
+    }
+    async pushPositionsAndBalances() {
+        this.settle();
+        const positions = {
+            position: this.assets.position,
+            closable: this.assets.closable,
+            time: this.now(),
+        };
+        const balances = {
+            balance: this.assets.balance,
+            reserve: this.assets.reserve,
+            time: this.now(),
+        };
+        this.emit('positions', positions);
+        this.emit('balances', balances);
     }
     orderMakes(order) {
         const openOrder = {
@@ -86,6 +126,13 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(length, position[length], settlementDollarVolume, new Big(0));
             this.assets.openPosition(length, position[length], settlementDollarVolume, new Big(0));
         }
+    }
+    updateTrades(uTrades) {
+        const totalVolume = super.updateTrades(uTrades);
+        if (totalVolume.gt(0))
+            this.pushPositionsAndBalances()
+                .catch(err => void this.emit('error', err));
+        return totalVolume;
     }
 }
 export { ManagingAssets as default, ManagingAssets, };

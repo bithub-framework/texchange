@@ -6,10 +6,7 @@ class AutoAssets {
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
         this.autoMargin = new Big(0);
-        ({
-            balance: this.balance,
-            time: this.time,
-        } = config.initialAssets);
+        ({ balance: this.balance } = config.initialAssets);
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [LONG]: new Big(0),
@@ -48,7 +45,6 @@ class AutoAssets {
             frozenPosition: this.frozenPosition,
             reserve: this.reserve,
             closable: this.closable,
-            time: this.time,
         };
     }
 }
