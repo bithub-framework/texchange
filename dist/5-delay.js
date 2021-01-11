@@ -9,7 +9,7 @@ class Texchange extends ManagingAssets {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeLimitOrderSync(order));
+            orders.forEach(order => this.makeLimitOrderSync(order));
         }
         finally {
             await this.sleep(this.config.PING);

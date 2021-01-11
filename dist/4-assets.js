@@ -30,7 +30,6 @@ class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         }
-        return new Big(0);
     }
     cancelOrderSync(oid) {
         const openOrder = this.openOrders.get(oid);

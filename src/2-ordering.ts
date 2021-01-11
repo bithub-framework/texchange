@@ -34,7 +34,7 @@ abstract class Ordering extends Pushing {
         );
     }
 
-    protected makeLimitOrderSync(order: LimitOrder): Big {
+    protected makeLimitOrderSync(order: LimitOrder): void {
         this.validateOrder(order);
         assert(!this.openOrders.has(order.id));
         let openOrder: OpenOrder = {
@@ -47,15 +47,14 @@ abstract class Ordering extends Pushing {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
-        return new Big(0);
     }
 
     protected remakeLimitOrderSync(
         order: LimitOrder
     ): [Big | null, Big] {
-        const filled1 = this.cancelOrderSync(order.id);
-        const filled2 = this.makeLimitOrderSync(order);
-        return [filled1, filled2];
+        const filled = this.cancelOrderSync(order.id);
+        this.makeLimitOrderSync(order);
+        return [filled, new Big(0)];
     }
 
     protected cancelOrderSync(oid: OrderId): Big | null {

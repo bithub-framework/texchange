@@ -23,12 +23,11 @@ class Ordering extends Pushing {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
-        return new Big(0);
     }
     remakeLimitOrderSync(order) {
-        const filled1 = this.cancelOrderSync(order.id);
-        const filled2 = this.makeLimitOrderSync(order);
-        return [filled1, filled2];
+        const filled = this.cancelOrderSync(order.id);
+        this.makeLimitOrderSync(order);
+        return [filled, new Big(0)];
     }
     cancelOrderSync(oid) {
         const order = this.openOrders.get(oid);

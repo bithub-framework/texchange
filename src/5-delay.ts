@@ -24,11 +24,11 @@ class Texchange extends ManagingAssets implements
         super(config, now);
     }
 
-    public async makeLimitOrders(orders: LimitOrder[]): Promise<Big[]> {
+    public async makeLimitOrders(orders: LimitOrder[]): Promise<void> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeLimitOrderSync(order));
+            orders.forEach(order => this.makeLimitOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }

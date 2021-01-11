@@ -8,7 +8,7 @@ import { EventEmitter } from 'events';
 declare abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;
     constructor(config: Config, now: () => number);
-    protected makeLimitOrderSync(order: LimitOrder): Big;
+    protected makeLimitOrderSync(order: LimitOrder): void;
     protected cancelOrderSync(oid: OrderId): Big | null;
     protected getPositionsSync(): Positions;
     protected getBalancesSync(): Balances;

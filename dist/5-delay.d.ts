@@ -4,7 +4,7 @@ import Big from 'big.js';
 declare class Texchange extends ManagingAssets implements ContextMarketPublicApiLike, ContextAccountPrivateApiLike {
     private sleep;
     constructor(config: Config, sleep: (ms: number) => Promise<void>, now: () => number);
-    makeLimitOrders(orders: LimitOrder[]): Promise<Big[]>;
+    makeLimitOrders(orders: LimitOrder[]): Promise<void>;
     remakeLimitOrders(orders: LimitOrder[]): Promise<[Big | null, Big][]>;
     cancelOrders(oids: OrderId[]): Promise<(Big | null)[]>;
     getBalances(): Promise<Balances>;

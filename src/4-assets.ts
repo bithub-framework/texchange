@@ -37,7 +37,7 @@ abstract class ManagingAssets extends Taken {
         );
     }
 
-    protected makeLimitOrderSync(order: LimitOrder): Big {
+    protected makeLimitOrderSync(order: LimitOrder): void {
         this.validateOrder(order);
         assert(!this.openOrders.has(order.id));
         this.enoughPosition(order);
@@ -59,7 +59,6 @@ abstract class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         }
-        return new Big(0);
     }
 
     protected cancelOrderSync(oid: OrderId): Big | null {

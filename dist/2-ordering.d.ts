@@ -7,7 +7,7 @@ declare abstract class Ordering extends Pushing {
     protected settlementPrice: Big;
     protected latestPrice: Big;
     constructor(config: Config, now: () => number);
-    protected makeLimitOrderSync(order: LimitOrder): Big;
+    protected makeLimitOrderSync(order: LimitOrder): void;
     protected remakeLimitOrderSync(order: LimitOrder): [Big | null, Big];
     protected cancelOrderSync(oid: OrderId): Big | null;
     protected getOpenOrdersSync(): OpenOrder[];
