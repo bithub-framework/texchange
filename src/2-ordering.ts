@@ -70,6 +70,7 @@ abstract class Ordering extends Pushing {
 
     protected validateOrder(order: LimitOrder) {
         assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
+        assert(order.price.mod(this.config.TICK_SIZE).eq(0));
         assert(order.quantity.gt(0));
         assert(order.quantity.eq(order.quantity.round(this.config.QUANTITY_DP)));
         assert(order.length === LONG || order.length === SHORT);

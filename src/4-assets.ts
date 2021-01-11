@@ -41,7 +41,7 @@ abstract class ManagingAssets extends Taken {
         this.validateOrder(order);
         assert(!this.openOrders.has(order.id));
         this.enoughPosition(order);
-        if (this.config.UNIDIRECTIONAL) this.singleLength(order);
+        if (this.config.ONE_WAY_POSITION) this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
 
