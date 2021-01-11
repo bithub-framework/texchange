@@ -67,11 +67,13 @@ class Texchange extends ManagingAssets {
     }
     async pushOrderbook() {
         const orderbook = clone(this.orderbook);
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
     async pushUTrades(uTrades) {
         const trades = clone(this.uTrade2Trade(uTrades));
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }
@@ -87,6 +89,7 @@ class Texchange extends ManagingAssets {
             reserve: this.assets.reserve,
             time: this.now(),
         });
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('positions', positions);
         this.emit('balances', balances);

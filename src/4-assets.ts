@@ -5,6 +5,7 @@ import {
     UnidentifiedTrade,
     LONG, SHORT,
     OPEN, CLOSE,
+    BID, ASK,
     Config,
     OpenOrder,
     clone,
@@ -12,10 +13,12 @@ import {
     Balances,
     Orderbook,
     Trade,
+    OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './manager-assets';
+import { Frozen } from './manager-open-orders';
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
@@ -152,16 +155,18 @@ abstract class ManagingAssets extends Taken {
 
     protected orderMakes(
         openOrder: OpenOrder,
-    ): void {
-        const toFreeze = this.openOrders.addOrder(openOrder);
+    ) {
+        const toFreeze = super.orderMakes(openOrder);
         this.assets.freeze(toFreeze);
+        return toFreeze;
     }
 
-    protected uTradeTakesOpenOrder(
+    protected uTradeTakesOpenMaker(
         uTrade: UnidentifiedTrade,
-        maker: OpenOrder,
-    ) {
-        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenOrder(uTrade, maker);
+        maker: OpenMaker,
+    ): [Big, Big, Frozen] {
+        const [volume, dollarVolume, toThaw] =
+            super.uTradeTakesOpenMaker(uTrade, maker);
         this.assets.thaw(toThaw);
 
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
@@ -177,7 +182,7 @@ abstract class ManagingAssets extends Taken {
             );
             this.assets.decMargin(volume);
         }
-        return [volume, dollarVolume, toThaw] as const;
+        return [volume, dollarVolume, toThaw];
     }
 
     protected settle(): void {

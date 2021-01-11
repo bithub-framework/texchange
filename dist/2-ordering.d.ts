@@ -14,6 +14,6 @@ declare abstract class Ordering extends Pushing {
     protected validateOrder(order: LimitOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
-    protected orderMakes(openOrder: OpenOrder): void;
+    protected orderMakes(openOrder: OpenOrder): import("./manager-open-orders").Frozen;
 }
 export { Ordering as default, Ordering, };

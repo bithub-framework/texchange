@@ -10,6 +10,7 @@ import {
     min,
     Config,
     clone,
+    OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-orders';
@@ -119,8 +120,18 @@ abstract class Ordering extends Pushing {
 
     protected orderMakes(
         openOrder: OpenOrder,
-    ): void {
-        this.openOrders.addOrder(openOrder);
+    ) {
+        const openMaker: OpenMaker = {
+            ...openOrder,
+            behind: new Big(0),
+        };
+        for (const maker of this.orderbook[openOrder.side]) {
+            if (
+                openOrder.side === BID && maker.price.gte(openOrder.price) ||
+                openOrder.side === ASK && maker.price.lte(openOrder.price)
+            ) openMaker.behind = openMaker.behind.plus(maker.quantity);
+        }
+        return this.openOrders.addOrder(openMaker);
     }
 }
 

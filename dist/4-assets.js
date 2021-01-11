@@ -100,11 +100,12 @@ class ManagingAssets extends Taken {
         this.emit('balances', balances);
     }
     orderMakes(openOrder) {
-        const toFreeze = this.openOrders.addOrder(openOrder);
+        const toFreeze = super.orderMakes(openOrder);
         this.assets.freeze(toFreeze);
+        return toFreeze;
     }
-    uTradeTakesOpenOrder(uTrade, maker) {
-        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenOrder(uTrade, maker);
+    uTradeTakesOpenMaker(uTrade, maker) {
+        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenMaker(uTrade, maker);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);

@@ -207,8 +207,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "645518936897bfe8f706246551590bc1f35edb7ef6b520aae8805f8ced42feaf",
-        "signature": "645518936897bfe8f706246551590bc1f35edb7ef6b520aae8805f8ced42feaf",
+        "version": "6ab884c62664310d79bdb4a8dce0c2d028a77114110ce4e28a14ebe48f23dd5d",
+        "signature": "6ab884c62664310d79bdb4a8dce0c2d028a77114110ce4e28a14ebe48f23dd5d",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/serialization.d.ts": {
@@ -482,18 +482,18 @@
         "affectsGlobalScope": false
       },
       "./src/manager-open-orders.ts": {
-        "version": "0aa3da431687f4c4d13595b159362a8332ec460799995be1eea7f785987376a3",
-        "signature": "51f2a936995d16ed3759adeaebad22444fcde31b98a3028929a46cbece021c43",
+        "version": "b7187743981e0f5b377cf1f2d195795d9c24b20bad2c1c21eea23267e9b19e45",
+        "signature": "da8e7a1537657b8b82f20c46ec6092f4f746916d59666a98c21433ae0657a4a9",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "ee8b9cea82549d09c0f624256889f365d8bba088bd712151a11b302bd32a7d19",
-        "signature": "72b380b78de18121f6ea2008e972b9d02152ee847c6aad6a3a3634ecd342ca15",
+        "version": "a91fc4d2c595c162ef4149ca7cad4c87b9dd7b228269039b862f2eab8e3fc015",
+        "signature": "4d09cd9c765913c1da81c005ed483c320e7a41337747cc339afecaf5684b8b9d",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "8a014f05000b42beafb724fce8c59cf0ec40c50dce2e02d0f4aa1e4629c5e98d",
-        "signature": "7aba93ef900bbca0ef7a1e079f9e20918fd4dbba6a28cec894d75873d37bdc27",
+        "version": "2bbf716b1e6d754f6c107bfd83156b29bb327b835110f35ab0ba8256576ec50c",
+        "signature": "a64ad5dbac4711cd801f8783b6aabf7d634c9c594d57f8c226467a474e998f03",
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
@@ -507,12 +507,12 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "76ebda2c7992e109fa788024220548fe4c5a3c3205a1dfe2c1c97e6b16ca3dac",
-        "signature": "2e625eeb81e311057aeb9f2f5139875ae8450e362e52917075c488fe0d9b522b",
+        "version": "a689f8118120bc0f87dc3aa28ccf57684ecdddd185efccd0b185c744728dc3df",
+        "signature": "a8c1cba3f62fb42153b676f16224ea6d4a224132afbffd139205027e894a823d",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "9511dac6d24d37a4a4be9dcdf87b0ae531a47065548052424ca0dd8944c29050",
+        "version": "dd31a1fbc03eb1a0bf877fee4554259bf7ca114ebe6e0ec919ed8709771e9df2",
         "signature": "49373afb333b5c98ff2efb925d0b408ed0b40313c9f397240f3cbb645b12273a",
         "affectsGlobalScope": false
       },
@@ -745,7 +745,8 @@
       "./src/3-taken.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/2-ordering.ts",
-        "./src/interfaces.ts"
+        "./src/interfaces.ts",
+        "./src/manager-open-orders.ts"
       ],
       "./src/4-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
@@ -753,7 +754,8 @@
         "./node_modules/@types/node/events.d.ts",
         "./src/3-taken.ts",
         "./src/interfaces.ts",
-        "./src/manager-assets.ts"
+        "./src/manager-assets.ts",
+        "./src/manager-open-orders.ts"
       ],
       "./src/5-delay.ts": [
         "./node_modules/@types/big.js/index.d.ts",

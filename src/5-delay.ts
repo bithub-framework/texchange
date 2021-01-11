@@ -88,12 +88,14 @@ class Texchange extends ManagingAssets implements
 
     protected async pushOrderbook(): Promise<void> {
         const orderbook = clone(this.orderbook);
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
 
     protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
         const trades = clone(this.uTrade2Trade(uTrades));
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }
@@ -110,6 +112,7 @@ class Texchange extends ManagingAssets implements
             reserve: this.assets.reserve,
             time: this.now(),
         });
+        await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('positions', positions);
         this.emit('balances', balances);

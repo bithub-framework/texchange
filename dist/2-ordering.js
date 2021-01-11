@@ -82,7 +82,16 @@ class Ordering extends Pushing {
         return [uTrades, volume, dollarVolume];
     }
     orderMakes(openOrder) {
-        this.openOrders.addOrder(openOrder);
+        const openMaker = {
+            ...openOrder,
+            behind: new Big(0),
+        };
+        for (const maker of this.orderbook[openOrder.side]) {
+            if (openOrder.side === BID && maker.price.gte(openOrder.price) ||
+                openOrder.side === ASK && maker.price.lte(openOrder.price))
+                openMaker.behind = openMaker.behind.plus(maker.quantity);
+        }
+        return this.openOrders.addOrder(openMaker);
     }
 }
 export { Ordering as default, Ordering, };

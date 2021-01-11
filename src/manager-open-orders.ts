@@ -1,9 +1,9 @@
 import {
     OrderId,
     Config,
-    OpenOrder,
     Length,
     OPEN, CLOSE,
+    OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
@@ -14,7 +14,7 @@ interface Frozen {
     length: Length;
 }
 
-class OpenOrderManager extends Map<OrderId, OpenOrder>{
+class OpenOrderManager extends Map<OrderId, OpenMaker>{
     private frozens = new Map<OrderId, Frozen>();
 
     constructor(
@@ -25,7 +25,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         super();
     }
 
-    public addOrder(order: OpenOrder): Frozen {
+    public addOrder(order: OpenMaker): Frozen {
         const frozen: Frozen = {
             margin: order.operation === OPEN
                 ? this.config.calcFrozenMargin(

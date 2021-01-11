@@ -1,10 +1,12 @@
 import { Ordering } from './2-ordering';
-import { UnidentifiedTrade, OpenOrder } from './interfaces';
+import { UnidentifiedTrade, OpenOrder, OpenMaker } from './interfaces';
+import { Frozen } from './manager-open-orders';
 import Big from 'big.js';
 declare abstract class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): boolean;
-    protected uTradeTakesOpenOrder(uTrade: UnidentifiedTrade, maker: OpenOrder): readonly [Big, Big, import("./manager-open-orders").Frozen];
-    protected uTradeTakesOpenOrders(uTrade: UnidentifiedTrade): Big;
+    protected uTradeTakesOrderQueue(uTrade: UnidentifiedTrade, maker: OpenMaker): void;
+    protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];
+    protected uTradeTakesOpenMakers(uTrade: UnidentifiedTrade): Big;
     updateTrades(uTrades: UnidentifiedTrade[]): Big;
 }
 export { Taken as default, Taken, };
