@@ -5,31 +5,31 @@ class Texchange extends ManagingAssets {
         super(config, now);
         this.sleep = sleep;
     }
-    async makeLimitOrder(order) {
+    async makeLimitOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.makeLimitOrderSync(order);
+            return orders.map(order => this.makeLimitOrderSync(order));
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async remakeLimitOrder(oid, order) {
+    async remakeLimitOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.remakeLimitOrderSync(oid, order);
+            return orders.map(order => this.remakeLimitOrderSync(order));
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async cancelOrder(oid) {
+    async cancelOrders(oids) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.cancelOrderSync(oid);
+            return oids.map(oid => this.cancelOrderSync(oid));
         }
         finally {
             await this.sleep(this.config.PING);

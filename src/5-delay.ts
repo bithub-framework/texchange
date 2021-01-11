@@ -11,6 +11,7 @@ import {
     Balances,
     Positions,
 } from './interfaces';
+import Big from 'big.js';
 
 class Texchange extends ManagingAssets implements
     ContextMarketPublicApiLike,
@@ -23,31 +24,33 @@ class Texchange extends ManagingAssets implements
         super(config, now);
     }
 
-    public async makeLimitOrder(order: LimitOrder): Promise<OrderId> {
+    public async makeLimitOrders(orders: LimitOrder[]): Promise<Big[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.makeLimitOrderSync(order);
+            return orders.map(order => this.makeLimitOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async remakeLimitOrder(oid: OrderId, order: LimitOrder): Promise<OrderId> {
+    public async remakeLimitOrders(
+        orders: LimitOrder[]
+    ): Promise<[Big | null, Big][]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.remakeLimitOrderSync(oid, order);
+            return orders.map(order => this.remakeLimitOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async cancelOrder(oid: OrderId): Promise<OpenOrder | null> {
+    public async cancelOrders(oids: OrderId[]): Promise<(Big | null)[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.cancelOrderSync(oid);
+            return oids.map(oid => this.cancelOrderSync(oid));
         } finally {
             await this.sleep(this.config.PING);
         }

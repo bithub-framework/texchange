@@ -6,30 +6,34 @@ import assert from 'assert';
 class Ordering extends Pushing {
     constructor(config, now) {
         super(config, now);
-        this.orderCount = 0;
         this.latestPrice = new Big(0);
         this.settlementPrice = config.initialSettlementPrice;
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     makeLimitOrderSync(order) {
         this.validateOrder(order);
-        if (this.config.UNIDIRECTIONAL)
-            this.onlyOneOpenOrder();
-        const [maker, uTrades] = this.orderTakes(order);
-        const openOrder = this.orderMakes(maker);
+        assert(!this.openOrders.has(order.id));
+        let openOrder = {
+            ...order,
+            filled: new Big(0),
+        };
+        const [uTrades] = this.orderTakes(openOrder);
+        this.orderMakes(openOrder);
         if (uTrades.length) {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
-        return openOrder.id;
+        return new Big(0);
     }
-    remakeLimitOrderSync(oid, order) {
-        this.cancelOrderSync(oid);
-        return this.makeLimitOrderSync(order);
+    remakeLimitOrderSync(order) {
+        const filled1 = this.cancelOrderSync(order.id);
+        const filled2 = this.makeLimitOrderSync(order);
+        return [filled1, filled2];
     }
     cancelOrderSync(oid) {
+        const order = this.openOrders.get(oid);
         this.openOrders.removeOrder(oid);
-        return null;
+        return order ? order.filled : null;
     }
     getOpenOrdersSync() {
         return clone([...this.openOrders.values()]);
@@ -42,9 +46,6 @@ class Ordering extends Pushing {
         assert(order.operation === OPEN || order.operation === CLOSE);
         assert(order.operation * order.length === order.side);
     }
-    onlyOneOpenOrder() {
-        assert(!this.openOrders.size);
-    }
     updateTrades(uTrades) {
         super.updateTrades(uTrades);
         for (let uTrade of uTrades) {
@@ -56,7 +57,6 @@ class Ordering extends Pushing {
         }
     }
     orderTakes(taker) {
-        taker = clone(taker);
         const uTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
@@ -72,21 +72,17 @@ class Ordering extends Pushing {
                 });
                 this.orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.quantity = taker.quantity.minus(quantity);
+                taker.filled = taker.filled.plus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
         this.orderbook.apply();
-        return [taker, uTrades, volume, dollarVolume];
+        return [uTrades, volume, dollarVolume];
     }
-    orderMakes(order) {
-        const openOrder = {
-            ...order,
-            id: ++this.orderCount,
-        };
+    orderMakes(openOrder) {
         this.openOrders.addOrder(openOrder);
-        return openOrder;
     }
 }
 export { Ordering as default, Ordering, };

@@ -69,6 +69,7 @@ class OpenOrderManager extends Map<OrderId, OpenOrder>{
         frozen.position = frozen.position.minus(thawed.position);
 
         order.quantity = order.quantity.minus(volume);
+        order.filled = order.filled.plus(volume);
         if (order.quantity.eq(0)) {
             this.delete(oid);
             this.frozens.delete(oid);

@@ -207,8 +207,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "1e3ba52fbc573d63810364620150f684b623ab66012f7f8145b1db6df70f7f8b",
-        "signature": "1e3ba52fbc573d63810364620150f684b623ab66012f7f8145b1db6df70f7f8b",
+        "version": "645518936897bfe8f706246551590bc1f35edb7ef6b520aae8805f8ced42feaf",
+        "signature": "645518936897bfe8f706246551590bc1f35edb7ef6b520aae8805f8ced42feaf",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/serialization.d.ts": {
@@ -457,8 +457,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/context.d.ts": {
-        "version": "a209f5fb9087f9171e217ce8bcc6c59929b0f6548a92271bc8ffd78bac740aea",
-        "signature": "a209f5fb9087f9171e217ce8bcc6c59929b0f6548a92271bc8ffd78bac740aea",
+        "version": "cc29157eb02285eb3a8ffbb3fd780a0bd2e855931bf9e411f7746c090121ca4b",
+        "signature": "cc29157eb02285eb3a8ffbb3fd780a0bd2e855931bf9e411f7746c090121ca4b",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/index.d.ts": {
@@ -482,13 +482,13 @@
         "affectsGlobalScope": false
       },
       "./src/manager-open-orders.ts": {
-        "version": "f9dcce668fb334fa60dd7b715dad2acf4c7a82daa073b14a07c1c1e77e41edd6",
+        "version": "0aa3da431687f4c4d13595b159362a8332ec460799995be1eea7f785987376a3",
         "signature": "51f2a936995d16ed3759adeaebad22444fcde31b98a3028929a46cbece021c43",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "faf059419ae1ab3c24063b47465ce56e726ab0abdef96cb5ce9a7d7ad6c607de",
-        "signature": "9a2090c5ecc9f7e6036577672d79163bc73ab946480741b257a920e00382cd6c",
+        "version": "ee8b9cea82549d09c0f624256889f365d8bba088bd712151a11b302bd32a7d19",
+        "signature": "72b380b78de18121f6ea2008e972b9d02152ee847c6aad6a3a3634ecd342ca15",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
@@ -507,13 +507,13 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "0d7c21b35c099ba45838f3d616c7d487ff52c322f226e6436e0e632ea68382e6",
-        "signature": "6c65d7aa05085358c849952a31d1ec3d1d920a2c754d19432bcc8e4a9ba45aae",
+        "version": "76ebda2c7992e109fa788024220548fe4c5a3c3205a1dfe2c1c97e6b16ca3dac",
+        "signature": "2e625eeb81e311057aeb9f2f5139875ae8450e362e52917075c488fe0d9b522b",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "db2772280ca2cfe42ac601c209aa61d1344b2e799de792f5b1e3f2074b9729cc",
-        "signature": "4bd219b043a0c49eeb7880c7329323f54b8663ff9b78d4af27577fd08a1c49df",
+        "version": "9511dac6d24d37a4a4be9dcdf87b0ae531a47065548052424ca0dd8944c29050",
+        "signature": "49373afb333b5c98ff2efb925d0b408ed0b40313c9f397240f3cbb645b12273a",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -711,6 +711,7 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/context.d.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/config.d.ts",
@@ -755,6 +756,7 @@
         "./src/manager-assets.ts"
       ],
       "./src/5-delay.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],
@@ -960,6 +962,7 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/context.d.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/config.d.ts",
@@ -1005,6 +1008,7 @@
         "./src/manager-open-orders.ts"
       ],
       "./src/5-delay.ts": [
+        "./node_modules/@types/big.js/index.d.ts",
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],

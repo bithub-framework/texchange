@@ -10,15 +10,18 @@ class ManagingAssets extends Taken {
     }
     makeLimitOrderSync(order) {
         this.validateOrder(order);
-        if (this.config.UNIDIRECTIONAL)
-            this.onlyOneOpenOrder();
+        assert(!this.openOrders.has(order.id));
         this.enoughPosition(order);
         if (this.config.UNIDIRECTIONAL)
             this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
-        const [makerOrder, uTrades] = this.orderTakes(order);
-        const openOrder = this.orderMakes(makerOrder);
+        const openOrder = {
+            ...order,
+            filled: new Big(0),
+        };
+        const [uTrades] = this.orderTakes(openOrder);
+        this.orderMakes(openOrder);
         if (uTrades.length) {
             this.pushUTrades(uTrades)
                 .catch(err => void this.emit('error', err));
@@ -27,13 +30,14 @@ class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         }
-        return openOrder.id;
+        return new Big(0);
     }
     cancelOrderSync(oid) {
-        const openOrder = this.openOrders.get(oid) || null;
+        const openOrder = this.openOrders.get(oid);
+        const filled = openOrder ? openOrder.filled : null;
         const toThaw = this.openOrders.removeOrder(oid);
         this.assets.thaw(toThaw);
-        return clone(openOrder);
+        return filled;
     }
     getPositionsSync() {
         this.settle();
@@ -67,7 +71,7 @@ class ManagingAssets extends Taken {
                 .lte(this.assets.reserve));
     }
     orderTakes(taker) {
-        const [makerOrder, uTrades, volume, dollarVolume] = super.orderTakes(taker);
+        const [uTrades, volume, dollarVolume] = super.orderTakes(taker);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === OPEN) {
@@ -78,7 +82,7 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
             this.assets.decMargin(volume);
         }
-        return [makerOrder, uTrades, volume, dollarVolume];
+        return [uTrades, volume, dollarVolume];
     }
     async pushPositionsAndBalances() {
         this.settle();
@@ -95,14 +99,9 @@ class ManagingAssets extends Taken {
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
-    orderMakes(order) {
-        const openOrder = {
-            ...order,
-            id: ++this.orderCount,
-        };
+    orderMakes(openOrder) {
         const toFreeze = this.openOrders.addOrder(openOrder);
         this.assets.freeze(toFreeze);
-        return openOrder;
     }
     uTradeTakesOpenOrder(uTrade, maker) {
         const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenOrder(uTrade, maker);
