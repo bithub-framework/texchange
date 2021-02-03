@@ -88,7 +88,7 @@ Texchange 会在每次开仓和平仓时调用你的 `calcMarginIncrement` 和 `
 
 有的衍生品，比如 Binance 永续全仓，持仓保证金是每次开仓平仓时计算并统计出来的，你需要提供 `calcMarginIncrement` 和 `calcMarginDecrement`。而 `calcMargin` 只需要直接输出统计值就行了。
 
-还有的衍生品，比如 OKEX 永续全仓，持仓保证金是用当前结算价直接算出来的，所以你需要提供 `calcMargin`。而 `calcMarginIncrement` 和 `calcMarginDecrement` 直接输出 0 就行。
+还有的衍生品，比如 OKEX 永续全仓，持仓保证金是用当前结算价直接算出来的，所以你需要提供 `calcMargin`。而 `calcMarginIncrement` 和 `calcMarginDecrement` 随便输出一个数就行，比如 0。
 
 #### 商品期货
 
