@@ -1,7 +1,8 @@
 export * from 'interfaces';
 import {
     Trade,
-    Assets,
+    Positions,
+    Balances,
     MarketConfig,
     AccountConfig,
     LimitOrder,
@@ -10,6 +11,10 @@ import {
 import Big from 'big.js';
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
+
+export interface Assets extends
+    Positions,
+    Balances { }
 
 export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {

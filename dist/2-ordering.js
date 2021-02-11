@@ -7,15 +7,15 @@ class Ordering extends Pushing {
     constructor(config, now) {
         super(config, now);
         this.latestPrice = new Big(0);
+        this.orderCount = 0;
         this.settlementPrice = config.initialSettlementPrice;
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    makeLimitOrderSync(order) {
+    makeLimitOrderSync(order, oid) {
         this.validateOrder(order);
-        assert(!this.openOrders.has(order.id));
-        let openOrder = {
+        const openOrder = {
             ...order,
-            filled: new Big(0),
+            id: oid || ++this.orderCount,
         };
         const [uTrades] = this.orderTakes(openOrder);
         this.orderMakes(openOrder);
@@ -23,16 +23,17 @@ class Ordering extends Pushing {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
+        return openOrder.id;
     }
-    remakeLimitOrderSync(order) {
-        const filled = this.cancelOrderSync(order.id);
-        this.makeLimitOrderSync(order);
-        return [filled, new Big(0)];
+    amendLimitOrderSync(amendment) {
+        const unfilled = this.cancelOrderSync(amendment.id);
+        this.makeLimitOrderSync(amendment, amendment.id);
+        return unfilled;
     }
     cancelOrderSync(oid) {
         const order = this.openOrders.get(oid);
         this.openOrders.removeOrder(oid);
-        return order ? order.filled : null;
+        return order ? order.quantity : new Big(0);
     }
     getOpenOrdersSync() {
         return clone([...this.openOrders.values()]);
@@ -72,7 +73,6 @@ class Ordering extends Pushing {
                 });
                 this.orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.quantity = taker.quantity.minus(quantity);
-                taker.filled = taker.filled.plus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.config.calcDollarVolume(maker.price, quantity))

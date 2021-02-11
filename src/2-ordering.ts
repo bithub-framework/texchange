@@ -11,6 +11,7 @@ import {
     Config,
     clone,
     OpenMaker,
+    LimitOrderAmendment,
 } from './interfaces';
 import Big from 'big.js';
 import { OpenOrderManager } from './manager-open-orders';
@@ -20,6 +21,7 @@ abstract class Ordering extends Pushing {
     protected openOrders: OpenOrderManager;
     protected settlementPrice: Big;
     protected latestPrice = new Big(0);
+    protected orderCount = 0;
 
     constructor(
         config: Config,
@@ -34,12 +36,14 @@ abstract class Ordering extends Pushing {
         );
     }
 
-    protected makeLimitOrderSync(order: LimitOrder): void {
+    protected makeLimitOrderSync(
+        order: LimitOrder,
+        oid?: number,
+    ): OrderId {
         this.validateOrder(order);
-        assert(!this.openOrders.has(order.id));
-        let openOrder: OpenOrder = {
+        const openOrder: OpenOrder = {
             ...order,
-            filled: new Big(0),
+            id: oid || ++this.orderCount,
         };
         const [uTrades] = this.orderTakes(openOrder);
         this.orderMakes(openOrder);
@@ -47,20 +51,21 @@ abstract class Ordering extends Pushing {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
+        return openOrder.id;
     }
 
-    protected remakeLimitOrderSync(
-        order: LimitOrder
-    ): [Big | null, Big] {
-        const filled = this.cancelOrderSync(order.id);
-        this.makeLimitOrderSync(order);
-        return [filled, new Big(0)];
+    protected amendLimitOrderSync(
+        amendment: LimitOrderAmendment,
+    ): Big {
+        const unfilled = this.cancelOrderSync(amendment.id);
+        this.makeLimitOrderSync(amendment, <number>amendment.id);
+        return unfilled;
     }
 
-    protected cancelOrderSync(oid: OrderId): Big | null {
+    protected cancelOrderSync(oid: OrderId): Big {
         const order = this.openOrders.get(oid);
         this.openOrders.removeOrder(oid);
-        return order ? order.filled : null;
+        return order ? order.quantity : new Big(0);
     }
 
     protected getOpenOrdersSync(): OpenOrder[] {
@@ -108,7 +113,6 @@ abstract class Ordering extends Pushing {
                 });
                 this.orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.quantity = taker.quantity.minus(quantity);
-                taker.filled = taker.filled.plus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.config.calcDollarVolume(maker.price, quantity))

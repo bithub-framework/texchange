@@ -8,9 +8,8 @@ class ManagingAssets extends Taken {
         super(config, now);
         this.assets = new AssetsManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    makeLimitOrderSync(order) {
+    makeLimitOrderSync(order, oid) {
         this.validateOrder(order);
-        assert(!this.openOrders.has(order.id));
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
@@ -18,7 +17,7 @@ class ManagingAssets extends Taken {
         this.enoughReserve(order);
         const openOrder = {
             ...order,
-            filled: new Big(0),
+            id: oid || ++this.orderCount,
         };
         const [uTrades] = this.orderTakes(openOrder);
         this.orderMakes(openOrder);
@@ -30,13 +29,14 @@ class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         }
+        return openOrder.id;
     }
     cancelOrderSync(oid) {
         const openOrder = this.openOrders.get(oid);
-        const filled = openOrder ? openOrder.filled : null;
+        const unfilled = openOrder ? openOrder.quantity : new Big(0);
         const toThaw = this.openOrders.removeOrder(oid);
         this.assets.thaw(toThaw);
-        return filled;
+        return unfilled;
     }
     getPositionsSync() {
         this.settle();

@@ -1,6 +1,7 @@
 import { ManagingAssets } from './4-assets';
 import {
     LimitOrder,
+    LimitOrderAmendment,
     OrderId,
     UnidentifiedTrade,
     ContextMarketPublicApiLike,
@@ -24,29 +25,29 @@ class Texchange extends ManagingAssets implements
         super(config, now);
     }
 
-    public async makeLimitOrders(orders: LimitOrder[]): Promise<void> {
+    public async makeLimitOrders(orders: LimitOrder[]): Promise<OrderId[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            orders.forEach(order => this.makeLimitOrderSync(order));
+            return orders.map(order => this.makeLimitOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async remakeLimitOrders(
-        orders: LimitOrder[]
-    ): Promise<[Big | null, Big][]> {
+    public async amendLimitOrders(
+        amendments: LimitOrderAmendment[],
+    ): Promise<Big[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.remakeLimitOrderSync(order));
+            return amendments.map(order => this.amendLimitOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async cancelOrders(oids: OrderId[]): Promise<(Big | null)[]> {
+    public async cancelOrders(oids: OrderId[]): Promise<Big[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);

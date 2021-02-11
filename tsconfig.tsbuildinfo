@@ -207,13 +207,13 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "6ab884c62664310d79bdb4a8dce0c2d028a77114110ce4e28a14ebe48f23dd5d",
-        "signature": "6ab884c62664310d79bdb4a8dce0c2d028a77114110ce4e28a14ebe48f23dd5d",
+        "version": "80d2e48b749fdf441d11f3eb2728236c09a16db219e76e9d7b9265914cd4a17e",
+        "signature": "80d2e48b749fdf441d11f3eb2728236c09a16db219e76e9d7b9265914cd4a17e",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/serialization.d.ts": {
-        "version": "9010779de5f4beba2f4fadfa9e5f8b346e6be70a741d4d432d2a206cfe9c0fa0",
-        "signature": "9010779de5f4beba2f4fadfa9e5f8b346e6be70a741d4d432d2a206cfe9c0fa0",
+        "version": "5dae53cd24e95625da2841af1ec1fc366ead2bfd11274962df675c6fe67070ae",
+        "signature": "5dae53cd24e95625da2841af1ec1fc366ead2bfd11274962df675c6fe67070ae",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -457,8 +457,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/context.d.ts": {
-        "version": "c4b234371ed4ba09190730ffd0ff48f6c6793f12b56912e9d231402604e3049a",
-        "signature": "c4b234371ed4ba09190730ffd0ff48f6c6793f12b56912e9d231402604e3049a",
+        "version": "efedfe0c7c82b3c13608a0b7b281144b5d4fb91125e4079557ce6df102862eba",
+        "signature": "efedfe0c7c82b3c13608a0b7b281144b5d4fb91125e4079557ce6df102862eba",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/index.d.ts": {
@@ -467,8 +467,8 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "adfc275dbd98d872f762735bd56e8251e1c9dbe532cb2bf5ade9d1ee96143f06",
-        "signature": "7c4ed4227c474df88b9d9809a3b0139492ee204947211886b9f43721e07c1573",
+        "version": "1d5060e281516528052f42439de08a5406c64e7a2bbe9753a1545176ae4067a5",
+        "signature": "f76a852795f08b72ac698ea555f479bc35035b6997ccd2f692f5022a7a72af59",
         "affectsGlobalScope": false
       },
       "./src/manager-orderbook.ts": {
@@ -482,13 +482,13 @@
         "affectsGlobalScope": false
       },
       "./src/manager-open-orders.ts": {
-        "version": "b7187743981e0f5b377cf1f2d195795d9c24b20bad2c1c21eea23267e9b19e45",
+        "version": "8f8db23f71e3025d31c40b612bc742e7ca3708bd6dcb33d108321273e7af93a4",
         "signature": "da8e7a1537657b8b82f20c46ec6092f4f746916d59666a98c21433ae0657a4a9",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "c43158d49842818cb5e4dc16ea63ac54630502c3d5ee096ddb2ba5eabc75ab22",
-        "signature": "a38fbd5454e9aba30fa74c3331de574c3a22e3a75710afe1d1218019b29129c2",
+        "version": "12611200b3b5b7060ec16b605e6667f88e0a2086acdf5017a407b72cc26cffb0",
+        "signature": "a406d5b5b5fcfda44d357f2db7a0c9b3b93c2a5445449c0ac55bdcd5364a68eb",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
@@ -507,13 +507,13 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "32d203c8431951fef83731a65a2873e2b19d8ca664314400a0d30d1ebf5c6220",
-        "signature": "c384e21c7526aff3026f4c2b125108599842cd5bd63393161262ff8879cc7b70",
+        "version": "a1c360e00e5bcd68b1b882096a7ca47553e9406632079cefbf37de91a524f6af",
+        "signature": "ddc00541258531eb5ae53ef55e78225eb764a734ea273119838eb9d8bf25349a",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "f0e54a513c41face6412c5288f6a895586110a9ebb00b2c3a48f5374421adf61",
-        "signature": "e8d19bd82d705ae4c753de9ffb25fea49b55621d7f75e975e3908e59b28858f0",
+        "version": "6c20fe77bdc26dc6287c37068a6f012401df57708d99fa4f756bee71694f6e8f",
+        "signature": "81f1bccd77da78ff4b015b5514d50508d5df84b1d51f06ab823cdd7e9ca9cd31",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -725,10 +725,6 @@
         "./node_modules/interfaces/dist/context.d.ts",
         "./node_modules/interfaces/dist/data.d.ts",
         "./node_modules/interfaces/dist/serialization.d.ts"
-      ],
-      "./node_modules/interfaces/dist/serialization.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
       ],
       "./src/1-pushing.ts": [
         "./node_modules/@types/node/events.d.ts",
@@ -978,10 +974,6 @@
         "./node_modules/interfaces/dist/context.d.ts",
         "./node_modules/interfaces/dist/data.d.ts",
         "./node_modules/interfaces/dist/serialization.d.ts"
-      ],
-      "./node_modules/interfaces/dist/serialization.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
-        "./node_modules/interfaces/dist/data.d.ts"
       ],
       "./src/1-pushing.ts": [
         "./node_modules/@types/node/events.d.ts",

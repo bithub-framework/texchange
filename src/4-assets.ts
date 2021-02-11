@@ -37,17 +37,19 @@ abstract class ManagingAssets extends Taken {
         );
     }
 
-    protected makeLimitOrderSync(order: LimitOrder): void {
+    protected makeLimitOrderSync(
+        order: LimitOrder,
+        oid?: number,
+    ): OrderId {
         this.validateOrder(order);
-        assert(!this.openOrders.has(order.id));
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION) this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
 
-        const openOrder = {
+        const openOrder: OpenOrder = {
             ...order,
-            filled: new Big(0),
+            id: oid || ++this.orderCount,
         };
         const [uTrades] = this.orderTakes(openOrder);
         this.orderMakes(openOrder);
@@ -59,14 +61,15 @@ abstract class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         }
+        return openOrder.id;
     }
 
-    protected cancelOrderSync(oid: OrderId): Big | null {
+    protected cancelOrderSync(oid: OrderId): Big {
         const openOrder = this.openOrders.get(oid);
-        const filled = openOrder ? openOrder.filled : null;
+        const unfilled = openOrder ? openOrder.quantity : new Big(0);
         const toThaw = this.openOrders.removeOrder(oid);
         this.assets.thaw(toThaw);
-        return filled;
+        return unfilled;
     }
 
     protected getPositionsSync(): Positions {
