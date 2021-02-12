@@ -114,9 +114,9 @@ abstract class Ordering extends Pushing {
                 (
                     taker.side === BID && taker.price.gte(maker.price) ||
                     taker.side === ASK && taker.price.lte(maker.price)
-                ) && taker.quantity.gt(0)
+                ) && taker.unfilled.gt(0)
             ) {
-                const quantity = min(taker.quantity, maker.quantity);
+                const quantity = min(taker.unfilled, maker.quantity);
                 uTrades.push({
                     side: taker.side,
                     price: maker.price,
@@ -124,7 +124,8 @@ abstract class Ordering extends Pushing {
                     time: this.now(),
                 });
                 this.orderbook.decQuantity(maker.side, maker.price, quantity);
-                taker.quantity = taker.quantity.minus(quantity);
+                taker.filled = taker.filled.plus(quantity);
+                taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
