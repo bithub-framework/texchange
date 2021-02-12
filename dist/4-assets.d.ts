@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Taken } from './3-taken';
-import { LimitOrder, OrderId, UnidentifiedTrade, Config, OpenOrder, Positions, Balances, Orderbook, Trade, OpenMaker } from './interfaces';
+import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, Orderbook, Trade, OpenMaker } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import { Frozen } from './manager-open-orders';
@@ -8,14 +8,16 @@ import { EventEmitter } from 'events';
 declare abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;
     constructor(config: Config, now: () => number);
-    protected makeLimitOrderSync(order: LimitOrder, oid?: number): OrderId;
-    protected cancelOrderSync(oid: OrderId): Big;
+    /** @override */
+    protected makeOpenOrder(order: OpenOrder): OpenOrder;
+    /** @override */
+    protected cancelOrderSync(order: OpenOrder): OpenOrder;
     protected getPositionsSync(): Positions;
     protected getBalancesSync(): Balances;
     private enoughPosition;
     private singleLength;
     private enoughReserve;
-    protected orderTakes(taker: OpenOrder): readonly [Pick<Trade, "quantity" | "side" | "price" | "time">[], Big, Big];
+    protected orderTakes(taker: OpenOrder): readonly [Pick<Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
     protected pushPositionsAndBalances(): Promise<void>;
     protected orderMakes(openOrder: OpenOrder): Frozen;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];

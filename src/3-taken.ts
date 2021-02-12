@@ -44,7 +44,7 @@ abstract class Taken extends Ordering {
                 length: 1, // meaningless
             },
         ];
-        const volume = min(uTrade.quantity, maker.quantity);
+        const volume = min(uTrade.quantity, maker.unfilled);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);

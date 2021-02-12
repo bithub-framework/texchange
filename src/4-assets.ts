@@ -1,11 +1,10 @@
 import { Taken } from './3-taken';
 import {
     LimitOrder,
-    OrderId,
+    LimitOrderAmendment,
     UnidentifiedTrade,
     LONG, SHORT,
     OPEN, CLOSE,
-    BID, ASK,
     Config,
     OpenOrder,
     clone,
@@ -37,39 +36,33 @@ abstract class ManagingAssets extends Taken {
         );
     }
 
-    protected makeLimitOrderSync(
-        order: LimitOrder,
-        oid?: number,
-    ): OrderId {
+    /** @override */
+    protected makeOpenOrder(order: OpenOrder): OpenOrder {
         this.validateOrder(order);
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION) this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
-
-        const openOrder: OpenOrder = {
-            ...order,
-            id: oid || ++this.orderCount,
-        };
-        const [uTrades] = this.orderTakes(openOrder);
-        this.orderMakes(openOrder);
+        const [uTrades] = this.orderTakes(order);
+        this.orderMakes(order);
         if (uTrades.length) {
-            this.pushUTrades(uTrades)
-                .catch(err => void this.emit('error', err));
-            this.pushOrderbook()
-                .catch(err => void this.emit('error', err));
-            this.pushPositionsAndBalances()
-                .catch(err => void this.emit('error', err));
+            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+            this.pushOrderbook().catch(err => void this.emit('error', err));
+            this.pushPositionsAndBalances().catch(err => void this.emit('error', err));
         }
-        return openOrder.id;
+        return order;
     }
 
-    protected cancelOrderSync(oid: OrderId): Big {
-        const openOrder = this.openOrders.get(oid);
-        const unfilled = openOrder ? openOrder.quantity : new Big(0);
-        const toThaw = this.openOrders.removeOrder(oid);
+    /** @override */
+    protected cancelOrderSync(order: OpenOrder): OpenOrder {
+        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
+        const toThaw = this.openOrders.removeOrder(order.id);
         this.assets.thaw(toThaw);
-        return unfilled;
+        return {
+            ...order,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
 
     protected getPositionsSync(): Positions {
@@ -90,10 +83,10 @@ abstract class ManagingAssets extends Taken {
         });
     }
 
-    private enoughPosition(order: LimitOrder) {
+    private enoughPosition(order: OpenOrder) {
         if (order.operation === CLOSE)
             assert(
-                order.quantity.lte(new Big(0)
+                order.unfilled.lte(new Big(0)
                     .plus(this.assets.position[order.side * order.operation])
                     .minus(this.assets.frozenPosition[order.side * order.operation])
                 ),
@@ -104,7 +97,7 @@ abstract class ManagingAssets extends Taken {
         assert(this.assets.position[-order.length].eq(0));
     }
 
-    private enoughReserve(order: LimitOrder) {
+    private enoughReserve(order: OpenOrder) {
         if (order.operation === OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin(
@@ -114,7 +107,7 @@ abstract class ManagingAssets extends Taken {
                     this.latestPrice,
                 )).plus(
                     this.config.calcDollarVolume(
-                        order.price, order.quantity,
+                        order.price, order.unfilled,
                     ).times(this.config.TAKER_FEE_RATE),
                 ).round(this.config.CURRENCY_DP)
                 .lte(this.assets.reserve),

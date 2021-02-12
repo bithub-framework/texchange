@@ -8,35 +8,33 @@ class ManagingAssets extends Taken {
         super(config, now);
         this.assets = new AssetsManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    makeLimitOrderSync(order, oid) {
+    /** @override */
+    makeOpenOrder(order) {
         this.validateOrder(order);
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
-        const openOrder = {
-            ...order,
-            id: oid || ++this.orderCount,
-        };
-        const [uTrades] = this.orderTakes(openOrder);
-        this.orderMakes(openOrder);
+        const [uTrades] = this.orderTakes(order);
+        this.orderMakes(order);
         if (uTrades.length) {
-            this.pushUTrades(uTrades)
-                .catch(err => void this.emit('error', err));
-            this.pushOrderbook()
-                .catch(err => void this.emit('error', err));
-            this.pushPositionsAndBalances()
-                .catch(err => void this.emit('error', err));
+            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+            this.pushOrderbook().catch(err => void this.emit('error', err));
+            this.pushPositionsAndBalances().catch(err => void this.emit('error', err));
         }
-        return openOrder.id;
+        return order;
     }
-    cancelOrderSync(oid) {
-        const openOrder = this.openOrders.get(oid);
-        const unfilled = openOrder ? openOrder.quantity : new Big(0);
-        const toThaw = this.openOrders.removeOrder(oid);
+    /** @override */
+    cancelOrderSync(order) {
+        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
+        const toThaw = this.openOrders.removeOrder(order.id);
         this.assets.thaw(toThaw);
-        return unfilled;
+        return {
+            ...order,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
     getPositionsSync() {
         this.settle();
@@ -56,7 +54,7 @@ class ManagingAssets extends Taken {
     }
     enoughPosition(order) {
         if (order.operation === CLOSE)
-            assert(order.quantity.lte(new Big(0)
+            assert(order.unfilled.lte(new Big(0)
                 .plus(this.assets.position[order.side * order.operation])
                 .minus(this.assets.frozenPosition[order.side * order.operation])));
     }
@@ -66,7 +64,7 @@ class ManagingAssets extends Taken {
     enoughReserve(order) {
         if (order.operation === OPEN)
             assert(new Big(0)
-                .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.quantity).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
+                .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
                 .lte(this.assets.reserve));
     }
     orderTakes(taker) {

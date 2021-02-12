@@ -207,8 +207,8 @@
         "affectsGlobalScope": true
       },
       "./node_modules/interfaces/dist/data.d.ts": {
-        "version": "80d2e48b749fdf441d11f3eb2728236c09a16db219e76e9d7b9265914cd4a17e",
-        "signature": "80d2e48b749fdf441d11f3eb2728236c09a16db219e76e9d7b9265914cd4a17e",
+        "version": "687c6e917456f97075ca981bc44413db549cbdd4f43c42b0539451632e5a3ba1",
+        "signature": "687c6e917456f97075ca981bc44413db549cbdd4f43c42b0539451632e5a3ba1",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/serialization.d.ts": {
@@ -457,8 +457,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/context.d.ts": {
-        "version": "efedfe0c7c82b3c13608a0b7b281144b5d4fb91125e4079557ce6df102862eba",
-        "signature": "efedfe0c7c82b3c13608a0b7b281144b5d4fb91125e4079557ce6df102862eba",
+        "version": "8d0952c4012de32c9c1d5e9e3ece605e53716803e4932e3e58ac1d38d9055d8c",
+        "signature": "8d0952c4012de32c9c1d5e9e3ece605e53716803e4932e3e58ac1d38d9055d8c",
         "affectsGlobalScope": false
       },
       "./node_modules/interfaces/dist/index.d.ts": {
@@ -482,17 +482,17 @@
         "affectsGlobalScope": false
       },
       "./src/manager-open-orders.ts": {
-        "version": "8f8db23f71e3025d31c40b612bc742e7ca3708bd6dcb33d108321273e7af93a4",
+        "version": "a5e4a15ad568495f5a26fe0769c98e8e9718f29cefa1ad466d93b18de5f33a69",
         "signature": "da8e7a1537657b8b82f20c46ec6092f4f746916d59666a98c21433ae0657a4a9",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "12611200b3b5b7060ec16b605e6667f88e0a2086acdf5017a407b72cc26cffb0",
-        "signature": "a406d5b5b5fcfda44d357f2db7a0c9b3b93c2a5445449c0ac55bdcd5364a68eb",
+        "version": "3881b5bcc3c1b85e01f65e48b06359b55420b937b0d8bd6535cc10bd937ff851",
+        "signature": "304e921639c18eeb62355f8599815ff88a64bf3db557b640246508911eef17f8",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "2bbf716b1e6d754f6c107bfd83156b29bb327b835110f35ab0ba8256576ec50c",
+        "version": "e9834d2fedc2352cf7bf6dedbf5ece405f7f82028dce77d1bc7c3e9644e83d2d",
         "signature": "a64ad5dbac4711cd801f8783b6aabf7d634c9c594d57f8c226467a474e998f03",
         "affectsGlobalScope": false
       },
@@ -507,13 +507,13 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "a1c360e00e5bcd68b1b882096a7ca47553e9406632079cefbf37de91a524f6af",
-        "signature": "ddc00541258531eb5ae53ef55e78225eb764a734ea273119838eb9d8bf25349a",
+        "version": "d521e9d68ef1c6572e102c1ea49af751ff4eba1e9473403e3c2376484b05b2f8",
+        "signature": "572e5efcea0e3e16a16e1722431fb8fb982b220bcfc5bfb3717b74244393acab",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "6c20fe77bdc26dc6287c37068a6f012401df57708d99fa4f756bee71694f6e8f",
-        "signature": "81f1bccd77da78ff4b015b5514d50508d5df84b1d51f06ab823cdd7e9ca9cd31",
+        "version": "8b765559d0b15747da7c0726412f20cab21a5f02a844dc558096a5b611589264",
+        "signature": "a2060cec863ba82422004bfea1a9a93c91e23f1988123196dea6ecdf3da15a46",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -711,7 +711,6 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/context.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/config.d.ts",
@@ -960,7 +959,6 @@
         "./node_modules/@types/big.js/index.d.ts"
       ],
       "./node_modules/interfaces/dist/context.d.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/events.d.ts",
         "./node_modules/@types/node/index.d.ts",
         "./node_modules/interfaces/dist/config.d.ts",
@@ -1002,7 +1000,6 @@
         "./src/manager-open-orders.ts"
       ],
       "./src/5-delay.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],

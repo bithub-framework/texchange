@@ -25,11 +25,11 @@ class Texchange extends ManagingAssets {
             await this.sleep(this.config.PING);
         }
     }
-    async cancelOrders(oids) {
+    async cancelOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return oids.map(oid => this.cancelOrderSync(oid));
+            return orders.map(order => this.cancelOrderSync(order));
         }
         finally {
             await this.sleep(this.config.PING);

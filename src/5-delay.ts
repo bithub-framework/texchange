@@ -25,7 +25,7 @@ class Texchange extends ManagingAssets implements
         super(config, now);
     }
 
-    public async makeLimitOrders(orders: LimitOrder[]): Promise<OrderId[]> {
+    public async makeLimitOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
@@ -36,8 +36,8 @@ class Texchange extends ManagingAssets implements
     }
 
     public async amendLimitOrders(
-        amendments: LimitOrderAmendment[],
-    ): Promise<Big[]> {
+        amendments: LimitOrderAmendment[]
+    ): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
@@ -47,11 +47,11 @@ class Texchange extends ManagingAssets implements
         }
     }
 
-    public async cancelOrders(oids: OrderId[]): Promise<Big[]> {
+    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return oids.map(oid => this.cancelOrderSync(oid));
+            return orders.map(order => this.cancelOrderSync(order));
         } finally {
             await this.sleep(this.config.PING);
         }

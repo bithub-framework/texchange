@@ -11,29 +11,44 @@ class Ordering extends Pushing {
         this.settlementPrice = config.initialSettlementPrice;
         this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
-    makeLimitOrderSync(order, oid) {
+    makeOpenOrder(order) {
         this.validateOrder(order);
-        const openOrder = {
-            ...order,
-            id: oid || ++this.orderCount,
-        };
-        const [uTrades] = this.orderTakes(openOrder);
-        this.orderMakes(openOrder);
+        const [uTrades] = this.orderTakes(order);
+        this.orderMakes(order);
         if (uTrades.length) {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
             this.pushOrderbook().catch(err => void this.emit('error', err));
         }
-        return openOrder.id;
+        return order;
+    }
+    makeLimitOrderSync(order) {
+        const openOrder = {
+            ...order,
+            id: ++this.orderCount,
+            filled: new Big(0),
+            unfilled: order.quantity,
+        };
+        return this.makeOpenOrder(openOrder);
+    }
+    cancelOrderSync(order) {
+        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
+        this.openOrders.removeOrder(order.id);
+        return {
+            ...order,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
     amendLimitOrderSync(amendment) {
-        const unfilled = this.cancelOrderSync(amendment.id);
-        this.makeLimitOrderSync(amendment, amendment.id);
-        return unfilled;
-    }
-    cancelOrderSync(oid) {
-        const order = this.openOrders.get(oid);
-        this.openOrders.removeOrder(oid);
-        return order ? order.quantity : new Big(0);
+        const { filled } = this.cancelOrderSync(amendment);
+        const openOrder = {
+            ...amendment,
+            price: amendment.newPrice,
+            unfilled: amendment.newUnfilled,
+            quantity: amendment.newUnfilled.plus(filled),
+            filled,
+        };
+        return this.makeOpenOrder(openOrder);
     }
     getOpenOrdersSync() {
         return clone([...this.openOrders.values()]);
@@ -41,8 +56,8 @@ class Ordering extends Pushing {
     validateOrder(order) {
         assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
         assert(order.price.mod(this.config.TICK_SIZE).eq(0));
-        assert(order.quantity.gt(0));
-        assert(order.quantity.eq(order.quantity.round(this.config.QUANTITY_DP)));
+        assert(order.unfilled.gt(0));
+        assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
         assert(order.length === LONG || order.length === SHORT);
         assert(order.operation === OPEN || order.operation === CLOSE);
         assert(order.operation * order.length === order.side);
