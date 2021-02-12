@@ -1,7 +1,6 @@
 import { Taken } from './3-taken';
 import {
     LimitOrder,
-    LimitOrderAmendment,
     UnidentifiedTrade,
     LONG, SHORT,
     OPEN, CLOSE,
@@ -17,7 +16,7 @@ import {
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './manager-assets';
-import { Frozen } from './manager-open-orders';
+import { Frozen } from './manager-open-makers';
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
@@ -55,8 +54,8 @@ abstract class ManagingAssets extends Taken {
 
     /** @override */
     protected cancelOrderSync(order: OpenOrder): OpenOrder {
-        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
-        const toThaw = this.openOrders.removeOrder(order.id);
+        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
+        const toThaw = this.openMakers.removeOrder(order.id);
         this.assets.thaw(toThaw);
         return {
             ...order,

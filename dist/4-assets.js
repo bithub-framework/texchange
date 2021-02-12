@@ -27,8 +27,8 @@ class ManagingAssets extends Taken {
     }
     /** @override */
     cancelOrderSync(order) {
-        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
-        const toThaw = this.openOrders.removeOrder(order.id);
+        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
+        const toThaw = this.openMakers.removeOrder(order.id);
         this.assets.thaw(toThaw);
         return {
             ...order,

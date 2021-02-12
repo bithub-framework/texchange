@@ -1,7 +1,7 @@
 import { Pushing } from './1-pushing';
 import { BID, ASK, LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './manager-open-orders';
+import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
 class Ordering extends Pushing {
     constructor(config, now) {
@@ -9,7 +9,7 @@ class Ordering extends Pushing {
         this.latestPrice = new Big(0);
         this.orderCount = 0;
         this.settlementPrice = config.initialSettlementPrice;
-        this.openOrders = new OpenOrderManager(config, () => this.settlementPrice, () => this.latestPrice);
+        this.openMakers = new OpenMakerManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     makeOpenOrder(order) {
         this.validateOrder(order);
@@ -31,8 +31,8 @@ class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
     cancelOrderSync(order) {
-        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
-        this.openOrders.removeOrder(order.id);
+        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
+        this.openMakers.removeOrder(order.id);
         return {
             ...order,
             filled,
@@ -51,7 +51,7 @@ class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
     getOpenOrdersSync() {
-        return clone([...this.openOrders.values()]);
+        return clone([...this.openMakers.values()]);
     }
     validateOrder(order) {
         assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
@@ -106,7 +106,7 @@ class Ordering extends Pushing {
                 openOrder.side === ASK && maker.price.lte(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         }
-        return this.openOrders.addOrder(openMaker);
+        return this.openMakers.addOrder(openMaker);
     }
 }
 export { Ordering as default, Ordering, };

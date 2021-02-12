@@ -1,9 +1,9 @@
 import { Pushing } from './1-pushing';
 import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, LimitOrderAmendment } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './manager-open-orders';
+import { OpenMakerManager } from './manager-open-makers';
 declare abstract class Ordering extends Pushing {
-    protected openOrders: OpenOrderManager;
+    protected openMakers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice: Big;
     protected orderCount: number;
@@ -16,6 +16,6 @@ declare abstract class Ordering extends Pushing {
     protected validateOrder(order: OpenOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
-    protected orderMakes(openOrder: OpenOrder): import("./manager-open-orders").Frozen;
+    protected orderMakes(openOrder: OpenOrder): import("./manager-open-makers").Frozen;
 }
 export { Ordering as default, Ordering, };

@@ -481,19 +481,19 @@
         "signature": "babdc0c536849b997fdcb9f57642c95f50d9c64d607ba7bf3ac854ce53411bce",
         "affectsGlobalScope": false
       },
-      "./src/manager-open-orders.ts": {
-        "version": "a5e4a15ad568495f5a26fe0769c98e8e9718f29cefa1ad466d93b18de5f33a69",
-        "signature": "da8e7a1537657b8b82f20c46ec6092f4f746916d59666a98c21433ae0657a4a9",
+      "./src/manager-open-makers.ts": {
+        "version": "1b6ff9528c1a2a23fdca6f46d77b9e255e3a782f51f3ba4017701a058bd7e428",
+        "signature": "3e0009f059eeaa278ad2b10d03ef265cba980e778461db613ece17dacd12b25f",
         "affectsGlobalScope": false
       },
       "./src/2-ordering.ts": {
-        "version": "3881b5bcc3c1b85e01f65e48b06359b55420b937b0d8bd6535cc10bd937ff851",
-        "signature": "304e921639c18eeb62355f8599815ff88a64bf3db557b640246508911eef17f8",
+        "version": "c880e6da27a66e4f252f4e810ae9de9c3b80e2151652f87d42c54638dd315ec9",
+        "signature": "97d8458d6a217f58f80833dfd50836b37e6fedfb8260aed416730089d71c3cb8",
         "affectsGlobalScope": false
       },
       "./src/3-taken.ts": {
-        "version": "e9834d2fedc2352cf7bf6dedbf5ece405f7f82028dce77d1bc7c3e9644e83d2d",
-        "signature": "a64ad5dbac4711cd801f8783b6aabf7d634c9c594d57f8c226467a474e998f03",
+        "version": "7adbb37967c1403543a3e42bef63f31c70aeffde0f597803c62c5ce53b48f81c",
+        "signature": "70455d219dbc89f2c73b8625393fa88546865882313bb062822f12123843b316",
         "affectsGlobalScope": false
       },
       "./src/auto-assets.ts": {
@@ -502,17 +502,17 @@
         "affectsGlobalScope": false
       },
       "./src/manager-assets.ts": {
-        "version": "f771378903f167861e3fc5712b0fe004d98b7572ac93931a5d98769a28d6c4ac",
-        "signature": "77011ed85f9d72be8b8c40ab9ab5de78efcd28bda9e9922d444d79db036c65dc",
+        "version": "caf2cb4921f62314ddea90901dda0b6af9a2f5c9dacfbd743cfa6a0546d484e9",
+        "signature": "4d53cc4bf74de01b226b255ac2db3fe5d27c37f8a483d0baa44693dacaa9b72f",
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "d521e9d68ef1c6572e102c1ea49af751ff4eba1e9473403e3c2376484b05b2f8",
-        "signature": "572e5efcea0e3e16a16e1722431fb8fb982b220bcfc5bfb3717b74244393acab",
+        "version": "3dc70059c84d99e5246dd2b2b398ec6b04969220ef67b96be6b3ddac003effc5",
+        "signature": "e148c13ee52521b55bd2f9a8a70158eadfb0fa8ef5a78901d8770cacd810350b",
         "affectsGlobalScope": false
       },
       "./src/5-delay.ts": {
-        "version": "8b765559d0b15747da7c0726412f20cab21a5f02a844dc558096a5b611589264",
+        "version": "d16ecdbb8e9d8a397c443bd002aa3eee9aeb4fe560763742436410b64b80e6cf",
         "signature": "a2060cec863ba82422004bfea1a9a93c91e23f1988123196dea6ecdf3da15a46",
         "affectsGlobalScope": false
       },
@@ -735,13 +735,13 @@
         "./node_modules/@types/node/assert.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/3-taken.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/2-ordering.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/4-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
@@ -750,10 +750,9 @@
         "./src/3-taken.ts",
         "./src/interfaces.ts",
         "./src/manager-assets.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/5-delay.ts": [
-        "./node_modules/@types/big.js/index.d.ts",
         "./src/4-assets.ts",
         "./src/interfaces.ts"
       ],
@@ -774,9 +773,9 @@
         "./node_modules/@types/node/util.d.ts",
         "./src/auto-assets.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
-      "./src/manager-open-orders.ts": [
+      "./src/manager-open-makers.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./node_modules/@types/node/assert.d.ts",
         "./src/interfaces.ts"
@@ -983,13 +982,13 @@
         "./node_modules/interfaces/dist/data.d.ts",
         "./src/1-pushing.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/3-taken.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/2-ordering.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/4-assets.ts": [
         "./node_modules/@types/big.js/index.d.ts",
@@ -997,7 +996,7 @@
         "./src/3-taken.ts",
         "./src/interfaces.ts",
         "./src/manager-assets.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
       "./src/5-delay.ts": [
         "./src/4-assets.ts",
@@ -1020,9 +1019,9 @@
         "./node_modules/@types/node/util.d.ts",
         "./src/auto-assets.ts",
         "./src/interfaces.ts",
-        "./src/manager-open-orders.ts"
+        "./src/manager-open-makers.ts"
       ],
-      "./src/manager-open-orders.ts": [
+      "./src/manager-open-makers.ts": [
         "./node_modules/@types/big.js/index.d.ts",
         "./src/interfaces.ts"
       ],
@@ -1094,7 +1093,7 @@
       "./src/index.ts",
       "./src/interfaces.ts",
       "./src/manager-assets.ts",
-      "./src/manager-open-orders.ts",
+      "./src/manager-open-makers.ts",
       "./src/manager-orderbook.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.collection.d.ts",
       "../../../../../usr/local/lib/node_modules/typescript/lib/lib.es2015.core.d.ts",

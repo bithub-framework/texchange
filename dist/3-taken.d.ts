@@ -1,6 +1,6 @@
 import { Ordering } from './2-ordering';
 import { UnidentifiedTrade, OpenOrder, OpenMaker } from './interfaces';
-import { Frozen } from './manager-open-orders';
+import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
 declare abstract class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): boolean;

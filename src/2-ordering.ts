@@ -13,11 +13,11 @@ import {
     LimitOrderAmendment,
 } from './interfaces';
 import Big from 'big.js';
-import { OpenOrderManager } from './manager-open-orders';
+import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
 
 abstract class Ordering extends Pushing {
-    protected openOrders: OpenOrderManager;
+    protected openMakers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice = new Big(0);
     protected orderCount = 0;
@@ -28,7 +28,7 @@ abstract class Ordering extends Pushing {
     ) {
         super(config, now);
         this.settlementPrice = config.initialSettlementPrice;
-        this.openOrders = new OpenOrderManager(
+        this.openMakers = new OpenMakerManager(
             config,
             () => this.settlementPrice,
             () => this.latestPrice,
@@ -57,8 +57,8 @@ abstract class Ordering extends Pushing {
     }
 
     protected cancelOrderSync(order: OpenOrder): OpenOrder {
-        const filled = this.openOrders.get(order.id)?.filled || order.quantity;
-        this.openOrders.removeOrder(order.id);
+        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
+        this.openMakers.removeOrder(order.id);
         return {
             ...order,
             filled,
@@ -81,7 +81,7 @@ abstract class Ordering extends Pushing {
     }
 
     protected getOpenOrdersSync(): OpenOrder[] {
-        return clone([...this.openOrders.values()]);
+        return clone([...this.openMakers.values()]);
     }
 
     protected validateOrder(order: OpenOrder) {
@@ -147,7 +147,7 @@ abstract class Ordering extends Pushing {
                 openOrder.side === ASK && maker.price.lte(openOrder.price)
             ) openMaker.behind = openMaker.behind.plus(maker.quantity);
         }
-        return this.openOrders.addOrder(openMaker);
+        return this.openMakers.addOrder(openMaker);
     }
 }
 

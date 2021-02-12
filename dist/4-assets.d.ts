@@ -3,7 +3,7 @@ import { Taken } from './3-taken';
 import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, Orderbook, Trade, OpenMaker } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
-import { Frozen } from './manager-open-orders';
+import { Frozen } from './manager-open-makers';
 import { EventEmitter } from 'events';
 declare abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;

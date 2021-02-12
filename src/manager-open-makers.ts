@@ -14,7 +14,7 @@ interface Frozen {
     length: Length;
 }
 
-class OpenOrderManager extends Map<OrderId, OpenMaker>{
+class OpenMakerManager extends Map<OrderId, OpenMaker>{
     private frozens = new Map<OrderId, Frozen>();
 
     constructor(
@@ -114,7 +114,7 @@ class OpenOrderManager extends Map<OrderId, OpenMaker>{
 }
 
 export {
-    OpenOrderManager as default,
-    OpenOrderManager,
+    OpenMakerManager as default,
+    OpenMakerManager,
     Frozen,
 }

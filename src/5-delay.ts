@@ -2,7 +2,6 @@ import { ManagingAssets } from './4-assets';
 import {
     LimitOrder,
     LimitOrderAmendment,
-    OrderId,
     UnidentifiedTrade,
     ContextMarketPublicApiLike,
     ContextAccountPrivateApiLike,
@@ -12,7 +11,6 @@ import {
     Balances,
     Positions,
 } from './interfaces';
-import Big from 'big.js';
 
 class Texchange extends ManagingAssets implements
     ContextMarketPublicApiLike,

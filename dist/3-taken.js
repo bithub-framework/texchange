@@ -31,13 +31,13 @@ class Taken extends Ordering {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openOrders.takeOrder(maker.id, volume, dollarVolume);
+        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
         return [volume, dollarVolume, toThaw];
     }
     uTradeTakesOpenMakers(uTrade) {
         uTrade = { ...uTrade };
         let totalVolume = new Big(0);
-        for (const order of this.openOrders.values())
+        for (const order of this.openMakers.values())
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
                 const [volume] = this.uTradeTakesOpenMaker(uTrade, order);
                 totalVolume = totalVolume.plus(volume);
