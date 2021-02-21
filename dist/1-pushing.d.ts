@@ -4,10 +4,13 @@ import { OrderbookManager } from './manager-orderbook';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
 declare abstract class Pushing extends EventEmitter {
     protected config: Config;
+    /** 必须保证 update 时数据的 time 等于 now() */
     protected now: () => number;
     protected tradeCount: number;
     protected orderbook: OrderbookManager;
-    constructor(config: Config, now: () => number);
+    constructor(config: Config, 
+    /** 必须保证 update 时数据的 time 等于 now() */
+    now: () => number);
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     protected pushOrderbook(): Promise<void>;

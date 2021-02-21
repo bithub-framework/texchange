@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
 class Pushing extends EventEmitter {
     constructor(config, 
-    // 必须保证 update 时数据的 time 等于 now()
+    /** 必须保证 update 时数据的 time 等于 now() */
     now) {
         super();
         this.config = config;
