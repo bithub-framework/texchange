@@ -1,6 +1,6 @@
-import { Ordering } from './2-ordering';
+import { Ordering, OrderingEvents } from './2-ordering';
 import {
-    BID, ASK,
+    Side,
     UnidentifiedTrade,
     min,
     OpenOrder,
@@ -14,12 +14,12 @@ abstract class Taken extends Ordering {
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
         return (
-            maker.side === BID &&
-            trade.side === ASK &&
+            maker.side === Side.BID &&
+            trade.side === Side.ASK &&
             trade.price.lte(maker.price)
             ||
-            maker.side === ASK &&
-            trade.side === BID &&
+            maker.side === Side.ASK &&
+            trade.side === Side.BID &&
             trade.price.gte(maker.price)
         );
     }
@@ -77,4 +77,5 @@ abstract class Taken extends Ordering {
 export {
     Taken as default,
     Taken,
+    OrderingEvents as TakenEvents,
 }

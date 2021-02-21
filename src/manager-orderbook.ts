@@ -1,6 +1,6 @@
 import {
     Orderbook,
-    Side, BID, ASK,
+    Side,
     Config,
     BookOrder,
 } from './interfaces';
@@ -13,16 +13,16 @@ class OrderbookManager implements Orderbook {
     private applied = false;
     public time = Number.NEGATIVE_INFINITY;
     private baseBook: Orderbook = {
-        [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
+        [Side.ASK]: [], [Side.BID]: [], time: Number.NEGATIVE_INFINITY,
     };
     private total = {
-        [ASK]: new Map<string, Big>(),
-        [BID]: new Map<string, Big>(),
+        [Side.ASK]: new Map<string, Big>(),
+        [Side.BID]: new Map<string, Big>(),
     };
     // decrement 必须是正数
     private decrements = {
-        [ASK]: new Map<string, Big>(),
-        [BID]: new Map<string, Big>(),
+        [Side.ASK]: new Map<string, Big>(),
+        [Side.BID]: new Map<string, Big>(),
     };
 
     constructor(
@@ -33,20 +33,20 @@ class OrderbookManager implements Orderbook {
     }
 
     private _ASK!: BookOrder[];
-    public get [ASK]() {
+    public get [Side.ASK]() {
         assert(this.applied);
         return this._ASK;
     }
-    private set [ASK](v: BookOrder[]) {
+    private set [Side.ASK](v: BookOrder[]) {
         this._ASK = v;
     }
 
     private _BID!: BookOrder[];
-    public get [BID]() {
+    public get [Side.BID]() {
         assert(this.applied);
         return this._BID;
     }
-    private set [BID](v: BookOrder[]) {
+    private set [Side.BID](v: BookOrder[]) {
         this._BID = v;
     }
 
@@ -68,7 +68,7 @@ class OrderbookManager implements Orderbook {
     }
 
     public apply(): void {
-        for (const side of [BID, ASK]) {
+        for (const side of [Side.BID, Side.ASK]) {
             this.total[side].clear();
             this.baseBook[side].forEach(order =>
                 void this.total[side].set(
@@ -94,8 +94,8 @@ class OrderbookManager implements Orderbook {
 
     public toJSON(): Orderbook {
         return {
-            [BID]: this[BID],
-            [ASK]: this[ASK],
+            [Side.BID]: this[Side.BID],
+            [Side.ASK]: this[Side.ASK],
             time: this.time,
         }
     }

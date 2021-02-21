@@ -1,4 +1,4 @@
-import { LONG, SHORT, } from './interfaces';
+import { Length, } from './interfaces';
 import Big from 'big.js';
 class AutoAssets {
     constructor(config, getSettlementPrice, getLatestPrice) {
@@ -9,14 +9,14 @@ class AutoAssets {
         this.balance = config.initialBalance;
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
-            [LONG]: new Big(0),
-            [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
         };
         this.position = {
-            [LONG]: new Big(0), [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
         };
         this.cost = {
-            [LONG]: new Big(0), [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
         };
     }
     get margin() {
@@ -29,10 +29,10 @@ class AutoAssets {
     }
     get closable() {
         return {
-            [LONG]: this.position[LONG]
-                .minus(this.frozenPosition[LONG]),
-            [SHORT]: this.position[SHORT]
-                .minus(this.frozenPosition[SHORT]),
+            [Length.LONG]: this.position[Length.LONG]
+                .minus(this.frozenPosition[Length.LONG]),
+            [Length.SHORT]: this.position[Length.SHORT]
+                .minus(this.frozenPosition[Length.SHORT]),
         };
     }
     toJSON() {

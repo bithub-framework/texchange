@@ -1,4 +1,4 @@
-import { OPEN, CLOSE, } from './interfaces';
+import { Operation, } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 class OpenMakerManager extends Map {
@@ -11,10 +11,10 @@ class OpenMakerManager extends Map {
     }
     addOrder(order) {
         const frozen = {
-            margin: order.operation === OPEN
+            margin: order.operation === Operation.OPEN
                 ? this.config.calcFrozenMargin(this.config, order, this.getSettlementPrice(), this.getLatestPrice()).round(this.config.CURRENCY_DP)
                 : new Big(0),
-            position: order.operation === CLOSE
+            position: order.operation === Operation.CLOSE
                 ? order.unfilled
                 : new Big(0),
             length: order.length,

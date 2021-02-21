@@ -1,4 +1,4 @@
-import { Ordering } from './2-ordering';
+import { Ordering, OrderingEvents } from './2-ordering';
 import { UnidentifiedTrade, OpenOrder, OpenMaker } from './interfaces';
 import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
@@ -9,4 +9,4 @@ declare abstract class Taken extends Ordering {
     protected uTradeTakesOpenMakers(uTrade: UnidentifiedTrade): Big;
     updateTrades(uTrades: UnidentifiedTrade[]): Big;
 }
-export { Taken as default, Taken, };
+export { Taken as default, Taken, OrderingEvents as TakenEvents, };

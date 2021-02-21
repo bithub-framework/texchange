@@ -2,7 +2,7 @@ import {
     OrderId,
     Config,
     Length,
-    OPEN, CLOSE,
+    Operation,
     OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
@@ -27,7 +27,7 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
 
     public addOrder(order: OpenMaker): Frozen {
         const frozen: Frozen = {
-            margin: order.operation === OPEN
+            margin: order.operation === Operation.OPEN
                 ? this.config.calcFrozenMargin(
                     this.config,
                     order,
@@ -35,7 +35,7 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
                     this.getLatestPrice(),
                 ).round(this.config.CURRENCY_DP)
                 : new Big(0),
-            position: order.operation === CLOSE
+            position: order.operation === Operation.CLOSE
                 ? order.unfilled
                 : new Big(0),
             length: order.length,

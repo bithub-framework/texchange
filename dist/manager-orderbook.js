@@ -1,4 +1,4 @@
-import { BID, ASK, } from './interfaces';
+import { Side, } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 class OrderbookManager {
@@ -8,31 +8,31 @@ class OrderbookManager {
         this.applied = false;
         this.time = Number.NEGATIVE_INFINITY;
         this.baseBook = {
-            [ASK]: [], [BID]: [], time: Number.NEGATIVE_INFINITY,
+            [Side.ASK]: [], [Side.BID]: [], time: Number.NEGATIVE_INFINITY,
         };
         this.total = {
-            [ASK]: new Map(),
-            [BID]: new Map(),
+            [Side.ASK]: new Map(),
+            [Side.BID]: new Map(),
         };
         // decrement 必须是正数
         this.decrements = {
-            [ASK]: new Map(),
-            [BID]: new Map(),
+            [Side.ASK]: new Map(),
+            [Side.BID]: new Map(),
         };
         this.apply();
     }
-    get [ASK]() {
+    get [Side.ASK]() {
         assert(this.applied);
         return this._ASK;
     }
-    set [ASK](v) {
+    set [Side.ASK](v) {
         this._ASK = v;
     }
-    get [BID]() {
+    get [Side.BID]() {
         assert(this.applied);
         return this._BID;
     }
-    set [BID](v) {
+    set [Side.BID](v) {
         this._BID = v;
     }
     setBase(orderbook) {
@@ -48,7 +48,7 @@ class OrderbookManager {
         this.applied = false;
     }
     apply() {
-        for (const side of [BID, ASK]) {
+        for (const side of [Side.BID, Side.ASK]) {
             this.total[side].clear();
             this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(this.config.PRICE_DP), order.quantity));
             for (const [_price, decrement] of this.decrements[side]) {
@@ -72,8 +72,8 @@ class OrderbookManager {
     }
     toJSON() {
         return {
-            [BID]: this[BID],
-            [ASK]: this[ASK],
+            [Side.BID]: this[Side.BID],
+            [Side.ASK]: this[Side.ASK],
             time: this.time,
         };
     }

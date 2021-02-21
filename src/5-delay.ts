@@ -1,10 +1,10 @@
-import { ManagingAssets } from './4-assets';
+import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
 import {
     LimitOrder,
     LimitOrderAmendment,
     UnidentifiedTrade,
-    ContextMarketPublicApiLike,
-    ContextAccountPrivateApiLike,
+    ContextMarketApiLike,
+    ContextAccountApiLike,
     Config,
     OpenOrder,
     clone,
@@ -13,8 +13,8 @@ import {
 } from './interfaces';
 
 class Texchange extends ManagingAssets implements
-    ContextMarketPublicApiLike,
-    ContextAccountPrivateApiLike {
+    ContextMarketApiLike,
+    ContextAccountApiLike {
     constructor(
         config: Config,
         private sleep: (ms: number) => Promise<void>,
@@ -121,4 +121,5 @@ class Texchange extends ManagingAssets implements
 export {
     Texchange as default,
     Texchange,
+    ManagingAssetsEvents as TexchangeEvents,
 }

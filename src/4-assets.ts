@@ -1,16 +1,13 @@
-import { Taken } from './3-taken';
+import { Taken, TakenEvents } from './3-taken';
 import {
     LimitOrder,
     UnidentifiedTrade,
-    LONG, SHORT,
-    OPEN, CLOSE,
+    Operation, Length,
     Config,
     OpenOrder,
     clone,
     Positions,
     Balances,
-    Orderbook,
-    Trade,
     OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
@@ -83,7 +80,7 @@ abstract class ManagingAssets extends Taken {
     }
 
     private enoughPosition(order: OpenOrder) {
-        if (order.operation === CLOSE)
+        if (order.operation === Operation.CLOSE)
             assert(
                 order.unfilled.lte(new Big(0)
                     .plus(this.assets.position[order.side * order.operation])
@@ -97,7 +94,7 @@ abstract class ManagingAssets extends Taken {
     }
 
     private enoughReserve(order: OpenOrder) {
-        if (order.operation === OPEN)
+        if (order.operation === Operation.OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin(
                     this.config,
@@ -117,7 +114,7 @@ abstract class ManagingAssets extends Taken {
         const [uTrades, volume, dollarVolume] = super.orderTakes(taker);
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
-        if (taker.operation === OPEN) {
+        if (taker.operation === Operation.OPEN) {
             this.assets.openPosition(
                 taker.length, volume, dollarVolume, takerFee
             );
@@ -165,7 +162,7 @@ abstract class ManagingAssets extends Taken {
 
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
-        if (maker.operation === OPEN) {
+        if (maker.operation === Operation.OPEN) {
             this.assets.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
@@ -181,7 +178,7 @@ abstract class ManagingAssets extends Taken {
 
     protected settle(): void {
         const position = clone(this.assets.position);
-        for (const length of [LONG, SHORT]) {
+        for (const length of [Length.LONG, Length.SHORT]) {
             const settlementDollarVolume =
                 this.config.calcDollarVolume(
                     this.settlementPrice,
@@ -211,32 +208,49 @@ abstract class ManagingAssets extends Taken {
     }
 }
 
-interface ManagingAssets extends EventEmitter {
-    emit(event: 'positions', positions: Positions): boolean;
-    emit(event: 'balances', balances: Balances): boolean;
-    on(event: 'positions', listener: (positions: Positions) => void): this;
-    on(event: 'balances', listener: (balances: Balances) => void): this;
-    off(event: 'positions', listener: (positions: Positions) => void): this;
-    off(event: 'balances', listener: (balances: Balances) => void): this;
-    once(event: 'positions', listener: (positions: Positions) => void): this;
-    once(event: 'balances', listener: (balances: Balances) => void): this;
-
-    // extended from Pushing
-    emit(event: 'orderbook', orderbook: Orderbook): boolean;
-    emit(event: 'trades', trades: Trade[]): boolean;
-    emit(event: 'error', err: Error): boolean;
-    on(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
-    on(event: 'trades', listener: (trades: Trade[]) => void): this;
-    on(event: 'error', listener: (err: Error) => void): this;
-    off(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
-    off(event: 'trades', listener: (trades: Trade[]) => void): this;
-    off(event: 'error', listener: (err: Error) => void): this;
-    once(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
-    once(event: 'trades', listener: (trades: Trade[]) => void): this;
-    once(event: 'error', listener: (err: Error) => void): this;
+interface ManagingAssetsEvents extends TakenEvents {
+    positions: [Positions];
+    balances: [Balances];
 }
+
+interface ManagingAssets extends EventEmitter {
+    on<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
+    once<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
+    off<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
+    emit<Event extends keyof ManagingAssetsEvents>(event: Event, ...args: ManagingAssetsEvents[Event]): boolean;
+    on(event: string | symbol, listener: (...args: any[]) => void): this;
+    once(event: string | symbol, listener: (...args: any[]) => void): this;
+    off(event: string | symbol, listener: (...args: any[]) => void): this;
+    emit(event: string | symbol, ...args: any[]): boolean;
+}
+
+// interface ManagingAssets extends EventEmitter {
+//     emit(event: 'positions', positions: Positions): boolean;
+//     emit(event: 'balances', balances: Balances): boolean;
+//     on(event: 'positions', listener: (positions: Positions) => void): this;
+//     on(event: 'balances', listener: (balances: Balances) => void): this;
+//     off(event: 'positions', listener: (positions: Positions) => void): this;
+//     off(event: 'balances', listener: (balances: Balances) => void): this;
+//     once(event: 'positions', listener: (positions: Positions) => void): this;
+//     once(event: 'balances', listener: (balances: Balances) => void): this;
+
+//     // extended from Pushing
+//     emit(event: 'orderbook', orderbook: Orderbook): boolean;
+//     emit(event: 'trades', trades: Trade[]): boolean;
+//     emit(event: 'error', err: Error): boolean;
+//     on(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+//     on(event: 'trades', listener: (trades: Trade[]) => void): this;
+//     on(event: 'error', listener: (err: Error) => void): this;
+//     off(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+//     off(event: 'trades', listener: (trades: Trade[]) => void): this;
+//     off(event: 'error', listener: (err: Error) => void): this;
+//     once(event: 'orderbook', listener: (orderbook: Orderbook) => void): this;
+//     once(event: 'trades', listener: (trades: Trade[]) => void): this;
+//     once(event: 'error', listener: (err: Error) => void): this;
+// }
 
 export {
     ManagingAssets as default,
     ManagingAssets,
+    ManagingAssetsEvents,
 }

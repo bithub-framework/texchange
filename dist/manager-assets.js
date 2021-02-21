@@ -1,4 +1,4 @@
-import { LONG, SHORT, } from './interfaces';
+import { Length, } from './interfaces';
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import util from 'util';
@@ -18,7 +18,7 @@ class AssetsManager extends AutoAssets {
         this.autoMargin = this.autoMargin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
     }
     decMargin(volume) {
-        const totalPosition = this.position[LONG].plus(this.position[SHORT]);
+        const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
         this.autoMargin = totalPosition.eq(volume)
             ? new Big(0)
             : this.autoMargin.minus(this.config.calcMarginDecrement(this.config, this, volume).round(this.config.CURRENCY_DP));
@@ -32,7 +32,7 @@ class AssetsManager extends AutoAssets {
         const cost = volume.eq(this.position[length])
             ? this.cost[length]
             : this.config.calcDollarVolume(this.cost[length].div(this.position[length]), volume).round(this.config.CURRENCY_DP);
-        const profit = length === LONG
+        const profit = length === Length.LONG
             ? dollarVolume.minus(cost)
             : cost.minus(dollarVolume);
         this.position[length] = this.position[length].minus(volume);

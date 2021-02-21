@@ -1,5 +1,5 @@
 import {
-    LONG, SHORT, Length,
+    Length,
     Config,
 } from './interfaces';
 import AutoAssets from './auto-assets';
@@ -44,7 +44,7 @@ class AssetsManager extends AutoAssets {
     }
 
     public decMargin(volume: Big) {
-        const totalPosition = this.position[LONG].plus(this.position[SHORT]);
+        const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
         this.autoMargin = totalPosition.eq(volume)
             ? new Big(0)
             : this.autoMargin.minus(
@@ -79,7 +79,7 @@ class AssetsManager extends AutoAssets {
                 this.cost[length].div(this.position[length]),
                 volume,
             ).round(this.config.CURRENCY_DP);
-        const profit = length === LONG
+        const profit = length === Length.LONG
             ? dollarVolume.minus(cost)
             : cost.minus(dollarVolume);
         this.position[length] = this.position[length].minus(volume);

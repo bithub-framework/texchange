@@ -1,6 +1,6 @@
 import {
     ExAssets,
-    LONG, SHORT,
+    Length,
     Config,
 } from './interfaces';
 import Big from 'big.js';
@@ -26,14 +26,14 @@ class AutoAssets implements ExAssets {
         this.balance = config.initialBalance;
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
-            [LONG]: new Big(0),
-            [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
         };
         this.position = {
-            [LONG]: new Big(0), [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
         };
         this.cost = {
-            [LONG]: new Big(0), [SHORT]: new Big(0),
+            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
         };
     }
 
@@ -56,10 +56,10 @@ class AutoAssets implements ExAssets {
 
     public get closable() {
         return {
-            [LONG]: this.position[LONG]
-                .minus(this.frozenPosition[LONG]),
-            [SHORT]: this.position[SHORT]
-                .minus(this.frozenPosition[SHORT]),
+            [Length.LONG]: this.position[Length.LONG]
+                .minus(this.frozenPosition[Length.LONG]),
+            [Length.SHORT]: this.position[Length.SHORT]
+                .minus(this.frozenPosition[Length.SHORT]),
         };
     }
 

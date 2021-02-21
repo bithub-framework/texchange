@@ -1,10 +1,8 @@
-import { Pushing } from './1-pushing';
+import { Pushing, PushingEvents } from './1-pushing';
 import {
     OpenOrder,
     LimitOrder,
-    BID, ASK,
-    LONG, SHORT,
-    OPEN, CLOSE,
+    Side, Operation, Length,
     UnidentifiedTrade,
     min,
     Config,
@@ -89,8 +87,8 @@ abstract class Ordering extends Pushing {
         assert(order.price.mod(this.config.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
         assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
-        assert(order.length === LONG || order.length === SHORT);
-        assert(order.operation === OPEN || order.operation === CLOSE);
+        assert(order.length === Length.LONG || order.length === Length.SHORT);
+        assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
         assert(order.operation * order.length === order.side);
     }
 
@@ -112,8 +110,8 @@ abstract class Ordering extends Pushing {
         for (const maker of this.orderbook[-taker.side])
             if (
                 (
-                    taker.side === BID && taker.price.gte(maker.price) ||
-                    taker.side === ASK && taker.price.lte(maker.price)
+                    taker.side === Side.BID && taker.price.gte(maker.price) ||
+                    taker.side === Side.ASK && taker.price.lte(maker.price)
                 ) && taker.unfilled.gt(0)
             ) {
                 const quantity = min(taker.unfilled, maker.quantity);
@@ -144,8 +142,8 @@ abstract class Ordering extends Pushing {
         };
         for (const maker of this.orderbook[openOrder.side]) {
             if (
-                openOrder.side === BID && maker.price.gte(openOrder.price) ||
-                openOrder.side === ASK && maker.price.lte(openOrder.price)
+                openOrder.side === Side.BID && maker.price.gte(openOrder.price) ||
+                openOrder.side === Side.ASK && maker.price.lte(openOrder.price)
             ) openMaker.behind = openMaker.behind.plus(maker.quantity);
         }
         return this.openMakers.addOrder(openMaker);
@@ -155,4 +153,5 @@ abstract class Ordering extends Pushing {
 export {
     Ordering as default,
     Ordering,
+    PushingEvents as OrderingEvents,
 }

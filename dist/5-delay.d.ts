@@ -1,6 +1,6 @@
-import { ManagingAssets } from './4-assets';
-import { LimitOrder, LimitOrderAmendment, UnidentifiedTrade, ContextMarketPublicApiLike, ContextAccountPrivateApiLike, Config, OpenOrder, Balances, Positions } from './interfaces';
-declare class Texchange extends ManagingAssets implements ContextMarketPublicApiLike, ContextAccountPrivateApiLike {
+import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
+import { LimitOrder, LimitOrderAmendment, UnidentifiedTrade, ContextMarketApiLike, ContextAccountApiLike, Config, OpenOrder, Balances, Positions } from './interfaces';
+declare class Texchange extends ManagingAssets implements ContextMarketApiLike, ContextAccountApiLike {
     private sleep;
     constructor(config: Config, sleep: (ms: number) => Promise<void>, now: () => number);
     makeLimitOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
@@ -13,4 +13,4 @@ declare class Texchange extends ManagingAssets implements ContextMarketPublicApi
     protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
     protected pushPositionsAndBalances(): Promise<void>;
 }
-export { Texchange as default, Texchange, };
+export { Texchange as default, Texchange, ManagingAssetsEvents as TexchangeEvents, };

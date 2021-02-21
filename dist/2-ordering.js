@@ -1,5 +1,5 @@
 import { Pushing } from './1-pushing';
-import { BID, ASK, LONG, SHORT, OPEN, CLOSE, min, clone, } from './interfaces';
+import { Side, Operation, Length, min, clone, } from './interfaces';
 import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
@@ -58,8 +58,8 @@ class Ordering extends Pushing {
         assert(order.price.mod(this.config.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
         assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
-        assert(order.length === LONG || order.length === SHORT);
-        assert(order.operation === OPEN || order.operation === CLOSE);
+        assert(order.length === Length.LONG || order.length === Length.SHORT);
+        assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
         assert(order.operation * order.length === order.side);
     }
     updateTrades(uTrades) {
@@ -77,8 +77,8 @@ class Ordering extends Pushing {
         let volume = new Big(0);
         let dollarVolume = new Big(0);
         for (const maker of this.orderbook[-taker.side])
-            if ((taker.side === BID && taker.price.gte(maker.price) ||
-                taker.side === ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
+            if ((taker.side === Side.BID && taker.price.gte(maker.price) ||
+                taker.side === Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
                 const quantity = min(taker.unfilled, maker.quantity);
                 uTrades.push({
                     side: taker.side,
@@ -103,8 +103,8 @@ class Ordering extends Pushing {
             behind: new Big(0),
         };
         for (const maker of this.orderbook[openOrder.side]) {
-            if (openOrder.side === BID && maker.price.gte(openOrder.price) ||
-                openOrder.side === ASK && maker.price.lte(openOrder.price))
+            if (openOrder.side === Side.BID && maker.price.gte(openOrder.price) ||
+                openOrder.side === Side.ASK && maker.price.lte(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         }
         return this.openMakers.addOrder(openMaker);

@@ -1,14 +1,14 @@
 import { Ordering } from './2-ordering';
-import { BID, ASK, min, } from './interfaces';
+import { Side, min, } from './interfaces';
 import Big from 'big.js';
 class Taken extends Ordering {
     uTradeShouldTakeOpenOrder(trade, maker) {
-        return (maker.side === BID &&
-            trade.side === ASK &&
+        return (maker.side === Side.BID &&
+            trade.side === Side.ASK &&
             trade.price.lte(maker.price)
             ||
-                maker.side === ASK &&
-                    trade.side === BID &&
+                maker.side === Side.ASK &&
+                    trade.side === Side.BID &&
                     trade.price.gte(maker.price));
     }
     uTradeTakesOrderQueue(uTrade, maker) {
