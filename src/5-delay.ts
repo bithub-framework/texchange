@@ -1,7 +1,7 @@
 import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
 import {
     LimitOrder,
-    LimitOrderAmendment,
+    Amendment,
     UnidentifiedTrade,
     ContextMarketApiLike,
     ContextAccountApiLike,
@@ -25,23 +25,23 @@ class Texchange extends ManagingAssets implements
         super(config, snapshot, now);
     }
 
-    public async makeLimitOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
+    public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeLimitOrderNoDelay(order));
+            return orders.map(order => this.makeOrderNoDelay(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async amendLimitOrders(
-        amendments: LimitOrderAmendment[]
+    public async amendOrders(
+        amendments: Amendment[]
     ): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendLimitOrderNoDelay(order));
+            return amendments.map(order => this.amendOrderNoDelay(order));
         } finally {
             await this.sleep(this.config.PING);
         }

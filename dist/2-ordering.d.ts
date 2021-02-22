@@ -1,5 +1,5 @@
 import { Pushing, PushingEvents } from './1-pushing';
-import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, LimitOrderAmendment, Snapshot } from './interfaces';
+import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, Amendment, Snapshot } from './interfaces';
 import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
 declare class Ordering extends Pushing {
@@ -9,9 +9,9 @@ declare class Ordering extends Pushing {
     protected orderCount: number;
     constructor(config: Config, snapshot: Snapshot, now: () => number);
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
-    protected makeLimitOrderNoDelay(order: LimitOrder): OpenOrder;
+    protected makeOrderNoDelay(order: LimitOrder): OpenOrder;
     protected cancelOrderNoDelay(order: OpenOrder): OpenOrder;
-    protected amendLimitOrderNoDelay(amendment: LimitOrderAmendment): OpenOrder;
+    protected amendOrderNoDelay(amendment: Amendment): OpenOrder;
     protected getOpenOrdersNoDelay(): OpenOrder[];
     protected validateOrder(order: OpenOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;

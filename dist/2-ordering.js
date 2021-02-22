@@ -21,7 +21,7 @@ class Ordering extends Pushing {
         }
         return order;
     }
-    makeLimitOrderNoDelay(order) {
+    makeOrderNoDelay(order) {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
@@ -39,7 +39,7 @@ class Ordering extends Pushing {
             unfilled: order.quantity.minus(filled),
         };
     }
-    amendLimitOrderNoDelay(amendment) {
+    amendOrderNoDelay(amendment) {
         const { filled } = this.cancelOrderNoDelay(amendment);
         const openOrder = {
             ...amendment,

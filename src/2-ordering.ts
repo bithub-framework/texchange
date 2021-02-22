@@ -8,7 +8,7 @@ import {
     Config,
     clone,
     OpenMaker,
-    LimitOrderAmendment,
+    Amendment,
     Snapshot,
 } from './interfaces';
 import Big from 'big.js';
@@ -46,7 +46,7 @@ class Ordering extends Pushing {
         return order;
     }
 
-    protected makeLimitOrderNoDelay(order: LimitOrder): OpenOrder {
+    protected makeOrderNoDelay(order: LimitOrder): OpenOrder {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
@@ -66,8 +66,8 @@ class Ordering extends Pushing {
         };
     }
 
-    protected amendLimitOrderNoDelay(
-        amendment: LimitOrderAmendment,
+    protected amendOrderNoDelay(
+        amendment: Amendment,
     ): OpenOrder {
         const { filled } = this.cancelOrderNoDelay(amendment);
         const openOrder: OpenOrder = {
