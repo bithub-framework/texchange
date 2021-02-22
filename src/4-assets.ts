@@ -18,7 +18,7 @@ import { Frozen } from './manager-open-makers';
 import assert from 'assert';
 import { EventEmitter } from 'events';
 
-abstract class ManagingAssets extends Taken {
+class ManagingAssets extends Taken {
     protected assets: AssetsManager;
 
     constructor(

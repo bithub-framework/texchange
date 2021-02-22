@@ -5,7 +5,7 @@ import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import { Frozen } from './manager-open-makers';
 import { EventEmitter } from 'events';
-declare abstract class ManagingAssets extends Taken {
+declare class ManagingAssets extends Taken {
     protected assets: AssetsManager;
     constructor(config: Config, snapshot: Snapshot, now: () => number);
     /** @override */

@@ -2,7 +2,7 @@ import { Ordering, OrderingEvents } from './2-ordering';
 import { UnidentifiedTrade, OpenOrder, OpenMaker } from './interfaces';
 import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
-declare abstract class Taken extends Ordering {
+declare class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): boolean;
     protected uTradeTakesOrderQueue(uTrade: UnidentifiedTrade, maker: OpenMaker): void;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];

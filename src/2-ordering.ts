@@ -15,7 +15,7 @@ import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
 
-abstract class Ordering extends Pushing {
+class Ordering extends Pushing {
     protected openMakers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice = new Big(0);

@@ -10,7 +10,7 @@ import {
 import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
 
-abstract class Taken extends Ordering {
+class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {

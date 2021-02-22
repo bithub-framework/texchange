@@ -2,7 +2,7 @@ import { Pushing, PushingEvents } from './1-pushing';
 import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, LimitOrderAmendment, Snapshot } from './interfaces';
 import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
-declare abstract class Ordering extends Pushing {
+declare class Ordering extends Pushing {
     protected openMakers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice: Big;

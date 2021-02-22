@@ -7,7 +7,6 @@ import {
     AccountConfig,
     LimitOrder,
     OpenOrder,
-    Length,
 } from 'interfaces';
 import Big from 'big.js';
 
