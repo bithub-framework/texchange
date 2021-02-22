@@ -1,19 +1,19 @@
 /// <reference types="node" />
 import { Taken, TakenEvents } from './3-taken';
-import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, OpenMaker } from './interfaces';
+import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, OpenMaker, Snapshot } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import { Frozen } from './manager-open-makers';
 import { EventEmitter } from 'events';
 declare abstract class ManagingAssets extends Taken {
     protected assets: AssetsManager;
-    constructor(config: Config, now: () => number);
+    constructor(config: Config, snapshot: Snapshot, now: () => number);
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */
-    protected cancelOrderSync(order: OpenOrder): OpenOrder;
-    protected get positions(): Positions;
-    protected get balances(): Balances;
+    protected cancelOrderNoDelay(order: OpenOrder): OpenOrder;
+    protected getPositionsNoDelay(): Positions;
+    protected getBalancesNoDelay(): Balances;
     private enoughPosition;
     private singleLength;
     private enoughReserve;
@@ -23,6 +23,7 @@ declare abstract class ManagingAssets extends Taken {
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];
     protected settle(): void;
     updateTrades(uTrades: UnidentifiedTrade[]): Big;
+    getSnapshot(): Snapshot;
 }
 interface ManagingAssetsEvents extends TakenEvents {
     positions: [Positions];

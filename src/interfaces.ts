@@ -31,12 +31,9 @@ export interface ExAssets extends Omit<Assets, 'time'> {
 export interface TexMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
-    initialSettlementPrice: Big;
 }
 
 export interface TexAccountConfig extends AccountConfig {
-    initialBalance: Big;
-
     calcInitialMargin: (
         config: MarketConfig & AccountConfig,
         order: LimitOrder,

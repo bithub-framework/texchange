@@ -2,6 +2,7 @@ import {
     ExAssets,
     Length,
     Config,
+    Snapshot,
 } from './interfaces';
 import Big from 'big.js';
 
@@ -20,10 +21,11 @@ class AutoAssets implements ExAssets {
 
     constructor(
         protected config: Config,
+        snapshot: Snapshot,
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
-        this.balance = config.initialBalance;
+        this.balance = snapshot.balance;
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [Length.LONG]: new Big(0),

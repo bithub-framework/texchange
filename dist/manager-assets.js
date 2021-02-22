@@ -3,8 +3,8 @@ import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import util from 'util';
 class AssetsManager extends AutoAssets {
-    constructor(config, getSettlementPrice, getLatestPrice) {
-        super(config, getSettlementPrice, getLatestPrice);
+    constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
+        super(config, snapshot, getSettlementPrice, getLatestPrice);
     }
     freeze({ margin, position, length }) {
         this.frozenMargin = this.frozenMargin.plus(margin);

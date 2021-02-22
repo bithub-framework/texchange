@@ -23,11 +23,13 @@ abstract class ManagingAssets extends Taken {
 
     constructor(
         config: Config,
+        snapshot: Snapshot,
         now: () => number,
     ) {
-        super(config, now);
+        super(config, snapshot, now);
         this.assets = new AssetsManager(
             config,
+            snapshot,
             () => this.settlementPrice,
             () => this.latestPrice,
         );
@@ -51,7 +53,7 @@ abstract class ManagingAssets extends Taken {
     }
 
     /** @override */
-    protected cancelOrderSync(order: OpenOrder): OpenOrder {
+    protected cancelOrderNoDelay(order: OpenOrder): OpenOrder {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         const toThaw = this.openMakers.removeOrder(order.id);
         this.assets.thaw(toThaw);
@@ -62,7 +64,7 @@ abstract class ManagingAssets extends Taken {
         };
     }
 
-    protected get positions(): Positions {
+    protected getPositionsNoDelay(): Positions {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -71,7 +73,7 @@ abstract class ManagingAssets extends Taken {
         });
     }
 
-    protected get balances(): Balances {
+    protected getBalancesNoDelay(): Balances {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -206,6 +208,14 @@ abstract class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         return totalVolume;
+    }
+
+    // TODO 考虑现货
+    public getSnapshot(): Snapshot {
+        return {
+            balance: this.assets.balance,
+            settlementPrice: this.settlementPrice,
+        };
     }
 }
 

@@ -1,4 +1,4 @@
-import { ExAssets, Config } from './interfaces';
+import { ExAssets, Config, Snapshot } from './interfaces';
 import Big from 'big.js';
 declare class AutoAssets implements ExAssets {
     protected config: Config;
@@ -15,7 +15,7 @@ declare class AutoAssets implements ExAssets {
     frozenPosition: {
         [length: number]: Big;
     };
-    constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
+    constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     protected autoMargin: Big;
     get margin(): Big;
     get reserve(): Big;

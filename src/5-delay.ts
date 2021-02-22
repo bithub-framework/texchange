@@ -10,6 +10,7 @@ import {
     clone,
     Balances,
     Positions,
+    Snapshot,
 } from './interfaces';
 
 class Texchange extends ManagingAssets implements
@@ -17,17 +18,18 @@ class Texchange extends ManagingAssets implements
     ContextAccountApiLike {
     constructor(
         config: Config,
+        snapshot: Snapshot,
         private sleep: (ms: number) => Promise<void>,
         now: () => number,
     ) {
-        super(config, now);
+        super(config, snapshot, now);
     }
 
     public async makeLimitOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeLimitOrderSync(order));
+            return orders.map(order => this.makeLimitOrderNoDelay(order));
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -39,7 +41,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendLimitOrderSync(order));
+            return amendments.map(order => this.amendLimitOrderNoDelay(order));
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -49,7 +51,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.cancelOrderSync(order));
+            return orders.map(order => this.cancelOrderNoDelay(order));
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -59,7 +61,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.balances;
+            return this.getBalancesNoDelay();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -69,7 +71,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.positions;
+            return this.getPositionsNoDelay();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -79,7 +81,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.openOrders;
+            return this.getOpenOrdersNoDelay();
         } finally {
             await this.sleep(this.config.PING);
         }

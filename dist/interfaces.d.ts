@@ -17,10 +17,8 @@ export interface ExAssets extends Omit<Assets, 'time'> {
 export interface TexMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
-    initialSettlementPrice: Big;
 }
 export interface TexAccountConfig extends AccountConfig {
-    initialBalance: Big;
     calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
     calcMarginIncrement: (config: MarketConfig & AccountConfig, price: Big, volume: Big) => Big;
     calcMarginDecrement: (config: MarketConfig & AccountConfig, assets: ExAssets, volume: Big) => Big;

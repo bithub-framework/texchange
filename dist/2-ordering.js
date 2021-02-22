@@ -4,11 +4,11 @@ import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
 class Ordering extends Pushing {
-    constructor(config, now) {
+    constructor(config, snapshot, now) {
         super(config, now);
         this.latestPrice = new Big(0);
         this.orderCount = 0;
-        this.settlementPrice = config.initialSettlementPrice;
+        this.settlementPrice = snapshot.settlementPrice;
         this.openMakers = new OpenMakerManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     makeOpenOrder(order) {
@@ -21,7 +21,7 @@ class Ordering extends Pushing {
         }
         return order;
     }
-    makeLimitOrderSync(order) {
+    makeLimitOrderNoDelay(order) {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
@@ -30,7 +30,7 @@ class Ordering extends Pushing {
         };
         return this.makeOpenOrder(openOrder);
     }
-    cancelOrderSync(order) {
+    cancelOrderNoDelay(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -39,8 +39,8 @@ class Ordering extends Pushing {
             unfilled: order.quantity.minus(filled),
         };
     }
-    amendLimitOrderSync(amendment) {
-        const { filled } = this.cancelOrderSync(amendment);
+    amendLimitOrderNoDelay(amendment) {
+        const { filled } = this.cancelOrderNoDelay(amendment);
         const openOrder = {
             ...amendment,
             price: amendment.newPrice,
@@ -50,7 +50,7 @@ class Ordering extends Pushing {
         };
         return this.makeOpenOrder(openOrder);
     }
-    get openOrders() {
+    getOpenOrdersNoDelay() {
         return clone([...this.openMakers.values()]);
     }
     validateOrder(order) {

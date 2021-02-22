@@ -1,11 +1,11 @@
 /// <reference types="node" />
-import { Length, Config } from './interfaces';
+import { Length, Config, Snapshot } from './interfaces';
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-makers';
 import util from 'util';
 declare class AssetsManager extends AutoAssets {
-    constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
+    constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     freeze({ margin, position, length }: Frozen): void;
     thaw({ margin, position, length }: Frozen): void;
     incMargin(price: Big, volume: Big): void;

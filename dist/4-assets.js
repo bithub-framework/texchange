@@ -4,9 +4,9 @@ import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import assert from 'assert';
 class ManagingAssets extends Taken {
-    constructor(config, now) {
-        super(config, now);
-        this.assets = new AssetsManager(config, () => this.settlementPrice, () => this.latestPrice);
+    constructor(config, snapshot, now) {
+        super(config, snapshot, now);
+        this.assets = new AssetsManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
     }
     /** @override */
     makeOpenOrder(order) {
@@ -26,7 +26,7 @@ class ManagingAssets extends Taken {
         return order;
     }
     /** @override */
-    cancelOrderSync(order) {
+    cancelOrderNoDelay(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         const toThaw = this.openMakers.removeOrder(order.id);
         this.assets.thaw(toThaw);
@@ -36,7 +36,7 @@ class ManagingAssets extends Taken {
             unfilled: order.quantity.minus(filled),
         };
     }
-    get positions() {
+    getPositionsNoDelay() {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -44,7 +44,7 @@ class ManagingAssets extends Taken {
             time: this.now(),
         });
     }
-    get balances() {
+    getBalancesNoDelay() {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -130,6 +130,13 @@ class ManagingAssets extends Taken {
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
         return totalVolume;
+    }
+    // TODO 考虑现货
+    getSnapshot() {
+        return {
+            balance: this.assets.balance,
+            settlementPrice: this.settlementPrice,
+        };
     }
 }
 export { ManagingAssets as default, ManagingAssets, };

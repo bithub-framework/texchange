@@ -1,12 +1,12 @@
 import { Length, } from './interfaces';
 import Big from 'big.js';
 class AutoAssets {
-    constructor(config, getSettlementPrice, getLatestPrice) {
+    constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         this.config = config;
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
         this.autoMargin = new Big(0);
-        this.balance = config.initialBalance;
+        this.balance = snapshot.balance;
         this.frozenMargin = new Big(0);
         this.frozenPosition = {
             [Length.LONG]: new Big(0),

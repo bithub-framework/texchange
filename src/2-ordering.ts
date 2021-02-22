@@ -9,6 +9,7 @@ import {
     clone,
     OpenMaker,
     LimitOrderAmendment,
+    Snapshot,
 } from './interfaces';
 import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
@@ -22,10 +23,11 @@ abstract class Ordering extends Pushing {
 
     constructor(
         config: Config,
+        snapshot: Snapshot,
         now: () => number,
     ) {
         super(config, now);
-        this.settlementPrice = config.initialSettlementPrice;
+        this.settlementPrice = snapshot.settlementPrice;
         this.openMakers = new OpenMakerManager(
             config,
             () => this.settlementPrice,
@@ -44,7 +46,7 @@ abstract class Ordering extends Pushing {
         return order;
     }
 
-    protected makeLimitOrderSync(order: LimitOrder): OpenOrder {
+    protected makeLimitOrderNoDelay(order: LimitOrder): OpenOrder {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
@@ -54,7 +56,7 @@ abstract class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
 
-    protected cancelOrderSync(order: OpenOrder): OpenOrder {
+    protected cancelOrderNoDelay(order: OpenOrder): OpenOrder {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -64,10 +66,10 @@ abstract class Ordering extends Pushing {
         };
     }
 
-    protected amendLimitOrderSync(
+    protected amendLimitOrderNoDelay(
         amendment: LimitOrderAmendment,
     ): OpenOrder {
-        const { filled } = this.cancelOrderSync(amendment);
+        const { filled } = this.cancelOrderNoDelay(amendment);
         const openOrder: OpenOrder = {
             ...amendment,
             price: amendment.newPrice,
@@ -78,7 +80,7 @@ abstract class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
 
-    protected get openOrders(): OpenOrder[] {
+    protected getOpenOrdersNoDelay(): OpenOrder[] {
         return clone([...this.openMakers.values()]);
     }
 

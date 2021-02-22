@@ -1,6 +1,7 @@
 import {
     Length,
     Config,
+    Snapshot,
 } from './interfaces';
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
@@ -10,11 +11,13 @@ import util from 'util';
 class AssetsManager extends AutoAssets {
     constructor(
         config: Config,
+        snapshot: Snapshot,
         getSettlementPrice: () => Big,
         getLatestPrice: () => Big,
     ) {
         super(
             config,
+            snapshot,
             getSettlementPrice,
             getLatestPrice,
         );
