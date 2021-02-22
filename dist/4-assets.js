@@ -36,7 +36,7 @@ class ManagingAssets extends Taken {
             unfilled: order.quantity.minus(filled),
         };
     }
-    getPositionsSync() {
+    get positions() {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -44,7 +44,7 @@ class ManagingAssets extends Taken {
             time: this.now(),
         });
     }
-    getBalancesSync() {
+    get balances() {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -55,11 +55,11 @@ class ManagingAssets extends Taken {
     enoughPosition(order) {
         if (order.operation === Operation.CLOSE)
             assert(order.unfilled.lte(new Big(0)
-                .plus(this.assets.position[Length(order.side, order.operation)])
-                .minus(this.assets.frozenPosition[Length(order.side, order.operation)])));
+                .plus(this.assets.position[order.side * order.operation])
+                .minus(this.assets.frozenPosition[order.side * order.operation])));
     }
     singleLength(order) {
-        assert(this.assets.position[Length(order.length)].eq(0));
+        assert(this.assets.position[-order.length].eq(0));
     }
     enoughReserve(order) {
         if (order.operation === Operation.OPEN)

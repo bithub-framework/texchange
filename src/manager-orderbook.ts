@@ -2,16 +2,15 @@ import {
     Orderbook,
     Side,
     Config,
-    BookOrder,
 } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 
-class OrderbookManager implements Orderbook {
-    [side: number]: BookOrder[];
-
+class OrderbookManager {
+    private orderbook: Orderbook = {
+        time: Number.NEGATIVE_INFINITY,
+    };
     private applied = false;
-    public time = Number.NEGATIVE_INFINITY;
     private baseBook: Orderbook = {
         [Side.ASK]: [], [Side.BID]: [], time: Number.NEGATIVE_INFINITY,
     };
@@ -32,27 +31,14 @@ class OrderbookManager implements Orderbook {
         this.apply();
     }
 
-    private _ASK!: BookOrder[];
-    public get [Side.ASK]() {
+    public getBook(): Orderbook {
         assert(this.applied);
-        return this._ASK;
-    }
-    public set [Side.ASK](v: BookOrder[]) {
-        this._ASK = v;
-    }
-
-    private _BID!: BookOrder[];
-    public get [Side.BID]() {
-        assert(this.applied);
-        return this._BID;
-    }
-    public set [Side.BID](v: BookOrder[]) {
-        this._BID = v;
+        return this.orderbook;
     }
 
     public setBase(orderbook: Orderbook) {
         this.baseBook = orderbook;
-        this.time = this.now();
+        this.orderbook.time = this.now();
         this.applied = false;
     }
 
@@ -63,7 +49,7 @@ class OrderbookManager implements Orderbook {
             _price,
             origin.plus(decrement),
         );
-        this.time = this.now();
+        this.orderbook.time = this.now();
         this.applied = false;
     }
 
@@ -84,20 +70,12 @@ class OrderbookManager implements Orderbook {
                     else this.total[side].delete(_price);
                 } else this.decrements[side].delete(_price);
             }
-            this[side] = [...this.total[side]]
+            this.orderbook[side] = [...this.total[side]]
                 .map(([_price, quantity]) => ({
                     price: new Big(_price), quantity, side,
                 }));
         }
         this.applied = true;
-    }
-
-    public toJSON(): Orderbook {
-        return {
-            [Side.BID]: this[Side.BID],
-            [Side.ASK]: this[Side.ASK],
-            time: this.time,
-        }
     }
 }
 

@@ -12,10 +12,10 @@ declare abstract class Ordering extends Pushing {
     protected makeLimitOrderSync(order: LimitOrder): OpenOrder;
     protected cancelOrderSync(order: OpenOrder): OpenOrder;
     protected amendLimitOrderSync(amendment: LimitOrderAmendment): OpenOrder;
-    protected getOpenOrdersSync(): OpenOrder[];
+    protected get openOrders(): OpenOrder[];
     protected validateOrder(order: OpenOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
-    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "quantity" | "side" | "price" | "time">[], Big, Big];
+    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
     protected orderMakes(openOrder: OpenOrder): import("./manager-open-makers").Frozen;
 }
 export { Ordering as default, Ordering, PushingEvents as OrderingEvents, };

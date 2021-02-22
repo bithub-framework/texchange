@@ -9,7 +9,7 @@ import {
 
 abstract class Pushing extends EventEmitter {
     protected tradeCount = 0;
-    protected orderbook: OrderbookManager;
+    protected bookManager: OrderbookManager;
 
     constructor(
         protected config: Config,
@@ -17,7 +17,7 @@ abstract class Pushing extends EventEmitter {
         protected now: () => number,
     ) {
         super();
-        this.orderbook = new OrderbookManager(config, now);
+        this.bookManager = new OrderbookManager(config, now);
     }
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
@@ -25,13 +25,13 @@ abstract class Pushing extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
-        this.orderbook.setBase(orderbook);
-        this.orderbook.apply();
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
         this.pushOrderbook().catch(err => void this.emit('error', err));
     }
 
     protected async pushOrderbook(): Promise<void> {
-        this.emit('orderbook', this.orderbook);
+        this.emit('orderbook', this.bookManager);
     }
 
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {

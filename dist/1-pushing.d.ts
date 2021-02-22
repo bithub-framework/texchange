@@ -7,7 +7,7 @@ declare abstract class Pushing extends EventEmitter {
     /** 必须保证 update 时数据的 time 等于 now() */
     protected now: () => number;
     protected tradeCount: number;
-    protected orderbook: OrderbookManager;
+    protected bookManager: OrderbookManager;
     constructor(config: Config, 
     /** 必须保证 update 时数据的 time 等于 now() */
     now: () => number);

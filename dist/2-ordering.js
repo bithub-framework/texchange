@@ -50,7 +50,7 @@ class Ordering extends Pushing {
         };
         return this.makeOpenOrder(openOrder);
     }
-    getOpenOrdersSync() {
+    get openOrders() {
         return clone([...this.openMakers.values()]);
     }
     validateOrder(order) {
@@ -60,7 +60,7 @@ class Ordering extends Pushing {
         assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
         assert(order.length === Length.LONG || order.length === Length.SHORT);
         assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
-        assert(Side(order.operation, order.length) === order.side);
+        assert(order.operation * order.length === order.side);
     }
     updateTrades(uTrades) {
         super.updateTrades(uTrades);
@@ -76,7 +76,8 @@ class Ordering extends Pushing {
         const uTrades = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of this.orderbook[-taker.side])
+        const orderbook = this.bookManager.getBook();
+        for (const maker of orderbook[-taker.side])
             if ((taker.side === Side.BID && taker.price.gte(maker.price) ||
                 taker.side === Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
                 const quantity = min(taker.unfilled, maker.quantity);
@@ -86,7 +87,7 @@ class Ordering extends Pushing {
                     quantity,
                     time: this.now(),
                 });
-                this.orderbook.decQuantity(maker.side, maker.price, quantity);
+                this.bookManager.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
@@ -94,7 +95,7 @@ class Ordering extends Pushing {
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
-        this.orderbook.apply();
+        this.bookManager.apply();
         return [uTrades, volume, dollarVolume];
     }
     orderMakes(openOrder) {
@@ -102,7 +103,8 @@ class Ordering extends Pushing {
             ...openOrder,
             behind: new Big(0),
         };
-        for (const maker of this.orderbook[openOrder.side]) {
+        const orderbook = this.bookManager.getBook();
+        for (const maker of orderbook[openOrder.side]) {
             if (openOrder.side === Side.BID && maker.price.gte(openOrder.price) ||
                 openOrder.side === Side.ASK && maker.price.lte(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);

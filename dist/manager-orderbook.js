@@ -5,8 +5,10 @@ class OrderbookManager {
     constructor(config, now) {
         this.config = config;
         this.now = now;
+        this.orderbook = {
+            time: Number.NEGATIVE_INFINITY,
+        };
         this.applied = false;
-        this.time = Number.NEGATIVE_INFINITY;
         this.baseBook = {
             [Side.ASK]: [], [Side.BID]: [], time: Number.NEGATIVE_INFINITY,
         };
@@ -21,30 +23,20 @@ class OrderbookManager {
         };
         this.apply();
     }
-    get [Side.ASK]() {
+    getBook() {
         assert(this.applied);
-        return this._ASK;
-    }
-    set [Side.ASK](v) {
-        this._ASK = v;
-    }
-    get [Side.BID]() {
-        assert(this.applied);
-        return this._BID;
-    }
-    set [Side.BID](v) {
-        this._BID = v;
+        return this.orderbook;
     }
     setBase(orderbook) {
         this.baseBook = orderbook;
-        this.time = this.now();
+        this.orderbook.time = this.now();
         this.applied = false;
     }
     decQuantity(side, price, decrement) {
         const _price = price.toFixed(this.config.PRICE_DP);
         const origin = this.decrements[side].get(_price) || new Big(0);
         this.decrements[side].set(_price, origin.plus(decrement));
-        this.time = this.now();
+        this.orderbook.time = this.now();
         this.applied = false;
     }
     apply() {
@@ -63,19 +55,12 @@ class OrderbookManager {
                 else
                     this.decrements[side].delete(_price);
             }
-            this[side] = [...this.total[side]]
+            this.orderbook[side] = [...this.total[side]]
                 .map(([_price, quantity]) => ({
                 price: new Big(_price), quantity, side,
             }));
         }
         this.applied = true;
-    }
-    toJSON() {
-        return {
-            [Side.BID]: this[Side.BID],
-            [Side.ASK]: this[Side.ASK],
-            time: this.time,
-        };
     }
 }
 export { OrderbookManager as default, OrderbookManager, };

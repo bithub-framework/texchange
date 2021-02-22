@@ -19,13 +19,11 @@ export interface Assets extends
 
 export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
-        [Length.LONG]: Big;
-        [Length.SHORT]: Big;
+        [length: number]: Big;
     };
     frozenMargin: Big;
     frozenPosition: {
-        [Length.LONG]: Big;
-        [Length.SHORT]: Big;
+        [length: number]: Big;
     };
     margin: Big;
 }

@@ -59,7 +59,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getBalancesSync();
+            return this.balances;
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -69,7 +69,7 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getPositionsSync();
+            return this.positions;
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -79,14 +79,14 @@ class Texchange extends ManagingAssets implements
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getOpenOrdersSync();
+            return this.openOrders;
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = clone(this.orderbook);
+        const orderbook = clone(this.bookManager);
         await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);

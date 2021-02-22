@@ -1,30 +1,26 @@
-import { ExAssets, Length, Config } from './interfaces';
+import { ExAssets, Config } from './interfaces';
 import Big from 'big.js';
 declare class AutoAssets implements ExAssets {
     protected config: Config;
     private getSettlementPrice;
     private getLatestPrice;
     position: {
-        [Length.LONG]: Big;
-        [Length.SHORT]: Big;
+        [length: number]: Big;
     };
     balance: Big;
     cost: {
-        [Length.LONG]: Big;
-        [Length.SHORT]: Big;
+        [length: number]: Big;
     };
     frozenMargin: Big;
     frozenPosition: {
-        [Length.LONG]: Big;
-        [Length.SHORT]: Big;
+        [length: number]: Big;
     };
     constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     protected autoMargin: Big;
     get margin(): Big;
     get reserve(): Big;
     get closable(): {
-        LONG: Big;
-        SHORT: Big;
+        [x: number]: Big;
     };
     toJSON(): ExAssets;
 }
