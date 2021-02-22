@@ -89,7 +89,7 @@ abstract class Ordering extends Pushing {
         assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
         assert(order.length === Length.LONG || order.length === Length.SHORT);
         assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
-        assert(order.operation * order.length === order.side);
+        assert(Side(order.operation, order.length) === order.side);
     }
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {

@@ -1,16 +1,18 @@
 export * from 'interfaces';
-import { Trade, Positions, Balances, MarketConfig, AccountConfig, LimitOrder, OpenOrder } from 'interfaces';
+import { Trade, Positions, Balances, MarketConfig, AccountConfig, LimitOrder, OpenOrder, Length } from 'interfaces';
 import Big from 'big.js';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface Assets extends Positions, Balances {
 }
 export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     frozenMargin: Big;
     frozenPosition: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     margin: Big;
 }

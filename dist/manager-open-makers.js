@@ -1,4 +1,4 @@
-import { Operation, } from './interfaces';
+import { Length, Operation, } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
 class OpenMakerManager extends Map {
@@ -52,7 +52,7 @@ class OpenMakerManager extends Map {
             return {
                 margin: new Big(0),
                 position: new Big(0),
-                length: 1,
+                length: Length.LONG,
             };
         const thawed = {
             margin: frozen.margin,

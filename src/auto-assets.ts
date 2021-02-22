@@ -7,15 +7,18 @@ import Big from 'big.js';
 
 class AutoAssets implements ExAssets {
     public position: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     public balance: Big;
     public cost: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     public frozenMargin: Big;
     public frozenPosition: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
 
     constructor(

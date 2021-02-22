@@ -7,6 +7,7 @@ import {
     AccountConfig,
     LimitOrder,
     OpenOrder,
+    Length,
 } from 'interfaces';
 import Big from 'big.js';
 
@@ -18,11 +19,13 @@ export interface Assets extends
 
 export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     frozenMargin: Big;
     frozenPosition: {
-        [length: number]: Big;
+        [Length.LONG]: Big;
+        [Length.SHORT]: Big;
     };
     margin: Big;
 }

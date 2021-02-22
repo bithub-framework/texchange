@@ -1,5 +1,5 @@
 import { Ordering } from './2-ordering';
-import { Side, min, } from './interfaces';
+import { Side, min, Length, } from './interfaces';
 import Big from 'big.js';
 class Taken extends Ordering {
     uTradeShouldTakeOpenOrder(trade, maker) {
@@ -24,7 +24,7 @@ class Taken extends Ordering {
                 {
                     margin: new Big(0),
                     position: new Big(0),
-                    length: 1,
+                    length: Length.LONG,
                 },
             ];
         const volume = min(uTrade.quantity, maker.unfilled);

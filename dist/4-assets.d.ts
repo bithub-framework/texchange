@@ -17,7 +17,7 @@ declare abstract class ManagingAssets extends Taken {
     private enoughPosition;
     private singleLength;
     private enoughReserve;
-    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
+    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "quantity" | "side" | "price" | "time">[], Big, Big];
     protected pushPositionsAndBalances(): Promise<void>;
     protected orderMakes(openOrder: OpenOrder): Frozen;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];

@@ -84,14 +84,14 @@ abstract class ManagingAssets extends Taken {
         if (order.operation === Operation.CLOSE)
             assert(
                 order.unfilled.lte(new Big(0)
-                    .plus(this.assets.position[order.side * order.operation])
-                    .minus(this.assets.frozenPosition[order.side * order.operation])
+                    .plus(this.assets.position[Length(order.side, order.operation)])
+                    .minus(this.assets.frozenPosition[Length(order.side, order.operation)])
                 ),
             );
     }
 
     private singleLength(order: LimitOrder) {
-        assert(this.assets.position[-order.length].eq(0));
+        assert(this.assets.position[Length(order.length)].eq(0));
     }
 
     private enoughReserve(order: OpenOrder) {
@@ -179,7 +179,7 @@ abstract class ManagingAssets extends Taken {
 
     protected settle(): void {
         const position = clone(this.assets.position);
-        for (const length of [Length.LONG, Length.SHORT]) {
+        for (const length of [Length.LONG, Length.SHORT] as const) {
             const settlementDollarVolume =
                 this.config.calcDollarVolume(
                     this.settlementPrice,

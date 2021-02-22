@@ -84,7 +84,7 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
         if (!order) return {
             margin: new Big(0),
             position: new Big(0),
-            length: 1, // meaningless
+            length: Length.LONG, // meaningless
         }
 
         const thawed: Frozen = {

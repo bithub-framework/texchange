@@ -5,6 +5,7 @@ import {
     min,
     OpenOrder,
     OpenMaker,
+    Length,
 } from './interfaces';
 import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
@@ -41,7 +42,7 @@ abstract class Taken extends Ordering {
             {
                 margin: new Big(0),
                 position: new Big(0),
-                length: 1, // meaningless
+                length: Length.LONG, // meaningless
             },
         ];
         const volume = min(uTrade.quantity, maker.unfilled);

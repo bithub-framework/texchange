@@ -15,7 +15,7 @@ declare abstract class Ordering extends Pushing {
     protected getOpenOrdersSync(): OpenOrder[];
     protected validateOrder(order: OpenOrder): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
-    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
+    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "quantity" | "side" | "price" | "time">[], Big, Big];
     protected orderMakes(openOrder: OpenOrder): import("./manager-open-makers").Frozen;
 }
 export { Ordering as default, Ordering, PushingEvents as OrderingEvents, };

@@ -37,7 +37,7 @@ class OrderbookManager implements Orderbook {
         assert(this.applied);
         return this._ASK;
     }
-    private set [Side.ASK](v: BookOrder[]) {
+    public set [Side.ASK](v: BookOrder[]) {
         this._ASK = v;
     }
 
@@ -46,7 +46,7 @@ class OrderbookManager implements Orderbook {
         assert(this.applied);
         return this._BID;
     }
-    private set [Side.BID](v: BookOrder[]) {
+    public set [Side.BID](v: BookOrder[]) {
         this._BID = v;
     }
 
