@@ -13,16 +13,13 @@ export interface ExAssets extends Omit<Assets, 'time'> {
         [length: number]: Big;
     };
     margin: Big;
-    closable: {
-        [length: number]: Big;
-    };
 }
-export interface ExMarketConfig extends MarketConfig {
+export interface TexMarketConfig extends MarketConfig {
     PING: number;
     PROCESSING: number;
     initialSettlementPrice: Big;
 }
-export interface ExAccountConfig extends AccountConfig {
+export interface TexAccountConfig extends AccountConfig {
     initialBalance: Big;
     calcInitialMargin: (config: MarketConfig & AccountConfig, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
     calcMarginIncrement: (config: MarketConfig & AccountConfig, price: Big, volume: Big) => Big;
@@ -30,6 +27,10 @@ export interface ExAccountConfig extends AccountConfig {
     calcMargin: (config: MarketConfig & AccountConfig, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
     calcFrozenMargin: (config: MarketConfig & AccountConfig, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
-export interface Config extends ExMarketConfig, ExAccountConfig {
+export interface Config extends TexMarketConfig, TexAccountConfig {
+}
+export interface Snapshot {
+    balance: Big;
+    settlementPrice: Big;
 }
 export declare function min(...a: Big[]): Big;

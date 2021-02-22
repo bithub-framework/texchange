@@ -9,6 +9,7 @@ import {
     Positions,
     Balances,
     OpenMaker,
+    Snapshot,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';

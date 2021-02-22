@@ -477,8 +477,8 @@
         "affectsGlobalScope": false
       },
       "./src/interfaces.ts": {
-        "version": "1d5060e281516528052f42439de08a5406c64e7a2bbe9753a1545176ae4067a5",
-        "signature": "f76a852795f08b72ac698ea555f479bc35035b6997ccd2f692f5022a7a72af59",
+        "version": "c8918b8245cedec545a0312bd9b38e5e9ba2b714464f8d8bb563effa4fdeb75c",
+        "signature": "0a331a35113aa389a8d8b7737f93802e0ba41a7370c92c9a276d521dcee7ee95",
         "affectsGlobalScope": false
       },
       "./src/manager-orderbook.ts": {
@@ -517,7 +517,7 @@
         "affectsGlobalScope": false
       },
       "./src/4-assets.ts": {
-        "version": "81dfc33cd8a30f625f5ac0391dd07fcb2a93e738e2c169da4682d7b69bfed951",
+        "version": "b3ae2760204a1b8e461a6b6e81819370fe29e76b4dc6de8623c6d1da3936287e",
         "signature": "d05953b3dbd75988d1fcea2e2d3941b590f475c9c2004fb879e68ecd71ea7286",
         "affectsGlobalScope": false
       },
