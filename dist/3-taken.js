@@ -36,7 +36,7 @@ class Taken extends Ordering {
             time: uTrade.time,
         };
         let totalVolume = new Big(0);
-        for (const order of this.openMakers.values())
+        for (const order of [...this.openMakers.values()])
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
                 this.uTradeTakesOrderQueue(uTrade, order);
                 const volume = this.uTradeTakesOpenMaker(uTrade, order);

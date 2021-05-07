@@ -17,7 +17,6 @@ import {
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './manager-assets';
-import { Frozen } from './manager-open-makers';
 import assert from 'assert';
 import { EventEmitter } from 'events';
 

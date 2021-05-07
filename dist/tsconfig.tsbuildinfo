@@ -497,7 +497,7 @@
         "affectsGlobalScope": false
       },
       "../src/3-taken.ts": {
-        "version": "693246b63a7dbf4a2649c1c5b89b4eb9f6a225f901953405f68c699dae6200a8",
+        "version": "89365dcddb9051da903a26b4902160b371f4700992bfb69cb6f6340b9155f225",
         "signature": "efca36175ad87437870ca2a968493572554a80d2f6c19f006d7a078c7e98c6f5",
         "affectsGlobalScope": false
       },
@@ -512,7 +512,7 @@
         "affectsGlobalScope": false
       },
       "../src/4-assets.ts": {
-        "version": "e92c897d7c3cc346323afbf7940e01a20b54c2b4b399f124b9701a6d5afdf06d",
+        "version": "713032ffb94915de79fc8d022e319ec0c999868a18b6f1e741124c32c714c7ec",
         "signature": "4700eb71e18db38a17835f535f54e2fb0777b8cf7e5174df5d0436b4c1f4f1bc",
         "affectsGlobalScope": false
       },
@@ -739,8 +739,7 @@
       "../src/3-taken.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../src/2-ordering.ts",
-        "../src/interfaces.ts",
-        "../src/manager-open-makers.ts"
+        "../src/interfaces.ts"
       ],
       "../src/4-assets.ts": [
         "../node_modules/@types/big.js/index.d.ts",
@@ -748,8 +747,7 @@
         "../node_modules/@types/node/events.d.ts",
         "../src/3-taken.ts",
         "../src/interfaces.ts",
-        "../src/manager-assets.ts",
-        "../src/manager-open-makers.ts"
+        "../src/manager-assets.ts"
       ],
       "../src/5-delay.ts": [
         "../src/4-assets.ts",
