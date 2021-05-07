@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
+import { clone, } from './interfaces';
 class Pushing extends EventEmitter {
     constructor(config, 
     /** 必须保证 update 时数据的 time 等于 now() */
@@ -19,7 +20,7 @@ class Pushing extends EventEmitter {
         this.pushOrderbook().catch(err => void this.emit('error', err));
     }
     async pushOrderbook() {
-        this.emit('orderbook', this.bookManager);
+        this.emit('orderbook', clone(this.bookManager.getBook()));
     }
     uTrade2Trade(uTrades) {
         return uTrades.map(uTrade => ({
@@ -30,8 +31,8 @@ class Pushing extends EventEmitter {
             id: ++this.tradeCount,
         }));
     }
-    async pushUTrades(noidTrades) {
-        const trades = this.uTrade2Trade(noidTrades);
+    async pushUTrades(uTrades) {
+        const trades = this.uTrade2Trade(uTrades);
         this.emit('trades', trades);
     }
 }

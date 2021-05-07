@@ -87,12 +87,12 @@ export type Events = {
 }
 
 export interface ExchangeLike extends EventEmitter {
-    makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]>;
-    getOpenOrdersDelay(): Promise<OpenOrder[]>;
-    cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    getPositionsDelay(): Promise<Positions>;
-    getBalancesDelay(): Promise<Balances>;
-    amendOrdersDelay(amendments: Amendment[]): Promise<OpenOrder[]>;
+    makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
+    getOpenOrders(): Promise<OpenOrder[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
+    getPositions(): Promise<Positions>;
+    getBalances(): Promise<Balances>;
+    amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
 
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

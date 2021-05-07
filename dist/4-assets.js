@@ -26,7 +26,7 @@ class ManagingAssets extends Taken {
         return order;
     }
     /** @override */
-    cancelOrder(order) {
+    cancelOpenOrder(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         const toThaw = this.openMakers.removeOrder(order.id);
         if (toThaw)
@@ -42,7 +42,7 @@ class ManagingAssets extends Taken {
             unfilled: order.quantity.minus(filled),
         };
     }
-    getPositions() {
+    async getPositions() {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -50,7 +50,7 @@ class ManagingAssets extends Taken {
             time: this.now(),
         });
     }
-    getBalances() {
+    async getBalances() {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -172,16 +172,21 @@ class ManagingAssets extends Taken {
             this.assets.openPosition(length, position[length], settlementDollarVolume, new Big(0));
         }
     }
+    /** @override */
     updateTrades(uTrades) {
         this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        for (let uTrade of uTrades) {
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(uTrade.price.times(.1))
+                .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
         let totalVolume = new Big(0);
         for (let uTrade of uTrades) {
             const volume = this.uTradeTakesOpenMakers(uTrade);
             totalVolume = totalVolume.plus(volume);
         }
-        if (totalVolume.gt(0))
-            this.pushPositionsAndBalances()
-                .catch(err => void this.emit('error', err));
     }
     /** @override */
     updateOrderbook(orderbook) {

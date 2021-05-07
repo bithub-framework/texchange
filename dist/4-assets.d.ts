@@ -10,9 +10,9 @@ declare class ManagingAssets extends Taken {
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */
-    protected cancelOrder(order: OpenOrder): OpenOrder;
-    protected getPositions(): Positions;
-    protected getBalances(): Balances;
+    protected cancelOpenOrder(order: OpenOrder): OpenOrder;
+    getPositions(): Promise<Positions>;
+    getBalances(): Promise<Balances>;
     private enoughPosition;
     private singleLength;
     private enoughReserve;
@@ -23,6 +23,7 @@ declare class ManagingAssets extends Taken {
     protected orderMakes(openOrder: OpenOrder): void;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): Big;
     protected settle(): void;
+    /** @override */
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     /** @override */
     updateOrderbook(orderbook: Orderbook): void;
@@ -37,9 +38,5 @@ interface ManagingAssets extends EventEmitter {
     once<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     off<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     emit<Event extends keyof ManagingAssetsEvents>(event: Event, ...args: ManagingAssetsEvents[Event]): boolean;
-    on(event: string | symbol, listener: (...args: any[]) => void): this;
-    once(event: string | symbol, listener: (...args: any[]) => void): this;
-    off(event: string | symbol, listener: (...args: any[]) => void): this;
-    emit(event: string | symbol, ...args: any[]): boolean;
 }
 export { ManagingAssets as default, ManagingAssets, ManagingAssetsEvents, };

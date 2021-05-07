@@ -56,7 +56,7 @@ class ManagingAssets extends Taken {
     }
 
     /** @override */
-    protected cancelOrder(order: OpenOrder): OpenOrder {
+    protected cancelOpenOrder(order: OpenOrder): OpenOrder {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         const toThaw = this.openMakers.removeOrder(order.id);
         if (toThaw) this.assets.thaw(toThaw);
@@ -72,7 +72,7 @@ class ManagingAssets extends Taken {
         };
     }
 
-    protected getPositions(): Positions {
+    public async getPositions(): Promise<Positions> {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -81,7 +81,7 @@ class ManagingAssets extends Taken {
         });
     }
 
-    protected getBalances(): Balances {
+    public async getBalances(): Promise<Balances> {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -256,16 +256,22 @@ class ManagingAssets extends Taken {
         }
     }
 
+    /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
         this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        for (let uTrade of uTrades) {
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(uTrade.price.times(.1))
+                .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
+
         let totalVolume = new Big(0);
         for (let uTrade of uTrades) {
             const volume = this.uTradeTakesOpenMakers(uTrade);
             totalVolume = totalVolume.plus(volume);
         }
-        if (totalVolume.gt(0))
-            this.pushPositionsAndBalances()
-                .catch(err => void this.emit('error', err));
     }
 
     /** @override */
@@ -302,10 +308,10 @@ interface ManagingAssets extends EventEmitter {
     once<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     off<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     emit<Event extends keyof ManagingAssetsEvents>(event: Event, ...args: ManagingAssetsEvents[Event]): boolean;
-    on(event: string | symbol, listener: (...args: any[]) => void): this;
-    once(event: string | symbol, listener: (...args: any[]) => void): this;
-    off(event: string | symbol, listener: (...args: any[]) => void): this;
-    emit(event: string | symbol, ...args: any[]): boolean;
+    // on(event: string | symbol, listener: (...args: any[]) => void): this;
+    // once(event: string | symbol, listener: (...args: any[]) => void): this;
+    // off(event: string | symbol, listener: (...args: any[]) => void): this;
+    // emit(event: string | symbol, ...args: any[]): boolean;
 }
 
 export {

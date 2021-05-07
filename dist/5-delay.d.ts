@@ -3,14 +3,17 @@ import { LimitOrder, Amendment, UnidentifiedTrade, ExchangeLike, Config, OpenOrd
 declare class Texchange extends ManagingAssets implements ExchangeLike {
     private sleep;
     constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
-    makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]>;
-    amendOrdersDelay(amendments: Amendment[]): Promise<OpenOrder[]>;
-    cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    getBalancesDelay(): Promise<Balances>;
-    getPositionsDelay(): Promise<Positions>;
-    getOpenOrdersDelay(): Promise<OpenOrder[]>;
+    makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
+    amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
+    getBalances(): Promise<Balances>;
+    getPositions(): Promise<Positions>;
+    getOpenOrders(): Promise<OpenOrder[]>;
+    /** @override */
     protected pushOrderbook(): Promise<void>;
+    /** @override */
     protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
+    /** @override */
     protected pushPositionsAndBalances(): Promise<void>;
 }
 export { Texchange as default, Texchange, ManagingAssetsEvents as TexchangeEvents, };

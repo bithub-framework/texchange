@@ -5,6 +5,7 @@ import {
     Trade,
     UnidentifiedTrade,
     Config,
+    clone,
 } from './interfaces';
 
 class Pushing extends EventEmitter {
@@ -31,7 +32,7 @@ class Pushing extends EventEmitter {
     }
 
     protected async pushOrderbook(): Promise<void> {
-        this.emit('orderbook', this.bookManager);
+        this.emit('orderbook', clone(this.bookManager.getBook()));
     }
 
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {
@@ -44,8 +45,8 @@ class Pushing extends EventEmitter {
         }));
     }
 
-    protected async pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = this.uTrade2Trade(noidTrades);
+    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.uTrade2Trade(uTrades);
         this.emit('trades', trades);
     }
 }
@@ -61,10 +62,10 @@ interface Pushing extends EventEmitter {
     once<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     off<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     emit<Event extends keyof PushingEvents>(event: Event, ...args: PushingEvents[Event]): boolean;
-    on(event: string | symbol, listener: (...args: any[]) => void): this;
-    once(event: string | symbol, listener: (...args: any[]) => void): this;
-    off(event: string | symbol, listener: (...args: any[]) => void): this;
-    emit(event: string | symbol, ...args: any[]): boolean;
+    // on(event: string | symbol, listener: (...args: any[]) => void): this;
+    // once(event: string | symbol, listener: (...args: any[]) => void): this;
+    // off(event: string | symbol, listener: (...args: any[]) => void): this;
+    // emit(event: string | symbol, ...args: any[]): boolean;
 }
 
 export {

@@ -22,75 +22,75 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         super(config, snapshot, now);
     }
 
-    public async makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]> {
+    public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeOrder(order));
+            return await super.makeOrders(orders);
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async amendOrdersDelay(
-        amendments: Amendment[]
-    ): Promise<OpenOrder[]> {
+    public async amendOrders(amendments: Amendment[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendOrder(order));
+            return await super.amendOrders(amendments);
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]> {
+    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.cancelOrder(order));
+            return await super.cancelOrders(orders);
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getBalancesDelay(): Promise<Balances> {
+    public async getBalances(): Promise<Balances> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getBalances();
+            return await super.getBalances();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getPositionsDelay(): Promise<Positions> {
+    public async getPositions(): Promise<Positions> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getPositions();
+            return await super.getPositions();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getOpenOrdersDelay(): Promise<OpenOrder[]> {
+    public async getOpenOrders(): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getOpenOrders();
+            return await super.getOpenOrders();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
+    /** @override */
     protected async pushOrderbook(): Promise<void> {
-        const orderbook = clone(this.bookManager);
+        const orderbook = clone(this.bookManager.getBook());
         await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
 
+    /** @override */
     protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
         const trades = clone(this.uTrade2Trade(uTrades));
         await this.sleep(this.config.PROCESSING);
@@ -98,6 +98,7 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         this.emit('trades', trades);
     }
 
+    /** @override */
     protected async pushPositionsAndBalances(): Promise<void> {
         this.settle();
         const positions: Positions = clone({

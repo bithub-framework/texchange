@@ -5,78 +5,81 @@ class Texchange extends ManagingAssets {
         super(config, snapshot, now);
         this.sleep = sleep;
     }
-    async makeOrdersDelay(orders) {
+    async makeOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeOrder(order));
+            return await super.makeOrders(orders);
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async amendOrdersDelay(amendments) {
+    async amendOrders(amendments) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendOrder(order));
+            return await super.amendOrders(amendments);
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async cancelOrdersDelay(orders) {
+    async cancelOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.cancelOrder(order));
+            return await super.cancelOrders(orders);
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getBalancesDelay() {
+    async getBalances() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getBalances();
+            return await super.getBalances();
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getPositionsDelay() {
+    async getPositions() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getPositions();
+            return await super.getPositions();
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getOpenOrdersDelay() {
+    async getOpenOrders() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getOpenOrders();
+            return await super.getOpenOrders();
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
+    /** @override */
     async pushOrderbook() {
-        const orderbook = clone(this.bookManager);
+        const orderbook = clone(this.bookManager.getBook());
         await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('orderbook', orderbook);
     }
+    /** @override */
     async pushUTrades(uTrades) {
         const trades = clone(this.uTrade2Trade(uTrades));
         await this.sleep(this.config.PROCESSING);
         await this.sleep(this.config.PING);
         this.emit('trades', trades);
     }
+    /** @override */
     async pushPositionsAndBalances() {
         this.settle();
         const positions = clone({

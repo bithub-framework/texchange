@@ -21,7 +21,7 @@ class Ordering extends Pushing {
         }
         return order;
     }
-    makeOrder(order) {
+    async makeOrder(order) {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
@@ -30,7 +30,10 @@ class Ordering extends Pushing {
         };
         return this.makeOpenOrder(openOrder);
     }
-    cancelOrder(order) {
+    async makeOrders(orders) {
+        return Promise.all(orders.map(order => this.makeOrder(order)));
+    }
+    cancelOpenOrder(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -44,8 +47,14 @@ class Ordering extends Pushing {
             unfilled: order.quantity.minus(filled),
         };
     }
-    amendOrder(amendment) {
-        const { filled } = this.cancelOrder(amendment);
+    async cancelOrder(order) {
+        return this.cancelOpenOrder(order);
+    }
+    async cancelOrders(orders) {
+        return Promise.all(orders.map(order => this.cancelOrder(order)));
+    }
+    async amendOrder(amendment) {
+        const { filled } = this.cancelOpenOrder(amendment);
         const openOrder = {
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
@@ -57,6 +66,9 @@ class Ordering extends Pushing {
             operation: amendment.operation,
         };
         return this.makeOpenOrder(openOrder);
+    }
+    async amendOrders(amendments) {
+        return Promise.all(amendments.map(amendment => this.amendOrder(amendment)));
     }
     orderTakes(taker) {
         const uTrades = [];
@@ -102,7 +114,7 @@ class Ordering extends Pushing {
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         this.openMakers.addOrder(openMaker);
     }
-    getOpenOrders() {
+    async getOpenOrders() {
         return clone([...this.openMakers.values()]);
     }
     validateOrder(order) {

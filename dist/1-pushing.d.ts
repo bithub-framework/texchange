@@ -15,7 +15,7 @@ declare class Pushing extends EventEmitter {
     updateOrderbook(orderbook: Orderbook): void;
     protected pushOrderbook(): Promise<void>;
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[];
-    protected pushUTrades(noidTrades: UnidentifiedTrade[]): Promise<void>;
+    protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
 }
 declare type PushingEvents = {
     orderbook: [Orderbook];
@@ -27,9 +27,5 @@ interface Pushing extends EventEmitter {
     once<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     off<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     emit<Event extends keyof PushingEvents>(event: Event, ...args: PushingEvents[Event]): boolean;
-    on(event: string | symbol, listener: (...args: any[]) => void): this;
-    once(event: string | symbol, listener: (...args: any[]) => void): this;
-    off(event: string | symbol, listener: (...args: any[]) => void): this;
-    emit(event: string | symbol, ...args: any[]): boolean;
 }
 export { Pushing as default, Pushing, PushingEvents, };

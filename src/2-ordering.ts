@@ -46,7 +46,7 @@ class Ordering extends Pushing {
         return order;
     }
 
-    protected makeOrder(order: LimitOrder): OpenOrder {
+    public async makeOrder(order: LimitOrder): Promise<OpenOrder> {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
@@ -56,7 +56,11 @@ class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
 
-    protected cancelOrder(order: OpenOrder): OpenOrder {
+    public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
+        return Promise.all(orders.map(order => this.makeOrder(order)));
+    }
+
+    protected cancelOpenOrder(order: OpenOrder): OpenOrder {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -71,10 +75,16 @@ class Ordering extends Pushing {
         };
     }
 
-    protected amendOrder(
-        amendment: Amendment,
-    ): OpenOrder {
-        const { filled } = this.cancelOrder(amendment);
+    public async cancelOrder(order: OpenOrder): Promise<OpenOrder> {
+        return this.cancelOpenOrder(order);
+    }
+
+    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+        return Promise.all(orders.map(order => this.cancelOrder(order)));
+    }
+
+    public async amendOrder(amendment: Amendment): Promise<OpenOrder> {
+        const { filled } = this.cancelOpenOrder(amendment);
         const openOrder: OpenOrder = {
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
@@ -86,6 +96,10 @@ class Ordering extends Pushing {
             operation: amendment.operation,
         };
         return this.makeOpenOrder(openOrder);
+    }
+
+    public async amendOrders(amendments: Amendment[]): Promise<OpenOrder[]> {
+        return Promise.all(amendments.map(amendment => this.amendOrder(amendment)));
     }
 
     protected orderTakes(taker: OpenOrder): UnidentifiedTrade[] {
@@ -140,7 +154,7 @@ class Ordering extends Pushing {
         this.openMakers.addOrder(openMaker);
     }
 
-    protected getOpenOrders(): OpenOrder[] {
+    protected async getOpenOrders(): Promise<OpenOrder[]> {
         return clone([...this.openMakers.values()]);
     }
 
