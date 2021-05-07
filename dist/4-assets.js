@@ -1,5 +1,5 @@
 import { Taken } from './3-taken';
-import { Operation, Length, clone, } from './interfaces';
+import { Operation, Length, clone, Side, min, } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import assert from 'assert';
@@ -16,7 +16,7 @@ class ManagingAssets extends Taken {
             this.singleLength(order);
         this.settle();
         this.enoughReserve(order);
-        const [uTrades] = this.orderTakes(order);
+        const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
@@ -73,8 +73,31 @@ class ManagingAssets extends Taken {
                 .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
                 .lte(this.assets.reserve));
     }
+    /** @override */
     orderTakes(taker) {
-        const [uTrades, volume, dollarVolume] = super.orderTakes(taker);
+        const uTrades = [];
+        let volume = new Big(0);
+        let dollarVolume = new Big(0);
+        const orderbook = this.bookManager.getBook();
+        for (const maker of orderbook[-taker.side])
+            if ((taker.side === Side.BID && taker.price.gte(maker.price) ||
+                taker.side === Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
+                const quantity = min(taker.unfilled, maker.quantity);
+                uTrades.push({
+                    side: taker.side,
+                    price: maker.price,
+                    quantity,
+                    time: this.now(),
+                });
+                this.bookManager.decQuantity(maker.side, maker.price, quantity);
+                taker.filled = taker.filled.plus(quantity);
+                taker.unfilled = taker.unfilled.minus(quantity);
+                volume = volume.plus(quantity);
+                dollarVolume = dollarVolume
+                    .plus(this.config.calcDollarVolume(maker.price, quantity))
+                    .round(this.config.CURRENCY_DP);
+            }
+        this.bookManager.apply();
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === Operation.OPEN) {
@@ -85,7 +108,7 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
             this.assets.decMargin(volume);
         }
-        return [uTrades, volume, dollarVolume];
+        return uTrades;
     }
     async pushPositionsAndBalances() {
         this.settle();
@@ -102,10 +125,25 @@ class ManagingAssets extends Taken {
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
+    /** @override */
     orderMakes(openOrder) {
-        const toFreeze = super.orderMakes(openOrder);
+        const openMaker = {
+            price: openOrder.price,
+            quantity: openOrder.quantity,
+            side: openOrder.side,
+            length: openOrder.length,
+            operation: openOrder.operation,
+            filled: openOrder.filled,
+            unfilled: openOrder.unfilled,
+            id: openOrder.id,
+            behind: new Big(0),
+        };
+        const orderbook = this.bookManager.getBook();
+        for (const maker of orderbook[openOrder.side])
+            if (maker.price.eq(openOrder.price))
+                openMaker.behind = openMaker.behind.plus(maker.quantity);
+        const toFreeze = this.openMakers.addOrder(openMaker);
         this.assets.freeze(toFreeze);
-        return toFreeze;
     }
     uTradeTakesOpenMaker(uTrade, maker) {
         const { volume, dollarVolume, toThaw } = super.uTradeTakesOpenMaker(uTrade, maker);
@@ -131,11 +169,27 @@ class ManagingAssets extends Taken {
         }
     }
     updateTrades(uTrades) {
-        const totalVolume = super.updateTrades(uTrades);
+        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        let totalVolume = new Big(0);
+        for (let uTrade of uTrades) {
+            const volume = this.uTradeTakesOpenMakers(uTrade);
+            totalVolume = totalVolume.plus(volume);
+        }
         if (totalVolume.gt(0))
             this.pushPositionsAndBalances()
                 .catch(err => void this.emit('error', err));
-        return totalVolume;
+    }
+    /** @override */
+    updateOrderbook(orderbook) {
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
+        const makers = [...this.openMakers.values()];
+        for (const maker of makers) {
+            const toThaw = this.openMakers.removeOrder(maker.id);
+            this.assets.thaw(toThaw);
+            this.makeOpenOrder(maker);
+        }
+        this.pushOrderbook().catch(err => void this.emit('error', err));
     }
     // TODO 考虑现货
     getSnapshot() {

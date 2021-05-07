@@ -13,7 +13,7 @@ class Ordering extends Pushing {
     }
     makeOpenOrder(order) {
         this.validateOrder(order);
-        const [uTrades] = this.orderTakes(order);
+        const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
             this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
@@ -34,7 +34,12 @@ class Ordering extends Pushing {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
-            ...order,
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
             filled,
             unfilled: order.quantity.minus(filled),
         };
@@ -52,28 +57,6 @@ class Ordering extends Pushing {
             operation: amendment.operation,
         };
         return this.makeOpenOrder(openOrder);
-    }
-    getOpenOrders() {
-        return clone([...this.openMakers.values()]);
-    }
-    validateOrder(order) {
-        assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
-        assert(order.price.mod(this.config.TICK_SIZE).eq(0));
-        assert(order.unfilled.gt(0));
-        assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
-        assert(order.length === Length.LONG || order.length === Length.SHORT);
-        assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
-        assert(order.operation * order.length === order.side);
-    }
-    updateTrades(uTrades) {
-        super.updateTrades(uTrades);
-        for (let uTrade of uTrades) {
-            this.settlementPrice = new Big(0)
-                .plus(this.settlementPrice.times(.9))
-                .plus(uTrade.price.times(.1))
-                .round(this.config.PRICE_DP);
-            this.latestPrice = uTrade.price;
-        }
     }
     orderTakes(taker) {
         const uTrades = [];
@@ -99,7 +82,7 @@ class Ordering extends Pushing {
                     .round(this.config.CURRENCY_DP);
             }
         this.bookManager.apply();
-        return [uTrades, volume, dollarVolume];
+        return uTrades;
     }
     orderMakes(openOrder) {
         const openMaker = {
@@ -117,7 +100,29 @@ class Ordering extends Pushing {
         for (const maker of orderbook[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        return this.openMakers.addOrder(openMaker);
+        this.openMakers.addOrder(openMaker);
+    }
+    getOpenOrders() {
+        return clone([...this.openMakers.values()]);
+    }
+    validateOrder(order) {
+        assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
+        assert(order.price.mod(this.config.TICK_SIZE).eq(0));
+        assert(order.unfilled.gt(0));
+        assert(order.unfilled.eq(order.unfilled.round(this.config.QUANTITY_DP)));
+        assert(order.length === Length.LONG || order.length === Length.SHORT);
+        assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
+        assert(order.operation * order.length === order.side);
+    }
+    updateTrades(uTrades) {
+        super.updateTrades(uTrades);
+        for (let uTrade of uTrades) {
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(uTrade.price.times(.1))
+                .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
     }
 }
 export { Ordering as default, Ordering, };

@@ -22,6 +22,7 @@ class AssetsManager extends AutoAssets {
             throw new Error('No enough to thaw');
         }
     }
+    // TODO: assert?
     incMargin(price, volume) {
         this.staticMargin = this.staticMargin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
     }

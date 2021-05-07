@@ -5,11 +5,12 @@ import {
     min,
     OpenOrder,
     OpenMaker,
+    Orderbook,
 } from './interfaces';
 import { Frozen } from './manager-open-makers';
 import Big from 'big.js';
 
-abstract class Taken extends Ordering {
+class Taken extends Ordering {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
@@ -66,14 +67,26 @@ abstract class Taken extends Ordering {
         return totalVolume;
     }
 
-    public updateTrades(uTrades: UnidentifiedTrade[]) {
-        super.updateTrades(uTrades);
+    /** @override */
+    public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
         let totalVolume = new Big(0);
         for (let uTrade of uTrades) {
             const volume = this.uTradeTakesOpenMakers(uTrade);
             totalVolume = totalVolume.plus(volume);
         }
-        return totalVolume;
+    }
+
+    /** @override */
+    public updateOrderbook(orderbook: Orderbook): void {
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
+        const makers = [...this.openMakers.values()];
+        for (const maker of makers) {
+            this.openMakers.removeOrder(maker.id);
+            this.makeOpenOrder(maker);
+        }
+        this.pushOrderbook().catch(err => void this.emit('error', err));
     }
 }
 

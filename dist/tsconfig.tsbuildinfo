@@ -482,8 +482,8 @@
         "affectsGlobalScope": false
       },
       "../src/1-pushing.ts": {
-        "version": "3aa2f93120bfa83bd40702b1b3b898ef591bd87f75b367b1af8541e1fe0bbeb0",
-        "signature": "fef02d80c7dc989c909c8d2e2ac22b93f9155997a3a6daa9c840a7ef35866736",
+        "version": "2c73e1451251afff354af947b5b770599138504020913797ce053f5af1ce3c6a",
+        "signature": "e9b83b9c931d518a121cceff219f4d8d790c579fa8d969349523b5c71fbcdd11",
         "affectsGlobalScope": false
       },
       "../src/manager-open-makers.ts": {
@@ -492,13 +492,13 @@
         "affectsGlobalScope": false
       },
       "../src/2-ordering.ts": {
-        "version": "eaf153bc9cc6f5cafb31d34abe19f5361e538fac1831f13470f8d9974fe1d507",
-        "signature": "683464d75964bb227e04b308b5c4413db8c5cf2cb7d1854e312003287d4f3284",
+        "version": "770d3ea64a5a5e1c4dcd806bad1ed7256acddc8908ac94d4445da4b6951c9f29",
+        "signature": "cb86dafd2850cdb5b1137dbdfc8e7ea290ac13ff14320d5b29c358a43a3afebd",
         "affectsGlobalScope": false
       },
       "../src/3-taken.ts": {
-        "version": "86d0f4eb7fab059ce476118885c3536efe20ef9f5dc8542124ec813f216f9b42",
-        "signature": "0d70b4408b8a064acf3f046f193bb973e7289a748ae693ee4e233d6fd7aac206",
+        "version": "8f1cd15e685011312596c48de2384cf42d4623bb54a9dcb1ca867736a18bfbb6",
+        "signature": "34ed9013b5f6a734927c0d3c025351abf22010d77357b34cec9f971f22ad26af",
         "affectsGlobalScope": false
       },
       "../src/auto-assets.ts": {
@@ -507,13 +507,13 @@
         "affectsGlobalScope": false
       },
       "../src/manager-assets.ts": {
-        "version": "c4f36b8c4b650ff4d572e3b0bec6176845498b739f379e31236bad8e1b519eae",
+        "version": "f96b72ff132d5948d6fadb5a8c58315e2489f851224973cf25a58d2f28d3f22a",
         "signature": "d515edbc1ce15444d6a3cf5e6d49f1a87602c950d3e04a312b504619b3c17145",
         "affectsGlobalScope": false
       },
       "../src/4-assets.ts": {
-        "version": "c4c64387d1024c171f7dcbb5f6c739d81059c55cdd3417c20222f782ecdc44b6",
-        "signature": "8bd4bcf2ddfe75ae53d81b0babb4ad0c66a79f8d700e36cd91429e39078a024a",
+        "version": "faf9212845ecee1500837f202519538be1242f81c704b00dbdff7295b2cd72fc",
+        "signature": "ee7cc7bba5f6b0bc4f7196a63c07449a5014c6274cca4e711baf8c23e9b6e0bc",
         "affectsGlobalScope": false
       },
       "../src/5-delay.ts": {
@@ -975,7 +975,6 @@
       ],
       "../src/2-ordering.ts": [
         "../node_modules/@types/big.js/index.d.ts",
-        "../node_modules/interfaces/dist/data.d.ts",
         "../src/1-pushing.ts",
         "../src/interfaces.ts",
         "../src/manager-open-makers.ts"
@@ -989,7 +988,6 @@
       "../src/4-assets.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../node_modules/@types/node/events.d.ts",
-        "../node_modules/interfaces/dist/data.d.ts",
         "../src/3-taken.ts",
         "../src/interfaces.ts",
         "../src/manager-assets.ts",

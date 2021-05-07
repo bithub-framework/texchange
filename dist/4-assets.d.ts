@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Taken, TakenEvents } from './3-taken';
-import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, OpenMaker, Snapshot } from './interfaces';
+import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, OpenMaker, Snapshot, Orderbook } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
 import { Frozen } from './manager-open-makers';
@@ -17,16 +17,20 @@ declare class ManagingAssets extends Taken {
     private enoughPosition;
     private singleLength;
     private enoughReserve;
-    protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
+    /** @override */
+    protected orderTakes(taker: OpenOrder): UnidentifiedTrade[];
     protected pushPositionsAndBalances(): Promise<void>;
-    protected orderMakes(openOrder: OpenOrder): Frozen;
+    /** @override */
+    protected orderMakes(openOrder: OpenOrder): void;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): {
         volume: Big;
         dollarVolume: Big;
         toThaw: Frozen;
     };
     protected settle(): void;
-    updateTrades(uTrades: UnidentifiedTrade[]): Big;
+    updateTrades(uTrades: UnidentifiedTrade[]): void;
+    /** @override */
+    updateOrderbook(orderbook: Orderbook): void;
     getSnapshot(): Snapshot;
 }
 interface ManagingAssetsEvents extends TakenEvents {

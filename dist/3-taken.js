@@ -44,14 +44,25 @@ class Taken extends Ordering {
             }
         return totalVolume;
     }
+    /** @override */
     updateTrades(uTrades) {
-        super.updateTrades(uTrades);
+        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
         let totalVolume = new Big(0);
         for (let uTrade of uTrades) {
             const volume = this.uTradeTakesOpenMakers(uTrade);
             totalVolume = totalVolume.plus(volume);
         }
-        return totalVolume;
+    }
+    /** @override */
+    updateOrderbook(orderbook) {
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
+        const makers = [...this.openMakers.values()];
+        for (const maker of makers) {
+            this.openMakers.removeOrder(maker.id);
+            this.makeOpenOrder(maker);
+        }
+        this.pushOrderbook().catch(err => void this.emit('error', err));
     }
 }
 export { Taken as default, Taken, };

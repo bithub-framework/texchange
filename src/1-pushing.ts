@@ -7,7 +7,7 @@ import {
     Config,
 } from './interfaces';
 
-abstract class Pushing extends EventEmitter {
+class Pushing extends EventEmitter {
     protected tradeCount = 0;
     protected bookManager: OrderbookManager;
 

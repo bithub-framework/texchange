@@ -42,6 +42,7 @@ class AssetsManager extends AutoAssets {
         }
     }
 
+    // TODO: assert?
     public incMargin(
         price: Big,
         volume: Big,
