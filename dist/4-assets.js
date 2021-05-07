@@ -146,7 +146,11 @@ class ManagingAssets extends Taken {
         this.assets.freeze(toFreeze);
     }
     uTradeTakesOpenMaker(uTrade, maker) {
-        const { volume, dollarVolume, toThaw } = super.uTradeTakesOpenMaker(uTrade, maker);
+        const volume = min(uTrade.quantity, maker.unfilled);
+        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
+            .round(this.config.CURRENCY_DP);
+        uTrade.quantity = uTrade.quantity.minus(volume);
+        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
@@ -158,7 +162,7 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
             this.assets.decMargin(volume);
         }
-        return { volume, dollarVolume, toThaw };
+        return volume;
     }
     settle() {
         const position = clone(this.assets.position);

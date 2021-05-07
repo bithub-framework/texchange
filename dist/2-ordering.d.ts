@@ -16,6 +16,7 @@ declare class Ordering extends Pushing {
     protected orderMakes(openOrder: OpenOrder): void;
     protected getOpenOrders(): OpenOrder[];
     protected validateOrder(order: OpenOrder): void;
+    /** @override */
     updateTrades(uTrades: UnidentifiedTrade[]): void;
 }
 export { Ordering as default, Ordering, PushingEvents as OrderingEvents, };

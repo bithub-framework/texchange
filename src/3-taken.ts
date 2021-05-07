@@ -37,17 +37,13 @@ class Taken extends Ordering {
 
     protected uTradeTakesOpenMaker(
         uTrade: UnidentifiedTrade, maker: OpenMaker,
-    ): {
-        volume: Big,
-        dollarVolume: Big,
-        toThaw: Frozen,
-    } {
+    ): Big {
         const volume = min(uTrade.quantity, maker.unfilled);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
-        return { volume, dollarVolume, toThaw };
+        this.openMakers.takeOrder(maker.id, volume, dollarVolume);
+        return volume;
     }
 
     protected uTradeTakesOpenMakers(uTrade: UnidentifiedTrade) {
@@ -61,7 +57,7 @@ class Taken extends Ordering {
         for (const order of this.openMakers.values())
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
                 this.uTradeTakesOrderQueue(uTrade, order);
-                const { volume } = this.uTradeTakesOpenMaker(uTrade, order);
+                const volume = this.uTradeTakesOpenMaker(uTrade, order);
                 totalVolume = totalVolume.plus(volume);
             }
         return totalVolume;
@@ -70,6 +66,14 @@ class Taken extends Ordering {
     /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
         this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        for (let uTrade of uTrades) {
+            this.settlementPrice = new Big(0)
+                .plus(this.settlementPrice.times(.9))
+                .plus(uTrade.price.times(.1))
+                .round(this.config.PRICE_DP);
+            this.latestPrice = uTrade.price;
+        }
+
         let totalVolume = new Big(0);
         for (let uTrade of uTrades) {
             const volume = this.uTradeTakesOpenMakers(uTrade);

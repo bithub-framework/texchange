@@ -154,8 +154,9 @@ class Ordering extends Pushing {
         assert(order.operation * order.length === order.side);
     }
 
+    /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        super.updateTrades(uTrades);
+        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
         for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))

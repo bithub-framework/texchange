@@ -150,6 +150,7 @@ class ManagingAssets extends Taken {
                     .round(this.config.CURRENCY_DP);
             }
         this.bookManager.apply();
+
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === Operation.OPEN) {
@@ -208,15 +209,14 @@ class ManagingAssets extends Taken {
     protected uTradeTakesOpenMaker(
         uTrade: UnidentifiedTrade,
         maker: OpenMaker,
-    ): {
-        volume: Big,
-        dollarVolume: Big,
-        toThaw: Frozen,
-    } {
-        const { volume, dollarVolume, toThaw } =
-            super.uTradeTakesOpenMaker(uTrade, maker);
-        this.assets.thaw(toThaw);
+    ): Big {
+        const volume = min(uTrade.quantity, maker.unfilled);
+        const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
+            .round(this.config.CURRENCY_DP);
+        uTrade.quantity = uTrade.quantity.minus(volume);
+        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
 
+        this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (maker.operation === Operation.OPEN) {
@@ -230,7 +230,7 @@ class ManagingAssets extends Taken {
             );
             this.assets.decMargin(volume);
         }
-        return { volume, dollarVolume, toThaw };
+        return volume;
     }
 
     protected settle(): void {

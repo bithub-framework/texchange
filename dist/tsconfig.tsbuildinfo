@@ -492,13 +492,13 @@
         "affectsGlobalScope": false
       },
       "../src/2-ordering.ts": {
-        "version": "770d3ea64a5a5e1c4dcd806bad1ed7256acddc8908ac94d4445da4b6951c9f29",
-        "signature": "cb86dafd2850cdb5b1137dbdfc8e7ea290ac13ff14320d5b29c358a43a3afebd",
+        "version": "fa5956b276b5679ad49758c39c7d30fd99c576d5f31485380873b479c49e96d5",
+        "signature": "a0bba6311de440c5bac3cd27141302314f7802ea84cee0b20a9193f4e015832c",
         "affectsGlobalScope": false
       },
       "../src/3-taken.ts": {
-        "version": "8f1cd15e685011312596c48de2384cf42d4623bb54a9dcb1ca867736a18bfbb6",
-        "signature": "34ed9013b5f6a734927c0d3c025351abf22010d77357b34cec9f971f22ad26af",
+        "version": "693246b63a7dbf4a2649c1c5b89b4eb9f6a225f901953405f68c699dae6200a8",
+        "signature": "efca36175ad87437870ca2a968493572554a80d2f6c19f006d7a078c7e98c6f5",
         "affectsGlobalScope": false
       },
       "../src/auto-assets.ts": {
@@ -512,8 +512,8 @@
         "affectsGlobalScope": false
       },
       "../src/4-assets.ts": {
-        "version": "faf9212845ecee1500837f202519538be1242f81c704b00dbdff7295b2cd72fc",
-        "signature": "ee7cc7bba5f6b0bc4f7196a63c07449a5014c6274cca4e711baf8c23e9b6e0bc",
+        "version": "4fef7e2760a99b0b6c7425c101c75984086050faa1ce677c00503f61f3b96462",
+        "signature": "19d2e7beba0dc61cc979d8026a8ad3983a195735eb85d1846ce331c4fffc7293",
         "affectsGlobalScope": false
       },
       "../src/5-delay.ts": {
@@ -982,16 +982,14 @@
       "../src/3-taken.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../src/2-ordering.ts",
-        "../src/interfaces.ts",
-        "../src/manager-open-makers.ts"
+        "../src/interfaces.ts"
       ],
       "../src/4-assets.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../node_modules/@types/node/events.d.ts",
         "../src/3-taken.ts",
         "../src/interfaces.ts",
-        "../src/manager-assets.ts",
-        "../src/manager-open-makers.ts"
+        "../src/manager-assets.ts"
       ],
       "../src/5-delay.ts": [
         "../src/4-assets.ts",

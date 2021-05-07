@@ -3,7 +3,6 @@ import { Taken, TakenEvents } from './3-taken';
 import { UnidentifiedTrade, Config, OpenOrder, Positions, Balances, OpenMaker, Snapshot, Orderbook } from './interfaces';
 import Big from 'big.js';
 import { AssetsManager } from './manager-assets';
-import { Frozen } from './manager-open-makers';
 import { EventEmitter } from 'events';
 declare class ManagingAssets extends Taken {
     protected assets: AssetsManager;
@@ -22,11 +21,7 @@ declare class ManagingAssets extends Taken {
     protected pushPositionsAndBalances(): Promise<void>;
     /** @override */
     protected orderMakes(openOrder: OpenOrder): void;
-    protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): {
-        volume: Big;
-        dollarVolume: Big;
-        toThaw: Frozen;
-    };
+    protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): Big;
     protected settle(): void;
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     /** @override */
