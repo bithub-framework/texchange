@@ -14,7 +14,7 @@ class AutoAssets implements ExAssets {
     public cost: {
         [length: number]: Big;
     };
-    public frozenMargin: Big;
+    public frozenBalance: Big;
     public frozenPosition: {
         [length: number]: Big;
     };
@@ -26,7 +26,7 @@ class AutoAssets implements ExAssets {
         private getLatestPrice: () => Big,
     ) {
         this.balance = snapshot.balance;
-        this.frozenMargin = new Big(0);
+        this.frozenBalance = new Big(0);
         this.frozenPosition = {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
@@ -39,21 +39,21 @@ class AutoAssets implements ExAssets {
         };
     }
 
-    protected autoMargin = new Big(0);
+    protected staticMargin = new Big(0);
     public get margin(): Big {
         return this.config.calcMargin(
             this.config,
             this,
             this.getSettlementPrice(),
             this.getLatestPrice(),
-            this.autoMargin,
+            this.staticMargin,
         ).round(this.config.CURRENCY_DP);
     }
 
     public get reserve(): Big {
         return this.balance
             .minus(this.margin)
-            .minus(this.frozenMargin);
+            .minus(this.frozenBalance);
     }
 
     public get closable() {
@@ -71,7 +71,7 @@ class AutoAssets implements ExAssets {
             cost: this.cost,
             margin: this.margin,
             position: this.position,
-            frozenMargin: this.frozenMargin,
+            frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             reserve: this.reserve,
             closable: this.closable,

@@ -3,8 +3,7 @@ import {
     LimitOrder,
     Amendment,
     UnidentifiedTrade,
-    ContextMarketApiLike,
-    ContextAccountApiLike,
+    ExchangeLike,
     Config,
     OpenOrder,
     clone,
@@ -13,9 +12,7 @@ import {
     Snapshot,
 } from './interfaces';
 
-class Texchange extends ManagingAssets implements
-    ContextMarketApiLike,
-    ContextAccountApiLike {
+class Texchange extends ManagingAssets implements ExchangeLike {
     constructor(
         config: Config,
         snapshot: Snapshot,
@@ -25,63 +22,63 @@ class Texchange extends ManagingAssets implements
         super(config, snapshot, now);
     }
 
-    public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
+    public async makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeOrderNoDelay(order));
+            return orders.map(order => this.makeOrder(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async amendOrders(
+    public async amendOrdersDelay(
         amendments: Amendment[]
     ): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendOrderNoDelay(order));
+            return amendments.map(order => this.amendOrder(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+    public async cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.cancelOrderNoDelay(order));
+            return orders.map(order => this.cancelOrder(order));
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getBalances(): Promise<Balances> {
+    public async getBalancesDelay(): Promise<Balances> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getBalancesNoDelay();
+            return this.getBalances();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getPositions(): Promise<Positions> {
+    public async getPositionsDelay(): Promise<Positions> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getPositionsNoDelay();
+            return this.getPositions();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
 
-    public async getOpenOrders(): Promise<OpenOrder[]> {
+    public async getOpenOrdersDelay(): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getOpenOrdersNoDelay();
+            return this.getOpenOrders();
         } finally {
             await this.sleep(this.config.PING);
         }

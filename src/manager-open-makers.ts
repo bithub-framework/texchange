@@ -9,7 +9,7 @@ import Big from 'big.js';
 import assert from 'assert';
 
 interface Frozen {
-    margin: Big;
+    balance: Big;
     position: Big;
     length: Length;
 }
@@ -27,7 +27,7 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
 
     public addOrder(order: OpenMaker): Frozen {
         const frozen: Frozen = {
-            margin: order.operation === Operation.OPEN
+            balance: order.operation === Operation.OPEN
                 ? this.config.calcFrozenMargin(
                     this.config,
                     order,
@@ -58,14 +58,17 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
         assert(volume.lte(order.unfilled));
 
         const thawed: Frozen = {
-            margin: this.calcThawedMargin(
-                order.unfilled, frozen.margin, volume, dollarVolume,
-            ),
-            position: volume,
+            balance: order.operation === Operation.OPEN
+                ? this.calcThawedBalance(
+                    order.unfilled, frozen.balance, volume, dollarVolume,
+                ) : new Big(0),
+            position: order.operation === Operation.CLOSE
+                ? volume
+                : new Big(0),
             length: order.length,
         };
 
-        frozen.margin = frozen.margin.minus(thawed.margin);
+        frozen.balance = frozen.balance.minus(thawed.balance);
         frozen.position = frozen.position.minus(thawed.position);
 
         order.filled = order.filled.plus(volume);
@@ -78,17 +81,13 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
         return thawed;
     }
 
-    public removeOrder(oid: OrderId): Frozen {
+    public removeOrder(oid: OrderId): Frozen | null {
         const order = this.get(oid);
         const frozen = this.frozens.get(oid)!;
-        if (!order) return {
-            margin: new Big(0),
-            position: new Big(0),
-            length: Length.LONG, // meaningless
-        }
+        if (!order) return null;
 
         const thawed: Frozen = {
-            margin: frozen.margin,
+            balance: frozen.balance,
             position: frozen.position,
             length: order.length,
         };
@@ -99,16 +98,16 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
         return thawed;
     }
 
-    private calcThawedMargin(
+    private calcThawedBalance(
         unfilled: Big,
-        frozenMargin: Big,
+        frozenBalance: Big,
         volume: Big,
         dollarVolume: Big,
     ): Big {
         let thawedMargin = dollarVolume.div(this.config.LEVERAGE)
             .round(this.config.CURRENCY_DP);
-        if (thawedMargin.gt(frozenMargin) || volume.eq(unfilled))
-            thawedMargin = frozenMargin;
+        if (thawedMargin.gt(frozenBalance) || volume.eq(unfilled))
+            thawedMargin = frozenBalance;
         return thawedMargin;
     }
 }

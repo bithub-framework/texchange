@@ -6,22 +6,30 @@ class AssetsManager extends AutoAssets {
     constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         super(config, snapshot, getSettlementPrice, getLatestPrice);
     }
-    freeze({ margin, position, length }) {
-        this.frozenMargin = this.frozenMargin.plus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length].plus(position);
+    freeze(frozen) {
+        this.frozenBalance = this.frozenBalance.plus(frozen.balance);
+        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);
+        if (this.reserve.lt(0) || this.closable[frozen.length].lt(0)) {
+            this.thaw(frozen);
+            throw new Error('No enough to freeze');
+        }
     }
-    thaw({ margin, position, length }) {
-        this.frozenMargin = this.frozenMargin.minus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length].minus(position);
+    thaw(frozen) {
+        this.frozenBalance = this.frozenBalance.minus(frozen.balance);
+        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].minus(frozen.position);
+        if (this.frozenBalance.lt(0) || this.frozenPosition[frozen.length].lt(0)) {
+            this.freeze(frozen);
+            throw new Error('No enough to thaw');
+        }
     }
     incMargin(price, volume) {
-        this.autoMargin = this.autoMargin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
+        this.staticMargin = this.staticMargin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
     }
     decMargin(volume) {
         const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
-        this.autoMargin = totalPosition.eq(volume)
+        this.staticMargin = totalPosition.eq(volume)
             ? new Big(0)
-            : this.autoMargin.minus(this.config.calcMarginDecrement(this.config, this, volume).round(this.config.CURRENCY_DP));
+            : this.staticMargin.minus(this.config.calcMarginDecrement(this.config, this, volume).round(this.config.CURRENCY_DP));
     }
     openPosition(length, volume, dollarVolume, fee) {
         this.position[length] = this.position[length].plus(volume);

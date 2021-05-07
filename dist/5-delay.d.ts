@@ -1,14 +1,14 @@
 import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
-import { LimitOrder, Amendment, UnidentifiedTrade, ContextMarketApiLike, ContextAccountApiLike, Config, OpenOrder, Balances, Positions, Snapshot } from './interfaces';
-declare class Texchange extends ManagingAssets implements ContextMarketApiLike, ContextAccountApiLike {
+import { LimitOrder, Amendment, UnidentifiedTrade, ExchangeLike, Config, OpenOrder, Balances, Positions, Snapshot } from './interfaces';
+declare class Texchange extends ManagingAssets implements ExchangeLike {
     private sleep;
     constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
-    makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
-    amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    getBalances(): Promise<Balances>;
-    getPositions(): Promise<Positions>;
-    getOpenOrders(): Promise<OpenOrder[]>;
+    makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]>;
+    amendOrdersDelay(amendments: Amendment[]): Promise<OpenOrder[]>;
+    cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]>;
+    getBalancesDelay(): Promise<Balances>;
+    getPositionsDelay(): Promise<Positions>;
+    getOpenOrdersDelay(): Promise<OpenOrder[]>;
     protected pushOrderbook(): Promise<void>;
     protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
     protected pushPositionsAndBalances(): Promise<void>;

@@ -26,17 +26,23 @@ class ManagingAssets extends Taken {
         return order;
     }
     /** @override */
-    cancelOrderNoDelay(order) {
+    cancelOrder(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         const toThaw = this.openMakers.removeOrder(order.id);
-        this.assets.thaw(toThaw);
+        if (toThaw)
+            this.assets.thaw(toThaw);
         return {
-            ...order,
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
             filled,
             unfilled: order.quantity.minus(filled),
         };
     }
-    getPositionsNoDelay() {
+    getPositions() {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -44,7 +50,7 @@ class ManagingAssets extends Taken {
             time: this.now(),
         });
     }
-    getBalancesNoDelay() {
+    getBalances() {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -102,7 +108,7 @@ class ManagingAssets extends Taken {
         return toFreeze;
     }
     uTradeTakesOpenMaker(uTrade, maker) {
-        const [volume, dollarVolume, toThaw] = super.uTradeTakesOpenMaker(uTrade, maker);
+        const { volume, dollarVolume, toThaw } = super.uTradeTakesOpenMaker(uTrade, maker);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
@@ -114,7 +120,7 @@ class ManagingAssets extends Taken {
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
             this.assets.decMargin(volume);
         }
-        return [volume, dollarVolume, toThaw];
+        return { volume, dollarVolume, toThaw };
     }
     settle() {
         const position = clone(this.assets.position);

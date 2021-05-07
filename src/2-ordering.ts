@@ -15,7 +15,7 @@ import Big from 'big.js';
 import { OpenMakerManager } from './manager-open-makers';
 import assert from 'assert';
 
-class Ordering extends Pushing {
+abstract class Ordering extends Pushing {
     protected openMakers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice = new Big(0);
@@ -46,7 +46,7 @@ class Ordering extends Pushing {
         return order;
     }
 
-    protected makeOrderNoDelay(order: LimitOrder): OpenOrder {
+    protected makeOrder(order: LimitOrder): OpenOrder {
         const openOrder: OpenOrder = {
             ...order,
             id: ++this.orderCount,
@@ -56,7 +56,7 @@ class Ordering extends Pushing {
         return this.makeOpenOrder(openOrder);
     }
 
-    protected cancelOrderNoDelay(order: OpenOrder): OpenOrder {
+    protected cancelOrder(order: OpenOrder): OpenOrder {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -66,21 +66,24 @@ class Ordering extends Pushing {
         };
     }
 
-    protected amendOrderNoDelay(
+    protected amendOrder(
         amendment: Amendment,
     ): OpenOrder {
-        const { filled } = this.cancelOrderNoDelay(amendment);
+        const { filled } = this.cancelOrder(amendment);
         const openOrder: OpenOrder = {
-            ...amendment,
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
             quantity: amendment.newUnfilled.plus(filled),
             filled,
+            id: amendment.id,
+            side: amendment.side,
+            length: amendment.length,
+            operation: amendment.operation,
         };
         return this.makeOpenOrder(openOrder);
     }
 
-    protected getOpenOrdersNoDelay(): OpenOrder[] {
+    protected getOpenOrders(): OpenOrder[] {
         return clone([...this.openMakers.values()]);
     }
 
@@ -140,16 +143,20 @@ class Ordering extends Pushing {
         openOrder: OpenOrder,
     ) {
         const openMaker: OpenMaker = {
-            ...openOrder,
+            price: openOrder.price,
+            quantity: openOrder.quantity,
+            side: openOrder.side,
+            length: openOrder.length,
+            operation: openOrder.operation,
+            filled: openOrder.filled,
+            unfilled: openOrder.unfilled,
+            id: openOrder.id,
             behind: new Big(0),
         };
         const orderbook = this.bookManager.getBook();
-        for (const maker of orderbook[openOrder.side]) {
-            if (
-                openOrder.side === Side.BID && maker.price.gte(openOrder.price) ||
-                openOrder.side === Side.ASK && maker.price.lte(openOrder.price)
-            ) openMaker.behind = openMaker.behind.plus(maker.quantity);
-        }
+        for (const maker of orderbook[openOrder.side])
+            if (maker.price.eq(openOrder.price))
+                openMaker.behind = openMaker.behind.plus(maker.quantity);
         return this.openMakers.addOrder(openMaker);
     }
 }

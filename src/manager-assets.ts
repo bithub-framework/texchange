@@ -7,6 +7,7 @@ import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-makers';
 import util from 'util';
+import assert from 'assert';
 
 class AssetsManager extends AutoAssets {
     constructor(
@@ -23,21 +24,29 @@ class AssetsManager extends AutoAssets {
         );
     }
 
-    public freeze({ margin, position, length }: Frozen) {
-        this.frozenMargin = this.frozenMargin.plus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length].plus(position);
+    public freeze(frozen: Frozen) {
+        this.frozenBalance = this.frozenBalance.plus(frozen.balance);
+        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);
+        if (this.reserve.lt(0) || this.closable[frozen.length].lt(0)) {
+            this.thaw(frozen);
+            throw new Error('No enough to freeze');
+        }
     }
 
-    public thaw({ margin, position, length }: Frozen) {
-        this.frozenMargin = this.frozenMargin.minus(margin);
-        this.frozenPosition[length] = this.frozenPosition[length].minus(position);
+    public thaw(frozen: Frozen) {
+        this.frozenBalance = this.frozenBalance.minus(frozen.balance);
+        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].minus(frozen.position);
+        if (this.frozenBalance.lt(0) || this.frozenPosition[frozen.length].lt(0)) {
+            this.freeze(frozen);
+            throw new Error('No enough to thaw');
+        }
     }
 
     public incMargin(
         price: Big,
         volume: Big,
     ) {
-        this.autoMargin = this.autoMargin.plus(
+        this.staticMargin = this.staticMargin.plus(
             this.config.calcMarginIncrement(
                 this.config,
                 price,
@@ -48,9 +57,9 @@ class AssetsManager extends AutoAssets {
 
     public decMargin(volume: Big) {
         const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
-        this.autoMargin = totalPosition.eq(volume)
+        this.staticMargin = totalPosition.eq(volume)
             ? new Big(0)
-            : this.autoMargin.minus(
+            : this.staticMargin.minus(
                 this.config.calcMarginDecrement(
                     this.config,
                     this,

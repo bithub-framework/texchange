@@ -6,15 +6,15 @@ class OrderbookManager {
         this.config = config;
         this.now = now;
         this.orderbook = {
+            [Side.ASK]: [],
+            [Side.BID]: [],
             time: Number.NEGATIVE_INFINITY,
         };
         this.applied = false;
         this.baseBook = {
-            [Side.ASK]: [], [Side.BID]: [], time: Number.NEGATIVE_INFINITY,
-        };
-        this.total = {
-            [Side.ASK]: new Map(),
-            [Side.BID]: new Map(),
+            [Side.ASK]: [],
+            [Side.BID]: [],
+            time: Number.NEGATIVE_INFINITY,
         };
         // decrement 必须是正数
         this.decrements = {
@@ -27,37 +27,43 @@ class OrderbookManager {
         assert(this.applied);
         return this.orderbook;
     }
-    setBase(orderbook) {
-        this.baseBook = orderbook;
+    setBase(newBaseBook) {
+        this.baseBook = newBaseBook;
         this.orderbook.time = this.now();
         this.applied = false;
     }
     decQuantity(side, price, decrement) {
-        const _price = price.toFixed(this.config.PRICE_DP);
-        const origin = this.decrements[side].get(_price) || new Big(0);
-        this.decrements[side].set(_price, origin.plus(decrement));
+        assert(decrement.gt(0));
+        const priceString = price.toFixed(this.config.PRICE_DP);
+        const origin = this.decrements[side].get(priceString) || new Big(0);
+        this.decrements[side].set(priceString, origin.plus(decrement));
         this.orderbook.time = this.now();
         this.applied = false;
     }
     apply() {
         for (const side of [Side.BID, Side.ASK]) {
-            this.total[side].clear();
-            this.baseBook[side].forEach(order => void this.total[side].set(order.price.toFixed(this.config.PRICE_DP), order.quantity));
-            for (const [_price, decrement] of this.decrements[side]) {
-                const quantity = this.total[side].get(_price);
+            const total = {
+                [Side.ASK]: new Map(),
+                [Side.BID]: new Map(),
+            };
+            for (const order of this.baseBook[side])
+                total[side].set(order.price.toFixed(this.config.PRICE_DP), order.quantity);
+            for (const [priceString, decrement] of this.decrements[side]) {
+                const quantity = total[side].get(priceString);
                 if (quantity) {
                     const newQuantity = quantity.minus(decrement);
-                    if (quantity.gt(0))
-                        this.total[side].set(_price, newQuantity);
+                    if (newQuantity.lte(0))
+                        total[side].delete(priceString);
                     else
-                        this.total[side].delete(_price);
+                        total[side].set(priceString, newQuantity);
                 }
                 else
-                    this.decrements[side].delete(_price);
+                    this.decrements[side].delete(priceString);
             }
-            this.orderbook[side] = [...this.total[side]]
-                .map(([_price, quantity]) => ({
-                price: new Big(_price), quantity, side,
+            // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
+            this.orderbook[side] = [...total[side]]
+                .map(([priceString, quantity]) => ({
+                price: new Big(priceString), quantity, side,
             }));
         }
         this.applied = true;

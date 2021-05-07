@@ -6,11 +6,10 @@ declare class OrderbookManager {
     private orderbook;
     private applied;
     private baseBook;
-    private total;
     private decrements;
     constructor(config: Config, now: () => number);
     getBook(): Orderbook;
-    setBase(orderbook: Orderbook): void;
+    setBase(newBaseBook: Orderbook): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
     apply(): void;
 }

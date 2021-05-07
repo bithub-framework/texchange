@@ -22,8 +22,11 @@ class Pushing extends EventEmitter {
         this.emit('orderbook', this.bookManager);
     }
     uTrade2Trade(uTrades) {
-        return uTrades.map(noidTrade => ({
-            ...noidTrade,
+        return uTrades.map(uTrade => ({
+            price: uTrade.price,
+            quantity: uTrade.quantity,
+            side: uTrade.side,
+            time: uTrade.time,
             id: ++this.tradeCount,
         }));
     }

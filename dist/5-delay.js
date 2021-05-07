@@ -5,61 +5,61 @@ class Texchange extends ManagingAssets {
         super(config, snapshot, now);
         this.sleep = sleep;
     }
-    async makeOrders(orders) {
+    async makeOrdersDelay(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.makeOrderNoDelay(order));
+            return orders.map(order => this.makeOrder(order));
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async amendOrders(amendments) {
+    async amendOrdersDelay(amendments) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return amendments.map(order => this.amendOrderNoDelay(order));
+            return amendments.map(order => this.amendOrder(order));
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async cancelOrders(orders) {
+    async cancelOrdersDelay(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return orders.map(order => this.cancelOrderNoDelay(order));
+            return orders.map(order => this.cancelOrder(order));
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getBalances() {
+    async getBalancesDelay() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getBalancesNoDelay();
+            return this.getBalances();
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getPositions() {
+    async getPositionsDelay() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getPositionsNoDelay();
+            return this.getPositions();
         }
         finally {
             await this.sleep(this.config.PING);
         }
     }
-    async getOpenOrders() {
+    async getOpenOrdersDelay() {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return this.getOpenOrdersNoDelay();
+            return this.getOpenOrders();
         }
         finally {
             await this.sleep(this.config.PING);

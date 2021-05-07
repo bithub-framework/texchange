@@ -11,16 +11,20 @@ declare class ManagingAssets extends Taken {
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */
-    protected cancelOrderNoDelay(order: OpenOrder): OpenOrder;
-    protected getPositionsNoDelay(): Positions;
-    protected getBalancesNoDelay(): Balances;
+    protected cancelOrder(order: OpenOrder): OpenOrder;
+    protected getPositions(): Positions;
+    protected getBalances(): Balances;
     private enoughPosition;
     private singleLength;
     private enoughReserve;
     protected orderTakes(taker: OpenOrder): readonly [Pick<import("interfaces/dist/data").Trade, "side" | "price" | "quantity" | "time">[], Big, Big];
     protected pushPositionsAndBalances(): Promise<void>;
     protected orderMakes(openOrder: OpenOrder): Frozen;
-    protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): [Big, Big, Frozen];
+    protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): {
+        volume: Big;
+        dollarVolume: Big;
+        toThaw: Frozen;
+    };
     protected settle(): void;
     updateTrades(uTrades: UnidentifiedTrade[]): Big;
     getSnapshot(): Snapshot;

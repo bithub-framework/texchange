@@ -1,5 +1,5 @@
 import { Ordering } from './2-ordering';
-import { Side, min, Length, } from './interfaces';
+import { Side, min, } from './interfaces';
 import Big from 'big.js';
 class Taken extends Ordering {
     uTradeShouldTakeOpenOrder(trade, maker) {
@@ -12,34 +12,34 @@ class Taken extends Ordering {
                     trade.price.gte(maker.price));
     }
     uTradeTakesOrderQueue(uTrade, maker) {
-        const volume = min(uTrade.quantity, maker.behind);
-        uTrade.quantity = uTrade.quantity.minus(volume);
-        maker.behind = maker.behind.minus(volume);
+        if (uTrade.price.eq(maker.price)) {
+            const volume = min(uTrade.quantity, maker.behind);
+            uTrade.quantity = uTrade.quantity.minus(volume);
+            maker.behind = maker.behind.minus(volume);
+        }
+        else
+            maker.behind = new Big(0);
     }
     uTradeTakesOpenMaker(uTrade, maker) {
-        if (maker.behind.gt(0))
-            return [
-                new Big(0),
-                new Big(0),
-                {
-                    margin: new Big(0),
-                    position: new Big(0),
-                    length: Length.LONG,
-                },
-            ];
         const volume = min(uTrade.quantity, maker.unfilled);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
         const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
-        return [volume, dollarVolume, toThaw];
+        return { volume, dollarVolume, toThaw };
     }
     uTradeTakesOpenMakers(uTrade) {
-        uTrade = { ...uTrade };
+        uTrade = {
+            price: uTrade.price,
+            quantity: uTrade.quantity,
+            side: uTrade.side,
+            time: uTrade.time,
+        };
         let totalVolume = new Big(0);
         for (const order of this.openMakers.values())
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
-                const [volume] = this.uTradeTakesOpenMaker(uTrade, order);
+                this.uTradeTakesOrderQueue(uTrade, order);
+                const { volume } = this.uTradeTakesOpenMaker(uTrade, order);
                 totalVolume = totalVolume.plus(volume);
             }
         return totalVolume;

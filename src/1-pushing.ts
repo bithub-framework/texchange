@@ -7,7 +7,7 @@ import {
     Config,
 } from './interfaces';
 
-class Pushing extends EventEmitter {
+abstract class Pushing extends EventEmitter {
     protected tradeCount = 0;
     protected bookManager: OrderbookManager;
 
@@ -35,8 +35,11 @@ class Pushing extends EventEmitter {
     }
 
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {
-        return uTrades.map(noidTrade => ({
-            ...noidTrade,
+        return uTrades.map(uTrade => ({
+            price: uTrade.price,
+            quantity: uTrade.quantity,
+            side: uTrade.side,
+            time: uTrade.time,
             id: ++this.tradeCount,
         }));
     }

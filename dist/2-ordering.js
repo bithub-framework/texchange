@@ -21,7 +21,7 @@ class Ordering extends Pushing {
         }
         return order;
     }
-    makeOrderNoDelay(order) {
+    makeOrder(order) {
         const openOrder = {
             ...order,
             id: ++this.orderCount,
@@ -30,7 +30,7 @@ class Ordering extends Pushing {
         };
         return this.makeOpenOrder(openOrder);
     }
-    cancelOrderNoDelay(order) {
+    cancelOrder(order) {
         const filled = this.openMakers.get(order.id)?.filled || order.quantity;
         this.openMakers.removeOrder(order.id);
         return {
@@ -39,18 +39,21 @@ class Ordering extends Pushing {
             unfilled: order.quantity.minus(filled),
         };
     }
-    amendOrderNoDelay(amendment) {
-        const { filled } = this.cancelOrderNoDelay(amendment);
+    amendOrder(amendment) {
+        const { filled } = this.cancelOrder(amendment);
         const openOrder = {
-            ...amendment,
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
             quantity: amendment.newUnfilled.plus(filled),
             filled,
+            id: amendment.id,
+            side: amendment.side,
+            length: amendment.length,
+            operation: amendment.operation,
         };
         return this.makeOpenOrder(openOrder);
     }
-    getOpenOrdersNoDelay() {
+    getOpenOrders() {
         return clone([...this.openMakers.values()]);
     }
     validateOrder(order) {
@@ -100,15 +103,20 @@ class Ordering extends Pushing {
     }
     orderMakes(openOrder) {
         const openMaker = {
-            ...openOrder,
+            price: openOrder.price,
+            quantity: openOrder.quantity,
+            side: openOrder.side,
+            length: openOrder.length,
+            operation: openOrder.operation,
+            filled: openOrder.filled,
+            unfilled: openOrder.unfilled,
+            id: openOrder.id,
             behind: new Big(0),
         };
         const orderbook = this.bookManager.getBook();
-        for (const maker of orderbook[openOrder.side]) {
-            if (openOrder.side === Side.BID && maker.price.gte(openOrder.price) ||
-                openOrder.side === Side.ASK && maker.price.lte(openOrder.price))
+        for (const maker of orderbook[openOrder.side])
+            if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        }
         return this.openMakers.addOrder(openMaker);
     }
 }

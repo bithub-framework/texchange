@@ -5,9 +5,9 @@ class AutoAssets {
         this.config = config;
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
-        this.autoMargin = new Big(0);
+        this.staticMargin = new Big(0);
         this.balance = snapshot.balance;
-        this.frozenMargin = new Big(0);
+        this.frozenBalance = new Big(0);
         this.frozenPosition = {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
@@ -20,12 +20,12 @@ class AutoAssets {
         };
     }
     get margin() {
-        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this.autoMargin).round(this.config.CURRENCY_DP);
+        return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this.staticMargin).round(this.config.CURRENCY_DP);
     }
     get reserve() {
         return this.balance
             .minus(this.margin)
-            .minus(this.frozenMargin);
+            .minus(this.frozenBalance);
     }
     get closable() {
         return {
@@ -41,7 +41,7 @@ class AutoAssets {
             cost: this.cost,
             margin: this.margin,
             position: this.position,
-            frozenMargin: this.frozenMargin,
+            frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             reserve: this.reserve,
             closable: this.closable,

@@ -2,7 +2,7 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
-declare class Pushing extends EventEmitter {
+declare abstract class Pushing extends EventEmitter {
     protected config: Config;
     /** 必须保证 update 时数据的 time 等于 now() */
     protected now: () => number;

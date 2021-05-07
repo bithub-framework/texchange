@@ -3,12 +3,16 @@ import {
     Trade,
     Positions,
     Balances,
-    MarketConfig,
-    AccountConfig,
     LimitOrder,
     OpenOrder,
+    Orderbook,
+    Amendment,
+    MarketConfig,
+    AccountConfig,
 } from 'interfaces';
 import Big from 'big.js';
+import { EventEmitter } from 'events';
+
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
@@ -20,7 +24,7 @@ export interface ExAssets extends Omit<Assets, 'time'> {
     cost: {
         [length: number]: Big;
     };
-    frozenMargin: Big;
+    frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;
     };
@@ -73,4 +77,29 @@ export interface Snapshot {
 
 export function min(...a: Big[]) {
     return a.reduce((m, x) => m.lt(x) ? m : x);
+}
+
+export type Events = {
+    orderbook: [Orderbook];
+    trades: [Trade[]];
+    positions: [Positions];
+    balances: [Balances];
+}
+
+export interface ExchangeLike extends EventEmitter {
+    makeOrdersDelay(orders: LimitOrder[]): Promise<OpenOrder[]>;
+    getOpenOrdersDelay(): Promise<OpenOrder[]>;
+    cancelOrdersDelay(orders: OpenOrder[]): Promise<OpenOrder[]>;
+    getPositionsDelay(): Promise<Positions>;
+    getBalancesDelay(): Promise<Balances>;
+    amendOrdersDelay(amendments: Amendment[]): Promise<OpenOrder[]>;
+
+    on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
+    // on(event: string | symbol, listener: (...args: any[]) => void): this;
+    // once(event: string | symbol, listener: (...args: any[]) => void): this;
+    // off(event: string | symbol, listener: (...args: any[]) => void): this;
+    // emit(event: string | symbol, ...args: any[]): boolean;
 }

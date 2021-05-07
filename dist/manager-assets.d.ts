@@ -6,8 +6,8 @@ import { Frozen } from './manager-open-makers';
 import util from 'util';
 declare class AssetsManager extends AutoAssets {
     constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
-    freeze({ margin, position, length }: Frozen): void;
-    thaw({ margin, position, length }: Frozen): void;
+    freeze(frozen: Frozen): void;
+    thaw(frozen: Frozen): void;
     incMargin(price: Big, volume: Big): void;
     decMargin(volume: Big): void;
     openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;

@@ -11,12 +11,12 @@ declare class AutoAssets implements ExAssets {
     cost: {
         [length: number]: Big;
     };
-    frozenMargin: Big;
+    frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;
     };
     constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
-    protected autoMargin: Big;
+    protected staticMargin: Big;
     get margin(): Big;
     get reserve(): Big;
     get closable(): {
