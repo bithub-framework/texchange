@@ -38,12 +38,17 @@ class ManagingAssets extends Taken {
     }
 
     /** @override */
-    protected makeOpenOrder(order: OpenOrder): OpenOrder {
-        this.validateOrder(order);
+    protected validateOrder(order: OpenOrder) {
+        this.formatCorrect(order);
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION) this.singleLength(order);
+        // 暂只支持实时结算
         this.settle();
-        this.enoughReserve(order);
+        this.enoughAvailable(order);
+    }
+
+    /** @override */
+    protected makeOpenOrder(order: OpenOrder): OpenOrder {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
@@ -103,7 +108,7 @@ class ManagingAssets extends Taken {
         assert(this.assets.position[-order.length].eq(0));
     }
 
-    private enoughReserve(order: OpenOrder) {
+    private enoughAvailable(order: OpenOrder) {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin(

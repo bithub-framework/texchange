@@ -36,7 +36,6 @@ class Ordering extends Pushing {
     }
 
     protected makeOpenOrder(order: OpenOrder): OpenOrder {
-        this.validateOrder(order);
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
@@ -46,18 +45,17 @@ class Ordering extends Pushing {
         return order;
     }
 
-    public async makeOrder(order: LimitOrder): Promise<OpenOrder> {
-        const openOrder: OpenOrder = {
-            ...order,
-            id: ++this.orderCount,
-            filled: new Big(0),
-            unfilled: order.quantity,
-        };
-        return this.makeOpenOrder(openOrder);
-    }
-
     public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
-        return Promise.all(orders.map(order => this.makeOrder(order)));
+        return Promise.all(orders.map(order => {
+            const openOrder: OpenOrder = {
+                ...order,
+                id: ++this.orderCount,
+                filled: new Big(0),
+                unfilled: order.quantity,
+            };
+            this.validateOrder(openOrder);
+            return this.makeOpenOrder(openOrder);
+        }));
     }
 
     protected cancelOpenOrder(order: OpenOrder): OpenOrder {
@@ -75,31 +73,26 @@ class Ordering extends Pushing {
         };
     }
 
-    public async cancelOrder(order: OpenOrder): Promise<OpenOrder> {
-        return this.cancelOpenOrder(order);
-    }
-
     public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
-        return Promise.all(orders.map(order => this.cancelOrder(order)));
-    }
-
-    public async amendOrder(amendment: Amendment): Promise<OpenOrder> {
-        const { filled } = this.cancelOpenOrder(amendment);
-        const openOrder: OpenOrder = {
-            price: amendment.newPrice,
-            unfilled: amendment.newUnfilled,
-            quantity: amendment.newUnfilled.plus(filled),
-            filled,
-            id: amendment.id,
-            side: amendment.side,
-            length: amendment.length,
-            operation: amendment.operation,
-        };
-        return this.makeOpenOrder(openOrder);
+        return Promise.all(orders.map(order => this.cancelOpenOrder(order)));
     }
 
     public async amendOrders(amendments: Amendment[]): Promise<OpenOrder[]> {
-        return Promise.all(amendments.map(amendment => this.amendOrder(amendment)));
+        return Promise.all(amendments.map(amendment => {
+            const { filled } = this.cancelOpenOrder(amendment);
+            const openOrder: OpenOrder = {
+                price: amendment.newPrice,
+                unfilled: amendment.newUnfilled,
+                quantity: amendment.newUnfilled.plus(filled),
+                filled,
+                id: amendment.id,
+                side: amendment.side,
+                length: amendment.length,
+                operation: amendment.operation,
+            };
+            this.validateOrder(openOrder);
+            return this.makeOpenOrder(openOrder);
+        }));
     }
 
     protected orderTakes(taker: OpenOrder): UnidentifiedTrade[] {
@@ -158,7 +151,7 @@ class Ordering extends Pushing {
         return clone([...this.openMakers.values()]);
     }
 
-    protected validateOrder(order: OpenOrder) {
+    protected formatCorrect(order: OpenOrder) {
         assert(order.price.eq(order.price.round(this.config.PRICE_DP)));
         assert(order.price.mod(this.config.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
@@ -166,6 +159,10 @@ class Ordering extends Pushing {
         assert(order.length === Length.LONG || order.length === Length.SHORT);
         assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
         assert(order.operation * order.length === order.side);
+    }
+
+    protected validateOrder(order: OpenOrder) {
+        this.formatCorrect(order);
     }
 
     /** @override */

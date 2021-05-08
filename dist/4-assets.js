@@ -9,13 +9,17 @@ class ManagingAssets extends Taken {
         this.assets = new AssetsManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
     }
     /** @override */
-    makeOpenOrder(order) {
-        this.validateOrder(order);
+    validateOrder(order) {
+        this.formatCorrect(order);
         this.enoughPosition(order);
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
+        // 暂只支持实时结算
         this.settle();
-        this.enoughReserve(order);
+        this.enoughAvailable(order);
+    }
+    /** @override */
+    makeOpenOrder(order) {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
@@ -67,7 +71,7 @@ class ManagingAssets extends Taken {
     singleLength(order) {
         assert(this.assets.position[-order.length].eq(0));
     }
-    enoughReserve(order) {
+    enoughAvailable(order) {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)

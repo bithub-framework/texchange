@@ -9,16 +9,14 @@ declare class Ordering extends Pushing {
     protected orderCount: number;
     constructor(config: Config, snapshot: Snapshot, now: () => number);
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
-    makeOrder(order: LimitOrder): Promise<OpenOrder>;
     makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
     protected cancelOpenOrder(order: OpenOrder): OpenOrder;
-    cancelOrder(order: OpenOrder): Promise<OpenOrder>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    amendOrder(amendment: Amendment): Promise<OpenOrder>;
     amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
     protected orderTakes(taker: OpenOrder): UnidentifiedTrade[];
     protected orderMakes(openOrder: OpenOrder): void;
     protected getOpenOrders(): Promise<OpenOrder[]>;
+    protected formatCorrect(order: OpenOrder): void;
     protected validateOrder(order: OpenOrder): void;
     /** @override */
     updateTrades(uTrades: UnidentifiedTrade[]): void;

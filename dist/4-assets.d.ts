@@ -8,6 +8,8 @@ declare class ManagingAssets extends Taken {
     protected assets: AssetsManager;
     constructor(config: Config, snapshot: Snapshot, now: () => number);
     /** @override */
+    protected validateOrder(order: OpenOrder): void;
+    /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder;
@@ -15,7 +17,7 @@ declare class ManagingAssets extends Taken {
     getBalances(): Promise<Balances>;
     private enoughPosition;
     private singleLength;
-    private enoughReserve;
+    private enoughAvailable;
     /** @override */
     protected orderTakes(taker: OpenOrder): UnidentifiedTrade[];
     protected pushPositionsAndBalances(): Promise<void>;
