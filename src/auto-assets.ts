@@ -50,7 +50,7 @@ class AutoAssets implements ExAssets {
         ).round(this.config.CURRENCY_DP);
     }
 
-    public get reserve(): Big {
+    public get available(): Big {
         return this.balance
             .minus(this.margin)
             .minus(this.frozenBalance);
@@ -73,7 +73,7 @@ class AutoAssets implements ExAssets {
             position: this.position,
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
-            reserve: this.reserve,
+            available: this.available,
             closable: this.closable,
         }
     }

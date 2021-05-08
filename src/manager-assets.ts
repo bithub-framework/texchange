@@ -27,7 +27,7 @@ class AssetsManager extends AutoAssets {
     public freeze(frozen: Frozen) {
         this.frozenBalance = this.frozenBalance.plus(frozen.balance);
         this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);
-        if (this.reserve.lt(0) || this.closable[frozen.length].lt(0)) {
+        if (this.available.lt(0) || this.closable[frozen.length].lt(0)) {
             this.thaw(frozen);
             throw new Error('No enough to freeze');
         }

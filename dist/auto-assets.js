@@ -22,7 +22,7 @@ class AutoAssets {
     get margin() {
         return this.config.calcMargin(this.config, this, this.getSettlementPrice(), this.getLatestPrice(), this.staticMargin).round(this.config.CURRENCY_DP);
     }
-    get reserve() {
+    get available() {
         return this.balance
             .minus(this.margin)
             .minus(this.frozenBalance);
@@ -43,7 +43,7 @@ class AutoAssets {
             position: this.position,
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
-            reserve: this.reserve,
+            available: this.available,
             closable: this.closable,
         };
     }

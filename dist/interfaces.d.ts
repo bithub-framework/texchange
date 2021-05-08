@@ -4,9 +4,7 @@ import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, Amendment
 import Big from 'big.js';
 import { EventEmitter } from 'events';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
-export interface Assets extends Positions, Balances {
-}
-export interface ExAssets extends Omit<Assets, 'time'> {
+export interface ExAssets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -39,6 +37,7 @@ export declare type Events = {
     trades: [Trade[]];
     positions: [Positions];
     balances: [Balances];
+    error: [Error];
 };
 export interface ExchangeLike extends EventEmitter {
     makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;

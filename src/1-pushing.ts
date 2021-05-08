@@ -51,7 +51,7 @@ class Pushing extends EventEmitter {
     }
 }
 
-type PushingEvents = {
+interface PushingEvents {
     orderbook: [Orderbook];
     trades: [Trade[]];
     error: [Error];
@@ -62,10 +62,6 @@ interface Pushing extends EventEmitter {
     once<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     off<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     emit<Event extends keyof PushingEvents>(event: Event, ...args: PushingEvents[Event]): boolean;
-    // on(event: string | symbol, listener: (...args: any[]) => void): this;
-    // once(event: string | symbol, listener: (...args: any[]) => void): this;
-    // off(event: string | symbol, listener: (...args: any[]) => void): this;
-    // emit(event: string | symbol, ...args: any[]): boolean;
 }
 
 export {

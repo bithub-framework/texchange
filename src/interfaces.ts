@@ -16,11 +16,7 @@ import { EventEmitter } from 'events';
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
-export interface Assets extends
-    Positions,
-    Balances { }
-
-export interface ExAssets extends Omit<Assets, 'time'> {
+export interface ExAssets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -84,6 +80,7 @@ export type Events = {
     trades: [Trade[]];
     positions: [Positions];
     balances: [Balances];
+    error: [Error];
 }
 
 export interface ExchangeLike extends EventEmitter {

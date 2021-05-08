@@ -89,7 +89,7 @@ class Texchange extends ManagingAssets {
         });
         const balances = clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
         });
         await this.sleep(this.config.PROCESSING);

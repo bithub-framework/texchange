@@ -108,7 +108,7 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         });
         const balances: Balances = clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
         });
         await this.sleep(this.config.PROCESSING);

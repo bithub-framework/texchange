@@ -84,7 +84,7 @@ class ManagingAssets extends Taken {
         this.settle();
         return clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
         });
     }
@@ -116,7 +116,7 @@ class ManagingAssets extends Taken {
                         order.price, order.unfilled,
                     ).times(this.config.TAKER_FEE_RATE),
                 ).round(this.config.CURRENCY_DP)
-                .lte(this.assets.reserve),
+                .lte(this.assets.available),
             );
     }
 
@@ -168,16 +168,16 @@ class ManagingAssets extends Taken {
 
     protected async pushPositionsAndBalances(): Promise<void> {
         this.settle();
-        const positions: Positions = {
+        const positions: Positions = clone({
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        };
-        const balances: Balances = {
+        });
+        const balances: Balances = clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
-        };
+        });
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
@@ -307,10 +307,6 @@ interface ManagingAssets extends EventEmitter {
     once<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     off<Event extends keyof ManagingAssetsEvents>(event: Event, listener: (...args: ManagingAssetsEvents[Event]) => void): this;
     emit<Event extends keyof ManagingAssetsEvents>(event: Event, ...args: ManagingAssetsEvents[Event]): boolean;
-    // on(event: string | symbol, listener: (...args: any[]) => void): this;
-    // once(event: string | symbol, listener: (...args: any[]) => void): this;
-    // off(event: string | symbol, listener: (...args: any[]) => void): this;
-    // emit(event: string | symbol, ...args: any[]): boolean;
 }
 
 export {

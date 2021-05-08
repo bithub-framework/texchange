@@ -17,11 +17,11 @@ declare class Pushing extends EventEmitter {
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[];
     protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
 }
-declare type PushingEvents = {
+interface PushingEvents {
     orderbook: [Orderbook];
     trades: [Trade[]];
     error: [Error];
-};
+}
 interface Pushing extends EventEmitter {
     on<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
     once<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;

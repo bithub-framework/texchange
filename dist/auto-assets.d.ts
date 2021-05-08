@@ -18,7 +18,7 @@ declare class AutoAssets implements ExAssets {
     constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     protected staticMargin: Big;
     get margin(): Big;
-    get reserve(): Big;
+    get available(): Big;
     get closable(): {
         [x: number]: Big;
     };

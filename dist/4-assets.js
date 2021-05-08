@@ -54,7 +54,7 @@ class ManagingAssets extends Taken {
         this.settle();
         return clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
         });
     }
@@ -71,7 +71,7 @@ class ManagingAssets extends Taken {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
-                .lte(this.assets.reserve));
+                .lte(this.assets.available));
     }
     /** @override */
     orderTakes(taker) {
@@ -112,16 +112,16 @@ class ManagingAssets extends Taken {
     }
     async pushPositionsAndBalances() {
         this.settle();
-        const positions = {
+        const positions = clone({
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        };
-        const balances = {
+        });
+        const balances = clone({
             balance: this.assets.balance,
-            reserve: this.assets.reserve,
+            available: this.assets.available,
             time: this.now(),
-        };
+        });
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
