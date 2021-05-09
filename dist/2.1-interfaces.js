@@ -11,7 +11,7 @@ class Texchange extends Parent {
         this.openMakers = new OpenMakerManager(config, () => this.settlementPrice, () => this.latestPrice);
     }
     async makeOrders(orders) {
-        const results = await Promise.allSettled(orders.map(order => {
+        const results = await Promise.allSettled(orders.map(async (order) => {
             const openOrder = {
                 ...order,
                 id: ++this.orderCount,
@@ -28,15 +28,10 @@ class Texchange extends Parent {
         });
     }
     async cancelOrders(orders) {
-        const results = await Promise.allSettled(orders.map(order => this.cancelOpenOrder(order)));
-        return results.map(result => {
-            return result.status === 'fulfilled'
-                ? result.value
-                : result.reason;
-        });
+        return orders.map(order => this.cancelOpenOrder(order));
     }
     async amendOrders(amendments) {
-        const results = await Promise.allSettled(amendments.map(amendment => {
+        const results = await Promise.allSettled(amendments.map(async (amendment) => {
             const { filled } = this.cancelOpenOrder(amendment);
             const openOrder = {
                 price: amendment.newPrice,

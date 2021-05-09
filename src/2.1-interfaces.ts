@@ -39,16 +39,18 @@ abstract class Texchange extends Parent {
     }
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
-        const results = await Promise.allSettled(orders.map(order => {
-            const openOrder: OpenOrder = {
-                ...order,
-                id: ++this.orderCount,
-                filled: new Big(0),
-                unfilled: order.quantity,
-            };
-            this.validateOrder(openOrder);
-            return this.makeOpenOrder(openOrder);
-        }));
+        const results = await Promise.allSettled(orders.map(
+            async order => {
+                const openOrder: OpenOrder = {
+                    ...order,
+                    id: ++this.orderCount,
+                    filled: new Big(0),
+                    unfilled: order.quantity,
+                };
+                this.validateOrder(openOrder);
+                return this.makeOpenOrder(openOrder);
+            }
+        ));
         return results.map(result => {
             return result.status === 'fulfilled'
                 ? result.value
@@ -56,33 +58,28 @@ abstract class Texchange extends Parent {
         });
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]> {
-        const results = await Promise.allSettled(
-            orders.map(order => this.cancelOpenOrder(order))
-        );
-        return results.map(result => {
-            return result.status === 'fulfilled'
-                ? result.value
-                : <Error>result.reason;
-        });
+    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+        return orders.map(order => this.cancelOpenOrder(order));
     }
 
     public async amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]> {
-        const results = await Promise.allSettled(amendments.map(amendment => {
-            const { filled } = this.cancelOpenOrder(amendment);
-            const openOrder: OpenOrder = {
-                price: amendment.newPrice,
-                unfilled: amendment.newUnfilled,
-                quantity: amendment.newUnfilled.plus(filled),
-                filled,
-                id: amendment.id,
-                side: amendment.side,
-                length: amendment.length,
-                operation: amendment.operation,
-            };
-            this.validateOrder(openOrder);
-            return this.makeOpenOrder(openOrder);
-        }));
+        const results = await Promise.allSettled(amendments.map(
+            async amendment => {
+                const { filled } = this.cancelOpenOrder(amendment);
+                const openOrder: OpenOrder = {
+                    price: amendment.newPrice,
+                    unfilled: amendment.newUnfilled,
+                    quantity: amendment.newUnfilled.plus(filled),
+                    filled,
+                    id: amendment.id,
+                    side: amendment.side,
+                    length: amendment.length,
+                    operation: amendment.operation,
+                };
+                this.validateOrder(openOrder);
+                return this.makeOpenOrder(openOrder);
+            }
+        ));
         return results.map(result => {
             return result.status === 'fulfilled'
                 ? result.value

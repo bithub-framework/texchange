@@ -5,7 +5,7 @@ declare class Texchange extends Parent implements ExchangeLike {
     constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
     getBalances(): Promise<Balances>;
     getPositions(): Promise<Positions>;
     getOpenOrders(): Promise<OpenOrder[]>;

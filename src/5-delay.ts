@@ -45,7 +45,7 @@ class Texchange extends Parent implements ExchangeLike {
         }
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]> {
+    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);

@@ -12,7 +12,7 @@ declare abstract class Texchange extends Parent {
     protected abstract cancelOpenOrder(order: OpenOrder): OpenOrder;
     constructor(config: Config, snapshot: Snapshot, now: () => number);
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     getOpenOrders(): Promise<OpenOrder[]>;
     /** @override */
