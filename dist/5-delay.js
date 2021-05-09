@@ -1,6 +1,6 @@
-import { ManagingAssets } from './4-assets';
+import { Texchange as Parent, } from './4-assets';
 import { clone, } from './interfaces';
-class Texchange extends ManagingAssets {
+class Texchange extends Parent {
     constructor(config, snapshot, sleep, now) {
         super(config, snapshot, now);
         this.sleep = sleep;
@@ -98,5 +98,5 @@ class Texchange extends ManagingAssets {
         this.emit('balances', balances);
     }
 }
-export { Texchange as default, Texchange, };
+export { Texchange, };
 //# sourceMappingURL=5-delay.js.map

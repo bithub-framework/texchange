@@ -1,4 +1,7 @@
-import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
+import {
+    Texchange as Parent,
+    Events,
+} from './4-assets';
 import {
     LimitOrder,
     Amendment,
@@ -12,7 +15,7 @@ import {
     Snapshot,
 } from './interfaces';
 
-class Texchange extends ManagingAssets implements ExchangeLike {
+class Texchange extends Parent implements ExchangeLike {
     constructor(
         config: Config,
         snapshot: Snapshot,
@@ -22,7 +25,7 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         super(config, snapshot, now);
     }
 
-    public async makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]> {
+    public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
@@ -32,7 +35,7 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         }
     }
 
-    public async amendOrders(amendments: Amendment[]): Promise<OpenOrder[]> {
+    public async amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
@@ -42,7 +45,7 @@ class Texchange extends ManagingAssets implements ExchangeLike {
         }
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+    public async cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
@@ -119,7 +122,6 @@ class Texchange extends ManagingAssets implements ExchangeLike {
 }
 
 export {
-    Texchange as default,
     Texchange,
-    ManagingAssetsEvents as TexchangeEvents,
+    Events,
 }

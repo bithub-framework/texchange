@@ -1,7 +1,7 @@
-import { Ordering } from './2-ordering';
+import { Texchange as Parent, } from './2-ordering';
 import { Side, min, } from './interfaces';
 import Big from 'big.js';
-class Taken extends Ordering {
+class Texchange extends Parent {
     uTradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === Side.BID &&
             trade.side === Side.ASK &&
@@ -72,5 +72,5 @@ class Taken extends Ordering {
         this.pushOrderbook().catch(err => void this.emit('error', err));
     }
 }
-export { Taken as default, Taken, };
+export { Texchange, };
 //# sourceMappingURL=3-taken.js.map

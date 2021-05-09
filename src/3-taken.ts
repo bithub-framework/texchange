@@ -1,4 +1,7 @@
-import { Ordering, OrderingEvents } from './2-ordering';
+import {
+    Texchange as Parent,
+    Events,
+} from './2-ordering';
 import {
     Side,
     UnidentifiedTrade,
@@ -9,7 +12,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 
-class Taken extends Ordering {
+class Texchange extends Parent {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
@@ -94,7 +97,6 @@ class Taken extends Ordering {
 }
 
 export {
-    Taken as default,
-    Taken,
-    OrderingEvents as TakenEvents,
+    Texchange,
+    Events,
 }

@@ -1,3 +1,2 @@
-export { default } from './5-delay';
-export * from './5-delay';
+export { Texchange as default, Texchange, } from './5-delay';
 //# sourceMappingURL=index.js.map

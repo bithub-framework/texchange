@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './manager-orderbook';
 import { clone, } from './interfaces';
-class Pushing extends EventEmitter {
+class Texchange extends EventEmitter {
     constructor(config, 
     /** 必须保证 update 时数据的 time 等于 now() */
     now) {
@@ -14,13 +14,9 @@ class Pushing extends EventEmitter {
     updateTrades(uTrades) {
         this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
     }
-    updateOrderbook(orderbook) {
-        this.bookManager.setBase(orderbook);
-        this.bookManager.apply();
-        this.pushOrderbook().catch(err => void this.emit('error', err));
-    }
-    async pushOrderbook() {
-        this.emit('orderbook', clone(this.bookManager.getBook()));
+    async pushUTrades(uTrades) {
+        const trades = this.uTrade2Trade(uTrades);
+        this.emit('trades', trades);
     }
     uTrade2Trade(uTrades) {
         return uTrades.map(uTrade => ({
@@ -31,10 +27,14 @@ class Pushing extends EventEmitter {
             id: ++this.tradeCount,
         }));
     }
-    async pushUTrades(uTrades) {
-        const trades = this.uTrade2Trade(uTrades);
-        this.emit('trades', trades);
+    updateOrderbook(orderbook) {
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
+        this.pushOrderbook().catch(err => void this.emit('error', err));
+    }
+    async pushOrderbook() {
+        this.emit('orderbook', clone(this.bookManager.getBook()));
     }
 }
-export { Pushing as default, Pushing, };
+export { Texchange, };
 //# sourceMappingURL=1-pushing.js.map

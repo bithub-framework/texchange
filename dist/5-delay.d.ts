@@ -1,11 +1,11 @@
-import { ManagingAssets, ManagingAssetsEvents } from './4-assets';
+import { Texchange as Parent, Events } from './4-assets';
 import { LimitOrder, Amendment, UnidentifiedTrade, ExchangeLike, Config, OpenOrder, Balances, Positions, Snapshot } from './interfaces';
-declare class Texchange extends ManagingAssets implements ExchangeLike {
+declare class Texchange extends Parent implements ExchangeLike {
     private sleep;
     constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
-    makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
-    amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
+    makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
+    amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]>;
     getBalances(): Promise<Balances>;
     getPositions(): Promise<Positions>;
     getOpenOrders(): Promise<OpenOrder[]>;
@@ -16,4 +16,4 @@ declare class Texchange extends ManagingAssets implements ExchangeLike {
     /** @override */
     protected pushPositionsAndBalances(): Promise<void>;
 }
-export { Texchange as default, Texchange, ManagingAssetsEvents as TexchangeEvents, };
+export { Texchange, Events, };

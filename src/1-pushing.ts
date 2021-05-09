@@ -8,7 +8,7 @@ import {
     clone,
 } from './interfaces';
 
-class Pushing extends EventEmitter {
+class Texchange extends EventEmitter {
     protected tradeCount = 0;
     protected bookManager: OrderbookManager;
 
@@ -25,14 +25,9 @@ class Pushing extends EventEmitter {
         this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
     }
 
-    public updateOrderbook(orderbook: Orderbook): void {
-        this.bookManager.setBase(orderbook);
-        this.bookManager.apply();
-        this.pushOrderbook().catch(err => void this.emit('error', err));
-    }
-
-    protected async pushOrderbook(): Promise<void> {
-        this.emit('orderbook', clone(this.bookManager.getBook()));
+    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
+        const trades = this.uTrade2Trade(uTrades);
+        this.emit('trades', trades);
     }
 
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {
@@ -45,27 +40,31 @@ class Pushing extends EventEmitter {
         }));
     }
 
-    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = this.uTrade2Trade(uTrades);
-        this.emit('trades', trades);
+    public updateOrderbook(orderbook: Orderbook): void {
+        this.bookManager.setBase(orderbook);
+        this.bookManager.apply();
+        this.pushOrderbook().catch(err => void this.emit('error', err));
+    }
+
+    protected async pushOrderbook(): Promise<void> {
+        this.emit('orderbook', clone(this.bookManager.getBook()));
     }
 }
 
-interface PushingEvents {
+interface Events {
     orderbook: [Orderbook];
     trades: [Trade[]];
     error: [Error];
 }
 
-interface Pushing extends EventEmitter {
-    on<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
-    once<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
-    off<Event extends keyof PushingEvents>(event: Event, listener: (...args: PushingEvents[Event]) => void): this;
-    emit<Event extends keyof PushingEvents>(event: Event, ...args: PushingEvents[Event]): boolean;
+interface Texchange extends EventEmitter {
+    on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
 
 export {
-    Pushing as default,
-    Pushing,
-    PushingEvents,
+    Texchange,
+    Events,
 }

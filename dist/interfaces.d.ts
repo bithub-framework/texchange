@@ -40,12 +40,12 @@ export declare type Events = {
     error: [Error];
 };
 export interface ExchangeLike extends EventEmitter {
-    makeOrders(orders: LimitOrder[]): Promise<OpenOrder[]>;
+    makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
+    amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
+    cancelOrders(orders: OpenOrder[]): Promise<(OpenOrder | Error)[]>;
     getOpenOrders(): Promise<OpenOrder[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
     getPositions(): Promise<Positions>;
     getBalances(): Promise<Balances>;
-    amendOrders(amendments: Amendment[]): Promise<OpenOrder[]>;
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

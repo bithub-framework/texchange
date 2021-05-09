@@ -1,7 +1,7 @@
-import { Ordering, OrderingEvents } from './2-ordering';
+import { Texchange as Parent, Events } from './2-ordering';
 import { UnidentifiedTrade, OpenOrder, OpenMaker, Orderbook } from './interfaces';
 import Big from 'big.js';
-declare class Taken extends Ordering {
+declare class Texchange extends Parent {
     protected uTradeShouldTakeOpenOrder(trade: UnidentifiedTrade, maker: OpenOrder): boolean;
     protected uTradeTakesOrderQueue(uTrade: UnidentifiedTrade, maker: OpenMaker): void;
     protected uTradeTakesOpenMaker(uTrade: UnidentifiedTrade, maker: OpenMaker): Big;
@@ -11,4 +11,4 @@ declare class Taken extends Ordering {
     /** @override */
     updateOrderbook(orderbook: Orderbook): void;
 }
-export { Taken as default, Taken, OrderingEvents as TakenEvents, };
+export { Texchange, Events, };
