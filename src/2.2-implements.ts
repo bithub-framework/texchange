@@ -10,7 +10,7 @@ import assert from 'assert';
 import {
     Texchange as Parent,
     Events,
-} from './2.1-externals';
+} from './2.1-interfaces';
 
 class Texchange extends Parent {
     protected makeOpenOrder(order: OpenOrder): OpenOrder {

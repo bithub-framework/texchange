@@ -1,1 +1,1 @@
-export * from './2.2-internals';
+export * from './2.2-implements';

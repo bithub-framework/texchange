@@ -491,19 +491,19 @@
         "signature": "85f26d3f1f7194a9699368f6c35bb43d2dcd08225e9b61a667f720304684708a",
         "affectsGlobalScope": false
       },
-      "../src/2.1-externals.ts": {
+      "../src/2.1-interfaces.ts": {
         "version": "1b3e09b548404d38990c5a644dfbc9a37ad45c8029a86ad7e1a3c2bc5485fc4c",
         "signature": "6f105204a300751241f11105f943c26f8593d8da4dc6d59a45641f7d82458441",
         "affectsGlobalScope": false
       },
-      "../src/2.2-internals.ts": {
-        "version": "27ea19b5bb0f043f153a56965c96e01994f7bb891743571b0dc504673b7dc528",
-        "signature": "1081ad19bafde933e47bad9090e8bd65074183890205d899bfdea59b8c2df806",
+      "../src/2.2-implements.ts": {
+        "version": "01749fea5750e78982d669ac5683e79570ff3437162f309deab47a8ee77d40b4",
+        "signature": "b247e559332f5e61a2f335ac25154495828b1e1a74af84c5fafe6a18f1509873",
         "affectsGlobalScope": false
       },
       "../src/2-ordering.ts": {
-        "version": "93fd91ab37dec09d56ee7d583e028af1ea5fdff73c4f794aaafb07ba00c37b2e",
-        "signature": "93fd91ab37dec09d56ee7d583e028af1ea5fdff73c4f794aaafb07ba00c37b2e",
+        "version": "b9e62b9876c629285be4cbb5dc4d377441e537707bd33717ddd3442b134fe13f",
+        "signature": "b9e62b9876c629285be4cbb5dc4d377441e537707bd33717ddd3442b134fe13f",
         "affectsGlobalScope": false
       },
       "../src/3-taken.ts": {
@@ -755,18 +755,18 @@
         "../src/manager-orderbook.ts"
       ],
       "../src/2-ordering.ts": [
-        "../src/2.2-internals.ts"
+        "../src/2.2-implements.ts"
       ],
-      "../src/2.1-externals.ts": [
+      "../src/2.1-interfaces.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../src/1-pushing.ts",
         "../src/interfaces.ts",
         "../src/manager-open-makers.ts"
       ],
-      "../src/2.2-internals.ts": [
+      "../src/2.2-implements.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../node_modules/@types/node/assert.d.ts",
-        "../src/2.1-externals.ts",
+        "../src/2.1-interfaces.ts",
         "../src/interfaces.ts"
       ],
       "../src/3-taken.ts": [
@@ -1018,16 +1018,16 @@
         "../src/manager-orderbook.ts"
       ],
       "../src/2-ordering.ts": [
-        "../src/2.2-internals.ts"
+        "../src/2.2-implements.ts"
       ],
-      "../src/2.1-externals.ts": [
+      "../src/2.1-interfaces.ts": [
         "../node_modules/@types/big.js/index.d.ts",
         "../src/1-pushing.ts",
         "../src/interfaces.ts",
         "../src/manager-open-makers.ts"
       ],
-      "../src/2.2-internals.ts": [
-        "../src/2.1-externals.ts",
+      "../src/2.2-implements.ts": [
+        "../src/2.1-interfaces.ts",
         "../src/interfaces.ts"
       ],
       "../src/3-taken.ts": [
@@ -1141,8 +1141,8 @@
       "../node_modules/interfaces/dist/serialization.d.ts",
       "../src/1-pushing.ts",
       "../src/2-ordering.ts",
-      "../src/2.1-externals.ts",
-      "../src/2.2-internals.ts",
+      "../src/2.1-interfaces.ts",
+      "../src/2.2-implements.ts",
       "../src/3-taken.ts",
       "../src/4-assets.ts",
       "../src/4.1-making.ts",

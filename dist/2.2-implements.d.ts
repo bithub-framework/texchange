@@ -1,5 +1,5 @@
 import { OpenOrder, UnidentifiedTrade } from './interfaces';
-import { Texchange as Parent, Events } from './2.1-externals';
+import { Texchange as Parent, Events } from './2.1-interfaces';
 declare class Texchange extends Parent {
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     protected validateOrder(order: OpenOrder): void;

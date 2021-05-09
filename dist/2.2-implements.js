@@ -1,7 +1,7 @@
 import { Side, Operation, Length, min, } from './interfaces';
 import Big from 'big.js';
 import assert from 'assert';
-import { Texchange as Parent, } from './2.1-externals';
+import { Texchange as Parent, } from './2.1-interfaces';
 class Texchange extends Parent {
     makeOpenOrder(order) {
         const uTrades = this.orderTakes(order);
@@ -84,4 +84,4 @@ class Texchange extends Parent {
     }
 }
 export { Texchange, };
-//# sourceMappingURL=2.2-internals.js.map
+//# sourceMappingURL=2.2-implements.js.map

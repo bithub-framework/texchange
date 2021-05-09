@@ -73,4 +73,4 @@ class Texchange extends Parent {
     }
 }
 export { Texchange, };
-//# sourceMappingURL=2.1-externals.js.map
+//# sourceMappingURL=2.1-interfaces.js.map
