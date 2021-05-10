@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../src/interfaces.ts": {
-        "version": "3cbbb8edcd4dc86318123878ad3615f110ee31d70f40a3b883754509d4634ced",
-        "signature": "2d7055181b822895f60be30599d1fe02a69455ce160045ea8e1c0aeb29774ff7",
+        "version": "769def43054a76c542520061c8d4136ce4642dd5f0f135f230bbfbb03d0b7b55",
+        "signature": "f1831b0f4306d30eab0cf79d3e048dd96d1aa30ccbe09fb04240a186758c2e6f",
         "affectsGlobalScope": false
       },
       "../src/manager-orderbook.ts": {
@@ -507,8 +507,8 @@
         "affectsGlobalScope": false
       },
       "../src/3-taken.ts": {
-        "version": "468a77c37c5f64813c46fe736b8a9c103453db8b7a874908f255a4eb199accce",
-        "signature": "e136a48f50168d40989eb74deb30f8a34c82d170e003107be44c4d031eb79693",
+        "version": "554874281f52773b78edebe767a392f29c2e4817965b19c0f019d00526eba68d",
+        "signature": "bd0b6b623709636ccbde41b7ed65af8b4fb4b8986053698a0c562e8f89e88c26",
         "affectsGlobalScope": false
       },
       "../src/auto-assets.ts": {
@@ -527,8 +527,8 @@
         "affectsGlobalScope": false
       },
       "../src/4.2-taken.ts": {
-        "version": "35fe3c26feadac2276bacf2c1548c7f26199266ea87a66a87995b6ecf8f6a2b8",
-        "signature": "4e1d25d1ae62ec6da9a48279bba469fec97ffd1b9393dd429b13039538e24578",
+        "version": "7bae17c734ba7de464edf542fa30c8398827ad48983260015188565ffcbaf8fe",
+        "signature": "5d0ee0656086bba5976ed7e353bf229f77c66c176f2c5d86157fd2bc4f9db59b",
         "affectsGlobalScope": false
       },
       "../src/4.3-others.ts": {

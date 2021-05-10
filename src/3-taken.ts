@@ -82,18 +82,6 @@ class Texchange extends Parent {
             totalVolume = totalVolume.plus(volume);
         }
     }
-
-    /** @override */
-    public updateOrderbook(orderbook: Orderbook): void {
-        this.bookManager.setBase(orderbook);
-        this.bookManager.apply();
-        const makers = [...this.openMakers.values()];
-        for (const maker of makers) {
-            this.openMakers.removeOrder(maker.id);
-            this.makeOpenOrder(maker);
-        }
-        this.pushOrderbook().catch(err => void this.emit('error', err));
-    }
 }
 
 export {
