@@ -6,8 +6,8 @@ import {
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './manager-open-makers';
-import util from 'util';
-import assert from 'assert';
+import { inspect } from 'util';
+import assert = require('assert');
 
 class AssetsManager extends AutoAssets {
     constructor(
@@ -102,7 +102,7 @@ class AssetsManager extends AutoAssets {
             .minus(fee);
     }
 
-    public [util.inspect.custom]() {
+    public [inspect.custom]() {
         return this.toJSON();
     }
 }

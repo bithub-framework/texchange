@@ -7,8 +7,8 @@ import {
     OpenOrder,
     Orderbook,
     Amendment,
-    MarketConfig,
-    AccountConfig,
+    MarketSpec,
+    AccountSpec,
 } from 'interfaces';
 import Big from 'big.js';
 import { EventEmitter } from 'events';
@@ -27,37 +27,37 @@ export interface ExAssets extends Omit<Positions & Balances, 'time'> {
     margin: Big;
 }
 
-export interface TexMarketConfig extends MarketConfig {
+export interface TexMarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
 }
 
-export interface TexAccountConfig extends AccountConfig {
+export interface TexAccountConfig extends AccountSpec {
     calcInitialMargin: (
-        config: MarketConfig & AccountConfig,
+        config: MarketSpec & AccountSpec,
         order: LimitOrder,
         settlementPrice: Big,
         latestPrice: Big,
     ) => Big,
     calcMarginIncrement: (
-        config: MarketConfig & AccountConfig,
+        config: MarketSpec & AccountSpec,
         price: Big,
         volume: Big,
     ) => Big,
     calcMarginDecrement: (
-        config: MarketConfig & AccountConfig,
+        config: MarketSpec & AccountSpec,
         assets: ExAssets,
         volume: Big,
     ) => Big,
     calcMargin: (
-        config: MarketConfig & AccountConfig,
+        config: MarketSpec & AccountSpec,
         assets: Omit<ExAssets, 'margin' | 'reserve'>,
         settlementPrice: Big,
         latestPrice: Big,
         autoMargin: Big,
     ) => Big,
     calcFrozenMargin: (
-        config: MarketConfig & AccountConfig,
+        config: MarketSpec & AccountSpec,
         order: OpenOrder,
         settlementPrice: Big,
         latestPrice: Big,

@@ -4,7 +4,7 @@ import {
     Config,
 } from './interfaces';
 import Big from 'big.js';
-import assert from 'assert';
+import assert = require('assert');
 
 class OrderbookManager {
     private orderbook: Orderbook = {

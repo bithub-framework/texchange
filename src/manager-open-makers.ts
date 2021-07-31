@@ -6,7 +6,7 @@ import {
     OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
-import assert from 'assert';
+import assert = require('assert');
 
 interface Frozen {
     balance: Big;

@@ -16,7 +16,7 @@ import {
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './manager-assets';
-import assert from 'assert';
+import assert = require('assert');
 
 abstract class Texchange extends Parent {
     protected assets: AssetsManager;
