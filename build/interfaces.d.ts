@@ -24,6 +24,7 @@ export interface AccountConfig extends AccountSpec {
     calcFrozenMargin: (config: MarketSpec & AccountSpec, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
 export interface Config extends MarketConfig, AccountConfig {
+    marketName: string;
 }
 export interface Snapshot {
     balance: Big;

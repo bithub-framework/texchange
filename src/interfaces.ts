@@ -65,7 +65,9 @@ export interface AccountConfig extends AccountSpec {
     ) => Big,
 }
 
-export interface Config extends MarketConfig, AccountConfig { }
+export interface Config extends MarketConfig, AccountConfig {
+    marketName: string;
+}
 
 export interface Snapshot {
     balance: Big;
