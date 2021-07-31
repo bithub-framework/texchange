@@ -1,8 +1,6 @@
-/// <reference types="node" />
 export * from 'interfaces';
-import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, Amendment, MarketSpec, AccountSpec } from 'interfaces';
+import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, Amendment, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
-import { EventEmitter } from 'events';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
@@ -39,7 +37,7 @@ export declare type Events = {
     balances: [Balances];
     error: [Error];
 };
-export interface ExchangeLike extends EventEmitter {
+export interface ExchangeLike extends ContextMarketApiLike, ContextAccountApiLike {
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;

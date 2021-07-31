@@ -9,9 +9,10 @@ import {
     Amendment,
     MarketSpec,
     AccountSpec,
+    ContextMarketApiLike,
+    ContextAccountApiLike,
 } from 'interfaces';
 import Big from 'big.js';
-import { EventEmitter } from 'events';
 
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
@@ -83,7 +84,7 @@ export type Events = {
     error: [Error];
 }
 
-export interface ExchangeLike extends EventEmitter {
+export interface ExchangeLike extends ContextMarketApiLike, ContextAccountApiLike {
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
