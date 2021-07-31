@@ -14,8 +14,21 @@ import {
     Positions,
     Snapshot,
 } from './interfaces';
+import Big from 'big.js';
 
 class Texchange extends Parent implements ExchangeLike {
+    public PRICE_DP: number;
+    public CURRENCY_DP: number;
+    public QUANTITY_DP: number;
+    public TICK_SIZE: Big;
+    public calcDollarVolume: (price: Big, quantity: Big) => Big;
+    public calcQuantity: (price: Big, dollarVolume: Big) => Big;
+    public LEVERAGE: number;
+    public TAKER_FEE_RATE: number;
+    public MAKER_FEE_RATE: number;
+    public ONE_WAY_POSITION: boolean;
+
+
     constructor(
         config: Config,
         snapshot: Snapshot,
@@ -23,6 +36,18 @@ class Texchange extends Parent implements ExchangeLike {
         now: () => number,
     ) {
         super(config, snapshot, now);
+        ({
+            PRICE_DP: this.PRICE_DP,
+            CURRENCY_DP: this.CURRENCY_DP,
+            QUANTITY_DP: this.QUANTITY_DP,
+            TICK_SIZE: this.TICK_SIZE,
+            calcDollarVolume: this.calcDollarVolume,
+            calcQuantity: this.calcQuantity,
+            LEVERAGE: this.LEVERAGE,
+            TAKER_FEE_RATE: this.TAKER_FEE_RATE,
+            MAKER_FEE_RATE: this.MAKER_FEE_RATE,
+            ONE_WAY_POSITION: this.ONE_WAY_POSITION,
+        } = config);
     }
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {

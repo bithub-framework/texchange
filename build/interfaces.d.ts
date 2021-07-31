@@ -37,7 +37,7 @@ export declare type Events = {
     balances: [Balances];
     error: [Error];
 };
-export interface ExchangeLike extends ContextMarketApiLike, ContextAccountApiLike {
+export interface ExchangeLike extends ContextMarketApiLike, ContextAccountApiLike, MarketSpec, AccountSpec {
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;

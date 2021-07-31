@@ -7,6 +7,18 @@ class Texchange extends _4_assets_1.Texchange {
     constructor(config, snapshot, sleep, now) {
         super(config, snapshot, now);
         this.sleep = sleep;
+        ({
+            PRICE_DP: this.PRICE_DP,
+            CURRENCY_DP: this.CURRENCY_DP,
+            QUANTITY_DP: this.QUANTITY_DP,
+            TICK_SIZE: this.TICK_SIZE,
+            calcDollarVolume: this.calcDollarVolume,
+            calcQuantity: this.calcQuantity,
+            LEVERAGE: this.LEVERAGE,
+            TAKER_FEE_RATE: this.TAKER_FEE_RATE,
+            MAKER_FEE_RATE: this.MAKER_FEE_RATE,
+            ONE_WAY_POSITION: this.ONE_WAY_POSITION,
+        } = config);
     }
     async makeOrders(orders) {
         try {
