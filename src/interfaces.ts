@@ -16,7 +16,7 @@ import { EventEmitter } from 'events';
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
-export interface ExAssets extends Omit<Positions & Balances, 'time'> {
+export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -27,12 +27,12 @@ export interface ExAssets extends Omit<Positions & Balances, 'time'> {
     margin: Big;
 }
 
-export interface TexMarketConfig extends MarketSpec {
+export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
 }
 
-export interface TexAccountConfig extends AccountSpec {
+export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (
         config: MarketSpec & AccountSpec,
         order: LimitOrder,
@@ -46,12 +46,12 @@ export interface TexAccountConfig extends AccountSpec {
     ) => Big,
     calcMarginDecrement: (
         config: MarketSpec & AccountSpec,
-        assets: ExAssets,
+        assets: Assets,
         volume: Big,
     ) => Big,
     calcMargin: (
         config: MarketSpec & AccountSpec,
-        assets: Omit<ExAssets, 'margin' | 'reserve'>,
+        assets: Omit<Assets, 'margin' | 'reserve'>,
         settlementPrice: Big,
         latestPrice: Big,
         autoMargin: Big,
@@ -64,7 +64,7 @@ export interface TexAccountConfig extends AccountSpec {
     ) => Big,
 }
 
-export interface Config extends TexMarketConfig, TexAccountConfig { }
+export interface Config extends MarketConfig, AccountConfig { }
 
 export interface Snapshot {
     balance: Big;
@@ -95,8 +95,4 @@ export interface ExchangeLike extends EventEmitter {
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
-    // on(event: string | symbol, listener: (...args: any[]) => void): this;
-    // once(event: string | symbol, listener: (...args: any[]) => void): this;
-    // off(event: string | symbol, listener: (...args: any[]) => void): this;
-    // emit(event: string | symbol, ...args: any[]): boolean;
 }

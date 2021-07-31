@@ -4,7 +4,7 @@ import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, Amendment
 import Big from 'big.js';
 import { EventEmitter } from 'events';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
-export interface ExAssets extends Omit<Positions & Balances, 'time'> {
+export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;
     };
@@ -14,18 +14,18 @@ export interface ExAssets extends Omit<Positions & Balances, 'time'> {
     };
     margin: Big;
 }
-export interface TexMarketConfig extends MarketSpec {
+export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
 }
-export interface TexAccountConfig extends AccountSpec {
+export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (config: MarketSpec & AccountSpec, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
     calcMarginIncrement: (config: MarketSpec & AccountSpec, price: Big, volume: Big) => Big;
-    calcMarginDecrement: (config: MarketSpec & AccountSpec, assets: ExAssets, volume: Big) => Big;
-    calcMargin: (config: MarketSpec & AccountSpec, assets: Omit<ExAssets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
+    calcMarginDecrement: (config: MarketSpec & AccountSpec, assets: Assets, volume: Big) => Big;
+    calcMargin: (config: MarketSpec & AccountSpec, assets: Omit<Assets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
     calcFrozenMargin: (config: MarketSpec & AccountSpec, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
-export interface Config extends TexMarketConfig, TexAccountConfig {
+export interface Config extends MarketConfig, AccountConfig {
 }
 export interface Snapshot {
     balance: Big;

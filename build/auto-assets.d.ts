@@ -1,6 +1,6 @@
-import { ExAssets, Config, Snapshot } from './interfaces';
+import { Assets, Config, Snapshot } from './interfaces';
 import Big from 'big.js';
-declare class AutoAssets implements ExAssets {
+declare class AutoAssets implements Assets {
     protected config: Config;
     private getSettlementPrice;
     private getLatestPrice;
@@ -22,6 +22,6 @@ declare class AutoAssets implements ExAssets {
     get closable(): {
         [x: number]: Big;
     };
-    toJSON(): ExAssets;
+    toJSON(): Assets;
 }
 export { AutoAssets as default, AutoAssets, };

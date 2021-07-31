@@ -12,6 +12,6 @@ declare class AssetsManager extends AutoAssets {
     decMargin(volume: Big): void;
     openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
     closePosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
-    [inspect.custom](): import("./interfaces").ExAssets;
+    [inspect.custom](): import("./interfaces").Assets;
 }
 export { AssetsManager as default, AssetsManager, };

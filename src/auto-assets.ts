@@ -1,12 +1,12 @@
 import {
-    ExAssets,
+    Assets,
     Length,
     Config,
     Snapshot,
 } from './interfaces';
 import Big from 'big.js';
 
-class AutoAssets implements ExAssets {
+class AutoAssets implements Assets {
     public position: {
         [length: number]: Big;
     };
@@ -65,7 +65,7 @@ class AutoAssets implements ExAssets {
         };
     }
 
-    public toJSON(): ExAssets {
+    public toJSON(): Assets {
         return {
             balance: this.balance,
             cost: this.cost,
