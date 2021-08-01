@@ -4,12 +4,12 @@ exports.Texchange = void 0;
 const _3_taken_1 = require("./3-taken");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
-const manager_assets_1 = require("./manager-assets");
+const assets_manager_1 = require("./managers/assets-manager");
 const assert = require("assert");
 class Texchange extends _3_taken_1.Texchange {
     constructor(config, snapshot, now) {
         super(config, snapshot, now);
-        this.assets = new manager_assets_1.AssetsManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
+        this.assets = new assets_manager_1.AssetsManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
     }
     /** @override */
     validateOrder(order) {
@@ -41,9 +41,9 @@ class Texchange extends _3_taken_1.Texchange {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
-            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
-            this.pushOrderbook().catch(err => void this.emit('error', err));
-            this.pushPositionsAndBalances().catch(err => void this.emit('error', err));
+            this.pushUTrades(uTrades);
+            this.pushOrderbook();
+            this.pushPositionsAndBalances();
         }
         return order;
     }
@@ -52,7 +52,7 @@ class Texchange extends _3_taken_1.Texchange {
         const uTrades = [];
         let volume = new big_js_1.default(0);
         let dollarVolume = new big_js_1.default(0);
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
@@ -63,7 +63,7 @@ class Texchange extends _3_taken_1.Texchange {
                     quantity,
                     time: this.now(),
                 });
-                this.bookManager.decQuantity(maker.side, maker.price, quantity);
+                this.book.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
@@ -71,7 +71,7 @@ class Texchange extends _3_taken_1.Texchange {
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
-        this.bookManager.apply();
+        this.book.apply();
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === interfaces_1.Operation.OPEN) {
@@ -97,11 +97,11 @@ class Texchange extends _3_taken_1.Texchange {
             id: openOrder.id,
             behind: new big_js_1.default(0),
         };
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        const toFreeze = this.openMakers.addOrder(openMaker);
+        const toFreeze = this.makers.addOrder(openMaker);
         this.assets.freeze(toFreeze);
     }
 }

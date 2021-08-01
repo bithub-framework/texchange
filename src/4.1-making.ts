@@ -15,13 +15,13 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
-import { AssetsManager } from './manager-assets';
+import { AssetsManager } from './managers/assets-manager';
 import assert = require('assert');
 
 abstract class Texchange extends Parent {
     protected assets: AssetsManager;
 
-    protected abstract pushPositionsAndBalances(): Promise<void>;
+    protected abstract pushPositionsAndBalances(): void;
     protected abstract settle(): void;
 
 
@@ -85,9 +85,9 @@ abstract class Texchange extends Parent {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
-            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
-            this.pushOrderbook().catch(err => void this.emit('error', err));
-            this.pushPositionsAndBalances().catch(err => void this.emit('error', err));
+            this.pushUTrades(uTrades);
+            this.pushOrderbook();
+            this.pushPositionsAndBalances();
         }
         return order;
     }
@@ -97,7 +97,7 @@ abstract class Texchange extends Parent {
         const uTrades: UnidentifiedTrade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[-taker.side])
             if (
                 (
@@ -112,7 +112,7 @@ abstract class Texchange extends Parent {
                     quantity,
                     time: this.now(),
                 });
-                this.bookManager.decQuantity(maker.side, maker.price, quantity);
+                this.book.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
@@ -120,7 +120,7 @@ abstract class Texchange extends Parent {
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
-        this.bookManager.apply();
+        this.book.apply();
 
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
@@ -153,11 +153,11 @@ abstract class Texchange extends Parent {
             id: openOrder.id,
             behind: new Big(0),
         };
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        const toFreeze = this.openMakers.addOrder(openMaker);
+        const toFreeze = this.makers.addOrder(openMaker);
         this.assets.freeze(toFreeze);
     }
 }

@@ -2,7 +2,7 @@ import {
     Orderbook,
     Side,
     Config,
-} from './interfaces';
+} from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
 

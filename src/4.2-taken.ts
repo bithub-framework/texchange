@@ -7,7 +7,6 @@ import {
     Operation,
     OpenMaker,
     min,
-    Orderbook,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
@@ -21,7 +20,7 @@ abstract class Texchange extends Parent {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
+        const toThaw = this.makers.takeOrder(maker.id, volume, dollarVolume);
 
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
@@ -42,7 +41,7 @@ abstract class Texchange extends Parent {
 
     /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))

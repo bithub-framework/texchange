@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const events_1 = require("events");
-const manager_orderbook_1 = require("./manager-orderbook");
+const orderbook_manager_1 = require("./managers/orderbook-manager");
 const interfaces_1 = require("./interfaces");
 class Texchange extends events_1.EventEmitter {
     constructor(config, 
@@ -12,12 +12,12 @@ class Texchange extends events_1.EventEmitter {
         this.config = config;
         this.now = now;
         this.tradeCount = 0;
-        this.bookManager = new manager_orderbook_1.OrderbookManager(config, now);
+        this.book = new orderbook_manager_1.OrderbookManager(config, now);
     }
     updateTrades(uTrades) {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
     }
-    async pushUTrades(uTrades) {
+    pushUTrades(uTrades) {
         const trades = this.uTrade2Trade(uTrades);
         this.emit('trades', trades);
     }
@@ -31,12 +31,12 @@ class Texchange extends events_1.EventEmitter {
         }));
     }
     updateOrderbook(orderbook) {
-        this.bookManager.setBase(orderbook);
-        this.bookManager.apply();
-        this.pushOrderbook().catch(err => void this.emit('error', err));
+        this.book.setBase(orderbook);
+        this.book.apply();
+        this.pushOrderbook();
     }
-    async pushOrderbook() {
-        this.emit('orderbook', interfaces_1.clone(this.bookManager.getBook()));
+    pushOrderbook() {
+        this.emit('orderbook', interfaces_1.clone(this.book.getBook()));
     }
 }
 exports.Texchange = Texchange;

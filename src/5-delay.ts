@@ -1,22 +1,21 @@
 import {
-    Texchange as Parent,
+    Texchange as Core,
     Events,
 } from './4-assets';
 import {
     LimitOrder,
     Amendment,
-    UnidentifiedTrade,
     ExchangeLike,
     Config,
     OpenOrder,
-    clone,
     Balances,
     Positions,
     Snapshot,
 } from './interfaces';
 import Big from 'big.js';
+import { EventEmitter } from 'events';
 
-class Texchange extends Parent implements ExchangeLike {
+class Texchange extends EventEmitter implements ExchangeLike {
     public PRICE_DP: number;
     public CURRENCY_DP: number;
     public QUANTITY_DP: number;
@@ -27,15 +26,17 @@ class Texchange extends Parent implements ExchangeLike {
     public TAKER_FEE_RATE: number;
     public MAKER_FEE_RATE: number;
     public ONE_WAY_POSITION: boolean;
+    private core: Core;
 
 
     constructor(
-        config: Config,
+        private config: Config,
         snapshot: Snapshot,
         private sleep: (ms: number) => Promise<void>,
         now: () => number,
     ) {
-        super(config, snapshot, now);
+        super();
+        this.core = new Core(config, snapshot, now);
         ({
             PRICE_DP: this.PRICE_DP,
             CURRENCY_DP: this.CURRENCY_DP,
@@ -48,13 +49,50 @@ class Texchange extends Parent implements ExchangeLike {
             MAKER_FEE_RATE: this.MAKER_FEE_RATE,
             ONE_WAY_POSITION: this.ONE_WAY_POSITION,
         } = config);
+        this.core.on('error', err => void this.emit('error', err));
+        this.core.on('orderbook', async orderbook => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('orderbook', orderbook);
+            } catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('trades', async trades => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('trades', trades);
+            } catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('positions', async trades => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('positions', trades);
+            } catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('balances', async trades => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('balances', trades);
+            } catch (err) {
+                this.emit('error', err);
+            }
+        })
     }
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.makeOrders(orders);
+            return this.core.makeOrders(orders);
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -64,7 +102,7 @@ class Texchange extends Parent implements ExchangeLike {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.amendOrders(amendments);
+            return this.core.amendOrders(amendments);
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -74,7 +112,7 @@ class Texchange extends Parent implements ExchangeLike {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.cancelOrders(orders);
+            return this.core.cancelOrders(orders);
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -84,7 +122,7 @@ class Texchange extends Parent implements ExchangeLike {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getBalances();
+            return this.core.getBalances();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -94,7 +132,7 @@ class Texchange extends Parent implements ExchangeLike {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getPositions();
+            return this.core.getPositions();
         } finally {
             await this.sleep(this.config.PING);
         }
@@ -104,46 +142,18 @@ class Texchange extends Parent implements ExchangeLike {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getOpenOrders();
+            return this.core.getOpenOrders();
         } finally {
             await this.sleep(this.config.PING);
         }
     }
+}
 
-    /** @override */
-    protected async pushOrderbook(): Promise<void> {
-        const orderbook = clone(this.bookManager.getBook());
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('orderbook', orderbook);
-    }
-
-    /** @override */
-    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
-        const trades = clone(this.uTrade2Trade(uTrades));
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('trades', trades);
-    }
-
-    /** @override */
-    protected async pushPositionsAndBalances(): Promise<void> {
-        this.settle();
-        const positions: Positions = clone({
-            position: this.assets.position,
-            closable: this.assets.closable,
-            time: this.now(),
-        });
-        const balances: Balances = clone({
-            balance: this.assets.balance,
-            available: this.assets.available,
-            time: this.now(),
-        });
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('positions', positions);
-        this.emit('balances', balances);
-    }
+interface Texchange extends EventEmitter {
+    on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+    emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
 
 export {

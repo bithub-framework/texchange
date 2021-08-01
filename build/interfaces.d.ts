@@ -1,5 +1,5 @@
 export * from 'interfaces';
-import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, Amendment, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
+import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface Assets extends Omit<Positions & Balances, 'time'> {
@@ -31,20 +31,14 @@ export interface Snapshot {
     settlementPrice: Big;
 }
 export declare function min(...a: Big[]): Big;
-export declare type Events = {
+export interface Events {
     orderbook: [Orderbook];
     trades: [Trade[]];
     positions: [Positions];
     balances: [Balances];
     error: [Error];
-};
+}
 export interface ExchangeLike extends ContextMarketApiLike, ContextAccountApiLike, MarketSpec, AccountSpec {
-    makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
-    amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    getOpenOrders(): Promise<OpenOrder[]>;
-    getPositions(): Promise<Positions>;
-    getBalances(): Promise<Balances>;
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

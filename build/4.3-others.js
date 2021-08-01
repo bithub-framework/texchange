@@ -15,8 +15,8 @@ class Texchange extends _4_2_taken_1.Texchange {
     }
     /** @override */
     cancelOpenOrder(order) {
-        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
-        const toThaw = this.openMakers.removeOrder(order.id);
+        const filled = this.makers.get(order.id)?.filled || order.quantity;
+        const toThaw = this.makers.removeOrder(order.id);
         if (toThaw)
             this.assets.thaw(toThaw);
         return {
@@ -30,7 +30,7 @@ class Texchange extends _4_2_taken_1.Texchange {
             unfilled: order.quantity.minus(filled),
         };
     }
-    async getPositions() {
+    getPositions() {
         this.settle();
         return interfaces_1.clone({
             position: this.assets.position,
@@ -38,7 +38,7 @@ class Texchange extends _4_2_taken_1.Texchange {
             time: this.now(),
         });
     }
-    async getBalances() {
+    getBalances() {
         this.settle();
         return interfaces_1.clone({
             balance: this.assets.balance,
@@ -46,7 +46,7 @@ class Texchange extends _4_2_taken_1.Texchange {
             time: this.now(),
         });
     }
-    async pushPositionsAndBalances() {
+    pushPositionsAndBalances() {
         this.settle();
         const positions = interfaces_1.clone({
             position: this.assets.position,

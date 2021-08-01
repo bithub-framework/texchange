@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { OrderbookManager } from './manager-orderbook';
+import { OrderbookManager } from './managers/orderbook-manager';
 import {
     Orderbook,
     Trade,
@@ -10,7 +10,7 @@ import {
 
 class Texchange extends EventEmitter {
     protected tradeCount = 0;
-    protected bookManager: OrderbookManager;
+    protected book: OrderbookManager;
 
     constructor(
         protected config: Config,
@@ -18,14 +18,14 @@ class Texchange extends EventEmitter {
         protected now: () => number,
     ) {
         super();
-        this.bookManager = new OrderbookManager(config, now);
+        this.book = new OrderbookManager(config, now);
     }
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
     }
 
-    protected async pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void> {
+    protected pushUTrades(uTrades: UnidentifiedTrade[]): void {
         const trades = this.uTrade2Trade(uTrades);
         this.emit('trades', trades);
     }
@@ -41,13 +41,13 @@ class Texchange extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
-        this.bookManager.setBase(orderbook);
-        this.bookManager.apply();
-        this.pushOrderbook().catch(err => void this.emit('error', err));
+        this.book.setBase(orderbook);
+        this.book.apply();
+        this.pushOrderbook();
     }
 
-    protected async pushOrderbook(): Promise<void> {
-        this.emit('orderbook', clone(this.bookManager.getBook()));
+    protected pushOrderbook(): void {
+        this.emit('orderbook', clone(this.book.getBook()));
     }
 }
 

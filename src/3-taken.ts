@@ -8,7 +8,6 @@ import {
     min,
     OpenOrder,
     OpenMaker,
-    Orderbook,
 } from './interfaces';
 import Big from 'big.js';
 
@@ -44,7 +43,7 @@ class Texchange extends Parent {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        this.openMakers.takeOrder(maker.id, volume, dollarVolume);
+        this.makers.takeOrder(maker.id, volume, dollarVolume);
         return volume;
     }
 
@@ -56,7 +55,7 @@ class Texchange extends Parent {
             time: uTrade.time,
         };
         let totalVolume = new Big(0);
-        for (const order of [...this.openMakers.values()])
+        for (const order of [...this.makers.values()])
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
                 this.uTradeTakesOrderQueue(uTrade, order);
                 const volume = this.uTradeTakesOpenMaker(uTrade, order);
@@ -67,7 +66,7 @@ class Texchange extends Parent {
 
     /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))

@@ -12,10 +12,10 @@ import {
     Snapshot,
 } from './interfaces';
 import Big from 'big.js';
-import { OpenMakerManager } from './manager-open-makers';
+import { OpenMakerManager } from './managers/open-maker-manager';
 
 abstract class Texchange extends Parent {
-    protected openMakers: OpenMakerManager;
+    protected makers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice = new Big(0);
     protected orderCount = 0;
@@ -31,16 +31,16 @@ abstract class Texchange extends Parent {
     ) {
         super(config, now);
         this.settlementPrice = snapshot.settlementPrice;
-        this.openMakers = new OpenMakerManager(
+        this.makers = new OpenMakerManager(
             config,
             () => this.settlementPrice,
             () => this.latestPrice,
         );
     }
 
-    public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
-        const results = await Promise.allSettled(orders.map(
-            async order => {
+    public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
+        return orders.map((order): OpenOrder | Error => {
+            try {
                 const openOrder: OpenOrder = {
                     ...order,
                     id: ++this.orderCount,
@@ -49,22 +49,19 @@ abstract class Texchange extends Parent {
                 };
                 this.validateOrder(openOrder);
                 return this.makeOpenOrder(openOrder);
+            } catch (err) {
+                return err;
             }
-        ));
-        return results.map(result => {
-            return result.status === 'fulfilled'
-                ? result.value
-                : <Error>result.reason;
         });
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+    public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
         return orders.map(order => this.cancelOpenOrder(order));
     }
 
-    public async amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]> {
-        const results = await Promise.allSettled(amendments.map(
-            async amendment => {
+    public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
+        return amendments.map((amendment): OpenOrder | Error => {
+            try {
                 const { filled } = this.cancelOpenOrder(amendment);
                 const openOrder: OpenOrder = {
                     price: amendment.newPrice,
@@ -78,22 +75,19 @@ abstract class Texchange extends Parent {
                 };
                 this.validateOrder(openOrder);
                 return this.makeOpenOrder(openOrder);
+            } catch (err) {
+                return err;
             }
-        ));
-        return results.map(result => {
-            return result.status === 'fulfilled'
-                ? result.value
-                : <Error>result.reason;
         });
     }
 
-    public async getOpenOrders(): Promise<OpenOrder[]> {
-        return clone([...this.openMakers.values()]);
+    public getOpenOrders(): OpenOrder[] {
+        return clone([...this.makers.values()]);
     }
 
     /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
                 .plus(this.settlementPrice.times(.9))

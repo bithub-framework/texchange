@@ -13,7 +13,7 @@ import {
 import { EventEmitter } from 'events';
 import Big from 'big.js';
 
-abstract class Texchange extends Parent {
+class Texchange extends Parent {
     protected settle(): void {
         const position = clone(this.assets.position);
         for (const length of [Length.LONG, Length.SHORT] as const) {
@@ -39,8 +39,8 @@ abstract class Texchange extends Parent {
 
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder {
-        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
-        const toThaw = this.openMakers.removeOrder(order.id);
+        const filled = this.makers.get(order.id)?.filled || order.quantity;
+        const toThaw = this.makers.removeOrder(order.id);
         if (toThaw) this.assets.thaw(toThaw);
         return {
             price: order.price,
@@ -54,7 +54,7 @@ abstract class Texchange extends Parent {
         };
     }
 
-    public async getPositions(): Promise<Positions> {
+    public getPositions(): Positions {
         this.settle();
         return clone({
             position: this.assets.position,
@@ -63,7 +63,7 @@ abstract class Texchange extends Parent {
         });
     }
 
-    public async getBalances(): Promise<Balances> {
+    public getBalances(): Balances {
         this.settle();
         return clone({
             balance: this.assets.balance,
@@ -72,7 +72,7 @@ abstract class Texchange extends Parent {
         });
     }
 
-    protected async pushPositionsAndBalances(): Promise<void> {
+    protected pushPositionsAndBalances(): void {
         this.settle();
         const positions: Positions = clone({
             position: this.assets.position,

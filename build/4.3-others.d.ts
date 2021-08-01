@@ -2,13 +2,13 @@
 import { Texchange as Parent, Events as ParentEvent } from './4.2-taken';
 import { OpenOrder, Positions, Balances, Snapshot } from './interfaces';
 import { EventEmitter } from 'events';
-declare abstract class Texchange extends Parent {
+declare class Texchange extends Parent {
     protected settle(): void;
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder;
-    getPositions(): Promise<Positions>;
-    getBalances(): Promise<Balances>;
-    protected pushPositionsAndBalances(): Promise<void>;
+    getPositions(): Positions;
+    getBalances(): Balances;
+    protected pushPositionsAndBalances(): void;
     getSnapshot(): Snapshot;
 }
 interface Events extends ParentEvent {

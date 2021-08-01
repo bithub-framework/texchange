@@ -2,11 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const _4_assets_1 = require("./4-assets");
-const interfaces_1 = require("./interfaces");
-class Texchange extends _4_assets_1.Texchange {
+const events_1 = require("events");
+class Texchange extends events_1.EventEmitter {
     constructor(config, snapshot, sleep, now) {
-        super(config, snapshot, now);
+        super();
+        this.config = config;
         this.sleep = sleep;
+        this.core = new _4_assets_1.Texchange(config, snapshot, now);
         ({
             PRICE_DP: this.PRICE_DP,
             CURRENCY_DP: this.CURRENCY_DP,
@@ -19,12 +21,53 @@ class Texchange extends _4_assets_1.Texchange {
             MAKER_FEE_RATE: this.MAKER_FEE_RATE,
             ONE_WAY_POSITION: this.ONE_WAY_POSITION,
         } = config);
+        this.core.on('error', err => void this.emit('error', err));
+        this.core.on('orderbook', async (orderbook) => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('orderbook', orderbook);
+            }
+            catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('trades', async (trades) => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('trades', trades);
+            }
+            catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('positions', async (trades) => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('positions', trades);
+            }
+            catch (err) {
+                this.emit('error', err);
+            }
+        });
+        this.core.on('balances', async (trades) => {
+            try {
+                await this.sleep(this.config.PROCESSING);
+                await this.sleep(this.config.PING);
+                this.emit('balances', trades);
+            }
+            catch (err) {
+                this.emit('error', err);
+            }
+        });
     }
     async makeOrders(orders) {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.makeOrders(orders);
+            return this.core.makeOrders(orders);
         }
         finally {
             await this.sleep(this.config.PING);
@@ -34,7 +77,7 @@ class Texchange extends _4_assets_1.Texchange {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.amendOrders(amendments);
+            return this.core.amendOrders(amendments);
         }
         finally {
             await this.sleep(this.config.PING);
@@ -44,7 +87,7 @@ class Texchange extends _4_assets_1.Texchange {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.cancelOrders(orders);
+            return this.core.cancelOrders(orders);
         }
         finally {
             await this.sleep(this.config.PING);
@@ -54,7 +97,7 @@ class Texchange extends _4_assets_1.Texchange {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getBalances();
+            return this.core.getBalances();
         }
         finally {
             await this.sleep(this.config.PING);
@@ -64,7 +107,7 @@ class Texchange extends _4_assets_1.Texchange {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getPositions();
+            return this.core.getPositions();
         }
         finally {
             await this.sleep(this.config.PING);
@@ -74,43 +117,11 @@ class Texchange extends _4_assets_1.Texchange {
         try {
             await this.sleep(this.config.PING);
             await this.sleep(this.config.PROCESSING);
-            return await super.getOpenOrders();
+            return this.core.getOpenOrders();
         }
         finally {
             await this.sleep(this.config.PING);
         }
-    }
-    /** @override */
-    async pushOrderbook() {
-        const orderbook = interfaces_1.clone(this.bookManager.getBook());
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('orderbook', orderbook);
-    }
-    /** @override */
-    async pushUTrades(uTrades) {
-        const trades = interfaces_1.clone(this.uTrade2Trade(uTrades));
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('trades', trades);
-    }
-    /** @override */
-    async pushPositionsAndBalances() {
-        this.settle();
-        const positions = interfaces_1.clone({
-            position: this.assets.position,
-            closable: this.assets.closable,
-            time: this.now(),
-        });
-        const balances = interfaces_1.clone({
-            balance: this.assets.balance,
-            available: this.assets.available,
-            time: this.now(),
-        });
-        await this.sleep(this.config.PROCESSING);
-        await this.sleep(this.config.PING);
-        this.emit('positions', positions);
-        this.emit('balances', balances);
     }
 }
 exports.Texchange = Texchange;

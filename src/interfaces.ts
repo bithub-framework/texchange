@@ -6,7 +6,6 @@ import {
     LimitOrder,
     OpenOrder,
     Orderbook,
-    Amendment,
     MarketSpec,
     AccountSpec,
     ContextMarketApiLike,
@@ -78,7 +77,7 @@ export function min(...a: Big[]) {
     return a.reduce((m, x) => m.lt(x) ? m : x);
 }
 
-export type Events = {
+export interface Events {
     orderbook: [Orderbook];
     trades: [Trade[]];
     positions: [Positions];
@@ -91,12 +90,6 @@ export interface ExchangeLike extends
     ContextAccountApiLike,
     MarketSpec,
     AccountSpec {
-    makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
-    amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
-    cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
-    getOpenOrders(): Promise<OpenOrder[]>;
-    getPositions(): Promise<Positions>;
-    getBalances(): Promise<Balances>;
 
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

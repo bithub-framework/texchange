@@ -10,7 +10,7 @@ class Texchange extends _4_1_making_1.Texchange {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.openMakers.takeOrder(maker.id, volume, dollarVolume);
+        const toThaw = this.makers.takeOrder(maker.id, volume, dollarVolume);
         this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
@@ -26,7 +26,7 @@ class Texchange extends _4_1_making_1.Texchange {
     }
     /** @override */
     updateTrades(uTrades) {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new big_js_1.default(0)
                 .plus(this.settlementPrice.times(.9))

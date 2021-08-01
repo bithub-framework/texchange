@@ -28,7 +28,7 @@ class Texchange extends _2_ordering_1.Texchange {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        this.openMakers.takeOrder(maker.id, volume, dollarVolume);
+        this.makers.takeOrder(maker.id, volume, dollarVolume);
         return volume;
     }
     uTradeTakesOpenMakers(uTrade) {
@@ -39,7 +39,7 @@ class Texchange extends _2_ordering_1.Texchange {
             time: uTrade.time,
         };
         let totalVolume = new big_js_1.default(0);
-        for (const order of [...this.openMakers.values()])
+        for (const order of [...this.makers.values()])
             if (this.uTradeShouldTakeOpenOrder(uTrade, order)) {
                 this.uTradeTakesOrderQueue(uTrade, order);
                 const volume = this.uTradeTakesOpenMaker(uTrade, order);
@@ -49,7 +49,7 @@ class Texchange extends _2_ordering_1.Texchange {
     }
     /** @override */
     updateTrades(uTrades) {
-        this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
+        this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new big_js_1.default(0)
                 .plus(this.settlementPrice.times(.9))

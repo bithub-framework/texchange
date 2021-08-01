@@ -3,7 +3,7 @@ import {
     Length,
     Config,
     Snapshot,
-} from './interfaces';
+} from '../interfaces';
 import Big from 'big.js';
 
 class AutoAssets implements Assets {

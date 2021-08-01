@@ -1,21 +1,21 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { OrderbookManager } from './manager-orderbook';
+import { OrderbookManager } from './managers/orderbook-manager';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
 declare class Texchange extends EventEmitter {
     protected config: Config;
     /** 必须保证 update 时数据的 time 等于 now() */
     protected now: () => number;
     protected tradeCount: number;
-    protected bookManager: OrderbookManager;
+    protected book: OrderbookManager;
     constructor(config: Config, 
     /** 必须保证 update 时数据的 time 等于 now() */
     now: () => number);
     updateTrades(uTrades: UnidentifiedTrade[]): void;
-    protected pushUTrades(uTrades: UnidentifiedTrade[]): Promise<void>;
+    protected pushUTrades(uTrades: UnidentifiedTrade[]): void;
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[];
     updateOrderbook(orderbook: Orderbook): void;
-    protected pushOrderbook(): Promise<void>;
+    protected pushOrderbook(): void;
 }
 interface Events {
     orderbook: [Orderbook];

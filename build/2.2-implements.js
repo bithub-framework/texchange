@@ -10,8 +10,8 @@ class Texchange extends _2_1_interfaces_1.Texchange {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
-            this.pushUTrades(uTrades).catch(err => void this.emit('error', err));
-            this.pushOrderbook().catch(err => void this.emit('error', err));
+            this.pushUTrades(uTrades);
+            this.pushOrderbook();
         }
         return order;
     }
@@ -31,7 +31,7 @@ class Texchange extends _2_1_interfaces_1.Texchange {
         const uTrades = [];
         let volume = new big_js_1.default(0);
         let dollarVolume = new big_js_1.default(0);
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
@@ -42,7 +42,7 @@ class Texchange extends _2_1_interfaces_1.Texchange {
                     quantity,
                     time: this.now(),
                 });
-                this.bookManager.decQuantity(maker.side, maker.price, quantity);
+                this.book.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
@@ -50,7 +50,7 @@ class Texchange extends _2_1_interfaces_1.Texchange {
                     .plus(this.config.calcDollarVolume(maker.price, quantity))
                     .round(this.config.CURRENCY_DP);
             }
-        this.bookManager.apply();
+        this.book.apply();
         return uTrades;
     }
     orderMakes(openOrder) {
@@ -65,15 +65,15 @@ class Texchange extends _2_1_interfaces_1.Texchange {
             id: openOrder.id,
             behind: new big_js_1.default(0),
         };
-        const orderbook = this.bookManager.getBook();
+        const orderbook = this.book.getBook();
         for (const maker of orderbook[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        this.openMakers.addOrder(openMaker);
+        this.makers.addOrder(openMaker);
     }
     cancelOpenOrder(order) {
-        const filled = this.openMakers.get(order.id)?.filled || order.quantity;
-        this.openMakers.removeOrder(order.id);
+        const filled = this.makers.get(order.id)?.filled || order.quantity;
+        this.makers.removeOrder(order.id);
         return {
             price: order.price,
             quantity: order.quantity,

@@ -2,10 +2,10 @@ import {
     Length,
     Config,
     Snapshot,
-} from './interfaces';
+} from '../interfaces';
 import AutoAssets from './auto-assets';
 import Big from 'big.js';
-import { Frozen } from './manager-open-makers';
+import { Frozen } from './open-maker-manager';
 import { inspect } from 'util';
 import assert = require('assert');
 
