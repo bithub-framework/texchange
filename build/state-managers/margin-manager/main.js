@@ -17,10 +17,10 @@ function makeEmptyMarginSnapshot() {
 }
 exports.makeEmptyMarginSnapshot = makeEmptyMarginSnapshot;
 class MarginManager extends _2_freezing_margin_manager_1.MarginManager {
-    constructor(config, snapshot, getSettlementPrice, getLatestPrice, equity) {
+    constructor(config, snapshot, getClearingPrice, getLatestPrice, equity) {
         super();
         this.config = config;
-        this.getSettlementPrice = getSettlementPrice;
+        this.getClearingPrice = getClearingPrice;
         this.getLatestPrice = getLatestPrice;
         this.equity = equity;
         this.frozenBalance = new big_js_1.default(snapshot.frozenBalance);

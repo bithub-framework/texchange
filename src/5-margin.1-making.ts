@@ -24,15 +24,15 @@ abstract class Texchange extends Parent {
     /** @override */
     protected validateOrder(order: OpenOrder) {
         this.formatCorrect(order);
-        this.enoughPosition(order);
+        this.assertEnoughPosition(order);
         if (this.config.ONE_WAY_POSITION) this.singleLength(order);
         // 暂只支持实时结算
-        this.settle();
-        this.enoughAvailable(order);
+        this.clear();
+        this.assertEnoughAvailable(order);
     }
 
     /** @override */
-    protected enoughPosition(order: OpenOrder) {
+    protected assertEnoughPosition(order: OpenOrder) {
         if (order.operation === Operation.CLOSE)
             assert(
                 order.unfilled.lte(new Big(0)
@@ -42,13 +42,13 @@ abstract class Texchange extends Parent {
             );
     }
 
-    private enoughAvailable(order: OpenOrder) {
+    private assertEnoughAvailable(order: OpenOrder) {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
                 .plus(this.config.calcInitialMargin({
                     spec: this.config,
                     order,
-                    settlementPrice: this.settlementPrice,
+                    clearingPrice: this.clearingPrice,
                     latestPrice: this.latestPrice,
                 })).plus(
                     this.config.calcDollarVolume(
@@ -109,7 +109,7 @@ abstract class Texchange extends Parent {
                 orderPrice: taker.price,
                 volume,
                 dollarVolume,
-                settlementPrice: this.settlementPrice,
+                clearingPrice: this.clearingPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
             this.equity.openPosition(

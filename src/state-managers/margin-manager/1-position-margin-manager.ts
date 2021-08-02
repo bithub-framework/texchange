@@ -8,7 +8,7 @@ import { EquityManager } from '../equity-manager';
 export abstract class MarginManager {
     public abstract marginSum: Big;
     protected abstract config: Config;
-    protected abstract getSettlementPrice: () => Big;
+    protected abstract getClearingPrice: () => Big;
     protected abstract getLatestPrice: () => Big;
     protected abstract equity: EquityManager;
 
@@ -17,7 +17,7 @@ export abstract class MarginManager {
             spec: this.config,
             position: this.equity.position,
             cost: this.equity.cost,
-            settlementPrice: this.getSettlementPrice(),
+            clearingPrice: this.getClearingPrice(),
             latestPrice: this.getLatestPrice(),
             marginSum: this.marginSum,
         }).round(this.config.CURRENCY_DP);

@@ -10,24 +10,24 @@ import {
 import Big from 'big.js';
 
 abstract class Texchange extends Parent {
-    protected settle(): void {
+    protected clear(): void {
         const position = clone(this.equity.position);
         for (const length of [Length.LONG, Length.SHORT] as const) {
-            const settlementDollarVolume =
+            const clearingDollarVolume =
                 this.config.calcDollarVolume(
-                    this.settlementPrice,
+                    this.clearingPrice,
                     position[length],
                 ).round(this.config.CURRENCY_DP);
             this.equity.closePosition(
                 length,
                 position[length],
-                settlementDollarVolume,
+                clearingDollarVolume,
                 new Big(0),
             );
             this.equity.openPosition(
                 length,
                 position[length],
-                settlementDollarVolume,
+                clearingDollarVolume,
                 new Big(0),
             );
         }

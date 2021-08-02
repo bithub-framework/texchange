@@ -8,9 +8,9 @@ const main_1 = require("./state-managers/margin-manager/main");
 class Texchange extends _5_margin_3_others_1.Texchange {
     constructor(config, snapshot, now) {
         super(config, now);
-        this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot.openMakers, () => this.settlementPrice, () => this.latestPrice);
+        this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot.openMakers, () => this.clearingPrice, () => this.latestPrice);
         this.equity = new equity_manager_1.EquityManager(config, snapshot.equity);
-        this.margin = new main_1.MarginManager(config, snapshot.margin, () => this.settlementPrice, () => this.latestPrice, this.equity);
+        this.margin = new main_1.MarginManager(config, snapshot.margin, () => this.clearingPrice, () => this.latestPrice, this.equity);
     }
     // TODO 考虑现货
     capture() {

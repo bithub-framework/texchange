@@ -10,27 +10,27 @@ class Texchange extends _4_equity_3_others_1.Texchange {
     /** @override */
     validateOrder(order) {
         this.formatCorrect(order);
-        this.enoughPosition(order);
+        this.assertEnoughPosition(order);
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
         // 暂只支持实时结算
-        this.settle();
-        this.enoughAvailable(order);
+        this.clear();
+        this.assertEnoughAvailable(order);
     }
     /** @override */
-    enoughPosition(order) {
+    assertEnoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
             assert(order.unfilled.lte(new big_js_1.default(0)
                 .plus(this.equity.position[order.length])
                 .minus(this.margin.frozenPosition[order.length])));
     }
-    enoughAvailable(order) {
+    assertEnoughAvailable(order) {
         if (order.operation === interfaces_1.Operation.OPEN)
             assert(new big_js_1.default(0)
                 .plus(this.config.calcInitialMargin({
                 spec: this.config,
                 order,
-                settlementPrice: this.settlementPrice,
+                clearingPrice: this.clearingPrice,
                 latestPrice: this.latestPrice,
             })).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
                 .lte(this.margin.available));
@@ -79,7 +79,7 @@ class Texchange extends _4_equity_3_others_1.Texchange {
                 orderPrice: taker.price,
                 volume,
                 dollarVolume,
-                settlementPrice: this.settlementPrice,
+                clearingPrice: this.clearingPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
             this.equity.openPosition(taker.length, volume, dollarVolume, takerFee);

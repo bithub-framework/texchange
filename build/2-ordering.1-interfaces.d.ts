@@ -4,7 +4,7 @@ import Big from 'big.js';
 import { OpenMakerManager } from './state-managers/open-maker-manager';
 declare abstract class Texchange extends Parent {
     protected abstract makers: OpenMakerManager;
-    protected settlementPrice: Big;
+    protected clearingPrice: Big;
     protected latestPrice: Big;
     protected orderCount: number;
     protected abstract validateOrder(order: OpenOrder): void;

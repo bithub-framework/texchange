@@ -7,7 +7,7 @@ class MarginManager {
             spec: this.config,
             position: this.equity.position,
             cost: this.equity.cost,
-            settlementPrice: this.getSettlementPrice(),
+            clearingPrice: this.getClearingPrice(),
             latestPrice: this.getLatestPrice(),
             marginSum: this.marginSum,
         }).round(this.config.CURRENCY_DP);

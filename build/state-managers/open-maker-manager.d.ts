@@ -12,10 +12,10 @@ export declare type OpenMakersSnapshot = {
 export declare function makeEmptyOpenMakersSnapshot(): OpenMakersSnapshot;
 export declare class OpenMakerManager extends Map<OrderId, OpenMaker> {
     private config;
-    private getSettlementPrice;
+    private getClearingPrice;
     private getLatestPrice;
     private frozens;
-    constructor(config: Config, snapshot: OpenMakersSnapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
+    constructor(config: Config, snapshot: OpenMakersSnapshot, getClearingPrice: () => Big, getLatestPrice: () => Big);
     capture(): OpenMakersSnapshot;
     addOrder(order: OpenMaker): Frozen;
     takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;

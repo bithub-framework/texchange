@@ -22,7 +22,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         };
     }
     getPositions() {
-        this.settle();
+        this.clear();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -31,7 +31,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         return interfaces_1.clone(positions);
     }
     getBalances() {
-        this.settle();
+        this.clear();
         const balances = {
             balance: this.equity.balance,
             available: this.margin.available,
@@ -40,7 +40,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         return interfaces_1.clone(balances);
     }
     pushPositionsAndBalances() {
-        this.settle();
+        this.clear();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,

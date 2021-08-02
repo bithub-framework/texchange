@@ -19,18 +19,18 @@ import { EquityManager } from './state-managers/equity-manager';
 
 abstract class Texchange extends Parent {
     protected abstract equity: EquityManager;
-    protected abstract settle(): void;
+    protected abstract clear(): void;
 
 
     /** @override */
     protected validateOrder(order: OpenOrder) {
         this.formatCorrect(order);
-        this.enoughPosition(order);
+        this.assertEnoughPosition(order);
         // TODO 支持 one way
         if (this.config.ONE_WAY_POSITION) this.singleLength(order);
     }
 
-    protected enoughPosition(order: OpenOrder) {
+    protected assertEnoughPosition(order: OpenOrder) {
         if (order.operation === Operation.CLOSE)
             assert(
                 order.unfilled.lte(this.equity.position[order.length]),

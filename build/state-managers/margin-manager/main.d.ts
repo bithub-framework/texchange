@@ -26,7 +26,7 @@ export interface MarginManagerProps {
 }
 export declare class MarginManager extends Parent implements MarginManagerProps {
     protected config: Config;
-    protected getSettlementPrice: () => Big;
+    protected getClearingPrice: () => Big;
     protected getLatestPrice: () => Big;
     protected equity: EquityManager;
     marginSum: Big;
@@ -34,7 +34,7 @@ export declare class MarginManager extends Parent implements MarginManagerProps 
     frozenPosition: {
         [length: number]: Big;
     };
-    constructor(config: Config, snapshot: MarginSnapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big, equity: EquityManager);
+    constructor(config: Config, snapshot: MarginSnapshot, getClearingPrice: () => Big, getLatestPrice: () => Big, equity: EquityManager);
     /** @returns 可直接 JSON 序列化 */
     capture(): MarginSnapshot;
     [inspect.custom](): MarginManagerProps;

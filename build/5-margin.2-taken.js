@@ -21,7 +21,7 @@ class Texchange extends _5_margin_1_making_1.Texchange {
                 orderPrice: maker.price,
                 volume,
                 dollarVolume,
-                settlementPrice: this.settlementPrice,
+                clearingPrice: this.clearingPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
             this.equity.openPosition(maker.length, volume, dollarVolume, makerFee);

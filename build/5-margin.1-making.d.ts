@@ -7,8 +7,8 @@ declare abstract class Texchange extends Parent {
     /** @override */
     protected validateOrder(order: OpenOrder): void;
     /** @override */
-    protected enoughPosition(order: OpenOrder): void;
-    private enoughAvailable;
+    protected assertEnoughPosition(order: OpenOrder): void;
+    private assertEnoughAvailable;
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */

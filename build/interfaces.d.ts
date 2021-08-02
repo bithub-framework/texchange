@@ -24,14 +24,14 @@ export interface Assets extends Omit<Positions & Balances, 'time'> {
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
-    initialSettlementPrice: Big;
+    initialClearingPrice: Big;
     initialLatestPrice: Big;
 }
 export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (args: {
         spec: MarketSpec & AccountSpec;
         order: LimitOrder;
-        settlementPrice: Big;
+        clearingPrice: Big;
         latestPrice: Big;
     }) => Big;
     calcPositionMarginIncrement: (args: {
@@ -39,7 +39,7 @@ export interface AccountConfig extends AccountSpec {
         orderPrice: Big;
         volume: Big;
         dollarVolume: Big;
-        settlementPrice: Big;
+        clearingPrice: Big;
         latestPrice: Big;
     }) => Big;
     calcPositionMarginDecrement: (args: {
@@ -53,19 +53,19 @@ export interface AccountConfig extends AccountSpec {
         spec: MarketSpec & AccountSpec;
         position: Assets['position'];
         cost: Assets['cost'];
-        settlementPrice: Big;
+        clearingPrice: Big;
         latestPrice: Big;
         marginSum: Big;
     }) => Big;
     calcFreezingMargin: (args: {
         spec: MarketSpec & AccountSpec;
         maker: OpenMaker;
-        settlementPrice: Big;
+        clearingPrice: Big;
         latestPrice: Big;
     }) => Big;
     shouldBeCompulsorilyLiquidated: (args: {
         spec: MarketSpec & AccountSpec;
-        settlementPrice: Big;
+        clearingPrice: Big;
         latestPrice: Big;
     }) => boolean;
 }

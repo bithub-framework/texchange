@@ -30,7 +30,7 @@ abstract class Texchange extends Parent {
     }
 
     public getPositions(): Positions {
-        this.settle();
+        this.clear();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -40,7 +40,7 @@ abstract class Texchange extends Parent {
     }
 
     public getBalances(): Balances {
-        this.settle();
+        this.clear();
         const balances = {
             balance: this.equity.balance,
             available: this.margin.available,
@@ -50,7 +50,7 @@ abstract class Texchange extends Parent {
     }
 
     protected pushPositionsAndBalances(): void {
-        this.settle();
+        this.clear();
         const positions: Positions = {
             position: this.equity.position,
             closable: this.margin.closable,

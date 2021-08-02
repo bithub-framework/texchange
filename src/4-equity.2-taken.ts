@@ -45,8 +45,8 @@ abstract class Texchange extends Parent {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.settlementPrice = new Big(0)
-                .plus(this.settlementPrice.times(.9))
+            this.clearingPrice = new Big(0)
+                .plus(this.clearingPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;

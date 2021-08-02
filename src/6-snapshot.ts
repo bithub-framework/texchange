@@ -25,7 +25,7 @@ class Texchange extends Parent {
         this.makers = new OpenMakerManager(
             config,
             snapshot.openMakers,
-            () => this.settlementPrice,
+            () => this.clearingPrice,
             () => this.latestPrice,
         );
         this.equity = new EquityManager(
@@ -35,7 +35,7 @@ class Texchange extends Parent {
         this.margin = new MarginManager(
             config,
             snapshot.margin,
-            () => this.settlementPrice,
+            () => this.clearingPrice,
             () => this.latestPrice,
             this.equity,
         );

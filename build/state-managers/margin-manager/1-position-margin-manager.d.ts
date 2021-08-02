@@ -4,7 +4,7 @@ import { EquityManager } from '../equity-manager';
 export declare abstract class MarginManager {
     abstract marginSum: Big;
     protected abstract config: Config;
-    protected abstract getSettlementPrice: () => Big;
+    protected abstract getClearingPrice: () => Big;
     protected abstract getLatestPrice: () => Big;
     protected abstract equity: EquityManager;
     get margin(): Big;

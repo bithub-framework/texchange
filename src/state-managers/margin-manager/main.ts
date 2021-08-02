@@ -49,7 +49,7 @@ export class MarginManager extends Parent implements MarginManagerProps {
     constructor(
         protected config: Config,
         snapshot: MarginSnapshot,
-        protected getSettlementPrice: () => Big,
+        protected getClearingPrice: () => Big,
         protected getLatestPrice: () => Big,
         protected equity: EquityManager,
     ) {

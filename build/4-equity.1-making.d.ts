@@ -3,10 +3,10 @@ import { LimitOrder, UnidentifiedTrade, OpenOrder } from './interfaces';
 import { EquityManager } from './state-managers/equity-manager';
 declare abstract class Texchange extends Parent {
     protected abstract equity: EquityManager;
-    protected abstract settle(): void;
+    protected abstract clear(): void;
     /** @override */
     protected validateOrder(order: OpenOrder): void;
-    protected enoughPosition(order: OpenOrder): void;
+    protected assertEnoughPosition(order: OpenOrder): void;
     protected singleLength(order: LimitOrder): void;
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;

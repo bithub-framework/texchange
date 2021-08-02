@@ -9,7 +9,7 @@ class Texchange extends _1_pushing_1.Texchange {
     constructor(config, now) {
         super(config, now);
         this.orderCount = 0;
-        this.settlementPrice = config.initialSettlementPrice;
+        this.clearingPrice = config.initialClearingPrice;
         this.latestPrice = config.initialLatestPrice;
     }
     makeOrders(orders) {
@@ -63,8 +63,8 @@ class Texchange extends _1_pushing_1.Texchange {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.settlementPrice = new big_js_1.default(0)
-                .plus(this.settlementPrice.times(.9))
+            this.clearingPrice = new big_js_1.default(0)
+                .plus(this.clearingPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;

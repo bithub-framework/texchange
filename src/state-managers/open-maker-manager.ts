@@ -29,7 +29,7 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
     constructor(
         private config: Config,
         snapshot: OpenMakersSnapshot,
-        private getSettlementPrice: () => Big,
+        private getClearingPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
         super();
@@ -53,7 +53,7 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
                 ? this.config.calcFreezingMargin({
                     spec: this.config,
                     maker: order,
-                    settlementPrice: this.getSettlementPrice(),
+                    clearingPrice: this.getClearingPrice(),
                     latestPrice: this.getLatestPrice(),
                 }).round(this.config.CURRENCY_DP)
                 : new Big(0),

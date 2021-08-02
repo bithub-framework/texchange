@@ -33,7 +33,7 @@ abstract class Texchange extends Parent {
                 orderPrice: maker.price,
                 volume,
                 dollarVolume,
-                settlementPrice: this.settlementPrice,
+                clearingPrice: this.clearingPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
             this.equity.openPosition(

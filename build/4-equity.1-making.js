@@ -10,12 +10,12 @@ class Texchange extends _3_taken_1.Texchange {
     /** @override */
     validateOrder(order) {
         this.formatCorrect(order);
-        this.enoughPosition(order);
+        this.assertEnoughPosition(order);
         // TODO 支持 one way
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
     }
-    enoughPosition(order) {
+    assertEnoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
             assert(order.unfilled.lte(this.equity.position[order.length]));
     }

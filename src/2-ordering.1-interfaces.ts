@@ -16,7 +16,7 @@ import { OpenMakerManager } from './state-managers/open-maker-manager';
 
 abstract class Texchange extends Parent {
     protected abstract makers: OpenMakerManager;
-    protected settlementPrice: Big;
+    protected clearingPrice: Big;
     protected latestPrice;
     protected orderCount = 0;
 
@@ -29,9 +29,8 @@ abstract class Texchange extends Parent {
         now: () => number,
     ) {
         super(config, now);
-        this.settlementPrice = config.initialSettlementPrice;
+        this.clearingPrice = config.initialClearingPrice;
         this.latestPrice = config.initialLatestPrice;
-
     }
 
     public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
@@ -87,8 +86,8 @@ abstract class Texchange extends Parent {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.settlementPrice = new Big(0)
-                .plus(this.settlementPrice.times(.9))
+            this.clearingPrice = new Big(0)
+                .plus(this.clearingPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
