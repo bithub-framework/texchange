@@ -34,6 +34,7 @@ abstract class Texchange extends Parent {
         this.settlementPrice = snapshot.settlementPrice;
         this.makers = new OpenMakerManager(
             config,
+            snapshot,
             () => this.settlementPrice,
             () => this.latestPrice,
         );

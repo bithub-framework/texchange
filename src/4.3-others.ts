@@ -91,8 +91,10 @@ class Texchange extends Parent {
     // TODO 考虑现货
     public getSnapshot(): Snapshot {
         return {
+            time: this.now(),
             balance: this.assets.balance,
             settlementPrice: this.settlementPrice,
+            openMakers: this.makers.capture(),
         };
     }
 }

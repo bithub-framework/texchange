@@ -64,8 +64,10 @@ class Texchange extends _4_2_taken_1.Texchange {
     // TODO 考虑现货
     getSnapshot() {
         return {
+            time: this.now(),
             balance: this.assets.balance,
             settlementPrice: this.settlementPrice,
+            openMakers: this.makers.capture(),
         };
     }
 }

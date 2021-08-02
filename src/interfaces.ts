@@ -10,8 +10,10 @@ import {
     AccountSpec,
     ContextMarketApiLike,
     ContextAccountApiLike,
+    OpenMaker,
 } from 'interfaces';
 import Big from 'big.js';
+import { Frozen } from './managers/open-maker-manager';
 
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
@@ -69,8 +71,13 @@ export interface Config extends MarketConfig, AccountConfig {
 }
 
 export interface Snapshot {
+    time: number;
     balance: Big;
     settlementPrice: Big;
+    openMakers: {
+        order: OpenMaker;
+        frozen: Frozen;
+    }[];
 }
 
 export function min(...a: Big[]) {

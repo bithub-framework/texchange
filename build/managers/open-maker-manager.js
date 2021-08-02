@@ -5,12 +5,23 @@ const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class OpenMakerManager extends Map {
-    constructor(config, getSettlementPrice, getLatestPrice) {
+    constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         super();
         this.config = config;
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
         this.frozens = new Map();
+        for (const { order, frozen } of snapshot.openMakers) {
+            this.set(order.id, order);
+            this.frozens.set(order.id, frozen);
+        }
+    }
+    capture() {
+        return [...this.keys()]
+            .map(oid => ({
+            order: this.get(oid),
+            frozen: this.frozens.get(oid),
+        }));
     }
     addOrder(order) {
         const frozen = {

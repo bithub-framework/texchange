@@ -1,4 +1,4 @@
-import { OrderId, Config, Length, OpenMaker } from '../interfaces';
+import { OrderId, Config, Length, OpenMaker, Snapshot } from '../interfaces';
 import Big from 'big.js';
 interface Frozen {
     balance: Big;
@@ -10,7 +10,8 @@ declare class OpenMakerManager extends Map<OrderId, OpenMaker> {
     private getSettlementPrice;
     private getLatestPrice;
     private frozens;
-    constructor(config: Config, getSettlementPrice: () => Big, getLatestPrice: () => Big);
+    constructor(config: Config, snapshot: Snapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
+    capture(): Snapshot['openMakers'];
     addOrder(order: OpenMaker): Frozen;
     takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
     removeOrder(oid: OrderId): Frozen | null;

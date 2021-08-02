@@ -4,6 +4,7 @@ import {
     Length,
     Operation,
     OpenMaker,
+    Snapshot,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
@@ -19,10 +20,23 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
 
     constructor(
         private config: Config,
+        snapshot: Snapshot,
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
         super();
+        for (const { order, frozen } of snapshot.openMakers) {
+            this.set(order.id, order);
+            this.frozens.set(order.id, frozen);
+        }
+    }
+
+    public capture(): Snapshot['openMakers'] {
+        return [...this.keys()]
+            .map(oid => ({
+                order: this.get(oid)!,
+                frozen: this.frozens.get(oid)!,
+            }));
     }
 
     public addOrder(order: OpenMaker): Frozen {
