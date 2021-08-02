@@ -4,7 +4,6 @@ import {
     Length,
     Operation,
     OpenMaker,
-    Snapshot,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
@@ -19,6 +18,10 @@ export type OpenMakersSnapshot = {
     order: OpenMaker;
     frozen: Frozen;
 }[];
+
+export function makeEmptyOpenMakersSnapshot(): OpenMakersSnapshot {
+    return [];
+}
 
 export class OpenMakerManager extends Map<OrderId, OpenMaker>{
     private frozens = new Map<OrderId, Frozen>();
@@ -36,7 +39,7 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
         }
     }
 
-    public capture(): Snapshot['openMakers'] {
+    public capture(): OpenMakersSnapshot {
         return [...this.keys()]
             .map(oid => ({
                 order: this.get(oid)!,

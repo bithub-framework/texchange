@@ -20,7 +20,7 @@ export interface AssetsSnapshot {
     staticMargin: Big;
 }
 
-export function makeEmptySnapshot(balance: Big): AssetsSnapshot {
+export function makeEmptyAssetsSnapshot(balance: Big): AssetsSnapshot {
     return {
         position: {
             [Length.LONG]: new Big(0),

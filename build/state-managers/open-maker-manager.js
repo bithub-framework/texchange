@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OpenMakerManager = void 0;
+exports.OpenMakerManager = exports.makeEmptyOpenMakersSnapshot = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
+function makeEmptyOpenMakersSnapshot() {
+    return [];
+}
+exports.makeEmptyOpenMakersSnapshot = makeEmptyOpenMakersSnapshot;
 class OpenMakerManager extends Map {
     constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         super();

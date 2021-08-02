@@ -8,3 +8,11 @@ export {
     Config,
     Snapshot,
 } from './interfaces';
+export {
+    AssetsSnapshot,
+    makeEmptyAssetsSnapshot,
+} from './state-managers/auto-assets';
+export {
+    OpenMakerManager,
+    makeEmptyOpenMakersSnapshot,
+} from './state-managers/open-maker-manager';

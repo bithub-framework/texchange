@@ -14,7 +14,7 @@ export interface AssetsSnapshot {
     };
     staticMargin: Big;
 }
-export declare function makeEmptySnapshot(balance: Big): AssetsSnapshot;
+export declare function makeEmptyAssetsSnapshot(balance: Big): AssetsSnapshot;
 export declare class AutoAssets implements Assets {
     protected config: Config;
     private getSettlementPrice;

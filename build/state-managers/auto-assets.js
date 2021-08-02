@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoAssets = exports.makeEmptySnapshot = void 0;
+exports.AutoAssets = exports.makeEmptyAssetsSnapshot = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
-function makeEmptySnapshot(balance) {
+function makeEmptyAssetsSnapshot(balance) {
     return {
         position: {
             [interfaces_1.Length.LONG]: new big_js_1.default(0),
@@ -22,7 +22,7 @@ function makeEmptySnapshot(balance) {
         balance,
     };
 }
-exports.makeEmptySnapshot = makeEmptySnapshot;
+exports.makeEmptyAssetsSnapshot = makeEmptyAssetsSnapshot;
 class AutoAssets {
     constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         this.config = config;
