@@ -4,13 +4,10 @@ import { OrderbookManager } from './managers/orderbook-manager';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
 declare class Texchange extends EventEmitter {
     protected config: Config;
-    /** 必须保证 update 时数据的 time 等于 now() */
     protected now: () => number;
     protected tradeCount: number;
     protected book: OrderbookManager;
-    constructor(config: Config, 
-    /** 必须保证 update 时数据的 time 等于 now() */
-    now: () => number);
+    constructor(config: Config, now: () => number);
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     protected pushUTrades(uTrades: UnidentifiedTrade[]): void;
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[];

@@ -4,6 +4,7 @@ exports.Texchange = void 0;
 const _2_ordering_1 = require("./2-ordering");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
+const assert = require("assert");
 class Texchange extends _2_ordering_1.Texchange {
     uTradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === interfaces_1.Side.BID &&
@@ -49,6 +50,8 @@ class Texchange extends _2_ordering_1.Texchange {
     }
     /** @override */
     updateTrades(uTrades) {
+        for (const uTrade of uTrades)
+            assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new big_js_1.default(0)

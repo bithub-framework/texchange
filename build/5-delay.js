@@ -63,6 +63,12 @@ class Texchange extends events_1.EventEmitter {
             }
         });
     }
+    updateTrades(uTrades) {
+        this.core.updateTrades(uTrades);
+    }
+    updateOrderbook(orderbook) {
+        this.core.updateOrderbook(orderbook);
+    }
     async makeOrders(orders) {
         try {
             await this.sleep(this.config.PING);

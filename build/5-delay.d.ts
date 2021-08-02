@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Events } from './4-assets';
-import { LimitOrder, Amendment, ExchangeLike, Config, OpenOrder, Balances, Positions, Snapshot } from './interfaces';
+import { LimitOrder, Amendment, ExchangeLike, Config, OpenOrder, Balances, Positions, Snapshot, UnidentifiedTrade, Orderbook } from './interfaces';
 import Big from 'big.js';
 import { EventEmitter } from 'events';
 declare class Texchange extends EventEmitter implements ExchangeLike {
@@ -18,6 +18,8 @@ declare class Texchange extends EventEmitter implements ExchangeLike {
     ONE_WAY_POSITION: boolean;
     private core;
     constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
+    updateTrades(uTrades: UnidentifiedTrade[]): void;
+    updateOrderbook(orderbook: Orderbook): void;
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;

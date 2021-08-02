@@ -4,6 +4,7 @@ exports.Texchange = void 0;
 const _4_1_making_1 = require("./4.1-making");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
+const assert = require("assert");
 class Texchange extends _4_1_making_1.Texchange {
     uTradeTakesOpenMaker(uTrade, maker) {
         const volume = interfaces_1.min(uTrade.quantity, maker.unfilled);
@@ -26,6 +27,8 @@ class Texchange extends _4_1_making_1.Texchange {
     }
     /** @override */
     updateTrades(uTrades) {
+        for (const uTrade of uTrades)
+            assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new big_js_1.default(0)

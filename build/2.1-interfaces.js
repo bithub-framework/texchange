@@ -4,6 +4,7 @@ exports.Texchange = void 0;
 const _1_pushing_1 = require("./1-pushing");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
+const assert = require("assert");
 const open_maker_manager_1 = require("./managers/open-maker-manager");
 class Texchange extends _1_pushing_1.Texchange {
     constructor(config, snapshot, now) {
@@ -60,6 +61,8 @@ class Texchange extends _1_pushing_1.Texchange {
     }
     /** @override */
     updateTrades(uTrades) {
+        for (const uTrade of uTrades)
+            assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new big_js_1.default(0)

@@ -11,6 +11,8 @@ import {
     Balances,
     Positions,
     Snapshot,
+    UnidentifiedTrade,
+    Orderbook,
 } from './interfaces';
 import Big from 'big.js';
 import { EventEmitter } from 'events';
@@ -86,6 +88,14 @@ class Texchange extends EventEmitter implements ExchangeLike {
                 this.emit('error', err);
             }
         })
+    }
+
+    public updateTrades(uTrades: UnidentifiedTrade[]) {
+        this.core.updateTrades(uTrades);
+    }
+
+    public updateOrderbook(orderbook: Orderbook) {
+        this.core.updateOrderbook(orderbook);
     }
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {

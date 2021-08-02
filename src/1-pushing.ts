@@ -7,6 +7,7 @@ import {
     Config,
     clone,
 } from './interfaces';
+import assert = require('assert');
 
 class Texchange extends EventEmitter {
     protected tradeCount = 0;
@@ -14,7 +15,6 @@ class Texchange extends EventEmitter {
 
     constructor(
         protected config: Config,
-        /** 必须保证 update 时数据的 time 等于 now() */
         protected now: () => number,
     ) {
         super();
@@ -22,6 +22,8 @@ class Texchange extends EventEmitter {
     }
 
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        for (const uTrade of uTrades)
+            assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
     }
 
@@ -41,6 +43,7 @@ class Texchange extends EventEmitter {
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
+        assert(orderbook.time === this.now());
         this.book.setBase(orderbook);
         this.book.apply();
         this.pushOrderbook();

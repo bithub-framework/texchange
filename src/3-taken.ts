@@ -10,6 +10,7 @@ import {
     OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
+import assert = require('assert');
 
 class Texchange extends Parent {
     protected uTradeShouldTakeOpenOrder(
@@ -66,6 +67,8 @@ class Texchange extends Parent {
 
     /** @override */
     public updateTrades(uTrades: UnidentifiedTrade[]): void {
+        for (const uTrade of uTrades)
+            assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
             this.settlementPrice = new Big(0)
