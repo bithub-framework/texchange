@@ -4,7 +4,7 @@ exports.Texchange = void 0;
 const _5_snapshot_1 = require("./5-snapshot");
 const events_1 = require("events");
 class Texchange extends events_1.EventEmitter {
-    constructor(config, snapshot, sleep, now) {
+    constructor(config, snapshot, now, sleep) {
         super();
         this.config = config;
         this.sleep = sleep;

@@ -17,7 +17,7 @@ declare class Texchange extends EventEmitter implements ExchangeLike {
     MAKER_FEE_RATE: number;
     ONE_WAY_POSITION: boolean;
     private core;
-    constructor(config: Config, snapshot: Snapshot, sleep: (ms: number) => Promise<void>, now: () => number);
+    constructor(config: Config, snapshot: Snapshot, now: () => number, sleep: (ms: number) => Promise<void>);
     updateTrades(uTrades: UnidentifiedTrade[]): void;
     updateOrderbook(orderbook: Orderbook): void;
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
