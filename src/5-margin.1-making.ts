@@ -1,7 +1,7 @@
 import {
     Texchange as Parent,
     Events,
-} from './4-equity';
+} from './4-equity.3-others';
 import {
     UnidentifiedTrade,
     Operation,

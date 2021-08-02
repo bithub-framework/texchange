@@ -1,7 +1,7 @@
 import {
     Texchange as Parent,
     Events,
-} from './5-margin';
+} from './5-margin.3-others';
 import {
     Snapshot,
     Config,
