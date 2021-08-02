@@ -13,7 +13,7 @@ export abstract class MarginManager {
     protected abstract equity: EquityManager;
 
     public get margin(): Big {
-        return this.config.reviseMargin({
+        return this.config.revisePositionMargin({
             spec: this.config,
             position: this.equity.position,
             cost: this.equity.cost,

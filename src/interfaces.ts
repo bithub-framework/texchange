@@ -52,7 +52,7 @@ export interface AccountConfig extends AccountSpec {
         settlementPrice: Big,
         latestPrice: Big,
     }) => Big,
-    calcMarginIncrement: (args: {
+    calcPositionMarginIncrement: (args: {
         spec: MarketSpec & AccountSpec,
         orderPrice: Big,
         volume: Big,
@@ -60,14 +60,14 @@ export interface AccountConfig extends AccountSpec {
         settlementPrice: Big,
         latestPrice: Big,
     }) => Big,
-    calcMarginDecrement: (args: {
+    calcPositionMarginDecrement: (args: {
         spec: MarketSpec & AccountSpec,
         position: Assets['position'],
         cost: Assets['cost'],
         volume: Big,
         marginSum: Big,
     }) => Big,
-    reviseMargin: (args: {
+    revisePositionMargin: (args: {
         spec: MarketSpec & AccountSpec,
         position: Assets['position'],
         cost: Assets['cost'],
@@ -75,7 +75,7 @@ export interface AccountConfig extends AccountSpec {
         latestPrice: Big,
         marginSum: Big,
     }) => Big,
-    calcFrozenMargin: (args: {
+    calcFreezingMargin: (args: {
         spec: MarketSpec & AccountSpec,
         maker: OpenMaker,
         settlementPrice: Big,

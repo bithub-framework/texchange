@@ -16,7 +16,7 @@ class Texchange extends _5_1_making_1.Texchange {
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (maker.operation === interfaces_1.Operation.OPEN) {
-            this.margin.incMargin(this.config.calcMarginIncrement({
+            this.margin.incMargin(this.config.calcPositionMarginIncrement({
                 spec: this.config,
                 orderPrice: maker.price,
                 volume,
@@ -27,7 +27,7 @@ class Texchange extends _5_1_making_1.Texchange {
             this.equity.openPosition(maker.length, volume, dollarVolume, makerFee);
         }
         else {
-            this.margin.decMargin(this.config.calcMarginDecrement({
+            this.margin.decMargin(this.config.calcPositionMarginDecrement({
                 spec: this.config,
                 position: this.equity.position,
                 cost: this.equity.cost,

@@ -50,7 +50,7 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
     public addOrder(order: OpenMaker): Frozen {
         const frozen: Frozen = {
             balance: order.operation === Operation.OPEN
-                ? this.config.calcFrozenMargin({
+                ? this.config.calcFreezingMargin({
                     spec: this.config,
                     maker: order,
                     settlementPrice: this.getSettlementPrice(),

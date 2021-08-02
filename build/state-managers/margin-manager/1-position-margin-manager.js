@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginManager = void 0;
 class MarginManager {
     get margin() {
-        return this.config.reviseMargin({
+        return this.config.revisePositionMargin({
             spec: this.config,
             position: this.equity.position,
             cost: this.equity.cost,
