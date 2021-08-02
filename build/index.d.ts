@@ -1,2 +1,2 @@
-export { Texchange as default, Texchange, Events, } from './5-delay';
+export { Texchange as default, Texchange, Events, } from './6-delay';
 export { UnidentifiedTrade, Config, Snapshot, } from './interfaces';

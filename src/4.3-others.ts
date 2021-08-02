@@ -87,15 +87,6 @@ class Texchange extends Parent {
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
-
-    // TODO 考虑现货
-    public getSnapshot(): Snapshot {
-        return {
-            time: this.now(),
-            openMakers: this.makers.capture(),
-            assets: this.assets.capture(),
-        };
-    }
 }
 
 interface Events extends ParentEvent {

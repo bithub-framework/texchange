@@ -61,14 +61,6 @@ class Texchange extends _4_2_taken_1.Texchange {
         this.emit('positions', positions);
         this.emit('balances', balances);
     }
-    // TODO 考虑现货
-    getSnapshot() {
-        return {
-            time: this.now(),
-            openMakers: this.makers.capture(),
-            assets: this.assets.capture(),
-        };
-    }
 }
 exports.Texchange = Texchange;
 //# sourceMappingURL=4.3-others.js.map

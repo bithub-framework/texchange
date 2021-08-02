@@ -2,7 +2,7 @@ export {
     Texchange as default,
     Texchange,
     Events,
-} from './5-delay';
+} from './6-delay';
 export {
     UnidentifiedTrade,
     Config,

@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Texchange as Parent, Events as ParentEvent } from './4.2-taken';
-import { OpenOrder, Positions, Balances, Snapshot } from './interfaces';
+import { OpenOrder, Positions, Balances } from './interfaces';
 import { EventEmitter } from 'events';
 declare class Texchange extends Parent {
     protected settle(): void;
@@ -9,7 +9,6 @@ declare class Texchange extends Parent {
     getPositions(): Positions;
     getBalances(): Balances;
     protected pushPositionsAndBalances(): void;
-    getSnapshot(): Snapshot;
 }
 interface Events extends ParentEvent {
     positions: [Positions];
