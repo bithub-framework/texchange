@@ -4,13 +4,8 @@ exports.Texchange = void 0;
 const _3_taken_1 = require("./3-taken");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
-const assets_manager_1 = require("./managers/assets-manager");
 const assert = require("assert");
 class Texchange extends _3_taken_1.Texchange {
-    constructor(config, snapshot, now) {
-        super(config, snapshot, now);
-        this.assets = new assets_manager_1.AssetsManager(config, snapshot.assets, () => this.settlementPrice, () => this.latestPrice);
-    }
     /** @override */
     validateOrder(order) {
         this.formatCorrect(order);

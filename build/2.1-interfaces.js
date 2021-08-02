@@ -5,14 +5,12 @@ const _1_pushing_1 = require("./1-pushing");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-const open_maker_manager_1 = require("./managers/open-maker-manager");
 class Texchange extends _1_pushing_1.Texchange {
-    constructor(config, snapshot, now) {
+    constructor(config, now) {
         super(config, now);
         this.orderCount = 0;
         this.settlementPrice = config.initialSettlementPrice;
         this.latestPrice = config.initialLatestPrice;
-        this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot.openMakers, () => this.settlementPrice, () => this.latestPrice);
     }
     makeOrders(orders) {
         return orders.map((order) => {

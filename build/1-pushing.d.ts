@@ -2,7 +2,7 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './managers/orderbook-manager';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
-declare class Texchange extends EventEmitter {
+declare abstract class Texchange extends EventEmitter {
     protected config: Config;
     protected now: () => number;
     protected tradeCount: number;

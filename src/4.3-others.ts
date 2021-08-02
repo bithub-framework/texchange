@@ -8,12 +8,11 @@ import {
     Length,
     Positions,
     Balances,
-    Snapshot,
 } from './interfaces';
 import { EventEmitter } from 'events';
 import Big from 'big.js';
 
-class Texchange extends Parent {
+abstract class Texchange extends Parent {
     protected settle(): void {
         const position = clone(this.assets.position);
         for (const length of [Length.LONG, Length.SHORT] as const) {

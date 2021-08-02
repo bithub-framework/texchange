@@ -12,7 +12,7 @@ import {
     Events,
 } from './2.1-interfaces';
 
-class Texchange extends Parent {
+abstract class Texchange extends Parent {
     protected makeOpenOrder(order: OpenOrder): OpenOrder {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);

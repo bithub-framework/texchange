@@ -6,10 +6,8 @@ import {
     LimitOrder,
     UnidentifiedTrade,
     Operation,
-    Config,
     OpenOrder,
     OpenMaker,
-    Snapshot,
     Side,
     min,
 } from './interfaces';
@@ -19,25 +17,10 @@ import { AssetsManager } from './managers/assets-manager';
 import assert = require('assert');
 
 abstract class Texchange extends Parent {
-    protected assets: AssetsManager;
-
+    protected abstract assets: AssetsManager;
     protected abstract pushPositionsAndBalances(): void;
     protected abstract settle(): void;
 
-
-    constructor(
-        config: Config,
-        snapshot: Snapshot,
-        now: () => number,
-    ) {
-        super(config, snapshot, now);
-        this.assets = new AssetsManager(
-            config,
-            snapshot.assets,
-            () => this.settlementPrice,
-            () => this.latestPrice,
-        );
-    }
 
     /** @override */
     protected validateOrder(order: OpenOrder) {

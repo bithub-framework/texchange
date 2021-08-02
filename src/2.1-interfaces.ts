@@ -9,14 +9,13 @@ import {
     Config,
     clone,
     Amendment,
-    Snapshot,
 } from './interfaces';
 import Big from 'big.js';
 import assert = require('assert');
 import { OpenMakerManager } from './managers/open-maker-manager';
 
 abstract class Texchange extends Parent {
-    protected makers: OpenMakerManager;
+    protected abstract makers: OpenMakerManager;
     protected settlementPrice: Big;
     protected latestPrice;
     protected orderCount = 0;
@@ -27,18 +26,12 @@ abstract class Texchange extends Parent {
 
     constructor(
         config: Config,
-        snapshot: Snapshot,
         now: () => number,
     ) {
         super(config, now);
         this.settlementPrice = config.initialSettlementPrice;
         this.latestPrice = config.initialLatestPrice;
-        this.makers = new OpenMakerManager(
-            config,
-            snapshot.openMakers,
-            () => this.settlementPrice,
-            () => this.latestPrice,
-        );
+
     }
 
     public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {

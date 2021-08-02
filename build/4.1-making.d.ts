@@ -1,11 +1,10 @@
 import { Texchange as Parent, Events } from './3-taken';
-import { UnidentifiedTrade, Config, OpenOrder, Snapshot } from './interfaces';
+import { UnidentifiedTrade, OpenOrder } from './interfaces';
 import { AssetsManager } from './managers/assets-manager';
 declare abstract class Texchange extends Parent {
-    protected assets: AssetsManager;
+    protected abstract assets: AssetsManager;
     protected abstract pushPositionsAndBalances(): void;
     protected abstract settle(): void;
-    constructor(config: Config, snapshot: Snapshot, now: () => number);
     /** @override */
     protected validateOrder(order: OpenOrder): void;
     private enoughPosition;

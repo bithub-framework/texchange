@@ -12,7 +12,7 @@ import {
 import Big from 'big.js';
 import assert = require('assert');
 
-class Texchange extends Parent {
+abstract class Texchange extends Parent {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {

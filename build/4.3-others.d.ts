@@ -2,7 +2,7 @@
 import { Texchange as Parent, Events as ParentEvent } from './4.2-taken';
 import { OpenOrder, Positions, Balances } from './interfaces';
 import { EventEmitter } from 'events';
-declare class Texchange extends Parent {
+declare abstract class Texchange extends Parent {
     protected settle(): void;
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder;

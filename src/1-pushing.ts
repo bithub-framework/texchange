@@ -9,7 +9,7 @@ import {
 } from './interfaces';
 import assert = require('assert');
 
-class Texchange extends EventEmitter {
+abstract class Texchange extends EventEmitter {
     protected tradeCount = 0;
     protected book: OrderbookManager;
 

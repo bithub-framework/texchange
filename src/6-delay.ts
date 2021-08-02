@@ -34,8 +34,8 @@ class Texchange extends EventEmitter implements ExchangeLike {
     constructor(
         private config: Config,
         snapshot: Snapshot,
-        private sleep: (ms: number) => Promise<void>,
         now: () => number,
+        private sleep: (ms: number) => Promise<void>,
     ) {
         super();
         this.core = new Core(config, snapshot, now);
