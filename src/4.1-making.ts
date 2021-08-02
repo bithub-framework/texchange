@@ -13,7 +13,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
-import { AssetsManager } from './managers/assets-manager';
+import { AssetsManager } from './state-managers/assets-manager';
 import assert = require('assert');
 
 abstract class Texchange extends Parent {

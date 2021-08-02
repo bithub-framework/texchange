@@ -1,6 +1,6 @@
 import { Texchange as Parent, Events } from './3-taken';
 import { UnidentifiedTrade, OpenOrder } from './interfaces';
-import { AssetsManager } from './managers/assets-manager';
+import { AssetsManager } from './state-managers/assets-manager';
 declare abstract class Texchange extends Parent {
     protected abstract assets: AssetsManager;
     protected abstract pushPositionsAndBalances(): void;

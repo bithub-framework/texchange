@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const events_1 = require("events");
-const orderbook_manager_1 = require("./managers/orderbook-manager");
+const orderbook_manager_1 = require("./state-managers/orderbook-manager");
 const interfaces_1 = require("./interfaces");
 const assert = require("assert");
 class Texchange extends events_1.EventEmitter {

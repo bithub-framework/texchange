@@ -12,7 +12,7 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 import assert = require('assert');
-import { OpenMakerManager } from './managers/open-maker-manager';
+import { OpenMakerManager } from './state-managers/open-maker-manager';
 
 abstract class Texchange extends Parent {
     protected abstract makers: OpenMakerManager;

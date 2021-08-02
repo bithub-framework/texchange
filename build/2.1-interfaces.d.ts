@@ -1,7 +1,7 @@
 import { Texchange as Parent, Events } from './1-pushing';
 import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, Amendment } from './interfaces';
 import Big from 'big.js';
-import { OpenMakerManager } from './managers/open-maker-manager';
+import { OpenMakerManager } from './state-managers/open-maker-manager';
 declare abstract class Texchange extends Parent {
     protected abstract makers: OpenMakerManager;
     protected settlementPrice: Big;

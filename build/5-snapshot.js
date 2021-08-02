@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const _4_assets_1 = require("./4-assets");
-const open_maker_manager_1 = require("./managers/open-maker-manager");
-const assets_manager_1 = require("./managers/assets-manager");
+const open_maker_manager_1 = require("./state-managers/open-maker-manager");
+const assets_manager_1 = require("./state-managers/assets-manager");
 class Texchange extends _4_assets_1.Texchange {
     constructor(config, snapshot, now) {
         super(config, now);

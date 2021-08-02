@@ -13,8 +13,8 @@ import {
     OpenMaker,
 } from 'interfaces';
 import Big from 'big.js';
-import { OpenMakersSnapshot } from './managers/open-maker-manager';
-import { AssetsSnapshot } from './managers/auto-assets';
+import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
+import { AssetsSnapshot } from './state-managers/auto-assets';
 
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
