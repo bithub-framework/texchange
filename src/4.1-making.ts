@@ -33,7 +33,7 @@ abstract class Texchange extends Parent {
         super(config, snapshot, now);
         this.assets = new AssetsManager(
             config,
-            snapshot,
+            snapshot.assets,
             () => this.settlementPrice,
             () => this.latestPrice,
         );

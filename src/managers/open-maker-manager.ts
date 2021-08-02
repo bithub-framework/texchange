@@ -9,23 +9,28 @@ import {
 import Big from 'big.js';
 import assert = require('assert');
 
-interface Frozen {
+export interface Frozen {
     balance: Big;
     position: Big;
     length: Length;
 }
 
-class OpenMakerManager extends Map<OrderId, OpenMaker>{
+export type OpenMakersSnapshot = {
+    order: OpenMaker;
+    frozen: Frozen;
+}[];
+
+export class OpenMakerManager extends Map<OrderId, OpenMaker>{
     private frozens = new Map<OrderId, Frozen>();
 
     constructor(
         private config: Config,
-        snapshot: Snapshot,
+        snapshot: OpenMakersSnapshot,
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
         super();
-        for (const { order, frozen } of snapshot.openMakers) {
+        for (const { order, frozen } of snapshot) {
             this.set(order.id, order);
             this.frozens.set(order.id, frozen);
         }
@@ -124,10 +129,4 @@ class OpenMakerManager extends Map<OrderId, OpenMaker>{
             thawedMargin = frozenBalance;
         return thawedMargin;
     }
-}
-
-export {
-    OpenMakerManager as default,
-    OpenMakerManager,
-    Frozen,
 }

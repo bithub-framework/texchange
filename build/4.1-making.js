@@ -9,7 +9,7 @@ const assert = require("assert");
 class Texchange extends _3_taken_1.Texchange {
     constructor(config, snapshot, now) {
         super(config, snapshot, now);
-        this.assets = new assets_manager_1.AssetsManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
+        this.assets = new assets_manager_1.AssetsManager(config, snapshot.assets, () => this.settlementPrice, () => this.latestPrice);
     }
     /** @override */
     validateOrder(order) {

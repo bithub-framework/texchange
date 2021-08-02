@@ -95,6 +95,7 @@ class Texchange extends Parent {
             balance: this.assets.balance,
             settlementPrice: this.settlementPrice,
             openMakers: this.makers.capture(),
+            assets: this.assets.capture(),
         };
     }
 }

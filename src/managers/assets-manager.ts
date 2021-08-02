@@ -1,29 +1,13 @@
 import {
     Length,
-    Config,
-    Snapshot,
 } from '../interfaces';
-import AutoAssets from './auto-assets';
+import { AutoAssets } from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './open-maker-manager';
 import { inspect } from 'util';
 import assert = require('assert');
 
 class AssetsManager extends AutoAssets {
-    constructor(
-        config: Config,
-        snapshot: Snapshot,
-        getSettlementPrice: () => Big,
-        getLatestPrice: () => Big,
-    ) {
-        super(
-            config,
-            snapshot,
-            getSettlementPrice,
-            getLatestPrice,
-        );
-    }
-
     public freeze(frozen: Frozen) {
         this.frozenBalance = this.frozenBalance.plus(frozen.balance);
         this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);

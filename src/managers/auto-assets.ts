@@ -2,11 +2,47 @@ import {
     Assets,
     Length,
     Config,
-    Snapshot,
 } from '../interfaces';
 import Big from 'big.js';
 
-class AutoAssets implements Assets {
+export interface AssetsSnapshot {
+    position: {
+        [length: number]: Big;
+    };
+    balance: Big;
+    cost: {
+        [length: number]: Big;
+    };
+    frozenBalance: Big;
+    frozenPosition: {
+        [length: number]: Big;
+    };
+    staticMargin: Big;
+}
+
+export function makeEmptySnapshot(balance: Big): AssetsSnapshot {
+    return {
+        position: {
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
+        },
+        frozenPosition: {
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
+        },
+        cost: {
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
+        },
+        frozenBalance: new Big(0),
+        staticMargin: new Big(0),
+        balance,
+    }
+}
+
+
+
+export class AutoAssets implements Assets {
     public position: {
         [length: number]: Big;
     };
@@ -21,25 +57,39 @@ class AutoAssets implements Assets {
 
     constructor(
         protected config: Config,
-        snapshot: Snapshot,
+        snapshot: AssetsSnapshot,
         private getSettlementPrice: () => Big,
         private getLatestPrice: () => Big,
     ) {
-        this.balance = snapshot.balance;
-        this.frozenBalance = new Big(0);
+        this.balance = new Big(snapshot.balance);
+        this.frozenBalance = new Big(snapshot.frozenBalance);
         this.frozenPosition = {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
+            [Length.LONG]: new Big(snapshot.frozenPosition[Length.LONG]),
+            [Length.SHORT]: new Big(snapshot.frozenPosition[Length.SHORT]),
         };
         this.position = {
-            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
+            [Length.LONG]: new Big(snapshot.position[Length.LONG]),
+            [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
         };
         this.cost = {
-            [Length.LONG]: new Big(0), [Length.SHORT]: new Big(0),
+            [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
+            [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
+        };
+        this.staticMargin = new Big(snapshot.staticMargin);
+    }
+
+    public capture(): AssetsSnapshot {
+        return {
+            position: this.position,
+            cost: this.cost,
+            frozenPosition: this.frozenPosition,
+            frozenBalance: this.frozenBalance,
+            staticMargin: this.staticMargin,
+            balance: this.balance,
         };
     }
 
-    protected staticMargin = new Big(0);
+    protected staticMargin;
     public get margin(): Big {
         return this.config.calcMargin(
             this.config,
@@ -77,9 +127,4 @@ class AutoAssets implements Assets {
             closable: this.closable,
         }
     }
-}
-
-export {
-    AutoAssets as default,
-    AutoAssets,
 }

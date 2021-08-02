@@ -1,25 +1,57 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AutoAssets = exports.default = void 0;
+exports.AutoAssets = exports.makeEmptySnapshot = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
+function makeEmptySnapshot(balance) {
+    return {
+        position: {
+            [interfaces_1.Length.LONG]: new big_js_1.default(0),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+        },
+        frozenPosition: {
+            [interfaces_1.Length.LONG]: new big_js_1.default(0),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+        },
+        cost: {
+            [interfaces_1.Length.LONG]: new big_js_1.default(0),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+        },
+        frozenBalance: new big_js_1.default(0),
+        staticMargin: new big_js_1.default(0),
+        balance,
+    };
+}
+exports.makeEmptySnapshot = makeEmptySnapshot;
 class AutoAssets {
     constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
         this.config = config;
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
-        this.staticMargin = new big_js_1.default(0);
-        this.balance = snapshot.balance;
-        this.frozenBalance = new big_js_1.default(0);
+        this.balance = new big_js_1.default(snapshot.balance);
+        this.frozenBalance = new big_js_1.default(snapshot.frozenBalance);
         this.frozenPosition = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.SHORT]),
         };
         this.position = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0), [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
         };
         this.cost = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0), [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
+        };
+        this.staticMargin = new big_js_1.default(snapshot.staticMargin);
+    }
+    capture() {
+        return {
+            position: this.position,
+            cost: this.cost,
+            frozenPosition: this.frozenPosition,
+            frozenBalance: this.frozenBalance,
+            staticMargin: this.staticMargin,
+            balance: this.balance,
         };
     }
     get margin() {
@@ -51,6 +83,5 @@ class AutoAssets {
         };
     }
 }
-exports.default = AutoAssets;
 exports.AutoAssets = AutoAssets;
 //# sourceMappingURL=auto-assets.js.map

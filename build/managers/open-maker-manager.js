@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OpenMakerManager = exports.default = void 0;
+exports.OpenMakerManager = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
@@ -11,7 +11,7 @@ class OpenMakerManager extends Map {
         this.getSettlementPrice = getSettlementPrice;
         this.getLatestPrice = getLatestPrice;
         this.frozens = new Map();
-        for (const { order, frozen } of snapshot.openMakers) {
+        for (const { order, frozen } of snapshot) {
             this.set(order.id, order);
             this.frozens.set(order.id, frozen);
         }
@@ -84,6 +84,5 @@ class OpenMakerManager extends Map {
         return thawedMargin;
     }
 }
-exports.default = OpenMakerManager;
 exports.OpenMakerManager = OpenMakerManager;
 //# sourceMappingURL=open-maker-manager.js.map

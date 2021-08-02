@@ -5,10 +5,7 @@ const interfaces_1 = require("../interfaces");
 const auto_assets_1 = require("./auto-assets");
 const big_js_1 = require("big.js");
 const util_1 = require("util");
-class AssetsManager extends auto_assets_1.default {
-    constructor(config, snapshot, getSettlementPrice, getLatestPrice) {
-        super(config, snapshot, getSettlementPrice, getLatestPrice);
-    }
+class AssetsManager extends auto_assets_1.AutoAssets {
     freeze(frozen) {
         this.frozenBalance = this.frozenBalance.plus(frozen.balance);
         this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);

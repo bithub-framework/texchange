@@ -12,7 +12,7 @@ class Texchange extends _1_pushing_1.Texchange {
         this.latestPrice = new big_js_1.default(0);
         this.orderCount = 0;
         this.settlementPrice = snapshot.settlementPrice;
-        this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot, () => this.settlementPrice, () => this.latestPrice);
+        this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot.openMakers, () => this.settlementPrice, () => this.latestPrice);
     }
     makeOrders(orders) {
         return orders.map((order) => {

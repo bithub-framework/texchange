@@ -1,7 +1,8 @@
 export * from 'interfaces';
-import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike, OpenMaker } from 'interfaces';
+import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
-import { Frozen } from './managers/open-maker-manager';
+import { OpenMakersSnapshot } from './managers/open-maker-manager';
+import { AssetsSnapshot } from './managers/auto-assets';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
@@ -31,10 +32,8 @@ export interface Snapshot {
     time: number;
     balance: Big;
     settlementPrice: Big;
-    openMakers: {
-        order: OpenMaker;
-        frozen: Frozen;
-    }[];
+    openMakers: OpenMakersSnapshot;
+    assets: AssetsSnapshot;
 }
 export declare function min(...a: Big[]): Big;
 export interface Events {
