@@ -1,5 +1,5 @@
 export * from 'interfaces';
-import { Trade, Positions, Balances, LimitOrder, OpenOrder, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
+import { Trade, Positions, Balances, LimitOrder, OpenMaker, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
 import { AssetsSnapshot } from './state-managers/auto-assets';
@@ -21,11 +21,46 @@ export interface MarketConfig extends MarketSpec {
     initialLatestPrice: Big;
 }
 export interface AccountConfig extends AccountSpec {
-    calcInitialMargin: (spec: MarketSpec & AccountSpec, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
-    calcMarginIncrement: (spec: MarketSpec & AccountSpec, price: Big, volume: Big) => Big;
-    calcMarginDecrement: (spec: MarketSpec & AccountSpec, assets: Assets, volume: Big) => Big;
-    calcMargin: (spec: MarketSpec & AccountSpec, assets: Omit<Assets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
-    calcFrozenMargin: (spec: MarketSpec & AccountSpec, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
+    calcInitialMargin: (args: {
+        spec: MarketSpec & AccountSpec;
+        order: LimitOrder;
+        settlementPrice: Big;
+        latestPrice: Big;
+    }) => Big;
+    calcMarginIncrement: (args: {
+        spec: MarketSpec & AccountSpec;
+        orderPrice: Big;
+        volume: Big;
+        dollarVolume: Big;
+        settlementPrice: Big;
+        latestPrice: Big;
+    }) => Big;
+    calcMarginDecrement: (args: {
+        spec: MarketSpec & AccountSpec;
+        position: Assets['position'];
+        cost: Assets['cost'];
+        volume: Big;
+        marginSum: Big;
+    }) => Big;
+    reviseMargin: (args: {
+        spec: MarketSpec & AccountSpec;
+        position: Assets['position'];
+        cost: Assets['cost'];
+        settlementPrice: Big;
+        latestPrice: Big;
+        marginSum: Big;
+    }) => Big;
+    calcFrozenMargin: (args: {
+        spec: MarketSpec & AccountSpec;
+        maker: OpenMaker;
+        settlementPrice: Big;
+        latestPrice: Big;
+    }) => Big;
+    shouldBeCompulsorilyLiquidated: (args: {
+        spec: MarketSpec & AccountSpec;
+        settlementPrice: Big;
+        latestPrice: Big;
+    }) => boolean;
 }
 export interface Config extends MarketConfig, AccountConfig {
     marketName: string;

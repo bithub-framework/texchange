@@ -4,7 +4,7 @@ import {
     Positions,
     Balances,
     LimitOrder,
-    OpenOrder,
+    OpenMaker,
     Orderbook,
     MarketSpec,
     AccountSpec,
@@ -37,35 +37,46 @@ export interface MarketConfig extends MarketSpec {
 }
 
 export interface AccountConfig extends AccountSpec {
-    calcInitialMargin: (
+    calcInitialMargin: (args: {
         spec: MarketSpec & AccountSpec,
         order: LimitOrder,
         settlementPrice: Big,
         latestPrice: Big,
-    ) => Big,
-    calcMarginIncrement: (
+    }) => Big,
+    calcMarginIncrement: (args: {
         spec: MarketSpec & AccountSpec,
-        price: Big,
+        orderPrice: Big,
         volume: Big,
-    ) => Big,
-    calcMarginDecrement: (
-        spec: MarketSpec & AccountSpec,
-        assets: Assets,
-        volume: Big,
-    ) => Big,
-    calcMargin: (
-        spec: MarketSpec & AccountSpec,
-        assets: Omit<Assets, 'margin' | 'reserve'>,
+        dollarVolume: Big,
         settlementPrice: Big,
         latestPrice: Big,
-        autoMargin: Big,
-    ) => Big,
-    calcFrozenMargin: (
+    }) => Big,
+    calcMarginDecrement: (args: {
         spec: MarketSpec & AccountSpec,
-        order: OpenOrder,
+        position: Assets['position'],
+        cost: Assets['cost'],
+        volume: Big,
+        marginSum: Big,
+    }) => Big,
+    reviseMargin: (args: {
+        spec: MarketSpec & AccountSpec,
+        position: Assets['position'],
+        cost: Assets['cost'],
         settlementPrice: Big,
         latestPrice: Big,
-    ) => Big,
+        marginSum: Big,
+    }) => Big,
+    calcFrozenMargin: (args: {
+        spec: MarketSpec & AccountSpec,
+        maker: OpenMaker,
+        settlementPrice: Big,
+        latestPrice: Big,
+    }) => Big,
+    shouldBeCompulsorilyLiquidated: (args: {
+        spec: MarketSpec & AccountSpec,
+        settlementPrice: Big,
+        latestPrice: Big,
+    }) => boolean;
 }
 
 export interface Config extends MarketConfig, AccountConfig {
@@ -92,7 +103,6 @@ export interface ExchangeLike extends
     ContextAccountApiLike,
     MarketSpec,
     AccountSpec {
-
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

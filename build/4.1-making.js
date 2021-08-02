@@ -29,7 +29,12 @@ class Texchange extends _3_taken_1.Texchange {
     enoughAvailable(order) {
         if (order.operation === interfaces_1.Operation.OPEN)
             assert(new big_js_1.default(0)
-                .plus(this.config.calcInitialMargin(this.config, order, this.settlementPrice, this.latestPrice)).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
+                .plus(this.config.calcInitialMargin({
+                spec: this.config,
+                order,
+                settlementPrice: this.settlementPrice,
+                latestPrice: this.latestPrice,
+            })).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
                 .lte(this.assets.available));
     }
     /** @override */
@@ -71,12 +76,25 @@ class Texchange extends _3_taken_1.Texchange {
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === interfaces_1.Operation.OPEN) {
+            this.assets.incMargin(this.config.calcMarginIncrement({
+                spec: this.config,
+                orderPrice: taker.price,
+                volume,
+                dollarVolume,
+                settlementPrice: this.settlementPrice,
+                latestPrice: this.latestPrice,
+            }).round(this.config.CURRENCY_DP));
             this.assets.openPosition(taker.length, volume, dollarVolume, takerFee);
-            this.assets.incMargin(taker.price, volume);
         }
         else {
+            this.assets.decMargin(this.config.calcMarginDecrement({
+                spec: this.config,
+                position: this.assets.position,
+                cost: this.assets.cost,
+                volume,
+                marginSum: this.assets.marginSum,
+            }).round(this.config.CURRENCY_DP));
             this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
-            this.assets.decMargin(volume);
         }
         return uTrades;
     }

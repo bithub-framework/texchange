@@ -17,12 +17,25 @@ class Texchange extends _4_1_making_1.Texchange {
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (maker.operation === interfaces_1.Operation.OPEN) {
+            this.assets.incMargin(this.config.calcMarginIncrement({
+                spec: this.config,
+                orderPrice: maker.price,
+                volume,
+                dollarVolume,
+                settlementPrice: this.settlementPrice,
+                latestPrice: this.latestPrice,
+            }).round(this.config.CURRENCY_DP));
             this.assets.openPosition(maker.length, volume, dollarVolume, makerFee);
-            this.assets.incMargin(maker.price, volume);
         }
         else {
+            this.assets.decMargin(this.config.calcMarginDecrement({
+                spec: this.config,
+                position: this.assets.position,
+                cost: this.assets.cost,
+                volume,
+                marginSum: this.assets.marginSum,
+            }).round(this.config.CURRENCY_DP));
             this.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
-            this.assets.decMargin(volume);
         }
         return volume;
     }

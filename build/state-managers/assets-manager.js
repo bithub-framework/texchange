@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssetsManager = exports.default = void 0;
 const interfaces_1 = require("../interfaces");
 const auto_assets_1 = require("./auto-assets");
-const big_js_1 = require("big.js");
 const util_1 = require("util");
 class AssetsManager extends auto_assets_1.AutoAssets {
     freeze(frozen) {
@@ -22,16 +21,24 @@ class AssetsManager extends auto_assets_1.AutoAssets {
             throw new Error('No enough to thaw');
         }
     }
-    // TODO: assert?
-    incMargin(price, volume) {
-        this.staticMargin = this.staticMargin.plus(this.config.calcMarginIncrement(this.config, price, volume).round(this.config.CURRENCY_DP));
+    incMargin(increment) {
+        this.marginSum = this.marginSum.plus(increment);
     }
-    decMargin(volume) {
-        const totalPosition = this.position[interfaces_1.Length.LONG].plus(this.position[interfaces_1.Length.SHORT]);
-        this.staticMargin = totalPosition.eq(volume)
-            ? new big_js_1.default(0)
-            : this.staticMargin.minus(this.config.calcMarginDecrement(this.config, this, volume).round(this.config.CURRENCY_DP));
+    decMargin(decrement) {
+        this.marginSum = this.marginSum.minus(decrement);
     }
+    // public decMargin(volume: Big) {
+    //     const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
+    //     this.autoMargin = totalPosition.eq(volume)
+    //         ? new Big(0)
+    //         : this.autoMargin.minus(
+    //             this.config.calcMarginDecrement({
+    //                 spec: this.config,
+    //                 assets: this,
+    //                 volume,
+    //             }).round(this.config.CURRENCY_DP),
+    //         );
+    // }
     openPosition(length, volume, dollarVolume, fee) {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);

@@ -5,7 +5,6 @@ import { AutoAssets } from './auto-assets';
 import Big from 'big.js';
 import { Frozen } from './open-maker-manager';
 import { inspect } from 'util';
-import assert = require('assert');
 
 class AssetsManager extends AutoAssets {
     public freeze(frozen: Frozen) {
@@ -26,32 +25,26 @@ class AssetsManager extends AutoAssets {
         }
     }
 
-    // TODO: assert?
-    public incMargin(
-        price: Big,
-        volume: Big,
-    ) {
-        this.staticMargin = this.staticMargin.plus(
-            this.config.calcMarginIncrement(
-                this.config,
-                price,
-                volume,
-            ).round(this.config.CURRENCY_DP),
-        );
+    public incMargin(increment: Big) {
+        this.marginSum = this.marginSum.plus(increment);
     }
 
-    public decMargin(volume: Big) {
-        const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
-        this.staticMargin = totalPosition.eq(volume)
-            ? new Big(0)
-            : this.staticMargin.minus(
-                this.config.calcMarginDecrement(
-                    this.config,
-                    this,
-                    volume,
-                ).round(this.config.CURRENCY_DP),
-            );
+    public decMargin(decrement: Big) {
+        this.marginSum = this.marginSum.minus(decrement);
     }
+
+    // public decMargin(volume: Big) {
+    //     const totalPosition = this.position[Length.LONG].plus(this.position[Length.SHORT]);
+    //     this.autoMargin = totalPosition.eq(volume)
+    //         ? new Big(0)
+    //         : this.autoMargin.minus(
+    //             this.config.calcMarginDecrement({
+    //                 spec: this.config,
+    //                 assets: this,
+    //                 volume,
+    //             }).round(this.config.CURRENCY_DP),
+    //         );
+    // }
 
     public openPosition(
         length: Length,

@@ -32,7 +32,7 @@ export declare class AutoAssets implements Assets {
     };
     constructor(config: Config, snapshot: AssetsSnapshot, getSettlementPrice: () => Big, getLatestPrice: () => Big);
     capture(): AssetsSnapshot;
-    protected staticMargin: Big;
+    marginSum: Big;
     get margin(): Big;
     get available(): Big;
     get closable(): {

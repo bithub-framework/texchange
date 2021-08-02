@@ -30,7 +30,12 @@ class OpenMakerManager extends Map {
     addOrder(order) {
         const frozen = {
             balance: order.operation === interfaces_1.Operation.OPEN
-                ? this.config.calcFrozenMargin(this.config, order, this.getSettlementPrice(), this.getLatestPrice()).round(this.config.CURRENCY_DP)
+                ? this.config.calcFrozenMargin({
+                    spec: this.config,
+                    maker: order,
+                    settlementPrice: this.getSettlementPrice(),
+                    latestPrice: this.getLatestPrice(),
+                }).round(this.config.CURRENCY_DP)
                 : new big_js_1.default(0),
             position: order.operation === interfaces_1.Operation.CLOSE
                 ? order.unfilled

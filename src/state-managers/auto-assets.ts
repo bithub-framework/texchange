@@ -75,7 +75,7 @@ export class AutoAssets implements Assets {
             [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
             [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
         };
-        this.staticMargin = new Big(snapshot.staticMargin);
+        this.marginSum = new Big(snapshot.staticMargin);
     }
 
     public capture(): AssetsSnapshot {
@@ -84,20 +84,21 @@ export class AutoAssets implements Assets {
             cost: this.cost,
             frozenPosition: this.frozenPosition,
             frozenBalance: this.frozenBalance,
-            staticMargin: this.staticMargin,
+            staticMargin: this.marginSum,
             balance: this.balance,
         };
     }
 
-    protected staticMargin;
+    public marginSum;
     public get margin(): Big {
-        return this.config.calcMargin(
-            this.config,
-            this,
-            this.getSettlementPrice(),
-            this.getLatestPrice(),
-            this.staticMargin,
-        ).round(this.config.CURRENCY_DP);
+        return this.config.reviseMargin({
+            spec: this.config,
+            position: this.position,
+            cost: this.cost,
+            settlementPrice: this.getSettlementPrice(),
+            latestPrice: this.getLatestPrice(),
+            marginSum: this.marginSum,
+        }).round(this.config.CURRENCY_DP);
     }
 
     public get available(): Big {
