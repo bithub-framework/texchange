@@ -20,7 +20,7 @@ class Texchange extends events_1.EventEmitter {
     }
     pushUTrades(uTrades) {
         const trades = this.uTrade2Trade(uTrades);
-        this.emit('trades', trades);
+        this.emit('trades', interfaces_1.clone(trades));
     }
     uTrade2Trade(uTrades) {
         return uTrades.map(uTrade => ({

@@ -22,7 +22,7 @@ class Texchange extends _1_pushing_1.Texchange {
                     unfilled: order.quantity,
                 };
                 this.validateOrder(openOrder);
-                return this.makeOpenOrder(openOrder);
+                return interfaces_1.clone(this.makeOpenOrder(openOrder));
             }
             catch (err) {
                 return err;
@@ -30,7 +30,7 @@ class Texchange extends _1_pushing_1.Texchange {
         });
     }
     cancelOrders(orders) {
-        return orders.map(order => this.cancelOpenOrder(order));
+        return orders.map(order => interfaces_1.clone(this.cancelOpenOrder(order)));
     }
     amendOrders(amendments) {
         return amendments.map((amendment) => {
@@ -47,7 +47,7 @@ class Texchange extends _1_pushing_1.Texchange {
                     operation: amendment.operation,
                 };
                 this.validateOrder(openOrder);
-                return this.makeOpenOrder(openOrder);
+                return interfaces_1.clone(this.makeOpenOrder(openOrder));
             }
             catch (err) {
                 return err;

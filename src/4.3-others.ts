@@ -55,36 +55,38 @@ abstract class Texchange extends Parent {
 
     public getPositions(): Positions {
         this.settle();
-        return clone({
+        const positions = {
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        });
+        };
+        return clone(positions);
     }
 
     public getBalances(): Balances {
         this.settle();
-        return clone({
+        const balances = {
             balance: this.assets.balance,
             available: this.assets.available,
             time: this.now(),
-        });
+        };
+        return clone(balances);
     }
 
     protected pushPositionsAndBalances(): void {
         this.settle();
-        const positions: Positions = clone({
+        const positions: Positions = {
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        });
-        const balances: Balances = clone({
+        };
+        const balances: Balances = {
             balance: this.assets.balance,
             available: this.assets.available,
             time: this.now(),
-        });
-        this.emit('positions', positions);
-        this.emit('balances', balances);
+        };
+        this.emit('positions', clone(positions));
+        this.emit('balances', clone(balances));
     }
 }
 

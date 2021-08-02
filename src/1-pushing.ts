@@ -29,7 +29,7 @@ abstract class Texchange extends EventEmitter {
 
     protected pushUTrades(uTrades: UnidentifiedTrade[]): void {
         const trades = this.uTrade2Trade(uTrades);
-        this.emit('trades', trades);
+        this.emit('trades', clone(trades));
     }
 
     protected uTrade2Trade(uTrades: UnidentifiedTrade[]): Trade[] {

@@ -44,7 +44,7 @@ abstract class Texchange extends Parent {
                     unfilled: order.quantity,
                 };
                 this.validateOrder(openOrder);
-                return this.makeOpenOrder(openOrder);
+                return clone(this.makeOpenOrder(openOrder));
             } catch (err) {
                 return err;
             }
@@ -52,7 +52,7 @@ abstract class Texchange extends Parent {
     }
 
     public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
-        return orders.map(order => this.cancelOpenOrder(order));
+        return orders.map(order => clone(this.cancelOpenOrder(order)));
     }
 
     public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
@@ -70,7 +70,7 @@ abstract class Texchange extends Parent {
                     operation: amendment.operation,
                 };
                 this.validateOrder(openOrder);
-                return this.makeOpenOrder(openOrder);
+                return clone(this.makeOpenOrder(openOrder));
             } catch (err) {
                 return err;
             }

@@ -32,34 +32,36 @@ class Texchange extends _4_2_taken_1.Texchange {
     }
     getPositions() {
         this.settle();
-        return interfaces_1.clone({
+        const positions = {
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        });
+        };
+        return interfaces_1.clone(positions);
     }
     getBalances() {
         this.settle();
-        return interfaces_1.clone({
+        const balances = {
             balance: this.assets.balance,
             available: this.assets.available,
             time: this.now(),
-        });
+        };
+        return interfaces_1.clone(balances);
     }
     pushPositionsAndBalances() {
         this.settle();
-        const positions = interfaces_1.clone({
+        const positions = {
             position: this.assets.position,
             closable: this.assets.closable,
             time: this.now(),
-        });
-        const balances = interfaces_1.clone({
+        };
+        const balances = {
             balance: this.assets.balance,
             available: this.assets.available,
             time: this.now(),
-        });
-        this.emit('positions', positions);
-        this.emit('balances', balances);
+        };
+        this.emit('positions', interfaces_1.clone(positions));
+        this.emit('balances', interfaces_1.clone(balances));
     }
 }
 exports.Texchange = Texchange;
