@@ -33,6 +33,8 @@ export interface Assets extends Omit<Positions & Balances, 'time'> {
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
+    initialSettlementPrice: Big;
+    initialLatestPrice: Big;
 }
 
 export interface AccountConfig extends AccountSpec {
@@ -73,8 +75,6 @@ export interface Config extends MarketConfig, AccountConfig {
 
 export interface Snapshot {
     time: number;
-    balance: Big;
-    settlementPrice: Big;
     openMakers: OpenMakersSnapshot;
     assets: AssetsSnapshot;
 }

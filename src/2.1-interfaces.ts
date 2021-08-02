@@ -18,7 +18,7 @@ import { OpenMakerManager } from './managers/open-maker-manager';
 abstract class Texchange extends Parent {
     protected makers: OpenMakerManager;
     protected settlementPrice: Big;
-    protected latestPrice = new Big(0);
+    protected latestPrice;
     protected orderCount = 0;
 
     protected abstract validateOrder(order: OpenOrder): void;
@@ -31,7 +31,8 @@ abstract class Texchange extends Parent {
         now: () => number,
     ) {
         super(config, now);
-        this.settlementPrice = snapshot.settlementPrice;
+        this.settlementPrice = config.initialSettlementPrice;
+        this.latestPrice = config.initialLatestPrice;
         this.makers = new OpenMakerManager(
             config,
             snapshot.openMakers,

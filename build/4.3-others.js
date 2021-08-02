@@ -65,8 +65,6 @@ class Texchange extends _4_2_taken_1.Texchange {
     getSnapshot() {
         return {
             time: this.now(),
-            balance: this.assets.balance,
-            settlementPrice: this.settlementPrice,
             openMakers: this.makers.capture(),
             assets: this.assets.capture(),
         };

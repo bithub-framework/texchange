@@ -9,9 +9,9 @@ const open_maker_manager_1 = require("./managers/open-maker-manager");
 class Texchange extends _1_pushing_1.Texchange {
     constructor(config, snapshot, now) {
         super(config, now);
-        this.latestPrice = new big_js_1.default(0);
         this.orderCount = 0;
-        this.settlementPrice = snapshot.settlementPrice;
+        this.settlementPrice = config.initialSettlementPrice;
+        this.latestPrice = config.initialLatestPrice;
         this.makers = new open_maker_manager_1.OpenMakerManager(config, snapshot.openMakers, () => this.settlementPrice, () => this.latestPrice);
     }
     makeOrders(orders) {

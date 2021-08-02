@@ -17,6 +17,8 @@ export interface Assets extends Omit<Positions & Balances, 'time'> {
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
+    initialSettlementPrice: Big;
+    initialLatestPrice: Big;
 }
 export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (config: MarketSpec & AccountSpec, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
@@ -30,8 +32,6 @@ export interface Config extends MarketConfig, AccountConfig {
 }
 export interface Snapshot {
     time: number;
-    balance: Big;
-    settlementPrice: Big;
     openMakers: OpenMakersSnapshot;
     assets: AssetsSnapshot;
 }

@@ -92,8 +92,6 @@ class Texchange extends Parent {
     public getSnapshot(): Snapshot {
         return {
             time: this.now(),
-            balance: this.assets.balance,
-            settlementPrice: this.settlementPrice,
             openMakers: this.makers.capture(),
             assets: this.assets.capture(),
         };
