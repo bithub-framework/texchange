@@ -1,7 +1,7 @@
 import {
     Texchange as Parent,
     Events,
-} from './2-ordering';
+} from './2-ordering.2-implements';
 import {
     Side,
     UnidentifiedTrade,

@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
-const _2_ordering_1 = require("./2-ordering");
+const _2_ordering_2_implements_1 = require("./2-ordering.2-implements");
 const interfaces_1 = require("./interfaces");
 const min_1 = require("./min");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Texchange extends _2_ordering_1.Texchange {
+class Texchange extends _2_ordering_2_implements_1.Texchange {
     uTradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === interfaces_1.Side.BID &&
             trade.side === interfaces_1.Side.ASK &&

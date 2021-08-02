@@ -1,4 +1,4 @@
-import { Texchange as Parent, Events } from './2-ordering';
+import { Texchange as Parent, Events } from './2-ordering.2-implements';
 import { UnidentifiedTrade, OpenOrder, OpenMaker } from './interfaces';
 import Big from 'big.js';
 declare abstract class Texchange extends Parent {
