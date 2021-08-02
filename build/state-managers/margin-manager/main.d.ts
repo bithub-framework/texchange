@@ -9,7 +9,7 @@ export interface MarginSnapshot {
     frozenPosition: {
         [length: number]: Big;
     };
-    marginSum: Big;
+    positionMargin: Big;
 }
 export declare function makeEmptyMarginSnapshot(): MarginSnapshot;
 export interface MarginManagerProps {
@@ -17,8 +17,7 @@ export interface MarginManagerProps {
     frozenPosition: {
         [length: number]: Big;
     };
-    marginSum: Big;
-    margin: Big;
+    positionMargin: Big;
     available: Big;
     closable: {
         [length: number]: Big;
@@ -29,7 +28,7 @@ export declare class MarginManager extends Parent implements MarginManagerProps 
     protected getClearingPrice: () => Big;
     protected getLatestPrice: () => Big;
     protected equity: EquityManager;
-    marginSum: Big;
+    positionMargin: Big;
     frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;

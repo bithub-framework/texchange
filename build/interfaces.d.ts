@@ -2,7 +2,7 @@ export * from 'interfaces';
 import { Trade, Positions, Balances, LimitOrder, OpenMaker, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
-import { EquitySnapshot } from './state-managers/equity-manager';
+import { EquitySnapshot, EquityManager } from './state-managers/equity-manager';
 import { MarginSnapshot } from './state-managers/margin-manager/main';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
 export interface Margin {
@@ -10,16 +10,6 @@ export interface Margin {
     frozenPosition: {
         [length: number]: Big;
     };
-}
-export interface Assets extends Omit<Positions & Balances, 'time'> {
-    cost: {
-        [length: number]: Big;
-    };
-    frozenBalance: Big;
-    frozenPosition: {
-        [length: number]: Big;
-    };
-    margin: Big;
 }
 export interface MarketConfig extends MarketSpec {
     PING: number;
@@ -44,17 +34,9 @@ export interface AccountConfig extends AccountSpec {
     }) => Big;
     calcPositionMarginDecrement: (args: {
         spec: MarketSpec & AccountSpec;
-        position: Assets['position'];
-        cost: Assets['cost'];
+        position: EquityManager['position'];
+        cost: EquityManager['cost'];
         volume: Big;
-        marginSum: Big;
-    }) => Big;
-    revisePositionMargin: (args: {
-        spec: MarketSpec & AccountSpec;
-        position: Assets['position'];
-        cost: Assets['cost'];
-        clearingPrice: Big;
-        latestPrice: Big;
         marginSum: Big;
     }) => Big;
     calcFreezingMargin: (args: {
@@ -62,6 +44,14 @@ export interface AccountConfig extends AccountSpec {
         maker: OpenMaker;
         clearingPrice: Big;
         latestPrice: Big;
+    }) => Big;
+    calcPositionMarginOnceClearing: (args: {
+        spec: MarketSpec & AccountSpec;
+        position: EquityManager['position'];
+        cost: EquityManager['cost'];
+        clearingPrice: Big;
+        latestPrice: Big;
+        positionMargin: Big;
     }) => Big;
     shouldBeCompulsorilyLiquidated: (args: {
         spec: MarketSpec & AccountSpec;

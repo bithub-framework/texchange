@@ -12,7 +12,7 @@ function makeEmptyMarginSnapshot() {
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
         },
         frozenBalance: new big_js_1.default(0),
-        marginSum: new big_js_1.default(0),
+        positionMargin: new big_js_1.default(0),
     };
 }
 exports.makeEmptyMarginSnapshot = makeEmptyMarginSnapshot;
@@ -28,14 +28,14 @@ class MarginManager extends _2_freezing_margin_manager_1.MarginManager {
             [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.LONG]),
             [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.SHORT]),
         };
-        this.marginSum = new big_js_1.default(snapshot.marginSum);
+        this.positionMargin = new big_js_1.default(snapshot.positionMargin);
     }
     /** @returns 可直接 JSON 序列化 */
     capture() {
         return {
             frozenPosition: this.frozenPosition,
             frozenBalance: this.frozenBalance,
-            marginSum: this.marginSum,
+            positionMargin: this.positionMargin,
         };
     }
     [util_1.inspect.custom]() {
@@ -43,12 +43,11 @@ class MarginManager extends _2_freezing_margin_manager_1.MarginManager {
     }
     toJSON() {
         return {
-            margin: this.margin,
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
-            marginSum: this.marginSum,
+            positionMargin: this.positionMargin,
         };
     }
 }

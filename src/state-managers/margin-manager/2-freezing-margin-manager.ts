@@ -4,9 +4,11 @@ import {
 import { MarginManager as Parent } from './1-position-margin-manager';
 import Big from 'big.js';
 import { Frozen } from '../open-maker-manager';
+import { EquityManager } from '../equity-manager';
 
 
 export abstract class MarginManager extends Parent {
+    protected abstract equity: EquityManager;
     public abstract frozenBalance: Big;
     public abstract frozenPosition: {
         [length: number]: Big;
@@ -14,7 +16,7 @@ export abstract class MarginManager extends Parent {
 
     public get available(): Big {
         return this.equity.balance
-            .minus(this.margin)
+            .minus(this.positionMargin)
             .minus(this.frozenBalance);
     }
 

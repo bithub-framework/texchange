@@ -1,13 +1,7 @@
-import { Config } from '../../interfaces';
 import Big from 'big.js';
-import { EquityManager } from '../equity-manager';
 export declare abstract class MarginManager {
-    abstract marginSum: Big;
-    protected abstract config: Config;
-    protected abstract getClearingPrice: () => Big;
-    protected abstract getLatestPrice: () => Big;
-    protected abstract equity: EquityManager;
-    get margin(): Big;
-    incMargin(increment: Big): void;
-    decMargin(decrement: Big): void;
+    abstract positionMargin: Big;
+    incPositionMargin(increment: Big): void;
+    decPositionMargin(decrement: Big): void;
+    setPositionMargin(positionMargin: Big): void;
 }

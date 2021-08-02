@@ -104,7 +104,7 @@ abstract class Texchange extends Parent {
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === Operation.OPEN) {
-            this.margin.incMargin(this.config.calcPositionMarginIncrement({
+            this.margin.incPositionMargin(this.config.calcPositionMarginIncrement({
                 spec: this.config,
                 orderPrice: taker.price,
                 volume,
@@ -116,12 +116,12 @@ abstract class Texchange extends Parent {
                 taker.length, volume, dollarVolume, takerFee,
             );
         } else {
-            this.margin.decMargin(this.config.calcPositionMarginDecrement({
+            this.margin.decPositionMargin(this.config.calcPositionMarginDecrement({
                 spec: this.config,
                 position: this.equity.position,
                 cost: this.equity.cost,
                 volume,
-                marginSum: this.margin.marginSum,
+                marginSum: this.margin.positionMargin,
             }).round(this.config.CURRENCY_DP));
             this.equity.closePosition(
                 taker.length, volume, dollarVolume, takerFee,

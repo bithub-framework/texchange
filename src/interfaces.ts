@@ -13,7 +13,7 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
-import { EquitySnapshot } from './state-managers/equity-manager';
+import { EquitySnapshot, EquityManager } from './state-managers/equity-manager';
 import { MarginSnapshot } from './state-managers/margin-manager/main';
 
 
@@ -27,17 +27,6 @@ export interface Margin {
     };
 }
 
-export interface Assets extends Omit<Positions & Balances, 'time'> {
-    cost: {
-        [length: number]: Big;
-    };
-    frozenBalance: Big;
-    frozenPosition: {
-        [length: number]: Big;
-    };
-    margin: Big;
-}
-
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
@@ -47,44 +36,44 @@ export interface MarketConfig extends MarketSpec {
 
 export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (args: {
-        spec: MarketSpec & AccountSpec,
-        order: LimitOrder,
-        clearingPrice: Big,
-        latestPrice: Big,
-    }) => Big,
+        spec: MarketSpec & AccountSpec;
+        order: LimitOrder;
+        clearingPrice: Big;
+        latestPrice: Big;
+    }) => Big;
     calcPositionMarginIncrement: (args: {
-        spec: MarketSpec & AccountSpec,
-        orderPrice: Big,
-        volume: Big,
-        dollarVolume: Big,
-        clearingPrice: Big,
-        latestPrice: Big,
-    }) => Big,
+        spec: MarketSpec & AccountSpec;
+        orderPrice: Big;
+        volume: Big;
+        dollarVolume: Big;
+        clearingPrice: Big;
+        latestPrice: Big;
+    }) => Big;
     calcPositionMarginDecrement: (args: {
-        spec: MarketSpec & AccountSpec,
-        position: Assets['position'],
-        cost: Assets['cost'],
-        volume: Big,
-        marginSum: Big,
-    }) => Big,
-    revisePositionMargin: (args: {
-        spec: MarketSpec & AccountSpec,
-        position: Assets['position'],
-        cost: Assets['cost'],
-        clearingPrice: Big,
-        latestPrice: Big,
-        marginSum: Big,
-    }) => Big,
+        spec: MarketSpec & AccountSpec;
+        position: EquityManager['position'];
+        cost: EquityManager['cost'];
+        volume: Big;
+        marginSum: Big;
+    }) => Big;
     calcFreezingMargin: (args: {
-        spec: MarketSpec & AccountSpec,
-        maker: OpenMaker,
-        clearingPrice: Big,
-        latestPrice: Big,
-    }) => Big,
+        spec: MarketSpec & AccountSpec;
+        maker: OpenMaker;
+        clearingPrice: Big;
+        latestPrice: Big;
+    }) => Big;
+    calcPositionMarginOnceClearing: (args: {
+        spec: MarketSpec & AccountSpec;
+        position: EquityManager['position'];
+        cost: EquityManager['cost'];
+        clearingPrice: Big;
+        latestPrice: Big;
+        positionMargin: Big;
+    }) => Big;
     shouldBeCompulsorilyLiquidated: (args: {
-        spec: MarketSpec & AccountSpec,
-        clearingPrice: Big,
-        latestPrice: Big,
+        spec: MarketSpec & AccountSpec;
+        clearingPrice: Big;
+        latestPrice: Big;
     }) => boolean;
 }
 

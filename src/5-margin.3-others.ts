@@ -7,10 +7,47 @@ import {
     clone,
     Positions,
     Balances,
+    Length,
 } from './interfaces';
 import { EventEmitter } from 'events';
+import Big from 'big.js';
+
 
 abstract class Texchange extends Parent {
+
+    /** @override */
+    protected clear(): void {
+        const position = clone(this.equity.position);
+        for (const length of [Length.LONG, Length.SHORT] as const) {
+            const clearingDollarVolume =
+                this.config.calcDollarVolume(
+                    this.clearingPrice,
+                    position[length],
+                ).round(this.config.CURRENCY_DP);
+            this.equity.closePosition(
+                length,
+                position[length],
+                clearingDollarVolume,
+                new Big(0),
+            );
+            this.equity.openPosition(
+                length,
+                position[length],
+                clearingDollarVolume,
+                new Big(0),
+            );
+        }
+        this.margin.setPositionMargin(
+            this.config.calcPositionMarginOnceClearing({
+                spec: this.config,
+                cost: this.equity.cost,
+                position: this.equity.position,
+                clearingPrice: this.clearingPrice,
+                latestPrice: this.latestPrice,
+                positionMargin: this.margin.positionMargin,
+            })
+        );
+    }
 
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder {

@@ -6,7 +6,7 @@ const _1_position_margin_manager_1 = require("./1-position-margin-manager");
 class MarginManager extends _1_position_margin_manager_1.MarginManager {
     get available() {
         return this.equity.balance
-            .minus(this.margin)
+            .minus(this.positionMargin)
             .minus(this.frozenBalance);
     }
     get closable() {

@@ -12,7 +12,7 @@ export interface MarginSnapshot {
     frozenPosition: {
         [length: number]: Big;
     };
-    marginSum: Big;
+    positionMargin: Big;
 }
 
 export function makeEmptyMarginSnapshot(): MarginSnapshot {
@@ -22,7 +22,7 @@ export function makeEmptyMarginSnapshot(): MarginSnapshot {
             [Length.SHORT]: new Big(0),
         },
         frozenBalance: new Big(0),
-        marginSum: new Big(0),
+        positionMargin: new Big(0),
     }
 }
 
@@ -31,8 +31,7 @@ export interface MarginManagerProps {
     frozenPosition: {
         [length: number]: Big;
     };
-    marginSum: Big;
-    margin: Big;
+    positionMargin: Big;
     available: Big;
     closable: {
         [length: number]: Big;
@@ -40,7 +39,7 @@ export interface MarginManagerProps {
 }
 
 export class MarginManager extends Parent implements MarginManagerProps {
-    public marginSum: Big;
+    public positionMargin: Big;
     public frozenBalance: Big;
     public frozenPosition: {
         [length: number]: Big;
@@ -59,7 +58,7 @@ export class MarginManager extends Parent implements MarginManagerProps {
             [Length.LONG]: new Big(snapshot.frozenPosition[Length.LONG]),
             [Length.SHORT]: new Big(snapshot.frozenPosition[Length.SHORT]),
         };
-        this.marginSum = new Big(snapshot.marginSum);
+        this.positionMargin = new Big(snapshot.positionMargin);
     }
 
     /** @returns 可直接 JSON 序列化 */
@@ -67,7 +66,7 @@ export class MarginManager extends Parent implements MarginManagerProps {
         return {
             frozenPosition: this.frozenPosition,
             frozenBalance: this.frozenBalance,
-            marginSum: this.marginSum,
+            positionMargin: this.positionMargin,
         };
     }
 
@@ -77,12 +76,11 @@ export class MarginManager extends Parent implements MarginManagerProps {
 
     public toJSON(): MarginManagerProps {
         return {
-            margin: this.margin,
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
-            marginSum: this.marginSum,
+            positionMargin: this.positionMargin,
         }
     }
 }

@@ -92,27 +92,20 @@ Texchange 会在每次开仓和平仓时调用你的 `calcMarginIncrement` 和 `
 #### 商品期货
 
 ```ts
-function calcMarginIncrement(
-    config: MarketConfig & AccountConfig,
-    price: Big,
-    volume: Big,
-): Big {
+function calcPositionMarginIncrement(): Big {
     return new Big(0);
 };
-function calcMarginDecrement(
-    config: MarketConfig & AccountConfig,
-    assets: ExAssets,
-    volume: Big,
-): Big {
+function calcPositionMarginDecrement(): Big {
     return new Big(0);
 }
-function calcPositionMargin(
-    config: MarketConfig & AccountConfig,
-    assets: Omit<ExAssets, 'margin' | 'reserve'>,
-    settlementPrice: Big,
+function revisePositionMargin({
+    spec: MarketSpec & AccountSpec,
+    position: Assets['position'],
+    cost: Assets['cost'],
+    clearingPrice: Big,
     latestPrice: Big,
-    autoMargin: Big,
-): Big {
+    marginSum: Big,
+}): Big {
     const cost = this.assets.cost[LONG].plus(this.assets.cost[SHORT]);
     return cost.div(config.leverage);
 }

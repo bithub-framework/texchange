@@ -4,6 +4,8 @@ import { OpenOrder, Positions, Balances } from './interfaces';
 import { EventEmitter } from 'events';
 declare abstract class Texchange extends Parent {
     /** @override */
+    protected clear(): void;
+    /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder;
     getPositions(): Positions;
     getBalances(): Balances;

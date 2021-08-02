@@ -2,21 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginManager = void 0;
 class MarginManager {
-    get margin() {
-        return this.config.revisePositionMargin({
-            spec: this.config,
-            position: this.equity.position,
-            cost: this.equity.cost,
-            clearingPrice: this.getClearingPrice(),
-            latestPrice: this.getLatestPrice(),
-            marginSum: this.marginSum,
-        }).round(this.config.CURRENCY_DP);
+    incPositionMargin(increment) {
+        this.positionMargin = this.positionMargin.plus(increment);
     }
-    incMargin(increment) {
-        this.marginSum = this.marginSum.plus(increment);
+    decPositionMargin(decrement) {
+        this.positionMargin = this.positionMargin.minus(decrement);
     }
-    decMargin(decrement) {
-        this.marginSum = this.marginSum.minus(decrement);
+    setPositionMargin(positionMargin) {
+        this.positionMargin = positionMargin;
     }
 }
 exports.MarginManager = MarginManager;

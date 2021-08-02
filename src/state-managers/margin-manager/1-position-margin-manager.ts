@@ -1,34 +1,19 @@
-import {
-    Config,
-} from '../../interfaces';
 import Big from 'big.js';
-import { EquityManager } from '../equity-manager';
 
 
 export abstract class MarginManager {
-    public abstract marginSum: Big;
-    protected abstract config: Config;
-    protected abstract getClearingPrice: () => Big;
-    protected abstract getLatestPrice: () => Big;
-    protected abstract equity: EquityManager;
+    public abstract positionMargin: Big;
 
-    public get margin(): Big {
-        return this.config.revisePositionMargin({
-            spec: this.config,
-            position: this.equity.position,
-            cost: this.equity.cost,
-            clearingPrice: this.getClearingPrice(),
-            latestPrice: this.getLatestPrice(),
-            marginSum: this.marginSum,
-        }).round(this.config.CURRENCY_DP);
+    public incPositionMargin(increment: Big) {
+        this.positionMargin = this.positionMargin.plus(increment);
     }
 
-    public incMargin(increment: Big) {
-        this.marginSum = this.marginSum.plus(increment);
+    public decPositionMargin(decrement: Big) {
+        this.positionMargin = this.positionMargin.minus(decrement);
     }
 
-    public decMargin(decrement: Big) {
-        this.marginSum = this.marginSum.minus(decrement);
+    public setPositionMargin(positionMargin: Big) {
+        this.positionMargin = positionMargin;
     }
 
     // public decMargin(volume: Big) {
