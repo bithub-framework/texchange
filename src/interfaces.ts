@@ -18,6 +18,14 @@ import { AssetsSnapshot } from './state-managers/auto-assets';
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
+
+export interface Margin {
+    frozenBalance: Big;
+    frozenPosition: {
+        [length: number]: Big;
+    };
+}
+
 export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;

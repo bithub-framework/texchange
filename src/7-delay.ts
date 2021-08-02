@@ -1,7 +1,7 @@
 import {
     Texchange as Core,
     Events,
-} from './5-snapshot';
+} from './6-snapshot';
 import {
     LimitOrder,
     Amendment,
