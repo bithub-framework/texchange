@@ -1,13 +1,14 @@
-import { Texchange as Parent, Events } from './3-taken';
-import { LimitOrder, UnidentifiedTrade, OpenOrder } from './interfaces';
-import { EquityManager } from './state-managers/equity-manager';
+import { Texchange as Parent, Events } from './4-equity';
+import { UnidentifiedTrade, OpenOrder } from './interfaces';
+import { MarginManager } from './state-managers/margin-manager/main';
 declare abstract class Texchange extends Parent {
-    protected abstract equity: EquityManager;
-    protected abstract settle(): void;
+    protected abstract pushPositionsAndBalances(): void;
+    protected abstract margin: MarginManager;
     /** @override */
     protected validateOrder(order: OpenOrder): void;
+    /** @override */
     protected enoughPosition(order: OpenOrder): void;
-    protected singleLength(order: LimitOrder): void;
+    private enoughAvailable;
     /** @override */
     protected makeOpenOrder(order: OpenOrder): OpenOrder;
     /** @override */

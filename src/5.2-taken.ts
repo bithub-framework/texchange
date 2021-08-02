@@ -1,7 +1,7 @@
 import {
     Texchange as Parent,
     Events,
-} from './4.1-making';
+} from './5.1-making';
 import { min } from './min';
 import {
     UnidentifiedTrade,
@@ -9,10 +9,11 @@ import {
     OpenMaker,
 } from './interfaces';
 import Big from 'big.js';
-import assert = require('assert');
 import { RoundingMode } from 'big.js';
 
 abstract class Texchange extends Parent {
+
+    /** @override */
     protected uTradeTakesOpenMaker(
         uTrade: UnidentifiedTrade,
         maker: OpenMaker,
@@ -23,11 +24,11 @@ abstract class Texchange extends Parent {
         uTrade.quantity = uTrade.quantity.minus(volume);
         const toThaw = this.makers.takeOrder(maker.id, volume, dollarVolume);
 
-        this.assets.thaw(toThaw);
+        this.margin.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (maker.operation === Operation.OPEN) {
-            this.assets.incMargin(this.config.calcMarginIncrement({
+            this.margin.incMargin(this.config.calcMarginIncrement({
                 spec: this.config,
                 orderPrice: maker.price,
                 volume,
@@ -35,42 +36,22 @@ abstract class Texchange extends Parent {
                 settlementPrice: this.settlementPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
-            this.assets.openPosition(
+            this.equity.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
         } else {
-            this.assets.decMargin(this.config.calcMarginDecrement({
+            this.margin.decMargin(this.config.calcMarginDecrement({
                 spec: this.config,
-                position: this.assets.position,
-                cost: this.assets.cost,
+                position: this.equity.position,
+                cost: this.equity.cost,
                 volume,
-                marginSum: this.assets.marginSum,
+                marginSum: this.margin.marginSum,
             }).round(this.config.CURRENCY_DP));
-            this.assets.closePosition(
+            this.equity.closePosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
         }
         return volume;
-    }
-
-    /** @override */
-    public updateTrades(uTrades: UnidentifiedTrade[]): void {
-        for (const uTrade of uTrades)
-            assert(uTrade.time === this.now());
-        this.pushUTrades(uTrades);
-        for (let uTrade of uTrades) {
-            this.settlementPrice = new Big(0)
-                .plus(this.settlementPrice.times(.9))
-                .plus(uTrade.price.times(.1))
-                .round(this.config.PRICE_DP);
-            this.latestPrice = uTrade.price;
-        }
-
-        let totalVolume = new Big(0);
-        for (let uTrade of uTrades) {
-            const volume = this.uTradeTakesOpenMakers(uTrade);
-            totalVolume = totalVolume.plus(volume);
-        }
     }
 }
 

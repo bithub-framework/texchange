@@ -1,18 +1,20 @@
 import {
     Texchange as Parent,
     Events,
-} from './4-assets';
+} from './5-margin';
 import {
     Snapshot,
     Config,
 } from './interfaces';
 import { OpenMakerManager } from './state-managers/open-maker-manager';
-import { AssetsManager } from './state-managers/assets-manager';
+import { EquityManager } from './state-managers/equity-manager';
+import { MarginManager } from './state-managers/margin-manager/main';
 
 
 class Texchange extends Parent {
     protected makers: OpenMakerManager;
-    protected assets: AssetsManager;
+    protected equity: EquityManager;
+    protected margin: MarginManager;
 
     constructor(
         config: Config,
@@ -26,11 +28,16 @@ class Texchange extends Parent {
             () => this.settlementPrice,
             () => this.latestPrice,
         );
-        this.assets = new AssetsManager(
+        this.equity = new EquityManager(
             config,
-            snapshot.assets,
+            snapshot.equity,
+        );
+        this.margin = new MarginManager(
+            config,
+            snapshot.margin,
             () => this.settlementPrice,
             () => this.latestPrice,
+            this.equity,
         );
     }
 
@@ -39,7 +46,8 @@ class Texchange extends Parent {
         return {
             time: this.now(),
             openMakers: this.makers.capture(),
-            assets: this.assets.capture(),
+            equity: this.equity.capture(),
+            margin: this.margin.capture(),
         };
     }
 }

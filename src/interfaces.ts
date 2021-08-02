@@ -13,7 +13,8 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
-import { AssetsSnapshot } from './state-managers/auto-assets';
+import { EquitySnapshot } from './state-managers/equity-manager';
+import { MarginSnapshot } from './state-managers/margin-manager/main';
 
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
@@ -94,7 +95,8 @@ export interface Config extends MarketConfig, AccountConfig {
 export interface Snapshot {
     time: number;
     openMakers: OpenMakersSnapshot;
-    assets: AssetsSnapshot;
+    equity: EquitySnapshot;
+    margin: MarginSnapshot;
 }
 
 

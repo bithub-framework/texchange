@@ -15,7 +15,7 @@ export interface MarginSnapshot {
     marginSum: Big;
 }
 
-export function makeEmptyAssetsSnapshot(): MarginSnapshot {
+export function makeEmptyMarginSnapshot(): MarginSnapshot {
     return {
         frozenPosition: {
             [Length.LONG]: new Big(0),
@@ -62,6 +62,7 @@ export class MarginManager extends Parent implements MarginManagerProps {
         this.marginSum = new Big(snapshot.marginSum);
     }
 
+    /** @returns 可直接 JSON 序列化 */
     public capture(): MarginSnapshot {
         return {
             frozenPosition: this.frozenPosition,

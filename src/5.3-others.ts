@@ -1,46 +1,22 @@
 import {
     Texchange as Parent,
-    Events as ParentEvent,
-} from './4.2-taken';
+    Events as ParentEvents,
+} from './5.2-taken';
 import {
     OpenOrder,
     clone,
-    Length,
     Positions,
     Balances,
 } from './interfaces';
 import { EventEmitter } from 'events';
-import Big from 'big.js';
 
 abstract class Texchange extends Parent {
-    protected settle(): void {
-        const position = clone(this.assets.position);
-        for (const length of [Length.LONG, Length.SHORT] as const) {
-            const settlementDollarVolume =
-                this.config.calcDollarVolume(
-                    this.settlementPrice,
-                    position[length],
-                ).round(this.config.CURRENCY_DP);
-            this.assets.closePosition(
-                length,
-                position[length],
-                settlementDollarVolume,
-                new Big(0),
-            );
-            this.assets.openPosition(
-                length,
-                position[length],
-                settlementDollarVolume,
-                new Big(0),
-            );
-        }
-    }
 
     /** @override */
     protected cancelOpenOrder(order: OpenOrder): OpenOrder {
         const filled = this.makers.get(order.id)?.filled || order.quantity;
         const toThaw = this.makers.removeOrder(order.id);
-        if (toThaw) this.assets.thaw(toThaw);
+        if (toThaw) this.margin.thaw(toThaw);
         return {
             price: order.price,
             quantity: order.quantity,
@@ -56,8 +32,8 @@ abstract class Texchange extends Parent {
     public getPositions(): Positions {
         this.settle();
         const positions = {
-            position: this.assets.position,
-            closable: this.assets.closable,
+            position: this.equity.position,
+            closable: this.margin.closable,
             time: this.now(),
         };
         return clone(positions);
@@ -66,8 +42,8 @@ abstract class Texchange extends Parent {
     public getBalances(): Balances {
         this.settle();
         const balances = {
-            balance: this.assets.balance,
-            available: this.assets.available,
+            balance: this.equity.balance,
+            available: this.margin.available,
             time: this.now(),
         };
         return clone(balances);
@@ -76,13 +52,13 @@ abstract class Texchange extends Parent {
     protected pushPositionsAndBalances(): void {
         this.settle();
         const positions: Positions = {
-            position: this.assets.position,
-            closable: this.assets.closable,
+            position: this.equity.position,
+            closable: this.margin.closable,
             time: this.now(),
         };
         const balances: Balances = {
-            balance: this.assets.balance,
-            available: this.assets.available,
+            balance: this.equity.balance,
+            available: this.margin.available,
             time: this.now(),
         };
         this.emit('positions', clone(positions));
@@ -90,7 +66,7 @@ abstract class Texchange extends Parent {
     }
 }
 
-interface Events extends ParentEvent {
+interface Events extends ParentEvents {
     positions: [Positions];
     balances: [Balances];
 }

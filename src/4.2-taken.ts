@@ -13,6 +13,8 @@ import assert = require('assert');
 import { RoundingMode } from 'big.js';
 
 abstract class Texchange extends Parent {
+
+    /** @override */
     protected uTradeTakesOpenMaker(
         uTrade: UnidentifiedTrade,
         maker: OpenMaker,
@@ -21,32 +23,16 @@ abstract class Texchange extends Parent {
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);
-        const toThaw = this.makers.takeOrder(maker.id, volume, dollarVolume);
+        this.makers.takeOrder(maker.id, volume, dollarVolume);
 
-        this.assets.thaw(toThaw);
         const makerFee = dollarVolume.times(this.config.MAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (maker.operation === Operation.OPEN) {
-            this.assets.incMargin(this.config.calcMarginIncrement({
-                spec: this.config,
-                orderPrice: maker.price,
-                volume,
-                dollarVolume,
-                settlementPrice: this.settlementPrice,
-                latestPrice: this.latestPrice,
-            }).round(this.config.CURRENCY_DP));
-            this.assets.openPosition(
+            this.equity.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
         } else {
-            this.assets.decMargin(this.config.calcMarginDecrement({
-                spec: this.config,
-                position: this.assets.position,
-                cost: this.assets.cost,
-                volume,
-                marginSum: this.assets.marginSum,
-            }).round(this.config.CURRENCY_DP));
-            this.assets.closePosition(
+            this.equity.closePosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
         }

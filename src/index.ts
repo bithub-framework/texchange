@@ -9,9 +9,13 @@ export {
     Snapshot,
 } from './interfaces';
 export {
-    AssetsSnapshot,
-    makeEmptyAssetsSnapshot,
-} from './state-managers/auto-assets';
+    EquitySnapshot,
+    makeEmptyEquitySnapshot
+} from './state-managers/equity-manager';
+export {
+    MarginSnapshot,
+    makeEmptyMarginSnapshot,
+} from './state-managers/margin-manager/main';
 export {
     OpenMakerManager,
     makeEmptyOpenMakersSnapshot,

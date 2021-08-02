@@ -1,66 +1,42 @@
-import {
-    Texchange as Parent,
-    Events,
-} from './4-equity';
-import {
-    UnidentifiedTrade,
-    Operation,
-    OpenOrder,
-    OpenMaker,
-    Side,
-} from './interfaces';
-import Big from 'big.js';
-import { RoundingMode } from 'big.js';
-import { MarginManager } from './state-managers/margin-manager/main';
-import assert = require('assert');
-import { min } from './min';
-
-
-abstract class Texchange extends Parent {
-    protected abstract pushPositionsAndBalances(): void;
-    protected abstract margin: MarginManager;
-
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Texchange = void 0;
+const _4_equity_1 = require("./4-equity");
+const interfaces_1 = require("./interfaces");
+const big_js_1 = require("big.js");
+const assert = require("assert");
+const min_1 = require("./min");
+class Texchange extends _4_equity_1.Texchange {
     /** @override */
-    protected validateOrder(order: OpenOrder) {
+    validateOrder(order) {
         this.formatCorrect(order);
         this.enoughPosition(order);
-        if (this.config.ONE_WAY_POSITION) this.singleLength(order);
+        if (this.config.ONE_WAY_POSITION)
+            this.singleLength(order);
         // 暂只支持实时结算
         this.settle();
         this.enoughAvailable(order);
     }
-
     /** @override */
-    protected enoughPosition(order: OpenOrder) {
-        if (order.operation === Operation.CLOSE)
-            assert(
-                order.unfilled.lte(new Big(0)
-                    .plus(this.equity.position[order.length])
-                    .minus(this.margin.frozenPosition[order.length])
-                ),
-            );
+    enoughPosition(order) {
+        if (order.operation === interfaces_1.Operation.CLOSE)
+            assert(order.unfilled.lte(new big_js_1.default(0)
+                .plus(this.equity.position[order.length])
+                .minus(this.margin.frozenPosition[order.length])));
     }
-
-    private enoughAvailable(order: OpenOrder) {
-        if (order.operation === Operation.OPEN)
-            assert(new Big(0)
+    enoughAvailable(order) {
+        if (order.operation === interfaces_1.Operation.OPEN)
+            assert(new big_js_1.default(0)
                 .plus(this.config.calcInitialMargin({
-                    spec: this.config,
-                    order,
-                    settlementPrice: this.settlementPrice,
-                    latestPrice: this.latestPrice,
-                })).plus(
-                    this.config.calcDollarVolume(
-                        order.price, order.unfilled,
-                    ).times(this.config.TAKER_FEE_RATE),
-                ).round(this.config.CURRENCY_DP)
-                .lte(this.margin.available),
-            );
+                spec: this.config,
+                order,
+                settlementPrice: this.settlementPrice,
+                latestPrice: this.latestPrice,
+            })).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
+                .lte(this.margin.available));
     }
-
     /** @override */
-    protected makeOpenOrder(order: OpenOrder): OpenOrder {
+    makeOpenOrder(order) {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
         if (uTrades.length) {
@@ -70,21 +46,16 @@ abstract class Texchange extends Parent {
         }
         return order;
     }
-
     /** @override */
-    protected orderTakes(taker: OpenOrder): UnidentifiedTrade[] {
-        const uTrades: UnidentifiedTrade[] = [];
-        let volume = new Big(0);
-        let dollarVolume = new Big(0);
+    orderTakes(taker) {
+        const uTrades = [];
+        let volume = new big_js_1.default(0);
+        let dollarVolume = new big_js_1.default(0);
         const orderbook = this.book.getBook();
         for (const maker of orderbook[-taker.side])
-            if (
-                (
-                    taker.side === Side.BID && taker.price.gte(maker.price) ||
-                    taker.side === Side.ASK && taker.price.lte(maker.price)
-                ) && taker.unfilled.gt(0)
-            ) {
-                const quantity = min(taker.unfilled, maker.quantity);
+            if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
+                taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
+                const quantity = min_1.min(taker.unfilled, maker.quantity);
                 uTrades.push({
                     side: taker.side,
                     price: maker.price,
@@ -100,10 +71,9 @@ abstract class Texchange extends Parent {
                     .round(this.config.CURRENCY_DP);
             }
         this.book.apply();
-
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
-            .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
-        if (taker.operation === Operation.OPEN) {
+            .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
+        if (taker.operation === interfaces_1.Operation.OPEN) {
             this.margin.incMargin(this.config.calcMarginIncrement({
                 spec: this.config,
                 orderPrice: taker.price,
@@ -112,10 +82,9 @@ abstract class Texchange extends Parent {
                 settlementPrice: this.settlementPrice,
                 latestPrice: this.latestPrice,
             }).round(this.config.CURRENCY_DP));
-            this.equity.openPosition(
-                taker.length, volume, dollarVolume, takerFee,
-            );
-        } else {
+            this.equity.openPosition(taker.length, volume, dollarVolume, takerFee);
+        }
+        else {
             this.margin.decMargin(this.config.calcMarginDecrement({
                 spec: this.config,
                 position: this.equity.position,
@@ -123,18 +92,13 @@ abstract class Texchange extends Parent {
                 volume,
                 marginSum: this.margin.marginSum,
             }).round(this.config.CURRENCY_DP));
-            this.equity.closePosition(
-                taker.length, volume, dollarVolume, takerFee,
-            );
+            this.equity.closePosition(taker.length, volume, dollarVolume, takerFee);
         }
         return uTrades;
     }
-
     /** @override */
-    protected orderMakes(
-        openOrder: OpenOrder,
-    ): void {
-        const openMaker: OpenMaker = {
+    orderMakes(openOrder) {
+        const openMaker = {
             price: openOrder.price,
             quantity: openOrder.quantity,
             side: openOrder.side,
@@ -143,7 +107,7 @@ abstract class Texchange extends Parent {
             filled: openOrder.filled,
             unfilled: openOrder.unfilled,
             id: openOrder.id,
-            behind: new Big(0),
+            behind: new big_js_1.default(0),
         };
         const orderbook = this.book.getBook();
         for (const maker of orderbook[openOrder.side])
@@ -153,8 +117,5 @@ abstract class Texchange extends Parent {
         this.margin.freeze(toFreeze);
     }
 }
-
-export {
-    Texchange,
-    Events,
-}
+exports.Texchange = Texchange;
+//# sourceMappingURL=5.1-making.js.map

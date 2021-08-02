@@ -11,31 +11,16 @@ class Texchange extends _3_taken_1.Texchange {
     validateOrder(order) {
         this.formatCorrect(order);
         this.enoughPosition(order);
+        // TODO 支持 one way
         if (this.config.ONE_WAY_POSITION)
             this.singleLength(order);
-        // 暂只支持实时结算
-        this.settle();
-        this.enoughAvailable(order);
     }
     enoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
-            assert(order.unfilled.lte(new big_js_1.default(0)
-                .plus(this.assets.position[order.side * order.operation])
-                .minus(this.assets.frozenPosition[order.side * order.operation])));
+            assert(order.unfilled.lte(this.equity.position[order.length]));
     }
     singleLength(order) {
-        assert(this.assets.position[-order.length].eq(0));
-    }
-    enoughAvailable(order) {
-        if (order.operation === interfaces_1.Operation.OPEN)
-            assert(new big_js_1.default(0)
-                .plus(this.config.calcInitialMargin({
-                spec: this.config,
-                order,
-                settlementPrice: this.settlementPrice,
-                latestPrice: this.latestPrice,
-            })).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
-                .lte(this.assets.available));
+        assert(this.equity.position[-order.length].eq(0));
     }
     /** @override */
     makeOpenOrder(order) {
@@ -44,7 +29,6 @@ class Texchange extends _3_taken_1.Texchange {
         if (uTrades.length) {
             this.pushUTrades(uTrades);
             this.pushOrderbook();
-            this.pushPositionsAndBalances();
         }
         return order;
     }
@@ -76,25 +60,10 @@ class Texchange extends _3_taken_1.Texchange {
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === interfaces_1.Operation.OPEN) {
-            this.assets.incMargin(this.config.calcMarginIncrement({
-                spec: this.config,
-                orderPrice: taker.price,
-                volume,
-                dollarVolume,
-                settlementPrice: this.settlementPrice,
-                latestPrice: this.latestPrice,
-            }).round(this.config.CURRENCY_DP));
-            this.assets.openPosition(taker.length, volume, dollarVolume, takerFee);
+            this.equity.openPosition(taker.length, volume, dollarVolume, takerFee);
         }
         else {
-            this.assets.decMargin(this.config.calcMarginDecrement({
-                spec: this.config,
-                position: this.assets.position,
-                cost: this.assets.cost,
-                volume,
-                marginSum: this.assets.marginSum,
-            }).round(this.config.CURRENCY_DP));
-            this.assets.closePosition(taker.length, volume, dollarVolume, takerFee);
+            this.equity.closePosition(taker.length, volume, dollarVolume, takerFee);
         }
         return uTrades;
     }
@@ -115,8 +84,7 @@ class Texchange extends _3_taken_1.Texchange {
         for (const maker of orderbook[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        const toFreeze = this.makers.addOrder(openMaker);
-        this.assets.freeze(toFreeze);
+        this.makers.addOrder(openMaker);
     }
 }
 exports.Texchange = Texchange;

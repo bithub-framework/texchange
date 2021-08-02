@@ -64,6 +64,7 @@ export class EquityManager implements EquityManagerProps {
         };
     }
 
+    /** @returns 可直接 JSON 序列化 */
     public capture(): EquitySnapshot {
         return {
             position: this.position,

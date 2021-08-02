@@ -2,8 +2,15 @@ export * from 'interfaces';
 import { Trade, Positions, Balances, LimitOrder, OpenMaker, Orderbook, MarketSpec, AccountSpec, ContextMarketApiLike, ContextAccountApiLike } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
-import { AssetsSnapshot } from './state-managers/auto-assets';
+import { EquitySnapshot } from './state-managers/equity-manager';
+import { MarginSnapshot } from './state-managers/margin-manager/main';
 export declare type UnidentifiedTrade = Omit<Trade, 'id'>;
+export interface Margin {
+    frozenBalance: Big;
+    frozenPosition: {
+        [length: number]: Big;
+    };
+}
 export interface Assets extends Omit<Positions & Balances, 'time'> {
     cost: {
         [length: number]: Big;
@@ -68,7 +75,8 @@ export interface Config extends MarketConfig, AccountConfig {
 export interface Snapshot {
     time: number;
     openMakers: OpenMakersSnapshot;
-    assets: AssetsSnapshot;
+    equity: EquitySnapshot;
+    margin: MarginSnapshot;
 }
 export interface Events {
     orderbook: [Orderbook];
