@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const _2_ordering_1 = require("./2-ordering");
 const interfaces_1 = require("./interfaces");
+const min_1 = require("./min");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Texchange extends _2_ordering_1.Texchange {
@@ -17,7 +18,7 @@ class Texchange extends _2_ordering_1.Texchange {
     }
     uTradeTakesOrderQueue(uTrade, maker) {
         if (uTrade.price.eq(maker.price)) {
-            const volume = interfaces_1.min(uTrade.quantity, maker.behind);
+            const volume = min_1.min(uTrade.quantity, maker.behind);
             uTrade.quantity = uTrade.quantity.minus(volume);
             maker.behind = maker.behind.minus(volume);
         }
@@ -25,7 +26,7 @@ class Texchange extends _2_ordering_1.Texchange {
             maker.behind = new big_js_1.default(0);
     }
     uTradeTakesOpenMaker(uTrade, maker) {
-        const volume = interfaces_1.min(uTrade.quantity, maker.unfilled);
+        const volume = min_1.min(uTrade.quantity, maker.unfilled);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);

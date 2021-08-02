@@ -5,6 +5,7 @@ const _3_taken_1 = require("./3-taken");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
+const min_1 = require("./min");
 class Texchange extends _3_taken_1.Texchange {
     /** @override */
     validateOrder(order) {
@@ -51,7 +52,7 @@ class Texchange extends _3_taken_1.Texchange {
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
-                const quantity = interfaces_1.min(taker.unfilled, maker.quantity);
+                const quantity = min_1.min(taker.unfilled, maker.quantity);
                 uTrades.push({
                     side: taker.side,
                     price: maker.price,

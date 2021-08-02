@@ -2,9 +2,9 @@ import {
     OpenOrder,
     Side, Operation, Length,
     UnidentifiedTrade,
-    min,
     OpenMaker,
 } from './interfaces';
+import { min } from './min';
 import Big from 'big.js';
 import assert = require('assert');
 import {

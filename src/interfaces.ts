@@ -10,7 +10,6 @@ import {
     AccountSpec,
     ContextMarketApiLike,
     ContextAccountApiLike,
-    OpenMaker,
 } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
@@ -39,30 +38,30 @@ export interface MarketConfig extends MarketSpec {
 
 export interface AccountConfig extends AccountSpec {
     calcInitialMargin: (
-        config: MarketSpec & AccountSpec,
+        spec: MarketSpec & AccountSpec,
         order: LimitOrder,
         settlementPrice: Big,
         latestPrice: Big,
     ) => Big,
     calcMarginIncrement: (
-        config: MarketSpec & AccountSpec,
+        spec: MarketSpec & AccountSpec,
         price: Big,
         volume: Big,
     ) => Big,
     calcMarginDecrement: (
-        config: MarketSpec & AccountSpec,
+        spec: MarketSpec & AccountSpec,
         assets: Assets,
         volume: Big,
     ) => Big,
     calcMargin: (
-        config: MarketSpec & AccountSpec,
+        spec: MarketSpec & AccountSpec,
         assets: Omit<Assets, 'margin' | 'reserve'>,
         settlementPrice: Big,
         latestPrice: Big,
         autoMargin: Big,
     ) => Big,
     calcFrozenMargin: (
-        config: MarketSpec & AccountSpec,
+        spec: MarketSpec & AccountSpec,
         order: OpenOrder,
         settlementPrice: Big,
         latestPrice: Big,
@@ -79,9 +78,6 @@ export interface Snapshot {
     assets: AssetsSnapshot;
 }
 
-export function min(...a: Big[]) {
-    return a.reduce((m, x) => m.lt(x) ? m : x);
-}
 
 export interface Events {
     orderbook: [Orderbook];

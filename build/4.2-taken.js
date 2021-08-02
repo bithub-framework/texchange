@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const _4_1_making_1 = require("./4.1-making");
+const min_1 = require("./min");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Texchange extends _4_1_making_1.Texchange {
     uTradeTakesOpenMaker(uTrade, maker) {
-        const volume = interfaces_1.min(uTrade.quantity, maker.unfilled);
+        const volume = min_1.min(uTrade.quantity, maker.unfilled);
         const dollarVolume = this.config.calcDollarVolume(maker.price, volume)
             .round(this.config.CURRENCY_DP);
         uTrade.quantity = uTrade.quantity.minus(volume);

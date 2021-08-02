@@ -21,11 +21,11 @@ export interface MarketConfig extends MarketSpec {
     initialLatestPrice: Big;
 }
 export interface AccountConfig extends AccountSpec {
-    calcInitialMargin: (config: MarketSpec & AccountSpec, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
-    calcMarginIncrement: (config: MarketSpec & AccountSpec, price: Big, volume: Big) => Big;
-    calcMarginDecrement: (config: MarketSpec & AccountSpec, assets: Assets, volume: Big) => Big;
-    calcMargin: (config: MarketSpec & AccountSpec, assets: Omit<Assets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
-    calcFrozenMargin: (config: MarketSpec & AccountSpec, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
+    calcInitialMargin: (spec: MarketSpec & AccountSpec, order: LimitOrder, settlementPrice: Big, latestPrice: Big) => Big;
+    calcMarginIncrement: (spec: MarketSpec & AccountSpec, price: Big, volume: Big) => Big;
+    calcMarginDecrement: (spec: MarketSpec & AccountSpec, assets: Assets, volume: Big) => Big;
+    calcMargin: (spec: MarketSpec & AccountSpec, assets: Omit<Assets, 'margin' | 'reserve'>, settlementPrice: Big, latestPrice: Big, autoMargin: Big) => Big;
+    calcFrozenMargin: (spec: MarketSpec & AccountSpec, order: OpenOrder, settlementPrice: Big, latestPrice: Big) => Big;
 }
 export interface Config extends MarketConfig, AccountConfig {
     marketName: string;
@@ -35,7 +35,6 @@ export interface Snapshot {
     openMakers: OpenMakersSnapshot;
     assets: AssetsSnapshot;
 }
-export declare function min(...a: Big[]): Big;
 export interface Events {
     orderbook: [Orderbook];
     trades: [Trade[]];

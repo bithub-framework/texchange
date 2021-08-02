@@ -9,12 +9,13 @@ import {
     OpenOrder,
     OpenMaker,
     Side,
-    min,
 } from './interfaces';
 import Big from 'big.js';
 import { RoundingMode } from 'big.js';
 import { AssetsManager } from './state-managers/assets-manager';
 import assert = require('assert');
+import { min } from './min';
+
 
 abstract class Texchange extends Parent {
     protected abstract assets: AssetsManager;

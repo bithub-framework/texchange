@@ -2,11 +2,11 @@ import {
     Texchange as Parent,
     Events,
 } from './4.1-making';
+import { min } from './min';
 import {
     UnidentifiedTrade,
     Operation,
     OpenMaker,
-    min,
 } from './interfaces';
 import Big from 'big.js';
 import assert = require('assert');

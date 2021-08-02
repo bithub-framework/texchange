@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const interfaces_1 = require("./interfaces");
+const min_1 = require("./min");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 const _2_1_interfaces_1 = require("./2.1-interfaces");
@@ -35,7 +36,7 @@ class Texchange extends _2_1_interfaces_1.Texchange {
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
-                const quantity = interfaces_1.min(taker.unfilled, maker.quantity);
+                const quantity = min_1.min(taker.unfilled, maker.quantity);
                 uTrades.push({
                     side: taker.side,
                     price: maker.price,

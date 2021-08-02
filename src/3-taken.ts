@@ -5,10 +5,10 @@ import {
 import {
     Side,
     UnidentifiedTrade,
-    min,
     OpenOrder,
     OpenMaker,
 } from './interfaces';
+import { min } from './min';
 import Big from 'big.js';
 import assert = require('assert');
 
