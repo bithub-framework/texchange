@@ -1,7 +1,10 @@
 import Big from 'big.js';
+import { Length } from '../../interfaces';
 export declare abstract class MarginManager {
-    abstract positionMargin: Big;
-    incPositionMargin(increment: Big): void;
-    decPositionMargin(decrement: Big): void;
-    setPositionMargin(positionMargin: Big): void;
+    abstract positionMargin: {
+        [length: number]: Big;
+    };
+    incPositionMargin(length: Length, increment: Big): void;
+    decPositionMargin(length: Length, decrement: Big): void;
+    setPositionMargin(length: Length, positionMargin: Big): void;
 }

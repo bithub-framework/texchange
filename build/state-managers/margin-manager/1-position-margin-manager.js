@@ -2,14 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginManager = void 0;
 class MarginManager {
-    incPositionMargin(increment) {
-        this.positionMargin = this.positionMargin.plus(increment);
+    incPositionMargin(length, increment) {
+        this.positionMargin[length] = this.positionMargin[length].plus(increment);
     }
-    decPositionMargin(decrement) {
-        this.positionMargin = this.positionMargin.minus(decrement);
+    decPositionMargin(length, decrement) {
+        this.positionMargin[length] = this.positionMargin[length].minus(decrement);
     }
-    setPositionMargin(positionMargin) {
-        this.positionMargin = positionMargin;
+    setPositionMargin(length, positionMargin) {
+        this.positionMargin[length] = positionMargin;
     }
 }
 exports.MarginManager = MarginManager;

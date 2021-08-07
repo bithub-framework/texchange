@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './4-equity.2-taken';
 import {
@@ -9,13 +9,13 @@ import {
 } from './interfaces';
 import Big from 'big.js';
 
-abstract class Texchange extends Parent {
-    protected clear(): void {
+abstract class Core extends Parent {
+    protected settle(): void {
         const position = clone(this.equity.position);
         for (const length of [Length.LONG, Length.SHORT] as const) {
             const clearingDollarVolume =
                 this.config.calcDollarVolume(
-                    this.clearingPrice,
+                    this.markPrice,
                     position[length],
                 ).round(this.config.CURRENCY_DP);
             this.equity.closePosition(
@@ -51,6 +51,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

@@ -8,11 +8,11 @@ import { min } from './min';
 import Big from 'big.js';
 import assert = require('assert');
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './2-ordering.1-interfaces';
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
     protected makeOpenOrder(order: OpenOrder): OpenOrder {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
@@ -106,6 +106,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

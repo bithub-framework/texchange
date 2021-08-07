@@ -2,9 +2,9 @@
 import { EventEmitter } from 'events';
 import { OrderbookManager } from './state-managers/orderbook-manager';
 import { Orderbook, Trade, UnidentifiedTrade, Config } from './interfaces';
-declare abstract class Texchange extends EventEmitter {
+declare abstract class Core extends EventEmitter {
     protected config: Config;
-    protected now: () => number;
+    now: () => number;
     protected tradeCount: number;
     protected book: OrderbookManager;
     constructor(config: Config, now: () => number);
@@ -19,10 +19,10 @@ interface Events {
     trades: [Trade[]];
     error: [Error];
 }
-interface Texchange extends EventEmitter {
+interface Core extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
-export { Texchange, Events, };
+export { Core, Events, };

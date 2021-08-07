@@ -1,20 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _4_equity_3_others_1 = require("./4-equity.3-others");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 const min_1 = require("./min");
-class Texchange extends _4_equity_3_others_1.Texchange {
+class Core extends _4_equity_3_others_1.Core {
     /** @override */
     validateOrder(order) {
         this.formatCorrect(order);
         this.assertEnoughPosition(order);
-        if (this.config.ONE_WAY_POSITION)
-            this.singleLength(order);
-        // 暂只支持实时结算
-        this.clear();
         this.assertEnoughAvailable(order);
     }
     /** @override */
@@ -27,11 +23,12 @@ class Texchange extends _4_equity_3_others_1.Texchange {
     assertEnoughAvailable(order) {
         if (order.operation === interfaces_1.Operation.OPEN)
             assert(new big_js_1.default(0)
-                .plus(this.config.calcInitialMargin({
+                .plus(this.config.calcFreezingMargin({
                 spec: this.config,
-                order,
-                clearingPrice: this.clearingPrice,
+                markPrice: this.markPrice,
                 latestPrice: this.latestPrice,
+                time: this.now(),
+                order,
             })).plus(this.config.calcDollarVolume(order.price, order.unfilled).times(this.config.TAKER_FEE_RATE)).round(this.config.CURRENCY_DP)
                 .lte(this.margin.available));
     }
@@ -74,23 +71,31 @@ class Texchange extends _4_equity_3_others_1.Texchange {
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, 3 /* RoundUp */);
         if (taker.operation === interfaces_1.Operation.OPEN) {
-            this.margin.incPositionMargin(this.config.calcPositionMarginIncrement({
+            this.margin.incPositionMargin(taker.length, this.config.calcPositionMarginIncrement({
                 spec: this.config,
-                orderPrice: taker.price,
+                markPrice: this.markPrice,
+                latestPrice: this.latestPrice,
+                time: this.now(),
                 volume,
                 dollarVolume,
-                clearingPrice: this.clearingPrice,
-                latestPrice: this.latestPrice,
+                order: taker,
             }).round(this.config.CURRENCY_DP));
             this.equity.openPosition(taker.length, volume, dollarVolume, takerFee);
         }
         else {
-            this.margin.decPositionMargin(this.config.calcPositionMarginDecrement({
+            this.margin.decPositionMargin(taker.length, this.config.calcPositionMarginDecrement({
                 spec: this.config,
+                latestPrice: this.latestPrice,
+                markPrice: this.markPrice,
+                time: this.now(),
+                volume,
+                dollarVolume,
                 position: this.equity.position,
                 cost: this.equity.cost,
-                volume,
-                marginSum: this.margin.positionMargin,
+                balance: this.equity.balance,
+                positionMargin: this.margin.positionMargin,
+                frozenBalance: this.margin.frozenBalance,
+                frozenPosition: this.margin.frozenPosition,
             }).round(this.config.CURRENCY_DP));
             this.equity.closePosition(taker.length, volume, dollarVolume, takerFee);
         }
@@ -117,5 +122,5 @@ class Texchange extends _4_equity_3_others_1.Texchange {
         this.margin.freeze(toFreeze);
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=5-margin.1-making.js.map

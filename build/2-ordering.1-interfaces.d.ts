@@ -1,11 +1,11 @@
-import { Texchange as Parent, Events } from './1-pushing';
+import { Core as Parent, Events } from './1-pushing';
 import { OpenOrder, LimitOrder, UnidentifiedTrade, Config, Amendment } from './interfaces';
 import Big from 'big.js';
 import { OpenMakerManager } from './state-managers/open-maker-manager';
-declare abstract class Texchange extends Parent {
+declare abstract class Core extends Parent {
     protected abstract makers: OpenMakerManager;
-    protected clearingPrice: Big;
-    protected latestPrice: Big;
+    markPrice: Big;
+    latestPrice: Big;
     protected orderCount: number;
     protected abstract validateOrder(order: OpenOrder): void;
     protected abstract makeOpenOrder(order: OpenOrder): OpenOrder;
@@ -18,4 +18,4 @@ declare abstract class Texchange extends Parent {
     /** @override */
     updateTrades(uTrades: UnidentifiedTrade[]): void;
 }
-export { Texchange, Events, };
+export { Core, Events, };

@@ -9,13 +9,13 @@ import {
 } from './interfaces';
 import assert = require('assert');
 
-abstract class Texchange extends EventEmitter {
+abstract class Core extends EventEmitter {
     protected tradeCount = 0;
     protected book: OrderbookManager;
 
     constructor(
         protected config: Config,
-        protected now: () => number,
+        public now: () => number,
     ) {
         super();
         this.book = new OrderbookManager(config, now);
@@ -60,7 +60,7 @@ interface Events {
     error: [Error];
 }
 
-interface Texchange extends EventEmitter {
+interface Core extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
@@ -68,6 +68,6 @@ interface Texchange extends EventEmitter {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

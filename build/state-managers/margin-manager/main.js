@@ -12,23 +12,28 @@ function makeEmptyMarginSnapshot() {
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
         },
         frozenBalance: new big_js_1.default(0),
-        positionMargin: new big_js_1.default(0),
+        positionMargin: {
+            [interfaces_1.Length.LONG]: new big_js_1.default(0),
+            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+        },
     };
 }
 exports.makeEmptyMarginSnapshot = makeEmptyMarginSnapshot;
 class MarginManager extends _2_freezing_margin_manager_1.MarginManager {
-    constructor(config, snapshot, getClearingPrice, getLatestPrice, equity) {
+    constructor(config, snapshot, equity, core) {
         super();
         this.config = config;
-        this.getClearingPrice = getClearingPrice;
-        this.getLatestPrice = getLatestPrice;
         this.equity = equity;
-        this.frozenBalance = new big_js_1.default(snapshot.frozenBalance);
+        this.core = core;
+        this.frozenBalance = snapshot.frozenBalance;
         this.frozenPosition = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.SHORT]),
+            [interfaces_1.Length.LONG]: snapshot.frozenPosition[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: snapshot.frozenPosition[interfaces_1.Length.SHORT],
         };
-        this.positionMargin = new big_js_1.default(snapshot.positionMargin);
+        this.positionMargin = {
+            [interfaces_1.Length.LONG]: snapshot.positionMargin[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: snapshot.positionMargin[interfaces_1.Length.SHORT],
+        };
     }
     /** @returns 可直接 JSON 序列化 */
     capture() {
@@ -39,16 +44,13 @@ class MarginManager extends _2_freezing_margin_manager_1.MarginManager {
         };
     }
     [util_1.inspect.custom]() {
-        return this.toJSON();
-    }
-    toJSON() {
-        return {
+        return JSON.stringify({
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
             positionMargin: this.positionMargin,
-        };
+        });
     }
 }
 exports.MarginManager = MarginManager;

@@ -1,26 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _5_margin_2_taken_1 = require("./5-margin.2-taken");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
-class Texchange extends _5_margin_2_taken_1.Texchange {
+class Core extends _5_margin_2_taken_1.Core {
     /** @override */
-    clear() {
+    settle() {
         const position = interfaces_1.clone(this.equity.position);
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            const clearingDollarVolume = this.config.calcDollarVolume(this.clearingPrice, position[length]).round(this.config.CURRENCY_DP);
+            const clearingDollarVolume = this.config.calcDollarVolume(this.markPrice, position[length]).round(this.config.CURRENCY_DP);
             this.equity.closePosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
             this.equity.openPosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
         }
-        this.margin.setPositionMargin(this.config.calcPositionMarginOnceClearing({
-            spec: this.config,
-            cost: this.equity.cost,
-            position: this.equity.position,
-            clearingPrice: this.clearingPrice,
-            latestPrice: this.latestPrice,
-            positionMargin: this.margin.positionMargin,
-        }));
+        for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT])
+            this.margin.setPositionMargin(length, this.config.calcPositionMarginOnSettlement({
+                spec: this.config,
+                latestPrice: this.latestPrice,
+                markPrice: this.markPrice,
+                balance: this.equity.balance,
+                cost: this.equity.cost,
+                position: this.equity.position,
+                positionMargin: this.margin.positionMargin,
+                frozenBalance: this.margin.frozenBalance,
+                frozenPosition: this.margin.frozenPosition,
+                time: this.now(),
+            }));
     }
     /** @override */
     cancelOpenOrder(order) {
@@ -40,7 +45,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         };
     }
     getPositions() {
-        this.clear();
+        this.settle();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -49,7 +54,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         return interfaces_1.clone(positions);
     }
     getBalances() {
-        this.clear();
+        this.settle();
         const balances = {
             balance: this.equity.balance,
             available: this.margin.available,
@@ -58,7 +63,7 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         return interfaces_1.clone(balances);
     }
     pushPositionsAndBalances() {
-        this.clear();
+        this.settle();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -73,5 +78,5 @@ class Texchange extends _5_margin_2_taken_1.Texchange {
         this.emit('balances', interfaces_1.clone(balances));
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=5-margin.3-others.js.map

@@ -1,7 +1,7 @@
-import { Texchange as Parent, Events } from './4-equity.3-others';
+import { Core as Parent, Events } from './4-equity.3-others';
 import { UnidentifiedTrade, OpenOrder } from './interfaces';
 import { MarginManager } from './state-managers/margin-manager/main';
-declare abstract class Texchange extends Parent {
+declare abstract class Core extends Parent {
     protected abstract pushPositionsAndBalances(): void;
     protected abstract margin: MarginManager;
     /** @override */
@@ -16,4 +16,4 @@ declare abstract class Texchange extends Parent {
     /** @override */
     protected orderMakes(openOrder: OpenOrder): void;
 }
-export { Texchange, Events, };
+export { Core, Events, };

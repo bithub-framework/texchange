@@ -6,15 +6,19 @@ import { MarginManager as Parent } from './2-freezing-margin-manager';
 import Big from 'big.js';
 import { inspect } from 'util';
 import { EquityManager } from '../equity-manager';
+import { Core } from '../../6-snapshot';
+
+
 
 export interface MarginSnapshot {
     frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;
     };
-    positionMargin: Big;
+    positionMargin: {
+        [length: number]: Big;
+    };
 }
-
 export function makeEmptyMarginSnapshot(): MarginSnapshot {
     return {
         frozenPosition: {
@@ -22,7 +26,10 @@ export function makeEmptyMarginSnapshot(): MarginSnapshot {
             [Length.SHORT]: new Big(0),
         },
         frozenBalance: new Big(0),
-        positionMargin: new Big(0),
+        positionMargin: {
+            [Length.LONG]: new Big(0),
+            [Length.SHORT]: new Big(0),
+        },
     }
 }
 
@@ -31,15 +38,15 @@ export interface MarginManagerProps {
     frozenPosition: {
         [length: number]: Big;
     };
-    positionMargin: Big;
-    available: Big;
-    closable: {
+    positionMargin: {
         [length: number]: Big;
-    }
+    };
 }
 
 export class MarginManager extends Parent implements MarginManagerProps {
-    public positionMargin: Big;
+    public positionMargin: {
+        [length: number]: Big;
+    };
     public frozenBalance: Big;
     public frozenPosition: {
         [length: number]: Big;
@@ -48,17 +55,19 @@ export class MarginManager extends Parent implements MarginManagerProps {
     constructor(
         protected config: Config,
         snapshot: MarginSnapshot,
-        protected getClearingPrice: () => Big,
-        protected getLatestPrice: () => Big,
         protected equity: EquityManager,
+        protected core: Core,
     ) {
         super();
-        this.frozenBalance = new Big(snapshot.frozenBalance);
+        this.frozenBalance = snapshot.frozenBalance;
         this.frozenPosition = {
-            [Length.LONG]: new Big(snapshot.frozenPosition[Length.LONG]),
-            [Length.SHORT]: new Big(snapshot.frozenPosition[Length.SHORT]),
+            [Length.LONG]: snapshot.frozenPosition[Length.LONG],
+            [Length.SHORT]: snapshot.frozenPosition[Length.SHORT],
         };
-        this.positionMargin = new Big(snapshot.positionMargin);
+        this.positionMargin = {
+            [Length.LONG]: snapshot.positionMargin[Length.LONG],
+            [Length.SHORT]: snapshot.positionMargin[Length.SHORT],
+        };
     }
 
     /** @returns 可直接 JSON 序列化 */
@@ -71,16 +80,12 @@ export class MarginManager extends Parent implements MarginManagerProps {
     }
 
     public [inspect.custom]() {
-        return this.toJSON();
-    }
-
-    public toJSON(): MarginManagerProps {
-        return {
+        return JSON.stringify({
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
             positionMargin: this.positionMargin,
-        }
+        });
     }
 }

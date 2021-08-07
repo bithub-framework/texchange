@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _4_equity_1_making_1 = require("./4-equity.1-making");
 const min_1 = require("./min");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Texchange extends _4_equity_1_making_1.Texchange {
+class Core extends _4_equity_1_making_1.Core {
     /** @override */
     uTradeTakesOpenMaker(uTrade, maker) {
         const volume = min_1.min(uTrade.quantity, maker.unfilled);
@@ -30,8 +30,8 @@ class Texchange extends _4_equity_1_making_1.Texchange {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.clearingPrice = new big_js_1.default(0)
-                .plus(this.clearingPrice.times(.9))
+            this.markPrice = new big_js_1.default(0)
+                .plus(this.markPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
@@ -43,5 +43,5 @@ class Texchange extends _4_equity_1_making_1.Texchange {
         }
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=4-equity.2-taken.js.map

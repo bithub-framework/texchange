@@ -7,6 +7,7 @@ import {
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
+import { Core } from '../6-snapshot';
 
 export interface Frozen {
     balance: Big;
@@ -29,8 +30,7 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
     constructor(
         private config: Config,
         snapshot: OpenMakersSnapshot,
-        private getClearingPrice: () => Big,
-        private getLatestPrice: () => Big,
+        private core: Core,
     ) {
         super();
         for (const { order, frozen } of snapshot) {
@@ -52,9 +52,10 @@ export class OpenMakerManager extends Map<OrderId, OpenMaker>{
             balance: order.operation === Operation.OPEN
                 ? this.config.calcFreezingMargin({
                     spec: this.config,
-                    maker: order,
-                    clearingPrice: this.getClearingPrice(),
-                    latestPrice: this.getLatestPrice(),
+                    order,
+                    markPrice: this.core.markPrice,
+                    latestPrice: this.core.latestPrice,
+                    time: this.core.now(),
                 }).round(this.config.CURRENCY_DP)
                 : new Big(0),
             position: order.operation === Operation.CLOSE

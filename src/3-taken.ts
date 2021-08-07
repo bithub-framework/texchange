@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './2-ordering.2-implements';
 import {
@@ -12,7 +12,7 @@ import { min } from './min';
 import Big from 'big.js';
 import assert = require('assert');
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
     protected uTradeShouldTakeOpenOrder(
         trade: UnidentifiedTrade, maker: OpenOrder,
     ): boolean {
@@ -71,8 +71,8 @@ abstract class Texchange extends Parent {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.clearingPrice = new Big(0)
-                .plus(this.clearingPrice.times(.9))
+            this.markPrice = new Big(0)
+                .plus(this.markPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
@@ -87,6 +87,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

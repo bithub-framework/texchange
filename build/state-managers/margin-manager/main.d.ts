@@ -4,12 +4,15 @@ import { MarginManager as Parent } from './2-freezing-margin-manager';
 import Big from 'big.js';
 import { inspect } from 'util';
 import { EquityManager } from '../equity-manager';
+import { Core } from '../../6-snapshot';
 export interface MarginSnapshot {
     frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;
     };
-    positionMargin: Big;
+    positionMargin: {
+        [length: number]: Big;
+    };
 }
 export declare function makeEmptyMarginSnapshot(): MarginSnapshot;
 export interface MarginManagerProps {
@@ -17,25 +20,23 @@ export interface MarginManagerProps {
     frozenPosition: {
         [length: number]: Big;
     };
-    positionMargin: Big;
-    available: Big;
-    closable: {
+    positionMargin: {
         [length: number]: Big;
     };
 }
 export declare class MarginManager extends Parent implements MarginManagerProps {
     protected config: Config;
-    protected getClearingPrice: () => Big;
-    protected getLatestPrice: () => Big;
     protected equity: EquityManager;
-    positionMargin: Big;
+    protected core: Core;
+    positionMargin: {
+        [length: number]: Big;
+    };
     frozenBalance: Big;
     frozenPosition: {
         [length: number]: Big;
     };
-    constructor(config: Config, snapshot: MarginSnapshot, getClearingPrice: () => Big, getLatestPrice: () => Big, equity: EquityManager);
+    constructor(config: Config, snapshot: MarginSnapshot, equity: EquityManager, core: Core);
     /** @returns 可直接 JSON 序列化 */
     capture(): MarginSnapshot;
-    [inspect.custom](): MarginManagerProps;
-    toJSON(): MarginManagerProps;
+    [inspect.custom](): string;
 }

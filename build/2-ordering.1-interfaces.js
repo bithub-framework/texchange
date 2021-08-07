@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _1_pushing_1 = require("./1-pushing");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Texchange extends _1_pushing_1.Texchange {
+class Core extends _1_pushing_1.Core {
     constructor(config, now) {
         super(config, now);
         this.orderCount = 0;
-        this.clearingPrice = config.initialClearingPrice;
+        this.markPrice = config.initialMarkPrice;
         this.latestPrice = config.initialLatestPrice;
     }
     makeOrders(orders) {
@@ -63,13 +63,13 @@ class Texchange extends _1_pushing_1.Texchange {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.clearingPrice = new big_js_1.default(0)
-                .plus(this.clearingPrice.times(.9))
+            this.markPrice = new big_js_1.default(0)
+                .plus(this.markPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
         }
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=2-ordering.1-interfaces.js.map

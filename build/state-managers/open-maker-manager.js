@@ -9,11 +9,10 @@ function makeEmptyOpenMakersSnapshot() {
 }
 exports.makeEmptyOpenMakersSnapshot = makeEmptyOpenMakersSnapshot;
 class OpenMakerManager extends Map {
-    constructor(config, snapshot, getClearingPrice, getLatestPrice) {
+    constructor(config, snapshot, core) {
         super();
         this.config = config;
-        this.getClearingPrice = getClearingPrice;
-        this.getLatestPrice = getLatestPrice;
+        this.core = core;
         this.frozens = new Map();
         for (const { order, frozen } of snapshot) {
             this.set(order.id, order);
@@ -32,9 +31,10 @@ class OpenMakerManager extends Map {
             balance: order.operation === interfaces_1.Operation.OPEN
                 ? this.config.calcFreezingMargin({
                     spec: this.config,
-                    maker: order,
-                    clearingPrice: this.getClearingPrice(),
-                    latestPrice: this.getLatestPrice(),
+                    order,
+                    markPrice: this.core.markPrice,
+                    latestPrice: this.core.latestPrice,
+                    time: this.core.now(),
                 }).round(this.config.CURRENCY_DP)
                 : new big_js_1.default(0),
             position: order.operation === interfaces_1.Operation.CLOSE

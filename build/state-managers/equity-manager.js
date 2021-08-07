@@ -58,14 +58,11 @@ class EquityManager {
             .minus(fee);
     }
     [util_1.inspect.custom]() {
-        return this.toJSON();
-    }
-    toJSON() {
-        return {
+        return JSON.stringify({
             balance: this.balance,
             cost: this.cost,
             position: this.position,
-        };
+        });
     }
 }
 exports.EquityManager = EquityManager;

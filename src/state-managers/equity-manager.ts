@@ -108,14 +108,10 @@ export class EquityManager implements EquityManagerProps {
     }
 
     public [inspect.custom]() {
-        return this.toJSON();
-    }
-
-    public toJSON(): EquityManagerProps {
-        return {
+        return JSON.stringify({
             balance: this.balance,
             cost: this.cost,
             position: this.position,
-        }
+        });
     }
 }

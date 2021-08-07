@@ -1,5 +1,6 @@
 import { OrderId, Config, Length, OpenMaker } from '../interfaces';
 import Big from 'big.js';
+import { Core } from '../6-snapshot';
 export interface Frozen {
     balance: Big;
     position: Big;
@@ -12,10 +13,9 @@ export declare type OpenMakersSnapshot = {
 export declare function makeEmptyOpenMakersSnapshot(): OpenMakersSnapshot;
 export declare class OpenMakerManager extends Map<OrderId, OpenMaker> {
     private config;
-    private getClearingPrice;
-    private getLatestPrice;
+    private core;
     private frozens;
-    constructor(config: Config, snapshot: OpenMakersSnapshot, getClearingPrice: () => Big, getLatestPrice: () => Big);
+    constructor(config: Config, snapshot: OpenMakersSnapshot, core: Core);
     capture(): OpenMakersSnapshot;
     addOrder(order: OpenMaker): Frozen;
     takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;

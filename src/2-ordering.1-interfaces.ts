@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './1-pushing';
 import {
@@ -14,10 +14,10 @@ import Big from 'big.js';
 import assert = require('assert');
 import { OpenMakerManager } from './state-managers/open-maker-manager';
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
     protected abstract makers: OpenMakerManager;
-    protected clearingPrice: Big;
-    protected latestPrice;
+    public markPrice: Big;
+    public latestPrice;
     protected orderCount = 0;
 
     protected abstract validateOrder(order: OpenOrder): void;
@@ -29,7 +29,7 @@ abstract class Texchange extends Parent {
         now: () => number,
     ) {
         super(config, now);
-        this.clearingPrice = config.initialClearingPrice;
+        this.markPrice = config.initialMarkPrice;
         this.latestPrice = config.initialLatestPrice;
     }
 
@@ -86,8 +86,8 @@ abstract class Texchange extends Parent {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.clearingPrice = new Big(0)
-                .plus(this.clearingPrice.times(.9))
+            this.markPrice = new Big(0)
+                .plus(this.markPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
@@ -96,6 +96,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

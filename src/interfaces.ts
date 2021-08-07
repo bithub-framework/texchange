@@ -6,6 +6,7 @@ import {
     LimitOrder,
     OpenMaker,
     Orderbook,
+    OpenOrder,
     MarketSpec,
     AccountSpec,
     ContextMarketApiLike,
@@ -13,68 +14,77 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 import { OpenMakersSnapshot } from './state-managers/open-maker-manager';
-import { EquitySnapshot, EquityManager } from './state-managers/equity-manager';
-import { MarginSnapshot } from './state-managers/margin-manager/main';
+import { EquitySnapshot, EquityManagerProps } from './state-managers/equity-manager';
+import { MarginSnapshot, MarginManagerProps } from './state-managers/margin-manager/main';
 
 
 export type UnidentifiedTrade = Omit<Trade, 'id'>;
 
-
-export interface Margin {
-    frozenBalance: Big;
-    frozenPosition: {
-        [length: number]: Big;
-    };
-}
-
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
-    initialClearingPrice: Big;
+    initialMarkPrice: Big;
     initialLatestPrice: Big;
 }
 
+
+
+
+interface Spec {
+    spec: MarketSpec & AccountSpec;
+}
+interface MarketInfo {
+    time: number;
+    markPrice: Big;
+    latestPrice: Big;
+}
+interface TradesInfo {
+    volume: Big;
+    dollarVolume: Big;
+}
+
 export interface AccountConfig extends AccountSpec {
-    calcInitialMargin: (args: {
-        spec: MarketSpec & AccountSpec;
-        order: LimitOrder;
-        clearingPrice: Big;
-        latestPrice: Big;
-    }) => Big;
-    calcPositionMarginIncrement: (args: {
-        spec: MarketSpec & AccountSpec;
-        orderPrice: Big;
-        volume: Big;
-        dollarVolume: Big;
-        clearingPrice: Big;
-        latestPrice: Big;
-    }) => Big;
-    calcPositionMarginDecrement: (args: {
-        spec: MarketSpec & AccountSpec;
-        position: EquityManager['position'];
-        cost: EquityManager['cost'];
-        volume: Big;
-        marginSum: Big;
-    }) => Big;
-    calcFreezingMargin: (args: {
-        spec: MarketSpec & AccountSpec;
-        maker: OpenMaker;
-        clearingPrice: Big;
-        latestPrice: Big;
-    }) => Big;
-    calcPositionMarginOnceClearing: (args: {
-        spec: MarketSpec & AccountSpec;
-        position: EquityManager['position'];
-        cost: EquityManager['cost'];
-        clearingPrice: Big;
-        latestPrice: Big;
-        positionMargin: Big;
-    }) => Big;
-    shouldBeCompulsorilyLiquidated: (args: {
-        spec: MarketSpec & AccountSpec;
-        clearingPrice: Big;
-        latestPrice: Big;
-    }) => boolean;
+    calcInitialMargin: (ctx:
+        Spec &
+        MarketInfo &
+        { order: LimitOrder }
+    ) => Big;
+    calcPositionMarginIncrement: (ctx:
+        Spec &
+        MarketInfo &
+        TradesInfo &
+        { order: OpenOrder }
+    ) => Big;
+    calcPositionMarginDecrement: (ctx:
+        Spec &
+        MarketInfo &
+        TradesInfo &
+        EquityManagerProps &
+        MarginManagerProps
+    ) => Big;
+    calcFreezingMargin: (ctx:
+        Spec &
+        MarketInfo &
+        { order: OpenMaker | LimitOrder }
+    ) => Big;
+    calcPositionMarginOnSettlement: (ctx:
+        Spec &
+        MarketInfo &
+        EquityManagerProps &
+        MarginManagerProps
+    ) => Big;
+    shouldBeCompulsorilyLiquidated: (ctx:
+        Spec &
+        MarketInfo &
+        EquityManagerProps &
+        MarginManagerProps
+    ) => boolean;
+    calcTotalPositionMargin: (ctx:
+        Spec &
+        MarketInfo &
+        EquityManagerProps &
+        MarginManagerProps
+    ) => Big;
 }
 
 export interface Config extends MarketConfig, AccountConfig {

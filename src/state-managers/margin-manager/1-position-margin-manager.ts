@@ -1,19 +1,34 @@
 import Big from 'big.js';
+import {
+    Length,
+} from '../../interfaces';
+
 
 
 export abstract class MarginManager {
-    public abstract positionMargin: Big;
+    public abstract positionMargin: {
+        [length: number]: Big;
+    };
 
-    public incPositionMargin(increment: Big) {
-        this.positionMargin = this.positionMargin.plus(increment);
+    public incPositionMargin(
+        length: Length,
+        increment: Big,
+    ) {
+        this.positionMargin[length] = this.positionMargin[length].plus(increment);
     }
 
-    public decPositionMargin(decrement: Big) {
-        this.positionMargin = this.positionMargin.minus(decrement);
+    public decPositionMargin(
+        length: Length,
+        decrement: Big,
+    ) {
+        this.positionMargin[length] = this.positionMargin[length].minus(decrement);
     }
 
-    public setPositionMargin(positionMargin: Big) {
-        this.positionMargin = positionMargin;
+    public setPositionMargin(
+        length: Length,
+        positionMargin: Big,
+    ) {
+        this.positionMargin[length] = positionMargin;
     }
 
     // public decMargin(volume: Big) {

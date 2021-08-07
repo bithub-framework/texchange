@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events as ParentEvents,
 } from './5-margin.2-taken';
 import {
@@ -13,15 +13,15 @@ import { EventEmitter } from 'events';
 import Big from 'big.js';
 
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
 
     /** @override */
-    protected clear(): void {
+    protected settle(): void {
         const position = clone(this.equity.position);
         for (const length of [Length.LONG, Length.SHORT] as const) {
             const clearingDollarVolume =
                 this.config.calcDollarVolume(
-                    this.clearingPrice,
+                    this.markPrice,
                     position[length],
                 ).round(this.config.CURRENCY_DP);
             this.equity.closePosition(
@@ -37,16 +37,23 @@ abstract class Texchange extends Parent {
                 new Big(0),
             );
         }
-        this.margin.setPositionMargin(
-            this.config.calcPositionMarginOnceClearing({
-                spec: this.config,
-                cost: this.equity.cost,
-                position: this.equity.position,
-                clearingPrice: this.clearingPrice,
-                latestPrice: this.latestPrice,
-                positionMargin: this.margin.positionMargin,
-            })
-        );
+
+        for (const length of [Length.LONG, Length.SHORT] as const)
+            this.margin.setPositionMargin(
+                length,
+                this.config.calcPositionMarginOnSettlement({
+                    spec: this.config,
+                    latestPrice: this.latestPrice,
+                    markPrice: this.markPrice,
+                    balance: this.equity.balance,
+                    cost: this.equity.cost,
+                    position: this.equity.position,
+                    positionMargin: this.margin.positionMargin,
+                    frozenBalance: this.margin.frozenBalance,
+                    frozenPosition: this.margin.frozenPosition,
+                    time: this.now(),
+                })
+            );
     }
 
     /** @override */
@@ -67,7 +74,7 @@ abstract class Texchange extends Parent {
     }
 
     public getPositions(): Positions {
-        this.clear();
+        this.settle();
         const positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -77,7 +84,7 @@ abstract class Texchange extends Parent {
     }
 
     public getBalances(): Balances {
-        this.clear();
+        this.settle();
         const balances = {
             balance: this.equity.balance,
             available: this.margin.available,
@@ -87,7 +94,7 @@ abstract class Texchange extends Parent {
     }
 
     protected pushPositionsAndBalances(): void {
-        this.clear();
+        this.settle();
         const positions: Positions = {
             position: this.equity.position,
             closable: this.margin.closable,
@@ -108,7 +115,7 @@ interface Events extends ParentEvents {
     balances: [Balances];
 }
 
-interface Texchange extends EventEmitter {
+interface Core extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
@@ -116,6 +123,6 @@ interface Texchange extends EventEmitter {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

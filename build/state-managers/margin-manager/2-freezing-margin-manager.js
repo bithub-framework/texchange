@@ -6,7 +6,18 @@ const _1_position_margin_manager_1 = require("./1-position-margin-manager");
 class MarginManager extends _1_position_margin_manager_1.MarginManager {
     get available() {
         return this.equity.balance
-            .minus(this.positionMargin)
+            .minus(this.config.calcTotalPositionMargin({
+            spec: this.config,
+            latestPrice: this.core.latestPrice,
+            markPrice: this.core.markPrice,
+            time: this.core.now(),
+            position: this.equity.position,
+            cost: this.equity.cost,
+            balance: this.equity.balance,
+            positionMargin: this.positionMargin,
+            frozenBalance: this.frozenBalance,
+            frozenPosition: this.frozenPosition,
+        }))
             .minus(this.frozenBalance);
     }
     get closable() {

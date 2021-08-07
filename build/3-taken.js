@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _2_ordering_2_implements_1 = require("./2-ordering.2-implements");
 const interfaces_1 = require("./interfaces");
 const min_1 = require("./min");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Texchange extends _2_ordering_2_implements_1.Texchange {
+class Core extends _2_ordering_2_implements_1.Core {
     uTradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === interfaces_1.Side.BID &&
             trade.side === interfaces_1.Side.ASK &&
@@ -55,8 +55,8 @@ class Texchange extends _2_ordering_2_implements_1.Texchange {
             assert(uTrade.time === this.now());
         this.pushUTrades(uTrades);
         for (let uTrade of uTrades) {
-            this.clearingPrice = new big_js_1.default(0)
-                .plus(this.clearingPrice.times(.9))
+            this.markPrice = new big_js_1.default(0)
+                .plus(this.markPrice.times(.9))
                 .plus(uTrade.price.times(.1))
                 .round(this.config.PRICE_DP);
             this.latestPrice = uTrade.price;
@@ -68,5 +68,5 @@ class Texchange extends _2_ordering_2_implements_1.Texchange {
         }
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=3-taken.js.map

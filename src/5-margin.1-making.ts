@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './4-equity.3-others';
 import {
@@ -16,7 +16,7 @@ import assert = require('assert');
 import { min } from './min';
 
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
     protected abstract pushPositionsAndBalances(): void;
     protected abstract margin: MarginManager;
 
@@ -25,9 +25,6 @@ abstract class Texchange extends Parent {
     protected validateOrder(order: OpenOrder) {
         this.formatCorrect(order);
         this.assertEnoughPosition(order);
-        if (this.config.ONE_WAY_POSITION) this.singleLength(order);
-        // 暂只支持实时结算
-        this.clear();
         this.assertEnoughAvailable(order);
     }
 
@@ -45,11 +42,12 @@ abstract class Texchange extends Parent {
     private assertEnoughAvailable(order: OpenOrder) {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
-                .plus(this.config.calcInitialMargin({
+                .plus(this.config.calcFreezingMargin({
                     spec: this.config,
-                    order,
-                    clearingPrice: this.clearingPrice,
+                    markPrice: this.markPrice,
                     latestPrice: this.latestPrice,
+                    time: this.now(),
+                    order,
                 })).plus(
                     this.config.calcDollarVolume(
                         order.price, order.unfilled,
@@ -104,25 +102,39 @@ abstract class Texchange extends Parent {
         const takerFee = dollarVolume.times(this.config.TAKER_FEE_RATE)
             .round(this.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === Operation.OPEN) {
-            this.margin.incPositionMargin(this.config.calcPositionMarginIncrement({
-                spec: this.config,
-                orderPrice: taker.price,
-                volume,
-                dollarVolume,
-                clearingPrice: this.clearingPrice,
-                latestPrice: this.latestPrice,
-            }).round(this.config.CURRENCY_DP));
+            this.margin.incPositionMargin(
+                taker.length,
+                this.config.calcPositionMarginIncrement({
+                    spec: this.config,
+                    markPrice: this.markPrice,
+                    latestPrice: this.latestPrice,
+                    time: this.now(),
+                    volume,
+                    dollarVolume,
+                    order: taker,
+                }).round(this.config.CURRENCY_DP),
+            );
             this.equity.openPosition(
                 taker.length, volume, dollarVolume, takerFee,
             );
         } else {
-            this.margin.decPositionMargin(this.config.calcPositionMarginDecrement({
-                spec: this.config,
-                position: this.equity.position,
-                cost: this.equity.cost,
-                volume,
-                marginSum: this.margin.positionMargin,
-            }).round(this.config.CURRENCY_DP));
+            this.margin.decPositionMargin(
+                taker.length,
+                this.config.calcPositionMarginDecrement({
+                    spec: this.config,
+                    latestPrice: this.latestPrice,
+                    markPrice: this.markPrice,
+                    time: this.now(),
+                    volume,
+                    dollarVolume,
+                    position: this.equity.position,
+                    cost: this.equity.cost,
+                    balance: this.equity.balance,
+                    positionMargin: this.margin.positionMargin,
+                    frozenBalance: this.margin.frozenBalance,
+                    frozenPosition: this.margin.frozenPosition,
+                }).round(this.config.CURRENCY_DP),
+            );
             this.equity.closePosition(
                 taker.length, volume, dollarVolume, takerFee,
             );
@@ -155,6 +167,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

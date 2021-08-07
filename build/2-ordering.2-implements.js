@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const interfaces_1 = require("./interfaces");
 const min_1 = require("./min");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 const _2_ordering_1_interfaces_1 = require("./2-ordering.1-interfaces");
-class Texchange extends _2_ordering_1_interfaces_1.Texchange {
+class Core extends _2_ordering_1_interfaces_1.Core {
     makeOpenOrder(order) {
         const uTrades = this.orderTakes(order);
         this.orderMakes(order);
@@ -87,5 +87,5 @@ class Texchange extends _2_ordering_1_interfaces_1.Texchange {
         };
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=2-ordering.2-implements.js.map

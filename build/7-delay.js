@@ -8,7 +8,7 @@ class Texchange extends events_1.EventEmitter {
         super();
         this.config = config;
         this.sleep = sleep;
-        this.core = new _6_snapshot_1.Texchange(config, snapshot, now);
+        this.core = new _6_snapshot_1.Core(config, snapshot, now);
         ({
             PRICE_DP: this.PRICE_DP,
             CURRENCY_DP: this.CURRENCY_DP,
@@ -19,7 +19,6 @@ class Texchange extends events_1.EventEmitter {
             LEVERAGE: this.LEVERAGE,
             TAKER_FEE_RATE: this.TAKER_FEE_RATE,
             MAKER_FEE_RATE: this.MAKER_FEE_RATE,
-            ONE_WAY_POSITION: this.ONE_WAY_POSITION,
         } = config);
         this.core.on('error', err => void this.emit('error', err));
         this.core.on('orderbook', async (orderbook) => {

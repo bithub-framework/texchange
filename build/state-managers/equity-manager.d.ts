@@ -35,6 +35,5 @@ export declare class EquityManager implements EquityManagerProps {
     capture(): EquitySnapshot;
     openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
     closePosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
-    [inspect.custom](): EquityManagerProps;
-    toJSON(): EquityManagerProps;
+    [inspect.custom](): string;
 }

@@ -1,5 +1,5 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './5-margin.3-others';
 import {
@@ -11,7 +11,7 @@ import { EquityManager } from './state-managers/equity-manager';
 import { MarginManager } from './state-managers/margin-manager/main';
 
 
-class Texchange extends Parent {
+class Core extends Parent {
     protected makers: OpenMakerManager;
     protected equity: EquityManager;
     protected margin: MarginManager;
@@ -25,8 +25,7 @@ class Texchange extends Parent {
         this.makers = new OpenMakerManager(
             config,
             snapshot.openMakers,
-            () => this.clearingPrice,
-            () => this.latestPrice,
+            this,
         );
         this.equity = new EquityManager(
             config,
@@ -35,9 +34,8 @@ class Texchange extends Parent {
         this.margin = new MarginManager(
             config,
             snapshot.margin,
-            () => this.clearingPrice,
-            () => this.latestPrice,
             this.equity,
+            this,
         );
     }
 
@@ -53,6 +51,6 @@ class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

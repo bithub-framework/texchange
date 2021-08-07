@@ -1,9 +1,8 @@
 import {
-    Texchange as Parent,
+    Core as Parent,
     Events,
 } from './3-taken';
 import {
-    LimitOrder,
     UnidentifiedTrade,
     Operation,
     OpenOrder,
@@ -17,17 +16,15 @@ import { min } from './min';
 import { EquityManager } from './state-managers/equity-manager';
 
 
-abstract class Texchange extends Parent {
+abstract class Core extends Parent {
     protected abstract equity: EquityManager;
-    protected abstract clear(): void;
+    protected abstract settle(): void;
 
 
     /** @override */
     protected validateOrder(order: OpenOrder) {
         this.formatCorrect(order);
         this.assertEnoughPosition(order);
-        // TODO 支持 one way
-        if (this.config.ONE_WAY_POSITION) this.singleLength(order);
     }
 
     protected assertEnoughPosition(order: OpenOrder) {
@@ -35,10 +32,6 @@ abstract class Texchange extends Parent {
             assert(
                 order.unfilled.lte(this.equity.position[order.length]),
             );
-    }
-
-    protected singleLength(order: LimitOrder) {
-        assert(this.equity.position[-order.length].eq(0));
     }
 
     /** @override */
@@ -120,6 +113,6 @@ abstract class Texchange extends Parent {
 }
 
 export {
-    Texchange,
+    Core,
     Events,
 }

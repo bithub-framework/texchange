@@ -1,26 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const _3_taken_1 = require("./3-taken");
 const interfaces_1 = require("./interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 const min_1 = require("./min");
-class Texchange extends _3_taken_1.Texchange {
+class Core extends _3_taken_1.Core {
     /** @override */
     validateOrder(order) {
         this.formatCorrect(order);
         this.assertEnoughPosition(order);
-        // TODO 支持 one way
-        if (this.config.ONE_WAY_POSITION)
-            this.singleLength(order);
     }
     assertEnoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
             assert(order.unfilled.lte(this.equity.position[order.length]));
-    }
-    singleLength(order) {
-        assert(this.equity.position[-order.length].eq(0));
     }
     /** @override */
     makeOpenOrder(order) {
@@ -87,5 +81,5 @@ class Texchange extends _3_taken_1.Texchange {
         this.makers.addOrder(openMaker);
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=4-equity.1-making.js.map

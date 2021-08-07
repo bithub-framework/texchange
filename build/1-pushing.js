@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = void 0;
+exports.Core = void 0;
 const events_1 = require("events");
 const orderbook_manager_1 = require("./state-managers/orderbook-manager");
 const interfaces_1 = require("./interfaces");
 const assert = require("assert");
-class Texchange extends events_1.EventEmitter {
+class Core extends events_1.EventEmitter {
     constructor(config, now) {
         super();
         this.config = config;
@@ -41,5 +41,5 @@ class Texchange extends events_1.EventEmitter {
         this.emit('orderbook', interfaces_1.clone(this.book.getBook()));
     }
 }
-exports.Texchange = Texchange;
+exports.Core = Core;
 //# sourceMappingURL=1-pushing.js.map
