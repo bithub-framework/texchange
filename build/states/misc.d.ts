@@ -1,6 +1,7 @@
 import { Startable } from 'startable';
 import Big from 'big.js';
 import { DatabaseTrade, StateLike } from '../interfaces';
+import { Core } from '../core';
 export interface Snapshot {
     latestPrice: Big;
     latestDatabaseTradeId: string;
@@ -8,12 +9,13 @@ export interface Snapshot {
     userOrderCount: number;
 }
 export declare class StateMisc extends Startable implements StateLike<Snapshot> {
+    private core;
     latestPrice?: Big;
     private latestDatabaseTradeId?;
     private mutex;
     userTradeCount: number;
     userOrderCount: number;
-    constructor(snapshotString?: string);
+    constructor(core: Core, snapshot?: Snapshot);
     protected _start(): Promise<void>;
     protected _stop(): Promise<void>;
     updateDatabaseTrade(trade: DatabaseTrade): void;

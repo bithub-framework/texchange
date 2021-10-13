@@ -57,8 +57,8 @@ export class Core extends Startable implements ExchangeLike {
             margin: new StateMargin(this, snapshot.margin),
             makers: new StateMakers(this, snapshot.makers),
             orderbook: new StateOrderbook(this),
-            mtm: new StateMtm(snapshot.mtm),
-            misc: new StateMisc(snapshot.misc),
+            mtm: new StateMtm(this, snapshot.mtm),
+            misc: new StateMisc(this, snapshot.misc),
         };
         this.interfaces = {
             instant: new InterfaceInstant(this),

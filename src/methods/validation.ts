@@ -30,7 +30,7 @@ export class MethodsValidation {
     private assertEnoughAvailable(order: OpenOrder) {
         if (order.operation === Operation.OPEN)
             assert(new Big(0)
-                .plus(this.core.calculation.freezingMargin(order))
+                .plus(this.core.calculation.balanceToFreeze(order))
                 .plus(
                     this.core.calculation.dollarVolume(
                         order.price, order.unfilled,

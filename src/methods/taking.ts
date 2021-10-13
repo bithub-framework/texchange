@@ -46,22 +46,18 @@ export class MethodsTaking {
         const takerFee = dollarVolume.times(this.core.config.TAKER_FEE_RATE)
             .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === Operation.OPEN) {
-            this.core.states.margin.incPositionMargin(
-                taker.length,
-                this.core.calculation.positionMarginIncrement(
+            this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
+                .plus(this.core.calculation.marginIncrement(
                     taker, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP),
-            );
+                ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.openPosition(
                 taker.length, volume, dollarVolume, takerFee,
             );
         } else {
-            this.core.states.margin.decPositionMargin(
-                taker.length,
-                this.core.calculation.positionMarginDecrement(
+            this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
+                .minus(this.core.calculation.marginDecrement(
                     taker, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP),
-            );
+                ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.closePosition(
                 taker.length, volume, dollarVolume, takerFee,
             );

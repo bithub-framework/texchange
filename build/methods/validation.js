@@ -22,7 +22,7 @@ class MethodsValidation {
     assertEnoughAvailable(order) {
         if (order.operation === interfaces_1.Operation.OPEN)
             assert(new big_js_1.default(0)
-                .plus(this.core.calculation.freezingMargin(order))
+                .plus(this.core.calculation.balanceToFreeze(order))
                 .plus(this.core.calculation.dollarVolume(order.price, order.unfilled).times(this.core.config.TAKER_FEE_RATE)).round(this.core.config.CURRENCY_DP)
                 .lte(this.core.states.margin.available));
     }

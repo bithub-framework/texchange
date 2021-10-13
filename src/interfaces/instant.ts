@@ -95,7 +95,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public getPositions(): Positions {
-        this.core.clearing.clear();
+        this.core.clearing.settle();
         const positions = {
             position: this.core.states.assets.position,
             closable: this.core.states.margin.closable,
@@ -105,7 +105,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public getBalances(): Balances {
-        this.core.clearing.clear();
+        this.core.clearing.settle();
         const balances = {
             balance: this.core.states.assets.balance,
             available: this.core.states.margin.available,

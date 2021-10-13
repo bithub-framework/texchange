@@ -4,13 +4,13 @@ exports.StateMisc = void 0;
 const startable_1 = require("startable");
 const coroutine_locks_1 = require("coroutine-locks");
 class StateMisc extends startable_1.Startable {
-    constructor(snapshotString) {
+    constructor(core, snapshot) {
         super();
+        this.core = core;
         this.mutex = new coroutine_locks_1.Mutex();
         this.userTradeCount = 0;
         this.userOrderCount = 0;
-        if (snapshotString) {
-            const snapshot = JSON.parse(snapshotString);
+        if (snapshot) {
             this.latestPrice = snapshot.latestPrice;
             this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
             this.userTradeCount = snapshot.userTradeCount;

@@ -22,7 +22,9 @@ export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
 }
-export interface AccountConfig extends AccountSpec { }
+export interface AccountConfig extends AccountSpec {
+    initialBalance: Big;
+}
 export interface Config extends MarketConfig, AccountConfig {
     marketName: string;
 }

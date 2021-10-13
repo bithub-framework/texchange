@@ -9,20 +9,16 @@ import { Core } from '../core';
 
 
 export interface Snapshot {
+    [length: number]: Big;
     frozenBalance: Big;
     frozenPosition: {
-        [length: number]: Big;
-    };
-    positionMargin: {
         [length: number]: Big;
     };
 }
 
 
 export class StateMargin implements StateLike<Snapshot> {
-    public positionMargin: {
-        [length: number]: Big;
-    };
+    [length: number]: Big;
     public frozenBalance: Big;
     public frozenPosition: {
         [length: number]: Big;
@@ -37,36 +33,35 @@ export class StateMargin implements StateLike<Snapshot> {
             [Length.LONG]: snapshot.frozenPosition[Length.LONG],
             [Length.SHORT]: snapshot.frozenPosition[Length.SHORT],
         };
-        this.positionMargin = {
-            [Length.LONG]: snapshot.positionMargin[Length.LONG],
-            [Length.SHORT]: snapshot.positionMargin[Length.SHORT],
-        };
+
+        this[Length.LONG] = snapshot[Length.LONG];
+        this[Length.SHORT] = snapshot[Length.SHORT];
     }
 
-    public incPositionMargin(
-        length: Length,
-        increment: Big,
-    ) {
-        this.positionMargin[length] = this.positionMargin[length].plus(increment);
-    }
+    // public incPositionMargin(
+    //     length: Length,
+    //     increment: Big,
+    // ) {
+    //     this[length] = this[length].plus(increment);
+    // }
 
-    public decPositionMargin(
-        length: Length,
-        decrement: Big,
-    ) {
-        this.positionMargin[length] = this.positionMargin[length].minus(decrement);
-    }
+    // public decPositionMargin(
+    //     length: Length,
+    //     decrement: Big,
+    // ) {
+    //     this[length] = this[length].minus(decrement);
+    // }
 
-    public setPositionMargin(
-        length: Length,
-        positionMargin: Big,
-    ) {
-        this.positionMargin[length] = positionMargin;
-    }
+    // public setPositionMargin(
+    //     length: Length,
+    //     positionMargin: Big,
+    // ) {
+    //     this[length] = positionMargin;
+    // }
 
     public get available(): Big {
         return this.core.states.assets.balance
-            .minus(this.core.calculation.totalPositionMargin())
+            .minus(this.core.calculation.totalMargin())
             .minus(this.frozenBalance);
 
     }
@@ -80,11 +75,11 @@ export class StateMargin implements StateLike<Snapshot> {
         };
     }
 
-    public freeze(frozen: Frozen) {
-        this.frozenBalance = this.frozenBalance.plus(frozen.balance);
-        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);
-        if (this.available.lt(0) || this.closable[frozen.length].lt(0)) {
-            this.thaw(frozen);
+    public freeze(toFreeze: Frozen) {
+        this.frozenBalance = this.frozenBalance.plus(toFreeze.balance);
+        this.frozenPosition[toFreeze.length] = this.frozenPosition[toFreeze.length].plus(toFreeze.position);
+        if (this.available.lt(0) || this.closable[toFreeze.length].lt(0)) {
+            this.thaw(toFreeze);
             throw new Error('No enough to freeze');
         }
     }
@@ -102,17 +97,19 @@ export class StateMargin implements StateLike<Snapshot> {
         return {
             frozenPosition: this.frozenPosition,
             frozenBalance: this.frozenBalance,
-            positionMargin: this.positionMargin,
+            [Length.LONG]: this[Length.LONG],
+            [Length.SHORT]: this[Length.SHORT],
         };
     }
 
     public [inspect.custom]() {
         return JSON.stringify({
+            [Length.LONG]: this[Length.LONG],
+            [Length.SHORT]: this[Length.SHORT],
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
-            positionMargin: this.positionMargin,
         });
     }
 }

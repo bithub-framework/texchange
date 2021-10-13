@@ -25,10 +25,9 @@ class MethodsOrdering {
         const trades = this.core.taking.orderTakes(order);
         this.core.making.orderMakes(order);
         if (trades.length) {
-            for (const trade of trades)
-                this.core.states.mtm.updateTrade(trade);
             this.core.interfaces.instant.pushTrades(trades);
             this.core.interfaces.instant.pushOrderbook();
+            this.core.states.mtm.updateTrades(trades);
             this.core.interfaces.instant.pushPositionsAndBalances();
         }
         return order;

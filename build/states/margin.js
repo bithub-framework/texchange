@@ -11,23 +11,30 @@ class StateMargin {
             [interfaces_1.Length.LONG]: snapshot.frozenPosition[interfaces_1.Length.LONG],
             [interfaces_1.Length.SHORT]: snapshot.frozenPosition[interfaces_1.Length.SHORT],
         };
-        this.positionMargin = {
-            [interfaces_1.Length.LONG]: snapshot.positionMargin[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: snapshot.positionMargin[interfaces_1.Length.SHORT],
-        };
+        this[interfaces_1.Length.LONG] = snapshot[interfaces_1.Length.LONG];
+        this[interfaces_1.Length.SHORT] = snapshot[interfaces_1.Length.SHORT];
     }
-    incPositionMargin(length, increment) {
-        this.positionMargin[length] = this.positionMargin[length].plus(increment);
-    }
-    decPositionMargin(length, decrement) {
-        this.positionMargin[length] = this.positionMargin[length].minus(decrement);
-    }
-    setPositionMargin(length, positionMargin) {
-        this.positionMargin[length] = positionMargin;
-    }
+    // public incPositionMargin(
+    //     length: Length,
+    //     increment: Big,
+    // ) {
+    //     this[length] = this[length].plus(increment);
+    // }
+    // public decPositionMargin(
+    //     length: Length,
+    //     decrement: Big,
+    // ) {
+    //     this[length] = this[length].minus(decrement);
+    // }
+    // public setPositionMargin(
+    //     length: Length,
+    //     positionMargin: Big,
+    // ) {
+    //     this[length] = positionMargin;
+    // }
     get available() {
         return this.core.states.assets.balance
-            .minus(this.core.calculation.totalPositionMargin())
+            .minus(this.core.calculation.totalMargin())
             .minus(this.frozenBalance);
     }
     get closable() {
@@ -38,11 +45,11 @@ class StateMargin {
                 .minus(this.frozenPosition[interfaces_1.Length.SHORT]),
         };
     }
-    freeze(frozen) {
-        this.frozenBalance = this.frozenBalance.plus(frozen.balance);
-        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].plus(frozen.position);
-        if (this.available.lt(0) || this.closable[frozen.length].lt(0)) {
-            this.thaw(frozen);
+    freeze(toFreeze) {
+        this.frozenBalance = this.frozenBalance.plus(toFreeze.balance);
+        this.frozenPosition[toFreeze.length] = this.frozenPosition[toFreeze.length].plus(toFreeze.position);
+        if (this.available.lt(0) || this.closable[toFreeze.length].lt(0)) {
+            this.thaw(toFreeze);
             throw new Error('No enough to freeze');
         }
     }
@@ -58,16 +65,18 @@ class StateMargin {
         return {
             frozenPosition: this.frozenPosition,
             frozenBalance: this.frozenBalance,
-            positionMargin: this.positionMargin,
+            [interfaces_1.Length.LONG]: this[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT],
         };
     }
     [util_1.inspect.custom]() {
         return JSON.stringify({
+            [interfaces_1.Length.LONG]: this[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT],
             frozenBalance: this.frozenBalance,
             frozenPosition: this.frozenPosition,
             available: this.available,
             closable: this.closable,
-            positionMargin: this.positionMargin,
         });
     }
 }

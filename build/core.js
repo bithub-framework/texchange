@@ -36,8 +36,8 @@ class Core extends startable_1.Startable {
             margin: new margin_1.StateMargin(this, snapshot.margin),
             makers: new makers_1.StateMakers(this, snapshot.makers),
             orderbook: new orderbook_1.StateOrderbook(this),
-            mtm: new mtm_1.StateMtm(snapshot.mtm),
-            misc: new misc_1.StateMisc(snapshot.misc),
+            mtm: new mtm_1.StateMtm(this, snapshot.mtm),
+            misc: new misc_1.StateMisc(this, snapshot.misc),
         };
         this.interfaces = {
             instant: new instant_1.InterfaceInstant(this),

@@ -21,17 +21,29 @@ exports.makeEmptyAssetsSnapshot = makeEmptyAssetsSnapshot;
 class StateAssets {
     constructor(core, snapshot) {
         this.core = core;
-        this.balance = new big_js_1.default(snapshot.balance);
-        this.position = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
-        };
-        this.cost = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
-        };
+        if (snapshot) {
+            this.balance = new big_js_1.default(snapshot.balance);
+            this.position = {
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
+            };
+            this.cost = {
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
+            };
+        }
+        else {
+            this.balance = this.core.config.initialBalance;
+            this.position = {
+                [interfaces_1.Length.LONG]: new big_js_1.default(0),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            };
+            this.cost = {
+                [interfaces_1.Length.LONG]: new big_js_1.default(0),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            };
+        }
     }
-    /** @returns 可直接 JSON 序列化 */
     capture() {
         return {
             position: this.position,
@@ -56,6 +68,7 @@ class StateAssets {
         this.balance = this.balance
             .plus(profit)
             .minus(fee);
+        return profit;
     }
     [util_1.inspect.custom]() {
         return JSON.stringify({

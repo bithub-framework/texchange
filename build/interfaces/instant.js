@@ -76,7 +76,7 @@ class InterfaceInstant extends events_1.EventEmitter {
         return interfaces_1.clone([...this.core.states.makers.values()]);
     }
     getPositions() {
-        this.core.clearing.clear();
+        this.core.clearing.settle();
         const positions = {
             position: this.core.states.assets.position,
             closable: this.core.states.margin.closable,
@@ -85,7 +85,7 @@ class InterfaceInstant extends events_1.EventEmitter {
         return interfaces_1.clone(positions);
     }
     getBalances() {
-        this.core.clearing.clear();
+        this.core.clearing.settle();
         const balances = {
             balance: this.core.states.assets.balance,
             available: this.core.states.margin.available,

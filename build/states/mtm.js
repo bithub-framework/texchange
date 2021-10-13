@@ -5,11 +5,12 @@ const big_js_1 = require("big.js");
 const startable_1 = require("startable");
 const coroutine_locks_1 = require("coroutine-locks");
 class StateMtm extends startable_1.Startable {
-    constructor(snapshot) {
+    constructor(core, snapshot) {
         super();
+        this.core = core;
         this.mutex = new coroutine_locks_1.Mutex();
         if (snapshot)
-            this.latestPrice = new big_js_1.default(snapshot);
+            this.markPrice = new big_js_1.default(snapshot);
         else
             this.mutex.lock();
     }
@@ -17,15 +18,17 @@ class StateMtm extends startable_1.Startable {
         await this.mutex.lock();
     }
     async _stop() { }
-    updateTrade(trade) {
-        this.latestPrice = trade.price;
+    updateTrades(trades) {
+        this.markPrice = trades[trades.length - 1].price;
+        this.core.clearing.settle();
         this.mutex.unlock();
     }
-    getMarkPrice() {
-        return this.latestPrice;
+    updateOrderbook(orderbook) { }
+    getSettlementPrice() {
+        return this.markPrice;
     }
     capture() {
-        return this.latestPrice;
+        return this.markPrice;
     }
 }
 exports.StateMtm = StateMtm;

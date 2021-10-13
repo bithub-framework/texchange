@@ -52,22 +52,18 @@ export class MethodsTaken {
         const makerFee = dollarVolume.times(this.core.config.MAKER_FEE_RATE)
             .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (maker.operation === Operation.OPEN) {
-            this.core.states.margin.incPositionMargin(
-                maker.length,
-                this.core.calculation.positionMarginIncrement(
+            this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
+                .plus(this.core.calculation.marginIncrement(
                     maker, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP),
-            );
+                ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
             );
         } else {
-            this.core.states.margin.decPositionMargin(
-                maker.length,
-                this.core.calculation.positionMarginDecrement(
+            this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
+                .minus(this.core.calculation.marginDecrement(
                     maker, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP),
-            );
+                ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.closePosition(
                 maker.length, volume, dollarVolume, makerFee,
             );

@@ -9,6 +9,7 @@ export interface MarketConfig extends MarketSpec {
     PROCESSING: number;
 }
 export interface AccountConfig extends AccountSpec {
+    initialBalance: Big;
 }
 export interface Config extends MarketConfig, AccountConfig {
     marketName: string;

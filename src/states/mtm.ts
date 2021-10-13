@@ -1,29 +1,33 @@
 import {
     Trade,
+    Orderbook,
     StateLike,
 } from '../interfaces';
 import Big from 'big.js';
 import { Startable } from 'startable';
 import { Mutex } from 'coroutine-locks';
+import { Core } from '../core';
 
 export type Snapshot = Big;
 
 export interface StateMtmLike<Snapshot>
     extends StateLike<Snapshot>, Startable {
-    getMarkPrice(): Big;
-    updateTrade(trade: Trade): void;
+    getSettlementPrice(): Big;
+    updateTrades(trades: Trade[]): void;
+    updateOrderbook(orderbook: Orderbook): void;
 }
 
 
 export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
-    private latestPrice?: Big;
-    private mutex = new Mutex();
+    protected markPrice?: Big;
+    protected mutex = new Mutex();
 
     constructor(
+        protected core: Core,
         snapshot?: Snapshot,
     ) {
         super();
-        if (snapshot) this.latestPrice = new Big(snapshot);
+        if (snapshot) this.markPrice = new Big(snapshot);
         else this.mutex.lock();
     }
 
@@ -33,16 +37,19 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
 
     protected async _stop() { }
 
-    public updateTrade(trade: Trade): void {
-        this.latestPrice = trade.price;
+    public updateTrades(trades: Trade[]): void {
+        this.markPrice = trades[trades.length - 1].price;
+        this.core.clearing.settle();
         this.mutex.unlock();
     }
 
-    public getMarkPrice(): Big {
-        return this.latestPrice!;
+    public updateOrderbook(orderbook: Orderbook) { }
+
+    public getSettlementPrice(): Big {
+        return this.markPrice!;
     }
 
     public capture(): Snapshot {
-        return this.latestPrice!;
+        return this.markPrice!;
     }
 }

@@ -1,7 +1,6 @@
 import {
     LimitOrder,
     OpenOrder,
-    OpenMaker,
     MarketCalc,
     Length,
 } from '../interfaces';
@@ -33,38 +32,42 @@ export class MethodsCalculation implements MarketCalc {
             .div(this.core.config.LEVERAGE);
     };
 
-    public positionMarginIncrement(
+    // this.core.assets.position[order.length] has not updated.
+    public marginIncrement(
         order: OpenOrder, volume: Big, dollarVolume: Big,
     ): Big {
         return dollarVolume.div(this.core.config.LEVERAGE);
     }
 
-    public positionMarginDecrement(
+    public marginDecrement(
         order: OpenOrder, volume: Big, dollarVolume: Big,
     ): Big {
-        if (this.core.states.assets.position[order.length].eq(volume))
-            return this.core.states.margin.positionMargin[order.length];
-        else
-            return dollarVolume.div(this.core.config.LEVERAGE);
+        return volume
+            .div(this.core.states.assets.position[order.length])
+            .times(this.core.states.margin[order.length]);
     };
 
-    public totalPositionMargin(): Big {
-        return this.core.states.margin.positionMargin[Length.LONG]
-            .plus(this.core.states.margin.positionMargin[Length.SHORT]);
+    public totalMargin(): Big {
+        return this.core.states.margin[Length.LONG]
+            .plus(this.core.states.margin[Length.SHORT]);
     }
 
-    public freezingMargin(
-        order: OpenMaker | LimitOrder,
+    public balanceToFreeze(
+        order: OpenOrder,
     ): Big {
-        return order.price.times(order.quantity);
+        return order.price
+            .times(order.quantity)
+            .div(this.core.config.LEVERAGE);
     }
 
-    public positionMarginOnClearing(): Big {
-        return new Big(0);
+    public marginOnSettlement(
+        length: Length, profit: Big,
+    ): Big {
+        return this.core.states.margin[length]
+            .plus(profit);
     }
 
-    public shouldBeCompulsorilyLiquidated(): boolean {
-        return this.core.states.assets.balance
-            .lt(this.totalPositionMargin());
+    public shouldLiquidate(): Length[] {
+        return [];
     }
 }

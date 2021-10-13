@@ -5,6 +5,7 @@ import {
     DatabaseTrade,
     StateLike,
 } from '../interfaces';
+import { Core } from '../core';
 
 export interface Snapshot {
     latestPrice: Big;
@@ -21,11 +22,11 @@ export class StateMisc extends Startable implements StateLike<Snapshot> {
     public userOrderCount = 0;
 
     constructor(
-        snapshotString?: string,
+        private core: Core,
+        snapshot?: Snapshot,
     ) {
         super();
-        if (snapshotString) {
-            const snapshot = <Snapshot>JSON.parse(snapshotString);
+        if (snapshot) {
             this.latestPrice = snapshot.latestPrice;
             this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
             this.userTradeCount = snapshot.userTradeCount;

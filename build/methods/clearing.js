@@ -7,15 +7,17 @@ class MethodsClearing {
     constructor(core) {
         this.core = core;
     }
-    clear() {
+    settle() {
         const position = interfaces_1.clone(this.core.states.assets.position);
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            const clearingDollarVolume = this.core.calculation.dollarVolume(this.core.states.mtm.getMarkPrice(), position[length]).round(this.core.config.CURRENCY_DP);
-            this.core.states.assets.closePosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
+            const clearingDollarVolume = this.core.calculation.dollarVolume(this.core.states.mtm.getSettlementPrice(), position[length]).round(this.core.config.CURRENCY_DP);
+            const profit = this.core.states.assets.closePosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
             this.core.states.assets.openPosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
+            this.core.states.margin[length] =
+                this.core.calculation.marginOnSettlement(length, profit);
         }
-        for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT])
-            this.core.states.margin.setPositionMargin(length, this.core.calculation.positionMarginOnClearing());
+        if (this.core.calculation.shouldLiquidate().length)
+            this.core.stop(new Error('Liquidated.'));
     }
 }
 exports.MethodsClearing = MethodsClearing;

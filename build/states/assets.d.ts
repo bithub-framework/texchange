@@ -22,10 +22,9 @@ export declare class StateAssets implements StateLike<Snapshot> {
     cost: {
         [length: number]: Big;
     };
-    constructor(core: Core, snapshot: Snapshot);
-    /** @returns 可直接 JSON 序列化 */
+    constructor(core: Core, snapshot?: Snapshot);
     capture(): Snapshot;
     openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
-    closePosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
+    closePosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): Big;
     [inspect.custom](): string;
 }

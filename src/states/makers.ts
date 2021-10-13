@@ -44,7 +44,7 @@ export class StateMakers
     public addOrder(order: OpenMaker): Frozen {
         const frozen: Frozen = {
             balance: order.operation === Operation.OPEN
-                ? this.core.calculation.freezingMargin(order)
+                ? this.core.calculation.balanceToFreeze(order)
                     .round(this.core.config.CURRENCY_DP)
                 : new Big(0),
             position: order.operation === Operation.CLOSE

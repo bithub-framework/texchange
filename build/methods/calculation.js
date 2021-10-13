@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MethodsCalculation = void 0;
 const interfaces_1 = require("../interfaces");
-const big_js_1 = require("big.js");
 const assert = require("assert");
 class MethodsCalculation {
     constructor(core) {
@@ -21,29 +20,31 @@ class MethodsCalculation {
             .div(this.core.config.LEVERAGE);
     }
     ;
-    positionMarginIncrement(order, volume, dollarVolume) {
+    // this.core.assets.position[order.length] has not updated.
+    marginIncrement(order, volume, dollarVolume) {
         return dollarVolume.div(this.core.config.LEVERAGE);
     }
-    positionMarginDecrement(order, volume, dollarVolume) {
-        if (this.core.states.assets.position[order.length].eq(volume))
-            return this.core.states.margin.positionMargin[order.length];
-        else
-            return dollarVolume.div(this.core.config.LEVERAGE);
+    marginDecrement(order, volume, dollarVolume) {
+        return volume
+            .div(this.core.states.assets.position[order.length])
+            .times(this.core.states.margin[order.length]);
     }
     ;
-    totalPositionMargin() {
-        return this.core.states.margin.positionMargin[interfaces_1.Length.LONG]
-            .plus(this.core.states.margin.positionMargin[interfaces_1.Length.SHORT]);
+    totalMargin() {
+        return this.core.states.margin[interfaces_1.Length.LONG]
+            .plus(this.core.states.margin[interfaces_1.Length.SHORT]);
     }
-    freezingMargin(order) {
-        return order.price.times(order.quantity);
+    balanceToFreeze(order) {
+        return order.price
+            .times(order.quantity)
+            .div(this.core.config.LEVERAGE);
     }
-    positionMarginOnClearing() {
-        return new big_js_1.default(0);
+    marginOnSettlement(length, profit) {
+        return this.core.states.margin[length]
+            .plus(profit);
     }
-    shouldBeCompulsorilyLiquidated() {
-        return this.core.states.assets.balance
-            .lt(this.totalPositionMargin());
+    shouldLiquidate() {
+        return [];
     }
 }
 exports.MethodsCalculation = MethodsCalculation;

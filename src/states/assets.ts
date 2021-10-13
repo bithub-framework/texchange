@@ -44,20 +44,31 @@ export class StateAssets implements StateLike<Snapshot> {
 
     constructor(
         private core: Core,
-        snapshot: Snapshot,
+        snapshot?: Snapshot,
     ) {
-        this.balance = new Big(snapshot.balance);
-        this.position = {
-            [Length.LONG]: new Big(snapshot.position[Length.LONG]),
-            [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
-        };
-        this.cost = {
-            [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
-            [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
-        };
+        if (snapshot) {
+            this.balance = new Big(snapshot.balance);
+            this.position = {
+                [Length.LONG]: new Big(snapshot.position[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
+            };
+            this.cost = {
+                [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
+            };
+        } else {
+            this.balance = this.core.config.initialBalance;
+            this.position = {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            };
+            this.cost = {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            };
+        }
     }
 
-    /** @returns 可直接 JSON 序列化 */
     public capture(): Snapshot {
         return {
             position: this.position,
@@ -83,7 +94,7 @@ export class StateAssets implements StateLike<Snapshot> {
         volume: Big,
         dollarVolume: Big,
         fee: Big,
-    ): void {
+    ): Big {
         const cost = volume.eq(this.position[length])
             ? this.cost[length]
             : this.core.calculation.dollarVolume(
@@ -98,6 +109,7 @@ export class StateAssets implements StateLike<Snapshot> {
         this.balance = this.balance
             .plus(profit)
             .minus(fee);
+        return profit;
     }
 
     public [inspect.custom]() {

@@ -24,7 +24,7 @@ class StateMakers extends Map {
     addOrder(order) {
         const frozen = {
             balance: order.operation === interfaces_1.Operation.OPEN
-                ? this.core.calculation.freezingMargin(order)
+                ? this.core.calculation.balanceToFreeze(order)
                     .round(this.core.config.CURRENCY_DP)
                 : new big_js_1.default(0),
             position: order.operation === interfaces_1.Operation.CLOSE
