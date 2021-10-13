@@ -35,7 +35,7 @@ class Core extends startable_1.Startable {
             assets: new assets_1.StateAssets(this, snapshot?.assets),
             margin: new margin_1.StateMargin(this, snapshot?.margin),
             makers: new makers_1.StateMakers(this, snapshot?.makers),
-            orderbook: new orderbook_1.StateOrderbook(this),
+            orderbook: new orderbook_1.StateOrderbook(this, snapshot?.orderbook),
             mtm: new mtm_1.StateMtm(this, snapshot?.mtm),
             misc: new misc_1.StateMisc(this, snapshot?.misc),
         };
@@ -44,6 +44,8 @@ class Core extends startable_1.Startable {
             latency: new latency_1.InterfaceLatency(this),
         };
     }
+    // TODO 允许的时机
+    // TODO Snapshot 中的无穷大
     capture() {
         return {
             time: this.timeline.now(),
@@ -52,6 +54,7 @@ class Core extends startable_1.Startable {
             makers: this.states.makers.capture(),
             misc: this.states.misc.capture(),
             mtm: this.states.mtm.capture(),
+            orderbook: this.states.orderbook.capture(),
         };
     }
     async _start() {

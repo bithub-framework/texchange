@@ -8,6 +8,22 @@ import {
     MarketEvents, AccountEvents,
 } from 'interfaces';
 import Big from 'big.js';
+import { Snapshot as SnapshotStateMakers } from './states/makers';
+import { Snapshot as SnapshotStateAssets } from './states/assets';
+import { Snapshot as SnapshotStateMargin } from './states/margin';
+import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
+import { Snapshot as SnapshotStateMisc } from './states/misc';
+
+
+export interface Snapshot {
+    time: number;
+    makers: SnapshotStateMakers;
+    assets: SnapshotStateAssets;
+    margin: SnapshotStateMargin;
+    mtm: any;
+    misc: SnapshotStateMisc;
+    orderbook: SnapshotStateOrderbook;
+}
 
 
 export interface DatabaseTrade extends Trade {
@@ -27,14 +43,6 @@ export interface Config extends MarketConfig, AccountConfig {
 }
 
 
-export interface Snapshot {
-    time: number;
-    makers: any;
-    assets: any;
-    margin: any;
-    mtm: any;
-    misc: any;
-}
 
 export interface StateLike<Snapshot> {
     capture(): Snapshot;
@@ -67,3 +75,18 @@ export interface Frozen {
     position: Big;
     length: Length;
 }
+
+export type TypeRecur<Type, Old, New> =
+    Type extends Old
+    ? New
+    : (
+        Type extends {}
+        ? { [K in keyof Type]: TypeRecur<Type[K], Old, New> }
+        : Type
+    );
+
+interface A {
+    [i: number]: number;
+}
+
+type B = TypeRecur<A, number, string>;

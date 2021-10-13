@@ -4,6 +4,7 @@ import { Mutex } from 'coroutine-locks';
 import {
     DatabaseTrade,
     StateLike,
+    TypeRecur,
 } from '../interfaces';
 import { Core } from '../core';
 
@@ -23,11 +24,11 @@ export class StateMisc extends Startable implements StateLike<Snapshot> {
 
     constructor(
         private core: Core,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         super();
         if (snapshot) {
-            this.latestPrice = snapshot.latestPrice;
+            this.latestPrice = new Big(snapshot.latestPrice);
             this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
             this.userTradeCount = snapshot.userTradeCount;
             this.userOrderCount = snapshot.userOrderCount;

@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Frozen, StateLike } from '../interfaces';
+import { Frozen, StateLike, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { inspect } from 'util';
 import { Core } from '../core';
@@ -17,7 +17,7 @@ export declare class StateMargin implements StateLike<Snapshot> {
     frozenPosition: {
         [length: number]: Big;
     };
-    constructor(core: Core, snapshot?: Snapshot);
+    constructor(core: Core, snapshot?: TypeRecur<Snapshot, Big, string>);
     get available(): Big;
     get closable(): {
         [x: number]: Big;

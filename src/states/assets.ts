@@ -1,6 +1,7 @@
 import {
     Length,
     StateLike,
+    TypeRecur,
 } from '../interfaces';
 import { inspect } from 'util';
 import Big from 'big.js';
@@ -17,6 +18,7 @@ export interface Snapshot {
     };
 }
 
+
 export class StateAssets implements StateLike<Snapshot> {
     public position: {
         [length: number]: Big;
@@ -28,17 +30,17 @@ export class StateAssets implements StateLike<Snapshot> {
 
     constructor(
         private core: Core,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         if (snapshot) {
-            this.balance = snapshot.balance;
+            this.balance = new Big(snapshot.balance);
             this.position = {
-                [Length.LONG]: snapshot.position[Length.LONG],
-                [Length.SHORT]: snapshot.position[Length.SHORT],
+                [Length.LONG]: new Big(snapshot.position[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
             };
             this.cost = {
-                [Length.LONG]: snapshot.cost[Length.LONG],
-                [Length.SHORT]: snapshot.cost[Length.SHORT],
+                [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
             };
         } else {
             this.balance = this.core.config.initialBalance;

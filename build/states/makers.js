@@ -11,8 +11,22 @@ class StateMakers extends Map {
         this.frozens = new Map();
         if (snapshot)
             for (const { order, frozen } of snapshot) {
-                this.set(order.id, order);
-                this.frozens.set(order.id, frozen);
+                this.set(order.id, {
+                    price: new big_js_1.default(order.price),
+                    quantity: new big_js_1.default(order.quantity),
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
+                    filled: new big_js_1.default(order.filled),
+                    unfilled: new big_js_1.default(order.unfilled),
+                    id: order.id,
+                    behind: new big_js_1.default(order.behind),
+                });
+                this.frozens.set(order.id, {
+                    balance: new big_js_1.default(frozen.balance),
+                    position: new big_js_1.default(frozen.position),
+                    length: frozen.length,
+                });
             }
     }
     capture() {

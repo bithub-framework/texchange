@@ -41,7 +41,7 @@ export class MethodsTaking {
                     .plus(this.core.calculation.dollarVolume(maker.price, quantity))
                     .round(this.core.config.CURRENCY_DP);
             }
-        this.core.states.orderbook.apply();
+        // this.core.states.orderbook.apply();
 
         const takerFee = dollarVolume.times(this.core.config.TAKER_FEE_RATE)
             .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);

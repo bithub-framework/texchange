@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StateMisc = void 0;
 const startable_1 = require("startable");
+const big_js_1 = require("big.js");
 const coroutine_locks_1 = require("coroutine-locks");
 class StateMisc extends startable_1.Startable {
     constructor(core, snapshot) {
@@ -11,7 +12,7 @@ class StateMisc extends startable_1.Startable {
         this.userTradeCount = 0;
         this.userOrderCount = 0;
         if (snapshot) {
-            this.latestPrice = snapshot.latestPrice;
+            this.latestPrice = new big_js_1.default(snapshot.latestPrice);
             this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
             this.userTradeCount = snapshot.userTradeCount;
             this.userOrderCount = snapshot.userOrderCount;

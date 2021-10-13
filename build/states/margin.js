@@ -8,13 +8,13 @@ class StateMargin {
     constructor(core, snapshot) {
         this.core = core;
         if (snapshot) {
-            this.frozenBalance = snapshot.frozenBalance;
+            this.frozenBalance = new big_js_1.default(snapshot.frozenBalance);
             this.frozenPosition = {
-                [interfaces_1.Length.LONG]: snapshot.frozenPosition[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: snapshot.frozenPosition[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozenPosition[interfaces_1.Length.SHORT]),
             };
-            this[interfaces_1.Length.LONG] = snapshot[interfaces_1.Length.LONG];
-            this[interfaces_1.Length.SHORT] = snapshot[interfaces_1.Length.SHORT];
+            this[interfaces_1.Length.LONG] = new big_js_1.default(snapshot[interfaces_1.Length.LONG]);
+            this[interfaces_1.Length.SHORT] = new big_js_1.default(snapshot[interfaces_1.Length.SHORT]);
         }
         else {
             this.frozenBalance = new big_js_1.default(0);

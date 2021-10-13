@@ -1,18 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StateOrderbook = exports.default = void 0;
+exports.StateOrderbook = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class StateOrderbook {
-    constructor(core) {
+    constructor(core, snapshot) {
         this.core = core;
+        this.time = Number.NEGATIVE_INFINITY;
         this.orderbook = {
             [interfaces_1.Side.ASK]: [],
             [interfaces_1.Side.BID]: [],
             time: Number.NEGATIVE_INFINITY,
         };
-        this.applied = false;
+        this.applied = true;
         this.baseBook = {
             [interfaces_1.Side.ASK]: [],
             [interfaces_1.Side.BID]: [],
@@ -23,15 +24,36 @@ class StateOrderbook {
             [interfaces_1.Side.ASK]: new Map(),
             [interfaces_1.Side.BID]: new Map(),
         };
-        this.apply();
+        if (snapshot) {
+            this.baseBook = {
+                [interfaces_1.Side.ASK]: snapshot.baseBook[interfaces_1.Side.ASK].map(order => ({
+                    price: new big_js_1.default(order.price),
+                    quantity: new big_js_1.default(order.quantity),
+                    side: order.side,
+                })),
+                [interfaces_1.Side.BID]: snapshot.baseBook[interfaces_1.Side.BID].map(order => ({
+                    price: new big_js_1.default(order.price),
+                    quantity: new big_js_1.default(order.quantity),
+                    side: order.side,
+                })),
+                time: snapshot.baseBook.time,
+            };
+            this.decrements = {
+                [interfaces_1.Side.ASK]: new Map(snapshot.decrements[interfaces_1.Side.ASK].map(([priceString, decrement]) => [priceString, new big_js_1.default(decrement)])),
+                [interfaces_1.Side.BID]: new Map(snapshot.decrements[interfaces_1.Side.BID].map(([priceString, decrement]) => [priceString, new big_js_1.default(decrement)])),
+            };
+            this.time = snapshot.time;
+            this.applied = false;
+            this.apply();
+        }
     }
     getBook() {
-        assert(this.applied);
+        this.apply();
         return this.orderbook;
     }
     setBase(newBaseBook) {
         this.baseBook = newBaseBook;
-        this.orderbook.time = this.core.timeline.now();
+        this.time = this.core.timeline.now();
         this.applied = false;
     }
     decQuantity(side, price, decrement) {
@@ -39,10 +61,12 @@ class StateOrderbook {
         const priceString = price.toFixed(this.core.config.PRICE_DP);
         const origin = this.decrements[side].get(priceString) || new big_js_1.default(0);
         this.decrements[side].set(priceString, origin.plus(decrement));
-        this.orderbook.time = this.core.timeline.now();
+        this.time = this.core.timeline.now();
         this.applied = false;
     }
     apply() {
+        if (this.applied)
+            return;
         for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
             const total = {
                 [interfaces_1.Side.ASK]: new Map(),
@@ -70,7 +94,16 @@ class StateOrderbook {
         }
         this.applied = true;
     }
+    capture() {
+        return {
+            baseBook: this.baseBook,
+            decrements: {
+                [interfaces_1.Side.ASK]: [...this.decrements[interfaces_1.Side.ASK]],
+                [interfaces_1.Side.BID]: [...this.decrements[interfaces_1.Side.BID]],
+            },
+            time: this.time,
+        };
+    }
 }
-exports.default = StateOrderbook;
 exports.StateOrderbook = StateOrderbook;
 //# sourceMappingURL=orderbook.js.map

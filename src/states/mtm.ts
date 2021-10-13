@@ -2,6 +2,7 @@ import {
     Trade,
     Orderbook,
     StateLike,
+    TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
 import { Startable } from 'startable';
@@ -24,7 +25,7 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
 
     constructor(
         protected core: Core,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         super();
         if (snapshot) this.markPrice = new Big(snapshot);

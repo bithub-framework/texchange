@@ -4,6 +4,7 @@ import {
     OpenMaker,
     Frozen,
     StateLike,
+    TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
@@ -24,13 +25,27 @@ export class StateMakers
 
     constructor(
         private core: Core,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         super();
         if (snapshot)
             for (const { order, frozen } of snapshot) {
-                this.set(order.id, order);
-                this.frozens.set(order.id, frozen);
+                this.set(order.id, {
+                    price: new Big(order.price),
+                    quantity: new Big(order.quantity),
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
+                    filled: new Big(order.filled),
+                    unfilled: new Big(order.unfilled),
+                    id: order.id,
+                    behind: new Big(order.behind),
+                });
+                this.frozens.set(order.id, {
+                    balance: new Big(frozen.balance),
+                    position: new Big(frozen.position),
+                    length: frozen.length,
+                });
             }
     }
 

@@ -1,19 +1,31 @@
 import {
     Orderbook,
     Side,
+    TypeRecur,
+    StateLike,
+    BookOrder,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
 import { Core } from '../core';
 
 
-class StateOrderbook {
+export interface Snapshot {
+    baseBook: Orderbook;
+    decrements: {
+        [side: number]: [string, Big][],
+    };
+    time: number;
+}
+
+export class StateOrderbook implements StateLike<Snapshot>{
+    private time = Number.NEGATIVE_INFINITY;
     private orderbook: Orderbook = {
         [Side.ASK]: [],
         [Side.BID]: [],
         time: Number.NEGATIVE_INFINITY,
     };
-    private applied = false;
+    private applied = true;
     private baseBook: Orderbook = {
         [Side.ASK]: [],
         [Side.BID]: [],
@@ -27,18 +39,48 @@ class StateOrderbook {
 
     constructor(
         private core: Core,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
-        this.apply();
+        if (snapshot) {
+            this.baseBook = {
+                [Side.ASK]: snapshot.baseBook[Side.ASK].map<BookOrder>(order => ({
+                    price: new Big(order.price),
+                    quantity: new Big(order.quantity),
+                    side: order.side,
+                })),
+                [Side.BID]: snapshot.baseBook[Side.BID].map<BookOrder>(order => ({
+                    price: new Big(order.price),
+                    quantity: new Big(order.quantity),
+                    side: order.side,
+                })),
+                time: snapshot.baseBook.time,
+            }
+            this.decrements = {
+                [Side.ASK]: new Map<string, Big>(
+                    snapshot.decrements[Side.ASK].map(
+                        ([priceString, decrement]) =>
+                            [priceString, new Big(decrement)]
+                    )),
+                [Side.BID]: new Map<string, Big>(
+                    snapshot.decrements[Side.BID].map(
+                        ([priceString, decrement]) =>
+                            [priceString, new Big(decrement)]
+                    )),
+            };
+            this.time = snapshot.time;
+            this.applied = false;
+            this.apply();
+        }
     }
 
     public getBook(): Orderbook {
-        assert(this.applied);
+        this.apply();
         return this.orderbook;
     }
 
     public setBase(newBaseBook: Orderbook) {
         this.baseBook = newBaseBook;
-        this.orderbook.time = this.core.timeline.now();
+        this.time = this.core.timeline.now();
         this.applied = false;
     }
 
@@ -47,11 +89,12 @@ class StateOrderbook {
         const priceString = price.toFixed(this.core.config.PRICE_DP);
         const origin = this.decrements[side].get(priceString) || new Big(0);
         this.decrements[side].set(priceString, origin.plus(decrement));
-        this.orderbook.time = this.core.timeline.now();
+        this.time = this.core.timeline.now();
         this.applied = false;
     }
 
-    public apply(): void {
+    private apply(): void {
+        if (this.applied) return;
         for (const side of [Side.BID, Side.ASK]) {
             const total = {
                 [Side.ASK]: new Map<string, Big>(),
@@ -78,9 +121,15 @@ class StateOrderbook {
         }
         this.applied = true;
     }
-}
 
-export {
-    StateOrderbook as default,
-    StateOrderbook,
+    public capture(): Snapshot {
+        return {
+            baseBook: this.baseBook,
+            decrements: {
+                [Side.ASK]: [...this.decrements[Side.ASK]],
+                [Side.BID]: [...this.decrements[Side.BID]],
+            },
+            time: this.time,
+        }
+    }
 }

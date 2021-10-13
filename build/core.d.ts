@@ -1,5 +1,5 @@
 import { Startable } from 'startable';
-import { Config, Snapshot, ExchangeLike, Timeline } from './interfaces';
+import { Config, Snapshot, ExchangeLike, Timeline, TypeRecur } from './interfaces';
 import { StateAssets } from './states/assets';
 import { StateMargin } from './states/margin';
 import { StateMakers } from './states/makers';
@@ -16,6 +16,7 @@ import { MethodsUpdating } from './methods/updating';
 import { MethodsCalculation } from './methods/calculation';
 import { InterfaceInstant } from './interfaces/instant';
 import { InterfaceLatency } from './interfaces/latency';
+import Big from 'big.js';
 export declare class Core extends Startable implements ExchangeLike {
     config: Config;
     timeline: Timeline<any>;
@@ -39,7 +40,7 @@ export declare class Core extends Startable implements ExchangeLike {
     updating: MethodsUpdating;
     validation: MethodsValidation;
     calculation: MethodsCalculation;
-    constructor(config: Config, timeline: Timeline<any>, snapshot?: Snapshot);
+    constructor(config: Config, timeline: Timeline<any>, snapshot?: TypeRecur<Snapshot, Big, string>);
     capture(): Snapshot;
     protected _start(): Promise<void>;
     protected _stop(): Promise<void>;

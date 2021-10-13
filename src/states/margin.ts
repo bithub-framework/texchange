@@ -2,6 +2,7 @@ import {
     Length,
     Frozen,
     StateLike,
+    TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
 import { inspect } from 'util';
@@ -26,16 +27,16 @@ export class StateMargin implements StateLike<Snapshot> {
 
     constructor(
         private core: Core,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         if (snapshot) {
-            this.frozenBalance = snapshot.frozenBalance;
+            this.frozenBalance = new Big(snapshot.frozenBalance);
             this.frozenPosition = {
-                [Length.LONG]: snapshot.frozenPosition[Length.LONG],
-                [Length.SHORT]: snapshot.frozenPosition[Length.SHORT],
+                [Length.LONG]: new Big(snapshot.frozenPosition[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.frozenPosition[Length.SHORT]),
             };
-            this[Length.LONG] = snapshot[Length.LONG];
-            this[Length.SHORT] = snapshot[Length.SHORT];
+            this[Length.LONG] = new Big(snapshot[Length.LONG]);
+            this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
         } else {
             this.frozenBalance = new Big(0);
             this.frozenPosition = {

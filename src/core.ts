@@ -4,6 +4,7 @@ import {
     Snapshot,
     ExchangeLike,
     Timeline,
+    TypeRecur,
 } from './interfaces';
 import { StateAssets } from './states/assets';
 import { StateMargin } from './states/margin';
@@ -21,6 +22,7 @@ import { MethodsUpdating } from './methods/updating';
 import { MethodsCalculation } from './methods/calculation';
 import { InterfaceInstant } from './interfaces/instant';
 import { InterfaceLatency } from './interfaces/latency';
+import Big from 'big.js';
 
 
 export class Core extends Startable implements ExchangeLike {
@@ -49,14 +51,14 @@ export class Core extends Startable implements ExchangeLike {
     constructor(
         public config: Config,
         public timeline: Timeline<any>,
-        snapshot?: Snapshot,
+        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         super();
         this.states = {
             assets: new StateAssets(this, snapshot?.assets),
             margin: new StateMargin(this, snapshot?.margin),
             makers: new StateMakers(this, snapshot?.makers),
-            orderbook: new StateOrderbook(this),
+            orderbook: new StateOrderbook(this, snapshot?.orderbook),
             mtm: new StateMtm(this, snapshot?.mtm),
             misc: new StateMisc(this, snapshot?.misc),
         };
@@ -66,6 +68,8 @@ export class Core extends Startable implements ExchangeLike {
         }
     }
 
+    // TODO 允许的时机
+    // TODO Snapshot 中的无穷大
     public capture(): Snapshot {
         return {
             time: this.timeline.now(),
@@ -74,6 +78,7 @@ export class Core extends Startable implements ExchangeLike {
             makers: this.states.makers.capture(),
             misc: this.states.misc.capture(),
             mtm: this.states.mtm.capture(),
+            orderbook: this.states.orderbook.capture(),
         }
     }
 

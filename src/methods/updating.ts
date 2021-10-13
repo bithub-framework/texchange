@@ -26,7 +26,6 @@ export class MethodsUpdating {
     public updateOrderbook(orderbook: Orderbook): void {
         assert(orderbook.time === this.core.timeline.now());
         this.core.states.orderbook.setBase(orderbook);
-        this.core.states.orderbook.apply();
         this.core.interfaces.instant.pushOrderbook();
     }
 }

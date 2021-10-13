@@ -8,14 +8,14 @@ class StateAssets {
     constructor(core, snapshot) {
         this.core = core;
         if (snapshot) {
-            this.balance = snapshot.balance;
+            this.balance = new big_js_1.default(snapshot.balance);
             this.position = {
-                [interfaces_1.Length.LONG]: snapshot.position[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: snapshot.position[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
             };
             this.cost = {
-                [interfaces_1.Length.LONG]: snapshot.cost[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: snapshot.cost[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
             };
         }
         else {
