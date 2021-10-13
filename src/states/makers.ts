@@ -24,13 +24,14 @@ export class StateMakers
 
     constructor(
         private core: Core,
-        snapshot: Snapshot,
+        snapshot?: Snapshot,
     ) {
         super();
-        for (const { order, frozen } of snapshot) {
-            this.set(order.id, order);
-            this.frozens.set(order.id, frozen);
-        }
+        if (snapshot)
+            for (const { order, frozen } of snapshot) {
+                this.set(order.id, order);
+                this.frozens.set(order.id, frozen);
+            }
     }
 
     public capture(): Snapshot {

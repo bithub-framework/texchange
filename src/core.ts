@@ -49,20 +49,31 @@ export class Core extends Startable implements ExchangeLike {
     constructor(
         public config: Config,
         public timeline: Timeline<any>,
-        snapshot: Snapshot,
+        snapshot?: Snapshot,
     ) {
         super();
         this.states = {
-            assets: new StateAssets(this, snapshot.assets),
-            margin: new StateMargin(this, snapshot.margin),
-            makers: new StateMakers(this, snapshot.makers),
+            assets: new StateAssets(this, snapshot?.assets),
+            margin: new StateMargin(this, snapshot?.margin),
+            makers: new StateMakers(this, snapshot?.makers),
             orderbook: new StateOrderbook(this),
-            mtm: new StateMtm(this, snapshot.mtm),
-            misc: new StateMisc(this, snapshot.misc),
+            mtm: new StateMtm(this, snapshot?.mtm),
+            misc: new StateMisc(this, snapshot?.misc),
         };
         this.interfaces = {
             instant: new InterfaceInstant(this),
             latency: new InterfaceLatency(this),
+        }
+    }
+
+    public capture(): Snapshot {
+        return {
+            time: this.timeline.now(),
+            assets: this.states.assets.capture(),
+            margin: this.states.margin.capture(),
+            makers: this.states.makers.capture(),
+            misc: this.states.misc.capture(),
+            mtm: this.states.mtm.capture(),
         }
     }
 

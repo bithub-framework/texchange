@@ -1,35 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StateAssets = exports.makeEmptyAssetsSnapshot = void 0;
+exports.StateAssets = void 0;
 const interfaces_1 = require("../interfaces");
 const util_1 = require("util");
 const big_js_1 = require("big.js");
-function makeEmptyAssetsSnapshot(balance) {
-    return {
-        position: {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-        },
-        cost: {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-        },
-        balance,
-    };
-}
-exports.makeEmptyAssetsSnapshot = makeEmptyAssetsSnapshot;
 class StateAssets {
     constructor(core, snapshot) {
         this.core = core;
         if (snapshot) {
-            this.balance = new big_js_1.default(snapshot.balance);
+            this.balance = snapshot.balance;
             this.position = {
-                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
+                [interfaces_1.Length.LONG]: snapshot.position[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: snapshot.position[interfaces_1.Length.SHORT],
             };
             this.cost = {
-                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
+                [interfaces_1.Length.LONG]: snapshot.cost[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: snapshot.cost[interfaces_1.Length.SHORT],
             };
         }
         else {

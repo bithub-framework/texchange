@@ -26,38 +26,26 @@ export class StateMargin implements StateLike<Snapshot> {
 
     constructor(
         private core: Core,
-        snapshot: Snapshot,
+        snapshot?: Snapshot,
     ) {
-        this.frozenBalance = snapshot.frozenBalance;
-        this.frozenPosition = {
-            [Length.LONG]: snapshot.frozenPosition[Length.LONG],
-            [Length.SHORT]: snapshot.frozenPosition[Length.SHORT],
-        };
-
-        this[Length.LONG] = snapshot[Length.LONG];
-        this[Length.SHORT] = snapshot[Length.SHORT];
+        if (snapshot) {
+            this.frozenBalance = snapshot.frozenBalance;
+            this.frozenPosition = {
+                [Length.LONG]: snapshot.frozenPosition[Length.LONG],
+                [Length.SHORT]: snapshot.frozenPosition[Length.SHORT],
+            };
+            this[Length.LONG] = snapshot[Length.LONG];
+            this[Length.SHORT] = snapshot[Length.SHORT];
+        } else {
+            this.frozenBalance = new Big(0);
+            this.frozenPosition = {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            };
+            this[Length.LONG] = new Big(0);
+            this[Length.SHORT] = new Big(0);
+        }
     }
-
-    // public incPositionMargin(
-    //     length: Length,
-    //     increment: Big,
-    // ) {
-    //     this[length] = this[length].plus(increment);
-    // }
-
-    // public decPositionMargin(
-    //     length: Length,
-    //     decrement: Big,
-    // ) {
-    //     this[length] = this[length].minus(decrement);
-    // }
-
-    // public setPositionMargin(
-    //     length: Length,
-    //     positionMargin: Big,
-    // ) {
-    //     this[length] = positionMargin;
-    // }
 
     public get available(): Big {
         return this.core.states.assets.balance

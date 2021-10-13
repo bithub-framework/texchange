@@ -17,7 +17,7 @@ export declare class StateMargin implements StateLike<Snapshot> {
     frozenPosition: {
         [length: number]: Big;
     };
-    constructor(core: Core, snapshot: Snapshot);
+    constructor(core: Core, snapshot?: Snapshot);
     get available(): Big;
     get closable(): {
         [x: number]: Big;

@@ -32,7 +32,7 @@ export interface ApiLike extends ContextMarketApiLike, ContextAccountApiLike {
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
-export interface ExchangeLike {
+export interface ExchangeLike extends StateLike<Snapshot> {
     interfaces: {
         latency: ApiLike;
     };

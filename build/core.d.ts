@@ -39,7 +39,8 @@ export declare class Core extends Startable implements ExchangeLike {
     updating: MethodsUpdating;
     validation: MethodsValidation;
     calculation: MethodsCalculation;
-    constructor(config: Config, timeline: Timeline<any>, snapshot: Snapshot);
+    constructor(config: Config, timeline: Timeline<any>, snapshot?: Snapshot);
+    capture(): Snapshot;
     protected _start(): Promise<void>;
     protected _stop(): Promise<void>;
 }

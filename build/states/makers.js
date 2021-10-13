@@ -9,10 +9,11 @@ class StateMakers extends Map {
         super();
         this.core = core;
         this.frozens = new Map();
-        for (const { order, frozen } of snapshot) {
-            this.set(order.id, order);
-            this.frozens.set(order.id, frozen);
-        }
+        if (snapshot)
+            for (const { order, frozen } of snapshot) {
+                this.set(order.id, order);
+                this.frozens.set(order.id, frozen);
+            }
     }
     capture() {
         return [...this.keys()]

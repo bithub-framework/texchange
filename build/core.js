@@ -32,16 +32,26 @@ class Core extends startable_1.Startable {
         this.validation = new validation_1.MethodsValidation(this);
         this.calculation = new calculation_1.MethodsCalculation(this);
         this.states = {
-            assets: new assets_1.StateAssets(this, snapshot.assets),
-            margin: new margin_1.StateMargin(this, snapshot.margin),
-            makers: new makers_1.StateMakers(this, snapshot.makers),
+            assets: new assets_1.StateAssets(this, snapshot?.assets),
+            margin: new margin_1.StateMargin(this, snapshot?.margin),
+            makers: new makers_1.StateMakers(this, snapshot?.makers),
             orderbook: new orderbook_1.StateOrderbook(this),
-            mtm: new mtm_1.StateMtm(this, snapshot.mtm),
-            misc: new misc_1.StateMisc(this, snapshot.misc),
+            mtm: new mtm_1.StateMtm(this, snapshot?.mtm),
+            misc: new misc_1.StateMisc(this, snapshot?.misc),
         };
         this.interfaces = {
             instant: new instant_1.InterfaceInstant(this),
             latency: new latency_1.InterfaceLatency(this),
+        };
+    }
+    capture() {
+        return {
+            time: this.timeline.now(),
+            assets: this.states.assets.capture(),
+            margin: this.states.margin.capture(),
+            makers: this.states.makers.capture(),
+            misc: this.states.misc.capture(),
+            mtm: this.states.mtm.capture(),
         };
     }
     async _start() {

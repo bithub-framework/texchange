@@ -2,36 +2,30 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StateMargin = void 0;
 const interfaces_1 = require("../interfaces");
+const big_js_1 = require("big.js");
 const util_1 = require("util");
 class StateMargin {
     constructor(core, snapshot) {
         this.core = core;
-        this.frozenBalance = snapshot.frozenBalance;
-        this.frozenPosition = {
-            [interfaces_1.Length.LONG]: snapshot.frozenPosition[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: snapshot.frozenPosition[interfaces_1.Length.SHORT],
-        };
-        this[interfaces_1.Length.LONG] = snapshot[interfaces_1.Length.LONG];
-        this[interfaces_1.Length.SHORT] = snapshot[interfaces_1.Length.SHORT];
+        if (snapshot) {
+            this.frozenBalance = snapshot.frozenBalance;
+            this.frozenPosition = {
+                [interfaces_1.Length.LONG]: snapshot.frozenPosition[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: snapshot.frozenPosition[interfaces_1.Length.SHORT],
+            };
+            this[interfaces_1.Length.LONG] = snapshot[interfaces_1.Length.LONG];
+            this[interfaces_1.Length.SHORT] = snapshot[interfaces_1.Length.SHORT];
+        }
+        else {
+            this.frozenBalance = new big_js_1.default(0);
+            this.frozenPosition = {
+                [interfaces_1.Length.LONG]: new big_js_1.default(0),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            };
+            this[interfaces_1.Length.LONG] = new big_js_1.default(0);
+            this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
+        }
     }
-    // public incPositionMargin(
-    //     length: Length,
-    //     increment: Big,
-    // ) {
-    //     this[length] = this[length].plus(increment);
-    // }
-    // public decPositionMargin(
-    //     length: Length,
-    //     decrement: Big,
-    // ) {
-    //     this[length] = this[length].minus(decrement);
-    // }
-    // public setPositionMargin(
-    //     length: Length,
-    //     positionMargin: Big,
-    // ) {
-    //     this[length] = positionMargin;
-    // }
     get available() {
         return this.core.states.assets.balance
             .minus(this.core.calculation.totalMargin())

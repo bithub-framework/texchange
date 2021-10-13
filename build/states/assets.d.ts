@@ -12,7 +12,6 @@ export interface Snapshot {
         [length: number]: Big;
     };
 }
-export declare function makeEmptyAssetsSnapshot(balance: Big): Snapshot;
 export declare class StateAssets implements StateLike<Snapshot> {
     private core;
     position: {

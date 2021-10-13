@@ -17,22 +17,6 @@ export interface Snapshot {
     };
 }
 
-
-export function makeEmptyAssetsSnapshot(balance: Big): Snapshot {
-    return {
-        position: {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
-        },
-        cost: {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
-        },
-        balance,
-    }
-}
-
-
 export class StateAssets implements StateLike<Snapshot> {
     public position: {
         [length: number]: Big;
@@ -47,14 +31,14 @@ export class StateAssets implements StateLike<Snapshot> {
         snapshot?: Snapshot,
     ) {
         if (snapshot) {
-            this.balance = new Big(snapshot.balance);
+            this.balance = snapshot.balance;
             this.position = {
-                [Length.LONG]: new Big(snapshot.position[Length.LONG]),
-                [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
+                [Length.LONG]: snapshot.position[Length.LONG],
+                [Length.SHORT]: snapshot.position[Length.SHORT],
             };
             this.cost = {
-                [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
-                [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
+                [Length.LONG]: snapshot.cost[Length.LONG],
+                [Length.SHORT]: snapshot.cost[Length.SHORT],
             };
         } else {
             this.balance = this.core.config.initialBalance;
