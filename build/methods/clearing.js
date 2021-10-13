@@ -8,7 +8,10 @@ class MethodsClearing {
         this.core = core;
     }
     settle() {
-        const position = interfaces_1.clone(this.core.states.assets.position);
+        const position = {
+            [interfaces_1.Length.LONG]: this.core.states.assets.position[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: this.core.states.assets.position[interfaces_1.Length.SHORT],
+        };
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const clearingDollarVolume = this.core.calculation.dollarVolume(this.core.states.mtm.getSettlementPrice(), position[length]).round(this.core.config.CURRENCY_DP);
             const profit = this.core.states.assets.closePosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));

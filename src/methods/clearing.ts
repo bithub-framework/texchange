@@ -1,6 +1,5 @@
 import {
     Length,
-    clone,
 } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
@@ -12,7 +11,10 @@ export class MethodsClearing {
     ) { }
 
     public settle(): void {
-        const position = clone(this.core.states.assets.position);
+        const position = {
+            [Length.LONG]: this.core.states.assets.position[Length.LONG],
+            [Length.SHORT]: this.core.states.assets.position[Length.SHORT],
+        };
         for (const length of [Length.LONG, Length.SHORT]) {
             const clearingDollarVolume =
                 this.core.calculation.dollarVolume(

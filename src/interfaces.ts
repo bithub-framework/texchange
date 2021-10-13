@@ -2,15 +2,12 @@ export * from 'interfaces';
 import {
     Length,
     Trade,
-    Positions,
-    Balances,
     Orderbook,
     MarketSpec, AccountSpec, MarketCalc,
     ContextMarketApiLike, ContextAccountApiLike,
     MarketEvents, AccountEvents,
 } from 'interfaces';
 import Big from 'big.js';
-import { EventEmitter } from 'stream';
 
 
 export interface DatabaseTrade extends Trade {

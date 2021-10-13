@@ -10,37 +10,59 @@ class InterfaceInstant extends events_1.EventEmitter {
         this.core = core;
     }
     pushTrades(trades) {
-        this.emit('trades', interfaces_1.clone(trades));
+        this.emit('trades', trades.map(trade => ({
+            id: trade.id,
+            price: trade.price,
+            quantity: trade.quantity,
+            side: trade.side,
+            time: trade.time,
+        })));
     }
     pushOrderbook() {
-        this.emit('orderbook', interfaces_1.clone(this.core.states.orderbook.getBook()));
+        const orderbook = this.core.states.orderbook.getBook();
+        this.emit('orderbook', {
+            [interfaces_1.Side.ASK]: orderbook[interfaces_1.Side.ASK].map(order => ({
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+            })),
+            [interfaces_1.Side.BID]: orderbook[interfaces_1.Side.BID].map(order => ({
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+            })),
+            time: orderbook.time,
+        });
     }
     pushPositionsAndBalances() {
-        // this.clearingController.clear();
-        const positions = {
-            position: this.core.states.assets.position,
-            closable: this.core.states.margin.closable,
-            time: this.core.timeline.now(),
-        };
-        const balances = {
-            balance: this.core.states.assets.balance,
-            available: this.core.states.margin.available,
-            time: this.core.timeline.now(),
-        };
-        this.emit('positions', interfaces_1.clone(positions));
-        this.emit('balances', interfaces_1.clone(balances));
+        this.emit('positions', this.getPositions());
+        this.emit('balances', this.getBalances());
     }
     makeOrders(orders) {
         return orders.map((order) => {
             try {
                 const openOrder = {
-                    ...order,
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
                     id: ++this.core.states.misc.userOrderCount,
                     filled: new big_js_1.default(0),
                     unfilled: order.quantity,
                 };
                 this.core.validation.validateOrder(openOrder);
-                return interfaces_1.clone(this.core.ordering.makeOpenOrder(openOrder));
+                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
+                return {
+                    price: returnedOrder.price,
+                    quantity: returnedOrder.quantity,
+                    side: returnedOrder.side,
+                    length: returnedOrder.length,
+                    operation: returnedOrder.operation,
+                    id: returnedOrder.id,
+                    filled: returnedOrder.filled,
+                    unfilled: returnedOrder.unfilled,
+                };
             }
             catch (err) {
                 return err;
@@ -48,7 +70,19 @@ class InterfaceInstant extends events_1.EventEmitter {
         });
     }
     cancelOrders(orders) {
-        return orders.map(order => interfaces_1.clone(this.core.ordering.cancelOpenOrder(order)));
+        return orders.map(order => {
+            const returnedOrder = this.core.ordering.cancelOpenOrder(order);
+            return {
+                price: returnedOrder.price,
+                quantity: returnedOrder.quantity,
+                side: returnedOrder.side,
+                length: returnedOrder.length,
+                operation: returnedOrder.operation,
+                id: returnedOrder.id,
+                filled: returnedOrder.filled,
+                unfilled: returnedOrder.unfilled,
+            };
+        });
     }
     amendOrders(amendments) {
         return amendments.map((amendment) => {
@@ -65,7 +99,17 @@ class InterfaceInstant extends events_1.EventEmitter {
                     operation: amendment.operation,
                 };
                 this.core.validation.validateOrder(openOrder);
-                return interfaces_1.clone(this.core.ordering.makeOpenOrder(openOrder));
+                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
+                return {
+                    price: returnedOrder.price,
+                    quantity: returnedOrder.quantity,
+                    side: returnedOrder.side,
+                    length: returnedOrder.length,
+                    operation: returnedOrder.operation,
+                    id: returnedOrder.id,
+                    filled: returnedOrder.filled,
+                    unfilled: returnedOrder.unfilled,
+                };
             }
             catch (err) {
                 return err;
@@ -73,25 +117,37 @@ class InterfaceInstant extends events_1.EventEmitter {
         });
     }
     getOpenOrders() {
-        return interfaces_1.clone([...this.core.states.makers.values()]);
+        const openOrders = [...this.core.states.makers.values()];
+        return openOrders.map(order => ({
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
+            filled: order.filled,
+            unfilled: order.unfilled,
+        }));
     }
     getPositions() {
-        this.core.clearing.settle();
-        const positions = {
-            position: this.core.states.assets.position,
-            closable: this.core.states.margin.closable,
+        return {
+            position: {
+                [interfaces_1.Length.LONG]: this.core.states.assets.position[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: this.core.states.assets.position[interfaces_1.Length.SHORT],
+            },
+            closable: {
+                [interfaces_1.Length.LONG]: this.core.states.margin.closable[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: this.core.states.margin.closable[interfaces_1.Length.SHORT],
+            },
             time: this.core.timeline.now(),
         };
-        return interfaces_1.clone(positions);
     }
     getBalances() {
-        this.core.clearing.settle();
-        const balances = {
+        return {
             balance: this.core.states.assets.balance,
             available: this.core.states.margin.available,
             time: this.core.timeline.now(),
         };
-        return interfaces_1.clone(balances);
     }
 }
 exports.InterfaceInstant = InterfaceInstant;

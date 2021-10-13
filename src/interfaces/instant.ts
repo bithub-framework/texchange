@@ -5,9 +5,9 @@ import {
     OpenOrder,
     LimitOrder,
     Amendment,
-    clone,
     Positions,
     Balances,
+    Side, Length,
 } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
@@ -21,43 +21,62 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public pushTrades(trades: Trade[]): void {
-        this.emit('trades', clone(trades));
+        this.emit('trades', trades.map(trade => ({
+            id: trade.id,
+            price: trade.price,
+            quantity: trade.quantity,
+            side: trade.side,
+            time: trade.time,
+        })));
     }
-
 
     public pushOrderbook(): void {
-        this.emit('orderbook', clone(this.core.states.orderbook.getBook()));
+        const orderbook = this.core.states.orderbook.getBook();
+        this.emit('orderbook', {
+            [Side.ASK]: orderbook[Side.ASK].map(order => ({
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+            })),
+            [Side.BID]: orderbook[Side.BID].map(order => ({
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+            })),
+            time: orderbook.time,
+        });
     }
-
 
     public pushPositionsAndBalances(): void {
-        // this.clearingController.clear();
-        const positions: Positions = {
-            position: this.core.states.assets.position,
-            closable: this.core.states.margin.closable,
-            time: this.core.timeline.now(),
-        };
-        const balances: Balances = {
-            balance: this.core.states.assets.balance,
-            available: this.core.states.margin.available,
-            time: this.core.timeline.now(),
-        };
-        this.emit('positions', clone(positions));
-        this.emit('balances', clone(balances));
+        this.emit('positions', this.getPositions());
+        this.emit('balances', this.getBalances());
     }
-
 
     public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
         return orders.map((order): OpenOrder | Error => {
             try {
                 const openOrder: OpenOrder = {
-                    ...order,
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
                     id: ++this.core.states.misc.userOrderCount,
                     filled: new Big(0),
                     unfilled: order.quantity,
                 };
                 this.core.validation.validateOrder(openOrder);
-                return clone(this.core.ordering.makeOpenOrder(openOrder));
+                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
+                return {
+                    price: returnedOrder.price,
+                    quantity: returnedOrder.quantity,
+                    side: returnedOrder.side,
+                    length: returnedOrder.length,
+                    operation: returnedOrder.operation,
+                    id: returnedOrder.id,
+                    filled: returnedOrder.filled,
+                    unfilled: returnedOrder.unfilled,
+                };
             } catch (err) {
                 return <Error>err;
             }
@@ -65,7 +84,19 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
-        return orders.map(order => clone(this.core.ordering.cancelOpenOrder(order)));
+        return orders.map(order => {
+            const returnedOrder = this.core.ordering.cancelOpenOrder(order);
+            return {
+                price: returnedOrder.price,
+                quantity: returnedOrder.quantity,
+                side: returnedOrder.side,
+                length: returnedOrder.length,
+                operation: returnedOrder.operation,
+                id: returnedOrder.id,
+                filled: returnedOrder.filled,
+                unfilled: returnedOrder.unfilled,
+            }
+        });
     }
 
     public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
@@ -83,7 +114,17 @@ export class InterfaceInstant extends EventEmitter {
                     operation: amendment.operation,
                 };
                 this.core.validation.validateOrder(openOrder);
-                return clone(this.core.ordering.makeOpenOrder(openOrder));
+                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
+                return {
+                    price: returnedOrder.price,
+                    quantity: returnedOrder.quantity,
+                    side: returnedOrder.side,
+                    length: returnedOrder.length,
+                    operation: returnedOrder.operation,
+                    id: returnedOrder.id,
+                    filled: returnedOrder.filled,
+                    unfilled: returnedOrder.unfilled,
+                };
             } catch (err) {
                 return <Error>err;
             }
@@ -91,27 +132,39 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public getOpenOrders(): OpenOrder[] {
-        return clone([...this.core.states.makers.values()]);
+        const openOrders = [...this.core.states.makers.values()];
+        return openOrders.map(order => ({
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
+            filled: order.filled,
+            unfilled: order.unfilled,
+        }));
     }
 
     public getPositions(): Positions {
-        this.core.clearing.settle();
-        const positions = {
-            position: this.core.states.assets.position,
-            closable: this.core.states.margin.closable,
+        return {
+            position: {
+                [Length.LONG]: this.core.states.assets.position[Length.LONG],
+                [Length.SHORT]: this.core.states.assets.position[Length.SHORT],
+            },
+            closable: {
+                [Length.LONG]: this.core.states.margin.closable[Length.LONG],
+                [Length.SHORT]: this.core.states.margin.closable[Length.SHORT],
+            },
             time: this.core.timeline.now(),
         };
-        return clone(positions);
     }
 
     public getBalances(): Balances {
-        this.core.clearing.settle();
-        const balances = {
+        return {
             balance: this.core.states.assets.balance,
             available: this.core.states.margin.available,
             time: this.core.timeline.now(),
         };
-        return clone(balances);
     }
 }
 
