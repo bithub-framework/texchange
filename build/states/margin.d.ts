@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Frozen, StateLike, TypeRecur } from '../interfaces';
+import { Length, Frozen, StateLike, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { inspect } from 'util';
 import { Core } from '../core';
@@ -22,8 +22,10 @@ export declare class StateMargin implements StateLike<Snapshot> {
     get closable(): {
         [x: number]: Big;
     };
+    incMargin(length: Length, increment: Big): void;
+    decMargin(length: Length, decrement: Big): void;
     freeze(toFreeze: Frozen): void;
-    thaw(frozen: Frozen): void;
+    thaw(toThaw: Frozen): void;
     capture(): Snapshot;
     [inspect.custom](): string;
 }

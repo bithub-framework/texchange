@@ -3,6 +3,8 @@ import {
     OpenOrder,
     MarketCalc,
     Length,
+    Frozen,
+    Operation,
 } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
@@ -34,17 +36,17 @@ export class MethodsCalculation implements MarketCalc {
 
     // this.core.assets.position[order.length] has not updated.
     public marginIncrement(
-        order: OpenOrder, volume: Big, dollarVolume: Big,
+        length: Length, volume: Big, dollarVolume: Big,
     ): Big {
         return dollarVolume.div(this.core.config.LEVERAGE);
     }
 
     public marginDecrement(
-        order: OpenOrder, volume: Big, dollarVolume: Big,
+        length: Length, volume: Big, dollarVolume: Big,
     ): Big {
         return volume
-            .div(this.core.states.assets.position[order.length])
-            .times(this.core.states.margin[order.length]);
+            .div(this.core.states.assets.position[length])
+            .times(this.core.states.margin[length]);
     };
 
     public totalMargin(): Big {
@@ -52,12 +54,49 @@ export class MethodsCalculation implements MarketCalc {
             .plus(this.core.states.margin[Length.SHORT]);
     }
 
-    public balanceToFreeze(
+    public toFreeze(
         order: OpenOrder,
-    ): Big {
-        return order.price
-            .times(order.quantity)
-            .div(this.core.config.LEVERAGE);
+    ): Frozen {
+        if (order.operation === Operation.OPEN)
+            return {
+                balance: order.price.times(order.unfilled).div(this.core.config.LEVERAGE),
+                position: {
+                    [Length.LONG]: new Big(0),
+                    [Length.SHORT]: new Big(0),
+                },
+            }
+        else
+            return {
+                balance: new Big(0),
+                position: {
+                    [order.length]: order.unfilled,
+                    [-order.length]: new Big(0),
+                },
+            }
+    }
+
+    public toThaw(
+        order: OpenOrder,
+        frozen: Frozen,
+        volume: Big,
+        dollarVolume: Big,
+    ): Frozen {
+        if (order.operation === Operation.OPEN)
+            return {
+                balance: volume.div(order.unfilled).times(frozen.balance),
+                position: {
+                    [Length.LONG]: new Big(0),
+                    [Length.SHORT]: new Big(0),
+                },
+            }
+        else
+            return {
+                balance: new Big(0),
+                position: {
+                    [order.length]: volume,
+                    [-order.length]: new Big(0),
+                },
+            }
     }
 
     public marginOnSettlement(

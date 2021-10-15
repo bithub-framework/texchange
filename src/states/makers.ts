@@ -5,6 +5,7 @@ import {
     Frozen,
     StateLike,
     TypeRecur,
+    Side, Length,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
@@ -22,6 +23,9 @@ export class StateMakers
     implements StateLike<Snapshot> {
 
     private frozens = new Map<OrderId, Frozen>();
+    public totalQuantity: {
+        [side: number]: Big;
+    } = {};
 
     constructor(
         private core: Core,
@@ -43,10 +47,17 @@ export class StateMakers
                 });
                 this.frozens.set(order.id, {
                     balance: new Big(frozen.balance),
-                    position: new Big(frozen.position),
-                    length: frozen.length,
+                    position: {
+                        [Length.LONG]: new Big(frozen.position[Length.LONG]),
+                        [Length.SHORT]: new Big(frozen.position[Length.SHORT]),
+                    },
                 });
             }
+        for (const side of [Side.ASK, Side.BID]) {
+            this.totalQuantity[side] = [...this.values()]
+                .filter(order => order.side === side)
+                .reduce((total, order) => total.plus(order.unfilled), new Big(0));
+        }
     }
 
     public capture(): Snapshot {
@@ -58,21 +69,16 @@ export class StateMakers
     }
 
     public addOrder(order: OpenMaker): Frozen {
-        const frozen: Frozen = {
-            balance: order.operation === Operation.OPEN
-                ? this.core.calculation.balanceToFreeze(order)
-                    .round(this.core.config.CURRENCY_DP)
-                : new Big(0),
-            position: order.operation === Operation.CLOSE
-                ? order.unfilled
-                : new Big(0),
-            length: order.length,
-        };
+        const toFreeze: Frozen = this.core.calculation.toFreeze(order);
+        toFreeze.balance = toFreeze.balance.round(this.core.config.CURRENCY_DP);
+        toFreeze.position[Length.LONG] = toFreeze.position[Length.LONG].round(this.core.config.CURRENCY_DP);
+        toFreeze.position[Length.SHORT] = toFreeze.position[Length.SHORT].round(this.core.config.CURRENCY_DP);
+
         if (order.unfilled.gt(0)) {
             this.set(order.id, order);
-            this.frozens.set(order.id, frozen);
+            this.frozens.set(order.id, toFreeze);
         }
-        return frozen;
+        return toFreeze;
     }
 
     public takeOrder(
@@ -85,28 +91,26 @@ export class StateMakers
         const frozen = this.frozens.get(oid)!;
         assert(volume.lte(order.unfilled));
 
-        const thawed: Frozen = {
-            balance: order.operation === Operation.OPEN
-                ? this.calcThawedBalance(
-                    order.unfilled, frozen.balance, volume, dollarVolume,
-                ) : new Big(0),
-            position: order.operation === Operation.CLOSE
-                ? volume
-                : new Big(0),
-            length: order.length,
-        };
+        const toThaw: Frozen = this.core.calculation.toThaw(order, frozen, volume, dollarVolume);
+        toThaw.balance = toThaw.balance.round(this.core.config.CURRENCY_DP);
+        toThaw.position[Length.LONG] = toThaw.position[Length.LONG].round(this.core.config.CURRENCY_DP);
+        toThaw.position[Length.SHORT] = toThaw.position[Length.SHORT].round(this.core.config.CURRENCY_DP);
 
-        frozen.balance = frozen.balance.minus(thawed.balance);
-        frozen.position = frozen.position.minus(thawed.position);
+        frozen.balance = frozen.balance.minus(toThaw.balance);
+        frozen.position[Length.LONG] = frozen.position[Length.LONG]
+            .minus(toThaw.position[Length.LONG]);
+        frozen.position[Length.SHORT] = frozen.position[Length.SHORT]
+            .minus(toThaw.position[Length.SHORT]);
 
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
+
         if (order.unfilled.eq(0)) {
             this.delete(oid);
             this.frozens.delete(oid);
         }
 
-        return thawed;
+        return toThaw;
     }
 
     public removeOrder(oid: OrderId): Frozen | null {
@@ -114,28 +118,9 @@ export class StateMakers
         const frozen = this.frozens.get(oid)!;
         if (!order) return null;
 
-        const thawed: Frozen = {
-            balance: frozen.balance,
-            position: frozen.position,
-            length: order.length,
-        };
-
         this.delete(oid);
         this.frozens.delete(oid);
 
-        return thawed;
-    }
-
-    private calcThawedBalance(
-        unfilled: Big,
-        frozenBalance: Big,
-        volume: Big,
-        dollarVolume: Big,
-    ): Big {
-        let thawedMargin = dollarVolume.div(this.core.config.LEVERAGE)
-            .round(this.core.config.CURRENCY_DP);
-        if (thawedMargin.gt(frozenBalance) || volume.eq(unfilled))
-            thawedMargin = frozenBalance;
-        return thawedMargin;
+        return frozen;
     }
 }

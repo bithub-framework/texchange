@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MethodsValidation = void 0;
 const interfaces_1 = require("../interfaces");
-const big_js_1 = require("big.js");
 const assert = require("assert");
 class MethodsValidation {
     constructor(core) {
@@ -15,14 +14,12 @@ class MethodsValidation {
     }
     assertEnoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
-            assert(order.unfilled.lte(new big_js_1.default(0)
-                .plus(this.core.states.assets.position[order.length])
+            assert(order.unfilled.lte(this.core.states.assets.position[order.length]
                 .minus(this.core.states.margin.frozenPosition[order.length])));
     }
     assertEnoughAvailable(order) {
         if (order.operation === interfaces_1.Operation.OPEN)
-            assert(new big_js_1.default(0)
-                .plus(this.core.calculation.balanceToFreeze(order))
+            assert(this.core.calculation.toFreeze(order).balance
                 .plus(this.core.calculation.dollarVolume(order.price, order.unfilled).times(this.core.config.TAKER_FEE_RATE)).round(this.core.config.CURRENCY_DP)
                 .lte(this.core.states.margin.available));
     }

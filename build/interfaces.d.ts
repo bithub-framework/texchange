@@ -1,5 +1,5 @@
 export * from 'interfaces';
-import { Length, Trade, Orderbook, MarketSpec, AccountSpec, MarketCalc, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents } from 'interfaces';
+import { Trade, Orderbook, MarketSpec, AccountSpec, MarketCalc, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents } from 'interfaces';
 import Big from 'big.js';
 import { Snapshot as SnapshotStateMakers } from './states/makers';
 import { Snapshot as SnapshotStateAssets } from './states/assets';
@@ -51,8 +51,9 @@ export interface ExchangeLike extends StateLike<Snapshot> {
 }
 export interface Frozen {
     balance: Big;
-    position: Big;
-    length: Length;
+    position: {
+        [length: number]: Big;
+    };
 }
 export declare type TypeRecur<Type, Old, New> = Type extends Old ? New : (Type extends {} ? {
     [K in keyof Type]: TypeRecur<Type[K], Old, New>;

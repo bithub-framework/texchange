@@ -72,8 +72,9 @@ export interface ExchangeLike extends StateLike<Snapshot> {
 
 export interface Frozen {
     balance: Big;
-    position: Big;
-    length: Length;
+    position: {
+        [length: number]: Big;
+    };
 }
 
 export type TypeRecur<Type, Old, New> =

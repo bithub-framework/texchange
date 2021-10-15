@@ -48,7 +48,7 @@ export class MethodsTaking {
         if (taker.operation === Operation.OPEN) {
             this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
                 .plus(this.core.calculation.marginIncrement(
-                    taker, volume, dollarVolume,
+                    taker.length, volume, dollarVolume,
                 ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.openPosition(
                 taker.length, volume, dollarVolume, takerFee,
@@ -56,7 +56,7 @@ export class MethodsTaking {
         } else {
             this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
                 .minus(this.core.calculation.marginDecrement(
-                    taker, volume, dollarVolume,
+                    taker.length, volume, dollarVolume,
                 ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.closePosition(
                 taker.length, volume, dollarVolume, takerFee,

@@ -9,6 +9,7 @@ class StateMakers extends Map {
         super();
         this.core = core;
         this.frozens = new Map();
+        this.totalQuantity = {};
         if (snapshot)
             for (const { order, frozen } of snapshot) {
                 this.set(order.id, {
@@ -24,10 +25,17 @@ class StateMakers extends Map {
                 });
                 this.frozens.set(order.id, {
                     balance: new big_js_1.default(frozen.balance),
-                    position: new big_js_1.default(frozen.position),
-                    length: frozen.length,
+                    position: {
+                        [interfaces_1.Length.LONG]: new big_js_1.default(frozen.position[interfaces_1.Length.LONG]),
+                        [interfaces_1.Length.SHORT]: new big_js_1.default(frozen.position[interfaces_1.Length.SHORT]),
+                    },
                 });
             }
+        for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
+            this.totalQuantity[side] = [...this.values()]
+                .filter(order => order.side === side)
+                .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
+        }
     }
     capture() {
         return [...this.keys()]
@@ -37,65 +45,46 @@ class StateMakers extends Map {
         }));
     }
     addOrder(order) {
-        const frozen = {
-            balance: order.operation === interfaces_1.Operation.OPEN
-                ? this.core.calculation.balanceToFreeze(order)
-                    .round(this.core.config.CURRENCY_DP)
-                : new big_js_1.default(0),
-            position: order.operation === interfaces_1.Operation.CLOSE
-                ? order.unfilled
-                : new big_js_1.default(0),
-            length: order.length,
-        };
+        const toFreeze = this.core.calculation.toFreeze(order);
+        toFreeze.balance = toFreeze.balance.round(this.core.config.CURRENCY_DP);
+        toFreeze.position[interfaces_1.Length.LONG] = toFreeze.position[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP);
+        toFreeze.position[interfaces_1.Length.SHORT] = toFreeze.position[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP);
         if (order.unfilled.gt(0)) {
             this.set(order.id, order);
-            this.frozens.set(order.id, frozen);
+            this.frozens.set(order.id, toFreeze);
         }
-        return frozen;
+        return toFreeze;
     }
     takeOrder(oid, volume, dollarVolume) {
         const order = this.get(oid);
         assert(order);
         const frozen = this.frozens.get(oid);
         assert(volume.lte(order.unfilled));
-        const thawed = {
-            balance: order.operation === interfaces_1.Operation.OPEN
-                ? this.calcThawedBalance(order.unfilled, frozen.balance, volume, dollarVolume) : new big_js_1.default(0),
-            position: order.operation === interfaces_1.Operation.CLOSE
-                ? volume
-                : new big_js_1.default(0),
-            length: order.length,
-        };
-        frozen.balance = frozen.balance.minus(thawed.balance);
-        frozen.position = frozen.position.minus(thawed.position);
+        const toThaw = this.core.calculation.toThaw(order, frozen, volume, dollarVolume);
+        toThaw.balance = toThaw.balance.round(this.core.config.CURRENCY_DP);
+        toThaw.position[interfaces_1.Length.LONG] = toThaw.position[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP);
+        toThaw.position[interfaces_1.Length.SHORT] = toThaw.position[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP);
+        frozen.balance = frozen.balance.minus(toThaw.balance);
+        frozen.position[interfaces_1.Length.LONG] = frozen.position[interfaces_1.Length.LONG]
+            .minus(toThaw.position[interfaces_1.Length.LONG]);
+        frozen.position[interfaces_1.Length.SHORT] = frozen.position[interfaces_1.Length.SHORT]
+            .minus(toThaw.position[interfaces_1.Length.SHORT]);
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
         if (order.unfilled.eq(0)) {
             this.delete(oid);
             this.frozens.delete(oid);
         }
-        return thawed;
+        return toThaw;
     }
     removeOrder(oid) {
         const order = this.get(oid);
         const frozen = this.frozens.get(oid);
         if (!order)
             return null;
-        const thawed = {
-            balance: frozen.balance,
-            position: frozen.position,
-            length: order.length,
-        };
         this.delete(oid);
         this.frozens.delete(oid);
-        return thawed;
-    }
-    calcThawedBalance(unfilled, frozenBalance, volume, dollarVolume) {
-        let thawedMargin = dollarVolume.div(this.core.config.LEVERAGE)
-            .round(this.core.config.CURRENCY_DP);
-        if (thawedMargin.gt(frozenBalance) || volume.eq(unfilled))
-            thawedMargin = frozenBalance;
-        return thawedMargin;
+        return frozen;
     }
 }
 exports.StateMakers = StateMakers;

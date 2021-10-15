@@ -2,13 +2,12 @@ import {
     OpenOrder,
     Operation, Length,
 } from '../interfaces';
-import Big from 'big.js';
 import assert = require('assert');
 import { Core } from '../core';
 
 export class MethodsValidation {
     constructor(
-        private core: Core,
+        protected core: Core,
     ) { }
 
     public validateOrder(order: OpenOrder) {
@@ -20,23 +19,23 @@ export class MethodsValidation {
     private assertEnoughPosition(order: OpenOrder) {
         if (order.operation === Operation.CLOSE)
             assert(
-                order.unfilled.lte(new Big(0)
-                    .plus(this.core.states.assets.position[order.length])
-                    .minus(this.core.states.margin.frozenPosition[order.length])
+                order.unfilled.lte(
+                    this.core.states.assets.position[order.length]
+                        .minus(this.core.states.margin.frozenPosition[order.length])
                 ),
             );
     }
 
     private assertEnoughAvailable(order: OpenOrder) {
         if (order.operation === Operation.OPEN)
-            assert(new Big(0)
-                .plus(this.core.calculation.balanceToFreeze(order))
-                .plus(
-                    this.core.calculation.dollarVolume(
-                        order.price, order.unfilled,
-                    ).times(this.core.config.TAKER_FEE_RATE),
-                ).round(this.core.config.CURRENCY_DP)
-                .lte(this.core.states.margin.available),
+            assert(
+                this.core.calculation.toFreeze(order).balance
+                    .plus(
+                        this.core.calculation.dollarVolume(
+                            order.price, order.unfilled,
+                        ).times(this.core.config.TAKER_FEE_RATE),
+                    ).round(this.core.config.CURRENCY_DP)
+                    .lte(this.core.states.margin.available),
             );
     }
 

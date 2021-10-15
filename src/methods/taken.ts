@@ -54,7 +54,7 @@ export class MethodsTaken {
         if (maker.operation === Operation.OPEN) {
             this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
                 .plus(this.core.calculation.marginIncrement(
-                    maker, volume, dollarVolume,
+                    maker.length, volume, dollarVolume,
                 ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.openPosition(
                 maker.length, volume, dollarVolume, makerFee,
@@ -62,7 +62,7 @@ export class MethodsTaken {
         } else {
             this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
                 .minus(this.core.calculation.marginDecrement(
-                    maker, volume, dollarVolume,
+                    maker.length, volume, dollarVolume,
                 ).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.closePosition(
                 maker.length, volume, dollarVolume, makerFee,

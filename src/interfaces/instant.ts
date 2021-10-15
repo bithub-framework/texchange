@@ -168,7 +168,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 }
 
-export interface InterfaceInstant /* extends EventEmitter */ {
+export interface InterfaceInstant {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

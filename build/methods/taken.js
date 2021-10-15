@@ -37,12 +37,12 @@ class MethodsTaken {
             .round(this.core.config.CURRENCY_DP, 3 /* RoundUp */);
         if (maker.operation === interfaces_1.Operation.OPEN) {
             this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
-                .plus(this.core.calculation.marginIncrement(maker, volume, dollarVolume).round(this.core.config.CURRENCY_DP));
+                .plus(this.core.calculation.marginIncrement(maker.length, volume, dollarVolume).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.openPosition(maker.length, volume, dollarVolume, makerFee);
         }
         else {
             this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
-                .minus(this.core.calculation.marginDecrement(maker, volume, dollarVolume).round(this.core.config.CURRENCY_DP));
+                .minus(this.core.calculation.marginDecrement(maker.length, volume, dollarVolume).round(this.core.config.CURRENCY_DP));
             this.core.states.assets.closePosition(maker.length, volume, dollarVolume, makerFee);
         }
         return volume;

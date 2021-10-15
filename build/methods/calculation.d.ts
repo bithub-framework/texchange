@@ -1,4 +1,4 @@
-import { LimitOrder, OpenOrder, MarketCalc, Length } from '../interfaces';
+import { LimitOrder, OpenOrder, MarketCalc, Length, Frozen } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
 export declare class MethodsCalculation implements MarketCalc {
@@ -7,10 +7,11 @@ export declare class MethodsCalculation implements MarketCalc {
     dollarVolume(price: Big, quantity: Big): Big;
     quantity(price: Big, dollarVolume: Big): Big;
     initialMargin(order: LimitOrder): Big;
-    marginIncrement(order: OpenOrder, volume: Big, dollarVolume: Big): Big;
-    marginDecrement(order: OpenOrder, volume: Big, dollarVolume: Big): Big;
+    marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
+    marginDecrement(length: Length, volume: Big, dollarVolume: Big): Big;
     totalMargin(): Big;
-    balanceToFreeze(order: OpenOrder): Big;
+    toFreeze(order: OpenOrder): Frozen;
+    toThaw(order: OpenOrder, frozen: Frozen, volume: Big, dollarVolume: Big): Frozen;
     marginOnSettlement(length: Length, profit: Big): Big;
     shouldLiquidate(): Length[];
 }

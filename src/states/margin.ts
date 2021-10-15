@@ -64,20 +64,49 @@ export class StateMargin implements StateLike<Snapshot> {
         };
     }
 
+    public incMargin(length: Length, increment: Big): void {
+        if (increment.lt(0))
+            this.decMargin(length, new Big(0).minus(increment))
+        else
+            this[length] = this[length].plus(increment);
+    }
+
+    public decMargin(length: Length, decrement: Big): void {
+        if (decrement.lt(0))
+            this.incMargin(length, new Big(0).minus(decrement));
+        else if (decrement.lte(this[length]))
+            this[length] = this[length].minus(decrement);
+        else {
+            const rest = decrement.minus(this[length]);
+            this[length] = new Big(0);
+            this.incMargin(-length, rest);
+        }
+    }
+
     public freeze(toFreeze: Frozen) {
         this.frozenBalance = this.frozenBalance.plus(toFreeze.balance);
-        this.frozenPosition[toFreeze.length] = this.frozenPosition[toFreeze.length].plus(toFreeze.position);
-        if (this.available.lt(0) || this.closable[toFreeze.length].lt(0)) {
+        this.frozenPosition[Length.LONG] = this.frozenPosition[Length.LONG].plus(toFreeze.position[Length.LONG]);
+        this.frozenPosition[Length.SHORT] = this.frozenPosition[Length.SHORT].plus(toFreeze.position[Length.SHORT]);
+        if (
+            this.available.lt(0) ||
+            this.closable[Length.LONG].lt(0) ||
+            this.closable[Length.SHORT].lt(0)
+        ) {
             this.thaw(toFreeze);
             throw new Error('No enough to freeze');
         }
     }
 
-    public thaw(frozen: Frozen) {
-        this.frozenBalance = this.frozenBalance.minus(frozen.balance);
-        this.frozenPosition[frozen.length] = this.frozenPosition[frozen.length].minus(frozen.position);
-        if (this.frozenBalance.lt(0) || this.frozenPosition[frozen.length].lt(0)) {
-            this.freeze(frozen);
+    public thaw(toThaw: Frozen) {
+        this.frozenBalance = this.frozenBalance.minus(toThaw.balance);
+        this.frozenPosition[Length.LONG] = this.frozenPosition[Length.LONG].minus(toThaw.position[Length.LONG]);
+        this.frozenPosition[Length.SHORT] = this.frozenPosition[Length.SHORT].minus(toThaw.position[Length.SHORT]);
+        if (
+            this.frozenBalance.lt(0) ||
+            this.frozenPosition[Length.LONG].lt(0) ||
+            this.frozenPosition[Length.SHORT].lt(0)
+        ) {
+            this.freeze(toThaw);
             throw new Error('No enough to thaw');
         }
     }
