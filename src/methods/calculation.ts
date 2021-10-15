@@ -1,5 +1,4 @@
 import {
-    LimitOrder,
     OpenOrder,
     MarketCalc,
     Length,
@@ -9,6 +8,7 @@ import {
 import Big from 'big.js';
 import { Core } from '../core';
 import assert = require('assert');
+import { max } from '../big-math';
 
 export class MethodsCalculation implements MarketCalc {
     constructor(
@@ -28,11 +28,10 @@ export class MethodsCalculation implements MarketCalc {
         return dollarVolume.div(price);
     }
 
-    public initialMargin(order: LimitOrder): Big {
-        return order.price
-            .times(order.quantity)
-            .div(this.core.config.LEVERAGE);
-    };
+    // public initialMargin(order: LimitOrder): Big {
+    //     return this.dollarVolume(order.price, order.quantity)
+    //         .div(this.core.config.LEVERAGE);
+    // };
 
     // this.core.assets.position[order.length] has not updated.
     public marginIncrement(
@@ -54,49 +53,57 @@ export class MethodsCalculation implements MarketCalc {
             .plus(this.core.states.margin[Length.SHORT]);
     }
 
+    public totalFrozenBalance(): Big {
+        const totalUnfilled = this.core.states.makers.totalUnfilled;
+        const position = this.core.states.assets.position;
+        const frozen = this.core.states.margin.frozen;
+        const total: {
+            [length: number]: Big;
+        } = {};
+        for (const length of [Length.LONG, Length.SHORT]) {
+            total[length] = max(
+                totalUnfilled[length].minus(position[-length]),
+                new Big(0),
+            ).div(totalUnfilled[length])
+                .times(frozen.balance[length]);
+        }
+        return total[Length.LONG].plus(total[Length.SHORT]);
+    }
+
     public toFreeze(
         order: OpenOrder,
     ): Frozen {
-        if (order.operation === Operation.OPEN)
-            return {
-                balance: order.price.times(order.unfilled).div(this.core.config.LEVERAGE),
-                position: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-            }
-        else
-            return {
-                balance: new Big(0),
-                position: {
-                    [order.length]: order.unfilled,
-                    [-order.length]: new Big(0),
-                },
-            }
+        const length: Length = order.side * Operation.OPEN;
+        return {
+            balance: {
+                [length]: this.dollarVolume(order.price, order.unfilled),
+                [-length]: new Big(0),
+            },
+            position: {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            },
+        };
     }
 
+    // order has not been updated
     public toThaw(
         order: OpenOrder,
         frozen: Frozen,
         volume: Big,
         dollarVolume: Big,
     ): Frozen {
-        if (order.operation === Operation.OPEN)
-            return {
-                balance: volume.div(order.unfilled).times(frozen.balance),
-                position: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-            }
-        else
-            return {
-                balance: new Big(0),
-                position: {
-                    [order.length]: volume,
-                    [-order.length]: new Big(0),
-                },
-            }
+        const length: Length = order.side * Operation.OPEN;
+        return {
+            balance: {
+                [length]: volume.div(order.unfilled).times(frozen.balance[length]),
+                [-length]: new Big(0),
+            },
+            position: {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            },
+        };
     }
 
     public marginOnSettlement(

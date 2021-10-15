@@ -11,38 +11,49 @@ import { Core } from '../core';
 
 export interface Snapshot {
     [length: number]: Big;
-    frozenBalance: Big;
-    frozenPosition: {
-        [length: number]: Big;
+    frozen: {
+        balance: {
+            [length: number]: Big;
+        };
+        position: {
+            [length: number]: Big;
+        };
     };
 }
 
 
 export class StateMargin implements StateLike<Snapshot> {
     [length: number]: Big;
-    public frozenBalance: Big;
-    public frozenPosition: {
-        [length: number]: Big;
-    };
+    public frozen: Frozen;
 
     constructor(
         private core: Core,
         snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         if (snapshot) {
-            this.frozenBalance = new Big(snapshot.frozenBalance);
-            this.frozenPosition = {
-                [Length.LONG]: new Big(snapshot.frozenPosition[Length.LONG]),
-                [Length.SHORT]: new Big(snapshot.frozenPosition[Length.SHORT]),
+            this.frozen = {
+                balance: {
+                    [Length.LONG]: new Big(snapshot.frozen.balance[Length.LONG]),
+                    [Length.SHORT]: new Big(snapshot.frozen.balance[Length.SHORT]),
+                },
+                position: {
+                    [Length.LONG]: new Big(snapshot.frozen.position[Length.LONG]),
+                    [Length.SHORT]: new Big(snapshot.frozen.position[Length.SHORT]),
+                },
             };
             this[Length.LONG] = new Big(snapshot[Length.LONG]);
             this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
         } else {
-            this.frozenBalance = new Big(0);
-            this.frozenPosition = {
-                [Length.LONG]: new Big(0),
-                [Length.SHORT]: new Big(0),
-            };
+            this.frozen = {
+                balance: {
+                    [Length.LONG]: new Big(0),
+                    [Length.SHORT]: new Big(0),
+                },
+                position: {
+                    [Length.LONG]: new Big(0),
+                    [Length.SHORT]: new Big(0),
+                },
+            }
             this[Length.LONG] = new Big(0);
             this[Length.SHORT] = new Big(0);
         }
@@ -51,16 +62,15 @@ export class StateMargin implements StateLike<Snapshot> {
     public get available(): Big {
         return this.core.states.assets.balance
             .minus(this.core.calculation.totalMargin())
-            .minus(this.frozenBalance);
-
+            .minus(this.core.calculation.totalFrozenBalance());
     }
 
     public get closable() {
         return {
             [Length.LONG]: this.core.states.assets.position[Length.LONG]
-                .minus(this.frozenPosition[Length.LONG]),
+                .minus(this.frozen.position[Length.LONG]),
             [Length.SHORT]: this.core.states.assets.position[Length.SHORT]
-                .minus(this.frozenPosition[Length.SHORT]),
+                .minus(this.frozen.position[Length.SHORT]),
         };
     }
 
@@ -84,9 +94,7 @@ export class StateMargin implements StateLike<Snapshot> {
     }
 
     public freeze(toFreeze: Frozen) {
-        this.frozenBalance = this.frozenBalance.plus(toFreeze.balance);
-        this.frozenPosition[Length.LONG] = this.frozenPosition[Length.LONG].plus(toFreeze.position[Length.LONG]);
-        this.frozenPosition[Length.SHORT] = this.frozenPosition[Length.SHORT].plus(toFreeze.position[Length.SHORT]);
+        this.frozen = Frozen.plus(this.frozen, toFreeze);
         if (
             this.available.lt(0) ||
             this.closable[Length.LONG].lt(0) ||
@@ -98,13 +106,12 @@ export class StateMargin implements StateLike<Snapshot> {
     }
 
     public thaw(toThaw: Frozen) {
-        this.frozenBalance = this.frozenBalance.minus(toThaw.balance);
-        this.frozenPosition[Length.LONG] = this.frozenPosition[Length.LONG].minus(toThaw.position[Length.LONG]);
-        this.frozenPosition[Length.SHORT] = this.frozenPosition[Length.SHORT].minus(toThaw.position[Length.SHORT]);
+        this.frozen = Frozen.minus(this.frozen, toThaw);
         if (
-            this.frozenBalance.lt(0) ||
-            this.frozenPosition[Length.LONG].lt(0) ||
-            this.frozenPosition[Length.SHORT].lt(0)
+            this.frozen.balance[Length.LONG].lt(0) ||
+            this.frozen.balance[Length.SHORT].lt(0) ||
+            this.frozen.position[Length.LONG].lt(0) ||
+            this.frozen.position[Length.SHORT].lt(0)
         ) {
             this.freeze(toThaw);
             throw new Error('No enough to thaw');
@@ -113,8 +120,16 @@ export class StateMargin implements StateLike<Snapshot> {
 
     public capture(): Snapshot {
         return {
-            frozenPosition: this.frozenPosition,
-            frozenBalance: this.frozenBalance,
+            frozen: {
+                position: {
+                    [Length.LONG]: this.frozen.position[Length.LONG],
+                    [Length.SHORT]: this.frozen.position[Length.SHORT],
+                },
+                balance: {
+                    [Length.LONG]: this.frozen.balance[Length.LONG],
+                    [Length.SHORT]: this.frozen.balance[Length.SHORT],
+                },
+            },
             [Length.LONG]: this[Length.LONG],
             [Length.SHORT]: this[Length.SHORT],
         };
@@ -124,8 +139,16 @@ export class StateMargin implements StateLike<Snapshot> {
         return JSON.stringify({
             [Length.LONG]: this[Length.LONG],
             [Length.SHORT]: this[Length.SHORT],
-            frozenBalance: this.frozenBalance,
-            frozenPosition: this.frozenPosition,
+            frozen: {
+                position: {
+                    [Length.LONG]: this.frozen.position[Length.LONG],
+                    [Length.SHORT]: this.frozen.position[Length.SHORT],
+                },
+                balance: {
+                    [Length.LONG]: this.frozen.balance[Length.LONG],
+                    [Length.SHORT]: this.frozen.balance[Length.SHORT],
+                },
+            },
             available: this.available,
             closable: this.closable,
         });

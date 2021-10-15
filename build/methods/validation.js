@@ -15,13 +15,16 @@ class MethodsValidation {
     assertEnoughPosition(order) {
         if (order.operation === interfaces_1.Operation.CLOSE)
             assert(order.unfilled.lte(this.core.states.assets.position[order.length]
-                .minus(this.core.states.margin.frozenPosition[order.length])));
+                .minus(this.core.states.margin.frozen.position[order.length])));
     }
     assertEnoughAvailable(order) {
-        if (order.operation === interfaces_1.Operation.OPEN)
-            assert(this.core.calculation.toFreeze(order).balance
+        if (order.operation === interfaces_1.Operation.OPEN) {
+            const frozen = this.core.calculation.toFreeze(order);
+            assert(frozen.balance[interfaces_1.Length.LONG]
+                .plus(frozen.balance[interfaces_1.Length.SHORT])
                 .plus(this.core.calculation.dollarVolume(order.price, order.unfilled).times(this.core.config.TAKER_FEE_RATE)).round(this.core.config.CURRENCY_DP)
                 .lte(this.core.states.margin.available));
+        }
     }
     formatCorrect(order) {
         assert(order.price.eq(order.price.round(this.core.config.PRICE_DP)));

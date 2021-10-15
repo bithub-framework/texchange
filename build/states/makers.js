@@ -9,7 +9,7 @@ class StateMakers extends Map {
         super();
         this.core = core;
         this.frozens = new Map();
-        this.totalQuantity = {};
+        this.totalUnfilled = {};
         if (snapshot)
             for (const { order, frozen } of snapshot) {
                 this.set(order.id, {
@@ -24,7 +24,10 @@ class StateMakers extends Map {
                     behind: new big_js_1.default(order.behind),
                 });
                 this.frozens.set(order.id, {
-                    balance: new big_js_1.default(frozen.balance),
+                    balance: {
+                        [interfaces_1.Length.LONG]: new big_js_1.default(frozen.balance[interfaces_1.Length.LONG]),
+                        [interfaces_1.Length.SHORT]: new big_js_1.default(frozen.balance[interfaces_1.Length.SHORT]),
+                    },
                     position: {
                         [interfaces_1.Length.LONG]: new big_js_1.default(frozen.position[interfaces_1.Length.LONG]),
                         [interfaces_1.Length.SHORT]: new big_js_1.default(frozen.position[interfaces_1.Length.SHORT]),
@@ -32,7 +35,7 @@ class StateMakers extends Map {
                 });
             }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.totalQuantity[side] = [...this.values()]
+            this.totalUnfilled[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
@@ -44,11 +47,22 @@ class StateMakers extends Map {
             frozen: this.frozens.get(oid),
         }));
     }
+    normalizeFrozen(frozen) {
+        return {
+            balance: {
+                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP),
+            },
+            position: {
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP),
+            },
+        };
+    }
     addOrder(order) {
-        const toFreeze = this.core.calculation.toFreeze(order);
-        toFreeze.balance = toFreeze.balance.round(this.core.config.CURRENCY_DP);
-        toFreeze.position[interfaces_1.Length.LONG] = toFreeze.position[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP);
-        toFreeze.position[interfaces_1.Length.SHORT] = toFreeze.position[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP);
+        const toFreeze = this.normalizeFrozen(this.core.calculation.toFreeze(order));
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+            .plus(order.unfilled);
         if (order.unfilled.gt(0)) {
             this.set(order.id, order);
             this.frozens.set(order.id, toFreeze);
@@ -58,19 +72,14 @@ class StateMakers extends Map {
     takeOrder(oid, volume, dollarVolume) {
         const order = this.get(oid);
         assert(order);
-        const frozen = this.frozens.get(oid);
+        const oldFrozen = this.frozens.get(oid);
         assert(volume.lte(order.unfilled));
-        const toThaw = this.core.calculation.toThaw(order, frozen, volume, dollarVolume);
-        toThaw.balance = toThaw.balance.round(this.core.config.CURRENCY_DP);
-        toThaw.position[interfaces_1.Length.LONG] = toThaw.position[interfaces_1.Length.LONG].round(this.core.config.CURRENCY_DP);
-        toThaw.position[interfaces_1.Length.SHORT] = toThaw.position[interfaces_1.Length.SHORT].round(this.core.config.CURRENCY_DP);
-        frozen.balance = frozen.balance.minus(toThaw.balance);
-        frozen.position[interfaces_1.Length.LONG] = frozen.position[interfaces_1.Length.LONG]
-            .minus(toThaw.position[interfaces_1.Length.LONG]);
-        frozen.position[interfaces_1.Length.SHORT] = frozen.position[interfaces_1.Length.SHORT]
-            .minus(toThaw.position[interfaces_1.Length.SHORT]);
+        const toThaw = this.normalizeFrozen(this.core.calculation.toThaw(order, oldFrozen, volume, dollarVolume));
+        const newFrozen = interfaces_1.Frozen.minus(oldFrozen, toThaw);
+        this.frozens.set(oid, newFrozen);
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side].minus(volume);
         if (order.unfilled.eq(0)) {
             this.delete(oid);
             this.frozens.delete(oid);
@@ -84,6 +93,8 @@ class StateMakers extends Map {
             return null;
         this.delete(oid);
         this.frozens.delete(oid);
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+            .minus(order.unfilled);
         return frozen;
     }
 }

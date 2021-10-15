@@ -1,6 +1,5 @@
 import {
     OrderId,
-    Operation,
     OpenMaker,
     Frozen,
     StateLike,
@@ -23,7 +22,7 @@ export class StateMakers
     implements StateLike<Snapshot> {
 
     private frozens = new Map<OrderId, Frozen>();
-    public totalQuantity: {
+    public totalUnfilled: {
         [side: number]: Big;
     } = {};
 
@@ -46,7 +45,10 @@ export class StateMakers
                     behind: new Big(order.behind),
                 });
                 this.frozens.set(order.id, {
-                    balance: new Big(frozen.balance),
+                    balance: {
+                        [Length.LONG]: new Big(frozen.balance[Length.LONG]),
+                        [Length.SHORT]: new Big(frozen.balance[Length.SHORT]),
+                    },
                     position: {
                         [Length.LONG]: new Big(frozen.position[Length.LONG]),
                         [Length.SHORT]: new Big(frozen.position[Length.SHORT]),
@@ -54,7 +56,7 @@ export class StateMakers
                 });
             }
         for (const side of [Side.ASK, Side.BID]) {
-            this.totalQuantity[side] = [...this.values()]
+            this.totalUnfilled[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new Big(0));
         }
@@ -68,11 +70,25 @@ export class StateMakers
             }));
     }
 
+    private normalizeFrozen(frozen: Frozen): Frozen {
+        return {
+            balance: {
+                [Length.LONG]: frozen.balance[Length.LONG].round(this.core.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.core.config.CURRENCY_DP),
+            },
+            position: {
+                [Length.LONG]: frozen.position[Length.LONG].round(this.core.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.position[Length.SHORT].round(this.core.config.CURRENCY_DP),
+            },
+        };
+    }
+
     public addOrder(order: OpenMaker): Frozen {
-        const toFreeze: Frozen = this.core.calculation.toFreeze(order);
-        toFreeze.balance = toFreeze.balance.round(this.core.config.CURRENCY_DP);
-        toFreeze.position[Length.LONG] = toFreeze.position[Length.LONG].round(this.core.config.CURRENCY_DP);
-        toFreeze.position[Length.SHORT] = toFreeze.position[Length.SHORT].round(this.core.config.CURRENCY_DP);
+        const toFreeze: Frozen = this.normalizeFrozen(
+            this.core.calculation.toFreeze(order),
+        );
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+            .plus(order.unfilled);
 
         if (order.unfilled.gt(0)) {
             this.set(order.id, order);
@@ -88,22 +104,19 @@ export class StateMakers
     ): Frozen {
         const order = this.get(oid);
         assert(order);
-        const frozen = this.frozens.get(oid)!;
+        const oldFrozen = this.frozens.get(oid)!;
         assert(volume.lte(order.unfilled));
 
-        const toThaw: Frozen = this.core.calculation.toThaw(order, frozen, volume, dollarVolume);
-        toThaw.balance = toThaw.balance.round(this.core.config.CURRENCY_DP);
-        toThaw.position[Length.LONG] = toThaw.position[Length.LONG].round(this.core.config.CURRENCY_DP);
-        toThaw.position[Length.SHORT] = toThaw.position[Length.SHORT].round(this.core.config.CURRENCY_DP);
+        const toThaw: Frozen = this.normalizeFrozen(
+            this.core.calculation.toThaw(order, oldFrozen, volume, dollarVolume),
+        );
 
-        frozen.balance = frozen.balance.minus(toThaw.balance);
-        frozen.position[Length.LONG] = frozen.position[Length.LONG]
-            .minus(toThaw.position[Length.LONG]);
-        frozen.position[Length.SHORT] = frozen.position[Length.SHORT]
-            .minus(toThaw.position[Length.SHORT]);
+        const newFrozen = Frozen.minus(oldFrozen, toThaw);
+        this.frozens.set(oid, newFrozen);
 
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side].minus(volume);
 
         if (order.unfilled.eq(0)) {
             this.delete(oid);
@@ -120,6 +133,8 @@ export class StateMakers
 
         this.delete(oid);
         this.frozens.delete(oid);
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+            .minus(order.unfilled);
 
         return frozen;
     }

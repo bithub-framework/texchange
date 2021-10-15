@@ -50,10 +50,16 @@ export interface ExchangeLike extends StateLike<Snapshot> {
     };
 }
 export interface Frozen {
-    balance: Big;
+    balance: {
+        [length: number]: Big;
+    };
     position: {
         [length: number]: Big;
     };
+}
+export declare namespace Frozen {
+    function plus(x: Frozen, y: Frozen): Frozen;
+    function minus(x: Frozen, y: Frozen): Frozen;
 }
 export declare type TypeRecur<Type, Old, New> = Type extends Old ? New : (Type extends {} ? {
     [K in keyof Type]: TypeRecur<Type[K], Old, New>;

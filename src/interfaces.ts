@@ -71,10 +71,39 @@ export interface ExchangeLike extends StateLike<Snapshot> {
 }
 
 export interface Frozen {
-    balance: Big;
+    balance: {
+        [length: number]: Big;
+    };
     position: {
         [length: number]: Big;
     };
+}
+
+export namespace Frozen {
+    export function plus(x: Frozen, y: Frozen): Frozen {
+        return {
+            balance: {
+                [Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
+                [Length.SHORT]: x.balance[Length.SHORT].plus(y.balance[Length.SHORT]),
+            },
+            position: {
+                [Length.LONG]: x.position[Length.LONG].plus(y.position[Length.LONG]),
+                [Length.SHORT]: x.position[Length.SHORT].plus(y.position[Length.SHORT]),
+            },
+        }
+    }
+    export function minus(x: Frozen, y: Frozen): Frozen {
+        return {
+            balance: {
+                [Length.LONG]: x.balance[Length.LONG].minus(y.balance[Length.LONG]),
+                [Length.SHORT]: x.balance[Length.SHORT].minus(y.balance[Length.SHORT]),
+            },
+            position: {
+                [Length.LONG]: x.position[Length.LONG].minus(y.position[Length.LONG]),
+                [Length.SHORT]: x.position[Length.SHORT].minus(y.position[Length.SHORT]),
+            },
+        }
+    }
 }
 
 export type TypeRecur<Type, Old, New> =
@@ -85,9 +114,3 @@ export type TypeRecur<Type, Old, New> =
         ? { [K in keyof Type]: TypeRecur<Type[K], Old, New> }
         : Type
     );
-
-interface A {
-    [i: number]: number;
-}
-
-type B = TypeRecur<A, number, string>;

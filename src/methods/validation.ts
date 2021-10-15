@@ -21,15 +21,17 @@ export class MethodsValidation {
             assert(
                 order.unfilled.lte(
                     this.core.states.assets.position[order.length]
-                        .minus(this.core.states.margin.frozenPosition[order.length])
+                        .minus(this.core.states.margin.frozen.position[order.length])
                 ),
             );
     }
 
     private assertEnoughAvailable(order: OpenOrder) {
-        if (order.operation === Operation.OPEN)
+        if (order.operation === Operation.OPEN) {
+            const frozen = this.core.calculation.toFreeze(order);
             assert(
-                this.core.calculation.toFreeze(order).balance
+                frozen.balance[Length.LONG]
+                    .plus(frozen.balance[Length.SHORT])
                     .plus(
                         this.core.calculation.dollarVolume(
                             order.price, order.unfilled,
@@ -37,6 +39,7 @@ export class MethodsValidation {
                     ).round(this.core.config.CURRENCY_DP)
                     .lte(this.core.states.margin.available),
             );
+        }
     }
 
     private formatCorrect(order: OpenOrder) {
