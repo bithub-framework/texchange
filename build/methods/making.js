@@ -7,6 +7,7 @@ class MethodsMaking {
         this.core = core;
     }
     orderMakes(openOrder) {
+        const { orderbook, margin, makers } = this.core.states;
         const openMaker = {
             price: openOrder.price,
             quantity: openOrder.quantity,
@@ -18,12 +19,11 @@ class MethodsMaking {
             id: openOrder.id,
             behind: new big_js_1.default(0),
         };
-        const orderbook = this.core.states.orderbook.getBook();
-        for (const maker of orderbook[openOrder.side])
+        for (const maker of orderbook.getBook()[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        const toFreeze = this.core.states.makers.addOrder(openMaker);
-        this.core.states.margin.freeze(toFreeze);
+        const toFreeze = makers.addOrder(openMaker);
+        margin.freeze(toFreeze);
     }
 }
 exports.MethodsMaking = MethodsMaking;

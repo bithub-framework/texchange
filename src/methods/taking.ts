@@ -14,11 +14,13 @@ export class MethodsTaking {
     ) { }
 
     public orderTakes(taker: OpenOrder): Trade[] {
+        const { margin, assets, misc, orderbook } = this.core.states;
+        const { config, calculation } = this.core;
+
         const trades: Trade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        const orderbook = this.core.states.orderbook.getBook();
-        for (const maker of orderbook[-taker.side])
+        for (const maker of orderbook.getBook()[-taker.side])
             if (
                 (
                     taker.side === Side.BID && taker.price.gte(maker.price) ||
@@ -31,36 +33,26 @@ export class MethodsTaking {
                     price: maker.price,
                     quantity,
                     time: this.core.timeline.now(),
-                    id: ++this.core.states.misc.userTradeCount,
+                    id: ++misc.userTradeCount,
                 });
-                this.core.states.orderbook.decQuantity(maker.side, maker.price, quantity);
+                orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(this.core.calculation.dollarVolume(maker.price, quantity))
-                    .round(this.core.config.CURRENCY_DP);
+                    .plus(calculation.dollarVolume(maker.price, quantity))
+                    .round(config.CURRENCY_DP);
             }
         // this.core.states.orderbook.apply();
 
-        const takerFee = dollarVolume.times(this.core.config.TAKER_FEE_RATE)
-            .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);
+        const takerFee = dollarVolume.times(config.TAKER_FEE_RATE)
+            .round(config.CURRENCY_DP, RoundingMode.RoundUp);
         if (taker.operation === Operation.OPEN) {
-            this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
-                .plus(this.core.calculation.marginIncrement(
-                    taker.length, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP));
-            this.core.states.assets.openPosition(
-                taker.length, volume, dollarVolume, takerFee,
-            );
+            margin.incMargin(taker.length, volume, dollarVolume);
+            assets.openPosition(taker.length, volume, dollarVolume, takerFee);
         } else {
-            this.core.states.margin[taker.length] = this.core.states.margin[taker.length]
-                .minus(this.core.calculation.marginDecrement(
-                    taker.length, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP));
-            this.core.states.assets.closePosition(
-                taker.length, volume, dollarVolume, takerFee,
-            );
+            margin.decMargin(taker.length, volume, dollarVolume);
+            assets.closePosition(taker.length, volume, dollarVolume, takerFee);
         }
 
         return trades;

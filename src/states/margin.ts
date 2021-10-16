@@ -74,26 +74,32 @@ export class StateMargin implements StateLike<Snapshot> {
         };
     }
 
-    public incMargin(length: Length, increment: Big): void {
-        if (increment.lt(0))
-            this.decMargin(length, new Big(0).minus(increment))
-        else
-            this[length] = this[length].plus(increment);
+    public incMargin(length: Length, volume: Big, dollarVolume: Big): void {
+        this[length] = this[length]
+            .plus(this.core.calculation.marginIncrement(
+                length, volume, dollarVolume,
+            )).round(this.core.config.CURRENCY_DP);
     }
 
-    public decMargin(length: Length, decrement: Big): void {
-        if (decrement.lt(0))
-            this.incMargin(length, new Big(0).minus(decrement));
-        else if (decrement.lte(this[length]))
-            this[length] = this[length].minus(decrement);
-        else {
-            const rest = decrement.minus(this[length]);
+    public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
+        const { assets } = this.core.states;
+        if (volume.lte(assets.position[length])) {
+            this[length] = this[length]
+                .times(assets.position[length].minus(volume))
+                .div(assets.position[length])
+                .round(this.core.config.CURRENCY_DP);
+        } else {
+            const restVolume = volume.minus(assets.position[length]);
+            const restDollarVolume = dollarVolume
+                .times(restVolume)
+                .div(volume)
+                .round(this.core.config.CURRENCY_DP);
             this[length] = new Big(0);
-            this.incMargin(-length, rest);
+            this.incMargin(-length, restVolume, restDollarVolume);
         }
     }
 
-    public freeze(toFreeze: Frozen) {
+    public freeze(toFreeze: Frozen): void {
         this.frozen = Frozen.plus(this.frozen, toFreeze);
         if (
             this.available.lt(0) ||
@@ -105,7 +111,7 @@ export class StateMargin implements StateLike<Snapshot> {
         }
     }
 
-    public thaw(toThaw: Frozen) {
+    public thaw(toThaw: Frozen): void {
         this.frozen = Frozen.minus(this.frozen, toThaw);
         if (
             this.frozen.balance[Length.LONG].lt(0) ||

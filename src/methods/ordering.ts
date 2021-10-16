@@ -10,8 +10,10 @@ export class MethodsOrdering {
     ) { }
 
     public cancelOpenOrder(order: OpenOrder): OpenOrder {
-        const filled = this.core.states.makers.get(order.id)?.filled || order.quantity;
-        const toThaw = this.core.states.makers.removeOrder(order.id);
+        const { makers } = this.core.states;
+
+        const filled = makers.get(order.id)?.filled || order.quantity;
+        const toThaw = makers.removeOrder(order.id);
         if (toThaw) this.core.states.margin.thaw(toThaw);
         return {
             price: order.price,

@@ -8,18 +8,19 @@ class MethodsClearing {
         this.core = core;
     }
     settle() {
+        const { calculation } = this.core;
+        const { assets, mtm, margin } = this.core.states;
         const position = {
-            [interfaces_1.Length.LONG]: this.core.states.assets.position[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: this.core.states.assets.position[interfaces_1.Length.SHORT],
+            [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT],
         };
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            const clearingDollarVolume = this.core.calculation.dollarVolume(this.core.states.mtm.getSettlementPrice(), position[length]).round(this.core.config.CURRENCY_DP);
-            const profit = this.core.states.assets.closePosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
-            this.core.states.assets.openPosition(length, position[length], clearingDollarVolume, new big_js_1.default(0));
-            this.core.states.margin[length] =
-                this.core.calculation.marginOnSettlement(length, profit);
+            const dollarVolume = calculation.dollarVolume(mtm.getSettlementPrice(), position[length]).round(this.core.config.CURRENCY_DP);
+            const profit = assets.closePosition(length, position[length], dollarVolume, new big_js_1.default(0));
+            assets.openPosition(length, position[length], dollarVolume, new big_js_1.default(0));
+            margin[length] = calculation.marginOnSettlement(length, profit);
         }
-        if (this.core.calculation.shouldLiquidate().length)
+        if (calculation.shouldLiquidate().length)
             this.core.stop(new Error('Liquidated.'));
     }
 }

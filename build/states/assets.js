@@ -43,21 +43,14 @@ class StateAssets {
         this.balance = this.balance.minus(fee);
     }
     closePosition(length, volume, dollarVolume, fee) {
-        if (volume.lt(this.position[length])) {
-            const cost = this.core.calculation.dollarVolume(this.cost[length].div(this.position[length]), volume).round(this.core.config.CURRENCY_DP);
+        if (volume.lte(this.position[length])) {
+            const cost = this.cost[length]
+                .times(volume)
+                .div(this.position[length])
+                .round(this.core.config.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
-            this.balance = this.balance
-                .plus(profit)
-                .minus(fee);
-            return profit;
-        }
-        else if (volume.eq(this.position[length])) {
-            const cost = this.cost[length];
-            const profit = dollarVolume.minus(cost).times(length);
-            this.position[length] = new big_js_1.default(0);
-            this.cost[length] = new big_js_1.default(0);
             this.balance = this.balance
                 .plus(profit)
                 .minus(fee);

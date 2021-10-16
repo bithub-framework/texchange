@@ -42,31 +42,23 @@ export class MethodsTaken {
     private tradeTakesOpenMaker(
         trade: Trade, maker: OpenMaker,
     ): Big {
+        const { assets, margin, makers } = this.core.states;
+
         const volume = min(trade.quantity, maker.unfilled);
         const dollarVolume = this.core.calculation.dollarVolume(maker.price, volume)
             .round(this.core.config.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
-        const toThaw = this.core.states.makers.takeOrder(maker.id, volume, dollarVolume);
-        this.core.states.margin.thaw(toThaw);
+        const toThaw = makers.takeOrder(maker.id, volume, dollarVolume);
+        margin.thaw(toThaw);
 
         const makerFee = dollarVolume.times(this.core.config.MAKER_FEE_RATE)
             .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);
         if (maker.operation === Operation.OPEN) {
-            this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
-                .plus(this.core.calculation.marginIncrement(
-                    maker.length, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP));
-            this.core.states.assets.openPosition(
-                maker.length, volume, dollarVolume, makerFee,
-            );
+            margin.incMargin(maker.length, volume, dollarVolume);
+            assets.openPosition(maker.length, volume, dollarVolume, makerFee);
         } else {
-            this.core.states.margin[maker.length] = this.core.states.margin[maker.length]
-                .minus(this.core.calculation.marginDecrement(
-                    maker.length, volume, dollarVolume,
-                ).round(this.core.config.CURRENCY_DP));
-            this.core.states.assets.closePosition(
-                maker.length, volume, dollarVolume, makerFee,
-            );
+            margin.decMargin(maker.length, volume, dollarVolume);
+            assets.closePosition(maker.length, volume, dollarVolume, makerFee);
         }
 
         return volume;

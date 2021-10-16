@@ -23,8 +23,8 @@ export declare class StateMargin implements StateLike<Snapshot> {
     get closable(): {
         [x: number]: Big;
     };
-    incMargin(length: Length, increment: Big): void;
-    decMargin(length: Length, decrement: Big): void;
+    incMargin(length: Length, volume: Big, dollarVolume: Big): void;
+    decMargin(length: Length, volume: Big, dollarVolume: Big): void;
     freeze(toFreeze: Frozen): void;
     thaw(toThaw: Frozen): void;
     capture(): Snapshot;

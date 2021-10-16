@@ -49,21 +49,26 @@ class StateMargin {
                 .minus(this.frozen.position[interfaces_1.Length.SHORT]),
         };
     }
-    incMargin(length, increment) {
-        if (increment.lt(0))
-            this.decMargin(length, new big_js_1.default(0).minus(increment));
-        else
-            this[length] = this[length].plus(increment);
+    incMargin(length, volume, dollarVolume) {
+        this[length] = this[length]
+            .plus(this.core.calculation.marginIncrement(length, volume, dollarVolume)).round(this.core.config.CURRENCY_DP);
     }
-    decMargin(length, decrement) {
-        if (decrement.lt(0))
-            this.incMargin(length, new big_js_1.default(0).minus(decrement));
-        else if (decrement.lte(this[length]))
-            this[length] = this[length].minus(decrement);
+    decMargin(length, volume, dollarVolume) {
+        const { assets } = this.core.states;
+        if (volume.lte(assets.position[length])) {
+            this[length] = this[length]
+                .times(assets.position[length].minus(volume))
+                .div(assets.position[length])
+                .round(this.core.config.CURRENCY_DP);
+        }
         else {
-            const rest = decrement.minus(this[length]);
+            const restVolume = volume.minus(assets.position[length]);
+            const restDollarVolume = dollarVolume
+                .times(restVolume)
+                .div(volume)
+                .round(this.core.config.CURRENCY_DP);
             this[length] = new big_js_1.default(0);
-            this.incMargin(-length, rest);
+            this.incMargin(-length, restVolume, restDollarVolume);
         }
     }
     freeze(toFreeze) {
