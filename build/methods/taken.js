@@ -44,7 +44,6 @@ class MethodsTaken {
             margin.decMargin(maker.length, volume, dollarVolume);
             assets.closePosition(maker.length, volume, dollarVolume, makerFee);
         }
-        return volume;
     }
     tradeTakesOpenMakers(trade) {
         trade = {
@@ -54,14 +53,11 @@ class MethodsTaken {
             time: trade.time,
             id: trade.id,
         };
-        let totalVolume = new big_js_1.Big(0);
         for (const order of [...this.core.states.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);
-                const volume = this.tradeTakesOpenMaker(trade, order);
-                totalVolume = totalVolume.plus(volume);
+                this.tradeTakesOpenMaker(trade, order);
             }
-        return totalVolume;
     }
 }
 exports.MethodsTaken = MethodsTaken;

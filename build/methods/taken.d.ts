@@ -1,5 +1,4 @@
 import { Trade } from '../interfaces';
-import { Big } from 'big.js';
 import { Core } from '../core';
 export declare class MethodsTaken {
     private core;
@@ -7,5 +6,5 @@ export declare class MethodsTaken {
     private tradeShouldTakeOpenOrder;
     private tradeTakesOrderQueue;
     private tradeTakesOpenMaker;
-    tradeTakesOpenMakers(trade: Trade): Big;
+    tradeTakesOpenMakers(trade: Trade): void;
 }

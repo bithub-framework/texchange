@@ -29,9 +29,7 @@ export class MethodsTaken {
         );
     }
 
-    private tradeTakesOrderQueue(
-        trade: Trade, maker: OpenMaker,
-    ): void {
+    private tradeTakesOrderQueue(trade: Trade, maker: OpenMaker): void {
         if (trade.price.eq(maker.price)) {
             const volume = min(trade.quantity, maker.behind);
             trade.quantity = trade.quantity.minus(volume);
@@ -39,9 +37,7 @@ export class MethodsTaken {
         } else maker.behind = new Big(0);
     }
 
-    private tradeTakesOpenMaker(
-        trade: Trade, maker: OpenMaker,
-    ): Big {
+    private tradeTakesOpenMaker(trade: Trade, maker: OpenMaker): void {
         const { assets, margin, makers } = this.core.states;
 
         const volume = min(trade.quantity, maker.unfilled);
@@ -60,11 +56,9 @@ export class MethodsTaken {
             margin.decMargin(maker.length, volume, dollarVolume);
             assets.closePosition(maker.length, volume, dollarVolume, makerFee);
         }
-
-        return volume;
     }
 
-    public tradeTakesOpenMakers(trade: Trade): Big {
+    public tradeTakesOpenMakers(trade: Trade): void {
         trade = {
             price: trade.price,
             quantity: trade.quantity,
@@ -72,13 +66,10 @@ export class MethodsTaken {
             time: trade.time,
             id: trade.id,
         };
-        let totalVolume = new Big(0);
         for (const order of [...this.core.states.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);
-                const volume = this.tradeTakesOpenMaker(trade, order);
-                totalVolume = totalVolume.plus(volume);
+                this.tradeTakesOpenMaker(trade, order);
             }
-        return totalVolume;
     }
 }
