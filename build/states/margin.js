@@ -3,38 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StateMargin = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
-const util_1 = require("util");
 class StateMargin {
-    constructor(core, snapshot) {
+    constructor(core) {
         this.core = core;
-        if (snapshot) {
-            this.frozen = {
-                balance: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozen.balance[interfaces_1.Length.LONG]),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozen.balance[interfaces_1.Length.SHORT]),
-                },
-                position: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozen.position[interfaces_1.Length.LONG]),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozen.position[interfaces_1.Length.SHORT]),
-                },
-            };
-            this[interfaces_1.Length.LONG] = new big_js_1.default(snapshot[interfaces_1.Length.LONG]);
-            this[interfaces_1.Length.SHORT] = new big_js_1.default(snapshot[interfaces_1.Length.SHORT]);
-        }
-        else {
-            this.frozen = {
-                balance: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(0),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-                },
-                position: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(0),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-                },
-            };
-            this[interfaces_1.Length.LONG] = new big_js_1.default(0);
-            this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
-        }
+        this.frozen = {
+            balance: {
+                [interfaces_1.Length.LONG]: new big_js_1.default(0),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            },
+            position: {
+                [interfaces_1.Length.LONG]: new big_js_1.default(0),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            },
+        };
+        this[interfaces_1.Length.LONG] = new big_js_1.default(0);
+        this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
     }
     get available() {
         return this.core.states.assets.balance
@@ -42,10 +25,11 @@ class StateMargin {
             .minus(this.core.calculation.totalFrozenBalance());
     }
     get closable() {
+        const { assets } = this.core.states;
         return {
-            [interfaces_1.Length.LONG]: this.core.states.assets.position[interfaces_1.Length.LONG]
+            [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG]
                 .minus(this.frozen.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: this.core.states.assets.position[interfaces_1.Length.SHORT]
+            [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT]
                 .minus(this.frozen.position[interfaces_1.Length.SHORT]),
         };
     }
@@ -106,23 +90,19 @@ class StateMargin {
             [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT],
         };
     }
-    [util_1.inspect.custom]() {
-        return JSON.stringify({
-            [interfaces_1.Length.LONG]: this[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT],
-            frozen: {
-                position: {
-                    [interfaces_1.Length.LONG]: this.frozen.position[interfaces_1.Length.LONG],
-                    [interfaces_1.Length.SHORT]: this.frozen.position[interfaces_1.Length.SHORT],
-                },
-                balance: {
-                    [interfaces_1.Length.LONG]: this.frozen.balance[interfaces_1.Length.LONG],
-                    [interfaces_1.Length.SHORT]: this.frozen.balance[interfaces_1.Length.SHORT],
-                },
+    restore(snapshot) {
+        this.frozen = {
+            balance: {
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozen.balance[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozen.balance[interfaces_1.Length.SHORT]),
             },
-            available: this.available,
-            closable: this.closable,
-        });
+            position: {
+                [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.frozen.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.frozen.position[interfaces_1.Length.SHORT]),
+            },
+        };
+        this[interfaces_1.Length.LONG] = new big_js_1.default(snapshot[interfaces_1.Length.LONG]);
+        this[interfaces_1.Length.SHORT] = new big_js_1.default(snapshot[interfaces_1.Length.SHORT]);
     }
 }
 exports.StateMargin = StateMargin;

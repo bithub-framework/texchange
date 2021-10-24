@@ -31,7 +31,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public pushOrderbook(): void {
-        const orderbook = this.core.states.orderbook.getBook();
+        const orderbook = this.core.states.orderbook.getOrderbook();
         this.emit('orderbook', {
             [Side.ASK]: orderbook[Side.ASK].map(order => ({
                 price: order.price,

@@ -1,9 +1,9 @@
 import {
     Orderbook,
     Side,
-    TypeRecur,
     StateLike,
     BookOrder,
+    Parsed,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
@@ -11,7 +11,7 @@ import { Core } from '../core';
 
 
 export interface Snapshot {
-    baseBook: Orderbook;
+    basebook: Orderbook;
     decrements: {
         [side: number]: [string, Big][],
     };
@@ -26,7 +26,7 @@ export class StateOrderbook implements StateLike<Snapshot>{
         time: Number.NEGATIVE_INFINITY,
     };
     private applied = true;
-    private baseBook: Orderbook = {
+    private basebook: Orderbook = {
         [Side.ASK]: [],
         [Side.BID]: [],
         time: Number.NEGATIVE_INFINITY,
@@ -37,86 +37,55 @@ export class StateOrderbook implements StateLike<Snapshot>{
         [Side.BID]: new Map<string, Big>(),
     };
 
-    constructor(
-        private core: Core,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
-    ) {
-        if (snapshot) {
-            this.baseBook = {
-                [Side.ASK]: snapshot.baseBook[Side.ASK].map<BookOrder>(order => ({
-                    price: new Big(order.price),
-                    quantity: new Big(order.quantity),
-                    side: order.side,
-                })),
-                [Side.BID]: snapshot.baseBook[Side.BID].map<BookOrder>(order => ({
-                    price: new Big(order.price),
-                    quantity: new Big(order.quantity),
-                    side: order.side,
-                })),
-                time: snapshot.baseBook.time,
-            }
-            this.decrements = {
-                [Side.ASK]: new Map<string, Big>(
-                    snapshot.decrements[Side.ASK].map(
-                        ([priceString, decrement]) =>
-                            [priceString, new Big(decrement)]
-                    )),
-                [Side.BID]: new Map<string, Big>(
-                    snapshot.decrements[Side.BID].map(
-                        ([priceString, decrement]) =>
-                            [priceString, new Big(decrement)]
-                    )),
-            };
-            this.time = snapshot.time;
-            this.applied = false;
-            this.apply();
-        }
-    }
+    constructor(private core: Core) { }
 
-    public getBook(): Orderbook {
+    public getOrderbook(): Orderbook {
         this.apply();
         return this.orderbook;
     }
 
-    public setBase(newBaseBook: Orderbook) {
-        this.baseBook = newBaseBook;
-        this.time = this.core.timeline.now();
+    public setBasebook(newBasebook: Orderbook) {
+        assert(newBasebook.time === this.core.timeline.now());
+        this.basebook = newBasebook;
+        this.time = newBasebook.time;
         this.applied = false;
     }
 
-    public decQuantity(side: Side, price: Big, decrement: Big) {
+    public decQuantity(side: Side, price: Big, decrement: Big): void {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.core.config.PRICE_DP);
-        const origin = this.decrements[side].get(priceString) || new Big(0);
-        this.decrements[side].set(priceString, origin.plus(decrement));
+        const old = this.decrements[side].get(priceString) || new Big(0);
+        this.decrements[side].set(priceString, old.plus(decrement));
         this.time = this.core.timeline.now();
         this.applied = false;
     }
 
     private apply(): void {
         if (this.applied) return;
+        const total = {
+            [Side.ASK]: new Map<string, Big>(),
+            [Side.BID]: new Map<string, Big>(),
+        };
         for (const side of [Side.BID, Side.ASK]) {
-            const total = {
-                [Side.ASK]: new Map<string, Big>(),
-                [Side.BID]: new Map<string, Big>(),
-            };
-            for (const order of this.baseBook[side])
+            for (const order of this.basebook[side])
                 total[side].set(
                     order.price.toFixed(this.core.config.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {
-                const quantity = total[side].get(priceString);
+                let quantity = total[side].get(priceString);
                 if (quantity) {
-                    const newQuantity = quantity.minus(decrement);
-                    if (newQuantity.lte(0)) total[side].delete(priceString);
-                    else total[side].set(priceString, newQuantity);
+                    quantity = quantity.minus(decrement);
+                    if (quantity.lte(0)) total[side].delete(priceString);
+                    else total[side].set(priceString, quantity);
                 } else this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
             this.orderbook[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
-                    price: new Big(priceString), quantity, side,
+                    price: new Big(priceString),
+                    quantity,
+                    side,
                 }));
         }
         this.applied = true;
@@ -124,12 +93,49 @@ export class StateOrderbook implements StateLike<Snapshot>{
 
     public capture(): Snapshot {
         return {
-            baseBook: this.baseBook,
+            basebook: {
+                [Side.ASK]: this.basebook[Side.ASK].map(order => ({
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                })),
+                [Side.BID]: this.basebook[Side.BID].map(order => ({
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                })),
+                time: this.basebook.time,
+            },
             decrements: {
                 [Side.ASK]: [...this.decrements[Side.ASK]],
                 [Side.BID]: [...this.decrements[Side.BID]],
             },
             time: this.time,
         }
+    }
+
+    public restore(snapshot: Parsed<Snapshot>): void {
+        this.basebook = {
+            time: snapshot.basebook.time === null
+                ? Number.NEGATIVE_INFINITY
+                : snapshot.basebook.time
+        };
+        this.decrements = {};
+        for (const side of [Side.ASK, Side.BID]) {
+            this.basebook[side] = snapshot.basebook[side].map<BookOrder>(order => ({
+                price: new Big(order.price),
+                quantity: new Big(order.quantity),
+                side: order.side!,
+            }));
+            this.decrements[side] = new Map<string, Big>(
+                snapshot.decrements[side].map(
+                    ([priceString, decrement]) =>
+                        [priceString, new Big(decrement)]
+                ));
+        }
+        this.time = snapshot.time === null
+            ? Number.NEGATIVE_INFINITY
+            : snapshot.time;
+        this.applied = false;
     }
 }

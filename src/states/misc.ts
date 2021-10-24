@@ -1,10 +1,11 @@
-import { Startable } from 'startable';
+import { Startable, ReadyState } from 'startable';
+import assert = require('assert');
 import Big from 'big.js';
 import { Mutex } from 'coroutine-locks';
 import {
     DatabaseTrade,
     StateLike,
-    TypeRecur,
+    Parsed,
 } from '../interfaces';
 import { Core } from '../core';
 
@@ -21,22 +22,15 @@ export class StateMisc extends Startable implements StateLike<Snapshot> {
     private mutex = new Mutex();
     public userTradeCount = 0;
     public userOrderCount = 0;
+    private restored = false;
 
-    constructor(
-        private core: Core,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
-    ) {
+    constructor(private core: Core) {
         super();
-        if (snapshot) {
-            this.latestPrice = new Big(snapshot.latestPrice);
-            this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
-            this.userTradeCount = snapshot.userTradeCount;
-            this.userOrderCount = snapshot.userOrderCount;
-        } else this.mutex.lock();
+        this.mutex.lock();
     }
 
     protected async _start() {
-        await this.mutex.lock();
+        if (!this.restored) await this.mutex.lock();
     }
 
     protected async _stop() { }
@@ -48,11 +42,27 @@ export class StateMisc extends Startable implements StateLike<Snapshot> {
     }
 
     public capture(): Snapshot {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
         return {
             latestPrice: this.latestPrice!,
             latestDatabaseTradeId: this.latestDatabaseTradeId!,
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
         };
+    }
+
+    public restore(snapshot: Parsed<Snapshot>): void {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
+        this.restored = true;
+        this.latestPrice = new Big(snapshot.latestPrice);
+        this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
+        this.userTradeCount = snapshot.userTradeCount!;
+        this.userOrderCount = snapshot.userOrderCount!;
     }
 }

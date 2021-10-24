@@ -10,7 +10,6 @@ export declare class MethodsCalculation implements MarketCalc {
     marginDecrement(length: Length, volume: Big, dollarVolume: Big): Big;
     totalMargin(): Big;
     toFreeze(order: OpenOrder): Frozen;
-    toThaw(order: OpenOrder, frozen: Frozen, volume: Big, dollarVolume: Big): Frozen;
     totalFrozenBalance(): Big;
     marginOnSettlement(length: Length, profit: Big): Big;
     shouldLiquidate(): Length[];

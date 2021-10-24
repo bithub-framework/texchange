@@ -18,8 +18,9 @@ const updating_1 = require("./methods/updating");
 const calculation_1 = require("./methods/calculation");
 const instant_1 = require("./interfaces/instant");
 const latency_1 = require("./interfaces/latency");
+const assert = require("assert");
 class Core extends startable_1.Startable {
-    constructor(config, timeline, snapshot) {
+    constructor(config, timeline) {
         super();
         this.config = config;
         this.timeline = timeline;
@@ -32,21 +33,22 @@ class Core extends startable_1.Startable {
         this.validation = new validation_1.MethodsValidation(this);
         this.calculation = new calculation_1.MethodsCalculation(this);
         this.states = {
-            assets: new assets_1.StateAssets(this, snapshot?.assets),
-            margin: new margin_1.StateMargin(this, snapshot?.margin),
-            makers: new makers_1.StateMakers(this, snapshot?.makers),
-            orderbook: new orderbook_1.StateOrderbook(this, snapshot?.orderbook),
-            mtm: new mtm_1.StateMtm(this, snapshot?.mtm),
-            misc: new misc_1.StateMisc(this, snapshot?.misc),
+            assets: new assets_1.StateAssets(this),
+            margin: new margin_1.StateMargin(this),
+            makers: new makers_1.StateMakers(this),
+            orderbook: new orderbook_1.StateOrderbook(this),
+            mtm: new mtm_1.StateMtm(this),
+            misc: new misc_1.StateMisc(this),
         };
         this.interfaces = {
             instant: new instant_1.InterfaceInstant(this),
             latency: new latency_1.InterfaceLatency(this),
         };
     }
-    // TODO 允许的时机
     // TODO Snapshot 中的无穷大
     capture() {
+        assert(this.readyState === "STOPPED" /* STOPPED */ ||
+            this.readyState === "STARTED" /* STARTED */);
         return {
             time: this.timeline.now(),
             assets: this.states.assets.capture(),
@@ -57,11 +59,31 @@ class Core extends startable_1.Startable {
             orderbook: this.states.orderbook.capture(),
         };
     }
-    async _start() {
-        await this.states.misc.start(this.stop);
-        await this.states.mtm.start(this.stop);
+    restore(snapshot) {
+        assert(this.readyState === "STOPPED" /* STOPPED */ ||
+            this.readyState === "STARTED" /* STARTED */);
+        this.states.misc.restore(snapshot.misc);
+        this.states.assets.restore(snapshot.assets);
+        this.states.margin.restore(snapshot.margin);
+        this.states.makers.restore(snapshot.makers);
+        this.states.mtm.restore(snapshot.mtm);
+        this.states.orderbook.restore(snapshot.orderbook);
     }
-    async _stop() { }
+    async _start() {
+        const promises = [this.states.misc.start(this.stop)];
+        if (this.states.mtm instanceof startable_1.Startable)
+            promises.push(this.states.mtm.start(this.stop));
+        const results = await Promise.allSettled(promises);
+        results.forEach(result => {
+            if (result.status === 'rejected')
+                throw result.reason;
+        });
+    }
+    async _stop() {
+        await this.states.misc.stop();
+        if (this.states.mtm instanceof startable_1.Startable)
+            await this.states.mtm.stop();
+    }
 }
 exports.Core = Core;
 //# sourceMappingURL=core.js.map

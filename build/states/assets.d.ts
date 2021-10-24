@@ -1,6 +1,4 @@
-/// <reference types="node" />
-import { Length, StateLike, TypeRecur } from '../interfaces';
-import { inspect } from 'util';
+import { Length, StateLike, Parsed } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
 export interface Snapshot {
@@ -21,9 +19,13 @@ export declare class StateAssets implements StateLike<Snapshot> {
     cost: {
         [length: number]: Big;
     };
-    constructor(core: Core, snapshot?: TypeRecur<Snapshot, Big, string>);
+    constructor(core: Core);
     capture(): Snapshot;
-    openPosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): void;
-    closePosition(length: Length, volume: Big, dollarVolume: Big, fee: Big): Big;
-    [inspect.custom](): string;
+    restore(snapshot: Parsed<Snapshot>): void;
+    payFee(fee: Big): void;
+    openPosition(length: Length, volume: Big, dollarVolume: Big): void;
+    /**
+     * @returns profit
+     */
+    closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
 }

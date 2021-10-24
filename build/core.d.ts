@@ -40,8 +40,9 @@ export declare class Core extends Startable implements ExchangeLike {
     updating: MethodsUpdating;
     validation: MethodsValidation;
     calculation: MethodsCalculation;
-    constructor(config: Config, timeline: Timeline<any>, snapshot?: TypeRecur<Snapshot, Big, string>);
+    constructor(config: Config, timeline: Timeline<any>);
     capture(): Snapshot;
+    restore(snapshot: TypeRecur<Snapshot, Big, string>): void;
     protected _start(): Promise<void>;
     protected _stop(): Promise<void>;
 }

@@ -14,7 +14,7 @@ class MethodsTaking {
         const trades = [];
         let volume = new big_js_1.Big(0);
         let dollarVolume = new big_js_1.Big(0);
-        for (const maker of orderbook.getBook()[-taker.side])
+        for (const maker of orderbook.getOrderbook()[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
                 const quantity = big_math_1.min(taker.unfilled, maker.quantity);
@@ -34,15 +34,16 @@ class MethodsTaking {
                     .round(config.CURRENCY_DP);
             }
         // this.core.states.orderbook.apply();
-        const takerFee = dollarVolume.times(config.TAKER_FEE_RATE)
-            .round(config.CURRENCY_DP, 3 /* RoundUp */);
+        assets.payFee(dollarVolume
+            .times(config.TAKER_FEE_RATE)
+            .round(config.CURRENCY_DP, 3 /* RoundUp */));
         if (taker.operation === interfaces_1.Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
-            assets.openPosition(taker.length, volume, dollarVolume, takerFee);
+            assets.openPosition(taker.length, volume, dollarVolume);
         }
         else {
             margin.decMargin(taker.length, volume, dollarVolume);
-            assets.closePosition(taker.length, volume, dollarVolume, takerFee);
+            assets.closePosition(taker.length, volume, dollarVolume);
         }
         return trades;
     }

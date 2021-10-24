@@ -55,27 +55,33 @@ class MethodsCalculation {
         };
     }
     // order has not been updated
-    toThaw(order, frozen, volume, dollarVolume) {
-        const length = order.side * interfaces_1.Operation.OPEN;
-        return {
-            balance: {
-                [length]: volume.div(order.unfilled).times(frozen.balance[length]),
-                [-length]: new big_js_1.default(0),
-            },
-            position: {
-                [interfaces_1.Length.LONG]: new big_js_1.default(0),
-                [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-            },
-        };
-    }
+    // public toThaw(
+    //     order: OpenOrder,
+    //     frozen: Frozen,
+    //     volume: Big,
+    //     dollarVolume: Big,
+    // ): Frozen {
+    //     const length: Length = order.side * Operation.OPEN;
+    //     return {
+    //         balance: {
+    //             [length]: volume.div(order.unfilled).times(frozen.balance[length]),
+    //             [-length]: new Big(0),
+    //         },
+    //         position: {
+    //             [Length.LONG]: new Big(0),
+    //             [Length.SHORT]: new Big(0),
+    //         },
+    //     };
+    // }
     totalFrozenBalance() {
         const totalUnfilled = this.core.states.makers.totalUnfilled;
         const position = this.core.states.assets.position;
         const frozen = this.core.states.margin.frozen;
         const total = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            total[length] = big_math_1.max(totalUnfilled[length].minus(position[-length]), new big_js_1.default(0)).div(totalUnfilled[length])
-                .times(frozen.balance[length]);
+            total[length] = big_math_1.max(totalUnfilled[length].minus(position[-length]), new big_js_1.default(0))
+                .times(frozen.balance[length])
+                .div(totalUnfilled[length]);
         }
         return total[interfaces_1.Length.LONG].plus(total[interfaces_1.Length.SHORT]);
     }

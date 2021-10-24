@@ -2,10 +2,11 @@ import {
     Length,
     Frozen,
     StateLike,
-    TypeRecur,
+    Closable,
+    Parsed,
 } from '../interfaces';
 import Big from 'big.js';
-import { inspect } from 'util';
+// import { inspect } from 'util';
 import { Core } from '../core';
 
 
@@ -26,37 +27,19 @@ export class StateMargin implements StateLike<Snapshot> {
     [length: number]: Big;
     public frozen: Frozen;
 
-    constructor(
-        private core: Core,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
-    ) {
-        if (snapshot) {
-            this.frozen = {
-                balance: {
-                    [Length.LONG]: new Big(snapshot.frozen.balance[Length.LONG]),
-                    [Length.SHORT]: new Big(snapshot.frozen.balance[Length.SHORT]),
-                },
-                position: {
-                    [Length.LONG]: new Big(snapshot.frozen.position[Length.LONG]),
-                    [Length.SHORT]: new Big(snapshot.frozen.position[Length.SHORT]),
-                },
-            };
-            this[Length.LONG] = new Big(snapshot[Length.LONG]);
-            this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
-        } else {
-            this.frozen = {
-                balance: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-                position: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-            }
-            this[Length.LONG] = new Big(0);
-            this[Length.SHORT] = new Big(0);
+    constructor(private core: Core) {
+        this.frozen = {
+            balance: {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            },
+            position: {
+                [Length.LONG]: new Big(0),
+                [Length.SHORT]: new Big(0),
+            },
         }
+        this[Length.LONG] = new Big(0);
+        this[Length.SHORT] = new Big(0);
     }
 
     public get available(): Big {
@@ -65,20 +48,23 @@ export class StateMargin implements StateLike<Snapshot> {
             .minus(this.core.calculation.totalFrozenBalance());
     }
 
-    public get closable() {
+    public get closable(): Closable {
+        const { assets } = this.core.states;
         return {
-            [Length.LONG]: this.core.states.assets.position[Length.LONG]
+            [Length.LONG]: assets.position[Length.LONG]
                 .minus(this.frozen.position[Length.LONG]),
-            [Length.SHORT]: this.core.states.assets.position[Length.SHORT]
+            [Length.SHORT]: assets.position[Length.SHORT]
                 .minus(this.frozen.position[Length.SHORT]),
         };
     }
 
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {
         this[length] = this[length]
-            .plus(this.core.calculation.marginIncrement(
-                length, volume, dollarVolume,
-            )).round(this.core.config.CURRENCY_DP);
+            .plus(
+                this.core.calculation.marginIncrement(
+                    length, volume, dollarVolume,
+                )
+            ).round(this.core.config.CURRENCY_DP);
     }
 
     public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
@@ -141,22 +127,37 @@ export class StateMargin implements StateLike<Snapshot> {
         };
     }
 
-    public [inspect.custom]() {
-        return JSON.stringify({
-            [Length.LONG]: this[Length.LONG],
-            [Length.SHORT]: this[Length.SHORT],
-            frozen: {
-                position: {
-                    [Length.LONG]: this.frozen.position[Length.LONG],
-                    [Length.SHORT]: this.frozen.position[Length.SHORT],
-                },
-                balance: {
-                    [Length.LONG]: this.frozen.balance[Length.LONG],
-                    [Length.SHORT]: this.frozen.balance[Length.SHORT],
-                },
+    public restore(snapshot: Parsed<Snapshot>): void {
+        this.frozen = {
+            balance: {
+                [Length.LONG]: new Big(snapshot.frozen.balance[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.frozen.balance[Length.SHORT]),
             },
-            available: this.available,
-            closable: this.closable,
-        });
+            position: {
+                [Length.LONG]: new Big(snapshot.frozen.position[Length.LONG]),
+                [Length.SHORT]: new Big(snapshot.frozen.position[Length.SHORT]),
+            },
+        };
+        this[Length.LONG] = new Big(snapshot[Length.LONG]);
+        this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
     }
+
+    // public [inspect.custom]() {
+    //     return JSON.stringify({
+    //         [Length.LONG]: this[Length.LONG],
+    //         [Length.SHORT]: this[Length.SHORT],
+    //         frozen: {
+    //             position: {
+    //                 [Length.LONG]: this.frozen.position[Length.LONG],
+    //                 [Length.SHORT]: this.frozen.position[Length.SHORT],
+    //             },
+    //             balance: {
+    //                 [Length.LONG]: this.frozen.balance[Length.LONG],
+    //                 [Length.SHORT]: this.frozen.balance[Length.SHORT],
+    //             },
+    //         },
+    //         available: this.available,
+    //         closable: this.closable,
+    //     });
+    // }
 }

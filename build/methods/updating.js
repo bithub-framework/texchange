@@ -19,7 +19,7 @@ class MethodsUpdating {
     }
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.core.timeline.now());
-        this.core.states.orderbook.setBase(orderbook);
+        this.core.states.orderbook.setBasebook(orderbook);
         this.core.interfaces.instant.pushOrderbook();
     }
 }

@@ -23,10 +23,10 @@ export class MethodsClearing {
                 mtm.getSettlementPrice(), position[length],
             ).round(this.core.config.CURRENCY_DP);
             const profit = assets.closePosition(
-                length, position[length], dollarVolume, new Big(0),
+                length, position[length], dollarVolume,
             );
             assets.openPosition(
-                length, position[length], dollarVolume, new Big(0),
+                length, position[length], dollarVolume,
             );
             margin[length] = calculation.marginOnSettlement(length, profit);
         }

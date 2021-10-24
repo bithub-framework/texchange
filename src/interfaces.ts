@@ -46,6 +46,7 @@ export interface Config extends MarketConfig, AccountConfig {
 
 export interface StateLike<Snapshot> {
     capture(): Snapshot;
+    restore(snapshot: Parsed<Snapshot>): void;
 }
 
 export type Events = MarketEvents & AccountEvents;
@@ -114,3 +115,5 @@ export type TypeRecur<Type, Old, New> =
         ? { [K in keyof Type]: TypeRecur<Type[K], Old, New> }
         : Type
     );
+
+export type Parsed<T> = TypeRecur<TypeRecur<T, Big, string>, number, number | null>;

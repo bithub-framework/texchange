@@ -20,7 +20,7 @@ export class MethodsTaking {
         const trades: Trade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of orderbook.getBook()[-taker.side])
+        for (const maker of orderbook.getOrderbook()[-taker.side])
             if (
                 (
                     taker.side === Side.BID && taker.price.gte(maker.price) ||
@@ -45,14 +45,17 @@ export class MethodsTaking {
             }
         // this.core.states.orderbook.apply();
 
-        const takerFee = dollarVolume.times(config.TAKER_FEE_RATE)
-            .round(config.CURRENCY_DP, RoundingMode.RoundUp);
+        assets.payFee(
+            dollarVolume
+                .times(config.TAKER_FEE_RATE)
+                .round(config.CURRENCY_DP, RoundingMode.RoundUp)
+        );
         if (taker.operation === Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
-            assets.openPosition(taker.length, volume, dollarVolume, takerFee);
+            assets.openPosition(taker.length, volume, dollarVolume);
         } else {
             margin.decMargin(taker.length, volume, dollarVolume);
-            assets.closePosition(taker.length, volume, dollarVolume, takerFee);
+            assets.closePosition(taker.length, volume, dollarVolume);
         }
 
         return trades;

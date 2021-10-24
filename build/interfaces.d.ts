@@ -30,6 +30,7 @@ export interface Config extends MarketConfig, AccountConfig {
 }
 export interface StateLike<Snapshot> {
     capture(): Snapshot;
+    restore(snapshot: Parsed<Snapshot>): void;
 }
 export declare type Events = MarketEvents & AccountEvents;
 export interface ApiLike extends ContextMarketApiLike, ContextAccountApiLike {
@@ -64,3 +65,4 @@ export declare namespace Frozen {
 export declare type TypeRecur<Type, Old, New> = Type extends Old ? New : (Type extends {} ? {
     [K in keyof Type]: TypeRecur<Type[K], Old, New>;
 } : Type);
+export declare type Parsed<T> = TypeRecur<TypeRecur<T, Big, string>, number, number | null>;

@@ -19,7 +19,7 @@ class InterfaceInstant extends events_1.EventEmitter {
         })));
     }
     pushOrderbook() {
-        const orderbook = this.core.states.orderbook.getBook();
+        const orderbook = this.core.states.orderbook.getOrderbook();
         this.emit('orderbook', {
             [interfaces_1.Side.ASK]: orderbook[interfaces_1.Side.ASK].map(order => ({
                 price: order.price,

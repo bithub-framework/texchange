@@ -44,17 +44,20 @@ export class MethodsTaken {
         const dollarVolume = this.core.calculation.dollarVolume(maker.price, volume)
             .round(this.core.config.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
-        const toThaw = makers.takeOrder(maker.id, volume, dollarVolume);
+        const toThaw = makers.takeOrder(maker.id, volume);
         margin.thaw(toThaw);
 
-        const makerFee = dollarVolume.times(this.core.config.MAKER_FEE_RATE)
-            .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp);
+        assets.payFee(
+            dollarVolume
+                .times(this.core.config.MAKER_FEE_RATE)
+                .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp)
+        );
         if (maker.operation === Operation.OPEN) {
             margin.incMargin(maker.length, volume, dollarVolume);
-            assets.openPosition(maker.length, volume, dollarVolume, makerFee);
+            assets.openPosition(maker.length, volume, dollarVolume,);
         } else {
             margin.decMargin(maker.length, volume, dollarVolume);
-            assets.closePosition(maker.length, volume, dollarVolume, makerFee);
+            assets.closePosition(maker.length, volume, dollarVolume);
         }
     }
 

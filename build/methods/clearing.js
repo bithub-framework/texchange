@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MethodsClearing = void 0;
 const interfaces_1 = require("../interfaces");
-const big_js_1 = require("big.js");
 class MethodsClearing {
     constructor(core) {
         this.core = core;
@@ -16,8 +15,8 @@ class MethodsClearing {
         };
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const dollarVolume = calculation.dollarVolume(mtm.getSettlementPrice(), position[length]).round(this.core.config.CURRENCY_DP);
-            const profit = assets.closePosition(length, position[length], dollarVolume, new big_js_1.default(0));
-            assets.openPosition(length, position[length], dollarVolume, new big_js_1.default(0));
+            const profit = assets.closePosition(length, position[length], dollarVolume);
+            assets.openPosition(length, position[length], dollarVolume);
             margin[length] = calculation.marginOnSettlement(length, profit);
         }
         if (calculation.shouldLiquidate().length)

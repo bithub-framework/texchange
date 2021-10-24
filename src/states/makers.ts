@@ -3,7 +3,7 @@ import {
     OpenMaker,
     Frozen,
     StateLike,
-    TypeRecur,
+    Parsed,
     Side, Length,
 } from '../interfaces';
 import Big from 'big.js';
@@ -22,44 +22,13 @@ export class StateMakers
     implements StateLike<Snapshot> {
 
     private frozens = new Map<OrderId, Frozen>();
-    public totalUnfilled: {
-        [side: number]: Big;
-    } = {};
+    public totalUnfilled: { [side: number]: Big } = {
+        [Side.ASK]: new Big(0),
+        [Side.BID]: new Big(0),
+    };
 
-    constructor(
-        private core: Core,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
-    ) {
+    constructor(private core: Core) {
         super();
-        if (snapshot)
-            for (const { order, frozen } of snapshot) {
-                this.set(order.id, {
-                    price: new Big(order.price),
-                    quantity: new Big(order.quantity),
-                    side: order.side,
-                    length: order.length,
-                    operation: order.operation,
-                    filled: new Big(order.filled),
-                    unfilled: new Big(order.unfilled),
-                    id: order.id,
-                    behind: new Big(order.behind),
-                });
-                this.frozens.set(order.id, {
-                    balance: {
-                        [Length.LONG]: new Big(frozen.balance[Length.LONG]),
-                        [Length.SHORT]: new Big(frozen.balance[Length.SHORT]),
-                    },
-                    position: {
-                        [Length.LONG]: new Big(frozen.position[Length.LONG]),
-                        [Length.SHORT]: new Big(frozen.position[Length.SHORT]),
-                    },
-                });
-            }
-        for (const side of [Side.ASK, Side.BID]) {
-            this.totalUnfilled[side] = [...this.values()]
-                .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), new Big(0));
-        }
     }
 
     public capture(): Snapshot {
@@ -68,6 +37,37 @@ export class StateMakers
                 order: this.get(oid)!,
                 frozen: this.frozens.get(oid)!,
             }));
+    }
+
+    public restore(snapshot: Parsed<Snapshot>): void {
+        for (const { order, frozen } of snapshot) {
+            this.set(order.id!, {
+                price: new Big(order.price),
+                quantity: new Big(order.quantity),
+                side: order.side!,
+                length: order.length!,
+                operation: order.operation!,
+                filled: new Big(order.filled),
+                unfilled: new Big(order.unfilled),
+                id: order.id!,
+                behind: new Big(order.behind),
+            });
+            this.frozens.set(order.id!, {
+                balance: {
+                    [Length.LONG]: new Big(frozen.balance[Length.LONG]),
+                    [Length.SHORT]: new Big(frozen.balance[Length.SHORT]),
+                },
+                position: {
+                    [Length.LONG]: new Big(frozen.position[Length.LONG]),
+                    [Length.SHORT]: new Big(frozen.position[Length.SHORT]),
+                },
+            });
+        }
+        for (const side of [Side.ASK, Side.BID]) {
+            this.totalUnfilled[side] = [...this.values()]
+                .filter(order => order.side === side)
+                .reduce((total, order) => total.plus(order.unfilled), new Big(0));
+        }
     }
 
     private normalizeFrozen(frozen: Frozen): Frozen {
@@ -83,8 +83,8 @@ export class StateMakers
         };
     }
 
-    public addOrder(order: OpenMaker): Frozen {
-        const toFreeze: Frozen = this.normalizeFrozen(
+    public appendOrder(order: OpenMaker): Frozen {
+        const toFreeze = this.normalizeFrozen(
             this.core.calculation.toFreeze(order),
         );
         this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
@@ -100,36 +100,21 @@ export class StateMakers
     public takeOrder(
         oid: OrderId,
         volume: Big,
-        dollarVolume: Big,
     ): Frozen {
         const order = this.get(oid);
         assert(order);
-        const oldFrozen = this.frozens.get(oid)!;
         assert(volume.lte(order.unfilled));
-
-        const toThaw: Frozen = this.normalizeFrozen(
-            this.core.calculation.toThaw(order, oldFrozen, volume, dollarVolume),
-        );
-
-        const newFrozen = Frozen.minus(oldFrozen, toThaw);
-        this.frozens.set(oid, newFrozen);
-
+        const toThaw = <Frozen>this.removeOrder(oid);
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side].minus(volume);
-
-        if (order.unfilled.eq(0)) {
-            this.delete(oid);
-            this.frozens.delete(oid);
-        }
-
-        return toThaw;
+        const toFreeze = <Frozen>this.appendOrder(order);
+        return Frozen.plus(toThaw, toFreeze);
     }
 
     public removeOrder(oid: OrderId): Frozen | null {
         const order = this.get(oid);
-        const frozen = this.frozens.get(oid)!;
         if (!order) return null;
+        const frozen = this.frozens.get(oid)!;
 
         this.delete(oid);
         this.frozens.delete(oid);

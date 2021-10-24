@@ -19,13 +19,14 @@ export class MethodsUpdating {
             this.core.states.misc.updateDatabaseTrade(trade);
         }
         this.core.interfaces.instant.pushTrades(trades);
-        for (const trade of trades) this.core.taken.tradeTakesOpenMakers(trade);
+        for (const trade of trades)
+            this.core.taken.tradeTakesOpenMakers(trade);
         this.core.states.mtm.updateTrades(trades);
     }
 
     public updateOrderbook(orderbook: Orderbook): void {
         assert(orderbook.time === this.core.timeline.now());
-        this.core.states.orderbook.setBase(orderbook);
+        this.core.states.orderbook.setBasebook(orderbook);
         this.core.interfaces.instant.pushOrderbook();
     }
 }

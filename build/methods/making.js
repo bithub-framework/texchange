@@ -19,10 +19,10 @@ class MethodsMaking {
             id: openOrder.id,
             behind: new big_js_1.default(0),
         };
-        for (const maker of orderbook.getBook()[openOrder.side])
+        for (const maker of orderbook.getOrderbook()[openOrder.side])
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        const toFreeze = makers.addOrder(openMaker);
+        const toFreeze = makers.appendOrder(openMaker);
         margin.freeze(toFreeze);
     }
 }

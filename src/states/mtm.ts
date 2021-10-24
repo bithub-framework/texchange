@@ -1,21 +1,19 @@
 import {
     Trade,
-    Orderbook,
     StateLike,
-    TypeRecur,
+    Parsed,
 } from '../interfaces';
 import Big from 'big.js';
-import { Startable } from 'startable';
+import { Startable, ReadyState } from 'startable';
 import { Mutex } from 'coroutine-locks';
 import { Core } from '../core';
+import assert = require('assert');
 
 export type Snapshot = Big;
 
-export interface StateMtmLike<Snapshot>
-    extends StateLike<Snapshot>, Startable {
+export interface StateMtmLike<Snapshot> extends StateLike<Snapshot> {
     getSettlementPrice(): Big;
     updateTrades(trades: Trade[]): void;
-    updateOrderbook(orderbook: Orderbook): void;
 }
 
 
@@ -23,13 +21,9 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
     protected markPrice?: Big;
     protected mutex = new Mutex();
 
-    constructor(
-        protected core: Core,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
-    ) {
+    constructor(protected core: Core) {
         super();
-        if (snapshot) this.markPrice = new Big(snapshot);
-        else this.mutex.lock();
+        this.mutex.lock();
     }
 
     protected async _start() {
@@ -44,13 +38,25 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
         this.mutex.unlock();
     }
 
-    public updateOrderbook(orderbook: Orderbook) { }
-
     public getSettlementPrice(): Big {
+        assert(this.readyState === ReadyState.STARTED);
         return this.markPrice!;
     }
 
     public capture(): Snapshot {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
         return this.markPrice!;
+    }
+
+    public restore(snapshot: Parsed<Snapshot>): void {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
+        this.markPrice = new Big(snapshot);
+        this.mutex.unlock();
     }
 }

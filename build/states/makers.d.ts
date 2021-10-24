@@ -1,4 +1,4 @@
-import { OrderId, OpenMaker, Frozen, StateLike, TypeRecur } from '../interfaces';
+import { OrderId, OpenMaker, Frozen, StateLike, Parsed } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
 export declare type Snapshot = {
@@ -11,10 +11,11 @@ export declare class StateMakers extends Map<OrderId, OpenMaker> implements Stat
     totalUnfilled: {
         [side: number]: Big;
     };
-    constructor(core: Core, snapshot?: TypeRecur<Snapshot, Big, string>);
+    constructor(core: Core);
     capture(): Snapshot;
+    restore(snapshot: Parsed<Snapshot>): void;
     private normalizeFrozen;
-    addOrder(order: OpenMaker): Frozen;
-    takeOrder(oid: OrderId, volume: Big, dollarVolume: Big): Frozen;
+    appendOrder(order: OpenMaker): Frozen;
+    takeOrder(oid: OrderId, volume: Big): Frozen;
     removeOrder(oid: OrderId): Frozen | null;
 }

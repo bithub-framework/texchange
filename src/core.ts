@@ -1,4 +1,4 @@
-import { Startable } from 'startable';
+import { Startable, ReadyState } from 'startable';
 import {
     Config,
     Snapshot,
@@ -23,6 +23,7 @@ import { MethodsCalculation } from './methods/calculation';
 import { InterfaceInstant } from './interfaces/instant';
 import { InterfaceLatency } from './interfaces/latency';
 import Big from 'big.js';
+import assert = require('assert');
 
 
 export class Core extends Startable implements ExchangeLike {
@@ -51,16 +52,15 @@ export class Core extends Startable implements ExchangeLike {
     constructor(
         public config: Config,
         public timeline: Timeline<any>,
-        snapshot?: TypeRecur<Snapshot, Big, string>,
     ) {
         super();
         this.states = {
-            assets: new StateAssets(this, snapshot?.assets),
-            margin: new StateMargin(this, snapshot?.margin),
-            makers: new StateMakers(this, snapshot?.makers),
-            orderbook: new StateOrderbook(this, snapshot?.orderbook),
-            mtm: new StateMtm(this, snapshot?.mtm),
-            misc: new StateMisc(this, snapshot?.misc),
+            assets: new StateAssets(this),
+            margin: new StateMargin(this),
+            makers: new StateMakers(this),
+            orderbook: new StateOrderbook(this),
+            mtm: new StateMtm(this),
+            misc: new StateMisc(this),
         };
         this.interfaces = {
             instant: new InterfaceInstant(this),
@@ -68,9 +68,12 @@ export class Core extends Startable implements ExchangeLike {
         }
     }
 
-    // TODO 允许的时机
     // TODO Snapshot 中的无穷大
     public capture(): Snapshot {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
         return {
             time: this.timeline.now(),
             assets: this.states.assets.capture(),
@@ -82,10 +85,33 @@ export class Core extends Startable implements ExchangeLike {
         }
     }
 
-    protected async _start() {
-        await this.states.misc.start(this.stop);
-        await this.states.mtm.start(this.stop);
+    public restore(snapshot: TypeRecur<Snapshot, Big, string>): void {
+        assert(
+            this.readyState === ReadyState.STOPPED ||
+            this.readyState === ReadyState.STARTED
+        );
+        this.states.misc.restore(snapshot.misc);
+        this.states.assets.restore(snapshot.assets);
+        this.states.margin.restore(snapshot.margin);
+        this.states.makers.restore(snapshot.makers);
+        this.states.mtm.restore(snapshot.mtm);
+        this.states.orderbook.restore(snapshot.orderbook);
     }
 
-    protected async _stop() { }
+    protected async _start() {
+        const promises = [this.states.misc.start(this.stop)];
+        if (this.states.mtm instanceof Startable)
+            promises.push(this.states.mtm.start(this.stop));
+
+        const results = await Promise.allSettled(promises);
+        results.forEach(result => {
+            if (result.status === 'rejected') throw result.reason;
+        });
+    }
+
+    protected async _stop() {
+        await this.states.misc.stop();
+        if (this.states.mtm instanceof Startable)
+            await this.states.mtm.stop();
+    }
 }
