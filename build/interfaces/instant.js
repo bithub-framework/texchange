@@ -34,86 +34,80 @@ class InterfaceInstant extends events_1.EventEmitter {
             time: orderbook.time,
         });
     }
-    pushPositionsAndBalances() {
-        this.emit('positions', this.getPositions());
-        this.emit('balances', this.getBalances());
-    }
     makeOrders(orders) {
-        return orders.map((order) => {
-            try {
-                const openOrder = {
-                    price: order.price,
-                    quantity: order.quantity,
-                    side: order.side,
-                    length: order.length,
-                    operation: order.operation,
-                    id: ++this.core.states.misc.userOrderCount,
-                    filled: new big_js_1.default(0),
-                    unfilled: order.quantity,
-                };
-                this.core.validation.validateOrder(openOrder);
-                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
-                return {
-                    price: returnedOrder.price,
-                    quantity: returnedOrder.quantity,
-                    side: returnedOrder.side,
-                    length: returnedOrder.length,
-                    operation: returnedOrder.operation,
-                    id: returnedOrder.id,
-                    filled: returnedOrder.filled,
-                    unfilled: returnedOrder.unfilled,
-                };
+        return orders.map(order => this.makeOpenOrder({
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: ++this.core.states.misc.userOrderCount,
+            filled: new big_js_1.default(0),
+            unfilled: order.quantity,
+        }));
+    }
+    makeOpenOrder(order) {
+        try {
+            const openOrder = {
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+                length: order.length,
+                operation: order.operation,
+                id: ++this.core.states.misc.userOrderCount,
+                filled: new big_js_1.default(0),
+                unfilled: order.quantity,
+            };
+            this.core.validation.validateOrder(openOrder);
+            const trades = this.core.taking.orderTakes(openOrder);
+            this.core.making.orderMakes(openOrder);
+            if (trades.length) {
+                this.core.interfaces.instant.pushTrades(trades);
+                this.core.interfaces.instant.pushOrderbook();
+                this.core.interfaces.instant.pushBalances();
+                this.core.interfaces.instant.pushPositions();
             }
-            catch (err) {
-                return err;
-            }
-        });
+            return openOrder;
+        }
+        catch (err) {
+            return err;
+        }
     }
     cancelOrders(orders) {
-        return orders.map(order => {
-            const returnedOrder = this.core.ordering.cancelOpenOrder(order);
-            return {
-                price: returnedOrder.price,
-                quantity: returnedOrder.quantity,
-                side: returnedOrder.side,
-                length: returnedOrder.length,
-                operation: returnedOrder.operation,
-                id: returnedOrder.id,
-                filled: returnedOrder.filled,
-                unfilled: returnedOrder.unfilled,
-            };
-        });
+        return orders.map(order => this.cancelOpenOrder(order));
+    }
+    cancelOpenOrder(order) {
+        const { makers } = this.core.states;
+        let filled = makers.get(order.id)?.filled;
+        if (typeof filled === 'undefined')
+            filled = order.quantity;
+        else
+            makers.removeOrder(order.id);
+        return {
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
     amendOrders(amendments) {
-        return amendments.map((amendment) => {
-            try {
-                const { filled } = this.core.ordering.cancelOpenOrder(amendment);
-                const openOrder = {
-                    price: amendment.newPrice,
-                    unfilled: amendment.newUnfilled,
-                    quantity: amendment.newUnfilled.plus(filled),
-                    filled,
-                    id: amendment.id,
-                    side: amendment.side,
-                    length: amendment.length,
-                    operation: amendment.operation,
-                };
-                this.core.validation.validateOrder(openOrder);
-                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
-                return {
-                    price: returnedOrder.price,
-                    quantity: returnedOrder.quantity,
-                    side: returnedOrder.side,
-                    length: returnedOrder.length,
-                    operation: returnedOrder.operation,
-                    id: returnedOrder.id,
-                    filled: returnedOrder.filled,
-                    unfilled: returnedOrder.unfilled,
-                };
-            }
-            catch (err) {
-                return err;
-            }
+        return amendments.map(amendment => {
+            const oldOrder = this.cancelOpenOrder(amendment);
+            const newOrder = {
+                price: amendment.newPrice,
+                filled: oldOrder.filled,
+                unfilled: amendment.newUnfilled,
+                quantity: amendment.newUnfilled.plus(oldOrder.filled),
+                id: amendment.id,
+                side: amendment.side,
+                length: amendment.length,
+                operation: amendment.operation,
+            };
+            return this.makeOpenOrder(newOrder);
         });
     }
     getOpenOrders() {
@@ -148,6 +142,12 @@ class InterfaceInstant extends events_1.EventEmitter {
             available: this.core.states.margin.available,
             time: this.core.timeline.now(),
         };
+    }
+    pushBalances() {
+        this.emit('balances', this.getBalances());
+    }
+    pushPositions() {
+        this.emit('positions', this.getPositions());
     }
 }
 exports.InterfaceInstant = InterfaceInstant;

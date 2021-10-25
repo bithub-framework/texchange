@@ -9,7 +9,6 @@ const orderbook_1 = require("./states/orderbook");
 const mtm_1 = require("./states/mtm");
 const misc_1 = require("./states/misc");
 const validation_1 = require("./methods/validation");
-const ordering_1 = require("./methods/ordering");
 const clearing_1 = require("./methods/clearing");
 const taking_1 = require("./methods/taking");
 const taken_1 = require("./methods/taken");
@@ -24,7 +23,6 @@ class Core extends startable_1.Startable {
         super();
         this.config = config;
         this.timeline = timeline;
-        this.ordering = new ordering_1.MethodsOrdering(this);
         this.clearing = new clearing_1.MethodsClearing(this);
         this.making = new making_1.MethodsMaking(this);
         this.taking = new taking_1.MethodsTaking(this);

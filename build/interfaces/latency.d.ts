@@ -1,8 +1,8 @@
 /// <reference types="node" />
-import { LimitOrder, Amendment, OpenOrder, Balances, Positions, Events } from '../interfaces';
+import { LimitOrder, Amendment, OpenOrder, Balances, Positions, Events, ContextAccountApiLike, ContextMarketApiLike } from '../interfaces';
 import { EventEmitter } from 'events';
 import { Core } from '../core';
-export declare class InterfaceLatency extends EventEmitter {
+export declare class InterfaceLatency extends EventEmitter implements ContextAccountApiLike, ContextMarketApiLike {
     private core;
     constructor(core: Core);
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;

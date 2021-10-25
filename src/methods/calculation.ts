@@ -76,26 +76,6 @@ export class MethodsCalculation implements MarketCalc {
         };
     }
 
-    // order has not been updated
-    // public toThaw(
-    //     order: OpenOrder,
-    //     frozen: Frozen,
-    //     volume: Big,
-    //     dollarVolume: Big,
-    // ): Frozen {
-    //     const length: Length = order.side * Operation.OPEN;
-    //     return {
-    //         balance: {
-    //             [length]: volume.div(order.unfilled).times(frozen.balance[length]),
-    //             [-length]: new Big(0),
-    //         },
-    //         position: {
-    //             [Length.LONG]: new Big(0),
-    //             [Length.SHORT]: new Big(0),
-    //         },
-    //     };
-    // }
-
     public totalFrozenBalance(): Big {
         const totalUnfilled = this.core.states.makers.totalUnfilled;
         const position = this.core.states.assets.position;

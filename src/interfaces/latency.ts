@@ -5,12 +5,15 @@ import {
     Balances,
     Positions,
     Events,
+    ContextAccountApiLike,
+    ContextMarketApiLike,
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { Core } from '../core';
 
 
-export class InterfaceLatency extends EventEmitter {
+export class InterfaceLatency extends EventEmitter
+    implements ContextAccountApiLike, ContextMarketApiLike {
     constructor(
         private core: Core,
     ) {

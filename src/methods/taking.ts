@@ -13,6 +13,9 @@ export class MethodsTaking {
         private core: Core,
     ) { }
 
+    /**
+     * @param taker variable
+     */
     public orderTakes(taker: OpenOrder): Trade[] {
         const { margin, assets, misc, orderbook } = this.core.states;
         const { config, calculation } = this.core;
@@ -28,13 +31,6 @@ export class MethodsTaking {
                 ) && taker.unfilled.gt(0)
             ) {
                 const quantity = min(taker.unfilled, maker.quantity);
-                trades.push({
-                    side: taker.side,
-                    price: maker.price,
-                    quantity,
-                    time: this.core.timeline.now(),
-                    id: ++misc.userTradeCount,
-                });
                 orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
@@ -42,14 +38,21 @@ export class MethodsTaking {
                 dollarVolume = dollarVolume
                     .plus(calculation.dollarVolume(maker.price, quantity))
                     .round(config.CURRENCY_DP);
+                trades.push({
+                    side: taker.side,
+                    price: maker.price,
+                    quantity,
+                    time: this.core.timeline.now(),
+                    id: ++misc.userTradeCount,
+                });
             }
-        // this.core.states.orderbook.apply();
 
         assets.payFee(
             dollarVolume
                 .times(config.TAKER_FEE_RATE)
                 .round(config.CURRENCY_DP, RoundingMode.RoundUp)
         );
+        // margin before position
         if (taker.operation === Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
             assets.openPosition(taker.length, volume, dollarVolume);

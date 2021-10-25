@@ -11,10 +11,9 @@ class MethodsUpdating {
         for (const trade of trades) {
             assert(trade.time === this.core.timeline.now());
             this.core.states.misc.updateDatabaseTrade(trade);
+            this.core.taken.tradeTakesOpenMakers(trade);
         }
         this.core.interfaces.instant.pushTrades(trades);
-        for (const trade of trades)
-            this.core.taken.tradeTakesOpenMakers(trade);
         this.core.states.mtm.updateTrades(trades);
     }
     updateOrderbook(orderbook) {

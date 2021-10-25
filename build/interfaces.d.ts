@@ -1,4 +1,5 @@
 export * from 'interfaces';
+export { Frozen } from './frozon';
 import { Trade, Orderbook, MarketSpec, AccountSpec, MarketCalc, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents } from 'interfaces';
 import Big from 'big.js';
 import { Snapshot as SnapshotStateMakers } from './states/makers';
@@ -49,18 +50,6 @@ export interface ExchangeLike extends StateLike<Snapshot> {
         updateTrades: (trades: DatabaseTrade[]) => void;
         updateOrderbook: (orderbook: Orderbook) => void;
     };
-}
-export interface Frozen {
-    balance: {
-        [length: number]: Big;
-    };
-    position: {
-        [length: number]: Big;
-    };
-}
-export declare namespace Frozen {
-    function plus(x: Frozen, y: Frozen): Frozen;
-    function minus(x: Frozen, y: Frozen): Frozen;
 }
 export declare type TypeRecur<Type, Old, New> = Type extends Old ? New : (Type extends {} ? {
     [K in keyof Type]: TypeRecur<Type[K], Old, New>;

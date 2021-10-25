@@ -7,7 +7,6 @@ import { StateOrderbook } from './states/orderbook';
 import { StateMtmLike } from './states/mtm';
 import { StateMisc } from './states/misc';
 import { MethodsValidation } from './methods/validation';
-import { MethodsOrdering } from './methods/ordering';
 import { MethodsClearing } from './methods/clearing';
 import { MethodsTaking } from './methods/taking';
 import { MethodsTaken } from './methods/taken';
@@ -32,7 +31,6 @@ export declare class Core extends Startable implements ExchangeLike {
         instant: InterfaceInstant;
         latency: InterfaceLatency;
     };
-    ordering: MethodsOrdering;
     clearing: MethodsClearing;
     making: MethodsMaking;
     taking: MethodsTaking;

@@ -11,11 +11,12 @@ export declare class StateMakers extends Map<OrderId, OpenMaker> implements Stat
     totalUnfilled: {
         [side: number]: Big;
     };
+    totalFrozen: Frozen;
     constructor(core: Core);
     capture(): Snapshot;
     restore(snapshot: Parsed<Snapshot>): void;
     private normalizeFrozen;
-    appendOrder(order: OpenMaker): Frozen;
-    takeOrder(oid: OrderId, volume: Big): Frozen;
-    removeOrder(oid: OrderId): Frozen | null;
+    appendOrder(order: OpenMaker): void;
+    takeOrder(oid: OrderId, volume: Big): void;
+    removeOrder(oid: OrderId): void;
 }

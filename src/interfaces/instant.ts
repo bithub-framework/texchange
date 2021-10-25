@@ -47,87 +47,83 @@ export class InterfaceInstant extends EventEmitter {
         });
     }
 
-    public pushPositionsAndBalances(): void {
-        this.emit('positions', this.getPositions());
-        this.emit('balances', this.getBalances());
+    public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
+        return orders.map(order => this.makeOpenOrder({
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: ++this.core.states.misc.userOrderCount,
+            filled: new Big(0),
+            unfilled: order.quantity,
+        }));
     }
 
-    public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
-        return orders.map((order): OpenOrder | Error => {
-            try {
-                const openOrder: OpenOrder = {
-                    price: order.price,
-                    quantity: order.quantity,
-                    side: order.side,
-                    length: order.length,
-                    operation: order.operation,
-                    id: ++this.core.states.misc.userOrderCount,
-                    filled: new Big(0),
-                    unfilled: order.quantity,
-                };
-                this.core.validation.validateOrder(openOrder);
-                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
-                return {
-                    price: returnedOrder.price,
-                    quantity: returnedOrder.quantity,
-                    side: returnedOrder.side,
-                    length: returnedOrder.length,
-                    operation: returnedOrder.operation,
-                    id: returnedOrder.id,
-                    filled: returnedOrder.filled,
-                    unfilled: returnedOrder.unfilled,
-                };
-            } catch (err) {
-                return <Error>err;
+    private makeOpenOrder(order: OpenOrder): OpenOrder | Error {
+        try {
+            const openOrder: OpenOrder = {
+                price: order.price,
+                quantity: order.quantity,
+                side: order.side,
+                length: order.length,
+                operation: order.operation,
+                id: ++this.core.states.misc.userOrderCount,
+                filled: new Big(0),
+                unfilled: order.quantity,
+            };
+            this.core.validation.validateOrder(openOrder);
+            const trades = this.core.taking.orderTakes(openOrder);
+            this.core.making.orderMakes(openOrder);
+            if (trades.length) {
+                this.core.interfaces.instant.pushTrades(trades);
+                this.core.interfaces.instant.pushOrderbook();
+                this.core.interfaces.instant.pushBalances();
+                this.core.interfaces.instant.pushPositions();
             }
-        });
+            return openOrder
+        } catch (err) {
+            return <Error>err;
+        }
     }
 
     public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
-        return orders.map(order => {
-            const returnedOrder = this.core.ordering.cancelOpenOrder(order);
-            return {
-                price: returnedOrder.price,
-                quantity: returnedOrder.quantity,
-                side: returnedOrder.side,
-                length: returnedOrder.length,
-                operation: returnedOrder.operation,
-                id: returnedOrder.id,
-                filled: returnedOrder.filled,
-                unfilled: returnedOrder.unfilled,
-            }
-        });
+        return orders.map(order => this.cancelOpenOrder(order));
+    }
+
+    private cancelOpenOrder(order: OpenOrder): OpenOrder {
+        const { makers } = this.core.states;
+        let filled = makers.get(order.id)?.filled;
+        if (typeof filled === 'undefined')
+            filled = order.quantity;
+        else
+            makers.removeOrder(order.id)!;
+        return {
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            id: order.id,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
 
     public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
-        return amendments.map((amendment): OpenOrder | Error => {
-            try {
-                const { filled } = this.core.ordering.cancelOpenOrder(amendment);
-                const openOrder: OpenOrder = {
-                    price: amendment.newPrice,
-                    unfilled: amendment.newUnfilled,
-                    quantity: amendment.newUnfilled.plus(filled),
-                    filled,
-                    id: amendment.id,
-                    side: amendment.side,
-                    length: amendment.length,
-                    operation: amendment.operation,
-                };
-                this.core.validation.validateOrder(openOrder);
-                const returnedOrder = this.core.ordering.makeOpenOrder(openOrder);
-                return {
-                    price: returnedOrder.price,
-                    quantity: returnedOrder.quantity,
-                    side: returnedOrder.side,
-                    length: returnedOrder.length,
-                    operation: returnedOrder.operation,
-                    id: returnedOrder.id,
-                    filled: returnedOrder.filled,
-                    unfilled: returnedOrder.unfilled,
-                };
-            } catch (err) {
-                return <Error>err;
-            }
+        return amendments.map(amendment => {
+            const oldOrder = this.cancelOpenOrder(amendment);
+            const newOrder: OpenOrder = {
+                price: amendment.newPrice,
+                filled: oldOrder.filled,
+                unfilled: amendment.newUnfilled,
+                quantity: amendment.newUnfilled.plus(oldOrder.filled),
+                id: amendment.id,
+                side: amendment.side,
+                length: amendment.length,
+                operation: amendment.operation,
+            };
+            return this.makeOpenOrder(newOrder);
         });
     }
 
@@ -165,6 +161,14 @@ export class InterfaceInstant extends EventEmitter {
             available: this.core.states.margin.available,
             time: this.core.timeline.now(),
         };
+    }
+
+    public pushBalances(): void {
+        this.emit('balances', this.getBalances());
+    }
+
+    public pushPositions(): void {
+        this.emit('positions', this.getPositions());
     }
 }
 

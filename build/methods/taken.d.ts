@@ -3,8 +3,16 @@ import { Core } from '../core';
 export declare class MethodsTaken {
     private core;
     constructor(core: Core);
-    private tradeShouldTakeOpenOrder;
-    private tradeTakesOrderQueue;
-    private tradeTakesOpenMaker;
     tradeTakesOpenMakers(trade: Trade): void;
+    private tradeShouldTakeOpenOrder;
+    /**
+     * @param trade variable
+     * @param maker variable
+     */
+    private tradeTakesOrderQueue;
+    /**
+     * @param trade variable
+     * @param maker variable
+     */
+    private tradeTakesOpenMaker;
 }

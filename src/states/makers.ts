@@ -26,6 +26,7 @@ export class StateMakers
         [Side.ASK]: new Big(0),
         [Side.BID]: new Big(0),
     };
+    public totalFrozen: Frozen = Frozen.ZERO;
 
     constructor(private core: Core) {
         super();
@@ -68,6 +69,8 @@ export class StateMakers
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new Big(0));
         }
+        this.totalFrozen = [...this.frozens.values()]
+            .reduce((total, frozen) => Frozen.plus(total, frozen), Frozen.ZERO);
     }
 
     private normalizeFrozen(frozen: Frozen): Frozen {
@@ -83,44 +86,37 @@ export class StateMakers
         };
     }
 
-    public appendOrder(order: OpenMaker): Frozen {
+    public appendOrder(order: OpenMaker): void {
+        if (order.unfilled.eq(0)) return;
         const toFreeze = this.normalizeFrozen(
             this.core.calculation.toFreeze(order),
         );
+        this.set(order.id, order);
+        this.frozens.set(order.id, toFreeze);
+        this.totalFrozen = Frozen.plus(this.totalFrozen, toFreeze);
         this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .plus(order.unfilled);
-
-        if (order.unfilled.gt(0)) {
-            this.set(order.id, order);
-            this.frozens.set(order.id, toFreeze);
-        }
-        return toFreeze;
     }
 
-    public takeOrder(
-        oid: OrderId,
-        volume: Big,
-    ): Frozen {
+    public takeOrder(oid: OrderId, volume: Big): void {
         const order = this.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
-        const toThaw = <Frozen>this.removeOrder(oid);
+        this.removeOrder(oid)!;
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
-        const toFreeze = <Frozen>this.appendOrder(order);
-        return Frozen.plus(toThaw, toFreeze);
+        this.appendOrder(order);
     }
 
-    public removeOrder(oid: OrderId): Frozen | null {
+    public removeOrder(oid: OrderId): void {
         const order = this.get(oid);
-        if (!order) return null;
-        const frozen = this.frozens.get(oid)!;
+        if (!order) return;
+        const toThaw = this.frozens.get(oid)!;
 
         this.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .minus(order.unfilled);
-
-        return frozen;
+        this.totalFrozen = Frozen.minus(this.totalFrozen, toThaw);
     }
 }

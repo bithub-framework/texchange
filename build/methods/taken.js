@@ -8,44 +8,6 @@ class MethodsTaken {
     constructor(core) {
         this.core = core;
     }
-    tradeShouldTakeOpenOrder(trade, maker) {
-        return (maker.side === interfaces_1.Side.BID &&
-            trade.side === interfaces_1.Side.ASK &&
-            trade.price.lte(maker.price)
-            ||
-                maker.side === interfaces_1.Side.ASK &&
-                    trade.side === interfaces_1.Side.BID &&
-                    trade.price.gte(maker.price));
-    }
-    tradeTakesOrderQueue(trade, maker) {
-        if (trade.price.eq(maker.price)) {
-            const volume = big_math_1.min(trade.quantity, maker.behind);
-            trade.quantity = trade.quantity.minus(volume);
-            maker.behind = maker.behind.minus(volume);
-        }
-        else
-            maker.behind = new big_js_1.Big(0);
-    }
-    tradeTakesOpenMaker(trade, maker) {
-        const { assets, margin, makers } = this.core.states;
-        const volume = big_math_1.min(trade.quantity, maker.unfilled);
-        const dollarVolume = this.core.calculation.dollarVolume(maker.price, volume)
-            .round(this.core.config.CURRENCY_DP);
-        trade.quantity = trade.quantity.minus(volume);
-        const toThaw = makers.takeOrder(maker.id, volume);
-        margin.thaw(toThaw);
-        assets.payFee(dollarVolume
-            .times(this.core.config.MAKER_FEE_RATE)
-            .round(this.core.config.CURRENCY_DP, 3 /* RoundUp */));
-        if (maker.operation === interfaces_1.Operation.OPEN) {
-            margin.incMargin(maker.length, volume, dollarVolume);
-            assets.openPosition(maker.length, volume, dollarVolume);
-        }
-        else {
-            margin.decMargin(maker.length, volume, dollarVolume);
-            assets.closePosition(maker.length, volume, dollarVolume);
-        }
-    }
     tradeTakesOpenMakers(trade) {
         trade = {
             price: trade.price,
@@ -59,6 +21,53 @@ class MethodsTaken {
                 this.tradeTakesOrderQueue(trade, order);
                 this.tradeTakesOpenMaker(trade, order);
             }
+    }
+    tradeShouldTakeOpenOrder(trade, maker) {
+        return (maker.side === interfaces_1.Side.BID &&
+            trade.side === interfaces_1.Side.ASK &&
+            trade.price.lte(maker.price)
+            ||
+                maker.side === interfaces_1.Side.ASK &&
+                    trade.side === interfaces_1.Side.BID &&
+                    trade.price.gte(maker.price));
+    }
+    /**
+     * @param trade variable
+     * @param maker variable
+     */
+    tradeTakesOrderQueue(trade, maker) {
+        if (trade.price.eq(maker.price)) {
+            const volume = big_math_1.min(trade.quantity, maker.behind);
+            trade.quantity = trade.quantity.minus(volume);
+            maker.behind = maker.behind.minus(volume);
+        }
+        else
+            maker.behind = new big_js_1.Big(0);
+    }
+    /**
+     * @param trade variable
+     * @param maker variable
+     */
+    tradeTakesOpenMaker(trade, maker) {
+        const { assets, margin, makers } = this.core.states;
+        const volume = big_math_1.min(trade.quantity, maker.unfilled);
+        const dollarVolume = this.core.calculation
+            .dollarVolume(maker.price, volume)
+            .round(this.core.config.CURRENCY_DP);
+        trade.quantity = trade.quantity.minus(volume);
+        makers.takeOrder(maker.id, volume);
+        assets.payFee(dollarVolume
+            .times(this.core.config.MAKER_FEE_RATE)
+            .round(this.core.config.CURRENCY_DP, 3 /* RoundUp */));
+        // margin before position
+        if (maker.operation === interfaces_1.Operation.OPEN) {
+            margin.incMargin(maker.length, volume, dollarVolume);
+            assets.openPosition(maker.length, volume, dollarVolume);
+        }
+        else {
+            margin.decMargin(maker.length, volume, dollarVolume);
+            assets.closePosition(maker.length, volume, dollarVolume);
+        }
     }
 }
 exports.MethodsTaken = MethodsTaken;

@@ -13,6 +13,7 @@ class StateMakers extends Map {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
             [interfaces_1.Side.BID]: new big_js_1.default(0),
         };
+        this.totalFrozen = interfaces_1.Frozen.ZERO;
     }
     capture() {
         return [...this.keys()]
@@ -50,6 +51,8 @@ class StateMakers extends Map {
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
+        this.totalFrozen = [...this.frozens.values()]
+            .reduce((total, frozen) => interfaces_1.Frozen.plus(total, frozen), interfaces_1.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
@@ -64,35 +67,34 @@ class StateMakers extends Map {
         };
     }
     appendOrder(order) {
+        if (order.unfilled.eq(0))
+            return;
         const toFreeze = this.normalizeFrozen(this.core.calculation.toFreeze(order));
+        this.set(order.id, order);
+        this.frozens.set(order.id, toFreeze);
+        this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);
         this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .plus(order.unfilled);
-        if (order.unfilled.gt(0)) {
-            this.set(order.id, order);
-            this.frozens.set(order.id, toFreeze);
-        }
-        return toFreeze;
     }
     takeOrder(oid, volume) {
         const order = this.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
-        const toThaw = this.removeOrder(oid);
+        this.removeOrder(oid);
         order.filled = order.filled.plus(volume);
         order.unfilled = order.unfilled.minus(volume);
-        const toFreeze = this.appendOrder(order);
-        return interfaces_1.Frozen.plus(toThaw, toFreeze);
+        this.appendOrder(order);
     }
     removeOrder(oid) {
         const order = this.get(oid);
         if (!order)
-            return null;
-        const frozen = this.frozens.get(oid);
+            return;
+        const toThaw = this.frozens.get(oid);
         this.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .minus(order.unfilled);
-        return frozen;
+        this.totalFrozen = interfaces_1.Frozen.minus(this.totalFrozen, toThaw);
     }
 }
 exports.StateMakers = StateMakers;

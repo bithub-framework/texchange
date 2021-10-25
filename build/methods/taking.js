@@ -8,6 +8,9 @@ class MethodsTaking {
     constructor(core) {
         this.core = core;
     }
+    /**
+     * @param taker variable
+     */
     orderTakes(taker) {
         const { margin, assets, misc, orderbook } = this.core.states;
         const { config, calculation } = this.core;
@@ -18,13 +21,6 @@ class MethodsTaking {
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
                 const quantity = big_math_1.min(taker.unfilled, maker.quantity);
-                trades.push({
-                    side: taker.side,
-                    price: maker.price,
-                    quantity,
-                    time: this.core.timeline.now(),
-                    id: ++misc.userTradeCount,
-                });
                 orderbook.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
@@ -32,11 +28,18 @@ class MethodsTaking {
                 dollarVolume = dollarVolume
                     .plus(calculation.dollarVolume(maker.price, quantity))
                     .round(config.CURRENCY_DP);
+                trades.push({
+                    side: taker.side,
+                    price: maker.price,
+                    quantity,
+                    time: this.core.timeline.now(),
+                    id: ++misc.userTradeCount,
+                });
             }
-        // this.core.states.orderbook.apply();
         assets.payFee(dollarVolume
             .times(config.TAKER_FEE_RATE)
             .round(config.CURRENCY_DP, 3 /* RoundUp */));
+        // margin before position
         if (taker.operation === interfaces_1.Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
             assets.openPosition(taker.length, volume, dollarVolume);
