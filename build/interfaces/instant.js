@@ -19,7 +19,7 @@ class InterfaceInstant extends events_1.EventEmitter {
         })));
     }
     pushOrderbook() {
-        const orderbook = this.core.states.orderbook.getOrderbook();
+        const { orderbook } = this.core.states;
         this.emit('orderbook', {
             [interfaces_1.Side.ASK]: orderbook[interfaces_1.Side.ASK].map(order => ({
                 price: order.price,
@@ -46,6 +46,9 @@ class InterfaceInstant extends events_1.EventEmitter {
             unfilled: order.quantity,
         }));
     }
+    /**
+     * @returns As duplicate.
+     */
     makeOpenOrder(order) {
         try {
             const openOrder = {
@@ -76,6 +79,9 @@ class InterfaceInstant extends events_1.EventEmitter {
     cancelOrders(orders) {
         return orders.map(order => this.cancelOpenOrder(order));
     }
+    /**
+     * @returns As duplicate.
+     */
     cancelOpenOrder(order) {
         const { makers } = this.core.states;
         let filled = makers.get(order.id)?.filled;
@@ -129,17 +135,14 @@ class InterfaceInstant extends events_1.EventEmitter {
                 [interfaces_1.Length.LONG]: this.core.states.assets.position[interfaces_1.Length.LONG],
                 [interfaces_1.Length.SHORT]: this.core.states.assets.position[interfaces_1.Length.SHORT],
             },
-            closable: {
-                [interfaces_1.Length.LONG]: this.core.states.margin.closable[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: this.core.states.margin.closable[interfaces_1.Length.SHORT],
-            },
+            closable: this.getClosable(),
             time: this.core.timeline.now(),
         };
     }
     getBalances() {
         return {
             balance: this.core.states.assets.balance,
-            available: this.core.states.margin.available,
+            available: this.getAvailable(),
             time: this.core.timeline.now(),
         };
     }
@@ -148,6 +151,20 @@ class InterfaceInstant extends events_1.EventEmitter {
     }
     pushPositions() {
         this.emit('positions', this.getPositions());
+    }
+    getAvailable() {
+        return this.core.states.assets.balance
+            .minus(this.core.calculation.finalMargin())
+            .minus(this.core.calculation.finalFrozenBalance());
+    }
+    getClosable() {
+        const { assets, makers } = this.core.states;
+        return {
+            [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG]
+                .minus(makers.frozenSum.position[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT]
+                .minus(makers.frozenSum.position[interfaces_1.Length.SHORT]),
+        };
     }
 }
 exports.InterfaceInstant = InterfaceInstant;

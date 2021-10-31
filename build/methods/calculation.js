@@ -6,9 +6,10 @@ const big_js_1 = require("big.js");
 const assert = require("assert");
 const big_math_1 = require("../big-math");
 /*
+    TODO
     cross margin
     single position
-    forward contract
+    reverse contract
 */
 class MethodsCalculation {
     constructor(core) {
@@ -21,23 +22,11 @@ class MethodsCalculation {
         assert(price.gt(0));
         return dollarVolume.div(price);
     }
-    // this.core.assets.position[order.length] has not updated.
+    // this.core.assets.position[order.length] has not been updated.
     marginIncrement(length, volume, dollarVolume) {
         return dollarVolume.div(this.core.config.LEVERAGE);
     }
-    // this.core.assets.position[order.length] has not updated.
-    marginDecrement(length, volume, dollarVolume) {
-        const { assets } = this.core.states;
-        // 单向持仓模式下，volume 可能大于 assets.position[length]
-        if (volume.lte(assets.position[length]))
-            return volume
-                .div(this.core.states.assets.position[length])
-                .times(this.core.states.margin[length]);
-        else
-            return this.core.states.margin[length];
-    }
-    ;
-    totalMargin() {
+    finalMargin() {
         return this.core.states.margin[interfaces_1.Length.LONG]
             .plus(this.core.states.margin[interfaces_1.Length.SHORT]);
     }
@@ -54,17 +43,17 @@ class MethodsCalculation {
             },
         };
     }
-    totalFrozenBalance() {
-        const totalUnfilled = this.core.states.makers.totalUnfilled;
+    finalFrozenBalance() {
+        const unfilledSum = this.core.states.makers.unfilledSum;
         const position = this.core.states.assets.position;
-        const frozen = this.core.states.margin.frozen;
-        const total = {};
+        const frozenSum = this.core.states.makers.frozenSum;
+        const final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            total[length] = big_math_1.max(totalUnfilled[length].minus(position[-length]), new big_js_1.default(0))
-                .times(frozen.balance[length])
-                .div(totalUnfilled[length]);
+            final[length] = big_math_1.max(unfilledSum[length].minus(position[-length]), new big_js_1.default(0))
+                .times(frozenSum.balance[length])
+                .div(unfilledSum[length]);
         }
-        return total[interfaces_1.Length.LONG].plus(total[interfaces_1.Length.SHORT]);
+        return final[interfaces_1.Length.LONG].plus(final[interfaces_1.Length.SHORT]);
     }
     marginOnSettlement(length, profit) {
         return this.core.states.margin[length]

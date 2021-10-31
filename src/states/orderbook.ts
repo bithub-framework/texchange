@@ -18,13 +18,18 @@ export interface Snapshot {
     time: number;
 }
 
-export class StateOrderbook implements StateLike<Snapshot>{
-    private time = Number.NEGATIVE_INFINITY;
-    private orderbook: Orderbook = {
-        [Side.ASK]: [],
-        [Side.BID]: [],
-        time: Number.NEGATIVE_INFINITY,
-    };
+export class StateOrderbook implements StateLike<Snapshot>, Orderbook {
+    [side: number]: BookOrder[];
+    public time = Number.NEGATIVE_INFINITY;
+    public get [Side.ASK]() {
+        this.apply();
+        return Reflect.get(this, Side.ASK);
+    }
+    public get [Side.BID]() {
+        this.apply();
+        return Reflect.get(this, Side.BID);
+    }
+
     private applied = true;
     private basebook: Orderbook = {
         [Side.ASK]: [],
@@ -38,11 +43,6 @@ export class StateOrderbook implements StateLike<Snapshot>{
     };
 
     constructor(private core: Core) { }
-
-    public getOrderbook(): Orderbook {
-        this.apply();
-        return this.orderbook;
-    }
 
     public setBasebook(newBasebook: Orderbook) {
         assert(newBasebook.time === this.core.timeline.now());
@@ -81,7 +81,7 @@ export class StateOrderbook implements StateLike<Snapshot>{
                 } else this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this.orderbook[side] = [...total[side]]
+            this[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                     price: new Big(priceString),
                     quantity,

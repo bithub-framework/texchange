@@ -25,7 +25,7 @@ export declare class StateAssets implements StateLike<Snapshot> {
     payFee(fee: Big): void;
     openPosition(length: Length, volume: Big, dollarVolume: Big): void;
     /**
-     * @returns profit
+     * @returns Profit.
      */
     closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
 }

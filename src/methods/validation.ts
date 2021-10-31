@@ -17,11 +17,12 @@ export class MethodsValidation {
     }
 
     private assertEnoughPosition(order: OpenOrder) {
+        const { assets, makers } = this.core.states;
         if (order.operation === Operation.CLOSE)
             assert(
                 order.unfilled.lte(
-                    this.core.states.assets.position[order.length]
-                        .minus(this.core.states.margin.frozen.position[order.length])
+                    assets.position[order.length]
+                        .minus(makers.frozenSum.position[order.length])
                 ),
             );
     }
@@ -37,7 +38,7 @@ export class MethodsValidation {
                             order.price, order.unfilled,
                         ).times(this.core.config.TAKER_FEE_RATE),
                     ).round(this.core.config.CURRENCY_DP)
-                    .lte(this.core.states.margin.available),
+                    .lte(this.core.interfaces.instant.getAvailable()),
             );
         }
     }

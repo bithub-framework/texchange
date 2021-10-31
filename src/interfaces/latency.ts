@@ -5,27 +5,24 @@ import {
     Balances,
     Positions,
     Events,
-    ContextAccountApiLike,
-    ContextMarketApiLike,
+    ApiLike,
 } from '../interfaces';
 import { EventEmitter } from 'events';
 import { Core } from '../core';
 
 
-export class InterfaceLatency extends EventEmitter
-    implements ContextAccountApiLike, ContextMarketApiLike {
+export class InterfaceLatency extends EventEmitter implements ApiLike {
     constructor(
         private core: Core,
     ) {
         super();
-        this.core.interfaces.instant.on('error', err => void this.emit('error', err));
         this.core.interfaces.instant.on('orderbook', async orderbook => {
             try {
                 await this.core.timeline.sleep(this.core.config.PROCESSING);
                 await this.core.timeline.sleep(this.core.config.PING);
                 this.emit('orderbook', orderbook);
             } catch (err) {
-                this.emit('error', <Error>err);
+                this.core.stop(<Error>err);
             }
         });
         this.core.interfaces.instant.on('trades', async trades => {
@@ -34,7 +31,7 @@ export class InterfaceLatency extends EventEmitter
                 await this.core.timeline.sleep(this.core.config.PING);
                 this.emit('trades', trades);
             } catch (err) {
-                this.emit('error', <Error>err);
+                this.core.stop(<Error>err);
             }
         });
         this.core.interfaces.instant.on('positions', async positions => {
@@ -43,7 +40,7 @@ export class InterfaceLatency extends EventEmitter
                 await this.core.timeline.sleep(this.core.config.PING);
                 this.emit('positions', positions);
             } catch (err) {
-                this.emit('error', <Error>err);
+                this.core.stop(<Error>err);
             }
         });
         this.core.interfaces.instant.on('balances', async balances => {
@@ -52,9 +49,9 @@ export class InterfaceLatency extends EventEmitter
                 await this.core.timeline.sleep(this.core.config.PING);
                 this.emit('balances', balances);
             } catch (err) {
-                this.emit('error', <Error>err);
+                this.core.stop(<Error>err);
             }
-        })
+        });
     }
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {

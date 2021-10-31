@@ -22,11 +22,11 @@ export class StateMakers
     implements StateLike<Snapshot> {
 
     private frozens = new Map<OrderId, Frozen>();
-    public totalUnfilled: { [side: number]: Big } = {
+    public unfilledSum: { [side: number]: Big } = {
         [Side.ASK]: new Big(0),
         [Side.BID]: new Big(0),
     };
-    public totalFrozen: Frozen = Frozen.ZERO;
+    public frozenSum: Frozen = Frozen.ZERO;
 
     constructor(private core: Core) {
         super();
@@ -65,11 +65,11 @@ export class StateMakers
             });
         }
         for (const side of [Side.ASK, Side.BID]) {
-            this.totalUnfilled[side] = [...this.values()]
+            this.unfilledSum[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new Big(0));
         }
-        this.totalFrozen = [...this.frozens.values()]
+        this.frozenSum = [...this.frozens.values()]
             .reduce((total, frozen) => Frozen.plus(total, frozen), Frozen.ZERO);
     }
 
@@ -93,8 +93,8 @@ export class StateMakers
         );
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.totalFrozen = Frozen.plus(this.totalFrozen, toFreeze);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        this.frozenSum = Frozen.plus(this.frozenSum, toFreeze);
+        this.unfilledSum[order.side] = this.unfilledSum[order.side]
             .plus(order.unfilled);
     }
 
@@ -115,8 +115,8 @@ export class StateMakers
 
         this.delete(oid);
         this.frozens.delete(oid);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        this.unfilledSum[order.side] = this.unfilledSum[order.side]
             .minus(order.unfilled);
-        this.totalFrozen = Frozen.minus(this.totalFrozen, toThaw);
+        this.frozenSum = Frozen.minus(this.frozenSum, toThaw);
     }
 }

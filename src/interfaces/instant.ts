@@ -8,6 +8,7 @@ import {
     Positions,
     Balances,
     Side, Length,
+    Closable,
 } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
@@ -31,7 +32,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public pushOrderbook(): void {
-        const orderbook = this.core.states.orderbook.getOrderbook();
+        const { orderbook } = this.core.states;
         this.emit('orderbook', {
             [Side.ASK]: orderbook[Side.ASK].map(order => ({
                 price: order.price,
@@ -60,6 +61,9 @@ export class InterfaceInstant extends EventEmitter {
         }));
     }
 
+    /**
+     * @returns As duplicate.
+     */
     private makeOpenOrder(order: OpenOrder): OpenOrder | Error {
         try {
             const openOrder: OpenOrder = {
@@ -91,6 +95,9 @@ export class InterfaceInstant extends EventEmitter {
         return orders.map(order => this.cancelOpenOrder(order));
     }
 
+    /**
+     * @returns As duplicate.
+     */
     private cancelOpenOrder(order: OpenOrder): OpenOrder {
         const { makers } = this.core.states;
         let filled = makers.get(order.id)?.filled;
@@ -147,10 +154,7 @@ export class InterfaceInstant extends EventEmitter {
                 [Length.LONG]: this.core.states.assets.position[Length.LONG],
                 [Length.SHORT]: this.core.states.assets.position[Length.SHORT],
             },
-            closable: {
-                [Length.LONG]: this.core.states.margin.closable[Length.LONG],
-                [Length.SHORT]: this.core.states.margin.closable[Length.SHORT],
-            },
+            closable: this.getClosable(),
             time: this.core.timeline.now(),
         };
     }
@@ -158,7 +162,7 @@ export class InterfaceInstant extends EventEmitter {
     public getBalances(): Balances {
         return {
             balance: this.core.states.assets.balance,
-            available: this.core.states.margin.available,
+            available: this.getAvailable(),
             time: this.core.timeline.now(),
         };
     }
@@ -169,6 +173,22 @@ export class InterfaceInstant extends EventEmitter {
 
     public pushPositions(): void {
         this.emit('positions', this.getPositions());
+    }
+
+    public getAvailable(): Big {
+        return this.core.states.assets.balance
+            .minus(this.core.calculation.finalMargin())
+            .minus(this.core.calculation.finalFrozenBalance());
+    }
+
+    public getClosable(): Closable {
+        const { assets, makers } = this.core.states;
+        return {
+            [Length.LONG]: assets.position[Length.LONG]
+                .minus(makers.frozenSum.position[Length.LONG]),
+            [Length.SHORT]: assets.position[Length.SHORT]
+                .minus(makers.frozenSum.position[Length.SHORT]),
+        };
     }
 }
 

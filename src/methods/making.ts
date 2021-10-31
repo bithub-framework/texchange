@@ -25,7 +25,7 @@ export class MethodsMaking {
             id: openOrder.id,
             behind: new Big(0),
         };
-        const makers = this.core.states.orderbook.getOrderbook()[openOrder.side];
+        const makers = this.core.states.orderbook[openOrder.side];
         for (const maker of makers)
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);

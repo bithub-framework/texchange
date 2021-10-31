@@ -11,9 +11,10 @@ import assert = require('assert');
 import { max } from '../big-math';
 
 /*
+    TODO
     cross margin
     single position
-    forward contract
+    reverse contract
 */
 
 export class MethodsCalculation implements MarketCalc {
@@ -34,28 +35,14 @@ export class MethodsCalculation implements MarketCalc {
         return dollarVolume.div(price);
     }
 
-    // this.core.assets.position[order.length] has not updated.
+    // this.core.assets.position[order.length] has not been updated.
     public marginIncrement(
         length: Length, volume: Big, dollarVolume: Big,
     ): Big {
         return dollarVolume.div(this.core.config.LEVERAGE);
     }
 
-    // this.core.assets.position[order.length] has not updated.
-    public marginDecrement(
-        length: Length, volume: Big, dollarVolume: Big,
-    ): Big {
-        const { assets } = this.core.states;
-        // 单向持仓模式下，volume 可能大于 assets.position[length]
-        if (volume.lte(assets.position[length]))
-            return volume
-                .div(this.core.states.assets.position[length])
-                .times(this.core.states.margin[length]);
-        else
-            return this.core.states.margin[length];
-    };
-
-    public totalMargin(): Big {
+    public finalMargin(): Big {
         return this.core.states.margin[Length.LONG]
             .plus(this.core.states.margin[Length.SHORT]);
     }
@@ -76,22 +63,22 @@ export class MethodsCalculation implements MarketCalc {
         };
     }
 
-    public totalFrozenBalance(): Big {
-        const totalUnfilled = this.core.states.makers.totalUnfilled;
+    public finalFrozenBalance(): Big {
+        const unfilledSum = this.core.states.makers.unfilledSum;
         const position = this.core.states.assets.position;
-        const frozen = this.core.states.margin.frozen;
-        const total: {
+        const frozenSum = this.core.states.makers.frozenSum;
+        const final: {
             [length: number]: Big;
         } = {};
         for (const length of [Length.LONG, Length.SHORT]) {
-            total[length] = max(
-                totalUnfilled[length].minus(position[-length]),
+            final[length] = max(
+                unfilledSum[length].minus(position[-length]),
                 new Big(0),
             )
-                .times(frozen.balance[length])
-                .div(totalUnfilled[length]);
+                .times(frozenSum.balance[length])
+                .div(unfilledSum[length]);
         }
-        return total[Length.LONG].plus(total[Length.SHORT]);
+        return final[Length.LONG].plus(final[Length.SHORT]);
     }
 
     public marginOnSettlement(

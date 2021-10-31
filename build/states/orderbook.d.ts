@@ -1,4 +1,4 @@
-import { Orderbook, Side, StateLike, Parsed } from '../interfaces';
+import { Orderbook, Side, StateLike, BookOrder, Parsed } from '../interfaces';
 import Big from 'big.js';
 import { Core } from '../core';
 export interface Snapshot {
@@ -8,15 +8,14 @@ export interface Snapshot {
     };
     time: number;
 }
-export declare class StateOrderbook implements StateLike<Snapshot> {
+export declare class StateOrderbook implements StateLike<Snapshot>, Orderbook {
     private core;
-    private time;
-    private orderbook;
+    [side: number]: BookOrder[];
+    time: number;
     private applied;
     private basebook;
     private decrements;
     constructor(core: Core);
-    getOrderbook(): Orderbook;
     setBasebook(newBasebook: Orderbook): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
     private apply;

@@ -23,7 +23,7 @@ export class MethodsTaking {
         const trades: Trade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of orderbook.getOrderbook()[-taker.side])
+        for (const maker of orderbook[-taker.side])
             if (
                 (
                     taker.side === Side.BID && taker.price.gte(maker.price) ||

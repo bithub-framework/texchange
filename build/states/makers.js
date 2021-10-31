@@ -9,11 +9,11 @@ class StateMakers extends Map {
         super();
         this.core = core;
         this.frozens = new Map();
-        this.totalUnfilled = {
+        this.unfilledSum = {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
             [interfaces_1.Side.BID]: new big_js_1.default(0),
         };
-        this.totalFrozen = interfaces_1.Frozen.ZERO;
+        this.frozenSum = interfaces_1.Frozen.ZERO;
     }
     capture() {
         return [...this.keys()]
@@ -47,11 +47,11 @@ class StateMakers extends Map {
             });
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.totalUnfilled[side] = [...this.values()]
+            this.unfilledSum[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
-        this.totalFrozen = [...this.frozens.values()]
+        this.frozenSum = [...this.frozens.values()]
             .reduce((total, frozen) => interfaces_1.Frozen.plus(total, frozen), interfaces_1.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
@@ -72,8 +72,8 @@ class StateMakers extends Map {
         const toFreeze = this.normalizeFrozen(this.core.calculation.toFreeze(order));
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        this.frozenSum = interfaces_1.Frozen.plus(this.frozenSum, toFreeze);
+        this.unfilledSum[order.side] = this.unfilledSum[order.side]
             .plus(order.unfilled);
     }
     takeOrder(oid, volume) {
@@ -92,9 +92,9 @@ class StateMakers extends Map {
         const toThaw = this.frozens.get(oid);
         this.delete(oid);
         this.frozens.delete(oid);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        this.unfilledSum[order.side] = this.unfilledSum[order.side]
             .minus(order.unfilled);
-        this.totalFrozen = interfaces_1.Frozen.minus(this.totalFrozen, toThaw);
+        this.frozenSum = interfaces_1.Frozen.minus(this.frozenSum, toThaw);
     }
 }
 exports.StateMakers = StateMakers;

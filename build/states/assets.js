@@ -49,7 +49,7 @@ class StateAssets {
         this.cost[length] = this.cost[length].plus(dollarVolume);
     }
     /**
-     * @returns profit
+     * @returns Profit.
      */
     closePosition(length, volume, dollarVolume) {
         if (volume.lte(this.position[length])) {

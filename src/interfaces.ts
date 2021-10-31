@@ -2,28 +2,11 @@ export * from 'interfaces';
 export { Frozen } from './frozon';
 import {
     Trade,
-    Orderbook,
-    MarketSpec, AccountSpec, MarketCalc,
+    MarketSpec, AccountSpec,
     ContextMarketApiLike, ContextAccountApiLike,
     MarketEvents, AccountEvents,
 } from 'interfaces';
 import Big from 'big.js';
-import { Snapshot as SnapshotStateMakers } from './states/makers';
-import { Snapshot as SnapshotStateAssets } from './states/assets';
-import { Snapshot as SnapshotStateMargin } from './states/margin';
-import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
-import { Snapshot as SnapshotStateMisc } from './states/misc';
-
-
-export interface Snapshot {
-    time: number;
-    makers: SnapshotStateMakers;
-    assets: SnapshotStateAssets;
-    margin: SnapshotStateMargin;
-    mtm: any;
-    misc: SnapshotStateMisc;
-    orderbook: SnapshotStateOrderbook;
-}
 
 
 export interface DatabaseTrade extends Trade {
@@ -57,20 +40,6 @@ export interface ApiLike extends ContextMarketApiLike, ContextAccountApiLike {
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
-
-export interface ExchangeLike extends StateLike<Snapshot> {
-    interfaces: {
-        latency: ApiLike;
-    };
-
-    config: MarketSpec & AccountSpec;
-    calculation: MarketCalc;
-    updating: {
-        updateTrades: (trades: DatabaseTrade[]) => void;
-        updateOrderbook: (orderbook: Orderbook) => void;
-    };
-}
-
 
 
 export type TypeRecur<Type, Old, New> =

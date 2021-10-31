@@ -6,7 +6,6 @@ class InterfaceLatency extends events_1.EventEmitter {
     constructor(core) {
         super();
         this.core = core;
-        this.core.interfaces.instant.on('error', err => void this.emit('error', err));
         this.core.interfaces.instant.on('orderbook', async (orderbook) => {
             try {
                 await this.core.timeline.sleep(this.core.config.PROCESSING);
@@ -14,7 +13,7 @@ class InterfaceLatency extends events_1.EventEmitter {
                 this.emit('orderbook', orderbook);
             }
             catch (err) {
-                this.emit('error', err);
+                this.core.stop(err);
             }
         });
         this.core.interfaces.instant.on('trades', async (trades) => {
@@ -24,7 +23,7 @@ class InterfaceLatency extends events_1.EventEmitter {
                 this.emit('trades', trades);
             }
             catch (err) {
-                this.emit('error', err);
+                this.core.stop(err);
             }
         });
         this.core.interfaces.instant.on('positions', async (positions) => {
@@ -34,7 +33,7 @@ class InterfaceLatency extends events_1.EventEmitter {
                 this.emit('positions', positions);
             }
             catch (err) {
-                this.emit('error', err);
+                this.core.stop(err);
             }
         });
         this.core.interfaces.instant.on('balances', async (balances) => {
@@ -44,7 +43,7 @@ class InterfaceLatency extends events_1.EventEmitter {
                 this.emit('balances', balances);
             }
             catch (err) {
-                this.emit('error', err);
+                this.core.stop(err);
             }
         });
     }

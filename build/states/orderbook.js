@@ -8,11 +8,6 @@ class StateOrderbook {
     constructor(core) {
         this.core = core;
         this.time = Number.NEGATIVE_INFINITY;
-        this.orderbook = {
-            [interfaces_1.Side.ASK]: [],
-            [interfaces_1.Side.BID]: [],
-            time: Number.NEGATIVE_INFINITY,
-        };
         this.applied = true;
         this.basebook = {
             [interfaces_1.Side.ASK]: [],
@@ -25,9 +20,13 @@ class StateOrderbook {
             [interfaces_1.Side.BID]: new Map(),
         };
     }
-    getOrderbook() {
+    get [interfaces_1.Side.ASK]() {
         this.apply();
-        return this.orderbook;
+        return Reflect.get(this, interfaces_1.Side.ASK);
+    }
+    get [interfaces_1.Side.BID]() {
+        this.apply();
+        return Reflect.get(this, interfaces_1.Side.BID);
     }
     setBasebook(newBasebook) {
         assert(newBasebook.time === this.core.timeline.now());
@@ -66,7 +65,7 @@ class StateOrderbook {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this.orderbook[side] = [...total[side]]
+            this[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                 price: new big_js_1.default(priceString),
                 quantity,

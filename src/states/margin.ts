@@ -1,8 +1,6 @@
 import {
     Length,
-    Frozen,
     StateLike,
-    Closable,
     Parsed,
 } from '../interfaces';
 import Big from 'big.js';
@@ -21,26 +19,6 @@ export class StateMargin implements StateLike<Snapshot> {
     constructor(private core: Core) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
-    }
-
-    public get frozen(): Frozen {
-        return this.core.states.makers.totalFrozen;
-    }
-
-    public get available(): Big {
-        return this.core.states.assets.balance
-            .minus(this.core.calculation.totalMargin())
-            .minus(this.core.calculation.totalFrozenBalance());
-    }
-
-    public get closable(): Closable {
-        const { assets } = this.core.states;
-        return {
-            [Length.LONG]: assets.position[Length.LONG]
-                .minus(this.frozen.position[Length.LONG]),
-            [Length.SHORT]: assets.position[Length.SHORT]
-                .minus(this.frozen.position[Length.SHORT]),
-        };
     }
 
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {

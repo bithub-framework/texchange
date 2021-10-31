@@ -1,10 +1,14 @@
 import { Startable, ReadyState } from 'startable';
 import {
     Config,
-    Snapshot,
-    ExchangeLike,
     Timeline,
-    TypeRecur,
+    Parsed,
+    StateLike,
+    ApiLike,
+    MarketSpec, AccountSpec,
+    MarketCalc,
+    DatabaseTrade,
+    Orderbook,
 } from './interfaces';
 import { StateAssets } from './states/assets';
 import { StateMargin } from './states/margin';
@@ -21,11 +25,39 @@ import { MethodsUpdating } from './methods/updating';
 import { MethodsCalculation } from './methods/calculation';
 import { InterfaceInstant } from './interfaces/instant';
 import { InterfaceLatency } from './interfaces/latency';
-import Big from 'big.js';
 import assert = require('assert');
+import { Snapshot as SnapshotStateMakers } from './states/makers';
+import { Snapshot as SnapshotStateAssets } from './states/assets';
+import { Snapshot as SnapshotStateMargin } from './states/margin';
+import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
+import { Snapshot as SnapshotStateMisc } from './states/misc';
 
 
-export class Core extends Startable implements ExchangeLike {
+export interface Snapshot {
+    time: number;
+    makers: SnapshotStateMakers;
+    assets: SnapshotStateAssets;
+    margin: SnapshotStateMargin;
+    mtm: any;
+    misc: SnapshotStateMisc;
+    orderbook: SnapshotStateOrderbook;
+}
+
+export interface TexchangeLike extends StateLike<Snapshot> {
+    interfaces: {
+        latency: ApiLike;
+    };
+
+    config: MarketSpec & AccountSpec;
+    calculation: MarketCalc;
+    updating: {
+        updateTrades: (trades: DatabaseTrade[]) => void;
+        updateOrderbook: (orderbook: Orderbook) => void;
+    };
+}
+
+
+export class Core extends Startable implements TexchangeLike {
     public states: {
         assets: StateAssets;
         margin: StateMargin;
@@ -66,7 +98,6 @@ export class Core extends Startable implements ExchangeLike {
         }
     }
 
-    // TODO Snapshot 中的无穷大
     public capture(): Snapshot {
         assert(
             this.readyState === ReadyState.STOPPED ||
@@ -83,7 +114,7 @@ export class Core extends Startable implements ExchangeLike {
         }
     }
 
-    public restore(snapshot: TypeRecur<Snapshot, Big, string>): void {
+    public restore(snapshot: Parsed<Snapshot>): void {
         assert(
             this.readyState === ReadyState.STOPPED ||
             this.readyState === ReadyState.STARTED

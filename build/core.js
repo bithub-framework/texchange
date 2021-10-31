@@ -43,7 +43,6 @@ class Core extends startable_1.Startable {
             latency: new latency_1.InterfaceLatency(this),
         };
     }
-    // TODO Snapshot 中的无穷大
     capture() {
         assert(this.readyState === "STOPPED" /* STOPPED */ ||
             this.readyState === "STARTED" /* STARTED */);

@@ -8,10 +8,10 @@ export declare type Snapshot = {
 export declare class StateMakers extends Map<OrderId, OpenMaker> implements StateLike<Snapshot> {
     private core;
     private frozens;
-    totalUnfilled: {
+    unfilledSum: {
         [side: number]: Big;
     };
-    totalFrozen: Frozen;
+    frozenSum: Frozen;
     constructor(core: Core);
     capture(): Snapshot;
     restore(snapshot: Parsed<Snapshot>): void;

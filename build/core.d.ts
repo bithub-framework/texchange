@@ -1,5 +1,5 @@
 import { Startable } from 'startable';
-import { Config, Snapshot, ExchangeLike, Timeline, TypeRecur } from './interfaces';
+import { Config, Timeline, Parsed, StateLike, ApiLike, MarketSpec, AccountSpec, MarketCalc, DatabaseTrade, Orderbook } from './interfaces';
 import { StateAssets } from './states/assets';
 import { StateMargin } from './states/margin';
 import { StateMakers } from './states/makers';
@@ -15,8 +15,32 @@ import { MethodsUpdating } from './methods/updating';
 import { MethodsCalculation } from './methods/calculation';
 import { InterfaceInstant } from './interfaces/instant';
 import { InterfaceLatency } from './interfaces/latency';
-import Big from 'big.js';
-export declare class Core extends Startable implements ExchangeLike {
+import { Snapshot as SnapshotStateMakers } from './states/makers';
+import { Snapshot as SnapshotStateAssets } from './states/assets';
+import { Snapshot as SnapshotStateMargin } from './states/margin';
+import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
+import { Snapshot as SnapshotStateMisc } from './states/misc';
+export interface Snapshot {
+    time: number;
+    makers: SnapshotStateMakers;
+    assets: SnapshotStateAssets;
+    margin: SnapshotStateMargin;
+    mtm: any;
+    misc: SnapshotStateMisc;
+    orderbook: SnapshotStateOrderbook;
+}
+export interface TexchangeLike extends StateLike<Snapshot> {
+    interfaces: {
+        latency: ApiLike;
+    };
+    config: MarketSpec & AccountSpec;
+    calculation: MarketCalc;
+    updating: {
+        updateTrades: (trades: DatabaseTrade[]) => void;
+        updateOrderbook: (orderbook: Orderbook) => void;
+    };
+}
+export declare class Core extends Startable implements TexchangeLike {
     config: Config;
     timeline: Timeline<any>;
     states: {
@@ -40,7 +64,7 @@ export declare class Core extends Startable implements ExchangeLike {
     calculation: MethodsCalculation;
     constructor(config: Config, timeline: Timeline<any>);
     capture(): Snapshot;
-    restore(snapshot: TypeRecur<Snapshot, Big, string>): void;
+    restore(snapshot: Parsed<Snapshot>): void;
     protected _start(): Promise<void>;
     protected _stop(): Promise<void>;
 }

@@ -14,7 +14,6 @@ export interface Snapshot {
     cost: { [length: number]: Big; };
 }
 
-
 export class StateAssets implements StateLike<Snapshot> {
     public position: { [length: number]: Big; };
     public balance: Big;
@@ -72,7 +71,7 @@ export class StateAssets implements StateLike<Snapshot> {
     }
 
     /**
-     * @returns profit
+     * @returns Profit.
      */
     public closePosition(
         length: Length,
