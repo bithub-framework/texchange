@@ -178,7 +178,8 @@ export class InterfaceInstant extends EventEmitter {
     public getAvailable(): Big {
         return this.core.states.assets.balance
             .minus(this.core.calculation.finalMargin())
-            .minus(this.core.calculation.finalFrozenBalance());
+            .minus(this.core.calculation.finalFrozenBalance())
+            .round(this.core.config.CURRENCY_DP);
     }
 
     public getClosable(): Closable {

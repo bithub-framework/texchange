@@ -155,7 +155,8 @@ class InterfaceInstant extends events_1.EventEmitter {
     getAvailable() {
         return this.core.states.assets.balance
             .minus(this.core.calculation.finalMargin())
-            .minus(this.core.calculation.finalFrozenBalance());
+            .minus(this.core.calculation.finalFrozenBalance())
+            .round(this.core.config.CURRENCY_DP);
     }
     getClosable() {
         const { assets, makers } = this.core.states;

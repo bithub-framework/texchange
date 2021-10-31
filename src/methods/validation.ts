@@ -4,46 +4,44 @@ import {
 } from '../interfaces';
 import assert = require('assert');
 import { Core } from '../core';
+import Big from 'big.js';
+
 
 export class MethodsValidation {
-    constructor(
-        protected core: Core,
-    ) { }
+    constructor(protected core: Core) { }
 
     public validateOrder(order: OpenOrder) {
-        this.formatCorrect(order);
-        this.assertEnoughPosition(order);
-        this.assertEnoughAvailable(order);
+        this.validateFormat(order);
+        this.assertEnough(order);
     }
 
-    private assertEnoughPosition(order: OpenOrder) {
-        const { assets, makers } = this.core.states;
-        if (order.operation === Operation.CLOSE)
-            assert(
-                order.unfilled.lte(
-                    assets.position[order.length]
-                        .minus(makers.frozenSum.position[order.length])
-                ),
+    /**
+     * Overridable
+     * @param order Plain object.
+     */
+    protected assertEnough(order: OpenOrder): void {
+        const { makers } = this.core.states;
+        makers.appendOrder({ ...order, behind: new Big(0) });
+
+        const closable = this.core.interfaces.instant.getClosable();
+        const enoughPosition =
+            closable[Length.LONG].gte(0) &&
+            closable[Length.SHORT].gte(0);
+
+        const enoughBalance = this.core.interfaces.instant.getAvailable()
+            .gte(
+                this.core.calculation.dollarVolume(
+                    order.price, order.unfilled,
+                ).times(
+                    Math.max(this.core.config.TAKER_FEE_RATE, 0)
+                ).round(this.core.config.CURRENCY_DP)
             );
+
+        makers.removeOrder(order.id);
+        assert(enoughPosition && enoughBalance);
     }
 
-    private assertEnoughAvailable(order: OpenOrder) {
-        if (order.operation === Operation.OPEN) {
-            const frozen = this.core.calculation.toFreeze(order);
-            assert(
-                frozen.balance[Length.LONG]
-                    .plus(frozen.balance[Length.SHORT])
-                    .plus(
-                        this.core.calculation.dollarVolume(
-                            order.price, order.unfilled,
-                        ).times(this.core.config.TAKER_FEE_RATE),
-                    ).round(this.core.config.CURRENCY_DP)
-                    .lte(this.core.interfaces.instant.getAvailable()),
-            );
-        }
-    }
-
-    private formatCorrect(order: OpenOrder) {
+    private validateFormat(order: OpenOrder) {
         assert(order.price.eq(order.price.round(this.core.config.PRICE_DP)));
         assert(order.price.mod(this.core.config.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));

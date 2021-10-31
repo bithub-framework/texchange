@@ -10,6 +10,7 @@ const big_math_1 = require("../big-math");
     cross margin
     single position
     reverse contract
+    spot
 */
 class MethodsCalculation {
     constructor(core) {

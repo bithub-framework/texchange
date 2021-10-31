@@ -15,6 +15,7 @@ import { max } from '../big-math';
     cross margin
     single position
     reverse contract
+    spot
 */
 
 export class MethodsCalculation implements MarketCalc {
