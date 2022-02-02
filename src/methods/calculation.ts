@@ -6,7 +6,7 @@ import {
     Operation,
 } from '../interfaces';
 import Big from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 import assert = require('assert');
 import { max } from '../big-math';
 
@@ -20,7 +20,7 @@ import { max } from '../big-math';
 
 export class MethodsCalculation implements MarketCalc {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
     public dollarVolume(

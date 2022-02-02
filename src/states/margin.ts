@@ -1,11 +1,11 @@
 import {
     Length,
-    StateLike,
+    StatefulLike,
     Parsed,
 } from '../interfaces';
 import Big from 'big.js';
 // import { inspect } from 'util';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export interface Snapshot {
@@ -13,10 +13,10 @@ export interface Snapshot {
 }
 
 
-export class StateMargin implements StateLike<Snapshot> {
+export class StateMargin implements StatefulLike<Snapshot> {
     [length: number]: Big;
 
-    constructor(private core: Core) {
+    constructor(private core: Hub) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
     }

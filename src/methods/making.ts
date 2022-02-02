@@ -3,12 +3,12 @@ import {
     OpenMaker,
 } from '../interfaces';
 import Big from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class MethodsMaking {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
     public orderMakes(

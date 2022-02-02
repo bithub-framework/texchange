@@ -3,15 +3,19 @@ import {
     DatabaseTrade,
 } from '../interfaces';
 import assert = require('assert');
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 
 export class MethodsUpdating {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
+    /**
+     * Make sure update all trades which have same timestamp at a time.
+     * @param trades
+     */
     public updateTrades(trades: DatabaseTrade[]): void {
         assert(trades.length);
         for (const trade of trades) {

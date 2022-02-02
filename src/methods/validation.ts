@@ -3,12 +3,12 @@ import {
     Operation, Length,
 } from '../interfaces';
 import assert = require('assert');
-import { Core } from '../core';
+import { Hub } from '../hub';
 import Big from 'big.js';
 
 
 export class MethodsValidation {
-    constructor(protected core: Core) { }
+    constructor(protected core: Hub) { }
 
     public validateOrder(order: OpenOrder) {
         this.validateFormat(order);

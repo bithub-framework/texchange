@@ -7,12 +7,12 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class MethodsTaken {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
     public tradeTakesOpenMakers(trade: Trade): void {

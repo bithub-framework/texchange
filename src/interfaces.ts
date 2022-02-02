@@ -5,9 +5,9 @@ import {
     MarketSpec, AccountSpec,
     ContextMarketApiLike, ContextAccountApiLike,
     MarketEvents, AccountEvents,
+    Orderbook,
 } from 'interfaces';
 import Big from 'big.js';
-
 
 export interface DatabaseTrade extends Trade {
     id: string;
@@ -27,7 +27,7 @@ export interface Config extends MarketConfig, AccountConfig {
 
 
 
-export interface StateLike<Snapshot> {
+export interface StatefulLike<Snapshot> {
     capture(): Snapshot;
     restore(snapshot: Parsed<Snapshot>): void;
 }
@@ -52,3 +52,9 @@ export type TypeRecur<Type, Old, New> =
     );
 
 export type Parsed<T> = TypeRecur<TypeRecur<T, Big, string>, number, number | null>;
+
+
+export interface TexchangeLike extends ApiLike {
+    updateTrades(trades: DatabaseTrade[]): void;
+    updateOrderbook(orderbook: Orderbook): void;
+}

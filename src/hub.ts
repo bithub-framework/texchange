@@ -3,7 +3,7 @@ import {
     Config,
     Timeline,
     Parsed,
-    StateLike,
+    StatefulLike,
     ApiLike,
     MarketSpec, AccountSpec,
     MarketCalc,
@@ -15,7 +15,7 @@ import { StateMargin } from './states/margin';
 import { StateMakers } from './states/makers';
 import { StateOrderbook } from './states/orderbook';
 import { StateMtmLike, StateMtm } from './states/mtm';
-import { StateMisc } from './states/misc';
+import { StateMisc } from './states/progress';
 import { MethodsValidation } from './methods/validation';
 import { MethodsClearing } from './methods/clearing';
 import { MethodsTaking } from './methods/taking';
@@ -30,7 +30,7 @@ import { Snapshot as SnapshotStateMakers } from './states/makers';
 import { Snapshot as SnapshotStateAssets } from './states/assets';
 import { Snapshot as SnapshotStateMargin } from './states/margin';
 import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
-import { Snapshot as SnapshotStateMisc } from './states/misc';
+import { Snapshot as SnapshotStateMisc } from './states/progress';
 
 
 export interface Snapshot {
@@ -43,7 +43,7 @@ export interface Snapshot {
     orderbook: SnapshotStateOrderbook;
 }
 
-export interface TexchangeLike extends StateLike<Snapshot> {
+export interface TexchangeLike extends StatefulLike<Snapshot> {
     interfaces: {
         latency: ApiLike;
     };
@@ -57,7 +57,7 @@ export interface TexchangeLike extends StateLike<Snapshot> {
 }
 
 
-export class Core extends Startable implements TexchangeLike {
+export class Hub extends Startable implements TexchangeLike {
     public states: {
         assets: StateAssets;
         margin: StateMargin;

@@ -1,12 +1,12 @@
 import {
     Length,
 } from '../interfaces';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class MethodsClearing {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
     public settle(): void {

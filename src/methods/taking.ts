@@ -5,12 +5,12 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class MethodsTaking {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) { }
 
     /**

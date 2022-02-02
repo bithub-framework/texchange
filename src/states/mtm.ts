@@ -1,17 +1,17 @@
 import {
     Trade,
-    StateLike,
+    StatefulLike,
     Parsed,
 } from '../interfaces';
 import Big from 'big.js';
 import { Startable, ReadyState } from 'startable';
 import { Mutex } from 'coroutine-locks';
-import { Core } from '../core';
+import { Hub } from '../hub';
 import assert = require('assert');
 
 export type Snapshot = Big;
 
-export interface StateMtmLike<Snapshot> extends StateLike<Snapshot> {
+export interface StateMtmLike<Snapshot> extends StatefulLike<Snapshot> {
     getSettlementPrice(): Big;
     updateTrades(trades: Trade[]): void;
 }
@@ -21,7 +21,7 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
     protected markPrice?: Big;
     protected mutex = new Mutex();
 
-    constructor(protected core: Core) {
+    constructor(protected core: Hub) {
         super();
         this.mutex.lock();
     }

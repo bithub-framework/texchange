@@ -4,36 +4,35 @@ import Big from 'big.js';
 import { Mutex } from 'coroutine-locks';
 import {
     DatabaseTrade,
-    StateLike,
     Parsed,
 } from '../interfaces';
-import { Core } from '../core';
+import { Hub } from '../hub';
+import { StatefulStartable } from '../stateful-startable';
 
 export interface Snapshot {
     latestPrice: Big;
     latestDatabaseTradeId: string;
     userTradeCount: number;
-    userOrderCount: number;
+    // userOrderCount: number;
 }
 
-export class StateMisc extends Startable implements StateLike<Snapshot> {
+export class Progress extends StatefulStartable<Snapshot, Parsed<Snapshot>> {
     public latestPrice?: Big;
     private latestDatabaseTradeId?: string;
     private mutex = new Mutex();
     public userTradeCount = 0;
-    public userOrderCount = 0;
-    private restored = false;
+    // public userOrderCount = 0;
 
-    constructor(private core: Core) {
+    constructor(private hub: Hub) {
         super();
         this.mutex.lock();
     }
 
-    protected async _start() {
-        if (!this.restored) await this.mutex.lock();
+    protected async StatefulStartable$start() {
+        await this.mutex.lock();
     }
 
-    protected async _stop() { }
+    protected async StatefulStartable$stop() { }
 
     public updateDatabaseTrade(trade: DatabaseTrade): void {
         this.latestDatabaseTradeId = trade.id;
@@ -41,28 +40,19 @@ export class StateMisc extends Startable implements StateLike<Snapshot> {
         this.mutex.unlock();
     }
 
-    public capture(): Snapshot {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
+    protected StatefulStartable$capture(): Snapshot {
         return {
             latestPrice: this.latestPrice!,
             latestDatabaseTradeId: this.latestDatabaseTradeId!,
             userTradeCount: this.userTradeCount,
-            userOrderCount: this.userOrderCount,
+            // userOrderCount: this.userOrderCount,
         };
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
-        this.restored = true;
+    protected StatefulStartable$restore(snapshot: Parsed<Snapshot>): void {
         this.latestPrice = new Big(snapshot.latestPrice);
         this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
         this.userTradeCount = snapshot.userTradeCount!;
-        this.userOrderCount = snapshot.userOrderCount!;
+        // this.userOrderCount = snapshot.userOrderCount!;
     }
 }

@@ -8,12 +8,12 @@ import {
     ApiLike,
 } from '../interfaces';
 import { EventEmitter } from 'events';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class InterfaceLatency extends EventEmitter implements ApiLike {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) {
         super();
         this.core.interfaces.instant.on('orderbook', async orderbook => {

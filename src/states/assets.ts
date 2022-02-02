@@ -1,11 +1,11 @@
 import {
     Length,
-    StateLike,
+    StatefulLike,
     Parsed,
 } from '../interfaces';
 // import { inspect } from 'util';
 import Big from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export interface Snapshot {
@@ -14,12 +14,12 @@ export interface Snapshot {
     cost: { [length: number]: Big; };
 }
 
-export class StateAssets implements StateLike<Snapshot> {
+export class StateAssets implements StatefulLike<Snapshot> {
     public position: { [length: number]: Big; };
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(private core: Core) {
+    constructor(private core: Hub) {
         this.balance = this.core.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),

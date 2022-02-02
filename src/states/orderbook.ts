@@ -1,13 +1,13 @@
 import {
     Orderbook,
     Side,
-    StateLike,
+    StatefulLike,
     BookOrder,
     Parsed,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export interface Snapshot {
@@ -18,7 +18,7 @@ export interface Snapshot {
     time: number;
 }
 
-export class StateOrderbook implements StateLike<Snapshot>, Orderbook {
+export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
     [side: number]: BookOrder[];
     public time = Number.NEGATIVE_INFINITY;
     public get [Side.ASK]() {
@@ -42,7 +42,7 @@ export class StateOrderbook implements StateLike<Snapshot>, Orderbook {
         [Side.BID]: new Map<string, Big>(),
     };
 
-    constructor(private core: Core) { }
+    constructor(private core: Hub) { }
 
     public setBasebook(newBasebook: Orderbook) {
         assert(newBasebook.time === this.core.timeline.now());

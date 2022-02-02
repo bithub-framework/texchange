@@ -2,13 +2,13 @@ import {
     OrderId,
     OpenMaker,
     Frozen,
-    StateLike,
+    StatefulLike,
     Parsed,
     Side, Length,
 } from '../interfaces';
 import Big from 'big.js';
 import assert = require('assert');
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export type Snapshot = {
@@ -19,7 +19,7 @@ export type Snapshot = {
 
 export class StateMakers
     extends Map<OrderId, OpenMaker>
-    implements StateLike<Snapshot> {
+    implements StatefulLike<Snapshot> {
 
     private frozens = new Map<OrderId, Frozen>();
     public unfilledSum: { [side: number]: Big } = {
@@ -28,7 +28,7 @@ export class StateMakers
     };
     public frozenSum: Frozen = Frozen.ZERO;
 
-    constructor(private core: Core) {
+    constructor(private core: Hub) {
         super();
     }
 

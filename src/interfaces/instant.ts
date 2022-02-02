@@ -11,12 +11,12 @@ import {
     Closable,
 } from '../interfaces';
 import Big from 'big.js';
-import { Core } from '../core';
+import { Hub } from '../hub';
 
 
 export class InterfaceInstant extends EventEmitter {
     constructor(
-        private core: Core,
+        private core: Hub,
     ) {
         super();
     }
