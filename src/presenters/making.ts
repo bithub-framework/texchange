@@ -3,13 +3,11 @@ import {
     OpenMaker,
 } from '../interfaces';
 import Big from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export class MethodsMaking {
-    constructor(
-        private core: Hub,
-    ) { }
+export class Making {
+    constructor(private core: Hub) { }
 
     public orderMakes(
         openOrder: OpenOrder,
@@ -25,10 +23,10 @@ export class MethodsMaking {
             id: openOrder.id,
             behind: new Big(0),
         };
-        const makers = this.core.states.orderbook[openOrder.side];
+        const makers = this.core.models.orderbooks[openOrder.side];
         for (const maker of makers)
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        this.core.states.makers.appendOrder(openMaker);
+        this.core.models.makers.appendOrder(openMaker);
     }
 }

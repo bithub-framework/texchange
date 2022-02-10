@@ -27,10 +27,6 @@ export interface Config extends MarketConfig, AccountConfig {
 
 
 
-export interface StatefulLike<Snapshot> {
-    capture(): Snapshot;
-    restore(snapshot: Parsed<Snapshot>): void;
-}
 
 export type Events = MarketEvents & AccountEvents;
 

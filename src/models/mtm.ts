@@ -1,28 +1,33 @@
 import {
     Trade,
-    StatefulLike,
-    Parsed,
+    TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
-import { Startable, ReadyState } from 'startable';
+import { Startable, ReadyState, StatefulLike } from 'startable';
 import { Mutex } from 'coroutine-locks';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 import assert = require('assert');
 
-export type Snapshot = Big;
 
-export interface StateMtmLike<Snapshot> extends StatefulLike<Snapshot> {
+export interface MtmLike<Snapshot, Backup>
+    extends StatefulLike<Snapshot, Backup> {
     getSettlementPrice(): Big;
     updateTrades(trades: Trade[]): void;
 }
 
+export namespace DefaultMtm {
+    export type Snapshot = Big;
+    export type Backup = TypeRecur<Snapshot, Big, string>;
+}
 
-export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
+export import Snapshot = DefaultMtm.Snapshot;
+export import Backup = DefaultMtm.Backup;
+
+export class DefaultMtm implements MtmLike<Snapshot, Backup> {
     protected markPrice?: Big;
     protected mutex = new Mutex();
 
-    constructor(protected core: Hub) {
-        super();
+    constructor(protected hub: Hub) {
         this.mutex.lock();
     }
 
@@ -34,28 +39,19 @@ export class StateMtm extends Startable implements StateMtmLike<Snapshot> {
 
     public updateTrades(trades: Trade[]): void {
         this.markPrice = trades[trades.length - 1].price;
-        this.core.clearing.settle();
+        this.hub.presenters.clearing.settle();
         this.mutex.unlock();
     }
 
     public getSettlementPrice(): Big {
-        assert(this.readyState === ReadyState.STARTED);
         return this.markPrice!;
     }
 
     public capture(): Snapshot {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
         return this.markPrice!;
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
+    public restore(snapshot: Backup): void {
         this.markPrice = new Big(snapshot);
         this.mutex.unlock();
     }

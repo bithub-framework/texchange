@@ -7,13 +7,11 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export class MethodsTaken {
-    constructor(
-        private core: Hub,
-    ) { }
+export class Taken {
+    constructor(private hub: Hub) { }
 
     public tradeTakesOpenMakers(trade: Trade): void {
         trade = {
@@ -23,7 +21,7 @@ export class MethodsTaken {
             time: trade.time,
             id: trade.id,
         };
-        for (const order of [...this.core.states.makers.values()])
+        for (const order of [...this.hub.models.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);
                 this.tradeTakesOpenMaker(trade, order);
@@ -61,19 +59,19 @@ export class MethodsTaken {
      * @param maker variable
      */
     private tradeTakesOpenMaker(trade: Trade, maker: OpenMaker): void {
-        const { assets, margin, makers } = this.core.states;
+        const { assets, margin, makers } = this.hub.models;
 
         const volume = min(trade.quantity, maker.unfilled);
-        const dollarVolume = this.core.calculation
+        const dollarVolume = this.hub.context.calculation
             .dollarVolume(maker.price, volume)
-            .round(this.core.config.CURRENCY_DP);
+            .round(this.hub.context.config.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
         assets.payFee(
             dollarVolume
-                .times(this.core.config.MAKER_FEE_RATE)
-                .round(this.core.config.CURRENCY_DP, RoundingMode.RoundUp)
+                .times(this.hub.context.config.MAKER_FEE_RATE)
+                .round(this.hub.context.config.CURRENCY_DP, RoundingMode.RoundUp)
         );
         // margin before position
         if (maker.operation === Operation.OPEN) {

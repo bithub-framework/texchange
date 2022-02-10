@@ -6,7 +6,7 @@ import {
     Operation,
 } from '../interfaces';
 import Big from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 import assert = require('assert');
 import { max } from '../big-math';
 
@@ -18,10 +18,8 @@ import { max } from '../big-math';
     spot
 */
 
-export class MethodsCalculation implements MarketCalc {
-    constructor(
-        private core: Hub,
-    ) { }
+export abstract class Calculation implements MarketCalc {
+    constructor(private hub: Hub) { }
 
     public dollarVolume(
         price: Big, quantity: Big,
@@ -40,12 +38,12 @@ export class MethodsCalculation implements MarketCalc {
     public marginIncrement(
         length: Length, volume: Big, dollarVolume: Big,
     ): Big {
-        return dollarVolume.div(this.core.config.LEVERAGE);
+        return dollarVolume.div(this.hub.context.config.LEVERAGE);
     }
 
     public finalMargin(): Big {
-        return this.core.states.margin[Length.LONG]
-            .plus(this.core.states.margin[Length.SHORT]);
+        return this.hub.models.margin[Length.LONG]
+            .plus(this.hub.models.margin[Length.SHORT]);
     }
 
     public toFreeze(
@@ -65,9 +63,9 @@ export class MethodsCalculation implements MarketCalc {
     }
 
     public finalFrozenBalance(): Big {
-        const unfilledSum = this.core.states.makers.unfilledSum;
-        const position = this.core.states.assets.position;
-        const frozenSum = this.core.states.makers.frozenSum;
+        const unfilledSum = this.hub.models.makers.unfilledSum;
+        const position = this.hub.models.assets.position;
+        const frozenSum = this.hub.models.makers.frozenSum;
         const final: {
             [length: number]: Big;
         } = {};
@@ -85,7 +83,7 @@ export class MethodsCalculation implements MarketCalc {
     public marginOnSettlement(
         length: Length, profit: Big,
     ): Big {
-        return this.core.states.margin[length]
+        return this.hub.models.margin[length]
             .plus(profit);
     }
 
@@ -93,3 +91,5 @@ export class MethodsCalculation implements MarketCalc {
         return [];
     }
 }
+
+export class DefaultCalculation extends Calculation { }

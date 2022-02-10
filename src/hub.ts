@@ -1,146 +1,140 @@
-import { Startable, ReadyState } from 'startable';
+import { StatefulLike } from 'startable';
 import {
     Config,
     Timeline,
-    Parsed,
-    StatefulLike,
-    ApiLike,
-    MarketSpec, AccountSpec,
-    MarketCalc,
-    DatabaseTrade,
-    Orderbook,
+    TypeRecur,
 } from './interfaces';
-import { StateAssets } from './states/assets';
-import { StateMargin } from './states/margin';
-import { StateMakers } from './states/makers';
-import { StateOrderbook } from './states/orderbook';
-import { StateMtmLike, StateMtm } from './states/mtm';
-import { StateMisc } from './states/progress';
-import { MethodsValidation } from './methods/validation';
-import { MethodsClearing } from './methods/clearing';
-import { MethodsTaking } from './methods/taking';
-import { MethodsTaken } from './methods/taken';
-import { MethodsMaking } from './methods/making';
-import { MethodsUpdating } from './methods/updating';
-import { MethodsCalculation } from './methods/calculation';
-import { InterfaceInstant } from './interfaces/instant';
-import { InterfaceLatency } from './interfaces/latency';
+import { Assets } from './models/assets';
+import { Margin } from './models/margin';
+import { Makers } from './models/makers';
+import { Orderbooks } from './models/orderbook';
+import { MtmLike, DefaultMtm } from './models/mtm';
+import { Progress } from './models/progress';
+import { Validation } from './presenters/validation';
+import { Clearing } from './presenters/clearing';
+import { Taking } from './presenters/taking';
+import { Taken } from './presenters/taken';
+import { Making } from './presenters/making';
+import { Updating } from './presenters/updating';
+import { DefaultCalculation, Calculation } from './context/calculation';
+import { Instant } from './views/instant';
+import { Latency as Latency } from './views/latency';
 import assert = require('assert');
-import { Snapshot as SnapshotStateMakers } from './states/makers';
-import { Snapshot as SnapshotStateAssets } from './states/assets';
-import { Snapshot as SnapshotStateMargin } from './states/margin';
-import { Snapshot as SnapshotStateOrderbook } from './states/orderbook';
-import { Snapshot as SnapshotStateMisc } from './states/progress';
+import Big from 'big.js';
 
 
-export interface Snapshot {
-    time: number;
-    makers: SnapshotStateMakers;
-    assets: SnapshotStateAssets;
-    margin: SnapshotStateMargin;
-    mtm: any;
-    misc: SnapshotStateMisc;
-    orderbook: SnapshotStateOrderbook;
-}
+export class Models implements StatefulLike<Models.Snapshot, Models.Backup> {
+    public assets: Assets;
+    public margin: Margin;
+    public makers: Makers;
+    public orderbooks: Orderbooks;
+    public mtm: MtmLike<any, any>;
+    public progress: Progress;
 
-export interface TexchangeLike extends StatefulLike<Snapshot> {
-    interfaces: {
-        latency: ApiLike;
-    };
-
-    config: MarketSpec & AccountSpec;
-    calculation: MarketCalc;
-    updating: {
-        updateTrades: (trades: DatabaseTrade[]) => void;
-        updateOrderbook: (orderbook: Orderbook) => void;
-    };
-}
-
-
-export class Hub extends Startable implements TexchangeLike {
-    public states: {
-        assets: StateAssets;
-        margin: StateMargin;
-        makers: StateMakers;
-        orderbook: StateOrderbook;
-        mtm: StateMtmLike<any>;
-        misc: StateMisc;
-    };
-    public interfaces: {
-        instant: InterfaceInstant;
-        latency: InterfaceLatency;
+    constructor(hub: Hub) {
+        this.assets = new Assets(hub);
+        this.margin = new Margin(hub);
+        this.makers = new Makers(hub);
+        this.orderbooks = new Orderbooks(hub);
+        this.mtm = new DefaultMtm(hub);
+        this.progress = new Progress(hub);
     }
 
-    public clearing = new MethodsClearing(this);
-    public making = new MethodsMaking(this);
-    public taking = new MethodsTaking(this);
-    public taken = new MethodsTaken(this);
-    public updating = new MethodsUpdating(this);
-    public validation = new MethodsValidation(this);
-    public calculation = new MethodsCalculation(this);
+    public capture(): Models.Snapshot {
+        return {
+            assets: this.assets.capture(),
+            margin: this.margin.capture(),
+            makers: this.makers.capture(),
+            orderbooks: this.orderbooks.capture(),
+            mtm: this.mtm.capture(),
+            progress: this.progress.capture(),
+        }
+    }
+
+    public restore(backup: Models.Backup): void {
+        this.assets.restore(backup.assets);
+        this.margin.restore(backup.margin);
+        this.makers.restore(backup.makers);
+        this.orderbooks.restore(backup.orderbooks);
+        this.mtm.restore(backup.mtm);
+        this.progress.restore(backup.progress);
+    }
+}
+
+export namespace Models {
+    export interface Snapshot {
+        assets: Assets.Snapshot;
+        margin: Margin.Snapshot;
+        makers: Makers.Snapshot;
+        orderbooks: Orderbooks.Snapshot;
+        mtm: any;
+        progress: Progress.Snapshot;
+    }
+
+    export type Backup = TypeRecur<Snapshot, Big, string>;
+}
+
+export class Presenters {
+    public clearing: Clearing;
+    public making: Making;
+    public taking: Taking;
+    public taken: Taken;
+    public updating: Updating;
+    public validation: Validation;
+
+    constructor(hub: Hub) {
+        this.clearing = new Clearing(hub);
+        this.making = new Making(hub);
+        this.taking = new Taking(hub);
+        this.taken = new Taken(hub);
+        this.updating = new Updating(hub);
+        this.validation = new Validation(hub);
+    }
+}
+
+export class Views {
+    public instant: Instant;
+    public latency: Latency;
+
+    constructor(hub: Hub) {
+        this.instant = new Instant(hub);
+        this.latency = new Latency(hub);
+    }
+}
+
+export abstract class Context {
+    public calculation: Calculation;
+    public abstract config: Config;
 
     constructor(
-        public config: Config,
-        public timeline: Timeline<any>,
+        hub: Hub,
+        public timeline: Timeline,
     ) {
-        super();
-        this.states = {
-            assets: new StateAssets(this),
-            margin: new StateMargin(this),
-            makers: new StateMakers(this),
-            orderbook: new StateOrderbook(this),
-            mtm: new StateMtm(this),
-            misc: new StateMisc(this),
-        };
-        this.interfaces = {
-            instant: new InterfaceInstant(this),
-            latency: new InterfaceLatency(this),
-        }
+        this.calculation = new DefaultCalculation(hub);
     }
+}
 
-    public capture(): Snapshot {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
+export abstract class Hub implements StatefulLike<Hub.Snapshot, Hub.Backup> {
+    public models = new Models(this);
+    public presenters = new Presenters(this);
+    public views = new Views(this)
+    public abstract context: Context;
+
+    public capture(): Hub.Snapshot {
         return {
-            time: this.timeline.now(),
-            assets: this.states.assets.capture(),
-            margin: this.states.margin.capture(),
-            makers: this.states.makers.capture(),
-            misc: this.states.misc.capture(),
-            mtm: this.states.mtm.capture(),
-            orderbook: this.states.orderbook.capture(),
+            models: this.models.capture(),
         }
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
-        assert(
-            this.readyState === ReadyState.STOPPED ||
-            this.readyState === ReadyState.STARTED
-        );
-        this.states.misc.restore(snapshot.misc);
-        this.states.assets.restore(snapshot.assets);
-        this.states.margin.restore(snapshot.margin);
-        this.states.makers.restore(snapshot.makers);
-        this.states.mtm.restore(snapshot.mtm);
-        this.states.orderbook.restore(snapshot.orderbook);
+    public restore(backup: Hub.Backup): void {
+        this.models.restore(backup.models);
+    }
+}
+
+export namespace Hub {
+    export interface Snapshot {
+        models: Models.Snapshot;
     }
 
-    protected async _start() {
-        const promises = [this.states.misc.start(this.stop)];
-        if (this.states.mtm instanceof Startable)
-            promises.push(this.states.mtm.start(this.stop));
-
-        const results = await Promise.allSettled(promises);
-        results.forEach(result => {
-            if (result.status === 'rejected') throw result.reason;
-        });
-    }
-
-    protected async _stop() {
-        await this.states.misc.stop();
-        if (this.states.mtm instanceof Startable)
-            await this.states.mtm.stop();
-    }
+    export type Backup = TypeRecur<Snapshot, Big, string>;
 }

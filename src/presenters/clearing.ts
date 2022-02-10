@@ -1,17 +1,15 @@
 import {
     Length,
 } from '../interfaces';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export class MethodsClearing {
-    constructor(
-        private core: Hub,
-    ) { }
+export class Clearing {
+    constructor(private hub: Hub) { }
 
     public settle(): void {
-        const { calculation } = this.core;
-        const { assets, mtm, margin } = this.core.states;
+        const { calculation } = this.hub.context;
+        const { assets, mtm, margin } = this.hub.models;
 
         const position = {
             [Length.LONG]: assets.position[Length.LONG],
@@ -20,7 +18,7 @@ export class MethodsClearing {
         for (const length of [Length.LONG, Length.SHORT]) {
             const dollarVolume = calculation.dollarVolume(
                 mtm.getSettlementPrice(), position[length],
-            ).round(this.core.config.CURRENCY_DP);
+            ).round(this.hub.context.config.CURRENCY_DP);
             const profit = assets.closePosition(
                 length, position[length], dollarVolume,
             );
@@ -30,6 +28,6 @@ export class MethodsClearing {
             margin[length] = calculation.marginOnSettlement(length, profit);
         }
         if (calculation.shouldLiquidate().length)
-            this.core.stop(new Error('Liquidated.'));
+            this.hub.stop(new Error('Liquidated.'));
     }
 }

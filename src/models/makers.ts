@@ -2,24 +2,29 @@ import {
     OrderId,
     OpenMaker,
     Frozen,
-    StatefulLike,
-    Parsed,
+    TypeRecur,
     Side, Length,
 } from '../interfaces';
+import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import assert = require('assert');
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export type Snapshot = {
-    order: OpenMaker;
-    frozen: Frozen;
-}[];
+export namespace Makers {
+    export type Snapshot = {
+        order: OpenMaker;
+        frozen: Frozen;
+    }[];
 
+    export type Backup = TypeRecur<Snapshot, Big, string>;
+}
 
-export class StateMakers
-    extends Map<OrderId, OpenMaker>
-    implements StatefulLike<Snapshot> {
+export import Snapshot = Makers.Snapshot;
+export import Backup = Makers.Backup;
+
+export class Makers extends Map<OrderId, OpenMaker>
+    implements StatefulLike<Snapshot, Backup> {
 
     private frozens = new Map<OrderId, Frozen>();
     public unfilledSum: { [side: number]: Big } = {
@@ -40,7 +45,7 @@ export class StateMakers
             }));
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
+    public restore(snapshot: Backup): void {
         for (const { order, frozen } of snapshot) {
             this.set(order.id!, {
                 price: new Big(order.price),
@@ -76,12 +81,12 @@ export class StateMakers
     private normalizeFrozen(frozen: Frozen): Frozen {
         return {
             balance: {
-                [Length.LONG]: frozen.balance[Length.LONG].round(this.core.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.core.config.CURRENCY_DP),
+                [Length.LONG]: frozen.balance[Length.LONG].round(this.core.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.core.context.config.CURRENCY_DP),
             },
             position: {
-                [Length.LONG]: frozen.position[Length.LONG].round(this.core.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.position[Length.SHORT].round(this.core.config.CURRENCY_DP),
+                [Length.LONG]: frozen.position[Length.LONG].round(this.core.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.position[Length.SHORT].round(this.core.context.config.CURRENCY_DP),
             },
         };
     }
@@ -89,7 +94,7 @@ export class StateMakers
     public appendOrder(order: OpenMaker): void {
         if (order.unfilled.eq(0)) return;
         const toFreeze = this.normalizeFrozen(
-            this.core.calculation.toFreeze(order),
+            this.core.context.calculation.toFreeze(order),
         );
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);

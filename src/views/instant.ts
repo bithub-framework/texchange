@@ -11,13 +11,11 @@ import {
     Closable,
 } from '../interfaces';
 import Big from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export class InterfaceInstant extends EventEmitter {
-    constructor(
-        private core: Hub,
-    ) {
+export class Instant extends EventEmitter {
+    constructor(private hub: Hub) {
         super();
     }
 
@@ -32,7 +30,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public pushOrderbook(): void {
-        const { orderbook } = this.core.states;
+        const { orderbooks: orderbook } = this.hub.models;
         this.emit('orderbook', {
             [Side.ASK]: orderbook[Side.ASK].map(order => ({
                 price: order.price,
@@ -55,7 +53,7 @@ export class InterfaceInstant extends EventEmitter {
             side: order.side,
             length: order.length,
             operation: order.operation,
-            id: ++this.core.states.misc.userOrderCount,
+            id: ++this.hub.models.progress.userOrderCount,
             filled: new Big(0),
             unfilled: order.quantity,
         }));
@@ -72,18 +70,18 @@ export class InterfaceInstant extends EventEmitter {
                 side: order.side,
                 length: order.length,
                 operation: order.operation,
-                id: ++this.core.states.misc.userOrderCount,
+                id: ++this.hub.models.progress.userOrderCount,
                 filled: new Big(0),
                 unfilled: order.quantity,
             };
-            this.core.validation.validateOrder(openOrder);
-            const trades = this.core.taking.orderTakes(openOrder);
-            this.core.making.orderMakes(openOrder);
+            this.hub.presenters.validation.validateOrder(openOrder);
+            const trades = this.hub.presenters.taking.orderTakes(openOrder);
+            this.hub.presenters.making.orderMakes(openOrder);
             if (trades.length) {
-                this.core.interfaces.instant.pushTrades(trades);
-                this.core.interfaces.instant.pushOrderbook();
-                this.core.interfaces.instant.pushBalances();
-                this.core.interfaces.instant.pushPositions();
+                this.hub.views.instant.pushTrades(trades);
+                this.hub.views.instant.pushOrderbook();
+                this.hub.views.instant.pushBalances();
+                this.hub.views.instant.pushPositions();
             }
             return openOrder
         } catch (err) {
@@ -99,7 +97,7 @@ export class InterfaceInstant extends EventEmitter {
      * @returns As duplicate.
      */
     private cancelOpenOrder(order: OpenOrder): OpenOrder {
-        const { makers } = this.core.states;
+        const { makers } = this.hub.models;
         let filled = makers.get(order.id)?.filled;
         if (typeof filled === 'undefined')
             filled = order.quantity;
@@ -135,7 +133,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public getOpenOrders(): OpenOrder[] {
-        const openOrders = [...this.core.states.makers.values()];
+        const openOrders = [...this.hub.models.makers.values()];
         return openOrders.map(order => ({
             price: order.price,
             quantity: order.quantity,
@@ -151,19 +149,19 @@ export class InterfaceInstant extends EventEmitter {
     public getPositions(): Positions {
         return {
             position: {
-                [Length.LONG]: this.core.states.assets.position[Length.LONG],
-                [Length.SHORT]: this.core.states.assets.position[Length.SHORT],
+                [Length.LONG]: this.hub.models.assets.position[Length.LONG],
+                [Length.SHORT]: this.hub.models.assets.position[Length.SHORT],
             },
             closable: this.getClosable(),
-            time: this.core.timeline.now(),
+            time: this.hub.context.timeline.now(),
         };
     }
 
     public getBalances(): Balances {
         return {
-            balance: this.core.states.assets.balance,
+            balance: this.hub.models.assets.balance,
             available: this.getAvailable(),
-            time: this.core.timeline.now(),
+            time: this.hub.context.timeline.now(),
         };
     }
 
@@ -176,14 +174,14 @@ export class InterfaceInstant extends EventEmitter {
     }
 
     public getAvailable(): Big {
-        return this.core.states.assets.balance
-            .minus(this.core.calculation.finalMargin())
-            .minus(this.core.calculation.finalFrozenBalance())
-            .round(this.core.config.CURRENCY_DP);
+        return this.hub.models.assets.balance
+            .minus(this.hub.context.calculation.finalMargin())
+            .minus(this.hub.context.calculation.finalFrozenBalance())
+            .round(this.hub.context.config.CURRENCY_DP);
     }
 
     public getClosable(): Closable {
-        const { assets, makers } = this.core.states;
+        const { assets, makers } = this.hub.models;
         return {
             [Length.LONG]: assets.position[Length.LONG]
                 .minus(makers.frozenSum.position[Length.LONG]),
@@ -193,7 +191,7 @@ export class InterfaceInstant extends EventEmitter {
     }
 }
 
-export interface InterfaceInstant {
+export interface Instant extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

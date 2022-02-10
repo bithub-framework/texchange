@@ -1,26 +1,33 @@
 import {
     Length,
-    StatefulLike,
-    Parsed,
+    TypeRecur,
 } from '../interfaces';
-// import { inspect } from 'util';
 import Big from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
+import { StatefulLike } from 'startable';
 
 
-export interface Snapshot {
-    position: { [length: number]: Big; };
-    balance: Big;
-    cost: { [length: number]: Big; };
+
+export namespace Assets {
+    export interface Snapshot {
+        position: { [length: number]: Big; };
+        balance: Big;
+        cost: { [length: number]: Big; };
+    }
+
+    export type Backup = TypeRecur<Snapshot, Big, string>;
 }
 
-export class StateAssets implements StatefulLike<Snapshot> {
+export import Snapshot = Assets.Snapshot;
+export import Backup = Assets.Backup;
+
+export class Assets implements StatefulLike<Snapshot, Backup> {
     public position: { [length: number]: Big; };
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(private core: Hub) {
-        this.balance = this.core.config.initialBalance;
+    constructor(private hub: Hub) {
+        this.balance = this.hub.context.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
@@ -45,7 +52,7 @@ export class StateAssets implements StatefulLike<Snapshot> {
         };
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
+    public restore(snapshot: Backup): void {
         this.balance = new Big(snapshot.balance);
         this.position = {
             [Length.LONG]: new Big(snapshot.position[Length.LONG]),
@@ -82,7 +89,7 @@ export class StateAssets implements StatefulLike<Snapshot> {
             const cost = this.cost[length]
                 .times(volume)
                 .div(this.position[length])
-                .round(this.core.config.CURRENCY_DP);
+                .round(this.hub.context.config.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
@@ -93,7 +100,7 @@ export class StateAssets implements StatefulLike<Snapshot> {
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.core.config.CURRENCY_DP);
+                .round(this.hub.context.config.CURRENCY_DP);
             const profit = this.closePosition(
                 length,
                 this.position[length],

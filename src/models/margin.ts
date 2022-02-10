@@ -1,19 +1,24 @@
 import {
     Length,
-    StatefulLike,
-    Parsed,
+    TypeRecur,
 } from '../interfaces';
+import { StatefulLike } from 'startable';
 import Big from 'big.js';
 // import { inspect } from 'util';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
+export namespace Margin {
+    export interface Snapshot {
+        [length: number]: Big;
+    }
 
-export interface Snapshot {
-    [length: number]: Big;
+    export type Backup = TypeRecur<Snapshot, Big, string>;
 }
 
+export import Snapshot = Margin.Snapshot;
+export import Backup = Margin.Backup;
 
-export class StateMargin implements StatefulLike<Snapshot> {
+export class Margin implements StatefulLike<Snapshot, Backup> {
     [length: number]: Big;
 
     constructor(private core: Hub) {
@@ -24,25 +29,25 @@ export class StateMargin implements StatefulLike<Snapshot> {
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {
         this[length] = this[length]
             .plus(
-                this.core.calculation.marginIncrement(
+                this.core.context.calculation.marginIncrement(
                     length, volume, dollarVolume,
                 )
-            ).round(this.core.config.CURRENCY_DP);
+            ).round(this.core.context.config.CURRENCY_DP);
     }
 
     public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
-        const { assets } = this.core.states;
+        const { assets } = this.core.models;
         if (volume.lte(assets.position[length])) {
             this[length] = this[length]
                 .times(assets.position[length].minus(volume))
                 .div(assets.position[length])
-                .round(this.core.config.CURRENCY_DP);
+                .round(this.core.context.config.CURRENCY_DP);
         } else {
             const restVolume = volume.minus(assets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.core.config.CURRENCY_DP);
+                .round(this.core.context.config.CURRENCY_DP);
             this[length] = new Big(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }
@@ -55,7 +60,7 @@ export class StateMargin implements StatefulLike<Snapshot> {
         };
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
+    public restore(snapshot: Backup): void {
         this[Length.LONG] = new Big(snapshot[Length.LONG]);
         this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
     }

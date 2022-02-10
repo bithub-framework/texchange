@@ -1,24 +1,30 @@
 import {
     Orderbook,
     Side,
-    StatefulLike,
     BookOrder,
-    Parsed,
+    TypeRecur,
 } from '../interfaces';
+import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import assert = require('assert');
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
+export namespace Orderbooks {
+    export interface Snapshot {
+        basebook: Orderbook;
+        decrements: {
+            [side: number]: [string, Big][],
+        };
+        time: number;
+    }
 
-export interface Snapshot {
-    basebook: Orderbook;
-    decrements: {
-        [side: number]: [string, Big][],
-    };
-    time: number;
+    export type Backup = TypeRecur<Snapshot, Big, string>;
 }
 
-export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
+export import Snapshot = Orderbooks.Snapshot;
+export import Backup = Orderbooks.Backup;
+
+export class Orderbooks implements StatefulLike<Snapshot, Backup>, Orderbook {
     [side: number]: BookOrder[];
     public time = Number.NEGATIVE_INFINITY;
     public get [Side.ASK]() {
@@ -45,7 +51,7 @@ export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
     constructor(private core: Hub) { }
 
     public setBasebook(newBasebook: Orderbook) {
-        assert(newBasebook.time === this.core.timeline.now());
+        assert(newBasebook.time === this.core.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
         this.applied = false;
@@ -53,10 +59,10 @@ export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
 
     public decQuantity(side: Side, price: Big, decrement: Big): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.core.config.PRICE_DP);
+        const priceString = price.toFixed(this.core.context.config.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new Big(0);
         this.decrements[side].set(priceString, old.plus(decrement));
-        this.time = this.core.timeline.now();
+        this.time = this.core.context.timeline.now();
         this.applied = false;
     }
 
@@ -69,7 +75,7 @@ export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.core.config.PRICE_DP),
+                    order.price.toFixed(this.core.context.config.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {
@@ -114,7 +120,7 @@ export class StateOrderbook implements StatefulLike<Snapshot>, Orderbook {
         }
     }
 
-    public restore(snapshot: Parsed<Snapshot>): void {
+    public restore(snapshot: Backup): void {
         this.basebook = {
             time: snapshot.basebook.time === null
                 ? Number.NEGATIVE_INFINITY

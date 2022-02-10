@@ -5,25 +5,23 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
-import { Hub } from '../hub';
+import { type Hub } from '../hub';
 
 
-export class MethodsTaking {
-    constructor(
-        private core: Hub,
-    ) { }
+export class Taking {
+    constructor(private hub: Hub) { }
 
     /**
      * @param taker variable
      */
     public orderTakes(taker: OpenOrder): Trade[] {
-        const { margin, assets, misc, orderbook } = this.core.states;
-        const { config, calculation } = this.core;
+        const { margin, assets, progress, orderbooks } = this.hub.models;
+        const { config, calculation, timeline } = this.hub.context;
 
         const trades: Trade[] = [];
         let volume = new Big(0);
         let dollarVolume = new Big(0);
-        for (const maker of orderbook[-taker.side])
+        for (const maker of orderbooks[-taker.side])
             if (
                 (
                     taker.side === Side.BID && taker.price.gte(maker.price) ||
@@ -31,7 +29,7 @@ export class MethodsTaking {
                 ) && taker.unfilled.gt(0)
             ) {
                 const quantity = min(taker.unfilled, maker.quantity);
-                orderbook.decQuantity(maker.side, maker.price, quantity);
+                orderbooks.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
@@ -42,8 +40,8 @@ export class MethodsTaking {
                     side: taker.side,
                     price: maker.price,
                     quantity,
-                    time: this.core.timeline.now(),
-                    id: ++misc.userTradeCount,
+                    time: timeline.now(),
+                    id: ++progress.userTradeCount,
                 });
             }
 

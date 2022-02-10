@@ -1,4 +1,4 @@
 export { Hub as Texchange, Snapshot, TexchangeLike } from './hub';
 export * from './interfaces';
-export { MethodsCalculation } from './methods/calculation';
-export { StateMtmLike } from './states/mtm';
+export { Calculation as MethodsCalculation } from './context/calculation';
+export { MtmLike as StateMtmLike } from './models/mtm';
