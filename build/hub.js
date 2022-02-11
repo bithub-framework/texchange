@@ -17,6 +17,7 @@ const updating_1 = require("./presenters/updating");
 const calculation_1 = require("./context/calculation");
 const instant_1 = require("./views/instant");
 const latency_1 = require("./views/latency");
+const joystick_1 = require("./views/joystick");
 class Models {
     constructor(hub) {
         this.assets = new assets_1.Assets(hub);
@@ -61,6 +62,7 @@ class Views {
     constructor(hub) {
         this.instant = new instant_1.Instant(hub);
         this.latency = new latency_1.Latency(hub);
+        this.joystick = new joystick_1.Joystick(hub);
     }
 }
 exports.Views = Views;

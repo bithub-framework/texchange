@@ -16,7 +16,8 @@ import { Making } from './presenters/making';
 import { Updating } from './presenters/updating';
 import { CalculationLike } from './context/calculation';
 import { Instant } from './views/instant';
-import { Latency as Latency } from './views/latency';
+import { Latency } from './views/latency';
+import { Joystick } from './views/joystick';
 import Big from 'big.js';
 export declare class Models implements StatefulLike<Models.Snapshot, Models.Backup> {
     assets: Assets;
@@ -52,6 +53,7 @@ export declare class Presenters {
 export declare class Views {
     instant: Instant;
     latency: Latency;
+    joystick: Joystick;
     constructor(hub: Hub);
 }
 export declare class Context {

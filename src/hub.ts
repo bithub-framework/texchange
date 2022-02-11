@@ -19,8 +19,8 @@ import { Making } from './presenters/making';
 import { Updating } from './presenters/updating';
 import { DefaultCalculation, CalculationLike } from './context/calculation';
 import { Instant } from './views/instant';
-import { Latency as Latency } from './views/latency';
-import assert = require('assert');
+import { Latency } from './views/latency';
+import { Joystick } from './views/joystick';
 import Big from 'big.js';
 
 
@@ -96,10 +96,12 @@ export class Presenters {
 export class Views {
     public instant: Instant;
     public latency: Latency;
+    public joystick: Joystick;
 
     constructor(hub: Hub) {
         this.instant = new Instant(hub);
         this.latency = new Latency(hub);
+        this.joystick = new Joystick(hub);
     }
 }
 

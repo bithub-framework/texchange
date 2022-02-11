@@ -4,30 +4,29 @@ import {
 	Config,
 	Timeline,
 } from './interfaces';
+import { Latency } from './views/latency';
+import { Joystick } from './views/joystick';
 
-export namespace Texchange {
-	export type Snapshot = Hub.Snapshot;
-	export type Backup = Hub.Backup;
-}
 
-export import Snapshot = Texchange.Snapshot;
-export import Backup = Texchange.Backup;
-
-export class Texchange implements StatefulLike<Snapshot, Backup> {
+export class Texchange implements StatefulLike<Hub.Snapshot, Hub.Backup> {
 	protected hub: Hub;
+	public user: Latency;
+	public admin: Joystick;
 
 	constructor(
 		config: Config,
 		timeline: Timeline,
 	) {
 		this.hub = new Hub(config, timeline);
+		this.user = this.hub.views.latency;
+		this.admin = this.hub.views.joystick;
 	}
 
-	public capture(): Snapshot {
+	public capture(): Hub.Snapshot {
 		return this.hub.capture();
 	}
 
-	public restore(backup: Backup): void {
+	public restore(backup: Hub.Backup): void {
 		this.hub.restore(backup);
 	}
 }

@@ -5,6 +5,8 @@ const hub_1 = require("./hub");
 class Texchange {
     constructor(config, timeline) {
         this.hub = new hub_1.Hub(config, timeline);
+        this.user = this.hub.views.latency;
+        this.admin = this.hub.views.joystick;
     }
     capture() {
         return this.hub.capture();
