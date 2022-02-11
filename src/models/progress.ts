@@ -13,7 +13,7 @@ export namespace Progress {
         latestPrice: Big;
         latestDatabaseTradeId: string;
         userTradeCount: number;
-        // userOrderCount: number;
+        userOrderCount: number;
     }
 
     export type Backup = TypeRecur<Snapshot, Big, string>;
@@ -29,7 +29,7 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
     private latestDatabaseTradeId?: string;
     private mutex = new Mutex();
     public userTradeCount = 0;
-    // public userOrderCount = 0;
+    public userOrderCount = 0;
 
     constructor(private hub: Hub) { }
 
@@ -50,7 +50,7 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
             latestPrice: this.latestPrice!,
             latestDatabaseTradeId: this.latestDatabaseTradeId!,
             userTradeCount: this.userTradeCount,
-            // userOrderCount: this.userOrderCount,
+            userOrderCount: this.userOrderCount,
         };
     }
 

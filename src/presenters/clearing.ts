@@ -28,6 +28,6 @@ export class Clearing {
             margin[length] = calculation.marginOnSettlement(length, profit);
         }
         if (calculation.shouldLiquidate().length)
-            this.hub.stop(new Error('Liquidated.'));
+            this.hub.emit('error', new Error('Liquidated.'));
     }
 }
