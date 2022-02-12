@@ -6,14 +6,14 @@ import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
-import { MtmLike } from './models/mtm';
+import { Mtm } from './models/mtm';
 import { Progress } from './models/progress';
 import { Validation } from './presenters/validation';
 import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
 import { Making } from './presenters/making';
-import { CalculationLike } from './context/calculation';
+import { Calculation } from './context/calculation';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
@@ -24,7 +24,7 @@ export declare class Hub extends EventEmitter implements StatefulLike<Snapshot, 
         margin: Margin;
         makers: Makers;
         orderbooks: Book;
-        mtm: MtmLike<any>;
+        mtm: Mtm<any>;
         progress: Progress;
     };
     presenters: {
@@ -42,7 +42,7 @@ export declare class Hub extends EventEmitter implements StatefulLike<Snapshot, 
     context: {
         config: Config;
         timeline: Timeline;
-        calculation: CalculationLike;
+        calculation: Calculation;
     };
     constructor(config: Config, timeline: Timeline);
     capture(): Snapshot;

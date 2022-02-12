@@ -20,14 +20,6 @@ const joystick_1 = require("./views/joystick");
 class Hub extends events_1.EventEmitter {
     constructor(config, timeline) {
         super();
-        this.models = {
-            assets: new assets_1.Assets(this),
-            margin: new margin_1.Margin(this),
-            makers: new makers_1.Makers(this),
-            orderbooks: new book_1.Book(this),
-            mtm: new mtm_1.DefaultMtm(this),
-            progress: new progress_1.Progress(this),
-        };
         this.presenters = {
             clearing: new clearing_1.Clearing(this),
             making: new making_1.Making(this),
@@ -43,7 +35,15 @@ class Hub extends events_1.EventEmitter {
         this.context = {
             config,
             timeline,
-            calculation: new calculation_1.DefaultCalculation(this),
+            calculation: new calculation_1.Calculation(this),
+        };
+        this.models = {
+            assets: new assets_1.Assets(this),
+            margin: new margin_1.Margin(this),
+            makers: new makers_1.Makers(this),
+            orderbooks: new book_1.Book(this),
+            mtm: new mtm_1.DefaultMtm(this, config.initialMarkPrice),
+            progress: new progress_1.Progress(this),
         };
     }
     capture() {

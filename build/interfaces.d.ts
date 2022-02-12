@@ -8,6 +8,7 @@ export interface DatabaseTrade extends Trade {
 export interface MarketConfig extends MarketSpec {
     PING: number;
     PROCESSING: number;
+    initialMarkPrice: Big;
 }
 export interface AccountConfig extends AccountSpec {
     initialBalance: Big;

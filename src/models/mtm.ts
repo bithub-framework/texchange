@@ -9,50 +9,38 @@ import { type Hub } from '../hub';
 import assert = require('assert');
 
 
-export interface MtmLike<Snapshot>
-    extends StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
-    getSettlementPrice(): Big;
-    updateTrades(trades: Trade[]): void;
+export abstract class Mtm<Snapshot>
+    implements StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
+
+    constructor(
+        protected hub: Hub,
+        protected markPrice: Big,
+    ) { }
+
+    public abstract getSettlementPrice(): Big;
+    public abstract updateTrades(trades: Trade[]): void;
+    public abstract capture(): Snapshot;
+    public abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
 }
 
-export namespace DefaultMtm {
-    export type Snapshot = Big;
-    export type Backup = TypeRecur<Snapshot, Big, string>;
-}
-
-export import Snapshot = DefaultMtm.Snapshot;
-export import Backup = DefaultMtm.Backup;
-
-export class DefaultMtm implements MtmLike<Snapshot> {
-    protected markPrice?: Big;
-    protected mutex = new Mutex();
-
-    constructor(protected hub: Hub) {
-        this.mutex.lock();
-    }
-
-    protected async _start() {
-        await this.mutex.lock();
-    }
-
-    protected async _stop() { }
-
+export class DefaultMtm extends Mtm<Snapshot> {
     public updateTrades(trades: Trade[]): void {
         this.markPrice = trades[trades.length - 1].price;
         this.hub.presenters.clearing.settle();
-        this.mutex.unlock();
     }
 
     public getSettlementPrice(): Big {
-        return this.markPrice!;
+        return this.markPrice;
     }
 
     public capture(): Snapshot {
-        return this.markPrice!;
+        return this.markPrice;
     }
 
     public restore(snapshot: Backup): void {
         this.markPrice = new Big(snapshot);
-        this.mutex.unlock();
     }
 }
+
+type Snapshot = Big;
+type Backup = TypeRecur<Snapshot, Big, string>;

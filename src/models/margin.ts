@@ -10,7 +10,6 @@ import { type Hub } from '../hub';
 interface Snapshot {
     [length: number]: Big;
 }
-
 type Backup = TypeRecur<Snapshot, Big, string>;
 
 

@@ -1,27 +1,22 @@
 import { Trade, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { StatefulLike } from 'startable';
-import { Mutex } from 'coroutine-locks';
 import { type Hub } from '../hub';
-export interface MtmLike<Snapshot> extends StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
-    getSettlementPrice(): Big;
-    updateTrades(trades: Trade[]): void;
-}
-export declare namespace DefaultMtm {
-    type Snapshot = Big;
-    type Backup = TypeRecur<Snapshot, Big, string>;
-}
-export import Snapshot = DefaultMtm.Snapshot;
-export import Backup = DefaultMtm.Backup;
-export declare class DefaultMtm implements MtmLike<Snapshot> {
+export declare abstract class Mtm<Snapshot> implements StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
     protected hub: Hub;
-    protected markPrice?: Big;
-    protected mutex: Mutex;
-    constructor(hub: Hub);
-    protected _start(): Promise<void>;
-    protected _stop(): Promise<void>;
+    protected markPrice: Big;
+    constructor(hub: Hub, markPrice: Big);
+    abstract getSettlementPrice(): Big;
+    abstract updateTrades(trades: Trade[]): void;
+    abstract capture(): Snapshot;
+    abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
+}
+export declare class DefaultMtm extends Mtm<Snapshot> {
     updateTrades(trades: Trade[]): void;
     getSettlementPrice(): Big;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
+declare type Snapshot = Big;
+declare type Backup = TypeRecur<Snapshot, Big, string>;
+export {};

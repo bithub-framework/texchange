@@ -1,11 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultCalculation = void 0;
+exports.Calculation = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
-const assert = require("assert");
 const big_math_1 = require("../big-math");
-class DefaultCalculation {
+/*
+    TODO
+    cross margin
+    single position
+    reverse contract
+    spot
+*/
+class Calculation {
     constructor(hub) {
         this.hub = hub;
     }
@@ -13,10 +19,9 @@ class DefaultCalculation {
         return price.times(quantity);
     }
     quantity(price, dollarVolume) {
-        assert(price.gt(0));
         return dollarVolume.div(price);
     }
-    // this.core.assets.position[order.length] has not been updated.
+    // this.hub.assets.position[order.length] has not been updated.
     marginIncrement(length, volume, dollarVolume) {
         return dollarVolume.div(this.hub.context.config.LEVERAGE);
     }
@@ -57,5 +62,5 @@ class DefaultCalculation {
         return [];
     }
 }
-exports.DefaultCalculation = DefaultCalculation;
+exports.Calculation = Calculation;
 //# sourceMappingURL=calculation.js.map

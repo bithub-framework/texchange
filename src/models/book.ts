@@ -16,7 +16,6 @@ interface Snapshot {
     };
     time: number;
 }
-
 type Backup = TypeRecur<Snapshot, Big, string>;
 
 

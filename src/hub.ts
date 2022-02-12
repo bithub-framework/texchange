@@ -9,14 +9,14 @@ import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
-import { MtmLike, DefaultMtm } from './models/mtm';
+import { Mtm, DefaultMtm } from './models/mtm';
 import { Progress } from './models/progress';
 import { Validation } from './presenters/validation';
 import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
 import { Making } from './presenters/making';
-import { DefaultCalculation, CalculationLike } from './context/calculation';
+import { Calculation } from './context/calculation';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
@@ -24,13 +24,13 @@ import Big from 'big.js';
 
 
 export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> {
-    public models = {
-        assets: new Assets(this),
-        margin: new Margin(this),
-        makers: new Makers(this),
-        orderbooks: new Book(this),
-        mtm: <MtmLike<any>>new DefaultMtm(this),
-        progress: new Progress(this),
+    public models: {
+        assets: Assets;
+        margin: Margin;
+        makers: Makers;
+        orderbooks: Book;
+        mtm: Mtm<any>;
+        progress: Progress;
     };
     public presenters = {
         clearing: new Clearing(this),
@@ -47,7 +47,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
     public context: {
         config: Config;
         timeline: Timeline;
-        calculation: CalculationLike;
+        calculation: Calculation;
     };
 
     constructor(
@@ -58,7 +58,15 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         this.context = {
             config,
             timeline,
-            calculation: new DefaultCalculation(this),
+            calculation: new Calculation(this),
+        };
+        this.models = {
+            assets: new Assets(this),
+            margin: new Margin(this),
+            makers: new Makers(this),
+            orderbooks: new Book(this),
+            mtm: new DefaultMtm(this, config.initialMarkPrice),
+            progress: new Progress(this),
         };
     }
 

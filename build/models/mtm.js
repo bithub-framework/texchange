@@ -1,22 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultMtm = void 0;
+exports.DefaultMtm = exports.Mtm = void 0;
 const big_js_1 = require("big.js");
-const coroutine_locks_1 = require("coroutine-locks");
-class DefaultMtm {
-    constructor(hub) {
+class Mtm {
+    constructor(hub, markPrice) {
         this.hub = hub;
-        this.mutex = new coroutine_locks_1.Mutex();
-        this.mutex.lock();
+        this.markPrice = markPrice;
     }
-    async _start() {
-        await this.mutex.lock();
-    }
-    async _stop() { }
+}
+exports.Mtm = Mtm;
+class DefaultMtm extends Mtm {
     updateTrades(trades) {
         this.markPrice = trades[trades.length - 1].price;
         this.hub.presenters.clearing.settle();
-        this.mutex.unlock();
     }
     getSettlementPrice() {
         return this.markPrice;
@@ -26,7 +22,6 @@ class DefaultMtm {
     }
     restore(snapshot) {
         this.markPrice = new big_js_1.default(snapshot);
-        this.mutex.unlock();
     }
 }
 exports.DefaultMtm = DefaultMtm;

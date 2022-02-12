@@ -14,7 +14,6 @@ interface Snapshot {
     userTradeCount: number;
     userOrderCount: number;
 }
-
 type Backup = TypeRecur<Snapshot, Big, string>;
 
 

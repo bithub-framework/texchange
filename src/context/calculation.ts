@@ -18,19 +18,8 @@ import { max } from '../big-math';
     spot
 */
 
-export interface CalculationLike extends MarketCalc {
-    // this.core.assets.position[order.length] has not been updated.
-    marginIncrement(length: Length, volume: Big, dollarVolume: Big
-    ): Big;
-    finalMargin(): Big;
-    toFreeze(order: OpenOrder): Frozen;
-    finalFrozenBalance(): Big;
-    marginOnSettlement(length: Length, profit: Big): Big;
-    shouldLiquidate(): Length[];
-}
-
-export class DefaultCalculation implements MarketCalc {
-    constructor(private hub: Hub) { }
+export class Calculation implements MarketCalc {
+    constructor(protected hub: Hub) { }
 
     public dollarVolume(
         price: Big, quantity: Big,
@@ -41,11 +30,10 @@ export class DefaultCalculation implements MarketCalc {
     public quantity(
         price: Big, dollarVolume: Big,
     ): Big {
-        assert(price.gt(0));
         return dollarVolume.div(price);
     }
 
-    // this.core.assets.position[order.length] has not been updated.
+    // this.hub.assets.position[order.length] has not been updated.
     public marginIncrement(
         length: Length, volume: Big, dollarVolume: Big,
     ): Big {

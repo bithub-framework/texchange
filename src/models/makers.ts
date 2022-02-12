@@ -15,7 +15,6 @@ type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
 }[];
-
 type Backup = TypeRecur<Snapshot, Big, string>;
 
 
