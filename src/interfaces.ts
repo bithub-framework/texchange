@@ -5,7 +5,6 @@ import {
     MarketSpec, AccountSpec,
     ContextMarketApiLike, ContextAccountApiLike,
     MarketEvents, AccountEvents,
-    Orderbook,
 } from 'interfaces';
 import Big from 'big.js';
 
@@ -47,11 +46,3 @@ export type TypeRecur<Type, Old, New> =
         ? { [K in keyof Type]: TypeRecur<Type[K], Old, New> }
         : Type
     );
-
-export type Parsed<T> = TypeRecur<TypeRecur<T, Big, string>, number, number | null>;
-
-
-export interface TexchangeLike extends ApiLike {
-    updateTrades(trades: DatabaseTrade[]): void;
-    updateOrderbook(orderbook: Orderbook): void;
-}
