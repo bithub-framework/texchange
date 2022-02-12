@@ -33,7 +33,7 @@ class Taking {
                     price: maker.price,
                     quantity,
                     time: timeline.now(),
-                    id: progress.incUserTradeCount(),
+                    id: ++progress.userTradeCount,
                 });
             }
         assets.payFee(dollarVolume

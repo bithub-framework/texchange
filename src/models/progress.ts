@@ -18,36 +18,12 @@ type Backup = TypeRecur<Snapshot, Big, string>;
 
 
 export class Progress implements StatefulLike<Snapshot, Backup> {
-    private latestPrice: Big | null = null;
-    private latestDatabaseTradeTime: number | null = null;
-    private userTradeCount = 0;
-    private userOrderCount = 0;
+    public latestPrice: Big | null = null;
+    public latestDatabaseTradeTime: number | null = null;
+    public userTradeCount = 0;
+    public userOrderCount = 0;
 
     constructor(private hub: Hub) { }
-
-    public getUserTradeCount() {
-        return this.userTradeCount;
-    }
-
-    public getUserOrderCount() {
-        return this.userOrderCount;
-    }
-
-    public incUserOrderCount() {
-        return ++this.userOrderCount;
-    }
-
-    public incUserTradeCount() {
-        return ++this.userTradeCount;
-    }
-
-    public getLatestDatabaseTradeTime(): number | null {
-        return this.latestDatabaseTradeTime;
-    }
-
-    public getLatestPrice(): Big | null {
-        return this.latestPrice;
-    }
 
     public updateDatabaseTrades(trades: DatabaseTrade[]): void {
         const now = this.hub.context.timeline.now();

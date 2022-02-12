@@ -53,7 +53,7 @@ export class Instant extends EventEmitter {
             side: order.side,
             length: order.length,
             operation: order.operation,
-            id: this.hub.models.progress.incUserOrderCount(),
+            id: ++this.hub.models.progress.userOrderCount,
             filled: new Big(0),
             unfilled: order.quantity,
         }));

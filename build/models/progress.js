@@ -10,24 +10,6 @@ class Progress {
         this.userTradeCount = 0;
         this.userOrderCount = 0;
     }
-    getUserTradeCount() {
-        return this.userTradeCount;
-    }
-    getUserOrderCount() {
-        return this.userOrderCount;
-    }
-    incUserOrderCount() {
-        return ++this.userOrderCount;
-    }
-    incUserTradeCount() {
-        return ++this.userTradeCount;
-    }
-    getLatestDatabaseTradeTime() {
-        return this.latestDatabaseTradeTime;
-    }
-    getLatestPrice() {
-        return this.latestPrice;
-    }
     updateDatabaseTrades(trades) {
         const now = this.hub.context.timeline.now();
         this.latestDatabaseTradeTime = now;

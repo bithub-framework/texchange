@@ -13,7 +13,7 @@ class Joystick {
     updateTrades(trades) {
         assert(trades.length);
         const now = this.hub.context.timeline.now();
-        assert(now !== this.hub.models.progress.getLatestDatabaseTradeTime());
+        assert(now !== this.hub.models.progress.latestDatabaseTradeTime);
         for (const trade of trades)
             assert(trade.time === now);
         this.hub.models.progress.updateDatabaseTrades(trades);

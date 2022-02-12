@@ -41,7 +41,7 @@ class Instant extends events_1.EventEmitter {
             side: order.side,
             length: order.length,
             operation: order.operation,
-            id: this.hub.models.progress.incUserOrderCount(),
+            id: ++this.hub.models.progress.userOrderCount,
             filled: new big_js_1.default(0),
             unfilled: order.quantity,
         }));
