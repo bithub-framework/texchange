@@ -13,7 +13,6 @@ import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
 import { Making } from './presenters/making';
-import { Updating } from './presenters/updating';
 import { CalculationLike } from './context/calculation';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
@@ -33,7 +32,6 @@ export declare class Hub extends EventEmitter implements StatefulLike<Snapshot, 
         making: Making;
         taking: Taking;
         taken: Taken;
-        updating: Updating;
         validation: Validation;
     };
     views: {

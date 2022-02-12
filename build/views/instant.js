@@ -41,7 +41,7 @@ class Instant extends events_1.EventEmitter {
             side: order.side,
             length: order.length,
             operation: order.operation,
-            id: ++this.hub.models.progress.userOrderCount,
+            id: this.hub.models.progress.incUserOrderCount(),
             filled: new big_js_1.default(0),
             unfilled: order.quantity,
         }));
@@ -51,26 +51,16 @@ class Instant extends events_1.EventEmitter {
      */
     makeOpenOrder(order) {
         try {
-            const openOrder = {
-                price: order.price,
-                quantity: order.quantity,
-                side: order.side,
-                length: order.length,
-                operation: order.operation,
-                id: ++this.hub.models.progress.userOrderCount,
-                filled: new big_js_1.default(0),
-                unfilled: order.quantity,
-            };
-            this.hub.presenters.validation.validateOrder(openOrder);
-            const trades = this.hub.presenters.taking.orderTakes(openOrder);
-            this.hub.presenters.making.orderMakes(openOrder);
+            this.hub.presenters.validation.validateOrder(order);
+            const trades = this.hub.presenters.taking.orderTakes(order);
+            this.hub.presenters.making.orderMakes(order);
             if (trades.length) {
                 this.hub.views.instant.pushTrades(trades);
                 this.hub.views.instant.pushOrderbook();
                 this.hub.views.instant.pushBalances();
                 this.hub.views.instant.pushPositions();
             }
-            return openOrder;
+            return order;
         }
         catch (err) {
             return err;

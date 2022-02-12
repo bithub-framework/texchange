@@ -2,37 +2,52 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Progress = void 0;
 const big_js_1 = require("big.js");
-const coroutine_locks_1 = require("coroutine-locks");
-// TODO initial state
 class Progress {
     constructor(hub) {
         this.hub = hub;
-        this.mutex = new coroutine_locks_1.Mutex();
+        this.latestPrice = null;
+        this.latestDatabaseTradeTime = null;
         this.userTradeCount = 0;
         this.userOrderCount = 0;
     }
-    async StatefulStartable$start() {
-        await this.mutex.lock();
+    getUserTradeCount() {
+        return this.userTradeCount;
     }
-    async StatefulStartable$stop() { }
-    updateDatabaseTrade(trade) {
-        this.latestDatabaseTradeId = trade.id;
-        this.latestPrice = trade.price;
-        this.mutex.unlock();
+    getUserOrderCount() {
+        return this.userOrderCount;
+    }
+    incUserOrderCount() {
+        return ++this.userOrderCount;
+    }
+    incUserTradeCount() {
+        return ++this.userTradeCount;
+    }
+    getLatestDatabaseTradeTime() {
+        return this.latestDatabaseTradeTime;
+    }
+    getLatestPrice() {
+        return this.latestPrice;
+    }
+    updateDatabaseTrades(trades) {
+        const now = this.hub.context.timeline.now();
+        this.latestDatabaseTradeTime = now;
+        this.latestPrice = trades[trades.length - 1].price;
     }
     capture() {
         return {
             latestPrice: this.latestPrice,
-            latestDatabaseTradeId: this.latestDatabaseTradeId,
+            latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
         };
     }
     restore(snapshot) {
-        this.latestPrice = new big_js_1.default(snapshot.latestPrice);
-        this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
+        this.latestPrice = snapshot.latestPrice === null
+            ? null
+            : new big_js_1.default(snapshot.latestPrice);
+        this.latestDatabaseTradeTime = snapshot.latestDatabaseTradeTime;
         this.userTradeCount = snapshot.userTradeCount;
-        // this.userOrderCount = snapshot.userOrderCount!;
+        this.userOrderCount = snapshot.userOrderCount;
     }
 }
 exports.Progress = Progress;

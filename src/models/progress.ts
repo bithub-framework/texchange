@@ -9,8 +9,8 @@ import {
 import { type Hub } from '../hub';
 
 interface Snapshot {
-    latestPrice: Big;
-    latestDatabaseTradeId: string;
+    latestPrice: Big | null;
+    latestDatabaseTradeTime: number | null;
     userTradeCount: number;
     userOrderCount: number;
 }
@@ -18,41 +18,60 @@ interface Snapshot {
 type Backup = TypeRecur<Snapshot, Big, string>;
 
 
-// TODO initial state
 export class Progress implements StatefulLike<Snapshot, Backup> {
-    public latestPrice?: Big;
-    private latestDatabaseTradeId?: string;
-    private mutex = new Mutex();
-    public userTradeCount = 0;
-    public userOrderCount = 0;
+    private latestPrice: Big | null = null;
+    private latestDatabaseTradeTime: number | null = null;
+    private userTradeCount = 0;
+    private userOrderCount = 0;
 
     constructor(private hub: Hub) { }
 
-    protected async StatefulStartable$start() {
-        await this.mutex.lock();
+    public getUserTradeCount() {
+        return this.userTradeCount;
     }
 
-    protected async StatefulStartable$stop() { }
+    public getUserOrderCount() {
+        return this.userOrderCount;
+    }
 
-    public updateDatabaseTrade(trade: DatabaseTrade): void {
-        this.latestDatabaseTradeId = trade.id;
-        this.latestPrice = trade.price;
-        this.mutex.unlock();
+    public incUserOrderCount() {
+        return ++this.userOrderCount;
+    }
+
+    public incUserTradeCount() {
+        return ++this.userTradeCount;
+    }
+
+    public getLatestDatabaseTradeTime(): number | null {
+        return this.latestDatabaseTradeTime;
+    }
+
+    public getLatestPrice(): Big | null {
+        return this.latestPrice;
+    }
+
+    public updateDatabaseTrades(trades: DatabaseTrade[]): void {
+        const now = this.hub.context.timeline.now();
+
+        this.latestDatabaseTradeTime = now;
+        this.latestPrice = trades[trades.length - 1].price;
     }
 
     public capture(): Snapshot {
         return {
             latestPrice: this.latestPrice!,
-            latestDatabaseTradeId: this.latestDatabaseTradeId!,
+            latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
         };
     }
 
     public restore(snapshot: Backup): void {
-        this.latestPrice = new Big(snapshot.latestPrice);
-        this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
-        this.userTradeCount = snapshot.userTradeCount!;
-        // this.userOrderCount = snapshot.userOrderCount!;
+        this.latestPrice = snapshot.latestPrice === null
+            ? null
+            : new Big(snapshot.latestPrice);
+        this.latestDatabaseTradeTime = snapshot.latestDatabaseTradeTime;
+        this.userTradeCount = snapshot.userTradeCount;
+        this.userOrderCount = snapshot.userOrderCount;
     }
 }

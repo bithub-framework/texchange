@@ -3,6 +3,7 @@ import {
 	DatabaseTrade,
 } from '../interfaces';
 import { type Hub } from '../hub';
+import assert = require('assert');
 
 export class Joystick {
 	constructor(private hub: Hub) { }
@@ -12,10 +13,20 @@ export class Joystick {
 	 * @param trades
 	 */
 	public updateTrades(trades: DatabaseTrade[]): void {
-		this.hub.presenters.updating.updateTrades(trades);
+		assert(trades.length);
+		const now = this.hub.context.timeline.now();
+		assert(now !== this.hub.models.progress.getLatestDatabaseTradeTime());
+		for (const trade of trades) assert(trade.time === now);
+		this.hub.models.progress.updateDatabaseTrades(trades);
+		for (const trade of trades)
+			this.hub.presenters.taken.tradeTakesOpenMakers(trade);
+		this.hub.views.instant.pushTrades(trades);
+		this.hub.models.mtm.updateTrades(trades);
 	}
 
 	public updateOrderbook(orderbook: Orderbook): void {
-		this.hub.presenters.updating.updateOrderbook(orderbook);
+		assert(orderbook.time === this.hub.context.timeline.now());
+		this.hub.models.orderbooks.setBasebook(orderbook);
+		this.hub.views.instant.pushOrderbook();
 	}
 }

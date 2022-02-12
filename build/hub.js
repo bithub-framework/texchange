@@ -13,7 +13,6 @@ const clearing_1 = require("./presenters/clearing");
 const taking_1 = require("./presenters/taking");
 const taken_1 = require("./presenters/taken");
 const making_1 = require("./presenters/making");
-const updating_1 = require("./presenters/updating");
 const calculation_1 = require("./context/calculation");
 const instant_1 = require("./views/instant");
 const latency_1 = require("./views/latency");
@@ -34,7 +33,6 @@ class Hub extends events_1.EventEmitter {
             making: new making_1.Making(this),
             taking: new taking_1.Taking(this),
             taken: new taken_1.Taken(this),
-            updating: new updating_1.Updating(this),
             validation: new validation_1.Validation(this),
         };
         this.views = {

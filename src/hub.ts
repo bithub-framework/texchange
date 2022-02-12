@@ -16,7 +16,6 @@ import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
 import { Making } from './presenters/making';
-import { Updating } from './presenters/updating';
 import { DefaultCalculation, CalculationLike } from './context/calculation';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
@@ -38,7 +37,6 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         making: new Making(this),
         taking: new Taking(this),
         taken: new Taken(this),
-        updating: new Updating(this),
         validation: new Validation(this),
     };
     public views = {

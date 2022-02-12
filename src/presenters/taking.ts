@@ -41,7 +41,7 @@ export class Taking {
                     price: maker.price,
                     quantity,
                     time: timeline.now(),
-                    id: ++progress.userTradeCount,
+                    id: progress.incUserTradeCount(),
                 });
             }
 
