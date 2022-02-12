@@ -8,13 +8,13 @@ declare type Snapshot = {
 }[];
 declare type Backup = TypeRecur<Snapshot, Big, string>;
 export declare class Makers extends Map<OrderId, OpenMaker> implements StatefulLike<Snapshot, Backup> {
-    private core;
+    private hub;
     private frozens;
-    unfilledSum: {
+    totalUnfilledQuantity: {
         [side: number]: Big;
     };
-    frozenSum: Frozen;
-    constructor(core: Hub);
+    totalFrozen: Frozen;
+    constructor(hub: Hub);
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;

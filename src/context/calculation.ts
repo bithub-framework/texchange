@@ -1,7 +1,7 @@
 import {
     OpenOrder,
     MarketCalc,
-    Length,
+    Length, Side,
     Frozen,
     Operation,
 } from '../interfaces';
@@ -41,6 +41,7 @@ export class Calculation implements MarketCalc {
     }
 
     public finalMargin(): Big {
+        // 默认无锁仓优惠
         return this.hub.models.margin[Length.LONG]
             .plus(this.hub.models.margin[Length.SHORT]);
     }
@@ -48,45 +49,49 @@ export class Calculation implements MarketCalc {
     public toFreeze(
         order: OpenOrder,
     ): Frozen {
+        // 默认单向持仓模式
         const length: Length = order.side * Operation.OPEN;
         return {
             balance: {
                 [length]: this.dollarVolume(order.price, order.unfilled),
                 [-length]: new Big(0),
             },
-            position: {
-                [Length.LONG]: new Big(0),
-                [Length.SHORT]: new Big(0),
-            },
+            position: Frozen.ZERO.position,
         };
     }
 
     public finalFrozenBalance(): Big {
-        const unfilledSum = this.hub.models.makers.unfilledSum;
+        // 默认单向持仓模式
+        const totalUnfilledQuantity = this.hub.models.makers.totalUnfilledQuantity;
         const position = this.hub.models.assets.position;
-        const frozenSum = this.hub.models.makers.frozenSum;
-        const final: {
-            [length: number]: Big;
-        } = {};
+        const totalFrozen = this.hub.models.makers.totalFrozen;
+        const final: { [length: number]: Big; } = {};
         for (const length of [Length.LONG, Length.SHORT]) {
-            final[length] = max(
-                unfilledSum[length].minus(position[-length]),
-                new Big(0),
-            )
-                .times(frozenSum.balance[length])
-                .div(unfilledSum[length]);
+            const side: Side = length * Operation.OPEN;
+            final[length] = totalFrozen.balance[length]
+                .times(max(
+                    totalUnfilledQuantity[side].minus(position[-length]),
+                    new Big(0),
+                ))
+                .div(totalUnfilledQuantity[side]);
         }
         return final[Length.LONG].plus(final[Length.SHORT]);
     }
 
-    public marginOnSettlement(
+    public ClearingMargin(
         length: Length, profit: Big,
     ): Big {
+        // 默认逐仓
         return this.hub.models.margin[length]
             .plus(profit);
     }
 
-    public shouldLiquidate(): Length[] {
-        return [];
+    public shouldLiquidate(): Length | null {
+        const result: Length[] = [];
+        const { margin } = this.hub.models;
+        for (const length of [Length.SHORT, Length.LONG])
+            if (margin[length].lt(0))
+                return length;
+        return null;
     }
 }

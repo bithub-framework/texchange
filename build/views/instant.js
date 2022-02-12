@@ -152,9 +152,9 @@ class Instant extends events_1.EventEmitter {
         const { assets, makers } = this.hub.models;
         return {
             [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG]
-                .minus(makers.frozenSum.position[interfaces_1.Length.LONG]),
+                .minus(makers.totalFrozen.position[interfaces_1.Length.LONG]),
             [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT]
-                .minus(makers.frozenSum.position[interfaces_1.Length.SHORT]),
+                .minus(makers.totalFrozen.position[interfaces_1.Length.SHORT]),
         };
     }
 }

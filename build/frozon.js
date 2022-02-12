@@ -42,16 +42,7 @@ var Frozen;
     function minus(x, y) {
         if (!y) {
             y = x;
-            x = {
-                balance: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(0),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-                },
-                position: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(0),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-                },
-            };
+            x = Frozen.ZERO;
         }
         return {
             balance: {

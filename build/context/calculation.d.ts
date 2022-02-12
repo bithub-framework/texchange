@@ -10,6 +10,6 @@ export declare class Calculation implements MarketCalc {
     finalMargin(): Big;
     toFreeze(order: OpenOrder): Frozen;
     finalFrozenBalance(): Big;
-    marginOnSettlement(length: Length, profit: Big): Big;
-    shouldLiquidate(): Length[];
+    ClearingMargin(length: Length, profit: Big): Big;
+    shouldLiquidate(): Length | null;
 }

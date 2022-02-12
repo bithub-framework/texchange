@@ -5,15 +5,15 @@ const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Makers extends Map {
-    constructor(core) {
+    constructor(hub) {
         super();
-        this.core = core;
+        this.hub = hub;
         this.frozens = new Map();
-        this.unfilledSum = {
+        this.totalUnfilledQuantity = {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
             [interfaces_1.Side.BID]: new big_js_1.default(0),
         };
-        this.frozenSum = interfaces_1.Frozen.ZERO;
+        this.totalFrozen = interfaces_1.Frozen.ZERO;
     }
     capture() {
         return [...this.keys()]
@@ -47,33 +47,33 @@ class Makers extends Map {
             });
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.unfilledSum[side] = [...this.values()]
+            this.totalUnfilledQuantity[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
-        this.frozenSum = [...this.frozens.values()]
+        this.totalFrozen = [...this.frozens.values()]
             .reduce((total, frozen) => interfaces_1.Frozen.plus(total, frozen), interfaces_1.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.core.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.core.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.hub.context.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.core.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.core.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.hub.context.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
             },
         };
     }
     appendOrder(order) {
         if (order.unfilled.eq(0))
             return;
-        const toFreeze = this.normalizeFrozen(this.core.context.calculation.toFreeze(order));
+        const toFreeze = this.normalizeFrozen(this.hub.context.calculation.toFreeze(order));
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.frozenSum = interfaces_1.Frozen.plus(this.frozenSum, toFreeze);
-        this.unfilledSum[order.side] = this.unfilledSum[order.side]
+        this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .plus(order.unfilled);
     }
     takeOrder(oid, volume) {
@@ -92,9 +92,9 @@ class Makers extends Map {
         const toThaw = this.frozens.get(oid);
         this.delete(oid);
         this.frozens.delete(oid);
-        this.unfilledSum[order.side] = this.unfilledSum[order.side]
+        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
-        this.frozenSum = interfaces_1.Frozen.minus(this.frozenSum, toThaw);
+        this.totalFrozen = interfaces_1.Frozen.minus(this.totalFrozen, toThaw);
     }
 }
 exports.Makers = Makers;

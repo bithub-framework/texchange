@@ -5,11 +5,11 @@ import {
 import Big from 'big.js';
 
 export interface Frozen {
-    balance: {
-        [length: number]: Big;
+    readonly balance: {
+        readonly [length: number]: Big;
     };
-    position: {
-        [length: number]: Big;
+    readonly position: {
+        readonly [length: number]: Big;
     };
 }
 
@@ -39,16 +39,7 @@ export namespace Frozen {
     export function minus(x: Frozen, y?: Frozen): Frozen {
         if (!y) {
             y = x;
-            x = {
-                balance: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-                position: {
-                    [Length.LONG]: new Big(0),
-                    [Length.SHORT]: new Big(0),
-                },
-            };
+            x = ZERO;
         }
         return {
             balance: {

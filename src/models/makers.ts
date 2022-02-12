@@ -22,13 +22,13 @@ export class Makers extends Map<OrderId, OpenMaker>
     implements StatefulLike<Snapshot, Backup> {
 
     private frozens = new Map<OrderId, Frozen>();
-    public unfilledSum: { [side: number]: Big } = {
+    public totalUnfilledQuantity: { [side: number]: Big } = {
         [Side.ASK]: new Big(0),
         [Side.BID]: new Big(0),
     };
-    public frozenSum: Frozen = Frozen.ZERO;
+    public totalFrozen: Frozen = Frozen.ZERO;
 
-    constructor(private core: Hub) {
+    constructor(private hub: Hub) {
         super();
     }
 
@@ -65,23 +65,23 @@ export class Makers extends Map<OrderId, OpenMaker>
             });
         }
         for (const side of [Side.ASK, Side.BID]) {
-            this.unfilledSum[side] = [...this.values()]
+            this.totalUnfilledQuantity[side] = [...this.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new Big(0));
         }
-        this.frozenSum = [...this.frozens.values()]
+        this.totalFrozen = [...this.frozens.values()]
             .reduce((total, frozen) => Frozen.plus(total, frozen), Frozen.ZERO);
     }
 
     private normalizeFrozen(frozen: Frozen): Frozen {
         return {
             balance: {
-                [Length.LONG]: frozen.balance[Length.LONG].round(this.core.context.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.core.context.config.CURRENCY_DP),
+                [Length.LONG]: frozen.balance[Length.LONG].round(this.hub.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
             },
             position: {
-                [Length.LONG]: frozen.position[Length.LONG].round(this.core.context.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.position[Length.SHORT].round(this.core.context.config.CURRENCY_DP),
+                [Length.LONG]: frozen.position[Length.LONG].round(this.hub.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.position[Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
             },
         };
     }
@@ -89,12 +89,12 @@ export class Makers extends Map<OrderId, OpenMaker>
     public appendOrder(order: OpenMaker): void {
         if (order.unfilled.eq(0)) return;
         const toFreeze = this.normalizeFrozen(
-            this.core.context.calculation.toFreeze(order),
+            this.hub.context.calculation.toFreeze(order),
         );
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.frozenSum = Frozen.plus(this.frozenSum, toFreeze);
-        this.unfilledSum[order.side] = this.unfilledSum[order.side]
+        this.totalFrozen = Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .plus(order.unfilled);
     }
 
@@ -115,8 +115,8 @@ export class Makers extends Map<OrderId, OpenMaker>
 
         this.delete(oid);
         this.frozens.delete(oid);
-        this.unfilledSum[order.side] = this.unfilledSum[order.side]
+        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
-        this.frozenSum = Frozen.minus(this.frozenSum, toThaw);
+        this.totalFrozen = Frozen.minus(this.totalFrozen, toThaw);
     }
 }

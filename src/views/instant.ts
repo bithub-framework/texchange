@@ -174,9 +174,9 @@ export class Instant extends EventEmitter {
         const { assets, makers } = this.hub.models;
         return {
             [Length.LONG]: assets.position[Length.LONG]
-                .minus(makers.frozenSum.position[Length.LONG]),
+                .minus(makers.totalFrozen.position[Length.LONG]),
             [Length.SHORT]: assets.position[Length.SHORT]
-                .minus(makers.frozenSum.position[Length.SHORT]),
+                .minus(makers.totalFrozen.position[Length.SHORT]),
         };
     }
 }

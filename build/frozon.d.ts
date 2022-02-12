@@ -1,11 +1,11 @@
 export * from 'interfaces';
 import Big from 'big.js';
 export interface Frozen {
-    balance: {
-        [length: number]: Big;
+    readonly balance: {
+        readonly [length: number]: Big;
     };
-    position: {
-        [length: number]: Big;
+    readonly position: {
+        readonly [length: number]: Big;
     };
 }
 export declare namespace Frozen {

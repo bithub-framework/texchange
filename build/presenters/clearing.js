@@ -17,9 +17,9 @@ class Clearing {
             const dollarVolume = calculation.dollarVolume(mtm.getSettlementPrice(), position[length]).round(this.hub.context.config.CURRENCY_DP);
             const profit = assets.closePosition(length, position[length], dollarVolume);
             assets.openPosition(length, position[length], dollarVolume);
-            margin[length] = calculation.marginOnSettlement(length, profit);
+            margin[length] = calculation.ClearingMargin(length, profit);
         }
-        if (calculation.shouldLiquidate().length)
+        if (calculation.shouldLiquidate() !== null)
             this.hub.emit('error', new Error('Liquidated.'));
     }
 }
