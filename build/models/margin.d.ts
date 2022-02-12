@@ -7,9 +7,9 @@ interface Snapshot {
 }
 declare type Backup = TypeRecur<Snapshot, Big, string>;
 export declare class Margin implements StatefulLike<Snapshot, Backup> {
-    private core;
+    private hub;
     [length: number]: Big;
-    constructor(core: Hub);
+    constructor(hub: Hub);
     incMargin(length: Length, volume: Big, dollarVolume: Big): void;
     decMargin(length: Length, volume: Big, dollarVolume: Big): void;
     capture(): Snapshot;

@@ -4,13 +4,6 @@ exports.Calculation = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const big_math_1 = require("../big-math");
-/*
-    TODO
-    cross margin
-    single position
-    reverse contract
-    spot
-*/
 class Calculation {
     constructor(hub) {
         this.hub = hub;
@@ -23,10 +16,18 @@ class Calculation {
     }
     // this.hub.assets.position[order.length] has not been updated.
     marginIncrement(length, volume, dollarVolume) {
+        // 默认非实时结算
         return dollarVolume.div(this.hub.context.config.LEVERAGE);
+    }
+    marginDecrement(length, volume, dollarVolume) {
+        const { assets, margin } = this.hub.models;
+        return margin[length]
+            .times(volume)
+            .div(assets.position[length]);
     }
     finalMargin() {
         // 默认无锁仓优惠
+        // 默认非实时结算
         return this.hub.models.margin[interfaces_1.Length.LONG]
             .plus(this.hub.models.margin[interfaces_1.Length.SHORT]);
     }
@@ -43,14 +44,14 @@ class Calculation {
     }
     finalFrozenBalance() {
         // 默认单向持仓模式
-        const totalUnfilledQuantity = this.hub.models.makers.totalUnfilledQuantity;
-        const position = this.hub.models.assets.position;
-        const totalFrozen = this.hub.models.makers.totalFrozen;
+        const { position } = this.hub.models.assets;
+        const { totalFrozen, totalUnfilledQuantity } = this.hub.models.makers;
         const final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const side = length * interfaces_1.Operation.OPEN;
+            const afterDeduction = (0, big_math_1.max)(totalUnfilledQuantity[side].minus(position[-length]), new big_js_1.default(0));
             final[length] = totalFrozen.balance[length]
-                .times((0, big_math_1.max)(totalUnfilledQuantity[side].minus(position[-length]), new big_js_1.default(0)))
+                .times(afterDeduction)
                 .div(totalUnfilledQuantity[side]);
         }
         return final[interfaces_1.Length.LONG].plus(final[interfaces_1.Length.SHORT]);

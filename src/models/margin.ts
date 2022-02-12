@@ -16,7 +16,7 @@ type Backup = TypeRecur<Snapshot, Big, string>;
 export class Margin implements StatefulLike<Snapshot, Backup> {
     [length: number]: Big;
 
-    constructor(private core: Hub) {
+    constructor(private hub: Hub) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
     }
@@ -24,25 +24,27 @@ export class Margin implements StatefulLike<Snapshot, Backup> {
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {
         this[length] = this[length]
             .plus(
-                this.core.context.calculation.marginIncrement(
+                this.hub.context.calculation.marginIncrement(
                     length, volume, dollarVolume,
                 )
-            ).round(this.core.context.config.CURRENCY_DP);
+            ).round(this.hub.context.config.CURRENCY_DP);
     }
 
     public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
-        const { assets } = this.core.models;
+        const { assets } = this.hub.models;
+        const { calculation } = this.hub.context;
         if (volume.lte(assets.position[length])) {
             this[length] = this[length]
-                .times(assets.position[length].minus(volume))
-                .div(assets.position[length])
-                .round(this.core.context.config.CURRENCY_DP);
+                .minus(calculation.marginDecrement(
+                    length, volume, dollarVolume,
+                ))
+                .round(this.hub.context.config.CURRENCY_DP);
         } else {
             const restVolume = volume.minus(assets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.core.context.config.CURRENCY_DP);
+                .round(this.hub.context.config.CURRENCY_DP);
             this[length] = new Big(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }

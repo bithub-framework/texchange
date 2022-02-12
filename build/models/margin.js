@@ -4,29 +4,29 @@ exports.Margin = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 class Margin {
-    constructor(core) {
-        this.core = core;
+    constructor(hub) {
+        this.hub = hub;
         this[interfaces_1.Length.LONG] = new big_js_1.default(0);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
     }
     incMargin(length, volume, dollarVolume) {
         this[length] = this[length]
-            .plus(this.core.context.calculation.marginIncrement(length, volume, dollarVolume)).round(this.core.context.config.CURRENCY_DP);
+            .plus(this.hub.context.calculation.marginIncrement(length, volume, dollarVolume)).round(this.hub.context.config.CURRENCY_DP);
     }
     decMargin(length, volume, dollarVolume) {
-        const { assets } = this.core.models;
+        const { assets } = this.hub.models;
+        const { calculation } = this.hub.context;
         if (volume.lte(assets.position[length])) {
             this[length] = this[length]
-                .times(assets.position[length].minus(volume))
-                .div(assets.position[length])
-                .round(this.core.context.config.CURRENCY_DP);
+                .minus(calculation.marginDecrement(length, volume, dollarVolume))
+                .round(this.hub.context.config.CURRENCY_DP);
         }
         else {
             const restVolume = volume.minus(assets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.core.context.config.CURRENCY_DP);
+                .round(this.hub.context.config.CURRENCY_DP);
             this[length] = new big_js_1.default(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }

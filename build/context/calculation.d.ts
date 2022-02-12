@@ -7,6 +7,7 @@ export declare class Calculation implements MarketCalc {
     dollarVolume(price: Big, quantity: Big): Big;
     quantity(price: Big, dollarVolume: Big): Big;
     marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
+    marginDecrement(length: Length, volume: Big, dollarVolume: Big): Big;
     finalMargin(): Big;
     toFreeze(order: OpenOrder): Frozen;
     finalFrozenBalance(): Big;
