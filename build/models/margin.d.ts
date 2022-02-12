@@ -2,14 +2,10 @@ import { Length, TypeRecur } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import { type Hub } from '../hub';
-export declare namespace Margin {
-    interface Snapshot {
-        [length: number]: Big;
-    }
-    type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    [length: number]: Big;
 }
-export import Snapshot = Margin.Snapshot;
-export import Backup = Margin.Backup;
+declare type Backup = TypeRecur<Snapshot, Big, string>;
 export declare class Margin implements StatefulLike<Snapshot, Backup> {
     private core;
     [length: number]: Big;
@@ -19,3 +15,4 @@ export declare class Margin implements StatefulLike<Snapshot, Backup> {
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
+export {};

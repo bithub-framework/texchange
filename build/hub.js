@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Hub = exports.Context = exports.Views = exports.Presenters = exports.Models = void 0;
+exports.Hub = void 0;
 const events_1 = require("events");
 const assets_1 = require("./models/assets");
 const margin_1 = require("./models/margin");
@@ -18,77 +18,53 @@ const calculation_1 = require("./context/calculation");
 const instant_1 = require("./views/instant");
 const latency_1 = require("./views/latency");
 const joystick_1 = require("./views/joystick");
-class Models {
-    constructor(hub) {
-        this.assets = new assets_1.Assets(hub);
-        this.margin = new margin_1.Margin(hub);
-        this.makers = new makers_1.Makers(hub);
-        this.orderbooks = new book_1.Book(hub);
-        this.mtm = new mtm_1.DefaultMtm(hub);
-        this.progress = new progress_1.Progress(hub);
-    }
-    capture() {
-        return {
-            assets: this.assets.capture(),
-            margin: this.margin.capture(),
-            makers: this.makers.capture(),
-            book: this.orderbooks.capture(),
-            mtm: this.mtm.capture(),
-            progress: this.progress.capture(),
-        };
-    }
-    restore(backup) {
-        this.assets.restore(backup.assets);
-        this.margin.restore(backup.margin);
-        this.makers.restore(backup.makers);
-        this.orderbooks.restore(backup.book);
-        this.mtm.restore(backup.mtm);
-        this.progress.restore(backup.progress);
-    }
-}
-exports.Models = Models;
-class Presenters {
-    constructor(hub) {
-        this.clearing = new clearing_1.Clearing(hub);
-        this.making = new making_1.Making(hub);
-        this.taking = new taking_1.Taking(hub);
-        this.taken = new taken_1.Taken(hub);
-        this.updating = new updating_1.Updating(hub);
-        this.validation = new validation_1.Validation(hub);
-    }
-}
-exports.Presenters = Presenters;
-class Views {
-    constructor(hub) {
-        this.instant = new instant_1.Instant(hub);
-        this.latency = new latency_1.Latency(hub);
-        this.joystick = new joystick_1.Joystick(hub);
-    }
-}
-exports.Views = Views;
-class Context {
-    constructor(hub, config, timeline) {
-        this.config = config;
-        this.timeline = timeline;
-        this.calculation = new calculation_1.DefaultCalculation(hub);
-    }
-}
-exports.Context = Context;
 class Hub extends events_1.EventEmitter {
     constructor(config, timeline) {
         super();
-        this.models = new Models(this);
-        this.presenters = new Presenters(this);
-        this.views = new Views(this);
-        this.context = new Context(this, config, timeline);
+        this.models = {
+            assets: new assets_1.Assets(this),
+            margin: new margin_1.Margin(this),
+            makers: new makers_1.Makers(this),
+            orderbooks: new book_1.Book(this),
+            mtm: new mtm_1.DefaultMtm(this),
+            progress: new progress_1.Progress(this),
+        };
+        this.presenters = {
+            clearing: new clearing_1.Clearing(this),
+            making: new making_1.Making(this),
+            taking: new taking_1.Taking(this),
+            taken: new taken_1.Taken(this),
+            updating: new updating_1.Updating(this),
+            validation: new validation_1.Validation(this),
+        };
+        this.views = {
+            instant: new instant_1.Instant(this),
+            latency: new latency_1.Latency(this),
+            joystick: new joystick_1.Joystick(this),
+        };
+        this.context = {
+            config,
+            timeline,
+            calculation: new calculation_1.DefaultCalculation(this),
+        };
     }
     capture() {
         return {
-            models: this.models.capture(),
+            assets: this.models.assets.capture(),
+            margin: this.models.margin.capture(),
+            makers: this.models.makers.capture(),
+            book: this.models.orderbooks.capture(),
+            mtm: this.models.mtm.capture(),
+            progress: this.models.progress.capture(),
         };
     }
     restore(backup) {
-        this.models.restore(backup.models);
+        this.models.assets.restore(backup.assets);
+        this.models.margin.restore(backup.margin);
+        this.models.makers.restore(backup.makers);
+        this.models.orderbooks.restore(backup.book);
+        this.models.mtm.restore(backup.mtm);
+        this.models.progress.restore(backup.progress);
     }
 }
 exports.Hub = Hub;

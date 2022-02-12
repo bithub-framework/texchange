@@ -7,16 +7,12 @@ import Big from 'big.js';
 // import { inspect } from 'util';
 import { type Hub } from '../hub';
 
-export namespace Margin {
-    export interface Snapshot {
-        [length: number]: Big;
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    [length: number]: Big;
 }
 
-export import Snapshot = Margin.Snapshot;
-export import Backup = Margin.Backup;
+type Backup = TypeRecur<Snapshot, Big, string>;
+
 
 export class Margin implements StatefulLike<Snapshot, Backup> {
     [length: number]: Big;

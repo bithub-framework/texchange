@@ -1,13 +1,17 @@
 import { StatefulLike } from 'startable';
 import { Hub } from './hub';
-import { Config, Timeline } from './interfaces';
+import { Config, Timeline, TypeRecur } from './interfaces';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
-export declare class Texchange implements StatefulLike<Hub.Snapshot, Hub.Backup> {
+import Big from 'big.js';
+export declare class Texchange implements StatefulLike<Snapshot, Backup> {
     protected hub: Hub;
     user: Latency;
     admin: Joystick;
     constructor(config: Config, timeline: Timeline);
-    capture(): Hub.Snapshot;
-    restore(backup: Hub.Backup): void;
+    capture(): Snapshot;
+    restore(backup: Backup): void;
 }
+declare type Snapshot = any;
+declare type Backup = TypeRecur<Snapshot, Big, string>;
+export {};

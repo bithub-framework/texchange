@@ -9,8 +9,8 @@ import { type Hub } from '../hub';
 import assert = require('assert');
 
 
-export interface MtmLike<Snapshot, Backup>
-    extends StatefulLike<Snapshot, Backup> {
+export interface MtmLike<Snapshot>
+    extends StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
     getSettlementPrice(): Big;
     updateTrades(trades: Trade[]): void;
 }
@@ -23,7 +23,7 @@ export namespace DefaultMtm {
 export import Snapshot = DefaultMtm.Snapshot;
 export import Backup = DefaultMtm.Backup;
 
-export class DefaultMtm implements MtmLike<Snapshot, Backup> {
+export class DefaultMtm implements MtmLike<Snapshot> {
     protected markPrice?: Big;
     protected mutex = new Mutex();
 

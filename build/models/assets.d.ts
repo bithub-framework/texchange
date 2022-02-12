@@ -2,20 +2,16 @@ import { Length, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { type Hub } from '../hub';
 import { StatefulLike } from 'startable';
-export declare namespace Assets {
-    interface Snapshot {
-        position: {
-            [length: number]: Big;
-        };
-        balance: Big;
-        cost: {
-            [length: number]: Big;
-        };
-    }
-    type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    position: {
+        [length: number]: Big;
+    };
+    balance: Big;
+    cost: {
+        [length: number]: Big;
+    };
 }
-export import Snapshot = Assets.Snapshot;
-export import Backup = Assets.Backup;
+declare type Backup = TypeRecur<Snapshot, Big, string>;
 export declare class Assets implements StatefulLike<Snapshot, Backup> {
     private hub;
     position: {
@@ -35,3 +31,4 @@ export declare class Assets implements StatefulLike<Snapshot, Backup> {
      */
     closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
 }
+export {};

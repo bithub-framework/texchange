@@ -8,18 +8,13 @@ import { StatefulLike } from 'startable';
 
 
 
-export namespace Assets {
-    export interface Snapshot {
-        position: { [length: number]: Big; };
-        balance: Big;
-        cost: { [length: number]: Big; };
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    position: { [length: number]: Big; };
+    balance: Big;
+    cost: { [length: number]: Big; };
 }
 
-export import Snapshot = Assets.Snapshot;
-export import Backup = Assets.Backup;
+type Backup = TypeRecur<Snapshot, Big, string>;
 
 export class Assets implements StatefulLike<Snapshot, Backup> {
     public position: { [length: number]: Big; };

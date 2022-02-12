@@ -19,61 +19,44 @@ import { Instant } from './views/instant';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
 import Big from 'big.js';
-export declare class Models implements StatefulLike<Models.Snapshot, Models.Backup> {
-    assets: Assets;
-    margin: Margin;
-    makers: Makers;
-    orderbooks: Book;
-    mtm: MtmLike<any, any>;
-    progress: Progress;
-    constructor(hub: Hub);
-    capture(): Models.Snapshot;
-    restore(backup: Models.Backup): void;
-}
-export declare namespace Models {
-    interface Snapshot {
-        assets: any;
-        margin: any;
-        makers: any;
-        book: any;
-        mtm: any;
-        progress: any;
-    }
-    type Backup = TypeRecur<Snapshot, Big, string>;
-}
-export declare class Presenters {
-    clearing: Clearing;
-    making: Making;
-    taking: Taking;
-    taken: Taken;
-    updating: Updating;
-    validation: Validation;
-    constructor(hub: Hub);
-}
-export declare class Views {
-    instant: Instant;
-    latency: Latency;
-    joystick: Joystick;
-    constructor(hub: Hub);
-}
-export declare class Context {
-    config: Config;
-    timeline: Timeline;
-    calculation: CalculationLike;
-    constructor(hub: Hub, config: Config, timeline: Timeline);
-}
-export declare class Hub extends EventEmitter implements StatefulLike<Hub.Snapshot, Hub.Backup> {
-    models: Models;
-    presenters: Presenters;
-    views: Views;
-    context: Context;
+export declare class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> {
+    models: {
+        assets: Assets;
+        margin: Margin;
+        makers: Makers;
+        orderbooks: Book;
+        mtm: MtmLike<any>;
+        progress: Progress;
+    };
+    presenters: {
+        clearing: Clearing;
+        making: Making;
+        taking: Taking;
+        taken: Taken;
+        updating: Updating;
+        validation: Validation;
+    };
+    views: {
+        instant: Instant;
+        latency: Latency;
+        joystick: Joystick;
+    };
+    context: {
+        config: Config;
+        timeline: Timeline;
+        calculation: CalculationLike;
+    };
     constructor(config: Config, timeline: Timeline);
-    capture(): Hub.Snapshot;
-    restore(backup: Hub.Backup): void;
+    capture(): Snapshot;
+    restore(backup: Backup): void;
 }
-export declare namespace Hub {
-    interface Snapshot {
-        models: Models.Snapshot;
-    }
-    type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    assets: any;
+    margin: any;
+    makers: any;
+    book: any;
+    mtm: any;
+    progress: any;
 }
+declare type Backup = TypeRecur<Snapshot, Big, string>;
+export {};

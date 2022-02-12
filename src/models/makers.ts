@@ -11,17 +11,13 @@ import assert = require('assert');
 import { type Hub } from '../hub';
 
 
-export namespace Makers {
-    export type Snapshot = {
-        order: OpenMaker;
-        frozen: Frozen;
-    }[];
+type Snapshot = {
+    order: OpenMaker;
+    frozen: Frozen;
+}[];
 
-    export type Backup = TypeRecur<Snapshot, Big, string>;
-}
+type Backup = TypeRecur<Snapshot, Big, string>;
 
-export import Snapshot = Makers.Snapshot;
-export import Backup = Makers.Backup;
 
 export class Makers extends Map<OrderId, OpenMaker>
     implements StatefulLike<Snapshot, Backup> {

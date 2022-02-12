@@ -2,18 +2,14 @@ import { Orderbook, Side, BookOrder, TypeRecur } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import { type Hub } from '../hub';
-export declare namespace Book {
-    interface Snapshot {
-        basebook: Orderbook;
-        decrements: {
-            [side: number]: [string, Big][];
-        };
-        time: number;
-    }
-    type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    basebook: Orderbook;
+    decrements: {
+        [side: number]: [string, Big][];
+    };
+    time: number;
 }
-export import Snapshot = Book.Snapshot;
-export import Backup = Book.Backup;
+declare type Backup = TypeRecur<Snapshot, Big, string>;
 export declare class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
     private core;
     [side: number]: BookOrder[];
@@ -28,3 +24,4 @@ export declare class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
+export {};

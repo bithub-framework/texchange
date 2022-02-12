@@ -24,128 +24,74 @@ import { Joystick } from './views/joystick';
 import Big from 'big.js';
 
 
-export class Models implements StatefulLike<Models.Snapshot, Models.Backup> {
-    public assets: Assets;
-    public margin: Margin;
-    public makers: Makers;
-    public orderbooks: Book;
-    public mtm: MtmLike<any, any>;
-    public progress: Progress;
-
-    constructor(hub: Hub) {
-        this.assets = new Assets(hub);
-        this.margin = new Margin(hub);
-        this.makers = new Makers(hub);
-        this.orderbooks = new Book(hub);
-        this.mtm = new DefaultMtm(hub);
-        this.progress = new Progress(hub);
-    }
-
-    public capture(): Models.Snapshot {
-        return {
-            assets: this.assets.capture(),
-            margin: this.margin.capture(),
-            makers: this.makers.capture(),
-            book: this.orderbooks.capture(),
-            mtm: this.mtm.capture(),
-            progress: this.progress.capture(),
-        }
-    }
-
-    public restore(backup: Models.Backup): void {
-        this.assets.restore(backup.assets);
-        this.margin.restore(backup.margin);
-        this.makers.restore(backup.makers);
-        this.orderbooks.restore(backup.book);
-        this.mtm.restore(backup.mtm);
-        this.progress.restore(backup.progress);
-    }
-}
-
-export namespace Models {
-    export interface Snapshot {
-        assets: any;
-        margin: any;
-        makers: any;
-        book: any;
-        mtm: any;
-        progress: any;
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
-}
-
-export class Presenters {
-    public clearing: Clearing;
-    public making: Making;
-    public taking: Taking;
-    public taken: Taken;
-    public updating: Updating;
-    public validation: Validation;
-
-    constructor(hub: Hub) {
-        this.clearing = new Clearing(hub);
-        this.making = new Making(hub);
-        this.taking = new Taking(hub);
-        this.taken = new Taken(hub);
-        this.updating = new Updating(hub);
-        this.validation = new Validation(hub);
-    }
-}
-
-export class Views {
-    public instant: Instant;
-    public latency: Latency;
-    public joystick: Joystick;
-
-    constructor(hub: Hub) {
-        this.instant = new Instant(hub);
-        this.latency = new Latency(hub);
-        this.joystick = new Joystick(hub);
-    }
-}
-
-export class Context {
-    public calculation: CalculationLike;
-
-    constructor(
-        hub: Hub,
-        public config: Config,
-        public timeline: Timeline,
-    ) {
-        this.calculation = new DefaultCalculation(hub);
-    }
-}
-
-export class Hub extends EventEmitter implements StatefulLike<Hub.Snapshot, Hub.Backup> {
-    public models = new Models(this);
-    public presenters = new Presenters(this);
-    public views = new Views(this)
-    public context: Context;
+export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> {
+    public models = {
+        assets: new Assets(this),
+        margin: new Margin(this),
+        makers: new Makers(this),
+        orderbooks: new Book(this),
+        mtm: <MtmLike<any>>new DefaultMtm(this),
+        progress: new Progress(this),
+    };
+    public presenters = {
+        clearing: new Clearing(this),
+        making: new Making(this),
+        taking: new Taking(this),
+        taken: new Taken(this),
+        updating: new Updating(this),
+        validation: new Validation(this),
+    };
+    public views = {
+        instant: new Instant(this),
+        latency: new Latency(this),
+        joystick: new Joystick(this),
+    };
+    public context: {
+        config: Config;
+        timeline: Timeline;
+        calculation: CalculationLike;
+    };
 
     constructor(
         config: Config,
         timeline: Timeline,
     ) {
         super();
-        this.context = new Context(this, config, timeline);
+        this.context = {
+            config,
+            timeline,
+            calculation: new DefaultCalculation(this),
+        };
     }
 
-    public capture(): Hub.Snapshot {
+    public capture(): Snapshot {
         return {
-            models: this.models.capture(),
+            assets: this.models.assets.capture(),
+            margin: this.models.margin.capture(),
+            makers: this.models.makers.capture(),
+            book: this.models.orderbooks.capture(),
+            mtm: this.models.mtm.capture(),
+            progress: this.models.progress.capture(),
         }
     }
 
-    public restore(backup: Hub.Backup): void {
-        this.models.restore(backup.models);
+    public restore(backup: Backup): void {
+        this.models.assets.restore(backup.assets);
+        this.models.margin.restore(backup.margin);
+        this.models.makers.restore(backup.makers);
+        this.models.orderbooks.restore(backup.book);
+        this.models.mtm.restore(backup.mtm);
+        this.models.progress.restore(backup.progress);
     }
 }
 
-export namespace Hub {
-    export interface Snapshot {
-        models: Models.Snapshot;
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    assets: any;
+    margin: any;
+    makers: any;
+    book: any;
+    mtm: any;
+    progress: any;
 }
+
+type Backup = TypeRecur<Snapshot, Big, string>;

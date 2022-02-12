@@ -9,20 +9,16 @@ import Big from 'big.js';
 import assert = require('assert');
 import { type Hub } from '../hub';
 
-export namespace Book {
-    export interface Snapshot {
-        basebook: Orderbook;
-        decrements: {
-            [side: number]: [string, Big][],
-        };
-        time: number;
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    basebook: Orderbook;
+    decrements: {
+        [side: number]: [string, Big][],
+    };
+    time: number;
 }
 
-export import Snapshot = Book.Snapshot;
-export import Backup = Book.Backup;
+type Backup = TypeRecur<Snapshot, Big, string>;
+
 
 export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
     [side: number]: BookOrder[];

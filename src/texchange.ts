@@ -3,12 +3,14 @@ import { Hub } from './hub';
 import {
 	Config,
 	Timeline,
+	TypeRecur,
 } from './interfaces';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
+import Big from 'big.js';
 
 
-export class Texchange implements StatefulLike<Hub.Snapshot, Hub.Backup> {
+export class Texchange implements StatefulLike<Snapshot, Backup> {
 	protected hub: Hub;
 	public user: Latency;
 	public admin: Joystick;
@@ -22,11 +24,14 @@ export class Texchange implements StatefulLike<Hub.Snapshot, Hub.Backup> {
 		this.admin = this.hub.views.joystick;
 	}
 
-	public capture(): Hub.Snapshot {
+	public capture(): Snapshot {
 		return this.hub.capture();
 	}
 
-	public restore(backup: Hub.Backup): void {
+	public restore(backup: Backup): void {
 		this.hub.restore(backup);
 	}
 }
+
+type Snapshot = any;
+type Backup = TypeRecur<Snapshot, Big, string>;

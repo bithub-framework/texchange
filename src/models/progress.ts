@@ -8,19 +8,14 @@ import {
 } from '../interfaces';
 import { type Hub } from '../hub';
 
-export namespace Progress {
-    export interface Snapshot {
-        latestPrice: Big;
-        latestDatabaseTradeId: string;
-        userTradeCount: number;
-        userOrderCount: number;
-    }
-
-    export type Backup = TypeRecur<Snapshot, Big, string>;
+interface Snapshot {
+    latestPrice: Big;
+    latestDatabaseTradeId: string;
+    userTradeCount: number;
+    userOrderCount: number;
 }
 
-export import Snapshot = Progress.Snapshot;
-export import Backup = Progress.Backup;
+type Backup = TypeRecur<Snapshot, Big, string>;
 
 
 // TODO initial state
