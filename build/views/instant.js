@@ -148,19 +148,10 @@ class Instant extends events_1.EventEmitter {
         this.emit('positions', this.getPositions());
     }
     getAvailable() {
-        return this.hub.models.assets.balance
-            .minus(this.hub.context.calculation.finalMargin())
-            .minus(this.hub.context.calculation.finalFrozenBalance())
-            .round(this.hub.context.config.CURRENCY_DP);
+        return this.hub.presenters.accountView.getAvailable();
     }
     getClosable() {
-        const { assets, makers } = this.hub.models;
-        return {
-            [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG]
-                .minus(makers.totalFrozen.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT]
-                .minus(makers.totalFrozen.position[interfaces_1.Length.SHORT]),
-        };
+        return this.hub.presenters.accountView.getClosable();
     }
 }
 exports.Instant = Instant;

@@ -5,18 +5,19 @@ import {
     TypeRecur,
 } from './interfaces';
 import { EventEmitter } from 'events';
+import { Calculation } from './context/calculation';
 import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
 import { Mtm, DefaultMtm } from './models/mtm';
 import { Progress } from './models/progress';
-import { Validation } from './presenters/validation';
 import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
 import { Making } from './presenters/making';
-import { Calculation } from './context/calculation';
+import { Validation } from './presenters/validation';
+import { AccountView } from './presenters/account-view';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
@@ -38,6 +39,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         taking: new Taking(this),
         taken: new Taken(this),
         validation: new Validation(this),
+        accountView: new AccountView(this),
     };
     public views = {
         instant: new Instant(this),

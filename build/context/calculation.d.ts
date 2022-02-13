@@ -18,5 +18,5 @@ export declare class Calculation implements MarketCalc {
     toFreeze(order: OpenOrder): Frozen;
     finalFrozenBalance(): Big;
     ClearingMargin(length: Length, profit: Big): Big;
-    shouldLiquidate(): Length | null;
+    assertEnoughBalance(): void;
 }

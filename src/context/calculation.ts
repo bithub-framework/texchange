@@ -95,12 +95,9 @@ export class Calculation implements MarketCalc {
             .plus(profit);
     }
 
-    public shouldLiquidate(): Length | null {
-        const result: Length[] = [];
-        const { margin } = this.hub.models;
+    public assertEnoughBalance(): void {
+        // 默认逐仓
         for (const length of [Length.SHORT, Length.LONG])
-            if (margin[length].lt(0))
-                return length;
-        return null;
+            assert(this.hub.models.margin[length].gte(0));
     }
 }

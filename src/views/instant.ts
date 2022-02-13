@@ -168,20 +168,11 @@ export class Instant extends EventEmitter {
     }
 
     public getAvailable(): Big {
-        return this.hub.models.assets.balance
-            .minus(this.hub.context.calculation.finalMargin())
-            .minus(this.hub.context.calculation.finalFrozenBalance())
-            .round(this.hub.context.config.CURRENCY_DP);
+        return this.hub.presenters.accountView.getAvailable();
     }
 
     public getClosable(): Closable {
-        const { assets, makers } = this.hub.models;
-        return {
-            [Length.LONG]: assets.position[Length.LONG]
-                .minus(makers.totalFrozen.position[Length.LONG]),
-            [Length.SHORT]: assets.position[Length.SHORT]
-                .minus(makers.totalFrozen.position[Length.SHORT]),
-        };
+        return this.hub.presenters.accountView.getClosable();
     }
 }
 

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Calculation = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
+const assert = require("assert");
 const big_math_1 = require("../big-math");
 class Calculation {
     constructor(hub) {
@@ -66,13 +67,10 @@ class Calculation {
         return this.hub.models.margin[length]
             .plus(profit);
     }
-    shouldLiquidate() {
-        const result = [];
-        const { margin } = this.hub.models;
+    assertEnoughBalance() {
+        // 默认逐仓
         for (const length of [interfaces_1.Length.SHORT, interfaces_1.Length.LONG])
-            if (margin[length].lt(0))
-                return length;
-        return null;
+            assert(this.hub.models.margin[length].gte(0));
     }
 }
 exports.Calculation = Calculation;

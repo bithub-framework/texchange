@@ -19,8 +19,7 @@ class Clearing {
             assets.openPosition(length, position[length], dollarVolume);
             margin[length] = calculation.ClearingMargin(length, profit);
         }
-        if (calculation.shouldLiquidate() !== null)
-            this.hub.emit('error', new Error('Liquidated.'));
+        calculation.assertEnoughBalance();
     }
 }
 exports.Clearing = Clearing;

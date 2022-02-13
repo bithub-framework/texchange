@@ -21,7 +21,7 @@ type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     implements StatefulLike<Snapshot, Backup> {
 
-    private frozens = new Map<OrderId, Frozen>();
+    private frozens = new Map<OrderId, Readonly<Frozen>>();
     public totalUnfilledQuantity: { [side: number]: Big } = {
         [Side.ASK]: new Big(0),
         [Side.BID]: new Big(0),

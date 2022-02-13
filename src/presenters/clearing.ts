@@ -27,7 +27,6 @@ export class Clearing {
             );
             margin[length] = calculation.ClearingMargin(length, profit);
         }
-        if (calculation.shouldLiquidate() !== null)
-            this.hub.emit('error', new Error('Liquidated.'));
+        calculation.assertEnoughBalance();
     }
 }

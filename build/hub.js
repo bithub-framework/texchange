@@ -2,18 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hub = void 0;
 const events_1 = require("events");
+const calculation_1 = require("./context/calculation");
 const assets_1 = require("./models/assets");
 const margin_1 = require("./models/margin");
 const makers_1 = require("./models/makers");
 const book_1 = require("./models/book");
 const mtm_1 = require("./models/mtm");
 const progress_1 = require("./models/progress");
-const validation_1 = require("./presenters/validation");
 const clearing_1 = require("./presenters/clearing");
 const taking_1 = require("./presenters/taking");
 const taken_1 = require("./presenters/taken");
 const making_1 = require("./presenters/making");
-const calculation_1 = require("./context/calculation");
+const validation_1 = require("./presenters/validation");
+const account_view_1 = require("./presenters/account-view");
 const instant_1 = require("./views/instant");
 const latency_1 = require("./views/latency");
 const joystick_1 = require("./views/joystick");
@@ -26,6 +27,7 @@ class Hub extends events_1.EventEmitter {
             taking: new taking_1.Taking(this),
             taken: new taken_1.Taken(this),
             validation: new validation_1.Validation(this),
+            accountView: new account_view_1.AccountView(this),
         };
         this.views = {
             instant: new instant_1.Instant(this),
