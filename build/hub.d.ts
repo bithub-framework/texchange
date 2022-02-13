@@ -23,7 +23,7 @@ export declare class Hub extends EventEmitter implements StatefulLike<Snapshot, 
         assets: Assets;
         margin: Margin;
         makers: Makers;
-        orderbooks: Book;
+        book: Book;
         mtm: Mtm<any>;
         progress: Progress;
     };

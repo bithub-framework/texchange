@@ -28,7 +28,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         assets: Assets;
         margin: Margin;
         makers: Makers;
-        orderbooks: Book;
+        book: Book;
         mtm: Mtm<any>;
         progress: Progress;
     };
@@ -64,7 +64,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
             assets: new Assets(this),
             margin: new Margin(this),
             makers: new Makers(this),
-            orderbooks: new Book(this),
+            book: new Book(this),
             mtm: new DefaultMtm(this, config.initialMarkPrice),
             progress: new Progress(this),
         };
@@ -75,7 +75,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
             assets: this.models.assets.capture(),
             margin: this.models.margin.capture(),
             makers: this.models.makers.capture(),
-            book: this.models.orderbooks.capture(),
+            book: this.models.book.capture(),
             mtm: this.models.mtm.capture(),
             progress: this.models.progress.capture(),
         }
@@ -85,7 +85,7 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         this.models.assets.restore(backup.assets);
         this.models.margin.restore(backup.margin);
         this.models.makers.restore(backup.makers);
-        this.models.orderbooks.restore(backup.book);
+        this.models.book.restore(backup.book);
         this.models.mtm.restore(backup.mtm);
         this.models.progress.restore(backup.progress);
     }

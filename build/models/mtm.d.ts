@@ -7,16 +7,16 @@ export declare abstract class Mtm<Snapshot> implements StatefulLike<Snapshot, Ty
     protected markPrice: Big;
     constructor(hub: Hub, markPrice: Big);
     abstract getSettlementPrice(): Big;
-    abstract updateTrades(trades: Trade[]): void;
+    abstract updateTrades(trades: readonly Readonly<Trade>[]): void;
     abstract capture(): Snapshot;
     abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
 }
 export declare class DefaultMtm extends Mtm<Snapshot> {
-    updateTrades(trades: Trade[]): void;
+    updateTrades(trades: readonly Readonly<Trade>[]): void;
     getSettlementPrice(): Big;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
 declare type Snapshot = Big;
-declare type Backup = TypeRecur<Snapshot, Big, string>;
+declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export {};

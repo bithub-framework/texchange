@@ -16,23 +16,12 @@ interface Snapshot {
     };
     time: number;
 }
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
-    [side: number]: BookOrder[];
-    public time = Number.NEGATIVE_INFINITY;
-    public get [Side.ASK]() {
-        this.apply();
-        return Reflect.get(this, Side.ASK);
-    }
-    public get [Side.BID]() {
-        this.apply();
-        return Reflect.get(this, Side.BID);
-    }
-
-    private applied = true;
-    private basebook: Orderbook = {
+export class Book implements StatefulLike<Snapshot, Backup> {
+    private time = Number.NEGATIVE_INFINITY;
+    private basebook: Readonly<Orderbook> = {
         [Side.ASK]: [],
         [Side.BID]: [],
         time: Number.NEGATIVE_INFINITY,
@@ -42,35 +31,37 @@ export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
         [Side.ASK]: new Map<string, Big>(),
         [Side.BID]: new Map<string, Big>(),
     };
+    private finalbook: Orderbook | null = null;
 
-    constructor(private core: Hub) { }
+    constructor(private hub: Hub) { }
 
-    public setBasebook(newBasebook: Orderbook) {
-        assert(newBasebook.time === this.core.context.timeline.now());
+    public setBasebook(newBasebook: Readonly<Orderbook>) {
+        assert(newBasebook.time === this.hub.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
-        this.applied = false;
+        this.finalbook = null;
     }
 
     public decQuantity(side: Side, price: Big, decrement: Big): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.core.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.hub.context.config.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new Big(0);
         this.decrements[side].set(priceString, old.plus(decrement));
-        this.time = this.core.context.timeline.now();
-        this.applied = false;
+        this.time = this.hub.context.timeline.now();
+        this.finalbook = null;
     }
 
-    private apply(): void {
-        if (this.applied) return;
+    private apply(): Readonly<Orderbook> {
+        if (this.finalbook) return this.finalbook;
         const total = {
             [Side.ASK]: new Map<string, Big>(),
             [Side.BID]: new Map<string, Big>(),
         };
+        this.finalbook = { time: this.time };
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.core.context.config.PRICE_DP),
+                    order.price.toFixed(this.hub.context.config.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {
@@ -82,14 +73,18 @@ export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
                 } else this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this[side] = [...total[side]]
+            this.finalbook[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                     price: new Big(priceString),
                     quantity,
                     side,
                 }));
         }
-        this.applied = true;
+        return this.finalbook;
+    }
+
+    public getBook(): Readonly<Orderbook> {
+        return this.apply();
     }
 
     public capture(): Snapshot {
@@ -116,14 +111,14 @@ export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
     }
 
     public restore(snapshot: Backup): void {
-        this.basebook = {
+        const basebook: Orderbook = {
             time: snapshot.basebook.time === null
                 ? Number.NEGATIVE_INFINITY
                 : snapshot.basebook.time
         };
         this.decrements = {};
         for (const side of [Side.ASK, Side.BID]) {
-            this.basebook[side] = snapshot.basebook[side].map<BookOrder>(order => ({
+            basebook[side] = snapshot.basebook[side].map<BookOrder>(order => ({
                 price: new Big(order.price),
                 quantity: new Big(order.quantity),
                 side: order.side!,
@@ -134,9 +129,10 @@ export class Book implements StatefulLike<Snapshot, Backup>, Orderbook {
                         [priceString, new Big(decrement)]
                 ));
         }
+        this.basebook = basebook;
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY
             : snapshot.time;
-        this.applied = false;
+        this.finalbook = null;
     }
 }

@@ -41,7 +41,7 @@ class Hub extends events_1.EventEmitter {
             assets: new assets_1.Assets(this),
             margin: new margin_1.Margin(this),
             makers: new makers_1.Makers(this),
-            orderbooks: new book_1.Book(this),
+            book: new book_1.Book(this),
             mtm: new mtm_1.DefaultMtm(this, config.initialMarkPrice),
             progress: new progress_1.Progress(this),
         };
@@ -51,7 +51,7 @@ class Hub extends events_1.EventEmitter {
             assets: this.models.assets.capture(),
             margin: this.models.margin.capture(),
             makers: this.models.makers.capture(),
-            book: this.models.orderbooks.capture(),
+            book: this.models.book.capture(),
             mtm: this.models.mtm.capture(),
             progress: this.models.progress.capture(),
         };
@@ -60,7 +60,7 @@ class Hub extends events_1.EventEmitter {
         this.models.assets.restore(backup.assets);
         this.models.margin.restore(backup.margin);
         this.models.makers.restore(backup.makers);
-        this.models.orderbooks.restore(backup.book);
+        this.models.book.restore(backup.book);
         this.models.mtm.restore(backup.mtm);
         this.models.progress.restore(backup.progress);
     }

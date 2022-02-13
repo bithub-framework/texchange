@@ -18,13 +18,13 @@ export abstract class Mtm<Snapshot>
     ) { }
 
     public abstract getSettlementPrice(): Big;
-    public abstract updateTrades(trades: Trade[]): void;
+    public abstract updateTrades(trades: readonly Readonly<Trade>[]): void;
     public abstract capture(): Snapshot;
     public abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
 }
 
 export class DefaultMtm extends Mtm<Snapshot> {
-    public updateTrades(trades: Trade[]): void {
+    public updateTrades(trades: readonly Readonly<Trade>[]): void {
         this.markPrice = trades[trades.length - 1].price;
         this.hub.presenters.clearing.settle();
     }
@@ -43,4 +43,4 @@ export class DefaultMtm extends Mtm<Snapshot> {
 }
 
 type Snapshot = Big;
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;

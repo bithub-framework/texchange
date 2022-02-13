@@ -13,7 +13,7 @@ interface Snapshot {
     balance: Big;
     cost: { [length: number]: Big; };
 }
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 export class Assets implements StatefulLike<Snapshot, Backup> {
     public position: { [length: number]: Big; };

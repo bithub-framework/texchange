@@ -17,7 +17,7 @@ import { type Hub } from '../hub';
 export class Instant extends EventEmitter {
     constructor(private hub: Hub) { super(); }
 
-    public pushTrades(trades: Trade[]): void {
+    public pushTrades(trades: readonly Readonly<Trade>[]): void {
         this.emit('trades', trades.map(trade => ({
             id: trade.id,
             price: trade.price,
@@ -28,7 +28,7 @@ export class Instant extends EventEmitter {
     }
 
     public pushOrderbook(): void {
-        const { orderbooks: orderbook } = this.hub.models;
+        const orderbook = this.hub.models.book.getBook();
         this.emit('orderbook', {
             [Side.ASK]: orderbook[Side.ASK].map(order => ({
                 price: order.price,
@@ -44,7 +44,7 @@ export class Instant extends EventEmitter {
         });
     }
 
-    public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
+    public makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[] {
         const { validation } = this.hub.presenters;
         return orders.map(order => {
             try {
@@ -66,9 +66,6 @@ export class Instant extends EventEmitter {
         });
     }
 
-    /**
-     * @returns As duplicate.
-     */
     private makeOpenOrder(order: OpenOrder): OpenOrder {
         const trades = this.hub.presenters.taking.orderTakes(order);
         this.hub.presenters.making.orderMakes(order);
@@ -81,14 +78,11 @@ export class Instant extends EventEmitter {
         return order;
     }
 
-    public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
+    public cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[] {
         return orders.map(order => this.cancelOpenOrder(order));
     }
 
-    /**
-     * @returns As duplicate.
-     */
-    private cancelOpenOrder(order: OpenOrder): OpenOrder {
+    private cancelOpenOrder(order: Readonly<OpenOrder>): OpenOrder {
         const { makers } = this.hub.models;
         let filled = makers.get(order.id)?.filled;
         if (typeof filled === 'undefined')
@@ -107,7 +101,9 @@ export class Instant extends EventEmitter {
         };
     }
 
-    public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
+    public amendOrders(
+        amendments: readonly Readonly<Amendment>[],
+    ): (OpenOrder | Error)[] {
         const { validation } = this.hub.presenters;
         return amendments.map(amendment => {
             const oldOrder = this.cancelOpenOrder(amendment);

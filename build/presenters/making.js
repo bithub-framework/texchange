@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Making = void 0;
 const big_js_1 = require("big.js");
 class Making {
-    constructor(core) {
-        this.core = core;
+    constructor(hub) {
+        this.hub = hub;
     }
     orderMakes(openOrder) {
         const openMaker = {
@@ -18,11 +18,11 @@ class Making {
             id: openOrder.id,
             behind: new big_js_1.default(0),
         };
-        const makers = this.core.models.orderbooks[openOrder.side];
+        const makers = this.hub.models.book.getBook()[openOrder.side];
         for (const maker of makers)
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        this.core.models.makers.appendOrder(openMaker);
+        this.hub.models.makers.appendOrder(openMaker);
     }
 }
 exports.Making = Making;

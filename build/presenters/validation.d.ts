@@ -3,7 +3,7 @@ import { type Hub } from '../hub';
 export declare class Validation {
     protected hub: Hub;
     constructor(hub: Hub);
-    validateOrder(order: OpenOrder): void;
+    validateOrder(order: Readonly<OpenOrder>): void;
     /**
      * Can be called only in consistent states
      */

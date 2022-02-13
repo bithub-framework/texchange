@@ -6,7 +6,7 @@ declare type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
 }[];
-declare type Backup = TypeRecur<Snapshot, Big, string>;
+declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Makers extends Map<OrderId, OpenMaker> implements StatefulLike<Snapshot, Backup> {
     private hub;
     private frozens;

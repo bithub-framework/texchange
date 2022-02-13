@@ -8,7 +8,7 @@ interface Snapshot {
     userTradeCount: number;
     userOrderCount: number;
 }
-declare type Backup = TypeRecur<Snapshot, Big, string>;
+declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Progress implements StatefulLike<Snapshot, Backup> {
     private hub;
     latestPrice: Big | null;
@@ -16,7 +16,7 @@ export declare class Progress implements StatefulLike<Snapshot, Backup> {
     userTradeCount: number;
     userOrderCount: number;
     constructor(hub: Hub);
-    updateDatabaseTrades(trades: DatabaseTrade[]): void;
+    updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }

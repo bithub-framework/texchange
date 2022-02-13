@@ -6,10 +6,6 @@ class Joystick {
     constructor(hub) {
         this.hub = hub;
     }
-    /**
-     * Make sure update all trades which have same timestamp at a time.
-     * @param trades
-     */
     updateTrades(trades) {
         assert(trades.length);
         const now = this.hub.context.timeline.now();
@@ -24,7 +20,7 @@ class Joystick {
     }
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.hub.context.timeline.now());
-        this.hub.models.orderbooks.setBasebook(orderbook);
+        this.hub.models.book.setBasebook(orderbook);
         this.hub.views.instant.pushOrderbook();
     }
 }

@@ -14,7 +14,7 @@ interface Snapshot {
     userTradeCount: number;
     userOrderCount: number;
 }
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
 export class Progress implements StatefulLike<Snapshot, Backup> {
@@ -25,7 +25,7 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
 
     constructor(private hub: Hub) { }
 
-    public updateDatabaseTrades(trades: DatabaseTrade[]): void {
+    public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
         const now = this.hub.context.timeline.now();
 
         this.latestDatabaseTradeTime = now;

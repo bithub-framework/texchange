@@ -19,7 +19,7 @@ class Instant extends events_1.EventEmitter {
         })));
     }
     pushOrderbook() {
-        const { orderbooks: orderbook } = this.hub.models;
+        const orderbook = this.hub.models.book.getBook();
         this.emit('orderbook', {
             [interfaces_1.Side.ASK]: orderbook[interfaces_1.Side.ASK].map(order => ({
                 price: order.price,
@@ -56,9 +56,6 @@ class Instant extends events_1.EventEmitter {
             }
         });
     }
-    /**
-     * @returns As duplicate.
-     */
     makeOpenOrder(order) {
         const trades = this.hub.presenters.taking.orderTakes(order);
         this.hub.presenters.making.orderMakes(order);
@@ -73,9 +70,6 @@ class Instant extends events_1.EventEmitter {
     cancelOrders(orders) {
         return orders.map(order => this.cancelOpenOrder(order));
     }
-    /**
-     * @returns As duplicate.
-     */
     cancelOpenOrder(order) {
         const { makers } = this.hub.models;
         let filled = makers.get(order.id)?.filled;

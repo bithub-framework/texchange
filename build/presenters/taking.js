@@ -12,16 +12,17 @@ class Taking {
      * @param taker variable
      */
     orderTakes(taker) {
-        const { margin, assets, progress, orderbooks } = this.hub.models;
+        const { margin, assets, progress, book } = this.hub.models;
         const { config, calculation, timeline } = this.hub.context;
+        const orderbook = book.getBook();
         const trades = [];
         let volume = new big_js_1.Big(0);
         let dollarVolume = new big_js_1.Big(0);
-        for (const maker of orderbooks[-taker.side])
+        for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
                 const quantity = (0, big_math_1.min)(taker.unfilled, maker.quantity);
-                orderbooks.decQuantity(maker.side, maker.price, quantity);
+                book.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);

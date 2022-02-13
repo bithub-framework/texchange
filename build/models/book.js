@@ -5,10 +5,9 @@ const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Book {
-    constructor(core) {
-        this.core = core;
+    constructor(hub) {
+        this.hub = hub;
         this.time = Number.NEGATIVE_INFINITY;
-        this.applied = true;
         this.basebook = {
             [interfaces_1.Side.ASK]: [],
             [interfaces_1.Side.BID]: [],
@@ -19,39 +18,33 @@ class Book {
             [interfaces_1.Side.ASK]: new Map(),
             [interfaces_1.Side.BID]: new Map(),
         };
-    }
-    get [interfaces_1.Side.ASK]() {
-        this.apply();
-        return Reflect.get(this, interfaces_1.Side.ASK);
-    }
-    get [interfaces_1.Side.BID]() {
-        this.apply();
-        return Reflect.get(this, interfaces_1.Side.BID);
+        this.finalbook = null;
     }
     setBasebook(newBasebook) {
-        assert(newBasebook.time === this.core.context.timeline.now());
+        assert(newBasebook.time === this.hub.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
-        this.applied = false;
+        this.finalbook = null;
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.core.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.hub.context.config.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new big_js_1.default(0);
         this.decrements[side].set(priceString, old.plus(decrement));
-        this.time = this.core.context.timeline.now();
-        this.applied = false;
+        this.time = this.hub.context.timeline.now();
+        this.finalbook = null;
     }
     apply() {
-        if (this.applied)
-            return;
+        if (this.finalbook)
+            return this.finalbook;
         const total = {
             [interfaces_1.Side.ASK]: new Map(),
             [interfaces_1.Side.BID]: new Map(),
         };
+        this.finalbook = { time: this.time };
         for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.core.context.config.PRICE_DP), order.quantity);
+                total[side].set(order.price.toFixed(this.hub.context.config.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
                 if (quantity) {
@@ -65,14 +58,17 @@ class Book {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this[side] = [...total[side]]
+            this.finalbook[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                 price: new big_js_1.default(priceString),
                 quantity,
                 side,
             }));
         }
-        this.applied = true;
+        return this.finalbook;
+    }
+    getBook() {
+        return this.apply();
     }
     capture() {
         return {
@@ -97,24 +93,25 @@ class Book {
         };
     }
     restore(snapshot) {
-        this.basebook = {
+        const basebook = {
             time: snapshot.basebook.time === null
                 ? Number.NEGATIVE_INFINITY
                 : snapshot.basebook.time
         };
         this.decrements = {};
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.basebook[side] = snapshot.basebook[side].map(order => ({
+            basebook[side] = snapshot.basebook[side].map(order => ({
                 price: new big_js_1.default(order.price),
                 quantity: new big_js_1.default(order.quantity),
                 side: order.side,
             }));
             this.decrements[side] = new Map(snapshot.decrements[side].map(([priceString, decrement]) => [priceString, new big_js_1.default(decrement)]));
         }
+        this.basebook = basebook;
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY
             : snapshot.time;
-        this.applied = false;
+        this.finalbook = null;
     }
 }
 exports.Book = Book;

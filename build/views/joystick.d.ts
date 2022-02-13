@@ -3,10 +3,6 @@ import { type Hub } from '../hub';
 export declare class Joystick {
     private hub;
     constructor(hub: Hub);
-    /**
-     * Make sure update all trades which have same timestamp at a time.
-     * @param trades
-     */
-    updateTrades(trades: DatabaseTrade[]): void;
-    updateOrderbook(orderbook: Orderbook): void;
+    updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
+    updateOrderbook(orderbook: Readonly<Orderbook>): void;
 }

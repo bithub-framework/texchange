@@ -7,10 +7,10 @@ import { type Hub } from '../hub';
 
 
 export class Making {
-    constructor(private core: Hub) { }
+    constructor(private hub: Hub) { }
 
     public orderMakes(
-        openOrder: OpenOrder,
+        openOrder: Readonly<OpenOrder>,
     ): void {
         const openMaker: OpenMaker = {
             price: openOrder.price,
@@ -23,10 +23,10 @@ export class Making {
             id: openOrder.id,
             behind: new Big(0),
         };
-        const makers = this.core.models.orderbooks[openOrder.side];
+        const makers = this.hub.models.book.getBook()[openOrder.side];
         for (const maker of makers)
             if (maker.price.eq(openOrder.price))
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
-        this.core.models.makers.appendOrder(openMaker);
+        this.hub.models.makers.appendOrder(openMaker);
     }
 }

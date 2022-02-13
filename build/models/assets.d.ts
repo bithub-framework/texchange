@@ -11,7 +11,7 @@ interface Snapshot {
         [length: number]: Big;
     };
 }
-declare type Backup = TypeRecur<Snapshot, Big, string>;
+declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Assets implements StatefulLike<Snapshot, Backup> {
     private hub;
     position: {

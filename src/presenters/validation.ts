@@ -10,7 +10,7 @@ import Big from 'big.js';
 export class Validation {
     constructor(protected hub: Hub) { }
 
-    public validateOrder(order: OpenOrder) {
+    public validateOrder(order: Readonly<OpenOrder>) {
         this.validateFormat(order);
         this.validateQuantity(order);
     }
@@ -18,7 +18,7 @@ export class Validation {
     /**
      * Can be called only in consistent states
      */
-    private validateQuantity(order: OpenOrder): void {
+    private validateQuantity(order: Readonly<OpenOrder>): void {
         const { makers } = this.hub.models;
         const closable = this.hub.views.instant.getClosable();
         makers.appendOrder({ ...order, behind: new Big(0) });
@@ -42,7 +42,7 @@ export class Validation {
         }
     }
 
-    private validateFormat(order: OpenOrder) {
+    private validateFormat(order: Readonly<OpenOrder>) {
         assert(order.price.eq(order.price.round(this.hub.context.config.PRICE_DP)));
         assert(order.price.mod(this.hub.context.config.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));

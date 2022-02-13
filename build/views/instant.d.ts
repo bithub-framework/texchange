@@ -6,19 +6,13 @@ import { type Hub } from '../hub';
 export declare class Instant extends EventEmitter {
     private hub;
     constructor(hub: Hub);
-    pushTrades(trades: Trade[]): void;
+    pushTrades(trades: readonly Readonly<Trade>[]): void;
     pushOrderbook(): void;
-    makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[];
-    /**
-     * @returns As duplicate.
-     */
+    makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[];
     private makeOpenOrder;
-    cancelOrders(orders: OpenOrder[]): OpenOrder[];
-    /**
-     * @returns As duplicate.
-     */
+    cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[];
     private cancelOpenOrder;
-    amendOrders(amendments: Amendment[]): (OpenOrder | Error)[];
+    amendOrders(amendments: readonly Readonly<Amendment>[]): (OpenOrder | Error)[];
     getOpenOrders(): OpenOrder[];
     getPositions(): Positions;
     getBalances(): Balances;

@@ -10,7 +10,7 @@ import { type Hub } from '../hub';
 interface Snapshot {
     [length: number]: Big;
 }
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
 export class Margin implements StatefulLike<Snapshot, Backup> {
