@@ -6,7 +6,13 @@ export declare class Calculation implements MarketCalc {
     constructor(hub: Hub);
     dollarVolume(price: Big, quantity: Big): Big;
     quantity(price: Big, dollarVolume: Big): Big;
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     marginDecrement(length: Length, volume: Big, dollarVolume: Big): Big;
     finalMargin(): Big;
     toFreeze(order: OpenOrder): Frozen;

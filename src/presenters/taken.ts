@@ -6,20 +6,20 @@ import {
     Operation,
 } from '../interfaces';
 import { min } from '../big-math';
-import { Big, RoundingMode } from 'big.js';
+import { RoundingMode } from 'big.js';
 import { type Hub } from '../hub';
 
 
 export class Taken {
     constructor(private hub: Hub) { }
 
-    public tradeTakesOpenMakers(trade: Trade): void {
-        trade = {
-            price: trade.price,
-            quantity: trade.quantity,
-            side: trade.side,
-            time: trade.time,
-            id: trade.id,
+    public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
+        const trade: Trade = {
+            price: roTrade.price,
+            quantity: roTrade.quantity,
+            side: roTrade.side,
+            time: roTrade.time,
+            id: roTrade.id,
         };
         for (const order of [...this.hub.models.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
@@ -29,7 +29,7 @@ export class Taken {
     }
 
     private tradeShouldTakeOpenOrder(
-        trade: Trade, maker: OpenOrder,
+        trade: Readonly<Trade>, maker: Readonly<OpenOrder>,
     ): boolean {
         return (
             maker.side === Side.BID &&
@@ -42,23 +42,16 @@ export class Taken {
         );
     }
 
-    /**
-     * @param trade variable
-     * @param maker variable
-     */
     private tradeTakesOrderQueue(trade: Trade, maker: OpenMaker): void {
+        const { makers } = this.hub.models;
         if (trade.price.eq(maker.price)) {
             const volume = min(trade.quantity, maker.behind);
             trade.quantity = trade.quantity.minus(volume);
-            maker.behind = maker.behind.minus(volume);
-        } else maker.behind = new Big(0);
+            makers.takeOrderQueue(maker.id, volume);
+        } else makers.takeOrderQueue(maker.id);
     }
 
-    /**
-     * @param trade variable
-     * @param maker variable
-     */
-    private tradeTakesOpenMaker(trade: Trade, maker: OpenMaker): void {
+    private tradeTakesOpenMaker(trade: Trade, maker: Readonly<OpenMaker>): void {
         const { assets, margin, makers } = this.hub.models;
 
         const volume = min(trade.quantity, maker.unfilled);

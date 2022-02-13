@@ -7,7 +7,7 @@ declare type Snapshot = {
     frozen: Frozen;
 }[];
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Makers extends Map<OrderId, OpenMaker> implements StatefulLike<Snapshot, Backup> {
+export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements StatefulLike<Snapshot, Backup> {
     private hub;
     private frozens;
     totalUnfilledQuantity: {
@@ -20,6 +20,8 @@ export declare class Makers extends Map<OrderId, OpenMaker> implements StatefulL
     private normalizeFrozen;
     appendOrder(order: OpenMaker): void;
     takeOrder(oid: OrderId, volume: Big): void;
+    takeOrderQueue(oid: OrderId, volume?: Big): void;
     removeOrder(oid: OrderId): void;
+    tryRemoveOrder(oid: OrderId): void;
 }
 export {};

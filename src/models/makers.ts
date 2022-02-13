@@ -18,7 +18,7 @@ type Snapshot = {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Makers extends Map<OrderId, OpenMaker>
+export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     implements StatefulLike<Snapshot, Backup> {
 
     private frozens = new Map<OrderId, Frozen>();
@@ -102,21 +102,39 @@ export class Makers extends Map<OrderId, OpenMaker>
         const order = this.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
-        this.removeOrder(oid)!;
-        order.filled = order.filled.plus(volume);
-        order.unfilled = order.unfilled.minus(volume);
-        this.appendOrder(order);
+        this.tryRemoveOrder(oid);
+        const newOrder: Readonly<OpenMaker> = {
+            ...order,
+            filled: order.filled.plus(volume),
+            unfilled: order.unfilled.minus(volume),
+        };
+        this.appendOrder(newOrder);
+    }
+
+    public takeOrderQueue(oid: OrderId, volume?: Big): void {
+        const order = this.get(oid);
+        assert(order);
+        const newOrder: Readonly<OpenMaker> = {
+            ...order,
+            behind: volume ? order.behind.minus(volume) : new Big(0),
+        };
+        this.set(oid, newOrder);
     }
 
     public removeOrder(oid: OrderId): void {
         const order = this.get(oid);
-        if (!order) return;
+        assert(order);
         const toThaw = this.frozens.get(oid)!;
-
         this.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
         this.totalFrozen = Frozen.minus(this.totalFrozen, toThaw);
+    }
+
+    public tryRemoveOrder(oid: OrderId): void {
+        try {
+            this.removeOrder(oid);
+        } catch (err) { }
     }
 }

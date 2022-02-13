@@ -80,21 +80,38 @@ class Makers extends Map {
         const order = this.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
-        this.removeOrder(oid);
-        order.filled = order.filled.plus(volume);
-        order.unfilled = order.unfilled.minus(volume);
-        this.appendOrder(order);
+        this.tryRemoveOrder(oid);
+        const newOrder = {
+            ...order,
+            filled: order.filled.plus(volume),
+            unfilled: order.unfilled.minus(volume),
+        };
+        this.appendOrder(newOrder);
+    }
+    takeOrderQueue(oid, volume) {
+        const order = this.get(oid);
+        assert(order);
+        const newOrder = {
+            ...order,
+            behind: volume ? order.behind.minus(volume) : new big_js_1.default(0),
+        };
+        this.set(oid, newOrder);
     }
     removeOrder(oid) {
         const order = this.get(oid);
-        if (!order)
-            return;
+        assert(order);
         const toThaw = this.frozens.get(oid);
         this.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
         this.totalFrozen = interfaces_1.Frozen.minus(this.totalFrozen, toThaw);
+    }
+    tryRemoveOrder(oid) {
+        try {
+            this.removeOrder(oid);
+        }
+        catch (err) { }
     }
 }
 exports.Makers = Makers;

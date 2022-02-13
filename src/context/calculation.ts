@@ -26,7 +26,9 @@ export class Calculation implements MarketCalc {
         return dollarVolume.div(price);
     }
 
-    // this.hub.assets.position[order.length] has not been updated.
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     public marginIncrement(
         length: Length, volume: Big, dollarVolume: Big,
     ): Big {
@@ -34,6 +36,9 @@ export class Calculation implements MarketCalc {
         return dollarVolume.div(this.hub.context.config.LEVERAGE);
     }
 
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     public marginDecrement(
         length: Length, volume: Big, dollarVolume: Big,
     ): Big {

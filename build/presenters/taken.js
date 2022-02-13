@@ -3,18 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Taken = void 0;
 const interfaces_1 = require("../interfaces");
 const big_math_1 = require("../big-math");
-const big_js_1 = require("big.js");
 class Taken {
     constructor(hub) {
         this.hub = hub;
     }
-    tradeTakesOpenMakers(trade) {
-        trade = {
-            price: trade.price,
-            quantity: trade.quantity,
-            side: trade.side,
-            time: trade.time,
-            id: trade.id,
+    tradeTakesOpenMakers(roTrade) {
+        const trade = {
+            price: roTrade.price,
+            quantity: roTrade.quantity,
+            side: roTrade.side,
+            time: roTrade.time,
+            id: roTrade.id,
         };
         for (const order of [...this.hub.models.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
@@ -31,23 +30,16 @@ class Taken {
                     trade.side === interfaces_1.Side.BID &&
                     trade.price.gte(maker.price));
     }
-    /**
-     * @param trade variable
-     * @param maker variable
-     */
     tradeTakesOrderQueue(trade, maker) {
+        const { makers } = this.hub.models;
         if (trade.price.eq(maker.price)) {
             const volume = (0, big_math_1.min)(trade.quantity, maker.behind);
             trade.quantity = trade.quantity.minus(volume);
-            maker.behind = maker.behind.minus(volume);
+            makers.takeOrderQueue(maker.id, volume);
         }
         else
-            maker.behind = new big_js_1.Big(0);
+            makers.takeOrderQueue(maker.id);
     }
-    /**
-     * @param trade variable
-     * @param maker variable
-     */
     tradeTakesOpenMaker(trade, maker) {
         const { assets, margin, makers } = this.hub.models;
         const volume = (0, big_math_1.min)(trade.quantity, maker.unfilled);

@@ -14,11 +14,16 @@ class Calculation {
     quantity(price, dollarVolume) {
         return dollarVolume.div(price);
     }
-    // this.hub.assets.position[order.length] has not been updated.
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     marginIncrement(length, volume, dollarVolume) {
         // 默认非实时结算
         return dollarVolume.div(this.hub.context.config.LEVERAGE);
     }
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
     marginDecrement(length, volume, dollarVolume) {
         const { assets, margin } = this.hub.models;
         return margin[length]

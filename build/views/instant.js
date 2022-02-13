@@ -76,7 +76,7 @@ class Instant extends events_1.EventEmitter {
         if (typeof filled === 'undefined')
             filled = order.quantity;
         else
-            makers.removeOrder(order.id);
+            makers.tryRemoveOrder(order.id);
         return {
             price: order.price,
             quantity: order.quantity,
