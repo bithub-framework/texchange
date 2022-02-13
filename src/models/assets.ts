@@ -7,6 +7,8 @@ import { type Hub } from '../hub';
 import { StatefulLike } from 'startable';
 
 
+interface Deps extends Pick<Hub, 'context'> { }
+
 
 interface Snapshot {
     position: { [length: number]: Big; };
@@ -20,7 +22,7 @@ export class Assets implements StatefulLike<Snapshot, Backup> {
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(private hub: Hub) {
+    constructor(private hub: Deps) {
         this.balance = this.hub.context.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),

@@ -5,8 +5,13 @@ import {
 import { type Hub } from '../hub';
 import assert = require('assert');
 
+
+interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
+	views: Pick<Hub['views'], 'instant'>;
+}
+
 export class Joystick {
-	constructor(private hub: Hub) { }
+	constructor(private hub: Deps) { }
 
 	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
 		assert(trades.length);

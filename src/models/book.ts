@@ -9,6 +9,9 @@ import Big from 'big.js';
 import assert = require('assert');
 import { type Hub } from '../hub';
 
+
+interface Deps extends Pick<Hub, 'context'> { }
+
 interface Snapshot {
     basebook: Orderbook;
     decrements: {
@@ -33,7 +36,7 @@ export class Book implements StatefulLike<Snapshot, Backup> {
     };
     private finalbook: Orderbook | null = null;
 
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     public setBasebook(newBasebook: Readonly<Orderbook>) {
         assert(newBasebook.time === this.hub.context.timeline.now());

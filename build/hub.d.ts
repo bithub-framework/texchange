@@ -2,13 +2,13 @@
 import { StatefulLike } from 'startable';
 import { Config, Timeline, TypeRecur } from './interfaces';
 import { EventEmitter } from 'events';
-import { Calculation } from './context/calculation';
 import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
 import { Mtm } from './models/mtm';
 import { Progress } from './models/progress';
+import { Calculation } from './presenters/calculation';
 import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';

@@ -12,7 +12,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = exports.Mtm = exports.Calculation = void 0;
 __exportStar(require("./interfaces"), exports);
-var calculation_1 = require("./context/calculation");
+var calculation_1 = require("./presenters/calculation");
 Object.defineProperty(exports, "Calculation", { enumerable: true, get: function () { return calculation_1.Calculation; } });
 var mtm_1 = require("./models/mtm");
 Object.defineProperty(exports, "Mtm", { enumerable: true, get: function () { return mtm_1.Mtm; } });

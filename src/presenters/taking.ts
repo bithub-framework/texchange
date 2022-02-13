@@ -8,8 +8,10 @@ import { Big, RoundingMode } from 'big.js';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
 export class Taking {
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     /**
      * @param taker variable

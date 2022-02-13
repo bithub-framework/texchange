@@ -4,8 +4,10 @@ import {
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
 export class Clearing {
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     public settle(): void {
         const { calculation } = this.hub.context;

@@ -60,10 +60,10 @@ class Instant extends events_1.EventEmitter {
         const trades = this.hub.presenters.taking.orderTakes(order);
         this.hub.presenters.making.orderMakes(order);
         if (trades.length) {
-            this.hub.views.instant.pushTrades(trades);
-            this.hub.views.instant.pushOrderbook();
-            this.hub.views.instant.pushBalances();
-            this.hub.views.instant.pushPositions();
+            this.pushTrades(trades);
+            this.pushOrderbook();
+            this.pushBalances();
+            this.pushPositions();
         }
         return order;
     }

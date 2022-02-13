@@ -11,8 +11,10 @@ import assert = require('assert');
 import { max } from '../big-math';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
 export class Calculation implements MarketCalc {
-    constructor(protected hub: Hub) { }
+    constructor(protected hub: Deps) { }
 
     public dollarVolume(
         price: Big, quantity: Big,

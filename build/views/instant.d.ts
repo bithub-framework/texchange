@@ -3,9 +3,11 @@ import { EventEmitter } from 'events';
 import { Events, Trade, OpenOrder, LimitOrder, Amendment, Positions, Balances, Closable } from '../interfaces';
 import Big from 'big.js';
 import { type Hub } from '../hub';
+interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
+}
 export declare class Instant extends EventEmitter {
     private hub;
-    constructor(hub: Hub);
+    constructor(hub: Deps);
     pushTrades(trades: readonly Readonly<Trade>[]): void;
     pushOrderbook(): void;
     makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[];
@@ -27,3 +29,4 @@ export interface Instant extends EventEmitter {
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
+export {};

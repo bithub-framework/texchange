@@ -11,8 +11,12 @@ import { EventEmitter } from 'events';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
+    views: Pick<Hub['views'], 'instant'>;
+}
+
 export class Latency extends EventEmitter implements ApiLike {
-    constructor(private hub: Hub) {
+    constructor(private hub: Deps) {
         super();
         this.hub.views.instant.on('orderbook', async orderbook => {
             try {

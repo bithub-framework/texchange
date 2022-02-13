@@ -14,8 +14,10 @@ import Big from 'big.js';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> { }
+
 export class Instant extends EventEmitter {
-    constructor(private hub: Hub) { super(); }
+    constructor(private hub: Deps) { super(); }
 
     public pushTrades(trades: readonly Readonly<Trade>[]): void {
         this.emit('trades', trades.map(trade => ({
@@ -70,10 +72,10 @@ export class Instant extends EventEmitter {
         const trades = this.hub.presenters.taking.orderTakes(order);
         this.hub.presenters.making.orderMakes(order);
         if (trades.length) {
-            this.hub.views.instant.pushTrades(trades);
-            this.hub.views.instant.pushOrderbook();
-            this.hub.views.instant.pushBalances();
-            this.hub.views.instant.pushPositions();
+            this.pushTrades(trades);
+            this.pushOrderbook();
+            this.pushBalances();
+            this.pushPositions();
         }
         return order;
     }

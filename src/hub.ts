@@ -5,13 +5,13 @@ import {
     TypeRecur,
 } from './interfaces';
 import { EventEmitter } from 'events';
-import { Calculation } from './context/calculation';
 import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
 import { Mtm, DefaultMtm } from './models/mtm';
 import { Progress } from './models/progress';
+import { Calculation } from './presenters/calculation';
 import { Clearing } from './presenters/clearing';
 import { Taking } from './presenters/taking';
 import { Taken } from './presenters/taken';
@@ -33,19 +33,30 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         mtm: Mtm<any>;
         progress: Progress;
     };
-    public presenters = {
-        clearing: new Clearing(this),
-        making: new Making(this),
-        taking: new Taking(this),
-        taken: new Taken(this),
-        validation: new Validation(this),
-        accountView: new AccountView(this),
-    };
-    public views = {
-        instant: new Instant(this),
-        latency: new Latency(this),
-        joystick: new Joystick(this),
-    };
+    public presenters: {
+        clearing: Clearing;
+        making: Making;
+        taking: Taking;
+        taken: Taken;
+        validation: Validation;
+        accountView: AccountView;
+    } = {
+            clearing: new Clearing(this),
+            making: new Making(this),
+            taking: new Taking(this),
+            taken: new Taken(this),
+            validation: new Validation(this),
+            accountView: new AccountView(this),
+        };
+    public views: {
+        instant: Instant;
+        latency: Latency;
+        joystick: Joystick;
+    } = {
+            instant: new Instant(this),
+            latency: new Latency(this),
+            joystick: new Joystick(this),
+        };
     public context: {
         config: Config;
         timeline: Timeline;

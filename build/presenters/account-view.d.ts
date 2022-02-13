@@ -3,9 +3,11 @@ import { EventEmitter } from 'events';
 import { Events, Closable } from '../interfaces';
 import Big from 'big.js';
 import { type Hub } from '../hub';
+interface Deps extends Pick<Hub, 'context' | 'models'> {
+}
 export declare class AccountView {
     private hub;
-    constructor(hub: Hub);
+    constructor(hub: Deps);
     getAvailable(): Big;
     getClosable(): Closable;
 }
@@ -15,3 +17,4 @@ export interface Instant extends EventEmitter {
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
+export {};

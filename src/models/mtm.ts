@@ -9,11 +9,16 @@ import { type Hub } from '../hub';
 import assert = require('assert');
 
 
+interface Deps extends Pick<Hub, 'context'> {
+    presenters: Pick<Hub['presenters'], 'clearing'>;
+}
+
+
 export abstract class Mtm<Snapshot>
     implements StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
 
     constructor(
-        protected hub: Hub,
+        protected hub: Deps,
         protected markPrice: Big,
     ) { }
 

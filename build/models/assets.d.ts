@@ -2,6 +2,8 @@ import { Length, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { type Hub } from '../hub';
 import { StatefulLike } from 'startable';
+interface Deps extends Pick<Hub, 'context'> {
+}
 interface Snapshot {
     position: {
         [length: number]: Big;
@@ -21,7 +23,7 @@ export declare class Assets implements StatefulLike<Snapshot, Backup> {
     cost: {
         [length: number]: Big;
     };
-    constructor(hub: Hub);
+    constructor(hub: Deps);
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     payFee(fee: Big): void;

@@ -2,6 +2,8 @@ import { OrderId, OpenMaker, Frozen, TypeRecur } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import { type Hub } from '../hub';
+interface Deps extends Pick<Hub, 'context'> {
+}
 declare type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
@@ -14,7 +16,7 @@ export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements
         [side: number]: Big;
     };
     totalFrozen: Frozen;
-    constructor(hub: Hub);
+    constructor(hub: Deps);
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;

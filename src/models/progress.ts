@@ -8,6 +8,9 @@ import {
 } from '../interfaces';
 import { type Hub } from '../hub';
 
+
+interface Deps extends Pick<Hub, 'context'> { }
+
 interface Snapshot {
     latestPrice: Big | null;
     latestDatabaseTradeTime: number | null;
@@ -23,7 +26,7 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
     public userTradeCount = 0;
     public userOrderCount = 0;
 
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
         const now = this.hub.context.timeline.now();

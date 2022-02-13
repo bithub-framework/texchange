@@ -7,8 +7,13 @@ import { type Hub } from '../hub';
 import Big from 'big.js';
 
 
+
+interface Deps extends Pick<Hub, 'context' | 'models'> {
+    presenters: Pick<Hub['presenters'], 'accountView'>;
+}
+
 export class Validation {
-    constructor(protected hub: Hub) { }
+    constructor(protected hub: Deps) { }
 
     public validateOrder(order: Readonly<OpenOrder>) {
         this.validateFormat(order);
@@ -20,7 +25,7 @@ export class Validation {
      */
     private validateQuantity(order: Readonly<OpenOrder>): void {
         const { makers } = this.hub.models;
-        const closable = this.hub.views.instant.getClosable();
+        const closable = this.hub.presenters.accountView.getClosable();
         makers.appendOrder({ ...order, behind: new Big(0) });
         try {
             const enoughPosition =
@@ -28,7 +33,7 @@ export class Validation {
                 closable[Length.SHORT].gte(0);
             assert(enoughPosition);
 
-            const enoughBalance = this.hub.views.instant.getAvailable()
+            const enoughBalance = this.hub.presenters.accountView.getAvailable()
                 .gte(
                     this.hub.context.calculation.dollarVolume(
                         order.price, order.unfilled,

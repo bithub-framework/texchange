@@ -11,6 +11,8 @@ import assert = require('assert');
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context'> { }
+
 type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
@@ -28,7 +30,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     };
     public totalFrozen: Frozen = Frozen.ZERO;
 
-    constructor(private hub: Hub) {
+    constructor(private hub: Deps) {
         super();
     }
 

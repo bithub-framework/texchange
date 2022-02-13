@@ -10,8 +10,10 @@ import { RoundingMode } from 'big.js';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
 export class Taken {
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
         const trade: Trade = {

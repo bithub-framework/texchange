@@ -6,8 +6,10 @@ import Big from 'big.js';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
 export class Making {
-    constructor(private hub: Hub) { }
+    constructor(private hub: Deps) { }
 
     public orderMakes(
         openOrder: Readonly<OpenOrder>,

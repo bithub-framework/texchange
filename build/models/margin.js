@@ -13,6 +13,7 @@ class Margin {
         this[length] = this[length]
             .plus(this.hub.context.calculation.marginIncrement(length, volume, dollarVolume)).round(this.hub.context.config.CURRENCY_DP);
     }
+    // TODO try
     decMargin(length, volume, dollarVolume) {
         const { assets } = this.hub.models;
         const { calculation } = this.hub.context;

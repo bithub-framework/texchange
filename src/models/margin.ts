@@ -7,6 +7,12 @@ import Big from 'big.js';
 // import { inspect } from 'util';
 import { type Hub } from '../hub';
 
+
+interface Deps extends Pick<Hub, 'context'> {
+    models: Pick<Hub['models'], 'assets'>;
+}
+
+
 interface Snapshot {
     [length: number]: Big;
 }
@@ -16,7 +22,7 @@ type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export class Margin implements StatefulLike<Snapshot, Backup> {
     [length: number]: Big;
 
-    constructor(private hub: Hub) {
+    constructor(private hub: Deps) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
     }
@@ -30,6 +36,7 @@ export class Margin implements StatefulLike<Snapshot, Backup> {
             ).round(this.hub.context.config.CURRENCY_DP);
     }
 
+    // TODO try
     public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
         const { assets } = this.hub.models;
         const { calculation } = this.hub.context;

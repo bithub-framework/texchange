@@ -2,6 +2,8 @@ import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import { DatabaseTrade, TypeRecur } from '../interfaces';
 import { type Hub } from '../hub';
+interface Deps extends Pick<Hub, 'context'> {
+}
 interface Snapshot {
     latestPrice: Big | null;
     latestDatabaseTradeTime: number | null;
@@ -15,7 +17,7 @@ export declare class Progress implements StatefulLike<Snapshot, Backup> {
     latestDatabaseTradeTime: number | null;
     userTradeCount: number;
     userOrderCount: number;
-    constructor(hub: Hub);
+    constructor(hub: Deps);
     updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
     capture(): Snapshot;
     restore(snapshot: Backup): void;

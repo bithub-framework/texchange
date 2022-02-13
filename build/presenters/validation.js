@@ -17,13 +17,13 @@ class Validation {
      */
     validateQuantity(order) {
         const { makers } = this.hub.models;
-        const closable = this.hub.views.instant.getClosable();
+        const closable = this.hub.presenters.accountView.getClosable();
         makers.appendOrder({ ...order, behind: new big_js_1.default(0) });
         try {
             const enoughPosition = closable[interfaces_1.Length.LONG].gte(0) &&
                 closable[interfaces_1.Length.SHORT].gte(0);
             assert(enoughPosition);
-            const enoughBalance = this.hub.views.instant.getAvailable()
+            const enoughBalance = this.hub.presenters.accountView.getAvailable()
                 .gte(this.hub.context.calculation.dollarVolume(order.price, order.unfilled).times(Math.max(this.hub.context.config.TAKER_FEE_RATE, 0)).round(this.hub.context.config.CURRENCY_DP));
             assert(enoughBalance);
         }

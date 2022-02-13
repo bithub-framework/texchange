@@ -14,8 +14,11 @@ import Big from 'big.js';
 import { type Hub } from '../hub';
 
 
+interface Deps extends Pick<Hub, 'context' | 'models'> { }
+
+
 export class AccountView {
-	constructor(private hub: Hub) { }
+	constructor(private hub: Deps) { }
 
 	public getAvailable(): Big {
 		return this.hub.models.assets.balance
