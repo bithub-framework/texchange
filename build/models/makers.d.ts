@@ -18,7 +18,7 @@ export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;
-    appendOrder(order: OpenMaker): void;
+    appendOrder(order: Readonly<OpenMaker>): void;
     takeOrder(oid: OrderId, volume: Big): void;
     takeOrderQueue(oid: OrderId, volume?: Big): void;
     removeOrder(oid: OrderId): void;

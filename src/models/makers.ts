@@ -73,7 +73,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
             .reduce((total, frozen) => Frozen.plus(total, frozen), Frozen.ZERO);
     }
 
-    private normalizeFrozen(frozen: Frozen): Frozen {
+    private normalizeFrozen(frozen: Readonly<Frozen>): Frozen {
         return {
             balance: {
                 [Length.LONG]: frozen.balance[Length.LONG].round(this.hub.context.config.CURRENCY_DP),
@@ -86,7 +86,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
         };
     }
 
-    public appendOrder(order: OpenMaker): void {
+    public appendOrder(order: Readonly<OpenMaker>): void {
         if (order.unfilled.eq(0)) return;
         const toFreeze = this.normalizeFrozen(
             this.hub.context.calculation.toFreeze(order),
