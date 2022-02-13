@@ -12,33 +12,34 @@ export class Validation {
 
     public validateOrder(order: OpenOrder) {
         this.validateFormat(order);
-        this.assertEnough(order);
+        this.validateQuantity(order);
     }
 
     /**
-     * Overridable
-     * @param order Plain object.
+     * Can be called only in consistent states
      */
-    protected assertEnough(order: OpenOrder): void {
+    private validateQuantity(order: OpenOrder): void {
         const { makers } = this.hub.models;
-        makers.appendOrder({ ...order, behind: new Big(0) });
-
         const closable = this.hub.views.instant.getClosable();
-        const enoughPosition =
-            closable[Length.LONG].gte(0) &&
-            closable[Length.SHORT].gte(0);
+        makers.appendOrder({ ...order, behind: new Big(0) });
+        try {
+            const enoughPosition =
+                closable[Length.LONG].gte(0) &&
+                closable[Length.SHORT].gte(0);
+            assert(enoughPosition);
 
-        const enoughBalance = this.hub.views.instant.getAvailable()
-            .gte(
-                this.hub.context.calculation.dollarVolume(
-                    order.price, order.unfilled,
-                ).times(
-                    Math.max(this.hub.context.config.TAKER_FEE_RATE, 0)
-                ).round(this.hub.context.config.CURRENCY_DP)
-            );
-
-        makers.removeOrder(order.id);
-        assert(enoughPosition && enoughBalance);
+            const enoughBalance = this.hub.views.instant.getAvailable()
+                .gte(
+                    this.hub.context.calculation.dollarVolume(
+                        order.price, order.unfilled,
+                    ).times(
+                        Math.max(this.hub.context.config.TAKER_FEE_RATE, 0)
+                    ).round(this.hub.context.config.CURRENCY_DP)
+                );
+            assert(enoughBalance);
+        } finally {
+            makers.removeOrder(order.id);
+        }
     }
 
     private validateFormat(order: OpenOrder) {

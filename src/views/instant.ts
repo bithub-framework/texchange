@@ -15,9 +15,7 @@ import { type Hub } from '../hub';
 
 
 export class Instant extends EventEmitter {
-    constructor(private hub: Hub) {
-        super();
-    }
+    constructor(private hub: Hub) { super(); }
 
     public pushTrades(trades: Trade[]): void {
         this.emit('trades', trades.map(trade => ({
@@ -47,36 +45,40 @@ export class Instant extends EventEmitter {
     }
 
     public makeOrders(orders: LimitOrder[]): (OpenOrder | Error)[] {
-        return orders.map(order => this.makeOpenOrder({
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            id: ++this.hub.models.progress.userOrderCount,
-            filled: new Big(0),
-            unfilled: order.quantity,
-        }));
+        const { validation } = this.hub.presenters;
+        return orders.map(order => {
+            try {
+                const openOrder = {
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
+                    id: ++this.hub.models.progress.userOrderCount,
+                    filled: new Big(0),
+                    unfilled: order.quantity,
+                };
+                validation.validateOrder(openOrder);
+                return this.makeOpenOrder(openOrder);
+            } catch (err) {
+                return <Error>err;
+            }
+        });
     }
 
     /**
      * @returns As duplicate.
      */
-    private makeOpenOrder(order: OpenOrder): OpenOrder | Error {
-        try {
-            this.hub.presenters.validation.validateOrder(order);
-            const trades = this.hub.presenters.taking.orderTakes(order);
-            this.hub.presenters.making.orderMakes(order);
-            if (trades.length) {
-                this.hub.views.instant.pushTrades(trades);
-                this.hub.views.instant.pushOrderbook();
-                this.hub.views.instant.pushBalances();
-                this.hub.views.instant.pushPositions();
-            }
-            return order;
-        } catch (err) {
-            return <Error>err;
+    private makeOpenOrder(order: OpenOrder): OpenOrder {
+        const trades = this.hub.presenters.taking.orderTakes(order);
+        this.hub.presenters.making.orderMakes(order);
+        if (trades.length) {
+            this.hub.views.instant.pushTrades(trades);
+            this.hub.views.instant.pushOrderbook();
+            this.hub.views.instant.pushBalances();
+            this.hub.views.instant.pushPositions();
         }
+        return order;
     }
 
     public cancelOrders(orders: OpenOrder[]): OpenOrder[] {
@@ -106,19 +108,25 @@ export class Instant extends EventEmitter {
     }
 
     public amendOrders(amendments: Amendment[]): (OpenOrder | Error)[] {
+        const { validation } = this.hub.presenters;
         return amendments.map(amendment => {
             const oldOrder = this.cancelOpenOrder(amendment);
-            const newOrder: OpenOrder = {
-                price: amendment.newPrice,
-                filled: oldOrder.filled,
-                unfilled: amendment.newUnfilled,
-                quantity: amendment.newUnfilled.plus(oldOrder.filled),
-                id: amendment.id,
-                side: amendment.side,
-                length: amendment.length,
-                operation: amendment.operation,
-            };
-            return this.makeOpenOrder(newOrder);
+            try {
+                const newOrder: OpenOrder = {
+                    price: amendment.newPrice,
+                    filled: oldOrder.filled,
+                    unfilled: amendment.newUnfilled,
+                    quantity: amendment.newUnfilled.plus(oldOrder.filled),
+                    id: amendment.id,
+                    side: amendment.side,
+                    length: amendment.length,
+                    operation: amendment.operation,
+                };
+                validation.validateOrder(newOrder);
+                return this.makeOpenOrder(newOrder);
+            } catch (err) {
+                return <Error>err;
+            }
         });
     }
 

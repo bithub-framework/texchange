@@ -35,36 +35,40 @@ class Instant extends events_1.EventEmitter {
         });
     }
     makeOrders(orders) {
-        return orders.map(order => this.makeOpenOrder({
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            id: ++this.hub.models.progress.userOrderCount,
-            filled: new big_js_1.default(0),
-            unfilled: order.quantity,
-        }));
+        const { validation } = this.hub.presenters;
+        return orders.map(order => {
+            try {
+                const openOrder = {
+                    price: order.price,
+                    quantity: order.quantity,
+                    side: order.side,
+                    length: order.length,
+                    operation: order.operation,
+                    id: ++this.hub.models.progress.userOrderCount,
+                    filled: new big_js_1.default(0),
+                    unfilled: order.quantity,
+                };
+                validation.validateOrder(openOrder);
+                return this.makeOpenOrder(openOrder);
+            }
+            catch (err) {
+                return err;
+            }
+        });
     }
     /**
      * @returns As duplicate.
      */
     makeOpenOrder(order) {
-        try {
-            this.hub.presenters.validation.validateOrder(order);
-            const trades = this.hub.presenters.taking.orderTakes(order);
-            this.hub.presenters.making.orderMakes(order);
-            if (trades.length) {
-                this.hub.views.instant.pushTrades(trades);
-                this.hub.views.instant.pushOrderbook();
-                this.hub.views.instant.pushBalances();
-                this.hub.views.instant.pushPositions();
-            }
-            return order;
+        const trades = this.hub.presenters.taking.orderTakes(order);
+        this.hub.presenters.making.orderMakes(order);
+        if (trades.length) {
+            this.hub.views.instant.pushTrades(trades);
+            this.hub.views.instant.pushOrderbook();
+            this.hub.views.instant.pushBalances();
+            this.hub.views.instant.pushPositions();
         }
-        catch (err) {
-            return err;
-        }
+        return order;
     }
     cancelOrders(orders) {
         return orders.map(order => this.cancelOpenOrder(order));
@@ -91,19 +95,26 @@ class Instant extends events_1.EventEmitter {
         };
     }
     amendOrders(amendments) {
+        const { validation } = this.hub.presenters;
         return amendments.map(amendment => {
             const oldOrder = this.cancelOpenOrder(amendment);
-            const newOrder = {
-                price: amendment.newPrice,
-                filled: oldOrder.filled,
-                unfilled: amendment.newUnfilled,
-                quantity: amendment.newUnfilled.plus(oldOrder.filled),
-                id: amendment.id,
-                side: amendment.side,
-                length: amendment.length,
-                operation: amendment.operation,
-            };
-            return this.makeOpenOrder(newOrder);
+            try {
+                const newOrder = {
+                    price: amendment.newPrice,
+                    filled: oldOrder.filled,
+                    unfilled: amendment.newUnfilled,
+                    quantity: amendment.newUnfilled.plus(oldOrder.filled),
+                    id: amendment.id,
+                    side: amendment.side,
+                    length: amendment.length,
+                    operation: amendment.operation,
+                };
+                validation.validateOrder(newOrder);
+                return this.makeOpenOrder(newOrder);
+            }
+            catch (err) {
+                return err;
+            }
         });
     }
     getOpenOrders() {

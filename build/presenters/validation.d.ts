@@ -5,9 +5,8 @@ export declare class Validation {
     constructor(hub: Hub);
     validateOrder(order: OpenOrder): void;
     /**
-     * Overridable
-     * @param order Plain object.
+     * Can be called only in consistent states
      */
-    protected assertEnough(order: OpenOrder): void;
+    private validateQuantity;
     private validateFormat;
 }
