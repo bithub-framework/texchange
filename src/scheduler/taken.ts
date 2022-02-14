@@ -7,13 +7,16 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { RoundingMode } from 'big.js';
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
+import { Models } from '../models/models';
 
 
-interface Deps extends Pick<Hub, 'context' | 'models'> { }
 
 export class Taken {
-    constructor(private hub: Deps) { }
+    constructor(
+        private context: Context,
+        private models: Models,
+    ) { }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
         const trade: Trade = {
@@ -23,7 +26,7 @@ export class Taken {
             time: roTrade.time,
             id: roTrade.id,
         };
-        for (const order of [...this.hub.models.makers.values()])
+        for (const order of [...this.models.makers.values()])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);
                 this.tradeTakesOpenMaker(trade, order);
@@ -45,7 +48,7 @@ export class Taken {
     }
 
     private tradeTakesOrderQueue(trade: Trade, maker: OpenMaker): void {
-        const { makers } = this.hub.models;
+        const { makers } = this.models;
         if (trade.price.eq(maker.price)) {
             const volume = min(trade.quantity, maker.behind);
             trade.quantity = trade.quantity.minus(volume);
@@ -54,26 +57,25 @@ export class Taken {
     }
 
     private tradeTakesOpenMaker(trade: Trade, maker: Readonly<OpenMaker>): void {
-        const { assets, margin, makers } = this.hub.models;
+        const { assets, margin, makers } = this.models;
 
         const volume = min(trade.quantity, maker.unfilled);
-        const dollarVolume = this.hub.context.calculation
+        const dollarVolume = this.context.config
             .dollarVolume(maker.price, volume)
-            .round(this.hub.context.config.CURRENCY_DP);
+            .round(this.context.config.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
         assets.payFee(
             dollarVolume
-                .times(this.hub.context.config.MAKER_FEE_RATE)
-                .round(this.hub.context.config.CURRENCY_DP, RoundingMode.RoundUp)
+                .times(this.context.config.MAKER_FEE_RATE)
+                .round(this.context.config.CURRENCY_DP, RoundingMode.RoundUp)
         );
-        // margin before position
         if (maker.operation === Operation.OPEN) {
             margin.incMargin(maker.length, volume, dollarVolume);
             assets.openPosition(maker.length, volume, dollarVolume);
         } else {
-            margin.decMargin(maker.length, volume, dollarVolume);
+            margin.decMargin(assets, maker.length, volume, dollarVolume);
             assets.closePosition(maker.length, volume, dollarVolume);
         }
     }

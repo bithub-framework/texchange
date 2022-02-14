@@ -3,15 +3,15 @@ import {
     OpenMaker,
     Frozen,
     TypeRecur,
-    Side, Length,
+    Side, Length, Operation,
+    OpenOrder,
 } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import assert = require('assert');
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
 
 
-interface Deps extends Pick<Hub, 'context'> { }
 
 type Snapshot = {
     order: OpenMaker;
@@ -30,9 +30,9 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     };
     public totalFrozen: Frozen = Frozen.ZERO;
 
-    constructor(private hub: Deps) {
-        super();
-    }
+    constructor(
+        private context: Context,
+    ) { super(); }
 
     public capture(): Snapshot {
         return [...this.keys()]
@@ -78,20 +78,34 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     private normalizeFrozen(frozen: Readonly<Frozen>): Frozen {
         return {
             balance: {
-                [Length.LONG]: frozen.balance[Length.LONG].round(this.hub.context.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
+                [Length.LONG]: frozen.balance[Length.LONG].round(this.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.config.CURRENCY_DP),
             },
             position: {
-                [Length.LONG]: frozen.position[Length.LONG].round(this.hub.context.config.CURRENCY_DP),
-                [Length.SHORT]: frozen.position[Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
+                [Length.LONG]: frozen.position[Length.LONG].round(this.context.config.CURRENCY_DP),
+                [Length.SHORT]: frozen.position[Length.SHORT].round(this.context.config.CURRENCY_DP),
             },
+        };
+    }
+
+    protected toFreeze(
+        order: OpenOrder,
+    ): Frozen {
+        // 默认单向持仓模式
+        const length: Length = order.side * Operation.OPEN;
+        return {
+            balance: {
+                [length]: this.context.config.dollarVolume(order.price, order.unfilled),
+                [-length]: new Big(0),
+            },
+            position: Frozen.ZERO.position,
         };
     }
 
     public appendOrder(order: Readonly<OpenMaker>): void {
         if (order.unfilled.eq(0)) return;
         const toFreeze = this.normalizeFrozen(
-            this.hub.context.calculation.toFreeze(order),
+            this.toFreeze(order),
         );
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);

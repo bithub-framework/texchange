@@ -1,15 +1,12 @@
 import { Startable, ReadyState, StatefulLike } from 'startable';
 import assert = require('assert');
 import Big from 'big.js';
-import { Mutex } from 'coroutine-locks';
 import {
     DatabaseTrade,
     TypeRecur,
 } from '../interfaces';
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
 
-
-interface Deps extends Pick<Hub, 'context'> { }
 
 interface Snapshot {
     latestPrice: Big | null;
@@ -26,10 +23,12 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
     public userTradeCount = 0;
     public userOrderCount = 0;
 
-    constructor(private hub: Deps) { }
+    constructor(
+        private context: Context,
+    ) { }
 
     public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
-        const now = this.hub.context.timeline.now();
+        const now = this.context.timeline.now();
 
         this.latestDatabaseTradeTime = now;
         this.latestPrice = trades[trades.length - 1].price;

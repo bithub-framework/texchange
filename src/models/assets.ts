@@ -3,11 +3,8 @@ import {
     TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
-import { type Hub } from '../hub';
 import { StatefulLike } from 'startable';
-
-
-interface Deps extends Pick<Hub, 'context'> { }
+import { Context } from '../context/context';
 
 
 interface Snapshot {
@@ -22,8 +19,10 @@ export class Assets implements StatefulLike<Snapshot, Backup> {
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(private hub: Deps) {
-        this.balance = this.hub.context.config.initialBalance;
+    constructor(
+        private context: Context,
+    ) {
+        this.balance = this.context.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
@@ -85,7 +84,7 @@ export class Assets implements StatefulLike<Snapshot, Backup> {
             const cost = this.cost[length]
                 .times(volume)
                 .div(this.position[length])
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
@@ -96,7 +95,7 @@ export class Assets implements StatefulLike<Snapshot, Backup> {
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             const profit = this.closePosition(
                 length,
                 this.position[length],

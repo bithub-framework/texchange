@@ -7,10 +7,8 @@ import {
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
 import assert = require('assert');
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
 
-
-interface Deps extends Pick<Hub, 'context'> { }
 
 interface Snapshot {
     basebook: Orderbook;
@@ -36,10 +34,12 @@ export class Book implements StatefulLike<Snapshot, Backup> {
     };
     private finalbook: Orderbook | null = null;
 
-    constructor(private hub: Deps) { }
+    constructor(
+        private context: Context,
+    ) { }
 
     public setBasebook(newBasebook: Readonly<Orderbook>) {
-        assert(newBasebook.time === this.hub.context.timeline.now());
+        assert(newBasebook.time === this.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
         this.finalbook = null;
@@ -47,10 +47,10 @@ export class Book implements StatefulLike<Snapshot, Backup> {
 
     public decQuantity(side: Side, price: Big, decrement: Big): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.hub.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.context.config.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new Big(0);
         this.decrements[side].set(priceString, old.plus(decrement));
-        this.time = this.hub.context.timeline.now();
+        this.time = this.context.timeline.now();
         this.finalbook = null;
     }
 
@@ -64,7 +64,7 @@ export class Book implements StatefulLike<Snapshot, Backup> {
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.hub.context.config.PRICE_DP),
+                    order.price.toFixed(this.context.config.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {

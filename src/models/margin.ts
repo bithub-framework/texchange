@@ -4,13 +4,11 @@ import {
 } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
+import { Context } from '../context/context';
+import { Assets } from './assets';
 // import { inspect } from 'util';
-import { type Hub } from '../hub';
 
 
-interface Deps extends Pick<Hub, 'context'> {
-    models: Pick<Hub['models'], 'assets'>;
-}
 
 
 interface Snapshot {
@@ -22,7 +20,9 @@ type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export class Margin implements StatefulLike<Snapshot, Backup> {
     [length: number]: Big;
 
-    constructor(private hub: Deps) {
+    constructor(
+        private context: Context,
+    ) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
     }
@@ -30,28 +30,30 @@ export class Margin implements StatefulLike<Snapshot, Backup> {
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {
         this[length] = this[length]
             .plus(
-                this.hub.context.calculation.marginIncrement(
+                this.marginIncrement(
                     length, volume, dollarVolume,
                 )
-            ).round(this.hub.context.config.CURRENCY_DP);
+            ).round(this.context.config.CURRENCY_DP);
     }
 
     // TODO try
-    public decMargin(length: Length, volume: Big, dollarVolume: Big): void {
-        const { assets } = this.hub.models;
-        const { calculation } = this.hub.context;
-        if (volume.lte(assets.position[length])) {
+    public decMargin(
+        oldAssets: Assets,
+        length: Length, volume: Big, dollarVolume: Big,
+    ): void {
+        if (volume.lte(oldAssets.position[length])) {
             this[length] = this[length]
-                .minus(calculation.marginDecrement(
+                .minus(this.marginDecrement(
+                    oldAssets,
                     length, volume, dollarVolume,
                 ))
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
         } else {
-            const restVolume = volume.minus(assets.position[length]);
+            const restVolume = volume.minus(oldAssets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             this[length] = new Big(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }
@@ -87,4 +89,27 @@ export class Margin implements StatefulLike<Snapshot, Backup> {
     //         closable: this.closable,
     //     });
     // }
+
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    protected marginIncrement(
+        length: Length, volume: Big, dollarVolume: Big,
+    ): Big {
+        // 默认非实时结算
+        return dollarVolume.div(this.context.config.LEVERAGE);
+    }
+
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    protected marginDecrement(
+        oldAssets: Assets,
+        length: Length, volume: Big, dollarVolume: Big,
+    ): Big {
+        return this[length]
+            .times(volume)
+            .div(oldAssets.position[length]);
+    }
+
 }

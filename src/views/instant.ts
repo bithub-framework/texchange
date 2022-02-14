@@ -60,7 +60,6 @@ export class Instant extends EventEmitter {
                     filled: new Big(0),
                     unfilled: order.quantity,
                 };
-                validation.validateOrder(openOrder);
                 return this.makeOpenOrder(openOrder);
             } catch (err) {
                 return <Error>err;
@@ -70,6 +69,7 @@ export class Instant extends EventEmitter {
 
     private makeOpenOrder(order: OpenOrder): OpenOrder {
         const trades = this.hub.presenters.taking.orderTakes(order);
+        validation.validateOrder(openOrder);
         this.hub.presenters.making.orderMakes(order);
         if (trades.length) {
             this.pushTrades(trades);

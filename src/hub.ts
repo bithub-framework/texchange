@@ -9,15 +9,16 @@ import { Assets } from './models/assets';
 import { Margin } from './models/margin';
 import { Makers } from './models/makers';
 import { Book } from './models/book';
-import { Mtm, DefaultMtm } from './models/mtm';
 import { Progress } from './models/progress';
-import { Calculation } from './presenters/calculation';
-import { Clearing } from './presenters/clearing';
-import { Taking } from './presenters/taking';
-import { Taken } from './presenters/taken';
-import { Making } from './presenters/making';
-import { Validation } from './presenters/validation';
-import { AccountView } from './presenters/account-view';
+import { Pricing, DefaultPricing } from './models/pricing';
+import { Mtm, DefaultMtm } from './scheduler/mtm';
+import { Calculation } from './scheduler/calculation';
+import { Clearing } from './scheduler/clearing';
+import { Taking } from './scheduler/taking';
+import { Taken } from './scheduler/taken';
+import { Making } from './scheduler/making';
+import { Validation } from './scheduler/validation';
+import { AccountView } from './scheduler/account-view';
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
 import { Joystick } from './views/joystick';
@@ -30,24 +31,18 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
         margin: Margin;
         makers: Makers;
         book: Book;
-        mtm: Mtm<any>;
         progress: Progress;
-    };
+        pricing: Pricing<any>;
+    };;
     public presenters: {
+        mtm: Mtm<any>;
         clearing: Clearing;
         making: Making;
         taking: Taking;
         taken: Taken;
         validation: Validation;
         accountView: AccountView;
-    } = {
-            clearing: new Clearing(this),
-            making: new Making(this),
-            taking: new Taking(this),
-            taken: new Taken(this),
-            validation: new Validation(this),
-            accountView: new AccountView(this),
-        };
+    };
     public views: {
         instant: Instant;
         latency: Latency;
@@ -78,9 +73,18 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
             margin: new Margin(this),
             makers: new Makers(this),
             book: new Book(this),
-            mtm: new DefaultMtm(this, config.initialMarkPrice),
             progress: new Progress(this),
+            pricing: new DefaultPricing(this, config.initialSettlementPrice),
         };
+        this.presenters = {
+            mtm: new DefaultMtm(this),
+            clearing: new Clearing(this),
+            making: new Making(this),
+            taking: new Taking(this),
+            taken: new Taken(this),
+            validation: new Validation(this),
+            accountView: new AccountView(this),
+        }
     }
 
     public capture(): Snapshot {
@@ -89,7 +93,8 @@ export class Hub extends EventEmitter implements StatefulLike<Snapshot, Backup> 
             margin: this.models.margin.capture(),
             makers: this.models.makers.capture(),
             book: this.models.book.capture(),
-            mtm: this.models.mtm.capture(),
+            // TODO settlement price seperated from mtm
+            // mtm: this.models.mtm.capture(),
             progress: this.models.progress.capture(),
         }
     }

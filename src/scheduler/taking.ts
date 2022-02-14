@@ -5,20 +5,23 @@ import {
 } from '../interfaces';
 import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
+import { Models } from '../models/models';
 
 
-interface Deps extends Pick<Hub, 'context' | 'models'> { }
 
 export class Taking {
-    constructor(private hub: Deps) { }
+    constructor(
+        private context: Context,
+        private models: Models,
+    ) { }
 
     /**
      * @param taker variable
      */
     public orderTakes(taker: OpenOrder): Trade[] {
-        const { margin, assets, progress, book } = this.hub.models;
-        const { config, calculation, timeline } = this.hub.context;
+        const { margin, assets, progress, book } = this.models;
+        const { config, timeline } = this.context;
         const orderbook = book.getBook();
 
         const trades: Trade[] = [];
@@ -37,7 +40,7 @@ export class Taking {
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(calculation.dollarVolume(maker.price, quantity))
+                    .plus(config.dollarVolume(maker.price, quantity))
                     .round(config.CURRENCY_DP);
                 trades.push({
                     side: taker.side,
@@ -53,12 +56,11 @@ export class Taking {
                 .times(config.TAKER_FEE_RATE)
                 .round(config.CURRENCY_DP, RoundingMode.RoundUp)
         );
-        // margin before position
         if (taker.operation === Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
             assets.openPosition(taker.length, volume, dollarVolume);
         } else {
-            margin.decMargin(taker.length, volume, dollarVolume);
+            margin.decMargin(assets, taker.length, volume, dollarVolume);
             assets.closePosition(taker.length, volume, dollarVolume);
         }
 

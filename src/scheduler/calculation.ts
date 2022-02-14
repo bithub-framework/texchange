@@ -89,7 +89,7 @@ export class Calculation implements MarketCalc {
         return final[Length.LONG].plus(final[Length.SHORT]);
     }
 
-    public ClearingMargin(
+    public clearingMargin(
         length: Length, profit: Big,
     ): Big {
         // 默认逐仓
