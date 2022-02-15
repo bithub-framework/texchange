@@ -6,7 +6,7 @@ import { Progress } from './progress';
 import { Pricing } from './pricing';
 
 
-export type Models = {
+export interface Models {
 	assets: Assets;
 	margin: Margin;
 	makers: Makers;

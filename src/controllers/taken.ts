@@ -9,13 +9,21 @@ import { min } from '../big-math';
 import { RoundingMode } from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
+import { type Stages } from '../scheduler';
 
 
+export namespace Taken {
+    export type Involved = keyof Pick<Models, 'assets' | 'margin' | 'makers'>;
+}
+import Involved = Taken.Involved;
 
 export class Taken {
+    public static involved: Involved[] = ['assets', 'margin', 'makers'];
+
     constructor(
         private context: Context,
-        private models: Models,
+        private models: Pick<Models, Involved>,
+        private stages: Pick<Stages, Involved>,
     ) { }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
@@ -31,6 +39,9 @@ export class Taken {
                 this.tradeTakesOrderQueue(trade, order);
                 this.tradeTakesOpenMaker(trade, order);
             }
+        this.stages.makers = true;
+        this.stages.assets = true;
+        this.stages.margin = true;
     }
 
     private tradeShouldTakeOpenOrder(
@@ -79,5 +90,4 @@ export class Taken {
             assets.closePosition(maker.length, volume, dollarVolume);
         }
     }
-
 }

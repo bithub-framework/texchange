@@ -8,16 +8,28 @@ import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import { max } from '../big-math';
+import { type Stages } from '../scheduler';
+import assert = require('assert');
 
 
+
+export namespace AccountView {
+	export type Involved = keyof Pick<Models, 'assets' | 'makers' | 'margin'>;
+}
+import Involved = AccountView.Involved;
 
 export class AccountView {
 	constructor(
 		protected context: Context,
-		protected models: Models,
+		protected models: Pick<Models, Involved>,
+		protected stages: Pick<Stages, Involved>,
 	) { }
 
+	public static involved: Involved[] = ['assets', 'makers', 'margin'];
+
 	public getAvailable(): Big {
+		assert(this.stages.assets === this.stages.margin);
+		assert(this.stages.assets === this.stages.makers);
 		return this.models.assets.balance
 			.minus(this.finalMargin())
 			.minus(this.finalFrozenBalance())

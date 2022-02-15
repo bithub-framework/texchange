@@ -7,13 +7,25 @@ import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import { AccountView } from './account-view';
+import { type Stages } from '../scheduler';
 
 
+
+export namespace Validation {
+    export type Involved = keyof Pick<Models, 'makers'> | AccountView.Involved;
+}
+import Involved = Validation.Involved;
 
 export class Validation {
+    public static involved: Involved[] = [
+        'makers',
+        ...AccountView.involved,
+    ];
+
     constructor(
         private context: Context,
-        private models: Models,
+        private models: Pick<Models, Involved>,
+        private stages: Pick<Stages, Involved>,
         private accountView: AccountView,
     ) { }
 
@@ -26,6 +38,8 @@ export class Validation {
      * Can be called only in consistent states
      */
     private validateQuantity(order: Readonly<OpenOrder>): void {
+        assert(!this.stages.makers);
+
         const { makers } = this.models;
         const closable = this.accountView.getClosable();
         makers.appendOrder({ ...order, behind: new Big(0) });

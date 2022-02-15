@@ -7,13 +7,22 @@ import { min } from '../big-math';
 import { Big, RoundingMode } from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
+import { type Stages } from '../scheduler';
 
 
+
+export namespace Taking {
+    export type Involved = keyof Pick<Models, 'assets' | 'margin' | 'book' | 'progress'>;
+}
+import Involved = Taking.Involved;
 
 export class Taking {
+    public static involved: Involved[] = ['assets', 'margin', 'book', 'progress'];
+
     constructor(
         private context: Context,
-        private models: Models,
+        private models: Pick<Models, Involved>,
+        private stages: Pick<Stages, Involved>,
     ) { }
 
     /**
@@ -63,6 +72,11 @@ export class Taking {
             margin.decMargin(assets, taker.length, volume, dollarVolume);
             assets.closePosition(taker.length, volume, dollarVolume);
         }
+
+        this.stages.margin = true;
+        this.stages.assets = true;
+        this.stages.progress = true;
+        this.stages.book = true;
 
         return trades;
     }

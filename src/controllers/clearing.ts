@@ -6,14 +6,22 @@ import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import assert = require('assert');
+import { type Stages } from '../scheduler';
 
 
+export namespace Clearing {
+    export type Involved = keyof Pick<Models, 'assets' | 'pricing' | 'margin'>;
+}
+import Involved = Clearing.Involved;
 
 export class Clearing {
     constructor(
         protected context: Context,
-        protected models: Models,
+        protected models: Pick<Models, Involved>,
+        protected stages: Pick<Stages, Involved>,
     ) { }
+
+    public static involved: Involved[] = ['assets', 'pricing', 'margin'];
 
     public settle(): void {
         const { config } = this.context;

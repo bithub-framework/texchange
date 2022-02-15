@@ -6,7 +6,7 @@ import {
 } from './interfaces';
 import { Context } from './context/context';
 import { Models } from './models/models';
-import { Scheduler } from './scheduler/scheduler';
+import { Scheduler } from './scheduler';
 
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
