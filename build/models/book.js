@@ -5,8 +5,8 @@ const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Book {
-    constructor(hub) {
-        this.hub = hub;
+    constructor(context) {
+        this.context = context;
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {
             [interfaces_1.Side.ASK]: [],
@@ -21,17 +21,17 @@ class Book {
         this.finalbook = null;
     }
     setBasebook(newBasebook) {
-        assert(newBasebook.time === this.hub.context.timeline.now());
+        assert(newBasebook.time === this.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
         this.finalbook = null;
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.hub.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.context.config.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new big_js_1.default(0);
         this.decrements[side].set(priceString, old.plus(decrement));
-        this.time = this.hub.context.timeline.now();
+        this.time = this.context.timeline.now();
         this.finalbook = null;
     }
     apply() {
@@ -44,7 +44,7 @@ class Book {
         this.finalbook = { time: this.time };
         for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.hub.context.config.PRICE_DP), order.quantity);
+                total[side].set(order.price.toFixed(this.context.config.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
                 if (quantity) {

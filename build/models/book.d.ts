@@ -1,9 +1,7 @@
 import { Orderbook, Side, TypeRecur } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
-import { type Hub } from '../hub';
-interface Deps extends Pick<Hub, 'context'> {
-}
+import { Context } from '../context/context';
 interface Snapshot {
     basebook: Orderbook;
     decrements: {
@@ -13,12 +11,12 @@ interface Snapshot {
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Book implements StatefulLike<Snapshot, Backup> {
-    private hub;
+    private context;
     private time;
     private basebook;
     private decrements;
     private finalbook;
-    constructor(hub: Deps);
+    constructor(context: Context);
     setBasebook(newBasebook: Readonly<Orderbook>): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
     private apply;

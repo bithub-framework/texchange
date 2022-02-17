@@ -1,12 +1,10 @@
+import { Context } from '../context/context';
+import { Scheduler } from '../scheduler';
 import { Orderbook, DatabaseTrade } from '../interfaces';
-import { type Hub } from '../hub';
-interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
-    views: Pick<Hub['views'], 'instant'>;
-}
 export declare class Joystick {
-    private hub;
-    constructor(hub: Deps);
+    private context;
+    private scheduler;
+    constructor(context: Context, scheduler: Scheduler);
     updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
     updateOrderbook(orderbook: Readonly<Orderbook>): void;
 }
-export {};

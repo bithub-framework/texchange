@@ -1,13 +1,12 @@
 /// <reference types="node" />
 import { LimitOrder, Amendment, OpenOrder, Balances, Positions, Events, ApiLike } from '../interfaces';
 import { EventEmitter } from 'events';
-import { type Hub } from '../hub';
-interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
-    views: Pick<Hub['views'], 'instant'>;
-}
+import { Context } from '../context/context';
+import { Instant } from './instant';
 export declare class Latency extends EventEmitter implements ApiLike {
-    private hub;
-    constructor(hub: Deps);
+    private context;
+    private instant;
+    constructor(context: Context, instant: Instant);
     makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]>;
     amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]>;
     cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]>;
@@ -21,4 +20,3 @@ export interface Latency {
     off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }
-export {};

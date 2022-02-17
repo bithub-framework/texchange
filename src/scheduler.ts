@@ -9,11 +9,19 @@ import { Making } from './controllers/making';
 import { Validation } from './controllers/validation';
 import { AccountView } from './controllers/account-view';
 import { Ordering } from './controllers/ordering';
+import { Updating } from './controllers/updating';
 import {
 	LimitOrder,
 	OpenOrder,
 	Amendment,
+	DatabaseTrade,
+	Orderbook,
+	Trade,
+	Positions,
+	Balances,
+	Length,
 } from './interfaces';
+import assert = require('assert');
 
 
 export type Stages = {
@@ -30,6 +38,8 @@ export class Scheduler extends EventEmitter {
 	private accountView: AccountView;
 	private validation: Validation;
 	private ordering: Ordering;
+	private updating: Updating;
+
 	private initialStages: Stages = {
 		assets: false,
 		margin: false,
@@ -41,8 +51,8 @@ export class Scheduler extends EventEmitter {
 	private readonly stages: Stages = { ...this.initialStages };
 
 	constructor(
-		context: Context,
-		models: Models,
+		private context: Context,
+		private models: Models,
 	) {
 		super();
 
@@ -54,6 +64,37 @@ export class Scheduler extends EventEmitter {
 		this.accountView = new AccountView(context, models, this.stages);
 		this.validation = new Validation(context, models, this.stages, this.accountView);
 		this.ordering = new Ordering(context, models, this.stages, this.validation, this.taking, this.making);
+		this.updating = new Updating(context, models, this.stages, this.taken);
+
+		this.updating.on('pushTrades', trades => {
+			this.emit('pushTrades', trades);
+		});
+		this.updating.on('pushOrderbook', () => {
+			this.emit('pushOrderbook', models.book.getBook());
+		});
+		this.ordering.on('pushTrades', trades => {
+			this.emit('pushTrades', trades);
+		});
+		this.ordering.on('pushOrderbook', () => {
+			this.emit('pushOrderbook', models.book.getBook());
+		});
+		this.ordering.on('pushPositions', () => {
+			this.emit('pushPositions', {
+				position: {
+					[Length.LONG]: models.assets.position[Length.LONG],
+					[Length.SHORT]: models.assets.position[Length.SHORT],
+				},
+				closable: this.accountView.getClosable(),
+				time: context.timeline.now(),
+			});
+		});
+		this.ordering.on('pushBalances', () => {
+			this.emit('pushBalances', {
+				balance: models.assets.balance,
+				available: this.accountView.getAvailable(),
+				time: context.timeline.now(),
+			});
+		});
 	}
 
 	private initializeStages<Involved extends keyof Models>(involved: Involved[]): void {
@@ -79,4 +120,63 @@ export class Scheduler extends EventEmitter {
 		this.initializeStages(involved);
 		return this.ordering.amendOrder(amendment);
 	}
+
+	public getOpenOrders(): OpenOrder[] {
+		const openOrders = [...this.models.makers.values()];
+		return openOrders.map(order => ({
+			price: order.price,
+			quantity: order.quantity,
+			side: order.side,
+			length: order.length,
+			operation: order.operation,
+			id: order.id,
+			filled: order.filled,
+			unfilled: order.unfilled,
+		}));
+	}
+
+	public getPositions(): Positions {
+		return {
+			position: {
+				[Length.LONG]: this.models.assets.position[Length.LONG],
+				[Length.SHORT]: this.models.assets.position[Length.SHORT],
+			},
+			closable: this.accountView.getClosable(),
+			time: this.context.timeline.now(),
+		};
+	}
+
+	public getBalances(): Balances {
+		return {
+			balance: this.models.assets.balance,
+			available: this.accountView.getAvailable(),
+			time: this.context.timeline.now(),
+		};
+	}
+
+	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
+		const involved = [...Updating.involved];
+		this.initializeStages(involved);
+		this.updating.updateTrades(trades);
+	}
+
+	public updateOrderbook(orderbook: Readonly<Orderbook>): void {
+		const involved = [...Updating.involved];
+		this.initializeStages(involved);
+		this.updating.updateOrderbook(orderbook);
+	}
+}
+
+type Events = {
+	pushTrades: [readonly Readonly<Trade>[]];
+	pushOrderbook: [Readonly<Orderbook>];
+	pushPositions: [Readonly<Positions>];
+	pushBalances: [Readonly<Balances>];
+}
+
+export interface Scheduler extends EventEmitter {
+	on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }

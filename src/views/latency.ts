@@ -8,47 +8,48 @@ import {
     ApiLike,
 } from '../interfaces';
 import { EventEmitter } from 'events';
-import { type Hub } from '../hub';
+import { Context } from '../context/context';
+import { Instant } from './instant';
 
 
-interface Deps extends Pick<Hub, 'context' | 'models' | 'presenters'> {
-    views: Pick<Hub['views'], 'instant'>;
-}
 
 export class Latency extends EventEmitter implements ApiLike {
-    constructor(private hub: Deps) {
+    constructor(
+        private context: Context,
+        private instant: Instant,
+    ) {
         super();
-        this.hub.views.instant.on('orderbook', async orderbook => {
+        this.instant.on('orderbook', async orderbook => {
             try {
-                await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-                await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.PING);
                 this.emit('orderbook', orderbook);
             } catch (err) {
                 this.emit('error', <Error>err);
             }
         });
-        this.hub.views.instant.on('trades', async trades => {
+        this.instant.on('trades', async trades => {
             try {
-                await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-                await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.PING);
                 this.emit('trades', trades);
             } catch (err) {
                 this.emit('error', <Error>err);
             }
         });
-        this.hub.views.instant.on('positions', async positions => {
+        this.instant.on('positions', async positions => {
             try {
-                await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-                await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.PING);
                 this.emit('positions', positions);
             } catch (err) {
                 this.emit('error', <Error>err);
             }
         });
-        this.hub.views.instant.on('balances', async balances => {
+        this.instant.on('balances', async balances => {
             try {
-                await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-                await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.PING);
                 this.emit('balances', balances);
             } catch (err) {
                 this.emit('error', <Error>err);
@@ -58,61 +59,61 @@ export class Latency extends EventEmitter implements ApiLike {
 
     public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.makeOrders(orders);
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.makeOrders(orders);
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 
     public async amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.amendOrders(amendments);
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.amendOrders(amendments);
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 
     public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.cancelOrders(orders);
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.cancelOrders(orders);
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 
     public async getBalances(): Promise<Balances> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.getBalances();
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.getBalances();
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 
     public async getPositions(): Promise<Positions> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.getPositions();
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.getPositions();
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 
     public async getOpenOrders(): Promise<OpenOrder[]> {
         try {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
-            await this.hub.context.timeline.sleep(this.hub.context.config.PROCESSING);
-            return this.hub.views.instant.getOpenOrders();
+            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            return this.instant.getOpenOrders();
         } finally {
-            await this.hub.context.timeline.sleep(this.hub.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.PING);
         }
     }
 }

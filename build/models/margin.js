@@ -4,30 +4,28 @@ exports.Margin = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 class Margin {
-    constructor(hub) {
-        this.hub = hub;
+    constructor(context) {
+        this.context = context;
         this[interfaces_1.Length.LONG] = new big_js_1.default(0);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
     }
     incMargin(length, volume, dollarVolume) {
         this[length] = this[length]
-            .plus(this.hub.context.calculation.marginIncrement(length, volume, dollarVolume)).round(this.hub.context.config.CURRENCY_DP);
+            .plus(this.marginIncrement(length, volume, dollarVolume)).round(this.context.config.CURRENCY_DP);
     }
     // TODO try
-    decMargin(length, volume, dollarVolume) {
-        const { assets } = this.hub.models;
-        const { calculation } = this.hub.context;
-        if (volume.lte(assets.position[length])) {
+    decMargin(oldAssets, length, volume, dollarVolume) {
+        if (volume.lte(oldAssets.position[length])) {
             this[length] = this[length]
-                .minus(calculation.marginDecrement(length, volume, dollarVolume))
-                .round(this.hub.context.config.CURRENCY_DP);
+                .minus(this.marginDecrement(oldAssets, length, volume, dollarVolume))
+                .round(this.context.config.CURRENCY_DP);
         }
         else {
-            const restVolume = volume.minus(assets.position[length]);
+            const restVolume = volume.minus(oldAssets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             this[length] = new big_js_1.default(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }
@@ -41,6 +39,39 @@ class Margin {
     restore(snapshot) {
         this[interfaces_1.Length.LONG] = new big_js_1.default(snapshot[interfaces_1.Length.LONG]);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(snapshot[interfaces_1.Length.SHORT]);
+    }
+    // public [inspect.custom]() {
+    //     return JSON.stringify({
+    //         [Length.LONG]: this[Length.LONG],
+    //         [Length.SHORT]: this[Length.SHORT],
+    //         frozen: {
+    //             position: {
+    //                 [Length.LONG]: this.frozen.position[Length.LONG],
+    //                 [Length.SHORT]: this.frozen.position[Length.SHORT],
+    //             },
+    //             balance: {
+    //                 [Length.LONG]: this.frozen.balance[Length.LONG],
+    //                 [Length.SHORT]: this.frozen.balance[Length.SHORT],
+    //             },
+    //         },
+    //         available: this.available,
+    //         closable: this.closable,
+    //     });
+    // }
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    marginIncrement(length, volume, dollarVolume) {
+        // 默认非实时结算
+        return dollarVolume.div(this.context.config.LEVERAGE);
+    }
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    marginDecrement(oldAssets, length, volume, dollarVolume) {
+        return this[length]
+            .times(volume)
+            .div(oldAssets.position[length]);
     }
 }
 exports.Margin = Margin;

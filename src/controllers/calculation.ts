@@ -6,15 +6,13 @@ import {
     Operation,
 } from '../interfaces';
 import Big from 'big.js';
-import { type Hub } from '../hub';
 import assert = require('assert');
 import { max } from '../big-math';
 
 
-interface Deps extends Pick<Hub, 'context' | 'models'> { }
 
 export class Calculation implements MarketCalc {
-    constructor(protected hub: Deps) { }
+    constructor(protected hub: any) { }
 
     public dollarVolume(
         price: Big, quantity: Big,

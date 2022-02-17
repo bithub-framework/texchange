@@ -1,5 +1,4 @@
 import { StatefulLike } from 'startable';
-import { Hub } from './hub';
 import {
 	Timeline,
 	TypeRecur,

@@ -5,9 +5,9 @@ const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Makers extends Map {
-    constructor(hub) {
+    constructor(context) {
         super();
-        this.hub = hub;
+        this.context = context;
         this.frozens = new Map();
         this.totalUnfilledQuantity = {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
@@ -57,19 +57,30 @@ class Makers extends Map {
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.hub.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.context.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.context.config.CURRENCY_DP),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.hub.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.hub.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.CURRENCY_DP),
             },
+        };
+    }
+    toFreeze(order) {
+        // 默认单向持仓模式
+        const length = order.side * interfaces_1.Operation.OPEN;
+        return {
+            balance: {
+                [length]: this.context.config.dollarVolume(order.price, order.unfilled),
+                [-length]: new big_js_1.default(0),
+            },
+            position: interfaces_1.Frozen.ZERO.position,
         };
     }
     appendOrder(order) {
         if (order.unfilled.eq(0))
             return;
-        const toFreeze = this.normalizeFrozen(this.hub.context.calculation.toFreeze(order));
+        const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         this.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
         this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);

@@ -1,9 +1,7 @@
 import { Length, TypeRecur } from '../interfaces';
 import Big from 'big.js';
-import { type Hub } from '../hub';
 import { StatefulLike } from 'startable';
-interface Deps extends Pick<Hub, 'context'> {
-}
+import { Context } from '../context/context';
 interface Snapshot {
     position: {
         [length: number]: Big;
@@ -15,7 +13,7 @@ interface Snapshot {
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Assets implements StatefulLike<Snapshot, Backup> {
-    private hub;
+    private context;
     position: {
         [length: number]: Big;
     };
@@ -23,7 +21,7 @@ export declare class Assets implements StatefulLike<Snapshot, Backup> {
     cost: {
         [length: number]: Big;
     };
-    constructor(hub: Deps);
+    constructor(context: Context);
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     payFee(fee: Big): void;

@@ -1,25 +1,24 @@
-import { OrderId, OpenMaker, Frozen, TypeRecur } from '../interfaces';
+import { OrderId, OpenMaker, Frozen, TypeRecur, OpenOrder } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
-import { type Hub } from '../hub';
-interface Deps extends Pick<Hub, 'context'> {
-}
+import { Context } from '../context/context';
 declare type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
 }[];
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements StatefulLike<Snapshot, Backup> {
-    private hub;
+    private context;
     private frozens;
     totalUnfilledQuantity: {
         [side: number]: Big;
     };
     totalFrozen: Frozen;
-    constructor(hub: Deps);
+    constructor(context: Context);
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;
+    protected toFreeze(order: OpenOrder): Frozen;
     appendOrder(order: Readonly<OpenMaker>): void;
     takeOrder(oid: OrderId, volume: Big): void;
     takeOrderQueue(oid: OrderId, volume?: Big): void;

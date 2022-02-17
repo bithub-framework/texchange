@@ -1,21 +1,27 @@
 import { Length, TypeRecur } from '../interfaces';
 import { StatefulLike } from 'startable';
 import Big from 'big.js';
-import { type Hub } from '../hub';
-interface Deps extends Pick<Hub, 'context'> {
-    models: Pick<Hub['models'], 'assets'>;
-}
+import { Context } from '../context/context';
+import { Assets } from './assets';
 interface Snapshot {
     [length: number]: Big;
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 export declare class Margin implements StatefulLike<Snapshot, Backup> {
-    private hub;
+    private context;
     [length: number]: Big;
-    constructor(hub: Deps);
+    constructor(context: Context);
     incMargin(length: Length, volume: Big, dollarVolume: Big): void;
-    decMargin(length: Length, volume: Big, dollarVolume: Big): void;
+    decMargin(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): void;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    protected marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
+    /**
+     * this.hub.assets.position[order.length] has not been updated.
+     */
+    protected marginDecrement(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): Big;
 }
 export {};

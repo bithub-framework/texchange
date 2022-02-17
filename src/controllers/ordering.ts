@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import { Validation } from './validation';
@@ -7,19 +8,21 @@ import {
 	LimitOrder,
 	OpenOrder,
 	Amendment,
+	Trade,
+	Orderbook,
 } from '../interfaces';
 import Big from 'big.js';
 import { type Stages } from '../scheduler';
 
 
-export type Involved = keyof Pick<Models, 'progress' | 'makers'>
+export type Involved = keyof Pick<Models, 'progress' | 'makers' | 'book'>
 	| Taking.Involved
 	| Making.Involved
 	| Validation.Involved;
 
-export class Ordering {
+export class Ordering extends EventEmitter {
 	public static involved: Involved[] = [
-		'progress', 'makers',
+		'progress', 'makers', 'book',
 		...Taking.involved,
 		...Making.involved,
 		...Validation.involved,
@@ -32,7 +35,7 @@ export class Ordering {
 		private validation: Validation,
 		private taking: Taking,
 		private making: Making,
-	) { }
+	) { super(); }
 
 	public makeOrder(order: Readonly<LimitOrder>): OpenOrder {
 		const openOrder = {
@@ -54,10 +57,10 @@ export class Ordering {
 		this.validation.validateOrder(order);
 		this.making.orderMakes(order);
 		if (trades.length) {
-			this.pushTrades(trades);
-			this.pushOrderbook();
-			this.pushBalances();
-			this.pushPositions();
+			this.emit('pushTrades', trades);
+			this.emit('pushOrderbook');
+			this.emit('pushBalances');
+			this.emit('pushPositions');
 		}
 		return order;
 	}
@@ -101,4 +104,18 @@ export class Ordering {
 		this.validation.validateOrder(newOrder);
 		return this.makeOpenOrder(newOrder);
 	}
+}
+
+type Events = {
+	pushTrades: [readonly Readonly<Trade>[]];
+	pushOrderbook: [];
+	pushPositions: [];
+	pushBalances: [];
+}
+
+export interface Ordering extends EventEmitter {
+	on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
+	emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
 }

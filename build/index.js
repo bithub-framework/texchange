@@ -10,12 +10,18 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Texchange = exports.Mtm = exports.Calculation = void 0;
+exports.Texchange = exports.Margin = exports.Makers = exports.Mtm = exports.DefaultPricing = exports.Pricing = void 0;
 __exportStar(require("./interfaces"), exports);
-var calculation_1 = require("./presenters/calculation");
-Object.defineProperty(exports, "Calculation", { enumerable: true, get: function () { return calculation_1.Calculation; } });
-var mtm_1 = require("./models/mtm");
+// export { Calculation } from './controllers/calculation';
+var pricing_1 = require("./models/pricing");
+Object.defineProperty(exports, "Pricing", { enumerable: true, get: function () { return pricing_1.Pricing; } });
+Object.defineProperty(exports, "DefaultPricing", { enumerable: true, get: function () { return pricing_1.DefaultPricing; } });
+var mtm_1 = require("./controllers/mtm");
 Object.defineProperty(exports, "Mtm", { enumerable: true, get: function () { return mtm_1.Mtm; } });
+var makers_1 = require("./models/makers");
+Object.defineProperty(exports, "Makers", { enumerable: true, get: function () { return makers_1.Makers; } });
+var margin_1 = require("./models/margin");
+Object.defineProperty(exports, "Margin", { enumerable: true, get: function () { return margin_1.Margin; } });
 var texchange_1 = require("./texchange");
 Object.defineProperty(exports, "Texchange", { enumerable: true, get: function () { return texchange_1.Texchange; } });
 //# sourceMappingURL=index.js.map

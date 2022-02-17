@@ -1,18 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
-const hub_1 = require("./hub");
 class Texchange {
-    constructor(config, timeline) {
-        this.hub = new hub_1.Hub(config, timeline);
-        this.user = this.hub.views.latency;
-        this.admin = this.hub.views.joystick;
+    constructor(timeline) {
+        // this.models = {
+        // 	assets: new Assets(this.context),
+        // 	margin: new Margin(this.context),
+        // 	makers: new Makers(this.context),
+        // 	book: new Book(this.context),
+        // 	progress: new Progress(this.context),
+        // 	pricing: new DefaultPricing(this.context),
+        // }
+        // this.scheduler = new Scheduler(this.context, this.models);
     }
     capture() {
-        return this.hub.capture();
     }
     restore(backup) {
-        this.hub.restore(backup);
     }
 }
 exports.Texchange = Texchange;

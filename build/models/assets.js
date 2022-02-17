@@ -4,9 +4,9 @@ exports.Assets = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
 class Assets {
-    constructor(hub) {
-        this.hub = hub;
-        this.balance = this.hub.context.config.initialBalance;
+    constructor(context) {
+        this.context = context;
+        this.balance = this.context.config.initialBalance;
         this.position = {
             [interfaces_1.Length.LONG]: new big_js_1.default(0),
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
@@ -55,7 +55,7 @@ class Assets {
             const cost = this.cost[length]
                 .times(volume)
                 .div(this.position[length])
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
@@ -67,7 +67,7 @@ class Assets {
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.hub.context.config.CURRENCY_DP);
+                .round(this.context.config.CURRENCY_DP);
             const profit = this.closePosition(length, this.position[length], dollarVolume.minus(restDollarVolume));
             this.openPosition(-length, restVolume, restDollarVolume);
             return profit;
