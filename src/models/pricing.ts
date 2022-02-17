@@ -3,27 +3,35 @@ import {
 	TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
-import { Startable, ReadyState, StatefulLike } from 'startable';
 import assert = require('assert');
+import { ModelLike } from './model';
 import { Context } from '../context/context';
 
 
 
-export abstract class Pricing<Snapshot>
-	implements StatefulLike<Snapshot, TypeRecur<Snapshot, Big, string>> {
+export abstract class Pricing<Snapshot, Stage>
+	implements ModelLike<Snapshot, TypeRecur<Snapshot, Big, string>, Stage> {
+	public abstract stage?: Stage;
 
 	constructor(
 		protected context: Context,
 		protected settlementPrice: Big,
 	) { }
 
+	public abstract initializeStage(): void;
 	public abstract getSettlementPrice(): Big;
 	public abstract updateTrades(trades: readonly Readonly<Trade>[]): void;
 	public abstract capture(): Snapshot;
 	public abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
 }
 
-export class DefaultPricing extends Pricing<Snapshot> {
+export class DefaultPricing extends Pricing<Snapshot, boolean> {
+	public stage?: boolean;
+
+	public initializeStage(): void {
+		this.stage = false;
+	}
+
 	public updateTrades(trades: readonly Readonly<Trade>[]): void {
 		this.settlementPrice = trades[trades.length - 1].price;
 	}

@@ -5,7 +5,7 @@ import {
 } from './interfaces';
 import { Context } from './context/context';
 import { Models } from './models/models';
-import { Scheduler } from './scheduler';
+import { Tasks } from './tasks/tasks';
 
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';
@@ -23,7 +23,7 @@ type Views = {
 export abstract class Texchange implements StatefulLike<Snapshot, Backup> {
 	protected abstract context: Context;
 	protected abstract models: Models;
-	protected abstract scheduler: Scheduler;
+	protected abstract tasks: Tasks;
 	protected abstract views: Views;
 
 	constructor(

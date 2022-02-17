@@ -7,25 +7,25 @@ import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import { AccountView } from './account-view';
-import { type Stages } from '../scheduler';
+import { ModelLike } from '../models/model';
 
 
 
 export namespace Validation {
-    export type Involved = keyof Pick<Models, 'makers'> | AccountView.Involved;
+    export type Involved = Pick<Models, 'makers'>
+        & AccountView.Involved;
 }
 import Involved = Validation.Involved;
 
 export class Validation {
-    public static involved: Involved[] = [
-        'makers',
-        ...AccountView.involved,
+    public involved: ModelLike[] = [
+        this.models.makers,
+        ...this.accountView.involved,
     ];
 
     constructor(
         private context: Context,
-        private models: Pick<Models, Involved>,
-        private stages: Pick<Stages, Involved>,
+        private models: Involved,
         private accountView: AccountView,
     ) { }
 
@@ -38,7 +38,7 @@ export class Validation {
      * Can be called only in consistent states
      */
     private validateQuantity(order: Readonly<OpenOrder>): void {
-        assert(!this.stages.makers);
+        assert(!this.models.makers.stage!);
 
         const { makers } = this.models;
         const closable = this.accountView.getClosable();

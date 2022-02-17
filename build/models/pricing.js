@@ -10,6 +10,9 @@ class Pricing {
 }
 exports.Pricing = Pricing;
 class DefaultPricing extends Pricing {
+    initializeStage() {
+        this.stage = false;
+    }
     updateTrades(trades) {
         this.settlementPrice = trades[trades.length - 1].price;
     }

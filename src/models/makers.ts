@@ -6,7 +6,7 @@ import {
     Side, Length, Operation,
     OpenOrder,
 } from '../interfaces';
-import { StatefulLike } from 'startable';
+import { ModelLike } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context/context';
@@ -21,8 +21,9 @@ type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
 export class Makers extends Map<OrderId, Readonly<OpenMaker>>
-    implements StatefulLike<Snapshot, Backup> {
+    implements ModelLike<Snapshot, Backup, boolean> {
 
+    public stage?: boolean;
     private frozens = new Map<OrderId, Readonly<Frozen>>();
     public totalUnfilledQuantity: { [side: number]: Big } = {
         [Side.ASK]: new Big(0),
@@ -30,9 +31,11 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     };
     public totalFrozen: Frozen = Frozen.ZERO;
 
-    constructor(
-        private context: Context,
-    ) { super(); }
+    constructor(private context: Context) { super(); }
+
+    public initializeStage(): void {
+        this.stage = false;
+    }
 
     public capture(): Snapshot {
         return [...this.keys()]

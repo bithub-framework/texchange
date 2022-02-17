@@ -15,6 +15,9 @@ class Makers extends Map {
         };
         this.totalFrozen = interfaces_1.Frozen.ZERO;
     }
+    initializeStage() {
+        this.stage = false;
+    }
     capture() {
         return [...this.keys()]
             .map(oid => ({

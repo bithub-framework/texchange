@@ -20,6 +20,9 @@ class Book {
         };
         this.finalbook = null;
     }
+    initializeStage() {
+        this.stage = false;
+    }
     setBasebook(newBasebook) {
         assert(newBasebook.time === this.context.timeline.now());
         this.basebook = newBasebook;

@@ -5,22 +5,25 @@ import {
 import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
-import { type Stages } from '../scheduler';
+import { ModelLike } from '../models/model';
+
 
 
 export namespace Making {
-    export type Involved = keyof Pick<Models, 'book' | 'makers'>;
+    export type Involved = Pick<Models, 'book' | 'makers'>;
 }
 import Involved = Making.Involved;
 
 export class Making {
-    public static involved: Involved[] = ['book', 'makers'];
-
     constructor(
         private context: Context,
-        protected models: Pick<Models, Involved>,
-        protected stages: Pick<Stages, Involved>,
+        protected models: Involved,
     ) { }
+
+    public involved: ModelLike[] = [
+        this.models.book,
+        this.models.makers,
+    ];
 
     public orderMakes(
         openOrder: Readonly<OpenOrder>,
@@ -43,7 +46,7 @@ export class Making {
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         this.models.makers.appendOrder(openMaker);
 
-        this.stages.makers = true;
-        this.stages.book = true;
+        this.models.makers.stage = true;
+        this.models.book.stage = true;
     }
 }

@@ -3,10 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Making = void 0;
 const big_js_1 = require("big.js");
 class Making {
-    constructor(context, models, stages) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
+        this.involved = [
+            this.models.book,
+            this.models.makers,
+        ];
     }
     orderMakes(openOrder) {
         const openMaker = {
@@ -26,10 +29,9 @@ class Making {
                 // TODO addBehind()
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         this.models.makers.appendOrder(openMaker);
-        this.stages.makers = true;
-        this.stages.book = true;
+        this.models.makers.stage = true;
+        this.models.book.stage = true;
     }
 }
 exports.Making = Making;
-Making.involved = ['book', 'makers'];
 //# sourceMappingURL=making.js.map

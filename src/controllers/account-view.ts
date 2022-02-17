@@ -7,29 +7,34 @@ import {
 import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
+import { ModelLike } from '../models/model';
 import { max } from '../big-math';
-import { type Stages } from '../scheduler';
 import assert = require('assert');
 
 
 
 export namespace AccountView {
-	export type Involved = keyof Pick<Models, 'assets' | 'makers' | 'margin'>;
+	export type Involved = Pick<Models, 'assets' | 'makers' | 'margin'>;
 }
 import Involved = AccountView.Involved;
 
 export class AccountView {
+	// TODO 看看编译后是什么
+	public involved: ModelLike[] = [
+		this.models.assets,
+		this.models.makers,
+		this.models.margin,
+	];
+
 	constructor(
 		protected context: Context,
-		protected models: Pick<Models, Involved>,
-		protected stages: Pick<Stages, Involved>,
+		protected models: Involved,
 	) { }
 
-	public static involved: Involved[] = ['assets', 'makers', 'margin'];
 
 	public getAvailable(): Big {
-		assert(this.stages.assets === this.stages.margin);
-		assert(this.stages.assets === this.stages.makers);
+		assert(this.models.assets.stage === this.models.margin.stage);
+		assert(this.models.assets.stage === this.models.makers.stage);
 		return this.models.assets.balance
 			.minus(this.finalMargin())
 			.minus(this.finalFrozenBalance())

@@ -1,5 +1,5 @@
 import { OrderId, OpenMaker, Frozen, TypeRecur, OpenOrder } from '../interfaces';
-import { StatefulLike } from 'startable';
+import { ModelLike } from './model';
 import Big from 'big.js';
 import { Context } from '../context/context';
 declare type Snapshot = {
@@ -7,14 +7,16 @@ declare type Snapshot = {
     frozen: Frozen;
 }[];
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements StatefulLike<Snapshot, Backup> {
+export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements ModelLike<Snapshot, Backup, boolean> {
     private context;
+    stage?: boolean;
     private frozens;
     totalUnfilledQuantity: {
         [side: number]: Big;
     };
     totalFrozen: Frozen;
     constructor(context: Context);
+    initializeStage(): void;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;

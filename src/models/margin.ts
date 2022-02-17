@@ -2,7 +2,7 @@ import {
     Length,
     TypeRecur,
 } from '../interfaces';
-import { StatefulLike } from 'startable';
+import { ModelLike } from './model';
 import Big from 'big.js';
 import { Context } from '../context/context';
 import { Assets } from './assets';
@@ -17,14 +17,17 @@ interface Snapshot {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Margin implements StatefulLike<Snapshot, Backup> {
+export class Margin implements ModelLike<Snapshot, Backup, boolean> {
     [length: number]: Big;
+    public stage?: boolean;
 
-    constructor(
-        private context: Context,
-    ) {
+    constructor(private context: Context) {
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
+    }
+
+    public initializeStage(): void {
+        this.stage = false;
     }
 
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {

@@ -4,10 +4,14 @@ exports.Clearing = void 0;
 const interfaces_1 = require("../interfaces");
 const assert = require("assert");
 class Clearing {
-    constructor(context, models, stages) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
+        this.involved = [
+            this.models.assets,
+            this.models.pricing,
+            this.models.margin,
+        ];
     }
     settle() {
         const { config } = this.context;
@@ -37,5 +41,4 @@ class Clearing {
     }
 }
 exports.Clearing = Clearing;
-Clearing.involved = ['assets', 'pricing', 'margin'];
 //# sourceMappingURL=clearing.js.map

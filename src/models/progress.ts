@@ -1,5 +1,5 @@
-import { Startable, ReadyState, StatefulLike } from 'startable';
 import assert = require('assert');
+import { ModelLike } from './model';
 import Big from 'big.js';
 import {
     DatabaseTrade,
@@ -17,7 +17,8 @@ interface Snapshot {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Progress implements StatefulLike<Snapshot, Backup> {
+export class Progress implements ModelLike<Snapshot, Backup, boolean> {
+    public stage?: boolean;
     public latestPrice: Big | null = null;
     public latestDatabaseTradeTime: number | null = null;
     public userTradeCount = 0;
@@ -26,6 +27,10 @@ export class Progress implements StatefulLike<Snapshot, Backup> {
     constructor(
         private context: Context,
     ) { }
+
+    public initializeStage(): void {
+        this.stage = false;
+    }
 
     public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
         const now = this.context.timeline.now();

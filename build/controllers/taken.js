@@ -4,10 +4,14 @@ exports.Taken = void 0;
 const interfaces_1 = require("../interfaces");
 const big_math_1 = require("../big-math");
 class Taken {
-    constructor(context, models, stages) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
+        this.involved = [
+            this.models.assets,
+            this.models.margin,
+            this.models.makers,
+        ];
     }
     tradeTakesOpenMakers(roTrade) {
         const trade = {
@@ -22,9 +26,9 @@ class Taken {
                 this.tradeTakesOrderQueue(trade, order);
                 this.tradeTakesOpenMaker(trade, order);
             }
-        this.stages.makers = true;
-        this.stages.assets = true;
-        this.stages.margin = true;
+        this.models.makers.stage = true;
+        this.models.assets.stage = true;
+        this.models.margin.stage = true;
     }
     tradeShouldTakeOpenOrder(trade, maker) {
         return (maker.side === interfaces_1.Side.BID &&
@@ -67,5 +71,4 @@ class Taken {
     }
 }
 exports.Taken = Taken;
-Taken.involved = ['assets', 'margin', 'makers'];
 //# sourceMappingURL=taken.js.map

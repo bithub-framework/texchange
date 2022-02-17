@@ -5,22 +5,25 @@ import Big from 'big.js';
 import { Context } from '../context/context';
 import { Models } from '../models/models';
 import assert = require('assert');
-import { type Stages } from '../scheduler';
+import { ModelLike } from '../models/model';
 
 
 export namespace Clearing {
-    export type Involved = keyof Pick<Models, 'assets' | 'pricing' | 'margin'>;
+    export type Involved = Pick<Models, 'assets' | 'pricing' | 'margin'>;
 }
 import Involved = Clearing.Involved;
 
 export class Clearing {
     constructor(
         protected context: Context,
-        protected models: Pick<Models, Involved>,
-        protected stages: Pick<Stages, Involved>,
+        protected models: Involved,
     ) { }
 
-    public static involved: Involved[] = ['assets', 'pricing', 'margin'];
+    public involved: ModelLike[] = [
+        this.models.assets,
+        this.models.pricing,
+        this.models.margin,
+    ];
 
     public settle(): void {
         const { config } = this.context;

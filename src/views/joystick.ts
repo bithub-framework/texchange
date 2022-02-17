@@ -1,5 +1,5 @@
 import { Context } from '../context/context';
-import { Scheduler } from '../scheduler';
+import { Tasks } from '../tasks/tasks';
 import {
 	Orderbook,
 	DatabaseTrade,
@@ -11,14 +11,14 @@ import assert = require('assert');
 export class Joystick {
 	constructor(
 		private context: Context,
-		private scheduler: Scheduler,
+		private tasks: Tasks,
 	) { }
 
 	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
-		this.scheduler.updateTrades(trades);
+		this.tasks.updateTrades.updateTrades(trades);
 	}
 
 	public updateOrderbook(orderbook: Readonly<Orderbook>): void {
-		this.scheduler.updateOrderbook(orderbook);
+		this.tasks.updateOrderbook.updateOrderbook(orderbook);
 	}
 }

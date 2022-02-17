@@ -3,8 +3,8 @@ import {
     TypeRecur,
 } from '../interfaces';
 import Big from 'big.js';
-import { StatefulLike } from 'startable';
 import { Context } from '../context/context';
+import { ModelLike } from './model';
 
 
 interface Snapshot {
@@ -14,14 +14,13 @@ interface Snapshot {
 }
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
-export class Assets implements StatefulLike<Snapshot, Backup> {
+export class Assets implements ModelLike<Snapshot, Backup, boolean> {
+    public stage?: boolean;
     public position: { [length: number]: Big; };
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(
-        private context: Context,
-    ) {
+    constructor(private context: Context) {
         this.balance = this.context.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),
@@ -31,6 +30,10 @@ export class Assets implements StatefulLike<Snapshot, Backup> {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
         };
+    }
+
+    public initializeStage(): void {
+        this.stage = false;
     }
 
     public capture(): Snapshot {

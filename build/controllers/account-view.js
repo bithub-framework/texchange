@@ -6,14 +6,19 @@ const big_js_1 = require("big.js");
 const big_math_1 = require("../big-math");
 const assert = require("assert");
 class AccountView {
-    constructor(context, models, stages) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
+        // TODO 看看编译后是什么
+        this.involved = [
+            this.models.assets,
+            this.models.makers,
+            this.models.margin,
+        ];
     }
     getAvailable() {
-        assert(this.stages.assets === this.stages.margin);
-        assert(this.stages.assets === this.stages.makers);
+        assert(this.models.assets.stage === this.models.margin.stage);
+        assert(this.models.assets.stage === this.models.makers.stage);
         return this.models.assets.balance
             .minus(this.finalMargin())
             .minus(this.finalFrozenBalance())
@@ -50,5 +55,4 @@ class AccountView {
     }
 }
 exports.AccountView = AccountView;
-AccountView.involved = ['assets', 'makers', 'margin'];
 //# sourceMappingURL=account-view.js.map

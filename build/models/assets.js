@@ -16,6 +16,9 @@ class Assets {
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
         };
     }
+    initializeStage() {
+        this.stage = false;
+    }
     capture() {
         return {
             position: {

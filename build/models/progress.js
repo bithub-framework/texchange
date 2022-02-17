@@ -10,6 +10,9 @@ class Progress {
         this.userTradeCount = 0;
         this.userOrderCount = 0;
     }
+    initializeStage() {
+        this.stage = false;
+    }
     updateDatabaseTrades(trades) {
         const now = this.context.timeline.now();
         this.latestDatabaseTradeTime = now;

@@ -2,15 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Joystick = void 0;
 class Joystick {
-    constructor(context, scheduler) {
+    constructor(context, tasks) {
         this.context = context;
-        this.scheduler = scheduler;
+        this.tasks = tasks;
     }
     updateTrades(trades) {
-        this.scheduler.updateTrades(trades);
+        this.tasks.updateTrades.updateTrades(trades);
     }
     updateOrderbook(orderbook) {
-        this.scheduler.updateOrderbook(orderbook);
+        this.tasks.updateOrderbook.updateOrderbook(orderbook);
     }
 }
 exports.Joystick = Joystick;

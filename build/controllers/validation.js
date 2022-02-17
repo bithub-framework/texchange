@@ -4,13 +4,15 @@ exports.Validation = void 0;
 const interfaces_1 = require("../interfaces");
 const assert = require("assert");
 const big_js_1 = require("big.js");
-const account_view_1 = require("./account-view");
 class Validation {
-    constructor(context, models, stages, accountView) {
+    constructor(context, models, accountView) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
         this.accountView = accountView;
+        this.involved = [
+            this.models.makers,
+            ...this.accountView.involved,
+        ];
     }
     validateOrder(order) {
         this.validateFormat(order);
@@ -20,7 +22,7 @@ class Validation {
      * Can be called only in consistent states
      */
     validateQuantity(order) {
-        assert(!this.stages.makers);
+        assert(!this.models.makers.stage);
         const { makers } = this.models;
         const closable = this.accountView.getClosable();
         makers.appendOrder({ ...order, behind: new big_js_1.default(0) });
@@ -47,8 +49,4 @@ class Validation {
     }
 }
 exports.Validation = Validation;
-Validation.involved = [
-    'makers',
-    ...account_view_1.AccountView.involved,
-];
 //# sourceMappingURL=validation.js.map

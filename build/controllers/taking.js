@@ -5,10 +5,15 @@ const interfaces_1 = require("../interfaces");
 const big_math_1 = require("../big-math");
 const big_js_1 = require("big.js");
 class Taking {
-    constructor(context, models, stages) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.stages = stages;
+        this.involved = [
+            this.models.assets,
+            this.models.margin,
+            this.models.book,
+            this.models.progress,
+        ];
     }
     /**
      * @param taker variable
@@ -50,13 +55,12 @@ class Taking {
             margin.decMargin(assets, taker.length, volume, dollarVolume);
             assets.closePosition(taker.length, volume, dollarVolume);
         }
-        this.stages.margin = true;
-        this.stages.assets = true;
-        this.stages.progress = true;
-        this.stages.book = true;
+        this.models.margin.stage = true;
+        this.models.assets.stage = true;
+        this.models.progress.stage = true;
+        this.models.book.stage = true;
         return trades;
     }
 }
 exports.Taking = Taking;
-Taking.involved = ['assets', 'margin', 'book', 'progress'];
 //# sourceMappingURL=taking.js.map

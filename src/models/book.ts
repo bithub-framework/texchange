@@ -4,7 +4,7 @@ import {
     BookOrder,
     TypeRecur,
 } from '../interfaces';
-import { StatefulLike } from 'startable';
+import { ModelLike } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context/context';
@@ -20,7 +20,8 @@ interface Snapshot {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Book implements StatefulLike<Snapshot, Backup> {
+export class Book implements ModelLike<Snapshot, Backup, boolean> {
+    public stage?: boolean;
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Readonly<Orderbook> = {
         [Side.ASK]: [],
@@ -34,9 +35,11 @@ export class Book implements StatefulLike<Snapshot, Backup> {
     };
     private finalbook: Orderbook | null = null;
 
-    constructor(
-        private context: Context,
-    ) { }
+    constructor(private context: Context) { }
+
+    public initializeStage(): void {
+        this.stage = false;
+    }
 
     public setBasebook(newBasebook: Readonly<Orderbook>) {
         assert(newBasebook.time === this.context.timeline.now());

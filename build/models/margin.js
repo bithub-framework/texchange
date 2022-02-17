@@ -9,6 +9,9 @@ class Margin {
         this[interfaces_1.Length.LONG] = new big_js_1.default(0);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
     }
+    initializeStage() {
+        this.stage = false;
+    }
     incMargin(length, volume, dollarVolume) {
         this[length] = this[length]
             .plus(this.marginIncrement(length, volume, dollarVolume)).round(this.context.config.CURRENCY_DP);

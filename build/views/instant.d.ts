@@ -1,14 +1,12 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { Context } from '../context/context';
-import { Scheduler } from '../scheduler';
 import { Events, OpenOrder, LimitOrder, Amendment, Positions, Balances } from '../interfaces';
+import { Tasks } from '../tasks/tasks';
 export declare class Instant extends EventEmitter {
     private context;
-    private scheduler;
-    constructor(context: Context, scheduler: Scheduler);
-    private initializePushingTrades;
-    private initializePushingOrderbook;
+    private tasks;
+    constructor(context: Context, tasks: Tasks);
     makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[];
     cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[];
     amendOrders(amendments: readonly Readonly<Amendment>[]): (OpenOrder | Error)[];
