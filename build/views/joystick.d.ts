@@ -1,5 +1,5 @@
-import { Context } from '../context/context';
-import { Tasks } from '../tasks/tasks';
+import { Context } from '../context';
+import { Tasks } from '../tasks';
 import { Orderbook, DatabaseTrade } from '../interfaces';
 export declare class Joystick {
     private context;

@@ -3,9 +3,9 @@ import {
 	Timeline,
 	TypeRecur,
 } from './interfaces';
-import { Context } from './context/context';
-import { Models } from './models/models';
-import { Tasks } from './tasks/tasks';
+import { Context } from './context';
+import { Models } from './models';
+import { Tasks } from './tasks';
 
 import { Instant } from './views/instant';
 import { Latency } from './views/latency';

@@ -8,7 +8,7 @@ import {
     ApiLike,
 } from '../interfaces';
 import { EventEmitter } from 'events';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Instant } from './instant';
 
 

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { LimitOrder, Amendment, OpenOrder, Balances, Positions, Events, ApiLike } from '../interfaces';
 import { EventEmitter } from 'events';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Instant } from './instant';
 export declare class Latency extends EventEmitter implements ApiLike {
     private context;

@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Events, OpenOrder, LimitOrder, Amendment, Positions, Balances } from '../interfaces';
-import { Tasks } from '../tasks/tasks';
+import { Tasks } from '../tasks';
 export declare class Instant extends EventEmitter {
     private context;
     private tasks;

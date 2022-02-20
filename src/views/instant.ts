@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import {
     Events,
     Trade,
@@ -11,7 +11,7 @@ import {
     Side, Length,
     Closable,
 } from '../interfaces';
-import { Tasks } from '../tasks/tasks';
+import { Tasks } from '../tasks';
 
 
 
