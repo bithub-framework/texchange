@@ -4,17 +4,26 @@ import { Context } from '../context';
 import { ValidateOrder } from './validate-order';
 import { OrderTakes } from './order-takes';
 import { OrderMakes } from './order-makes';
+import { GetBalances } from './get-balances';
+import { GetPositions } from './get-positions';
 import { OpenOrder, Trade } from '../interfaces';
+import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
-declare type Involved = OrderTakes.Involved & OrderMakes.Involved & ValidateOrder.Involved;
-export declare class MakeOpenOrder extends EventEmitter {
+import { ControllerLike } from './controller';
+declare type OwnInvolved = Pick<Models, 'book'>;
+export declare namespace MakeOpenOrder {
+    type Involved = OwnInvolved & OrderTakes.Involved & OrderMakes.Involved & ValidateOrder.Involved & GetBalances.Involved & GetPositions.Involved;
+}
+export declare class MakeOpenOrder extends EventEmitter implements ControllerLike {
     private context;
     private models;
-    private validation;
-    private taking;
-    private making;
+    private validateOrder;
+    private orderTakes;
+    private orderMakes;
+    private getBalances;
+    private getPositions;
     involved: ModelLike[];
-    constructor(context: Context, models: Involved, validation: ValidateOrder, taking: OrderTakes, making: OrderMakes);
+    constructor(context: Context, models: OwnInvolved, validateOrder: ValidateOrder, orderTakes: OrderTakes, orderMakes: OrderMakes, getBalances: GetBalances, getPositions: GetPositions);
     makeOpenOrder(order: OpenOrder): OpenOrder;
 }
 declare type Events = {

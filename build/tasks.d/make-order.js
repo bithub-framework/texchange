@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakeOrder = void 0;
-const initialize_stages_1 = require("./initialize-stages");
+const initialize_stages_1 = require("../initialize-stages");
 const big_js_1 = require("big.js");
 class MakeOrder {
     constructor(context, models, controllers) {

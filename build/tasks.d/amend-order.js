@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AmendOrder = void 0;
-const initialize_stages_1 = require("./initialize-stages");
+const initialize_stages_1 = require("../initialize-stages");
 class AmendOrder {
     constructor(context, models, controllers) {
         this.context = context;
@@ -25,7 +25,7 @@ class AmendOrder {
             length: amendment.length,
             operation: amendment.operation,
         };
-        this.controllers.validation.validateOrder(newOrder);
+        this.controllers.validateOrder.validateOrder(newOrder);
         return this.controllers.makeOpenOrder.makeOpenOrder(newOrder);
     }
 }

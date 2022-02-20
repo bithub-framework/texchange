@@ -6,36 +6,39 @@ import {
 } from '../interfaces';
 import assert = require('assert');
 import { ModelLike } from '../models.d/model';
-import { initializeStages } from './initialize-stages';
-import { EventEmitter } from 'events';
+import { initializeStages } from '../initialize-stages';
+import { Broadcast } from '../context.d/broadcast';
 
 
+type OwnInvolved = Pick<Models, 'progress' | 'pricing'>;
 
-export class UpdateTrades extends EventEmitter {
+export class UpdateTrades {
 	private involved: ModelLike[] = [
 		this.models.progress,
 		this.models.pricing,
-		...this.controllers.taken.involved,
+		...this.controllers.tradeTakesOpenMakers.involved,
 	];
 
 	constructor(
 		private context: Context,
-		private models: Models,
+		private models: OwnInvolved,
 		private controllers: Controllers,
-	) { super(); }
+	) { }
 
 	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
 		initializeStages(this.involved);
 
-		const { taken } = this.controllers;
+		const { tradeTakesOpenMakers: taken } = this.controllers;
 		assert(trades.length);
 		const now = this.context.timeline.now();
 		assert(now !== this.models.progress.latestDatabaseTradeTime);
 		for (const trade of trades) assert(trade.time === now);
 		this.models.progress.updateDatabaseTrades(trades);
+
+		this.context.broadcast.emit('trades', trades);
+
 		for (const trade of trades)
 			taken.tradeTakesOpenMakers(trade);
-		this.emit('pushTrades', trades);
 		this.models.pricing.updateTrades(trades);
 
 		this.models.progress.stage = true;

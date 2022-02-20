@@ -1,4 +1,5 @@
 import { StatefulLike } from 'startable';
+import { EventEmitter } from 'events';
 import {
 	Timeline,
 	TypeRecur,
@@ -6,10 +7,11 @@ import {
 import { Context } from './context';
 import { Models } from './models';
 import { Tasks } from './tasks';
+import { Broadcast } from './context.d/broadcast';
 
-import { Instant } from './views/instant';
-import { Latency } from './views/latency';
-import { Joystick } from './views/joystick';
+import { Instant } from './views.d/instant';
+import { Latency } from './views.d/latency';
+import { Joystick } from './views.d/joystick';
 import Big from 'big.js';
 
 

@@ -6,9 +6,11 @@ import {
 	OpenOrder,
 } from '../interfaces';
 import { ModelLike } from '../models.d/model';
-import { initializeStages } from './initialize-stages';
+import { initializeStages } from '../initialize-stages';
 
 
+
+type OwnInvolved = Pick<Models, never>;
 
 export class AmendOrder {
 	private involved: ModelLike[] = [
@@ -18,7 +20,7 @@ export class AmendOrder {
 
 	constructor(
 		private context: Context,
-		private models: Models,
+		private models: OwnInvolved,
 		private controllers: Controllers,
 	) { }
 
@@ -35,7 +37,7 @@ export class AmendOrder {
 			length: amendment.length,
 			operation: amendment.operation,
 		};
-		this.controllers.validation.validateOrder(newOrder);
+		this.controllers.validateOrder.validateOrder(newOrder);
 		return this.controllers.makeOpenOrder.makeOpenOrder(newOrder);
 	}
 }

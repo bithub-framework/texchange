@@ -4,17 +4,18 @@ import { Models } from '../models';
 import { GetAvailable } from './get-available';
 import { GetClosable } from './get-closable';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
+declare type OwnInvolved = Pick<Models, 'makers'>;
 export declare namespace ValidateOrder {
-    type Involved = Pick<Models, 'makers'> & GetAvailable.Involved & GetClosable.Involved;
+    type Involved = OwnInvolved & GetAvailable.Involved & GetClosable.Involved;
 }
-import Involved = ValidateOrder.Involved;
-export declare class ValidateOrder {
+export declare class ValidateOrder implements ControllerLike {
     private context;
     private models;
     private getAvailable;
     private getClosable;
     involved: ModelLike[];
-    constructor(context: Context, models: Involved, getAvailable: GetAvailable, getClosable: GetClosable);
+    constructor(context: Context, models: OwnInvolved, getAvailable: GetAvailable, getClosable: GetClosable);
     validateOrder(order: Readonly<OpenOrder>): void;
     /**
      * Can be called only in consistent states
@@ -22,3 +23,4 @@ export declare class ValidateOrder {
     private validateQuantity;
     private validateFormat;
 }
+export {};

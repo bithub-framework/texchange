@@ -8,15 +8,15 @@ import { Big, RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
-
+type OwnInvolved = Pick<Models, 'assets' | 'margin' | 'book' | 'progress'>;
 export namespace OrderTakes {
-    export type Involved = Pick<Models, 'assets' | 'margin' | 'book' | 'progress'>;
+    export type Involved = OwnInvolved;
 }
-import Involved = OrderTakes.Involved;
 
-export class OrderTakes {
+export class OrderTakes implements ControllerLike {
     public involved: ModelLike[] = [
         this.models.assets,
         this.models.margin,
@@ -26,7 +26,7 @@ export class OrderTakes {
 
     constructor(
         private context: Context,
-        private models: Involved,
+        private models: OwnInvolved,
     ) { }
 
     /**

@@ -6,18 +6,19 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
 
+type OwnInvolved = Pick<Models, 'book' | 'makers'>;
 export namespace OrderMakes {
-    export type Involved = Pick<Models, 'book' | 'makers'>;
+    export type Involved = OwnInvolved;
 }
-import Involved = OrderMakes.Involved;
 
-export class OrderMakes {
+export class OrderMakes implements ControllerLike {
     constructor(
         private context: Context,
-        protected models: Involved,
+        protected models: OwnInvolved,
     ) { }
 
     public involved: ModelLike[] = [

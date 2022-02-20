@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetBalances = void 0;
-const initialize_stages_1 = require("./initialize-stages");
+const initialize_stages_1 = require("../initialize-stages");
 class GetBalances {
     constructor(context, models, controllers) {
         this.context = context;
@@ -11,11 +11,7 @@ class GetBalances {
     }
     getBalances() {
         (0, initialize_stages_1.initializeStages)(this.involved);
-        return {
-            balance: this.models.assets.balance,
-            available: this.controllers.getAvailable.getAvailable(),
-            time: this.context.timeline.now(),
-        };
+        return this.controllers.getBalances.getBalances();
     }
 }
 exports.GetBalances = GetBalances;

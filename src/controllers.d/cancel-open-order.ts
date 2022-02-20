@@ -4,18 +4,23 @@ import {
 	OpenOrder,
 } from '../interfaces';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
-type Involved = Pick<Models, 'makers'>;
 
-export class CancelOpenOrder {
+type OwnInvolved = Pick<Models, 'makers'>;
+export namespace CancelOpenOrder {
+	export type Involved = OwnInvolved;
+}
+
+export class CancelOpenOrder implements ControllerLike {
 	public involved: ModelLike[] = [
 		this.models.makers,
 	];
 
 	constructor(
 		private context: Context,
-		private models: Involved,
+		private models: OwnInvolved,
 	) { }
 
 	public cancelOpenOrder(order: Readonly<OpenOrder>): OpenOrder {

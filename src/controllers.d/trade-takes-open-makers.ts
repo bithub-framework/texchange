@@ -10,14 +10,16 @@ import { RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
+
+type OwnInvolved = Pick<Models, 'assets' | 'margin' | 'makers'>;
 export namespace TradeTakesOpenMakers {
-    export type Involved = Pick<Models, 'assets' | 'margin' | 'makers'>;
+    export type Involved = OwnInvolved;
 }
-import Involved = TradeTakesOpenMakers.Involved;
 
-export class TradeTakesOpenMakers {
+export class TradeTakesOpenMakers implements ControllerLike {
     public involved: ModelLike[] = [
         this.models.assets,
         this.models.margin,
@@ -26,7 +28,7 @@ export class TradeTakesOpenMakers {
 
     constructor(
         private context: Context,
-        private models: Involved,
+        private models: OwnInvolved,
     ) { }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {

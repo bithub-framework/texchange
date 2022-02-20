@@ -6,16 +6,17 @@ import {
 	Length,
 } from '../interfaces';
 import { ModelLike } from '../models.d/model';
-import { initializeStages } from './initialize-stages';
+import { initializeStages } from '../initialize-stages';
 
 
+type OwnInvolved = Pick<Models, 'assets'>;
 
 export class GetPositions {
 	private involved: ModelLike[] = [];
 
 	constructor(
 		private context: Context,
-		private models: Models,
+		private models: OwnInvolved,
 		private controllers: Controllers,
 	) { }
 

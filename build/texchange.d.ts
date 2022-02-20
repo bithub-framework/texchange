@@ -3,9 +3,9 @@ import { Timeline, TypeRecur } from './interfaces';
 import { Context } from './context';
 import { Models } from './models';
 import { Tasks } from './tasks';
-import { Instant } from './views/instant';
-import { Latency } from './views/latency';
-import { Joystick } from './views/joystick';
+import { Instant } from './views.d/instant';
+import { Latency } from './views.d/latency';
+import { Joystick } from './views.d/joystick';
 import Big from 'big.js';
 declare type Views = {
     instant: Instant;

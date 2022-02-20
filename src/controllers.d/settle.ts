@@ -6,17 +6,19 @@ import { Context } from '../context';
 import { Models } from '../models';
 import assert = require('assert');
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
+
+type OwnInvolved = Pick<Models, 'assets' | 'pricing' | 'margin'>;
 export namespace Settle {
-    export type Involved = Pick<Models, 'assets' | 'pricing' | 'margin'>;
+    export type Involved = OwnInvolved;
 }
-import Involved = Settle.Involved;
 
-export class Settle {
+export class Settle implements ControllerLike {
     constructor(
         protected context: Context,
-        protected models: Involved,
+        protected models: OwnInvolved,
     ) { }
 
     public involved: ModelLike[] = [

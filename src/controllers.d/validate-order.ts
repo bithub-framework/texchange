@@ -9,17 +9,17 @@ import { Models } from '../models';
 import { GetAvailable } from './get-available';
 import { GetClosable } from './get-closable';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 
 
-
+type OwnInvolved = Pick<Models, 'makers'>;
 export namespace ValidateOrder {
-    export type Involved = Pick<Models, 'makers'>
+    export type Involved = OwnInvolved
         & GetAvailable.Involved
         & GetClosable.Involved;
 }
-import Involved = ValidateOrder.Involved;
 
-export class ValidateOrder {
+export class ValidateOrder implements ControllerLike {
     public involved: ModelLike[] = [
         this.models.makers,
         ...this.getAvailable.involved,
@@ -28,7 +28,7 @@ export class ValidateOrder {
 
     constructor(
         private context: Context,
-        private models: Involved,
+        private models: OwnInvolved,
         private getAvailable: GetAvailable,
         private getClosable: GetClosable,
     ) { }

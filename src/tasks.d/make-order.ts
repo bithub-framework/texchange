@@ -6,10 +6,11 @@ import {
 	OpenOrder,
 } from '../interfaces';
 import { ModelLike } from '../models.d/model';
-import { initializeStages } from './initialize-stages';
+import { initializeStages } from '../initialize-stages';
 import Big from 'big.js';
 
 
+type OwnInvolved = Pick<Models, 'progress'>;
 
 export class MakeOrder {
 	private involved: ModelLike[] = [
@@ -19,7 +20,7 @@ export class MakeOrder {
 
 	constructor(
 		private context: Context,
-		private models: Models,
+		private models: OwnInvolved,
 		private controllers: Controllers,
 	) { }
 

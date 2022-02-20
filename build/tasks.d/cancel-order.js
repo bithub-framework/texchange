@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CancelOrder = void 0;
-const initialize_stages_1 = require("./initialize-stages");
+const initialize_stages_1 = require("../initialize-stages");
 class CancelOrder {
     constructor(context, models, controllers) {
         this.context = context;

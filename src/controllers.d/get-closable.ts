@@ -5,16 +5,16 @@ import {
 import { Context } from '../context';
 import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
-import assert = require('assert');
+import { ControllerLike } from './controller';
 
 
 
+type OwnInvolved = Pick<Models, 'assets' | 'makers'>;
 export namespace GetClosable {
-	export type Involved = Pick<Models, 'assets' | 'makers'>;
+	export type Involved = OwnInvolved;
 }
-import Involved = GetClosable.Involved;
 
-export class GetClosable {
+export class GetClosable implements ControllerLike {
 	public involved: ModelLike[] = [
 		this.models.assets,
 		this.models.makers,
@@ -22,7 +22,7 @@ export class GetClosable {
 
 	constructor(
 		protected context: Context,
-		protected models: Involved,
+		protected models: OwnInvolved,
 	) { }
 
 	public getClosable(): Closable {

@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOrderbook = void 0;
-const initialize_stages_1 = require("./initialize-stages");
-const events_1 = require("events");
+const initialize_stages_1 = require("../initialize-stages");
 const assert = require("assert");
-class UpdateOrderbook extends events_1.EventEmitter {
+class UpdateOrderbook {
     constructor(context, models, controllers) {
-        super();
         this.context = context;
         this.models = models;
         this.controllers = controllers;
@@ -16,7 +14,7 @@ class UpdateOrderbook extends events_1.EventEmitter {
         (0, initialize_stages_1.initializeStages)(this.involved);
         assert(orderbook.time === this.context.timeline.now());
         this.models.book.setBasebook(orderbook);
-        this.emit('pushOrderbook');
+        this.context.broadcast.emit('orderbook', this.models.book.getBook());
         this.models.book.stage = true;
     }
 }

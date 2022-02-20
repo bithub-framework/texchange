@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPositions = void 0;
 const interfaces_1 = require("../interfaces");
-const initialize_stages_1 = require("./initialize-stages");
+const initialize_stages_1 = require("../initialize-stages");
 class GetPositions {
     constructor(context, models, controllers) {
         this.context = context;

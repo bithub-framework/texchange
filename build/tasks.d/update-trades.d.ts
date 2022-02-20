@@ -1,14 +1,14 @@
-/// <reference types="node" />
 import { Models } from '../models';
 import { Context } from '../context';
 import { Controllers } from '../controllers';
 import { DatabaseTrade } from '../interfaces';
-import { EventEmitter } from 'events';
-export declare class UpdateTrades extends EventEmitter {
+declare type OwnInvolved = Pick<Models, 'progress' | 'pricing'>;
+export declare class UpdateTrades {
     private context;
     private models;
     private controllers;
     private involved;
-    constructor(context: Context, models: Models, controllers: Controllers);
+    constructor(context: Context, models: OwnInvolved, controllers: Controllers);
     updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
 }
+export {};

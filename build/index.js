@@ -16,7 +16,7 @@ __exportStar(require("./interfaces"), exports);
 var pricing_1 = require("./models.d/pricing");
 Object.defineProperty(exports, "Pricing", { enumerable: true, get: function () { return pricing_1.Pricing; } });
 Object.defineProperty(exports, "DefaultPricing", { enumerable: true, get: function () { return pricing_1.DefaultPricing; } });
-var mtm_1 = require("./controllers.d/mtm");
+var mtm_1 = require("./mtm");
 Object.defineProperty(exports, "Mtm", { enumerable: true, get: function () { return mtm_1.Mtm; } });
 var makers_1 = require("./models.d/makers");
 Object.defineProperty(exports, "Makers", { enumerable: true, get: function () { return makers_1.Makers; } });

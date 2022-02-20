@@ -5,17 +5,18 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { ModelLike } from '../models.d/model';
+import { ControllerLike } from './controller';
 import { max } from '../big-math';
 import assert = require('assert');
 
 
 
+type OwnInvolved = Pick<Models, 'assets' | 'makers' | 'margin'>;
 export namespace GetAvailable {
-	export type Involved = Pick<Models, 'assets' | 'makers' | 'margin'>;
+	export type Involved = OwnInvolved;
 }
-import Involved = GetAvailable.Involved;
 
-export class GetAvailable {
+export class GetAvailable implements ControllerLike {
 	public involved: ModelLike[] = [
 		this.models.assets,
 		this.models.makers,
@@ -24,7 +25,7 @@ export class GetAvailable {
 
 	constructor(
 		protected context: Context,
-		protected models: Involved,
+		protected models: OwnInvolved,
 	) { }
 
 
