@@ -4,13 +4,14 @@ import {
     Trade,
     OpenMaker,
     Operation,
-} from '../interfaces';
-import { min } from '../big-math';
+} from 'interfaces';
+import { min } from '../utilities';
 import { RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
 import { Tasks, TradeTakesOpenMakersLike } from '../tasks';
+import { Broadcast } from '../broadcast';
 
 
 
@@ -19,9 +20,10 @@ export class TradeTakesOpenMakers extends Task
     constructor(
         protected context: Context,
         protected models: Models,
+        protected broadcast: Broadcast,
         protected tasks: Tasks,
     ) {
-        super(context, models, tasks);
+        super();
     }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {

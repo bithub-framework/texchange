@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { EventEmitter } from 'events';
 import { Context } from '../context';
-import { Events, OpenOrder, LimitOrder, Amendment, Positions, Balances } from '../interfaces';
+import { OpenOrder, LimitOrder, Amendment, Positions, Balances, MarketEvents, AccountEvents } from 'interfaces';
 import { UseCases } from '../use-cases';
 export declare class Instant extends EventEmitter {
     private context;
@@ -14,6 +14,7 @@ export declare class Instant extends EventEmitter {
     getPositions(): Positions;
     getBalances(): Balances;
 }
+export declare type Events = MarketEvents & AccountEvents;
 export interface Instant extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

@@ -4,10 +4,11 @@ exports.UpdateTrades = void 0;
 const use_case_1 = require("./use-case");
 const assert = require("assert");
 class UpdateTrades extends use_case_1.UseCase {
-    constructor(context, models, tasks, realTimeSettlement) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks, realTimeSettlement) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
         this.realTimeSettlement = realTimeSettlement;
     }
@@ -19,7 +20,7 @@ class UpdateTrades extends use_case_1.UseCase {
         for (const trade of trades)
             assert(trade.time === now);
         this.models.progress.updateDatabaseTrades(trades);
-        this.context.broadcast.emit('trades', trades);
+        this.broadcast.emit('trades', trades);
         for (const trade of trades)
             tradeTakesOpenMakers.tradeTakesOpenMakers(trade);
         this.models.pricing.updateTrades(trades);

@@ -1,22 +1,21 @@
-import { Trade, TypeRecur } from '../interfaces';
+import { Trade } from 'interfaces';
 import Big from 'big.js';
-import { Model } from './model';
+import { Model, Stringified } from './model';
 import { Context } from '../context';
-export declare abstract class Pricing<Snapshot, Backup> extends Model<Snapshot, Backup> {
+export declare abstract class Pricing<Snapshot> extends Model<Snapshot> {
     protected context: Context;
     protected settlementPrice: Big;
     constructor(context: Context, settlementPrice: Big);
     abstract getSettlementPrice(): Big;
     abstract updateTrades(trades: readonly Readonly<Trade>[]): void;
     abstract capture(): Snapshot;
-    abstract restore(backup: Backup): void;
+    abstract restore(backup: Stringified<Snapshot>): void;
 }
-export declare class DefaultPricing extends Pricing<Snapshot, Backup> {
+export declare class DefaultPricing extends Pricing<Snapshot> {
     updateTrades(trades: readonly Readonly<Trade>[]): void;
     getSettlementPrice(): Big;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
-declare type Snapshot = Big;
-declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export {};
+export declare type Snapshot = Big;
+export declare type Backup = Stringified<Snapshot>;

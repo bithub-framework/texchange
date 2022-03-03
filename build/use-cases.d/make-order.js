@@ -4,10 +4,11 @@ exports.MakeOrder = void 0;
 const use_case_1 = require("./use-case");
 const big_js_1 = require("big.js");
 class MakeOrder extends use_case_1.UseCase {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     makeOrder(order) {

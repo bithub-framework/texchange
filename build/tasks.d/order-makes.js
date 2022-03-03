@@ -4,10 +4,11 @@ exports.OrderMakes = void 0;
 const big_js_1 = require("big.js");
 const task_1 = require("./task");
 class OrderMakes extends task_1.Task {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     orderMakes(openOrder) {

@@ -3,9 +3,7 @@ import { Tasks } from '../tasks';
 import { Context } from '../context';
 
 export abstract class UseCase {
-	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected tasks: Tasks,
-	) { }
+	protected abstract context: Context;
+	protected abstract models: Models;
+	protected abstract tasks: Tasks;
 }

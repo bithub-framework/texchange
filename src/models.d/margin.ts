@@ -1,8 +1,7 @@
 import {
     Length,
-    TypeRecur,
-} from '../interfaces';
-import { Model } from './model';
+} from 'interfaces';
+import { Model, Stringified } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Assets } from './assets';
@@ -11,17 +10,19 @@ import { Assets } from './assets';
 
 
 
-interface Snapshot {
+export interface Snapshot {
     [length: number]: Big;
 }
-type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
+export type Backup = Stringified<Snapshot>;
 
 
-export class Margin extends Model<Snapshot, Backup> {
+export class Margin extends Model<Snapshot> {
     [length: number]: Big;
 
-    constructor(protected context: Context) {
-        super(context);
+    constructor(
+        protected context: Context,
+    ) {
+        super();
 
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);

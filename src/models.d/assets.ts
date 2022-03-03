@@ -1,26 +1,26 @@
-import {
-    Length,
-    TypeRecur,
-} from '../interfaces';
+import { Length } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Model } from './model';
+import { Model, Stringified } from './model';
 
 
-interface Snapshot {
+export interface Snapshot {
     position: { [length: number]: Big; };
     balance: Big;
     cost: { [length: number]: Big; };
 }
-type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
-export class Assets extends Model<Snapshot, Backup> {
+export type Backup = Stringified<Snapshot>;
+
+export class Assets extends Model<Snapshot> {
     public position: { [length: number]: Big; };
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(protected context: Context) {
-        super(context);
+    constructor(
+        protected context: Context,
+    ) {
+        super();
 
         this.balance = this.context.config.initialBalance;
         this.position = {

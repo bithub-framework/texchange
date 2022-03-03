@@ -2,25 +2,24 @@ import {
     Orderbook,
     Side,
     BookOrder,
-    TypeRecur,
-} from '../interfaces';
-import { Model } from './model';
+} from 'interfaces';
+import { Model, Stringified } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context';
 
 
-interface Snapshot {
+export interface Snapshot {
     basebook: Orderbook;
     decrements: {
         [side: number]: [string, Big][],
     };
     time: number;
 }
-type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
+export type Backup = Stringified<Snapshot>;
 
 
-export class Book extends Model<Snapshot, Backup> {
+export class Book extends Model<Snapshot> {
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Readonly<Orderbook> = {
         [Side.ASK]: [],
@@ -34,8 +33,10 @@ export class Book extends Model<Snapshot, Backup> {
     };
     private finalbook: Orderbook | null = null;
 
-    constructor(protected context: Context) {
-        super(context);
+    constructor(
+        protected context: Context,
+    ) {
+        super();
     }
 
     public setBasebook(newBasebook: Readonly<Orderbook>) {

@@ -1,13 +1,14 @@
-import { OrderId, OpenMaker, Frozen, TypeRecur, OpenOrder } from '../interfaces';
-import { Model } from './model';
+import { OrderId, OpenMaker, OpenOrder } from 'interfaces';
+import { Frozen } from './makers.d/frozon';
+import { Model, Stringified } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
-declare type Snapshot = {
+export declare type Snapshot = {
     order: OpenMaker;
     frozen: Frozen;
 }[];
-declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Makers extends Model<Snapshot, Backup> implements Iterable<Readonly<OpenMaker>> {
+export declare type Backup = Stringified<Snapshot>;
+export declare class Makers extends Model<Snapshot> implements Iterable<Readonly<OpenMaker>> {
     protected context: Context;
     private orders;
     private frozens;
@@ -28,4 +29,3 @@ export declare class Makers extends Model<Snapshot, Backup> implements Iterable<
     removeOrder(oid: OrderId): void;
     tryRemoveOrder(oid: OrderId): void;
 }
-export {};

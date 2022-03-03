@@ -2,19 +2,21 @@ import { Models } from '../models';
 import { Context } from '../context';
 import { Tasks } from '../tasks';
 import { UseCase } from './use-case';
+import { Broadcast } from '../broadcast';
 import {
 	Amendment,
 	OpenOrder,
-} from '../interfaces';
+} from 'interfaces';
 
 
 export class AmendOrder extends UseCase {
 	constructor(
 		protected context: Context,
 		protected models: Models,
+		protected broadcast: Broadcast,
 		protected tasks: Tasks,
 	) {
-		super(context, models, tasks);
+		super();
 	}
 
 	public amendOrder(amendment: Readonly<Amendment>): OpenOrder {

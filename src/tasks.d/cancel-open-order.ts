@@ -3,9 +3,10 @@ import { Models } from '../models';
 import { Task } from './task';
 import { Tasks, CancelOpenOrderLike } from '../tasks';
 import Big from 'big.js';
+import { Broadcast } from '../broadcast';
 import {
 	OpenOrder,
-} from '../interfaces';
+} from 'interfaces';
 
 
 export class CancelOpenOrder extends Task
@@ -13,9 +14,10 @@ export class CancelOpenOrder extends Task
 	constructor(
 		protected context: Context,
 		protected models: Models,
+		protected broadcast: Broadcast,
 		protected tasks: Tasks,
 	) {
-		super(context, models, tasks);
+		super();
 	}
 
 	public cancelOpenOrder(order: Readonly<OpenOrder>): OpenOrder {

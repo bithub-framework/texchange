@@ -1,8 +1,8 @@
-import { Length, TypeRecur } from '../interfaces';
+import { Length } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Model } from './model';
-interface Snapshot {
+import { Model, Stringified } from './model';
+export interface Snapshot {
     position: {
         [length: number]: Big;
     };
@@ -11,8 +11,8 @@ interface Snapshot {
         [length: number]: Big;
     };
 }
-declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Assets extends Model<Snapshot, Backup> {
+export declare type Backup = Stringified<Snapshot>;
+export declare class Assets extends Model<Snapshot> {
     protected context: Context;
     position: {
         [length: number]: Big;
@@ -31,4 +31,3 @@ export declare class Assets extends Model<Snapshot, Backup> {
      */
     closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
 }
-export {};

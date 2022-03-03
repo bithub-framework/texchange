@@ -1,9 +1,9 @@
 /// <reference types="node" />
-import { LimitOrder, Amendment, OpenOrder, Balances, Positions, Events, ApiLike } from '../interfaces';
+import { LimitOrder, Amendment, OpenOrder, Balances, Positions, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents } from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { Instant } from './instant';
-export declare class Latency extends EventEmitter implements ApiLike {
+export declare class Latency extends EventEmitter implements ContextMarketApiLike, ContextAccountApiLike {
     private context;
     private instant;
     constructor(context: Context, instant: Instant);
@@ -14,6 +14,7 @@ export declare class Latency extends EventEmitter implements ApiLike {
     getPositions(): Promise<Positions>;
     getOpenOrders(): Promise<OpenOrder[]>;
 }
+export declare type Events = MarketEvents & AccountEvents;
 export interface Latency {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
     once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

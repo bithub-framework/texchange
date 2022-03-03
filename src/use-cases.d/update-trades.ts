@@ -2,20 +2,20 @@ import { Models } from '../models';
 import { Context } from '../context';
 import { Tasks } from '../tasks';
 import { UseCase } from './use-case';
-import {
-	DatabaseTrade,
-} from '../interfaces';
+import { DatabaseTrade } from '../models.d/progress';
 import assert = require('assert');
+import { Broadcast } from '../broadcast';
 
 
 export class UpdateTrades extends UseCase {
 	constructor(
 		protected context: Context,
 		protected models: Models,
+		protected broadcast: Broadcast,
 		protected tasks: Tasks,
 		private realTimeSettlement: boolean,
 	) {
-		super(context, models, tasks);
+		super();
 	}
 
 	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
@@ -26,7 +26,7 @@ export class UpdateTrades extends UseCase {
 		for (const trade of trades) assert(trade.time === now);
 		this.models.progress.updateDatabaseTrades(trades);
 
-		this.context.broadcast.emit('trades', trades);
+		this.broadcast.emit('trades', trades);
 
 		for (const trade of trades)
 			tradeTakesOpenMakers.tradeTakesOpenMakers(trade);

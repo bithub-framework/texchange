@@ -10,5 +10,5 @@ export interface Models {
     makers: Makers;
     book: Book;
     progress: Progress;
-    pricing: Pricing<any, any>;
+    pricing: Pricing<any>;
 }

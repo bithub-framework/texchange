@@ -3,9 +3,11 @@ import {
 	Orderbook,
 	Positions,
 	Balances,
-} from '../interfaces';
+} from 'interfaces';
 import { EventEmitter } from 'events';
 
+
+export class Broadcast extends EventEmitter { }
 
 export namespace Broadcast {
 	export type Events = {

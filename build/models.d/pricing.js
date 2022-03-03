@@ -5,7 +5,7 @@ const big_js_1 = require("big.js");
 const model_1 = require("./model");
 class Pricing extends model_1.Model {
     constructor(context, settlementPrice) {
-        super(context);
+        super();
         this.context = context;
         this.settlementPrice = settlementPrice;
     }

@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AmendOrder = void 0;
 const use_case_1 = require("./use-case");
 class AmendOrder extends use_case_1.UseCase {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     amendOrder(amendment) {

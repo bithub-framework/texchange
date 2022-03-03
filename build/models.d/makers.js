@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
-const interfaces_1 = require("../interfaces");
+const interfaces_1 = require("interfaces");
+const frozon_1 = require("./makers.d/frozon");
 const model_1 = require("./model");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Makers extends model_1.Model {
     constructor(context) {
-        super(context);
+        super();
         this.context = context;
         this.orders = new Map();
         this.frozens = new Map();
@@ -15,7 +16,7 @@ class Makers extends model_1.Model {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
             [interfaces_1.Side.BID]: new big_js_1.default(0),
         };
-        this.totalFrozen = interfaces_1.Frozen.ZERO;
+        this.totalFrozen = frozon_1.Frozen.ZERO;
     }
     [Symbol.iterator]() {
         return this.orders.values();
@@ -62,7 +63,7 @@ class Makers extends model_1.Model {
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
         this.totalFrozen = [...this.frozens.values()]
-            .reduce((total, frozen) => interfaces_1.Frozen.plus(total, frozen), interfaces_1.Frozen.ZERO);
+            .reduce((total, frozen) => frozon_1.Frozen.plus(total, frozen), frozon_1.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
@@ -84,7 +85,7 @@ class Makers extends model_1.Model {
                 [length]: this.context.config.dollarVolume(order.price, order.unfilled),
                 [-length]: new big_js_1.default(0),
             },
-            position: interfaces_1.Frozen.ZERO.position,
+            position: frozon_1.Frozen.ZERO.position,
         };
     }
     appendOrder(order) {
@@ -93,7 +94,7 @@ class Makers extends model_1.Model {
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         this.orders.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalFrozen = frozon_1.Frozen.plus(this.totalFrozen, toFreeze);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .plus(order.unfilled);
     }
@@ -126,7 +127,7 @@ class Makers extends model_1.Model {
         this.frozens.delete(oid);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
-        this.totalFrozen = interfaces_1.Frozen.minus(this.totalFrozen, toThaw);
+        this.totalFrozen = frozon_1.Frozen.minus(this.totalFrozen, toThaw);
     }
     tryRemoveOrder(oid) {
         try {

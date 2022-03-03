@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import {
-    Events,
     Trade,
     OpenOrder,
     LimitOrder,
@@ -10,7 +9,9 @@ import {
     Balances,
     Side, Length,
     Closable,
-} from '../interfaces';
+    MarketEvents,
+    AccountEvents,
+} from 'interfaces';
 import { UseCases } from '../use-cases';
 
 
@@ -93,6 +94,8 @@ export class Instant extends EventEmitter {
         return this.useCases.getBalances.getBalances();
     }
 }
+
+export type Events = MarketEvents & AccountEvents;
 
 export interface Instant extends EventEmitter {
     on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;

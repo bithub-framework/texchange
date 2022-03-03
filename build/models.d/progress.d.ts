@@ -1,15 +1,16 @@
 import { Model } from './model';
 import Big from 'big.js';
-import { DatabaseTrade, TypeRecur } from '../interfaces';
 import { Context } from '../context';
-interface Snapshot {
+import { Stringified } from './model';
+import { Trade } from 'interfaces';
+export interface Snapshot {
     latestPrice: Big | null;
     latestDatabaseTradeTime: number | null;
     userTradeCount: number;
     userOrderCount: number;
 }
-declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Progress extends Model<Snapshot, Backup> {
+export declare type Backup = Stringified<Snapshot>;
+export declare class Progress extends Model<Snapshot> {
     protected context: Context;
     latestPrice: Big | null;
     latestDatabaseTradeTime: number | null;
@@ -20,4 +21,6 @@ export declare class Progress extends Model<Snapshot, Backup> {
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
-export {};
+export interface DatabaseTrade extends Trade {
+    id: string;
+}

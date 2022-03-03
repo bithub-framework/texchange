@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidateOrder = void 0;
-const interfaces_1 = require("../interfaces");
+const interfaces_1 = require("interfaces");
 const assert = require("assert");
 const big_js_1 = require("big.js");
 const task_1 = require("./task");
 class ValidateOrder extends task_1.Task {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     validateOrder(order) {

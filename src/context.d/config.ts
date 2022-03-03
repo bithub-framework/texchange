@@ -2,7 +2,7 @@ import {
 	MarketSpec,
 	AccountSpec,
 	MarketCalc,
-} from '../interfaces';
+} from 'interfaces';
 import Big from 'big.js';
 
 export interface MarketConfig extends MarketSpec, MarketCalc {

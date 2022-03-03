@@ -1,16 +1,16 @@
-import { Orderbook, Side, TypeRecur } from '../interfaces';
-import { Model } from './model';
+import { Orderbook, Side } from 'interfaces';
+import { Model, Stringified } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
-interface Snapshot {
+export interface Snapshot {
     basebook: Orderbook;
     decrements: {
         [side: number]: [string, Big][];
     };
     time: number;
 }
-declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Book extends Model<Snapshot, Backup> {
+export declare type Backup = Stringified<Snapshot>;
+export declare class Book extends Model<Snapshot> {
     protected context: Context;
     private time;
     private basebook;
@@ -24,4 +24,3 @@ export declare class Book extends Model<Snapshot, Backup> {
     capture(): Snapshot;
     restore(snapshot: Backup): void;
 }
-export {};

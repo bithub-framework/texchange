@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CancelOpenOrder = void 0;
 const task_1 = require("./task");
 class CancelOpenOrder extends task_1.Task {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     cancelOpenOrder(order) {

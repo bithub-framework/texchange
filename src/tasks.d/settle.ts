@@ -7,7 +7,7 @@ import { Models } from '../models';
 import assert = require('assert');
 import { Task } from './task';
 import { Tasks, SettleLike } from '../tasks';
-
+import { Broadcast } from '../broadcast';
 
 
 export class Settle extends Task
@@ -15,9 +15,10 @@ export class Settle extends Task
     constructor(
         protected context: Context,
         protected models: Models,
+        protected broadcast: Broadcast,
         protected tasks: Tasks,
     ) {
-        super(context, models, tasks);
+        super();
     }
 
     public settle(): void {

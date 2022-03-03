@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderTakes = void 0;
-const interfaces_1 = require("../interfaces");
-const big_math_1 = require("../big-math");
+const interfaces_1 = require("interfaces");
+const utilities_1 = require("../utilities");
 const big_js_1 = require("big.js");
 const task_1 = require("./task");
 class OrderTakes extends task_1.Task {
-    constructor(context, models, tasks) {
-        super(context, models, tasks);
+    constructor(context, models, broadcast, tasks) {
+        super();
         this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     /**
@@ -25,7 +26,7 @@ class OrderTakes extends task_1.Task {
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
-                const quantity = (0, big_math_1.min)(taker.unfilled, maker.quantity);
+                const quantity = (0, utilities_1.min)(taker.unfilled, maker.quantity);
                 book.decQuantity(maker.side, maker.price, quantity);
                 taker.filled = taker.filled.plus(quantity);
                 taker.unfilled = taker.unfilled.minus(quantity);

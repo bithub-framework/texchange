@@ -1,9 +1,10 @@
 import { Models } from '../models';
 import { Context } from '../context';
 import { Tasks } from '../tasks';
+import { Broadcast } from '../broadcast';
 export declare abstract class Task {
-    protected context: Context;
-    protected models: Models;
-    protected tasks: Tasks;
-    constructor(context: Context, models: Models, tasks: Tasks);
+    protected abstract context: Context;
+    protected abstract models: Models;
+    protected abstract broadcast: Broadcast;
+    protected abstract tasks: Tasks;
 }

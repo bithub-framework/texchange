@@ -1,4 +1,4 @@
-import { MarketSpec, AccountSpec, MarketCalc } from '../interfaces';
+import { MarketSpec, AccountSpec, MarketCalc } from 'interfaces';
 import Big from 'big.js';
 export interface MarketConfig extends MarketSpec, MarketCalc {
     PING: number;

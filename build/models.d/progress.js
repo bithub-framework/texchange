@@ -5,7 +5,7 @@ const model_1 = require("./model");
 const big_js_1 = require("big.js");
 class Progress extends model_1.Model {
     constructor(context) {
-        super(context);
+        super();
         this.context = context;
         this.latestPrice = null;
         this.latestDatabaseTradeTime = null;

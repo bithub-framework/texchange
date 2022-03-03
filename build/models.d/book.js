@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Book = void 0;
-const interfaces_1 = require("../interfaces");
+const interfaces_1 = require("interfaces");
 const model_1 = require("./model");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Book extends model_1.Model {
     constructor(context) {
-        super(context);
+        super();
         this.context = context;
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {

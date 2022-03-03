@@ -1,4 +1,3 @@
-export * from 'interfaces';
 import {
     Length,
 } from 'interfaces';

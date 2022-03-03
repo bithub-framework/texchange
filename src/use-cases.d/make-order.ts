@@ -2,10 +2,11 @@ import { Models } from '../models';
 import { Context } from '../context';
 import { Tasks } from '../tasks';
 import { UseCase } from './use-case';
+import { Broadcast } from '../broadcast';
 import {
 	LimitOrder,
 	OpenOrder,
-} from '../interfaces';
+} from 'interfaces';
 import Big from 'big.js';
 
 
@@ -13,9 +14,10 @@ export class MakeOrder extends UseCase {
 	constructor(
 		protected context: Context,
 		protected models: Models,
+		protected broadcast: Broadcast,
 		protected tasks: Tasks,
 	) {
-		super(context, models, tasks);
+		super();
 	}
 
 	public makeOrder(order: Readonly<LimitOrder>): OpenOrder {

@@ -1,8 +1,6 @@
 import { StatefulLike } from 'startable';
-import {
-	Timeline,
-	TypeRecur,
-} from './interfaces';
+import { Stringified } from './models.d/model';
+import { Timeline } from 'interfaces';
 import { Context } from './context';
 import { Models } from './models';
 import { UseCases } from './use-cases';
@@ -11,15 +9,7 @@ import { Mtm } from './mark-to-market';
 import { Instant } from './views.d/instant';
 import { Latency } from './views.d/latency';
 import { Joystick } from './views.d/joystick';
-import Big from 'big.js';
 
-
-
-type Views = {
-	instant: Instant;
-	latency: Latency;
-	joystick: Joystick;
-}
 
 export abstract class Texchange implements StatefulLike<Snapshot, Backup> {
 	protected abstract context: Context;
@@ -50,4 +40,11 @@ export abstract class Texchange implements StatefulLike<Snapshot, Backup> {
 }
 
 type Snapshot = any;
-type Backup = TypeRecur<Snapshot, Big, string>;
+type Backup = Stringified<Snapshot>;
+
+
+interface Views {
+	instant: Instant;
+	latency: Latency;
+	joystick: Joystick;
+}

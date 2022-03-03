@@ -3,9 +3,10 @@ import { Context } from '../context';
 import {
 	Positions,
 	Length,
-} from '../interfaces';
+} from 'interfaces';
 import { Task } from './task';
 import { Tasks, GetPositionsLike } from '../tasks';
+import { Broadcast } from '../broadcast';
 
 
 export class GetPositions extends Task
@@ -13,9 +14,10 @@ export class GetPositions extends Task
 	constructor(
 		protected context: Context,
 		protected models: Models,
+		protected broadcast: Broadcast,
 		protected tasks: Tasks,
 	) {
-		super(context, models, tasks);
+		super();
 	}
 
 	public getPositions(): Positions {

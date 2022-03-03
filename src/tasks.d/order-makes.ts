@@ -1,12 +1,13 @@
 import {
     OpenOrder,
     OpenMaker,
-} from '../interfaces';
+} from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
 import { Tasks, OrderMakesLike } from '../tasks';
+import { Broadcast } from '../broadcast';
 
 
 export class OrderMakes extends Task
@@ -14,9 +15,10 @@ export class OrderMakes extends Task
     constructor(
         protected context: Context,
         protected models: Models,
+        protected broadcast: Broadcast,
         protected tasks: Tasks,
     ) {
-        super(context, models, tasks);
+        super();
     }
 
     public orderMakes(

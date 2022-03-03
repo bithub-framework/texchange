@@ -1,10 +1,7 @@
 import { Context } from '../context';
 import { UseCases } from '../use-cases';
-import {
-	Orderbook,
-	DatabaseTrade,
-} from '../interfaces';
-
+import { DatabaseTrade } from '../models.d/progress';
+import { Orderbook } from 'interfaces';
 
 
 export class Joystick {

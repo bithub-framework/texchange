@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
-const interfaces_1 = require("../interfaces");
+const interfaces_1 = require("interfaces");
 const big_js_1 = require("big.js");
 const model_1 = require("./model");
 class Assets extends model_1.Model {
     constructor(context) {
-        super(context);
+        super();
         this.context = context;
         this.balance = this.context.config.initialBalance;
         this.position = {
