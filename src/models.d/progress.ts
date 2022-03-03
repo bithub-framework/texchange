@@ -1,4 +1,4 @@
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import {
     DatabaseTrade,
@@ -16,19 +16,16 @@ interface Snapshot {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Progress implements ModelLike<Snapshot, Backup, boolean> {
-    public stage?: boolean;
+export class Progress extends Model<Snapshot, Backup> {
     public latestPrice: Big | null = null;
     public latestDatabaseTradeTime: number | null = null;
     public userTradeCount = 0;
     public userOrderCount = 0;
 
     constructor(
-        private context: Context,
-    ) { }
-
-    public initializeStage(): void {
-        this.stage = false;
+        protected context: Context,
+    ) {
+        super(context);
     }
 
     public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {

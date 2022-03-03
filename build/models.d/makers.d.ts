@@ -1,5 +1,5 @@
 import { OrderId, OpenMaker, Frozen, TypeRecur, OpenOrder } from '../interfaces';
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 declare type Snapshot = {
@@ -7,16 +7,17 @@ declare type Snapshot = {
     frozen: Frozen;
 }[];
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Makers extends Map<OrderId, Readonly<OpenMaker>> implements ModelLike<Snapshot, Backup, boolean> {
-    private context;
-    stage?: boolean;
+export declare class Makers extends Model<Snapshot, Backup> implements Iterable<Readonly<OpenMaker>> {
+    protected context: Context;
+    private orders;
     private frozens;
     totalUnfilledQuantity: {
         [side: number]: Big;
     };
     totalFrozen: Frozen;
     constructor(context: Context);
-    initializeStage(): void;
+    [Symbol.iterator](): IterableIterator<Readonly<OpenMaker>>;
+    getOrder(id: OrderId): Readonly<OpenMaker>;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     private normalizeFrozen;

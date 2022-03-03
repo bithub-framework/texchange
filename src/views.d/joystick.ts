@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { Tasks } from '../tasks';
+import { UseCases } from '../use-cases';
 import {
 	Orderbook,
 	DatabaseTrade,
@@ -10,14 +10,14 @@ import {
 export class Joystick {
 	constructor(
 		private context: Context,
-		private tasks: Tasks,
+		private useCases: UseCases,
 	) { }
 
 	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
-		this.tasks.updateTrades.updateTrades(trades);
+		this.useCases.updateTrades.updateTrades(trades);
 	}
 
 	public updateOrderbook(orderbook: Readonly<Orderbook>): void {
-		this.tasks.updateOrderbook.updateOrderbook(orderbook);
+		this.useCases.updateOrderbook.updateOrderbook(orderbook);
 	}
 }

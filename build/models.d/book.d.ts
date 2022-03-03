@@ -1,5 +1,5 @@
 import { Orderbook, Side, TypeRecur } from '../interfaces';
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 interface Snapshot {
@@ -10,15 +10,13 @@ interface Snapshot {
     time: number;
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Book implements ModelLike<Snapshot, Backup, boolean> {
-    private context;
-    stage?: boolean;
+export declare class Book extends Model<Snapshot, Backup> {
+    protected context: Context;
     private time;
     private basebook;
     private decrements;
     private finalbook;
     constructor(context: Context);
-    initializeStage(): void;
     setBasebook(newBasebook: Readonly<Orderbook>): void;
     decQuantity(side: Side, price: Big, decrement: Big): void;
     private apply;

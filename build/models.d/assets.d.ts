@@ -1,7 +1,7 @@
 import { Length, TypeRecur } from '../interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { ModelLike } from './model';
+import { Model } from './model';
 interface Snapshot {
     position: {
         [length: number]: Big;
@@ -12,9 +12,8 @@ interface Snapshot {
     };
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Assets implements ModelLike<Snapshot, Backup, boolean> {
-    private context;
-    stage?: boolean;
+export declare class Assets extends Model<Snapshot, Backup> {
+    protected context: Context;
     position: {
         [length: number]: Big;
     };
@@ -23,7 +22,6 @@ export declare class Assets implements ModelLike<Snapshot, Backup, boolean> {
         [length: number]: Big;
     };
     constructor(context: Context);
-    initializeStage(): void;
     capture(): Snapshot;
     restore(snapshot: Backup): void;
     payFee(fee: Big): void;

@@ -1,21 +1,17 @@
 import { Trade, TypeRecur } from '../interfaces';
 import Big from 'big.js';
-import { ModelLike } from './model';
+import { Model } from './model';
 import { Context } from '../context';
-export declare abstract class Pricing<Snapshot, Stage> implements ModelLike<Snapshot, TypeRecur<Snapshot, Big, string>, Stage> {
+export declare abstract class Pricing<Snapshot, Backup> extends Model<Snapshot, Backup> {
     protected context: Context;
     protected settlementPrice: Big;
-    abstract stage?: Stage;
     constructor(context: Context, settlementPrice: Big);
-    abstract initializeStage(): void;
     abstract getSettlementPrice(): Big;
     abstract updateTrades(trades: readonly Readonly<Trade>[]): void;
     abstract capture(): Snapshot;
-    abstract restore(backup: TypeRecur<Snapshot, Big, string>): void;
+    abstract restore(backup: Backup): void;
 }
-export declare class DefaultPricing extends Pricing<Snapshot, boolean> {
-    stage?: boolean;
-    initializeStage(): void;
+export declare class DefaultPricing extends Pricing<Snapshot, Backup> {
     updateTrades(trades: readonly Readonly<Trade>[]): void;
     getSettlementPrice(): Big;
     capture(): Snapshot;

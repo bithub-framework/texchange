@@ -1,26 +1,27 @@
 import { Models } from '../models';
 import { Context } from '../context';
-import { Controllers } from '../controllers';
 import {
 	Balances,
 } from '../interfaces';
-import { ModelLike } from '../models.d/model';
-import { initializeStages } from '../initialize-stages';
+import { Task } from './task';
+import { Tasks, GetBalancesLike } from '../tasks';
 
 
-type OwnInvolved = Pick<Models, never>;
-
-export class GetBalances {
-	private involved: ModelLike[] = [];
-
+export class GetBalances extends Task
+	implements GetBalancesLike {
 	constructor(
-		private context: Context,
-		private models: OwnInvolved,
-		private controllers: Controllers,
-	) { }
+		protected context: Context,
+		protected models: Models,
+		protected tasks: Tasks,
+	) {
+		super(context, models, tasks);
+	}
 
 	public getBalances(): Balances {
-		initializeStages(this.involved);
-		return this.controllers.getBalances.getBalances();
+		return {
+			balance: this.models.assets.balance,
+			available: this.tasks.getAvailable.getAvailable(),
+			time: this.context.timeline.now(),
+		};
 	}
 }

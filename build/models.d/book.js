@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Book = void 0;
 const interfaces_1 = require("../interfaces");
+const model_1 = require("./model");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Book {
+class Book extends model_1.Model {
     constructor(context) {
+        super(context);
         this.context = context;
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {
@@ -19,9 +21,6 @@ class Book {
             [interfaces_1.Side.BID]: new Map(),
         };
         this.finalbook = null;
-    }
-    initializeStage() {
-        this.stage = false;
     }
     setBasebook(newBasebook) {
         assert(newBasebook.time === this.context.timeline.now());

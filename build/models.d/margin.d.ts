@@ -1,5 +1,5 @@
 import { Length, TypeRecur } from '../interfaces';
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Assets } from './assets';
@@ -7,12 +7,10 @@ interface Snapshot {
     [length: number]: Big;
 }
 declare type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
-export declare class Margin implements ModelLike<Snapshot, Backup, boolean> {
-    private context;
+export declare class Margin extends Model<Snapshot, Backup> {
+    protected context: Context;
     [length: number]: Big;
-    stage?: boolean;
     constructor(context: Context);
-    initializeStage(): void;
     incMargin(length: Length, volume: Big, dollarVolume: Big): void;
     decMargin(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): void;
     capture(): Snapshot;

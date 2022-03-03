@@ -1,13 +1,12 @@
 import { StatefulLike } from 'startable';
-import { EventEmitter } from 'events';
 import {
 	Timeline,
 	TypeRecur,
 } from './interfaces';
 import { Context } from './context';
 import { Models } from './models';
-import { Tasks } from './tasks';
-import { Broadcast } from './context.d/broadcast';
+import { UseCases } from './use-cases';
+import { Mtm } from './mark-to-market';
 
 import { Instant } from './views.d/instant';
 import { Latency } from './views.d/latency';
@@ -25,8 +24,9 @@ type Views = {
 export abstract class Texchange implements StatefulLike<Snapshot, Backup> {
 	protected abstract context: Context;
 	protected abstract models: Models;
-	protected abstract tasks: Tasks;
+	protected abstract tasks: UseCases;
 	protected abstract views: Views;
+	protected abstract mtm: Mtm | null;
 
 	constructor(
 		timeline: Timeline,

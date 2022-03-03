@@ -11,14 +11,14 @@ import {
     Side, Length,
     Closable,
 } from '../interfaces';
-import { Tasks } from '../tasks';
+import { UseCases } from '../use-cases';
 
 
 
 export class Instant extends EventEmitter {
     constructor(
         private context: Context,
-        private tasks: Tasks,
+        private useCases: UseCases,
     ) {
         super();
         // this.initializePushingTrades();
@@ -58,7 +58,7 @@ export class Instant extends EventEmitter {
     public makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[] {
         return orders.map(order => {
             try {
-                return this.tasks.makeOrder.makeOrder(order);
+                return this.useCases.makeOrder.makeOrder(order);
             } catch (err) {
                 return <Error>err;
             }
@@ -66,7 +66,7 @@ export class Instant extends EventEmitter {
     }
 
     public cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[] {
-        return orders.map(order => this.tasks.cancelOrder.cancelOrder(order));
+        return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
@@ -74,7 +74,7 @@ export class Instant extends EventEmitter {
     ): (OpenOrder | Error)[] {
         return amendments.map(amendment => {
             try {
-                return this.tasks.amendOrder.amendOrder(amendment);
+                return this.useCases.amendOrder.amendOrder(amendment);
             } catch (err) {
                 return <Error>err;
             }
@@ -82,15 +82,15 @@ export class Instant extends EventEmitter {
     }
 
     public getOpenOrders(): OpenOrder[] {
-        return this.tasks.getOpenOrders.getOpenOrders();
+        return this.useCases.getOpenOrders.getOpenOrders();
     }
 
     public getPositions(): Positions {
-        return this.tasks.getPositions.getPositions();
+        return this.useCases.getPositions.getPositions();
     }
 
     public getBalances(): Balances {
-        return this.tasks.getBalances.getBalances();
+        return this.useCases.getBalances.getBalances();
     }
 }
 

@@ -2,17 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultPricing = exports.Pricing = void 0;
 const big_js_1 = require("big.js");
-class Pricing {
+const model_1 = require("./model");
+class Pricing extends model_1.Model {
     constructor(context, settlementPrice) {
+        super(context);
         this.context = context;
         this.settlementPrice = settlementPrice;
     }
 }
 exports.Pricing = Pricing;
 class DefaultPricing extends Pricing {
-    initializeStage() {
-        this.stage = false;
-    }
     updateTrades(trades) {
         this.settlementPrice = trades[trades.length - 1].price;
     }

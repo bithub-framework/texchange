@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const interfaces_1 = require("../interfaces");
 const big_js_1 = require("big.js");
-class Assets {
+const model_1 = require("./model");
+class Assets extends model_1.Model {
     constructor(context) {
+        super(context);
         this.context = context;
         this.balance = this.context.config.initialBalance;
         this.position = {
@@ -15,9 +17,6 @@ class Assets {
             [interfaces_1.Length.LONG]: new big_js_1.default(0),
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
         };
-    }
-    initializeStage() {
-        this.stage = false;
     }
     capture() {
         return {

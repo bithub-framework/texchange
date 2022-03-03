@@ -1,19 +1,67 @@
-import { MakeOrder } from './tasks.d/make-order';
-import { CancelOrder } from './tasks.d/cancel-order';
-import { AmendOrder } from './tasks.d/amend-order';
-import { GetOpenOrders } from './tasks.d/get-open-orders';
-import { GetPositions } from './tasks.d/get-positions';
-import { GetBalances } from './tasks.d/get-balances';
-import { UpdateOrderbook } from './tasks.d/update-orderbook';
-import { UpdateTrades } from './tasks.d/update-trades';
+import Big from 'big.js';
+import {
+	OpenOrder,
+	Balances,
+	Closable,
+	Positions,
+	Trade,
+} from 'interfaces';
+
+
+export interface GetBalancesLike {
+	getBalances(): Balances;
+}
+
+export interface GetPositionsLike {
+	getPositions(): Positions;
+}
+
+export interface GetAvailableLike {
+	getAvailable(): Big;
+}
+
+export interface GetClosableLike {
+	getClosable(): Closable;
+}
+
+export interface SettleLike {
+	settle(): void;
+}
+
+export interface OrderMakesLike {
+	orderMakes(openOrder: Readonly<OpenOrder>): void;
+}
+
+export interface OrderTakesLike {
+	orderTakes(taker: OpenOrder): Trade[];
+}
+
+export interface TradeTakesOpenMakersLike {
+	tradeTakesOpenMakers(trade: Readonly<Trade>): void;
+}
+
+export interface MakeOpenOrderLike {
+	makeOpenOrder(order: OpenOrder): OpenOrder;
+}
+
+export interface CancelOpenOrderLike {
+	cancelOpenOrder(order: Readonly<OpenOrder>): OpenOrder;
+}
+
+export interface ValidateOrderLike {
+	validateOrder(order: Readonly<OpenOrder>): void;
+}
 
 export interface Tasks {
-	makeOrder: MakeOrder;
-	cancelOrder: CancelOrder;
-	amendOrder: AmendOrder;
-	getOpenOrders: GetOpenOrders;
-	getPositions: GetPositions;
-	getBalances: GetBalances;
-	updateOrderbook: UpdateOrderbook;
-	updateTrades: UpdateTrades;
+	getBalances: GetBalancesLike;
+	getPositions: GetPositionsLike;
+	getAvailable: GetAvailableLike;
+	getClosable: GetClosableLike;
+	settle: SettleLike;
+	orderMakes: OrderMakesLike;
+	tradeTakesOpenMakers: TradeTakesOpenMakersLike;
+	orderTakes: OrderTakesLike;
+	validateOrder: ValidateOrderLike;
+	makeOpenOrder: MakeOpenOrderLike;
+	cancelOpenOrder: CancelOpenOrderLike;
 }

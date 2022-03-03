@@ -2,7 +2,7 @@ import {
     Length,
     TypeRecur,
 } from '../interfaces';
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Assets } from './assets';
@@ -17,17 +17,14 @@ interface Snapshot {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Margin implements ModelLike<Snapshot, Backup, boolean> {
+export class Margin extends Model<Snapshot, Backup> {
     [length: number]: Big;
-    public stage?: boolean;
 
-    constructor(private context: Context) {
+    constructor(protected context: Context) {
+        super(context);
+
         this[Length.LONG] = new Big(0);
         this[Length.SHORT] = new Big(0);
-    }
-
-    public initializeStage(): void {
-        this.stage = false;
     }
 
     public incMargin(length: Length, volume: Big, dollarVolume: Big): void {

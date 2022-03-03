@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Instant = void 0;
 const events_1 = require("events");
 class Instant extends events_1.EventEmitter {
-    constructor(context, tasks) {
+    constructor(context, useCases) {
         super();
         this.context = context;
-        this.tasks = tasks;
+        this.useCases = useCases;
         // this.initializePushingTrades();
         // this.initializePushingOrderbook();
     }
@@ -41,7 +41,7 @@ class Instant extends events_1.EventEmitter {
     makeOrders(orders) {
         return orders.map(order => {
             try {
-                return this.tasks.makeOrder.makeOrder(order);
+                return this.useCases.makeOrder.makeOrder(order);
             }
             catch (err) {
                 return err;
@@ -49,12 +49,12 @@ class Instant extends events_1.EventEmitter {
         });
     }
     cancelOrders(orders) {
-        return orders.map(order => this.tasks.cancelOrder.cancelOrder(order));
+        return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
     }
     amendOrders(amendments) {
         return amendments.map(amendment => {
             try {
-                return this.tasks.amendOrder.amendOrder(amendment);
+                return this.useCases.amendOrder.amendOrder(amendment);
             }
             catch (err) {
                 return err;
@@ -62,13 +62,13 @@ class Instant extends events_1.EventEmitter {
         });
     }
     getOpenOrders() {
-        return this.tasks.getOpenOrders.getOpenOrders();
+        return this.useCases.getOpenOrders.getOpenOrders();
     }
     getPositions() {
-        return this.tasks.getPositions.getPositions();
+        return this.useCases.getPositions.getPositions();
     }
     getBalances() {
-        return this.tasks.getBalances.getBalances();
+        return this.useCases.getBalances.getBalances();
     }
 }
 exports.Instant = Instant;

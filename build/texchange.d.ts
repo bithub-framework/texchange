@@ -2,7 +2,8 @@ import { StatefulLike } from 'startable';
 import { Timeline, TypeRecur } from './interfaces';
 import { Context } from './context';
 import { Models } from './models';
-import { Tasks } from './tasks';
+import { UseCases } from './use-cases';
+import { Mtm } from './mark-to-market';
 import { Instant } from './views.d/instant';
 import { Latency } from './views.d/latency';
 import { Joystick } from './views.d/joystick';
@@ -15,8 +16,9 @@ declare type Views = {
 export declare abstract class Texchange implements StatefulLike<Snapshot, Backup> {
     protected abstract context: Context;
     protected abstract models: Models;
-    protected abstract tasks: Tasks;
+    protected abstract tasks: UseCases;
     protected abstract views: Views;
+    protected abstract mtm: Mtm | null;
     constructor(timeline: Timeline);
     capture(): Snapshot;
     restore(backup: Backup): void;

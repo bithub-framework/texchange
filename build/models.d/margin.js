@@ -2,15 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Margin = void 0;
 const interfaces_1 = require("../interfaces");
+const model_1 = require("./model");
 const big_js_1 = require("big.js");
-class Margin {
+class Margin extends model_1.Model {
     constructor(context) {
+        super(context);
         this.context = context;
         this[interfaces_1.Length.LONG] = new big_js_1.default(0);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
-    }
-    initializeStage() {
-        this.stage = false;
     }
     incMargin(length, volume, dollarVolume) {
         this[length] = this[length]

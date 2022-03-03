@@ -2,12 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const interfaces_1 = require("../interfaces");
+const model_1 = require("./model");
 const big_js_1 = require("big.js");
 const assert = require("assert");
-class Makers extends Map {
+class Makers extends model_1.Model {
     constructor(context) {
-        super();
+        super(context);
         this.context = context;
+        this.orders = new Map();
         this.frozens = new Map();
         this.totalUnfilledQuantity = {
             [interfaces_1.Side.ASK]: new big_js_1.default(0),
@@ -15,19 +17,24 @@ class Makers extends Map {
         };
         this.totalFrozen = interfaces_1.Frozen.ZERO;
     }
-    initializeStage() {
-        this.stage = false;
+    [Symbol.iterator]() {
+        return this.orders.values();
+    }
+    getOrder(id) {
+        const order = this.orders.get(id);
+        assert(order);
+        return order;
     }
     capture() {
-        return [...this.keys()]
+        return [...this.orders.keys()]
             .map(oid => ({
-            order: this.get(oid),
+            order: this.orders.get(oid),
             frozen: this.frozens.get(oid),
         }));
     }
     restore(snapshot) {
         for (const { order, frozen } of snapshot) {
-            this.set(order.id, {
+            this.orders.set(order.id, {
                 price: new big_js_1.default(order.price),
                 quantity: new big_js_1.default(order.quantity),
                 side: order.side,
@@ -50,7 +57,7 @@ class Makers extends Map {
             });
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.totalUnfilledQuantity[side] = [...this.values()]
+            this.totalUnfilledQuantity[side] = [...this.orders.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
         }
@@ -84,14 +91,14 @@ class Makers extends Map {
         if (order.unfilled.eq(0))
             return;
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
-        this.set(order.id, order);
+        this.orders.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
         this.totalFrozen = interfaces_1.Frozen.plus(this.totalFrozen, toFreeze);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .plus(order.unfilled);
     }
     takeOrder(oid, volume) {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
         this.tryRemoveOrder(oid);
@@ -103,19 +110,19 @@ class Makers extends Map {
         this.appendOrder(newOrder);
     }
     takeOrderQueue(oid, volume) {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         const newOrder = {
             ...order,
             behind: volume ? order.behind.minus(volume) : new big_js_1.default(0),
         };
-        this.set(oid, newOrder);
+        this.orders.set(oid, newOrder);
     }
     removeOrder(oid) {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         const toThaw = this.frozens.get(oid);
-        this.delete(oid);
+        this.orders.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);

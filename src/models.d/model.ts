@@ -1,8 +1,13 @@
 import { StatefulLike } from 'startable';
+import { Context } from '../context';
 
-export interface ModelLike<Snapshot = unknown, Backup = unknown, Stage = unknown>
-	extends StatefulLike<Snapshot, Backup> {
+export abstract class Model<Snapshot = unknown, Backup = Snapshot>
+	implements StatefulLike<Snapshot, Backup> {
 
-	stage?: Stage;
-	initializeStage(): void;
+	public abstract capture(): Snapshot;
+	public abstract restore(backup: Backup): void;
+
+	constructor(
+		protected context: Context,
+	) { }
 }

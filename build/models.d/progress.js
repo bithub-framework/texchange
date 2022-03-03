@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Progress = void 0;
+const model_1 = require("./model");
 const big_js_1 = require("big.js");
-class Progress {
+class Progress extends model_1.Model {
     constructor(context) {
+        super(context);
         this.context = context;
         this.latestPrice = null;
         this.latestDatabaseTradeTime = null;
         this.userTradeCount = 0;
         this.userOrderCount = 0;
-    }
-    initializeStage() {
-        this.stage = false;
     }
     updateDatabaseTrades(trades) {
         const now = this.context.timeline.now();

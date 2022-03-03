@@ -4,7 +4,7 @@ import {
 } from '../interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { ModelLike } from './model';
+import { Model } from './model';
 
 
 interface Snapshot {
@@ -14,13 +14,14 @@ interface Snapshot {
 }
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
-export class Assets implements ModelLike<Snapshot, Backup, boolean> {
-    public stage?: boolean;
+export class Assets extends Model<Snapshot, Backup> {
     public position: { [length: number]: Big; };
     public balance: Big;
     public cost: { [length: number]: Big; };
 
-    constructor(private context: Context) {
+    constructor(protected context: Context) {
+        super(context);
+
         this.balance = this.context.config.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),
@@ -30,10 +31,6 @@ export class Assets implements ModelLike<Snapshot, Backup, boolean> {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
         };
-    }
-
-    public initializeStage(): void {
-        this.stage = false;
     }
 
     public capture(): Snapshot {

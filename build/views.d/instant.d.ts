@@ -2,11 +2,11 @@
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { Events, OpenOrder, LimitOrder, Amendment, Positions, Balances } from '../interfaces';
-import { Tasks } from '../tasks';
+import { UseCases } from '../use-cases';
 export declare class Instant extends EventEmitter {
     private context;
-    private tasks;
-    constructor(context: Context, tasks: Tasks);
+    private useCases;
+    constructor(context: Context, useCases: UseCases);
     makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[];
     cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[];
     amendOrders(amendments: readonly Readonly<Amendment>[]): (OpenOrder | Error)[];

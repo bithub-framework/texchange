@@ -1,14 +1,12 @@
 import { Models } from '../models';
 import { Context } from '../context';
-import { Controllers } from '../controllers';
 import { Balances } from '../interfaces';
-declare type OwnInvolved = Pick<Models, never>;
-export declare class GetBalances {
-    private context;
-    private models;
-    private controllers;
-    private involved;
-    constructor(context: Context, models: OwnInvolved, controllers: Controllers);
+import { Task } from './task';
+import { Tasks, GetBalancesLike } from '../tasks';
+export declare class GetBalances extends Task implements GetBalancesLike {
+    protected context: Context;
+    protected models: Models;
+    protected tasks: Tasks;
+    constructor(context: Context, models: Models, tasks: Tasks);
     getBalances(): Balances;
 }
-export {};

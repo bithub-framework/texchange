@@ -6,7 +6,7 @@ import {
     Side, Length, Operation,
     OpenOrder,
 } from '../interfaces';
-import { ModelLike } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context';
@@ -20,10 +20,9 @@ type Snapshot = {
 type Backup = Readonly<TypeRecur<Snapshot, Big, string>>;
 
 
-export class Makers extends Map<OrderId, Readonly<OpenMaker>>
-    implements ModelLike<Snapshot, Backup, boolean> {
-
-    public stage?: boolean;
+export class Makers extends Model<Snapshot, Backup>
+    implements Iterable<Readonly<OpenMaker>> {
+    private orders = new Map<OrderId, Readonly<OpenMaker>>();
     private frozens = new Map<OrderId, Readonly<Frozen>>();
     public totalUnfilledQuantity: { [side: number]: Big } = {
         [Side.ASK]: new Big(0),
@@ -31,23 +30,31 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     };
     public totalFrozen: Frozen = Frozen.ZERO;
 
-    constructor(private context: Context) { super(); }
+    constructor(protected context: Context) {
+        super(context);
+    }
 
-    public initializeStage(): void {
-        this.stage = false;
+    public [Symbol.iterator]() {
+        return this.orders.values();
+    }
+
+    public getOrder(id: OrderId): Readonly<OpenMaker> {
+        const order = this.orders.get(id);
+        assert(order);
+        return order;
     }
 
     public capture(): Snapshot {
-        return [...this.keys()]
+        return [...this.orders.keys()]
             .map(oid => ({
-                order: this.get(oid)!,
+                order: this.orders.get(oid)!,
                 frozen: this.frozens.get(oid)!,
             }));
     }
 
     public restore(snapshot: Backup): void {
         for (const { order, frozen } of snapshot) {
-            this.set(order.id!, {
+            this.orders.set(order.id!, {
                 price: new Big(order.price),
                 quantity: new Big(order.quantity),
                 side: order.side!,
@@ -70,7 +77,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
             });
         }
         for (const side of [Side.ASK, Side.BID]) {
-            this.totalUnfilledQuantity[side] = [...this.values()]
+            this.totalUnfilledQuantity[side] = [...this.orders.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new Big(0));
         }
@@ -110,7 +117,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
         const toFreeze = this.normalizeFrozen(
             this.toFreeze(order),
         );
-        this.set(order.id, order);
+        this.orders.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
         this.totalFrozen = Frozen.plus(this.totalFrozen, toFreeze);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
@@ -118,7 +125,7 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     }
 
     public takeOrder(oid: OrderId, volume: Big): void {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         assert(volume.lte(order.unfilled));
         this.tryRemoveOrder(oid);
@@ -131,20 +138,20 @@ export class Makers extends Map<OrderId, Readonly<OpenMaker>>
     }
 
     public takeOrderQueue(oid: OrderId, volume?: Big): void {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         const newOrder: Readonly<OpenMaker> = {
             ...order,
             behind: volume ? order.behind.minus(volume) : new Big(0),
         };
-        this.set(oid, newOrder);
+        this.orders.set(oid, newOrder);
     }
 
     public removeOrder(oid: OrderId): void {
-        const order = this.get(oid);
+        const order = this.orders.get(oid);
         assert(order);
         const toThaw = this.frozens.get(oid)!;
-        this.delete(oid);
+        this.orders.delete(oid);
         this.frozens.delete(oid);
         this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
             .minus(order.unfilled);
