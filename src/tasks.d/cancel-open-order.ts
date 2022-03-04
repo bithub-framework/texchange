@@ -1,7 +1,7 @@
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, CancelOpenOrderLike } from '../tasks';
+import { TasksLike, CancelOpenOrderLike } from '../tasks-like';
 import Big from 'big.js';
 import { Broadcast } from '../broadcast';
 import {
@@ -15,7 +15,7 @@ export class CancelOpenOrder extends Task
 		protected context: Context,
 		protected models: Models,
 		protected broadcast: Broadcast,
-		protected tasks: Tasks,
+		protected tasks: TasksLike,
 	) {
 		super();
 	}

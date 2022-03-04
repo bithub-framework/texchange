@@ -1,26 +1,20 @@
 import {
 	OrderId,
 	OpenMaker,
-	Side, Length, Operation,
+	Side, Length,
 	OpenOrder,
+	ReadonlyRecur,
+	JsonCompatible,
 } from 'interfaces';
 import { Frozen } from './makers.d/frozon';
-import { Model, Stringified } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context';
 
 
 
-export type Snapshot = {
-	order: OpenMaker;
-	frozen: Frozen;
-}[];
-
-export type Backup = Stringified<Snapshot>;
-
-
-export class Makers extends Model<Snapshot>
+export abstract class Makers extends Model<Snapshot>
 	implements Iterable<Readonly<OpenMaker>> {
 	private orders = new Map<OrderId, Readonly<OpenMaker>>();
 	private frozens = new Map<OrderId, Readonly<Frozen>>();
@@ -29,10 +23,8 @@ export class Makers extends Model<Snapshot>
 		[Side.BID]: new Big(0),
 	};
 	public totalFrozen: Frozen = Frozen.ZERO;
+	protected abstract context: Context;
 
-	constructor(protected context: Context) {
-		super();
-	}
 
 	public [Symbol.iterator]() {
 		return this.orders.values();
@@ -47,12 +39,12 @@ export class Makers extends Model<Snapshot>
 	public capture(): Snapshot {
 		return [...this.orders.keys()]
 			.map(oid => ({
-				order: this.orders.get(oid)!,
-				frozen: this.frozens.get(oid)!,
+				order: OpenMaker.jsonCompatiblize(this.orders.get(oid)!),
+				frozen: Frozen.jsonCompatiblize(this.frozens.get(oid)!),
 			}));
 	}
 
-	public restore(snapshot: Backup): void {
+	public restore(snapshot: Snapshot): void {
 		for (const { order, frozen } of snapshot) {
 			this.orders.set(order.id!, {
 				price: new Big(order.price),
@@ -98,19 +90,7 @@ export class Makers extends Model<Snapshot>
 		};
 	}
 
-	protected toFreeze(
-		order: OpenOrder,
-	): Frozen {
-		// 默认单向持仓模式
-		const length: Length = order.side * Operation.OPEN;
-		return {
-			balance: {
-				[length]: this.context.config.dollarVolume(order.price, order.unfilled),
-				[-length]: new Big(0),
-			},
-			position: Frozen.ZERO.position,
-		};
-	}
+	protected abstract toFreeze(order: OpenOrder): Frozen;
 
 	public appendOrder(order: Readonly<OpenMaker>): void {
 		if (order.unfilled.eq(0)) return;
@@ -164,3 +144,12 @@ export class Makers extends Model<Snapshot>
 		} catch (err) { }
 	}
 }
+
+type SnapshotStruct = {
+	order: OpenMaker;
+	frozen: Frozen;
+}[];
+export namespace Makers {
+	export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Makers.Snapshot;

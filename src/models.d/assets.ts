@@ -1,16 +1,13 @@
-import { Length } from 'interfaces';
+import {
+    Length,
+    ReadonlyRecur,
+    JsonCompatible,
+} from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Model, Stringified } from './model';
+import { Model } from './model';
 
 
-export interface Snapshot {
-    position: { [length: number]: Big; };
-    balance: Big;
-    cost: { [length: number]: Big; };
-}
-
-export type Backup = Stringified<Snapshot>;
 
 export class Assets extends Model<Snapshot> {
     public position: { [length: number]: Big; };
@@ -36,18 +33,18 @@ export class Assets extends Model<Snapshot> {
     public capture(): Snapshot {
         return {
             position: {
-                [Length.LONG]: this.position[Length.LONG],
-                [Length.SHORT]: this.position[Length.SHORT],
+                [Length.LONG]: this.position[Length.LONG].toString(),
+                [Length.SHORT]: this.position[Length.SHORT].toString(),
             },
             cost: {
-                [Length.LONG]: this.cost[Length.LONG],
-                [Length.SHORT]: this.cost[Length.SHORT],
+                [Length.LONG]: this.cost[Length.LONG].toString(),
+                [Length.SHORT]: this.cost[Length.SHORT].toString(),
             },
-            balance: this.balance,
+            balance: this.balance.toString(),
         };
     }
 
-    public restore(snapshot: Backup): void {
+    public restore(snapshot: Snapshot): void {
         this.balance = new Big(snapshot.balance);
         this.position = {
             [Length.LONG]: new Big(snapshot.position[Length.LONG]),
@@ -118,3 +115,14 @@ export class Assets extends Model<Snapshot> {
     //     });
     // }
 }
+
+interface SnapshotStruct {
+    position: { [length: number]: Big; };
+    balance: Big;
+    cost: { [length: number]: Big; };
+}
+
+export namespace Assets {
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Assets.Snapshot;

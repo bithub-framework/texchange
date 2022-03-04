@@ -1,27 +1,13 @@
 import { Startable } from 'startable';
 import { Context } from './context';
 import { Models } from './models';
-import { Tasks } from './tasks';
+import { TasksLike } from './tasks-like';
 
 
 export abstract class Mtm {
     public abstract startable: Startable;
-}
+    protected abstract context: Context;
+    protected abstract models: Models;
+    protected abstract tasks: TasksLike;
 
-
-// 默认永不结算
-export class DefaultMtm extends Mtm {
-    public startable = new Startable(
-        () => this.start(),
-        () => this.stop(),
-    );
-
-    constructor(
-        protected context: Context,
-        protected models: Models,
-        protected tasks: Tasks,
-    ) { super(); }
-
-    private async start(): Promise<void> { }
-    private async stop(): Promise<void> { }
 }

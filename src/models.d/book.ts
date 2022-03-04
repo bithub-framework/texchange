@@ -2,21 +2,14 @@ import {
     Orderbook,
     Side,
     BookOrder,
+    ReadonlyRecur,
+    JsonCompatible,
 } from 'interfaces';
-import { Model, Stringified } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import assert = require('assert');
 import { Context } from '../context';
 
-
-export interface Snapshot {
-    basebook: Orderbook;
-    decrements: {
-        [side: number]: [string, Big][],
-    };
-    time: number;
-}
-export type Backup = Stringified<Snapshot>;
 
 
 export class Book extends Model<Snapshot> {
@@ -95,26 +88,32 @@ export class Book extends Model<Snapshot> {
         return {
             basebook: {
                 [Side.ASK]: this.basebook[Side.ASK].map(order => ({
-                    price: order.price,
-                    quantity: order.quantity,
+                    price: order.price.toString(),
+                    quantity: order.quantity.toString(),
                     side: order.side,
                 })),
                 [Side.BID]: this.basebook[Side.BID].map(order => ({
-                    price: order.price,
-                    quantity: order.quantity,
+                    price: order.price.toString(),
+                    quantity: order.quantity.toString(),
                     side: order.side,
                 })),
                 time: this.basebook.time,
             },
             decrements: {
-                [Side.ASK]: [...this.decrements[Side.ASK]],
-                [Side.BID]: [...this.decrements[Side.BID]],
+                [Side.ASK]: [...this.decrements[Side.ASK]].map(
+                    ([priceString, decrement]) =>
+                        [priceString, decrement.toString()],
+                ),
+                [Side.BID]: [...this.decrements[Side.BID]].map(
+                    ([priceString, decrement]) =>
+                        [priceString, decrement.toString()],
+                ),
             },
             time: this.time,
         }
     }
 
-    public restore(snapshot: Backup): void {
+    public restore(snapshot: Snapshot): void {
         const basebook: Orderbook = {
             time: snapshot.basebook.time === null
                 ? Number.NEGATIVE_INFINITY
@@ -140,3 +139,16 @@ export class Book extends Model<Snapshot> {
         this.finalbook = null;
     }
 }
+
+interface SnapshotStruct {
+    basebook: Orderbook;
+    decrements: {
+        [side: number]: [string, Big][],
+    };
+    time: number;
+}
+
+export namespace Book {
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Book.Snapshot;

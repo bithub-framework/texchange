@@ -7,9 +7,8 @@ const model_1 = require("./model");
 const big_js_1 = require("big.js");
 const assert = require("assert");
 class Makers extends model_1.Model {
-    constructor(context) {
-        super();
-        this.context = context;
+    constructor() {
+        super(...arguments);
         this.orders = new Map();
         this.frozens = new Map();
         this.totalUnfilledQuantity = {
@@ -29,8 +28,8 @@ class Makers extends model_1.Model {
     capture() {
         return [...this.orders.keys()]
             .map(oid => ({
-            order: this.orders.get(oid),
-            frozen: this.frozens.get(oid),
+            order: interfaces_1.OpenMaker.jsonCompatiblize(this.orders.get(oid)),
+            frozen: frozon_1.Frozen.jsonCompatiblize(this.frozens.get(oid)),
         }));
     }
     restore(snapshot) {
@@ -75,17 +74,6 @@ class Makers extends model_1.Model {
                 [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.CURRENCY_DP),
                 [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.CURRENCY_DP),
             },
-        };
-    }
-    toFreeze(order) {
-        // 默认单向持仓模式
-        const length = order.side * interfaces_1.Operation.OPEN;
-        return {
-            balance: {
-                [length]: this.context.config.dollarVolume(order.price, order.unfilled),
-                [-length]: new big_js_1.default(0),
-            },
-            position: frozon_1.Frozen.ZERO.position,
         };
     }
     appendOrder(order) {

@@ -1,7 +1,9 @@
 import {
     Length,
+    JsonCompatible,
+    ReadonlyRecur,
 } from 'interfaces';
-import { Model, Stringified } from './model';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Assets } from './assets';
@@ -9,19 +11,11 @@ import { Assets } from './assets';
 
 
 
-
-export interface Snapshot {
+export abstract class Margin extends Model<Snapshot> {
     [length: number]: Big;
-}
-export type Backup = Stringified<Snapshot>;
+    protected abstract context: Context;
 
-
-export class Margin extends Model<Snapshot> {
-    [length: number]: Big;
-
-    constructor(
-        protected context: Context,
-    ) {
+    constructor() {
         super();
 
         this[Length.LONG] = new Big(0);
@@ -62,12 +56,12 @@ export class Margin extends Model<Snapshot> {
 
     public capture(): Snapshot {
         return {
-            [Length.LONG]: this[Length.LONG],
-            [Length.SHORT]: this[Length.SHORT],
+            [Length.LONG]: this[Length.LONG].toString(),
+            [Length.SHORT]: this[Length.SHORT].toString(),
         };
     }
 
-    public restore(snapshot: Backup): void {
+    public restore(snapshot: Snapshot): void {
         this[Length.LONG] = new Big(snapshot[Length.LONG]);
         this[Length.SHORT] = new Big(snapshot[Length.SHORT]);
     }
@@ -94,23 +88,23 @@ export class Margin extends Model<Snapshot> {
     /**
      * this.hub.assets.position[order.length] has not been updated.
      */
-    protected marginIncrement(
+    protected abstract marginIncrement(
         length: Length, volume: Big, dollarVolume: Big,
-    ): Big {
-        // 默认非实时结算
-        return dollarVolume.div(this.context.config.LEVERAGE);
-    }
+    ): Big;
 
     /**
      * this.hub.assets.position[order.length] has not been updated.
      */
-    protected marginDecrement(
+    protected abstract marginDecrement(
         oldAssets: Assets,
         length: Length, volume: Big, dollarVolume: Big,
-    ): Big {
-        return this[length]
-            .times(volume)
-            .div(oldAssets.position[length]);
-    }
-
+    ): Big;
 }
+
+interface SnapshotStruct {
+    [length: number]: Big;
+}
+export namespace Margin {
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Margin.Snapshot;

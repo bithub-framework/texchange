@@ -2,16 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settle = void 0;
 const interfaces_1 = require("interfaces");
-const assert = require("assert");
 const task_1 = require("./task");
 class Settle extends task_1.Task {
-    constructor(context, models, broadcast, tasks) {
-        super();
-        this.context = context;
-        this.models = models;
-        this.broadcast = broadcast;
-        this.tasks = tasks;
-    }
     settle() {
         const { config } = this.context;
         const { assets, margin, pricing } = this.models;
@@ -27,16 +19,6 @@ class Settle extends task_1.Task {
             margin[length] = this.clearingMargin(length, profit);
         }
         this.assertEnoughBalance();
-    }
-    clearingMargin(length, profit) {
-        // 默认逐仓
-        return this.models.margin[length]
-            .plus(profit);
-    }
-    assertEnoughBalance() {
-        // 默认逐仓
-        for (const length of [interfaces_1.Length.SHORT, interfaces_1.Length.LONG])
-            assert(this.models.margin[length].gte(0));
     }
 }
 exports.Settle = Settle;

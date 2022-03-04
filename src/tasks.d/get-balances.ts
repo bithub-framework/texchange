@@ -5,7 +5,7 @@ import {
 } from 'interfaces';
 import { Task } from './task';
 import { Broadcast } from '../broadcast';
-import { Tasks, GetBalancesLike } from '../tasks';
+import { TasksLike, GetBalancesLike } from '../tasks-like';
 
 
 export class GetBalances extends Task
@@ -14,7 +14,7 @@ export class GetBalances extends Task
 		protected context: Context,
 		protected models: Models,
 		protected broadcast: Broadcast,
-		protected tasks: Tasks,
+		protected tasks: TasksLike,
 	) {
 		super();
 	}

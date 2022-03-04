@@ -6,7 +6,7 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, OrderMakesLike } from '../tasks';
+import { TasksLike, OrderMakesLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
@@ -16,7 +16,7 @@ export class OrderMakes extends Task
         protected context: Context,
         protected models: Models,
         protected broadcast: Broadcast,
-        protected tasks: Tasks,
+        protected tasks: TasksLike,
     ) {
         super();
     }

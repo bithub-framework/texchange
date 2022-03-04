@@ -1,5 +1,6 @@
 import {
     Length,
+    JsonCompatible,
 } from 'interfaces';
 import Big from 'big.js';
 
@@ -25,6 +26,7 @@ export namespace Frozen {
             },
         }
     }
+
     export const ZERO: Frozen = {
         balance: {
             [Length.LONG]: new Big(0),
@@ -35,6 +37,7 @@ export namespace Frozen {
             [Length.SHORT]: new Big(0),
         },
     };
+
     export function minus(x: Frozen, y?: Frozen): Frozen {
         if (!y) {
             y = x;
@@ -48,6 +51,19 @@ export namespace Frozen {
             position: {
                 [Length.LONG]: x.position[Length.LONG].minus(y.position[Length.LONG]),
                 [Length.SHORT]: x.position[Length.SHORT].minus(y.position[Length.SHORT]),
+            },
+        }
+    }
+
+    export function jsonCompatiblize(frozen: Frozen): JsonCompatible<Frozen> {
+        return {
+            balance: {
+                [Length.LONG]: frozen.balance[Length.LONG].toString(),
+                [Length.SHORT]: frozen.balance[Length.SHORT].toString(),
+            },
+            position: {
+                [Length.LONG]: frozen.position[Length.LONG].toString(),
+                [Length.SHORT]: frozen.position[Length.SHORT].toString(),
             },
         }
     }

@@ -4,22 +4,18 @@ import {
 import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
-import assert = require('assert');
 import { Task } from './task';
-import { Tasks, SettleLike } from '../tasks';
+import { TasksLike, SettleLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
-export class Settle extends Task
+export abstract class Settle extends Task
     implements SettleLike {
-    constructor(
-        protected context: Context,
-        protected models: Models,
-        protected broadcast: Broadcast,
-        protected tasks: Tasks,
-    ) {
-        super();
-    }
+
+    protected abstract context: Context;
+    protected abstract models: Models;
+    protected abstract broadcast: Broadcast;
+    protected abstract tasks: TasksLike;
 
     public settle(): void {
         const { config } = this.context;
@@ -45,17 +41,9 @@ export class Settle extends Task
         this.assertEnoughBalance();
     }
 
-    protected clearingMargin(
+    protected abstract clearingMargin(
         length: Length, profit: Big,
-    ): Big {
-        // 默认逐仓
-        return this.models.margin[length]
-            .plus(profit);
-    }
+    ): Big;
 
-    protected assertEnoughBalance(): void {
-        // 默认逐仓
-        for (const length of [Length.SHORT, Length.LONG])
-            assert(this.models.margin[length].gte(0));
-    }
+    protected abstract assertEnoughBalance(): void;
 }

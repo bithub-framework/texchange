@@ -4,10 +4,10 @@ exports.Margin = void 0;
 const interfaces_1 = require("interfaces");
 const model_1 = require("./model");
 const big_js_1 = require("big.js");
+// import { inspect } from 'util';
 class Margin extends model_1.Model {
-    constructor(context) {
+    constructor() {
         super();
-        this.context = context;
         this[interfaces_1.Length.LONG] = new big_js_1.default(0);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(0);
     }
@@ -34,46 +34,13 @@ class Margin extends model_1.Model {
     }
     capture() {
         return {
-            [interfaces_1.Length.LONG]: this[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT],
+            [interfaces_1.Length.LONG]: this[interfaces_1.Length.LONG].toString(),
+            [interfaces_1.Length.SHORT]: this[interfaces_1.Length.SHORT].toString(),
         };
     }
     restore(snapshot) {
         this[interfaces_1.Length.LONG] = new big_js_1.default(snapshot[interfaces_1.Length.LONG]);
         this[interfaces_1.Length.SHORT] = new big_js_1.default(snapshot[interfaces_1.Length.SHORT]);
-    }
-    // public [inspect.custom]() {
-    //     return JSON.stringify({
-    //         [Length.LONG]: this[Length.LONG],
-    //         [Length.SHORT]: this[Length.SHORT],
-    //         frozen: {
-    //             position: {
-    //                 [Length.LONG]: this.frozen.position[Length.LONG],
-    //                 [Length.SHORT]: this.frozen.position[Length.SHORT],
-    //             },
-    //             balance: {
-    //                 [Length.LONG]: this.frozen.balance[Length.LONG],
-    //                 [Length.SHORT]: this.frozen.balance[Length.SHORT],
-    //             },
-    //         },
-    //         available: this.available,
-    //         closable: this.closable,
-    //     });
-    // }
-    /**
-     * this.hub.assets.position[order.length] has not been updated.
-     */
-    marginIncrement(length, volume, dollarVolume) {
-        // 默认非实时结算
-        return dollarVolume.div(this.context.config.LEVERAGE);
-    }
-    /**
-     * this.hub.assets.position[order.length] has not been updated.
-     */
-    marginDecrement(oldAssets, length, volume, dollarVolume) {
-        return this[length]
-            .times(volume)
-            .div(oldAssets.position[length]);
     }
 }
 exports.Margin = Margin;

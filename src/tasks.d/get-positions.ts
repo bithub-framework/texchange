@@ -5,7 +5,7 @@ import {
 	Length,
 } from 'interfaces';
 import { Task } from './task';
-import { Tasks, GetPositionsLike } from '../tasks';
+import { TasksLike, GetPositionsLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
@@ -15,7 +15,7 @@ export class GetPositions extends Task
 		protected context: Context,
 		protected models: Models,
 		protected broadcast: Broadcast,
-		protected tasks: Tasks,
+		protected tasks: TasksLike,
 	) {
 		super();
 	}

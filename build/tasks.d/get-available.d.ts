@@ -2,15 +2,14 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, GetAvailableLike } from '../tasks';
+import { TasksLike, GetAvailableLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
-export declare class GetAvailable extends Task implements GetAvailableLike {
-    protected context: Context;
-    protected models: Models;
-    protected broadcast: Broadcast;
-    protected tasks: Tasks;
-    constructor(context: Context, models: Models, broadcast: Broadcast, tasks: Tasks);
+export declare abstract class GetAvailable extends Task implements GetAvailableLike {
+    protected abstract context: Context;
+    protected abstract models: Models;
+    protected abstract broadcast: Broadcast;
+    protected abstract tasks: TasksLike;
     getAvailable(): Big;
-    protected finalMargin(): Big;
-    protected finalFrozenBalance(): Big;
+    protected abstract finalMargin(): Big;
+    protected abstract finalFrozenBalance(): Big;
 }

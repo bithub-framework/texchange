@@ -45,5 +45,18 @@ var Frozen;
         };
     }
     Frozen.minus = minus;
+    function jsonCompatiblize(frozen) {
+        return {
+            balance: {
+                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].toString(),
+                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].toString(),
+            },
+            position: {
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].toString(),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].toString(),
+            },
+        };
+    }
+    Frozen.jsonCompatiblize = jsonCompatiblize;
 })(Frozen = exports.Frozen || (exports.Frozen = {}));
 //# sourceMappingURL=frozon.js.map

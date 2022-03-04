@@ -19,7 +19,9 @@ class Progress extends model_1.Model {
     }
     capture() {
         return {
-            latestPrice: this.latestPrice,
+            latestPrice: this.latestPrice
+                ? this.latestPrice.toString()
+                : null,
             latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,

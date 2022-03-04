@@ -1,6 +1,6 @@
 import { Models } from '../models';
 import { Context } from '../context';
-import { Tasks } from '../tasks';
+import { TasksLike } from '../tasks-like';
 import { UseCase } from './use-case';
 import { Broadcast } from '../broadcast';
 import {
@@ -14,7 +14,7 @@ export class GetPositions extends UseCase {
 		protected context: Context,
 		protected models: Models,
 		protected broadcast: Broadcast,
-		protected tasks: Tasks,
+		protected tasks: TasksLike,
 	) {
 		super();
 	}

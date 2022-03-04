@@ -1,17 +1,7 @@
-import { Length } from 'interfaces';
+import { Length, ReadonlyRecur, JsonCompatible } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Model, Stringified } from './model';
-export interface Snapshot {
-    position: {
-        [length: number]: Big;
-    };
-    balance: Big;
-    cost: {
-        [length: number]: Big;
-    };
-}
-export declare type Backup = Stringified<Snapshot>;
+import { Model } from './model';
 export declare class Assets extends Model<Snapshot> {
     protected context: Context;
     position: {
@@ -23,7 +13,7 @@ export declare class Assets extends Model<Snapshot> {
     };
     constructor(context: Context);
     capture(): Snapshot;
-    restore(snapshot: Backup): void;
+    restore(snapshot: Snapshot): void;
     payFee(fee: Big): void;
     openPosition(length: Length, volume: Big, dollarVolume: Big): void;
     /**
@@ -31,3 +21,17 @@ export declare class Assets extends Model<Snapshot> {
      */
     closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
 }
+interface SnapshotStruct {
+    position: {
+        [length: number]: Big;
+    };
+    balance: Big;
+    cost: {
+        [length: number]: Big;
+    };
+}
+export declare namespace Assets {
+    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Assets.Snapshot;
+export {};

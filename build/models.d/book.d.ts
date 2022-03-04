@@ -1,15 +1,7 @@
-import { Orderbook, Side } from 'interfaces';
-import { Model, Stringified } from './model';
+import { Orderbook, Side, ReadonlyRecur, JsonCompatible } from 'interfaces';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
-export interface Snapshot {
-    basebook: Orderbook;
-    decrements: {
-        [side: number]: [string, Big][];
-    };
-    time: number;
-}
-export declare type Backup = Stringified<Snapshot>;
 export declare class Book extends Model<Snapshot> {
     protected context: Context;
     private time;
@@ -22,5 +14,17 @@ export declare class Book extends Model<Snapshot> {
     private apply;
     getBook(): Readonly<Orderbook>;
     capture(): Snapshot;
-    restore(snapshot: Backup): void;
+    restore(snapshot: Snapshot): void;
 }
+interface SnapshotStruct {
+    basebook: Orderbook;
+    decrements: {
+        [side: number]: [string, Big][];
+    };
+    time: number;
+}
+export declare namespace Book {
+    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Book.Snapshot;
+export {};

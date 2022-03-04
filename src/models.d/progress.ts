@@ -1,17 +1,12 @@
 import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Stringified } from './model';
-import { Trade } from 'interfaces';
+import {
+    Trade,
+    ReadonlyRecur,
+    JsonCompatible,
+} from 'interfaces';
 
-
-export interface Snapshot {
-    latestPrice: Big | null;
-    latestDatabaseTradeTime: number | null;
-    userTradeCount: number;
-    userOrderCount: number;
-}
-export type Backup = Stringified<Snapshot>;
 
 
 export class Progress extends Model<Snapshot> {
@@ -35,14 +30,16 @@ export class Progress extends Model<Snapshot> {
 
     public capture(): Snapshot {
         return {
-            latestPrice: this.latestPrice!,
+            latestPrice: this.latestPrice
+                ? this.latestPrice.toString()
+                : null,
             latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
         };
     }
 
-    public restore(snapshot: Backup): void {
+    public restore(snapshot: Snapshot): void {
         this.latestPrice = snapshot.latestPrice === null
             ? null
             : new Big(snapshot.latestPrice);
@@ -55,3 +52,14 @@ export class Progress extends Model<Snapshot> {
 export interface DatabaseTrade extends Trade {
     id: string;
 }
+
+interface SnapshotStruct {
+    latestPrice: Big | null;
+    latestDatabaseTradeTime: number | null;
+    userTradeCount: number;
+    userOrderCount: number;
+}
+export namespace Progress {
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Progress.Snapshot;

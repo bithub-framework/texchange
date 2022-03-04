@@ -8,7 +8,7 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, ValidateOrderLike } from '../tasks';
+import { TasksLike, ValidateOrderLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
@@ -19,7 +19,7 @@ export class ValidateOrder extends Task
         protected context: Context,
         protected models: Models,
         protected broadcast: Broadcast,
-        protected tasks: Tasks,
+        protected tasks: TasksLike,
     ) {
         super();
     }

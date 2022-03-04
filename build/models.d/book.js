@@ -76,20 +76,20 @@ class Book extends model_1.Model {
         return {
             basebook: {
                 [interfaces_1.Side.ASK]: this.basebook[interfaces_1.Side.ASK].map(order => ({
-                    price: order.price,
-                    quantity: order.quantity,
+                    price: order.price.toString(),
+                    quantity: order.quantity.toString(),
                     side: order.side,
                 })),
                 [interfaces_1.Side.BID]: this.basebook[interfaces_1.Side.BID].map(order => ({
-                    price: order.price,
-                    quantity: order.quantity,
+                    price: order.price.toString(),
+                    quantity: order.quantity.toString(),
                     side: order.side,
                 })),
                 time: this.basebook.time,
             },
             decrements: {
-                [interfaces_1.Side.ASK]: [...this.decrements[interfaces_1.Side.ASK]],
-                [interfaces_1.Side.BID]: [...this.decrements[interfaces_1.Side.BID]],
+                [interfaces_1.Side.ASK]: [...this.decrements[interfaces_1.Side.ASK]].map(([priceString, decrement]) => [priceString, decrement.toString()]),
+                [interfaces_1.Side.BID]: [...this.decrements[interfaces_1.Side.BID]].map(([priceString, decrement]) => [priceString, decrement.toString()]),
             },
             time: this.time,
         };

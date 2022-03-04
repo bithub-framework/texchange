@@ -10,7 +10,7 @@ import { RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, TradeTakesOpenMakersLike } from '../tasks';
+import { TasksLike, TradeTakesOpenMakersLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
@@ -21,7 +21,7 @@ export class TradeTakesOpenMakers extends Task
         protected context: Context,
         protected models: Models,
         protected broadcast: Broadcast,
-        protected tasks: Tasks,
+        protected tasks: TasksLike,
     ) {
         super();
     }

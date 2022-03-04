@@ -1,26 +1,30 @@
-import { Length } from 'interfaces';
-import { Model, Stringified } from './model';
+import { Length, JsonCompatible, ReadonlyRecur } from 'interfaces';
+import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Assets } from './assets';
-export interface Snapshot {
+export declare abstract class Margin extends Model<Snapshot> {
     [length: number]: Big;
-}
-export declare type Backup = Stringified<Snapshot>;
-export declare class Margin extends Model<Snapshot> {
-    protected context: Context;
-    [length: number]: Big;
-    constructor(context: Context);
+    protected abstract context: Context;
+    constructor();
     incMargin(length: Length, volume: Big, dollarVolume: Big): void;
     decMargin(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): void;
     capture(): Snapshot;
-    restore(snapshot: Backup): void;
+    restore(snapshot: Snapshot): void;
     /**
      * this.hub.assets.position[order.length] has not been updated.
      */
-    protected marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
+    protected abstract marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
     /**
      * this.hub.assets.position[order.length] has not been updated.
      */
-    protected marginDecrement(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): Big;
+    protected abstract marginDecrement(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): Big;
 }
+interface SnapshotStruct {
+    [length: number]: Big;
+}
+export declare namespace Margin {
+    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+}
+import Snapshot = Margin.Snapshot;
+export {};

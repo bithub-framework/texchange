@@ -21,14 +21,14 @@ class Assets extends model_1.Model {
     capture() {
         return {
             position: {
-                [interfaces_1.Length.LONG]: this.position[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: this.position[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: this.position[interfaces_1.Length.LONG].toString(),
+                [interfaces_1.Length.SHORT]: this.position[interfaces_1.Length.SHORT].toString(),
             },
             cost: {
-                [interfaces_1.Length.LONG]: this.cost[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: this.cost[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: this.cost[interfaces_1.Length.LONG].toString(),
+                [interfaces_1.Length.SHORT]: this.cost[interfaces_1.Length.SHORT].toString(),
             },
-            balance: this.balance,
+            balance: this.balance.toString(),
         };
     }
     restore(snapshot) {

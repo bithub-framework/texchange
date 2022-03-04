@@ -9,7 +9,7 @@ import { Big, RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Task } from './task';
-import { Tasks, OrderTakesLike } from '../tasks';
+import { TasksLike, OrderTakesLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 
 
@@ -19,7 +19,7 @@ export class OrderTakes extends Task
         protected context: Context,
         protected models: Models,
         protected broadcast: Broadcast,
-        protected tasks: Tasks,
+        protected tasks: TasksLike,
     ) {
         super();
     }
