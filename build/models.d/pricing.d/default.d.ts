@@ -3,7 +3,7 @@ import Big from 'big.js';
 import { Pricing } from '../pricing';
 import { Context } from '../../context';
 export declare class DefaultPricing extends Pricing<Snapshot> {
-    protected context: Context;
+    protected readonly context: Context;
     protected settlementPrice: Big;
     constructor(context: Context, settlementPrice: Big);
     updateTrades(trades: readonly Readonly<Trade>[]): void;

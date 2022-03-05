@@ -6,10 +6,10 @@ import { TasksLike } from '../../tasks-like';
 import { Broadcast } from '../../broadcast';
 import { Settle } from '../settle';
 export declare class DefaultSettle extends Settle {
-    protected context: Context;
-    protected models: Models;
-    protected broadcast: Broadcast;
-    protected tasks: TasksLike;
+    protected readonly context: Context;
+    protected readonly models: Models;
+    protected readonly broadcast: Broadcast;
+    protected readonly tasks: TasksLike;
     constructor(context: Context, models: Models, broadcast: Broadcast, tasks: TasksLike);
     protected clearingMargin(length: Length, profit: Big): Big;
     protected assertEnoughBalance(): void;

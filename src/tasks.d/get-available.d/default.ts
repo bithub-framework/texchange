@@ -15,10 +15,10 @@ import { GetAvailable } from '../get-available';
 
 export class DefaultGetAvailable extends GetAvailable {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
 	) { super(); }
 
 	protected finalMargin(): Big {

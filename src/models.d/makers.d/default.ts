@@ -11,7 +11,7 @@ import { Makers } from '../makers';
 
 export class DefaultMakers extends Makers {
 	constructor(
-		protected context: Context,
+		protected readonly context: Context,
 	) { super(); }
 
 	protected toFreeze(

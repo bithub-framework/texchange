@@ -11,13 +11,11 @@ import assert = require('assert');
 
 export class UpdateOrderbook extends UseCase {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
-	) {
-		super();
-	}
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
+	) { super(); }
 
 	public updateOrderbook(orderbook: Readonly<Orderbook>): void {
 		assert(orderbook.time === this.context.timeline.now());

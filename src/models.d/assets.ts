@@ -15,7 +15,7 @@ export class Assets extends Model<Snapshot> {
     public cost: { [length: number]: Big; };
 
     constructor(
-        protected context: Context,
+        protected readonly context: Context,
     ) {
         super();
 

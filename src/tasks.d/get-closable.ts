@@ -12,13 +12,11 @@ import { Broadcast } from '../broadcast';
 export class GetClosable extends Task
 	implements GetClosableLike {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
-	) {
-		super();
-	}
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
+	) { super(); }
 
 	public getClosable(): Closable {
 		const { assets, makers } = this.models;

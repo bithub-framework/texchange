@@ -5,10 +5,10 @@ import { Task } from './task';
 import { TasksLike, TradeTakesOpenMakersLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 export declare class TradeTakesOpenMakers extends Task implements TradeTakesOpenMakersLike {
-    protected context: Context;
-    protected models: Models;
-    protected broadcast: Broadcast;
-    protected tasks: TasksLike;
+    protected readonly context: Context;
+    protected readonly models: Models;
+    protected readonly broadcast: Broadcast;
+    protected readonly tasks: TasksLike;
     constructor(context: Context, models: Models, broadcast: Broadcast, tasks: TasksLike);
     tradeTakesOpenMakers(roTrade: Readonly<Trade>): void;
     private tradeShouldTakeOpenOrder;

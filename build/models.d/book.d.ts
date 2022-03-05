@@ -3,7 +3,7 @@ import { Model } from './model';
 import Big from 'big.js';
 import { Context } from '../context';
 export declare class Book extends Model<Snapshot> {
-    protected context: Context;
+    protected readonly context: Context;
     private time;
     private basebook;
     private decrements;

@@ -18,13 +18,11 @@ import { Broadcast } from '../broadcast';
 export class TradeTakesOpenMakers extends Task
     implements TradeTakesOpenMakersLike {
     constructor(
-        protected context: Context,
-        protected models: Models,
-        protected broadcast: Broadcast,
-        protected tasks: TasksLike,
-    ) {
-        super();
-    }
+        protected readonly context: Context,
+        protected readonly models: Models,
+        protected readonly broadcast: Broadcast,
+        protected readonly tasks: TasksLike,
+    ) { super(); }
 
     public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
         const trade: Trade = {

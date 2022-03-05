@@ -11,7 +11,7 @@ import { Context } from '../../context';
 
 export class DefaultPricing extends Pricing<Snapshot> {
 	constructor(
-		protected context: Context,
+		protected readonly context: Context,
 		protected settlementPrice: Big,
 	) { super(); }
 

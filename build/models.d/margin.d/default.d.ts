@@ -7,7 +7,7 @@ import { Margin } from '../margin';
  * 默认非实时结算
  */
 export declare class DefaultMargin extends Margin {
-    protected context: Context;
+    protected readonly context: Context;
     constructor(context: Context);
     protected marginIncrement(length: Length, volume: Big, dollarVolume: Big): Big;
     protected marginDecrement(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): Big;

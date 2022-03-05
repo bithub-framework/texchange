@@ -23,7 +23,7 @@ export abstract class Makers extends Model<Snapshot>
 		[Side.BID]: new Big(0),
 	};
 	public totalFrozen: Frozen = Frozen.ZERO;
-	protected abstract context: Context;
+	protected abstract readonly context: Context;
 
 
 	public [Symbol.iterator]() {

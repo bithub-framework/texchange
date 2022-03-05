@@ -11,13 +11,11 @@ import {
 
 export class AmendOrder extends UseCase {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
-	) {
-		super();
-	}
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
+	) { super(); }
 
 	public amendOrder(amendment: Readonly<Amendment>): OpenOrder {
 		const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);

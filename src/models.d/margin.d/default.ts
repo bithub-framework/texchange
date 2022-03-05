@@ -15,7 +15,7 @@ import { Margin } from '../margin';
  */
 export class DefaultMargin extends Margin {
 	constructor(
-		protected context: Context,
+		protected readonly context: Context,
 	) { super(); }
 
 	protected marginIncrement(

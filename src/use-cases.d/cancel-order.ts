@@ -10,13 +10,11 @@ import { Broadcast } from '../broadcast';
 
 export class CancelOrder extends UseCase {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
-	) {
-		super();
-	}
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
+	) { super(); }
 
 	public cancelOrder(order: Readonly<OpenOrder>): OpenOrder {
 		return this.tasks.cancelOpenOrder.cancelOpenOrder(order);

@@ -9,15 +9,15 @@ import { Mtm } from '../mark-to-market';
  * 默认永不结算
  */
 export class DefaultMtm extends Mtm {
-	public startable = new Startable(
+	public readonly startable = new Startable(
 		() => this.start(),
 		() => this.stop(),
 	);
 
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected tasks: TasksLike,
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly tasks: TasksLike,
 	) { super(); }
 
 	private async start(): Promise<void> { }

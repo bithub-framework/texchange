@@ -3,7 +3,7 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Trade, ReadonlyRecur, JsonCompatible } from 'interfaces';
 export declare class Progress extends Model<Snapshot> {
-    protected context: Context;
+    protected readonly context: Context;
     latestPrice: Big | null;
     latestDatabaseTradeTime: number | null;
     userTradeCount: number;

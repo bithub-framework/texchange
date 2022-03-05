@@ -3,8 +3,8 @@ import { Context } from '../context';
 import { TasksLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 export declare abstract class Task {
-    protected abstract context: Context;
-    protected abstract models: Models;
-    protected abstract broadcast: Broadcast;
-    protected abstract tasks: TasksLike;
+    protected abstract readonly context: Context;
+    protected abstract readonly models: Models;
+    protected abstract readonly broadcast: Broadcast;
+    protected abstract readonly tasks: TasksLike;
 }

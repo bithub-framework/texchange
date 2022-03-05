@@ -3,7 +3,7 @@ import Big from 'big.js';
 import { Context } from '../context';
 import { Model } from './model';
 export declare class Assets extends Model<Snapshot> {
-    protected context: Context;
+    protected readonly context: Context;
     position: {
         [length: number]: Big;
     };

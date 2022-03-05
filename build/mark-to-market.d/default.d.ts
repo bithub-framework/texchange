@@ -7,10 +7,10 @@ import { Mtm } from '../mark-to-market';
  * 默认永不结算
  */
 export declare class DefaultMtm extends Mtm {
-    protected context: Context;
-    protected models: Models;
-    protected tasks: TasksLike;
-    startable: Startable;
+    protected readonly context: Context;
+    protected readonly models: Models;
+    protected readonly tasks: TasksLike;
+    readonly startable: Startable;
     constructor(context: Context, models: Models, tasks: TasksLike);
     private start;
     private stop;

@@ -16,13 +16,11 @@ import { Broadcast } from '../broadcast';
 export class ValidateOrder extends Task
     implements ValidateOrderLike {
     constructor(
-        protected context: Context,
-        protected models: Models,
-        protected broadcast: Broadcast,
-        protected tasks: TasksLike,
-    ) {
-        super();
-    }
+        protected readonly context: Context,
+        protected readonly models: Models,
+        protected readonly broadcast: Broadcast,
+        protected readonly tasks: TasksLike,
+    ) { super(); }
 
     public validateOrder(order: Readonly<OpenOrder>): void {
         this.validateFormat(order);

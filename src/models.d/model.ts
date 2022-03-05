@@ -8,7 +8,7 @@ import { Context } from '../context';
 export abstract class Model<Snapshot>
 	implements StatefulLike<Snapshot> {
 
-	protected abstract context: Context;
+	protected abstract readonly context: Context;
 
 	public abstract capture(): Snapshot;
 	public abstract restore(backup: Snapshot): void;

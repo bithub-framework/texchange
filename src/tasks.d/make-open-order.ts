@@ -9,13 +9,11 @@ import { Broadcast } from '../broadcast';
 export class MakeOpenOrder extends Task
 	implements MakeOpenOrderLike {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
-	) {
-		super();
-	}
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
+	) { super(); }
 
 	public makeOpenOrder(order: OpenOrder): OpenOrder {
 		this.tasks.validateOrder.validateOrder(order);

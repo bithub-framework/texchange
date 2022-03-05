@@ -27,7 +27,7 @@ export class Book extends Model<Snapshot> {
     private finalbook: Orderbook | null = null;
 
     constructor(
-        protected context: Context,
+        protected readonly context: Context,
     ) {
         super();
     }

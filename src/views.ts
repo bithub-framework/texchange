@@ -19,5 +19,4 @@ export class Views {
 		this.latency = new Latency(this.context, this.instant);
 		this.joystick = new Joystick(this.context, this.useCases);
 	}
-
 }

@@ -5,7 +5,7 @@ import { Context } from '../context';
 import { Assets } from './assets';
 export declare abstract class Margin extends Model<Snapshot> {
     [length: number]: Big;
-    protected abstract context: Context;
+    protected abstract readonly context: Context;
     constructor();
     incMargin(length: Length, volume: Big, dollarVolume: Big): void;
     decMargin(oldAssets: Assets, length: Length, volume: Big, dollarVolume: Big): void;

@@ -3,7 +3,7 @@ import Big from 'big.js';
 import { Model } from './model';
 import { Context } from '../context';
 export declare abstract class Pricing<Snapshot> extends Model<Snapshot> {
-    protected abstract context: Context;
+    protected abstract readonly context: Context;
     protected abstract settlementPrice: Big;
     abstract getSettlementPrice(): Big;
     abstract updateTrades(trades: readonly Readonly<Trade>[]): void;

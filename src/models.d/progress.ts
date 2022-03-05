@@ -16,7 +16,7 @@ export class Progress extends Model<Snapshot> {
     public userOrderCount = 0;
 
     constructor(
-        protected context: Context,
+        protected readonly context: Context,
     ) {
         super();
     }

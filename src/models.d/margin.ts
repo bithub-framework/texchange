@@ -13,7 +13,7 @@ import { Assets } from './assets';
 
 export abstract class Margin extends Model<Snapshot> {
     [length: number]: Big;
-    protected abstract context: Context;
+    protected abstract readonly context: Context;
 
     constructor() {
         super();

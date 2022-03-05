@@ -10,7 +10,7 @@ export declare abstract class Makers extends Model<Snapshot> implements Iterable
         [side: number]: Big;
     };
     totalFrozen: Frozen;
-    protected abstract context: Context;
+    protected abstract readonly context: Context;
     [Symbol.iterator](): IterableIterator<Readonly<OpenMaker>>;
     getOrder(id: OrderId): Readonly<OpenMaker>;
     capture(): Snapshot;

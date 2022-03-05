@@ -5,10 +5,10 @@ import { Task } from './task';
 import { TasksLike, GetAvailableLike } from '../tasks-like';
 import { Broadcast } from '../broadcast';
 export declare abstract class GetAvailable extends Task implements GetAvailableLike {
-    protected abstract context: Context;
-    protected abstract models: Models;
-    protected abstract broadcast: Broadcast;
-    protected abstract tasks: TasksLike;
+    protected abstract readonly context: Context;
+    protected abstract readonly models: Models;
+    protected abstract readonly broadcast: Broadcast;
+    protected abstract readonly tasks: TasksLike;
     getAvailable(): Big;
     protected abstract finalMargin(): Big;
     protected abstract finalFrozenBalance(): Big;

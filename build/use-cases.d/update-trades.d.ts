@@ -5,11 +5,11 @@ import { UseCase } from './use-case';
 import { DatabaseTrade } from '../models.d/progress';
 import { Broadcast } from '../broadcast';
 export declare class UpdateTrades extends UseCase {
-    protected context: Context;
-    protected models: Models;
-    protected broadcast: Broadcast;
-    protected tasks: TasksLike;
-    private realTimeSettlement;
+    protected readonly context: Context;
+    protected readonly models: Models;
+    protected readonly broadcast: Broadcast;
+    protected readonly tasks: TasksLike;
+    private readonly realTimeSettlement;
     constructor(context: Context, models: Models, broadcast: Broadcast, tasks: TasksLike, realTimeSettlement: boolean);
     updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void;
 }

@@ -12,10 +12,10 @@ import { Settle } from '../settle';
 
 export class DefaultSettle extends Settle {
 	constructor(
-		protected context: Context,
-		protected models: Models,
-		protected broadcast: Broadcast,
-		protected tasks: TasksLike,
+		protected readonly context: Context,
+		protected readonly models: Models,
+		protected readonly broadcast: Broadcast,
+		protected readonly tasks: TasksLike,
 	) { super(); }
 
 	protected clearingMargin(
