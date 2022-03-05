@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultTexchange = void 0;
-const texchange_1 = require("../texchange");
+const texchange_1 = require("./texchange");
 const startable_1 = require("startable");
-const default_1 = require("../mark-to-market.d/default");
-const assets_1 = require("../models.d/assets");
-const default_2 = require("../models.d/margin.d/default");
-const default_3 = require("../models.d/makers.d/default");
-const book_1 = require("../models.d/book");
-const progress_1 = require("../models.d/progress");
-const default_4 = require("../models.d/pricing.d/default");
+const mark_to_market_1 = require("../mark-to-market");
+const assets_1 = require("../models/assets");
+const margin_1 = require("../models/margin");
+const makers_1 = require("../models/makers");
+const book_1 = require("../models/book");
+const progress_1 = require("../models/progress");
+const pricing_1 = require("../models/pricing");
 const broadcast_1 = require("../broadcast");
-const tasks_1 = require("../tasks");
-const amend_order_1 = require("../use-cases.d/amend-order");
-const cancel_order_1 = require("../use-cases.d/cancel-order");
-const get_balances_1 = require("../use-cases.d/get-balances");
-const get_open_orders_1 = require("../use-cases.d/get-open-orders");
-const get_positions_1 = require("../use-cases.d/get-positions");
-const make_order_1 = require("../use-cases.d/make-order");
-const update_orderbook_1 = require("../use-cases.d/update-orderbook");
-const update_trades_1 = require("../use-cases.d/update-trades");
+const default_tasks_1 = require("../default-tasks");
+const amend_order_1 = require("../use-cases/amend-order");
+const cancel_order_1 = require("../use-cases/cancel-order");
+const get_balances_1 = require("../use-cases/get-balances");
+const get_open_orders_1 = require("../use-cases/get-open-orders");
+const get_positions_1 = require("../use-cases/get-positions");
+const make_order_1 = require("../use-cases/make-order");
+const update_orderbook_1 = require("../use-cases/update-orderbook");
+const update_trades_1 = require("../use-cases/update-trades");
 const views_1 = require("../views");
 const big_js_1 = require("big.js");
 class DefaultTexchange extends texchange_1.Texchange {
@@ -31,15 +31,15 @@ class DefaultTexchange extends texchange_1.Texchange {
         };
         this.models = {
             assets: new assets_1.Assets(this.context),
-            margin: new default_2.DefaultMargin(this.context),
-            makers: new default_3.DefaultMakers(this.context),
+            margin: new margin_1.DefaultMargin(this.context),
+            makers: new makers_1.DefaultMakers(this.context),
             book: new book_1.Book(this.context),
-            pricing: new default_4.DefaultPricing(this.context, new big_js_1.default(0)),
+            pricing: new pricing_1.DefaultPricing(this.context, new big_js_1.default(0)),
             progress: new progress_1.Progress(this.context),
         };
         this.broadcast = new broadcast_1.Broadcast();
-        this.tasks = new tasks_1.DefaultTasks(this.context, this.models, this.broadcast);
-        this.mtm = new default_1.DefaultMtm(this.context, this.models, this.tasks);
+        this.tasks = new default_tasks_1.DefaultTasks(this.context, this.models, this.broadcast);
+        this.mtm = new mark_to_market_1.DefaultMtm(this.context, this.models, this.tasks);
         this.useCases = {
             amendOrder: new amend_order_1.AmendOrder(this.context, this.models, this.broadcast, this.tasks),
             cancelOrder: new cancel_order_1.CancelOrder(this.context, this.models, this.broadcast, this.tasks),

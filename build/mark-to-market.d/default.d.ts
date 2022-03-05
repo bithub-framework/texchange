@@ -2,7 +2,7 @@ import { Startable } from 'startable';
 import { Context } from '../context';
 import { Models } from '../models';
 import { TasksLike } from '../tasks-like';
-import { Mtm } from '../mark-to-market';
+import { Mtm } from './mtm';
 /**
  * 默认永不结算
  */

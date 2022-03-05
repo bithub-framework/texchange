@@ -1,8 +1,8 @@
 import { Context } from './context';
 import { UseCases } from './use-cases';
-import { Instant } from './views.d/instant';
-import { Latency } from './views.d/latency';
-import { Joystick } from './views.d/joystick';
+import { Instant } from './views/instant';
+import { Latency } from './views/latency';
+import { Joystick } from './views/joystick';
 export declare class Views {
     protected readonly context: Context;
     protected readonly useCases: UseCases;

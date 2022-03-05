@@ -1,9 +1,9 @@
-import { Assets } from './models.d/assets';
-import { Margin } from './models.d/margin';
-import { Makers } from './models.d/makers';
-import { Book } from './models.d/book';
-import { Progress } from './models.d/progress';
-import { Pricing } from './models.d/pricing';
+import { Assets } from './models/assets';
+import { Margin } from './models/margin';
+import { Makers } from './models/makers';
+import { Book } from './models/book';
+import { Progress } from './models/progress';
+import { Pricing } from './models/pricing';
 
 
 export interface Models {

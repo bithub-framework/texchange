@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMtm = void 0;
 const startable_1 = require("startable");
-const mark_to_market_1 = require("../mark-to-market");
+const mtm_1 = require("./mtm");
 /**
  * 默认永不结算
  */
-class DefaultMtm extends mark_to_market_1.Mtm {
+class DefaultMtm extends mtm_1.Mtm {
     constructor(context, models, tasks) {
         super();
         this.context = context;
