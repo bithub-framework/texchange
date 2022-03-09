@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Progress = void 0;
-const model_1 = require("./model");
+const model_1 = require("../model");
 const big_js_1 = require("big.js");
 class Progress extends model_1.Model {
     constructor(context) {

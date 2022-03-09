@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Views = void 0;
-const instant_1 = require("./views/instant");
-const latency_1 = require("./views/latency");
-const joystick_1 = require("./views/joystick");
+const instant_1 = require("./views.d/instant");
+const latency_1 = require("./views.d/latency");
+const joystick_1 = require("./views.d/joystick");
 class Views {
     constructor(context, useCases) {
-        this.context = context;
-        this.useCases = useCases;
-        this.instant = new instant_1.Instant(this.context, this.useCases);
-        this.latency = new latency_1.Latency(this.context, this.instant);
-        this.joystick = new joystick_1.Joystick(this.context, this.useCases);
+        this.instant = new instant_1.Instant(context, useCases);
+        this.latency = new latency_1.Latency(context, this.instant);
+        this.joystick = new joystick_1.Joystick(context, useCases);
     }
 }
 exports.Views = Views;

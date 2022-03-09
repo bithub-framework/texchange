@@ -2,11 +2,11 @@
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { OpenOrder, LimitOrder, Amendment, Positions, Balances, MarketEvents, AccountEvents } from 'interfaces';
-import { UseCases } from '../use-cases';
+import { UseCasesLike } from '../use-cases';
 export declare class Instant extends EventEmitter {
     private context;
     private useCases;
-    constructor(context: Context, useCases: UseCases);
+    constructor(context: Context, useCases: UseCasesLike);
     makeOrders(orders: readonly Readonly<LimitOrder>[]): (OpenOrder | Error)[];
     cancelOrders(orders: readonly Readonly<OpenOrder>[]): OpenOrder[];
     amendOrders(amendments: readonly Readonly<Amendment>[]): (OpenOrder | Error)[];

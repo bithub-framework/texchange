@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderMakes = void 0;
 const big_js_1 = require("big.js");
-const task_1 = require("./task");
+const task_1 = require("../task");
 class OrderMakes extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
         super();

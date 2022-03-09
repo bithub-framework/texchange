@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPositions = void 0;
-const use_case_1 = require("./use-case");
+const use_case_1 = require("../use-case");
 const interfaces_1 = require("interfaces");
 class GetPositions extends use_case_1.UseCase {
     constructor(context, models, broadcast, tasks) {

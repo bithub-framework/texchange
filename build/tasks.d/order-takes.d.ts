@@ -1,15 +1,15 @@
 import { OpenOrder, Trade } from 'interfaces';
 import { Context } from '../context';
-import { Models } from '../models';
-import { Task } from './task';
-import { TasksLike, OrderTakesLike } from '../tasks-like';
+import { ModelsStatic } from '../models/models-static';
+import { Task } from '../task';
+import { TasksLike, OrderTakesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 export declare class OrderTakes extends Task implements OrderTakesLike {
     protected readonly context: Context;
-    protected readonly models: Models;
+    protected readonly models: ModelsStatic;
     protected readonly broadcast: Broadcast;
     protected readonly tasks: TasksLike;
-    constructor(context: Context, models: Models, broadcast: Broadcast, tasks: TasksLike);
+    constructor(context: Context, models: ModelsStatic, broadcast: Broadcast, tasks: TasksLike);
     /**
      * @param taker variable
      */

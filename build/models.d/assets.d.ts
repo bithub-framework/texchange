@@ -1,7 +1,7 @@
 import { Length, ReadonlyRecur, JsonCompatible } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { Model } from './model';
+import { Model } from '../model';
 export declare class Assets extends Model<Snapshot> {
     protected readonly context: Context;
     position: {

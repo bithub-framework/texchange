@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const interfaces_1 = require("interfaces");
 const big_js_1 = require("big.js");
-const model_1 = require("./model");
+const model_1 = require("../model");
 class Assets extends model_1.Model {
     constructor(context) {
         super();

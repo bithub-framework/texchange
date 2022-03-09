@@ -4,7 +4,7 @@ exports.ValidateOrder = void 0;
 const interfaces_1 = require("interfaces");
 const assert = require("assert");
 const big_js_1 = require("big.js");
-const task_1 = require("./task");
+const task_1 = require("../task");
 class ValidateOrder extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
         super();

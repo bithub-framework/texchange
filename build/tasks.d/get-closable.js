@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetClosable = void 0;
 const interfaces_1 = require("interfaces");
-const task_1 = require("./task");
+const task_1 = require("../task");
 class GetClosable extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
         super();

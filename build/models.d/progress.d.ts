@@ -1,4 +1,4 @@
-import { Model } from './model';
+import { Model } from '../model';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Trade, ReadonlyRecur, JsonCompatible } from 'interfaces';

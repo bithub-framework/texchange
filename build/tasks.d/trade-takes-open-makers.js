@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
 const interfaces_1 = require("interfaces");
 const utilities_1 = require("../utilities");
-const task_1 = require("./task");
+const task_1 = require("../task");
 class TradeTakesOpenMakers extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
         super();

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakeOrder = void 0;
-const use_case_1 = require("./use-case");
+const use_case_1 = require("../use-case");
 const big_js_1 = require("big.js");
 class MakeOrder extends use_case_1.UseCase {
     constructor(context, models, broadcast, tasks) {

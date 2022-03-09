@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateTrades = void 0;
-const use_case_1 = require("./use-case");
+const use_case_1 = require("../use-case");
 const assert = require("assert");
 class UpdateTrades extends use_case_1.UseCase {
     constructor(context, models, broadcast, tasks, realTimeSettlement) {

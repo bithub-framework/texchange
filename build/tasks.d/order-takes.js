@@ -4,7 +4,7 @@ exports.OrderTakes = void 0;
 const interfaces_1 = require("interfaces");
 const utilities_1 = require("../utilities");
 const big_js_1 = require("big.js");
-const task_1 = require("./task");
+const task_1 = require("../task");
 class OrderTakes extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
         super();
