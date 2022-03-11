@@ -63,7 +63,7 @@ export class TradeTakesOpenMakers extends Task
     }
 
     private tradeTakesOpenMaker(trade: Trade, maker: Readonly<OpenMaker>): void {
-        const { assets, margin, makers } = this.models;
+        const { assets, margins: margin, makers } = this.models;
 
         const volume = min(trade.quantity, maker.unfilled);
         const dollarVolume = this.context.config.market
@@ -77,12 +77,17 @@ export class TradeTakesOpenMakers extends Task
                 .times(this.context.config.account.MAKER_FEE_RATE)
                 .round(this.context.config.market.CURRENCY_DP, RoundingMode.RoundUp)
         );
-        if (maker.operation === Operation.OPEN) {
-            margin.incMargin(maker.length, volume, dollarVolume);
-            assets.openPosition(maker.length, volume, dollarVolume);
-        } else {
-            margin.decMargin(assets, maker.length, volume, dollarVolume);
-            assets.closePosition(maker.length, volume, dollarVolume);
-        }
+        if (maker.operation === Operation.OPEN)
+            this.tasks.orderVolumes.open({
+                length: maker.length,
+                volume,
+                dollarVolume,
+            });
+        else
+            this.tasks.orderVolumes.close({
+                length: maker.length,
+                volume,
+                dollarVolume,
+            });
     }
 }

@@ -1,10 +1,11 @@
 export { Pricing, DefaultPricing } from './models.d/pricing';
 export { Makers, DefaultMakers } from './models.d/makers';
-export { Margin, DefaultMargin } from './models.d/margin';
+export { Margins } from './models.d/margins';
 export { Settle, DefaultSettle } from './tasks.d/settle';
 export { GetAvailable, DefaultGetAvailable } from './tasks.d/get-available';
+export { MarginAccumulation, DefaultMarginAccumulation } from './tasks.d/margin-accumulation';
 export { Mtm, DefaultMtm } from './mark-to-market';
-export { StatefulModels as ModelsStatic, DefaultModels } from './models';
+export { StatefulModels, DefaultModels } from './models';
 export { TasksLike, DefaultTasks } from './tasks';
 export { UseCasesLike, DefaultUseCases } from './use-cases';
 export { Texchange, DefaultTexchange } from './texchange';

@@ -21,9 +21,9 @@ export class GetClosable extends Task
 	public getClosable(): Closable {
 		const { assets, makers } = this.models;
 		return {
-			[Length.LONG]: assets.position[Length.LONG]
+			[Length.LONG]: assets.getPosition()[Length.LONG]
 				.minus(makers.totalFrozen.position[Length.LONG]),
-			[Length.SHORT]: assets.position[Length.SHORT]
+			[Length.SHORT]: assets.getPosition()[Length.SHORT]
 				.minus(makers.totalFrozen.position[Length.SHORT]),
 		};
 	}

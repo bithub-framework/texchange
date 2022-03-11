@@ -2,17 +2,19 @@ import {
     Length,
     ReadonlyRecur,
     JsonCompatible,
+    Position,
 } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Model } from '../model';
+import assert = require('assert');
 
 
 
-export class Assets extends Model<Snapshot> {
-    public position: { [length: number]: Big; };
-    public balance: Big;
-    public cost: { [length: number]: Big; };
+export class Assets extends Model<Assets.Snapshot> {
+    private position: Position;
+    private balance: Big;
+    private cost: Assets.Cost;
 
     constructor(
         protected readonly context: Context,
@@ -30,7 +32,19 @@ export class Assets extends Model<Snapshot> {
         };
     }
 
-    public capture(): Snapshot {
+    public getBalance(): Big {
+        return this.balance;
+    }
+
+    public getPosition(): Readonly<Position> {
+        return this.position;
+    }
+
+    public getCost(): Readonly<Assets.Cost> {
+        return this.cost;
+    }
+
+    public capture(): Assets.Snapshot {
         return {
             position: {
                 [Length.LONG]: this.position[Length.LONG].toString(),
@@ -44,7 +58,7 @@ export class Assets extends Model<Snapshot> {
         };
     }
 
-    public restore(snapshot: Snapshot): void {
+    public restore(snapshot: Assets.Snapshot): void {
         this.balance = new Big(snapshot.balance);
         this.position = {
             [Length.LONG]: new Big(snapshot.position[Length.LONG]),
@@ -60,11 +74,11 @@ export class Assets extends Model<Snapshot> {
         this.balance = this.balance.minus(fee);
     }
 
-    public openPosition(
-        length: Length,
-        volume: Big,
-        dollarVolume: Big,
-    ): void {
+    public open({
+        length,
+        volume,
+        dollarVolume,
+    }: Assets.Volumes): void {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);
     }
@@ -72,38 +86,38 @@ export class Assets extends Model<Snapshot> {
     /**
      * @returns Profit.
      */
-    public closePosition(
-        length: Length,
-        volume: Big,
-        dollarVolume: Big,
-    ): Big {
-        if (volume.lte(this.position[length])) {
-            const cost = this.cost[length]
-                .times(volume)
-                .div(this.position[length])
-                .round(this.context.config.market.CURRENCY_DP);
-            const profit = dollarVolume.minus(cost).times(length);
-            this.position[length] = this.position[length].minus(volume);
-            this.cost[length] = this.cost[length].minus(cost);
-            this.balance = this.balance.plus(profit);
-            return profit;
-        } else  /* volume.gt(this.position[length]) */ {
-            const restVolume = volume.minus(this.position[length]);
-            const restDollarVolume = dollarVolume
-                .times(restVolume)
-                .div(volume)
-                .round(this.context.config.market.CURRENCY_DP);
-            const profit = this.closePosition(
-                length,
-                this.position[length],
-                dollarVolume.minus(restDollarVolume),
-            );
-            this.openPosition(
-                -length,
-                restVolume,
-                restDollarVolume,
-            );
-            return profit;
+    public close({
+        length,
+        volume,
+        dollarVolume,
+    }: Assets.Volumes): Big {
+        assert(volume.lte(this.position[length]));
+        const cost = this.cost[length]
+            .times(volume)
+            .div(this.position[length])
+            .round(this.context.config.market.CURRENCY_DP);
+        const profit = dollarVolume.minus(cost).times(length);
+        this.position[length] = this.position[length].minus(volume);
+        this.cost[length] = this.cost[length].minus(cost);
+        this.balance = this.balance.plus(profit);
+        return profit;
+        /* volume.gt(this.position[length]) */ {
+            // const restVolume = volume.minus(this.position[length]);
+            // const restDollarVolume = dollarVolume
+            //     .times(restVolume)
+            //     .div(volume)
+            //     .round(this.context.config.market.CURRENCY_DP);
+            // const profit = this.closePosition({
+            //     length,
+            //     volume: this.position[length],
+            //     dollarVolume: dollarVolume.minus(restDollarVolume),
+            // });
+            // this.openPosition({
+            //     length: -length,
+            //     volume: restVolume,
+            //     dollarVolume: restDollarVolume,
+            // });
+            // return profit;
         }
     }
 
@@ -116,13 +130,20 @@ export class Assets extends Model<Snapshot> {
     // }
 }
 
-interface SnapshotStruct {
-    position: { [length: number]: Big; };
-    balance: Big;
-    cost: { [length: number]: Big; };
-}
 
 export namespace Assets {
+    export interface Cost { [length: number]: Big; }
+
+    export interface Volumes {
+        readonly length: Length;
+        readonly volume: Big;
+        readonly dollarVolume: Big;
+    }
+
+    interface SnapshotStruct {
+        position: Position;
+        balance: Big;
+        cost: Cost;
+    }
     export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }
-import Snapshot = Assets.Snapshot;

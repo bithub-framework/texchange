@@ -46,7 +46,7 @@ class TradeTakesOpenMakers extends task_1.Task {
             makers.takeOrderQueue(maker.id);
     }
     tradeTakesOpenMaker(trade, maker) {
-        const { assets, margin, makers } = this.models;
+        const { assets, margins: margin, makers } = this.models;
         const volume = (0, utilities_1.min)(trade.quantity, maker.unfilled);
         const dollarVolume = this.context.config.market
             .dollarVolume(maker.price, volume)
@@ -56,14 +56,18 @@ class TradeTakesOpenMakers extends task_1.Task {
         assets.payFee(dollarVolume
             .times(this.context.config.account.MAKER_FEE_RATE)
             .round(this.context.config.market.CURRENCY_DP, 3 /* RoundUp */));
-        if (maker.operation === interfaces_1.Operation.OPEN) {
-            margin.incMargin(maker.length, volume, dollarVolume);
-            assets.openPosition(maker.length, volume, dollarVolume);
-        }
-        else {
-            margin.decMargin(assets, maker.length, volume, dollarVolume);
-            assets.closePosition(maker.length, volume, dollarVolume);
-        }
+        if (maker.operation === interfaces_1.Operation.OPEN)
+            this.tasks.orderVolumes.open({
+                length: maker.length,
+                volume,
+                dollarVolume,
+            });
+        else
+            this.tasks.orderVolumes.close({
+                length: maker.length,
+                volume,
+                dollarVolume,
+            });
     }
 }
 exports.TradeTakesOpenMakers = TradeTakesOpenMakers;

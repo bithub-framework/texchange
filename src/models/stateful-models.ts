@@ -1,6 +1,6 @@
 import { StatefulLike } from 'startable';
 import { Assets } from '../models.d/assets';
-import { Margin } from '../models.d/margin';
+import { Margins } from '../models.d/margins';
 import { Makers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -10,7 +10,7 @@ import { ReadonlyRecur } from 'interfaces';
 
 export abstract class StatefulModels implements StatefulLike<Snapshot> {
 	public abstract readonly assets: Assets;
-	public abstract readonly margin: Margin;
+	public abstract readonly margins: Margins;
 	public abstract readonly makers: Makers;
 	public abstract readonly book: Book;
 	public abstract readonly progress: Progress;
@@ -19,7 +19,7 @@ export abstract class StatefulModels implements StatefulLike<Snapshot> {
 	public capture(): Snapshot {
 		return {
 			assets: this.assets.capture(),
-			margin: this.margin.capture(),
+			margin: this.margins.capture(),
 			makers: this.makers.capture(),
 			book: this.book.capture(),
 			pricing: this.pricing.capture(),
@@ -29,7 +29,7 @@ export abstract class StatefulModels implements StatefulLike<Snapshot> {
 
 	public restore(snapshot: Snapshot): void {
 		this.assets.restore(snapshot.assets);
-		this.margin.restore(snapshot.margin);
+		this.margins.restore(snapshot.margin);
 		this.makers.restore(snapshot.makers);
 		this.book.restore(snapshot.book);
 		this.pricing.restore(snapshot.pricing);

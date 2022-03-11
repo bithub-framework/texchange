@@ -14,8 +14,8 @@ class GetPositions extends task_1.Task {
     getPositions() {
         return {
             position: {
-                [interfaces_1.Length.LONG]: this.models.assets.position[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: this.models.assets.position[interfaces_1.Length.SHORT],
+                [interfaces_1.Length.LONG]: this.models.assets.getPosition()[interfaces_1.Length.LONG],
+                [interfaces_1.Length.SHORT]: this.models.assets.getPosition()[interfaces_1.Length.SHORT],
             },
             closable: this.tasks.getClosable.getClosable(),
             time: this.context.timeline.now(),

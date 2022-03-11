@@ -22,13 +22,13 @@ export class DefaultSettle extends Settle {
 		length: Length, profit: Big,
 	): Big {
 		// 默认逐仓
-		return this.models.margin[length]
+		return this.models.margins.getMargin()[length]
 			.plus(profit);
 	}
 
 	protected assertEnoughBalance(): void {
 		// 默认逐仓
 		for (const length of [Length.SHORT, Length.LONG])
-			assert(this.models.margin[length].gte(0));
+			assert(this.models.margins.getMargin()[length].gte(0));
 	}
 }

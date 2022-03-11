@@ -1,4 +1,4 @@
-import { TasksLike, GetBalancesLike, GetPositionsLike, GetAvailableLike, GetClosableLike, SettleLike, OrderMakesLike, TradeTakesOpenMakersLike, OrderTakesLike, ValidateOrderLike, MakeOpenOrderLike, CancelOpenOrderLike } from './tasks-like';
+import { TasksLike, GetBalancesLike, GetPositionsLike, GetAvailableLike, GetClosableLike, SettleLike, OrderMakesLike, TradeTakesOpenMakersLike, OrderTakesLike, ValidateOrderLike, MakeOpenOrderLike, CancelOpenOrderLike, MarginAccumulationLike, OrderVolumesLike } from './tasks-like';
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { StatefulModels } from '../models/stateful-models';
@@ -14,5 +14,7 @@ export declare class DefaultTasks implements TasksLike {
     readonly validateOrder: ValidateOrderLike;
     readonly makeOpenOrder: MakeOpenOrderLike;
     readonly cancelOpenOrder: CancelOpenOrderLike;
+    readonly marginAccumulation: MarginAccumulationLike;
+    readonly orderVolumes: OrderVolumesLike;
     constructor(context: Context, models: StatefulModels, broadcast: Broadcast);
 }

@@ -17,7 +17,7 @@ class OrderTakes extends task_1.Task {
      * @param taker variable
      */
     orderTakes(taker) {
-        const { margin, assets, progress, book } = this.models;
+        const { margins, assets, progress, book } = this.models;
         const { config, timeline } = this.context;
         const orderbook = book.getBook();
         const trades = [];
@@ -45,14 +45,18 @@ class OrderTakes extends task_1.Task {
         assets.payFee(dollarVolume
             .times(config.account.TAKER_FEE_RATE)
             .round(config.market.CURRENCY_DP, 3 /* RoundUp */));
-        if (taker.operation === interfaces_1.Operation.OPEN) {
-            margin.incMargin(taker.length, volume, dollarVolume);
-            assets.openPosition(taker.length, volume, dollarVolume);
-        }
-        else {
-            margin.decMargin(assets, taker.length, volume, dollarVolume);
-            assets.closePosition(taker.length, volume, dollarVolume);
-        }
+        if (taker.operation === interfaces_1.Operation.OPEN)
+            this.tasks.orderVolumes.open({
+                length: taker.length,
+                volume,
+                dollarVolume,
+            });
+        else
+            this.tasks.orderVolumes.close({
+                length: taker.length,
+                volume,
+                dollarVolume,
+            });
         return trades;
     }
 }

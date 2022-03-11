@@ -6,17 +6,25 @@ const task_1 = require("../../task");
 class Settle extends task_1.Task {
     settle() {
         const { config } = this.context;
-        const { assets, margin, pricing } = this.models;
+        const { assets, margins: margin, pricing } = this.models;
         const position = {
-            [interfaces_1.Length.LONG]: assets.position[interfaces_1.Length.LONG],
-            [interfaces_1.Length.SHORT]: assets.position[interfaces_1.Length.SHORT],
+            [interfaces_1.Length.LONG]: assets.getPosition()[interfaces_1.Length.LONG],
+            [interfaces_1.Length.SHORT]: assets.getPosition()[interfaces_1.Length.SHORT],
         };
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const dollarVolume = config.market.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
-            const profit = assets.closePosition(length, position[length], dollarVolume);
-            assets.openPosition(length, position[length], dollarVolume);
-            margin[length] = this.clearingMargin(length, profit);
+            const profit = assets.close({
+                length,
+                volume: position[length],
+                dollarVolume,
+            });
+            assets.open({
+                length,
+                volume: position[length],
+                dollarVolume,
+            });
+            margin.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();
     }

@@ -1,5 +1,6 @@
 import {
     Length,
+    Position,
 } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../../context';
@@ -19,24 +20,28 @@ export abstract class Settle extends Task
 
     public settle(): void {
         const { config } = this.context;
-        const { assets, margin, pricing } = this.models;
+        const { assets, margins: margin, pricing } = this.models;
 
-        const position = {
-            [Length.LONG]: assets.position[Length.LONG],
-            [Length.SHORT]: assets.position[Length.SHORT],
+        const position: Position = {
+            [Length.LONG]: assets.getPosition()[Length.LONG],
+            [Length.SHORT]: assets.getPosition()[Length.SHORT],
         };
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [Length.LONG, Length.SHORT]) {
             const dollarVolume = config.market.dollarVolume(
                 settlementPrice, position[length],
             ).round(config.market.CURRENCY_DP);
-            const profit = assets.closePosition(
-                length, position[length], dollarVolume,
-            );
-            assets.openPosition(
-                length, position[length], dollarVolume,
-            );
-            margin[length] = this.clearingMargin(length, profit);
+            const profit = assets.close({
+                length,
+                volume: position[length],
+                dollarVolume,
+            });
+            assets.open({
+                length,
+                volume: position[length],
+                dollarVolume,
+            });
+            margin.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();
     }

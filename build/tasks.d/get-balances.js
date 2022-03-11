@@ -12,7 +12,7 @@ class GetBalances extends task_1.Task {
     }
     getBalances() {
         return {
-            balance: this.models.assets.balance,
+            balance: this.models.assets.getBalance(),
             available: this.tasks.getAvailable.getAvailable(),
             time: this.context.timeline.now(),
         };

@@ -12,7 +12,7 @@ import { Context } from '../context';
 
 
 
-export class Book extends Model<Snapshot> {
+export class Book extends Model<Book.Snapshot> {
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Readonly<Orderbook> = {
         [Side.ASK]: [],
@@ -82,7 +82,7 @@ export class Book extends Model<Snapshot> {
         return this.apply();
     }
 
-    public capture(): Snapshot {
+    public capture(): Book.Snapshot {
         return {
             basebook: {
                 [Side.ASK]: this.basebook[Side.ASK].map(order => ({
@@ -111,7 +111,7 @@ export class Book extends Model<Snapshot> {
         }
     }
 
-    public restore(snapshot: Snapshot): void {
+    public restore(snapshot: Book.Snapshot): void {
         const basebook: Orderbook = {
             time: snapshot.basebook.time === null
                 ? Number.NEGATIVE_INFINITY
@@ -138,15 +138,14 @@ export class Book extends Model<Snapshot> {
     }
 }
 
-interface SnapshotStruct {
-    basebook: Orderbook;
-    decrements: {
-        [side: number]: [string, Big][],
-    };
-    time: number;
-}
 
 export namespace Book {
+    interface SnapshotStruct {
+        basebook: Orderbook;
+        decrements: {
+            [side: number]: [string, Big][],
+        };
+        time: number;
+    }
     export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }
-import Snapshot = Book.Snapshot;

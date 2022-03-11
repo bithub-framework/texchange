@@ -3,6 +3,7 @@ import {
     Side,
     Operation,
     Trade,
+    Length,
 } from 'interfaces';
 import { min } from '../utilities';
 import { Big, RoundingMode } from 'big.js';
@@ -26,7 +27,7 @@ export class OrderTakes extends Task
      * @param taker variable
      */
     public orderTakes(taker: OpenOrder): Trade[] {
-        const { margin, assets, progress, book } = this.models;
+        const { margins, assets, progress, book } = this.models;
         const { config, timeline } = this.context;
         const orderbook = book.getBook();
 
@@ -62,13 +63,18 @@ export class OrderTakes extends Task
                 .times(config.account.TAKER_FEE_RATE)
                 .round(config.market.CURRENCY_DP, RoundingMode.RoundUp)
         );
-        if (taker.operation === Operation.OPEN) {
-            margin.incMargin(taker.length, volume, dollarVolume);
-            assets.openPosition(taker.length, volume, dollarVolume);
-        } else {
-            margin.decMargin(assets, taker.length, volume, dollarVolume);
-            assets.closePosition(taker.length, volume, dollarVolume);
-        }
+        if (taker.operation === Operation.OPEN)
+            this.tasks.orderVolumes.open({
+                length: taker.length,
+                volume,
+                dollarVolume,
+            });
+        else
+            this.tasks.orderVolumes.close({
+                length: taker.length,
+                volume,
+                dollarVolume,
+            });
 
         return trades;
     }

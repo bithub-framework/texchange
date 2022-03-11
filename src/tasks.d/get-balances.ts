@@ -19,7 +19,7 @@ export class GetBalances extends Task
 
 	public getBalances(): Balances {
 		return {
-			balance: this.models.assets.balance,
+			balance: this.models.assets.getBalance(),
 			available: this.tasks.getAvailable.getAvailable(),
 			time: this.context.timeline.now(),
 		};

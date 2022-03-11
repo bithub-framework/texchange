@@ -1,37 +1,39 @@
-import { Length, ReadonlyRecur, JsonCompatible } from 'interfaces';
+import { Length, ReadonlyRecur, JsonCompatible, Position } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
 import { Model } from '../model';
-export declare class Assets extends Model<Snapshot> {
+export declare class Assets extends Model<Assets.Snapshot> {
     protected readonly context: Context;
-    position: {
-        [length: number]: Big;
-    };
-    balance: Big;
-    cost: {
-        [length: number]: Big;
-    };
+    private position;
+    private balance;
+    private cost;
     constructor(context: Context);
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
+    getBalance(): Big;
+    getPosition(): Readonly<Position>;
+    getCost(): Readonly<Assets.Cost>;
+    capture(): Assets.Snapshot;
+    restore(snapshot: Assets.Snapshot): void;
     payFee(fee: Big): void;
-    openPosition(length: Length, volume: Big, dollarVolume: Big): void;
+    open({ length, volume, dollarVolume, }: Assets.Volumes): void;
     /**
      * @returns Profit.
      */
-    closePosition(length: Length, volume: Big, dollarVolume: Big): Big;
-}
-interface SnapshotStruct {
-    position: {
-        [length: number]: Big;
-    };
-    balance: Big;
-    cost: {
-        [length: number]: Big;
-    };
+    close({ length, volume, dollarVolume, }: Assets.Volumes): Big;
 }
 export declare namespace Assets {
-    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+    export interface Cost {
+        [length: number]: Big;
+    }
+    export interface Volumes {
+        readonly length: Length;
+        readonly volume: Big;
+        readonly dollarVolume: Big;
+    }
+    interface SnapshotStruct {
+        position: Position;
+        balance: Big;
+        cost: Cost;
+    }
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+    export {};
 }
-import Snapshot = Assets.Snapshot;
-export {};

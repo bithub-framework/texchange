@@ -14,7 +14,7 @@ import { Context } from '../../context';
 
 
 
-export abstract class Makers extends Model<Snapshot>
+export abstract class Makers extends Model<Makers.Snapshot>
 	implements Iterable<Readonly<OpenMaker>> {
 
 	private orders = new Map<OrderId, Readonly<OpenMaker>>();
@@ -36,7 +36,7 @@ export abstract class Makers extends Model<Snapshot>
 		return order;
 	}
 
-	public capture(): Snapshot {
+	public capture(): Makers.Snapshot {
 		return [...this.orders.keys()]
 			.map(oid => ({
 				order: OpenMaker.jsonCompatiblize(this.orders.get(oid)!),
@@ -44,7 +44,7 @@ export abstract class Makers extends Model<Snapshot>
 			}));
 	}
 
-	public restore(snapshot: Snapshot): void {
+	public restore(snapshot: Makers.Snapshot): void {
 		for (const { order, frozen } of snapshot) {
 			this.orders.set(order.id!, {
 				price: new Big(order.price),
@@ -145,11 +145,11 @@ export abstract class Makers extends Model<Snapshot>
 	}
 }
 
-type SnapshotStruct = {
-	order: OpenMaker;
-	frozen: Frozen;
-}[];
+
 export namespace Makers {
+	type SnapshotStruct = {
+		order: OpenMaker;
+		frozen: Frozen;
+	}[];
 	export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }
-import Snapshot = Makers.Snapshot;

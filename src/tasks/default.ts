@@ -11,6 +11,8 @@ import {
 	ValidateOrderLike,
 	MakeOpenOrderLike,
 	CancelOpenOrderLike,
+	MarginAccumulationLike,
+	OrderVolumesLike,
 } from './tasks-like';
 
 import { Context } from '../context';
@@ -28,6 +30,8 @@ import { OrderTakes } from '../tasks.d/order-takes';
 import { DefaultSettle } from '../tasks.d/settle';
 import { TradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
 import { ValidateOrder } from '../tasks.d/validate-order';
+import { DefaultMarginAccumulation } from '../tasks.d/margin-accumulation';
+import { OrderVolumes } from '../tasks.d/order-volumes';
 
 
 export class DefaultTasks implements TasksLike {
@@ -42,6 +46,8 @@ export class DefaultTasks implements TasksLike {
 	public readonly validateOrder: ValidateOrderLike;
 	public readonly makeOpenOrder: MakeOpenOrderLike;
 	public readonly cancelOpenOrder: CancelOpenOrderLike;
+	public readonly marginAccumulation: MarginAccumulationLike;
+	public readonly orderVolumes: OrderVolumesLike;
 
 	constructor(
 		context: Context,
@@ -59,5 +65,7 @@ export class DefaultTasks implements TasksLike {
 		this.settle = new DefaultSettle(context, models, broadcast, this);
 		this.tradeTakesOpenMakers = new TradeTakesOpenMakers(context, models, broadcast, this);
 		this.validateOrder = new ValidateOrder(context, models, broadcast, this);
+		this.marginAccumulation = new DefaultMarginAccumulation(context, models, broadcast, this);
+		this.orderVolumes = new OrderVolumes(context, models, broadcast, this);
 	}
 }

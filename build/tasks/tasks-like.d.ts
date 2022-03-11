@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import { OpenOrder, Balances, Closable, Positions, Trade } from 'interfaces';
+import { OpenOrder, Balances, Closable, Positions, Trade, Length } from 'interfaces';
 export interface GetBalancesLike {
     getBalances(): Balances;
 }
@@ -33,6 +33,28 @@ export interface CancelOpenOrderLike {
 export interface ValidateOrderLike {
     validateOrder(order: Readonly<OpenOrder>): void;
 }
+export interface MarginAccumulationLike {
+    newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes): Big;
+    newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes): Big;
+}
+export declare namespace MarginAccumulationLike {
+    interface Volumes {
+        length: Length;
+        volume: Big;
+        dollarVolume: Big;
+    }
+}
+export interface OrderVolumesLike {
+    open(volumes: OrderVolumesLike.Volumes): void;
+    close(volumes: OrderVolumesLike.Volumes): void;
+}
+export declare namespace OrderVolumesLike {
+    interface Volumes {
+        length: Length;
+        volume: Big;
+        dollarVolume: Big;
+    }
+}
 export interface TasksLike {
     readonly getBalances: GetBalancesLike;
     readonly getPositions: GetPositionsLike;
@@ -45,4 +67,6 @@ export interface TasksLike {
     readonly validateOrder: ValidateOrderLike;
     readonly makeOpenOrder: MakeOpenOrderLike;
     readonly cancelOpenOrder: CancelOpenOrderLike;
+    readonly marginAccumulation: MarginAccumulationLike;
+    readonly orderVolumes: OrderVolumesLike;
 }

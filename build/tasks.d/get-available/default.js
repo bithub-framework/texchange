@@ -16,12 +16,13 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
     finalMargin() {
         // 默认无锁仓优惠
         // 默认非实时结算
-        return this.models.margin[interfaces_1.Length.LONG]
-            .plus(this.models.margin[interfaces_1.Length.SHORT]);
+        const margin = this.models.margins.getMargin();
+        return margin[interfaces_1.Length.LONG]
+            .plus(margin[interfaces_1.Length.SHORT]);
     }
     finalFrozenBalance() {
         // 默认单向持仓模式
-        const { position } = this.models.assets;
+        const position = this.models.assets.getPosition();
         const { totalFrozen, totalUnfilledQuantity } = this.models.makers;
         const final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {

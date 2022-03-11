@@ -21,8 +21,8 @@ export class GetPositions extends Task
 	public getPositions(): Positions {
 		return {
 			position: {
-				[Length.LONG]: this.models.assets.position[Length.LONG],
-				[Length.SHORT]: this.models.assets.position[Length.SHORT],
+				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],
+				[Length.SHORT]: this.models.assets.getPosition()[Length.SHORT],
 			},
 			closable: this.tasks.getClosable.getClosable(),
 			time: this.context.timeline.now(),

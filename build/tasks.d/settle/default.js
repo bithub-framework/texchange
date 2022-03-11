@@ -14,13 +14,13 @@ class DefaultSettle extends settle_1.Settle {
     }
     clearingMargin(length, profit) {
         // 默认逐仓
-        return this.models.margin[length]
+        return this.models.margins.getMargin()[length]
             .plus(profit);
     }
     assertEnoughBalance() {
         // 默认逐仓
         for (const length of [interfaces_1.Length.SHORT, interfaces_1.Length.LONG])
-            assert(this.models.margin[length].gte(0));
+            assert(this.models.margins.getMargin()[length].gte(0));
     }
 }
 exports.DefaultSettle = DefaultSettle;

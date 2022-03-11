@@ -4,7 +4,7 @@ exports.GetAvailable = void 0;
 const task_1 = require("../../task");
 class GetAvailable extends task_1.Task {
     getAvailable() {
-        return this.models.assets.balance
+        return this.models.assets.getBalance()
             .minus(this.finalMargin())
             .minus(this.finalFrozenBalance())
             .round(this.context.config.market.CURRENCY_DP);

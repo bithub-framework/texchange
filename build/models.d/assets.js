@@ -4,6 +4,7 @@ exports.Assets = void 0;
 const interfaces_1 = require("interfaces");
 const big_js_1 = require("big.js");
 const model_1 = require("../model");
+const assert = require("assert");
 class Assets extends model_1.Model {
     constructor(context) {
         super();
@@ -17,6 +18,15 @@ class Assets extends model_1.Model {
             [interfaces_1.Length.LONG]: new big_js_1.default(0),
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
         };
+    }
+    getBalance() {
+        return this.balance;
+    }
+    getPosition() {
+        return this.position;
+    }
+    getCost() {
+        return this.cost;
     }
     capture() {
         return {
@@ -45,34 +55,41 @@ class Assets extends model_1.Model {
     payFee(fee) {
         this.balance = this.balance.minus(fee);
     }
-    openPosition(length, volume, dollarVolume) {
+    open({ length, volume, dollarVolume, }) {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);
     }
     /**
      * @returns Profit.
      */
-    closePosition(length, volume, dollarVolume) {
-        if (volume.lte(this.position[length])) {
-            const cost = this.cost[length]
-                .times(volume)
-                .div(this.position[length])
-                .round(this.context.config.market.CURRENCY_DP);
-            const profit = dollarVolume.minus(cost).times(length);
-            this.position[length] = this.position[length].minus(volume);
-            this.cost[length] = this.cost[length].minus(cost);
-            this.balance = this.balance.plus(profit);
-            return profit;
-        }
-        else /* volume.gt(this.position[length]) */ {
-            const restVolume = volume.minus(this.position[length]);
-            const restDollarVolume = dollarVolume
-                .times(restVolume)
-                .div(volume)
-                .round(this.context.config.market.CURRENCY_DP);
-            const profit = this.closePosition(length, this.position[length], dollarVolume.minus(restDollarVolume));
-            this.openPosition(-length, restVolume, restDollarVolume);
-            return profit;
+    close({ length, volume, dollarVolume, }) {
+        assert(volume.lte(this.position[length]));
+        const cost = this.cost[length]
+            .times(volume)
+            .div(this.position[length])
+            .round(this.context.config.market.CURRENCY_DP);
+        const profit = dollarVolume.minus(cost).times(length);
+        this.position[length] = this.position[length].minus(volume);
+        this.cost[length] = this.cost[length].minus(cost);
+        this.balance = this.balance.plus(profit);
+        return profit;
+        /* volume.gt(this.position[length]) */ {
+            // const restVolume = volume.minus(this.position[length]);
+            // const restDollarVolume = dollarVolume
+            //     .times(restVolume)
+            //     .div(volume)
+            //     .round(this.context.config.market.CURRENCY_DP);
+            // const profit = this.closePosition({
+            //     length,
+            //     volume: this.position[length],
+            //     dollarVolume: dollarVolume.minus(restDollarVolume),
+            // });
+            // this.openPosition({
+            //     length: -length,
+            //     volume: restVolume,
+            //     dollarVolume: restDollarVolume,
+            // });
+            // return profit;
         }
     }
 }

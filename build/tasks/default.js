@@ -12,6 +12,8 @@ const order_takes_1 = require("../tasks.d/order-takes");
 const settle_1 = require("../tasks.d/settle");
 const trade_takes_open_makers_1 = require("../tasks.d/trade-takes-open-makers");
 const validate_order_1 = require("../tasks.d/validate-order");
+const margin_accumulation_1 = require("../tasks.d/margin-accumulation");
+const order_volumes_1 = require("../tasks.d/order-volumes");
 class DefaultTasks {
     constructor(context, models, broadcast) {
         this.cancelOpenOrder = new cancel_open_order_1.CancelOpenOrder(context, models, broadcast, this);
@@ -25,6 +27,8 @@ class DefaultTasks {
         this.settle = new settle_1.DefaultSettle(context, models, broadcast, this);
         this.tradeTakesOpenMakers = new trade_takes_open_makers_1.TradeTakesOpenMakers(context, models, broadcast, this);
         this.validateOrder = new validate_order_1.ValidateOrder(context, models, broadcast, this);
+        this.marginAccumulation = new margin_accumulation_1.DefaultMarginAccumulation(context, models, broadcast, this);
+        this.orderVolumes = new order_volumes_1.OrderVolumes(context, models, broadcast, this);
     }
 }
 exports.DefaultTasks = DefaultTasks;

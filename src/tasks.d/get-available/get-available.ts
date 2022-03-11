@@ -15,7 +15,7 @@ export abstract class GetAvailable extends Task
 	protected abstract readonly tasks: TasksLike;
 
 	public getAvailable(): Big {
-		return this.models.assets.balance
+		return this.models.assets.getBalance()
 			.minus(this.finalMargin())
 			.minus(this.finalFrozenBalance())
 			.round(this.context.config.market.CURRENCY_DP);

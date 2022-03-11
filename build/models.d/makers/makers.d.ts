@@ -2,7 +2,7 @@ import { OrderId, OpenMaker, OpenOrder, ReadonlyRecur, JsonCompatible } from 'in
 import { Frozen } from './frozon';
 import { Model } from '../../model';
 import Big from 'big.js';
-export declare abstract class Makers extends Model<Snapshot> implements Iterable<Readonly<OpenMaker>> {
+export declare abstract class Makers extends Model<Makers.Snapshot> implements Iterable<Readonly<OpenMaker>> {
     private orders;
     private frozens;
     totalUnfilledQuantity: {
@@ -11,8 +11,8 @@ export declare abstract class Makers extends Model<Snapshot> implements Iterable
     totalFrozen: Frozen;
     [Symbol.iterator](): IterableIterator<Readonly<OpenMaker>>;
     getOrder(id: OrderId): Readonly<OpenMaker>;
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
+    capture(): Makers.Snapshot;
+    restore(snapshot: Makers.Snapshot): void;
     private normalizeFrozen;
     protected abstract toFreeze(order: OpenOrder): Frozen;
     appendOrder(order: Readonly<OpenMaker>): void;
@@ -21,12 +21,11 @@ export declare abstract class Makers extends Model<Snapshot> implements Iterable
     removeOrder(oid: OrderId): void;
     tryRemoveOrder(oid: OrderId): void;
 }
-declare type SnapshotStruct = {
-    order: OpenMaker;
-    frozen: Frozen;
-}[];
 export declare namespace Makers {
-    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+    type SnapshotStruct = {
+        order: OpenMaker;
+        frozen: Frozen;
+    }[];
+    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+    export {};
 }
-import Snapshot = Makers.Snapshot;
-export {};

@@ -9,7 +9,7 @@ import {
 
 
 
-export class Progress extends Model<Snapshot> {
+export class Progress extends Model<Progress.Snapshot> {
     public latestPrice: Big | null = null;
     public latestDatabaseTradeTime: number | null = null;
     public userTradeCount = 0;
@@ -26,7 +26,7 @@ export class Progress extends Model<Snapshot> {
         this.latestPrice = trades[trades.length - 1].price;
     }
 
-    public capture(): Snapshot {
+    public capture(): Progress.Snapshot {
         return {
             latestPrice: this.latestPrice
                 ? this.latestPrice.toString()
@@ -37,7 +37,7 @@ export class Progress extends Model<Snapshot> {
         };
     }
 
-    public restore(snapshot: Snapshot): void {
+    public restore(snapshot: Progress.Snapshot): void {
         this.latestPrice = snapshot.latestPrice === null
             ? null
             : new Big(snapshot.latestPrice);
@@ -51,13 +51,13 @@ export interface DatabaseTrade extends Trade {
     id: string;
 }
 
-interface SnapshotStruct {
-    latestPrice: Big | null;
-    latestDatabaseTradeTime: number | null;
-    userTradeCount: number;
-    userOrderCount: number;
-}
+
 export namespace Progress {
+    interface SnapshotStruct {
+        latestPrice: Big | null;
+        latestDatabaseTradeTime: number | null;
+        userTradeCount: number;
+        userOrderCount: number;
+    }
     export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }
-import Snapshot = Progress.Snapshot;
