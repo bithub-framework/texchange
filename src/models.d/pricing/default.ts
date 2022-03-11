@@ -10,10 +10,13 @@ import { Context } from '../../context';
 
 
 export class DefaultPricing extends Pricing<Snapshot> {
+	private settlementPrice: Big;
 	constructor(
 		protected readonly context: Context,
-		protected settlementPrice: Big,
-	) { super(); }
+	) {
+		super();
+		this.settlementPrice = context.config.account.initialBalance;
+	}
 
 	public updateTrades(trades: readonly Readonly<Trade>[]): void {
 		this.settlementPrice = trades[trades.length - 1].price;

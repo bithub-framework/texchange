@@ -67,12 +67,12 @@ class Makers extends model_1.Model {
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
             },
         };
     }

@@ -7,7 +7,7 @@ import {
 import { min } from '../utilities';
 import { Big, RoundingMode } from 'big.js';
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, OrderTakesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
@@ -17,7 +17,7 @@ export class OrderTakes extends Task
     implements OrderTakesLike {
     constructor(
         protected readonly context: Context,
-        protected readonly models: ModelsStatic,
+        protected readonly models: StatefulModels,
         protected readonly broadcast: Broadcast,
         protected readonly tasks: TasksLike,
     ) { super(); }
@@ -46,8 +46,8 @@ export class OrderTakes extends Task
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(config.dollarVolume(maker.price, quantity))
-                    .round(config.CURRENCY_DP);
+                    .plus(config.market.dollarVolume(maker.price, quantity))
+                    .round(config.market.CURRENCY_DP);
                 trades.push({
                     side: taker.side,
                     price: maker.price,
@@ -59,8 +59,8 @@ export class OrderTakes extends Task
 
         assets.payFee(
             dollarVolume
-                .times(config.TAKER_FEE_RATE)
-                .round(config.CURRENCY_DP, RoundingMode.RoundUp)
+                .times(config.account.TAKER_FEE_RATE)
+                .round(config.market.CURRENCY_DP, RoundingMode.RoundUp)
         );
         if (taker.operation === Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);

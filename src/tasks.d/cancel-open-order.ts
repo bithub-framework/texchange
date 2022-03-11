@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, CancelOpenOrderLike } from '../tasks/tasks-like';
 import Big from 'big.js';
@@ -13,7 +13,7 @@ export class CancelOpenOrder extends Task
 	implements CancelOpenOrderLike {
 	constructor(
 		protected readonly context: Context,
-		protected readonly models: ModelsStatic,
+		protected readonly models: StatefulModels,
 		protected readonly broadcast: Broadcast,
 		protected readonly tasks: TasksLike,
 	) { super(); }

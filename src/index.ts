@@ -4,7 +4,7 @@ export { Margin, DefaultMargin } from './models.d/margin';
 export { Settle, DefaultSettle } from './tasks.d/settle';
 export { GetAvailable, DefaultGetAvailable } from './tasks.d/get-available';
 export { Mtm, DefaultMtm } from './mark-to-market';
-export { ModelsStatic, DefaultModels } from './models';
+export { StatefulModels as ModelsStatic, DefaultModels } from './models';
 export { TasksLike, DefaultTasks } from './tasks';
 export { UseCasesLike, DefaultUseCases } from './use-cases';
 export { Texchange, DefaultTexchange } from './texchange';

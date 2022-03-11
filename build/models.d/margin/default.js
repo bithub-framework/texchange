@@ -11,7 +11,7 @@ class DefaultMargin extends margin_1.Margin {
         this.context = context;
     }
     marginIncrement(length, volume, dollarVolume) {
-        return dollarVolume.div(this.context.config.LEVERAGE);
+        return dollarVolume.div(this.context.config.account.LEVERAGE);
     }
     marginDecrement(oldAssets, length, volume, dollarVolume) {
         return this[length]

@@ -48,14 +48,14 @@ class TradeTakesOpenMakers extends task_1.Task {
     tradeTakesOpenMaker(trade, maker) {
         const { assets, margin, makers } = this.models;
         const volume = (0, utilities_1.min)(trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.config
+        const dollarVolume = this.context.config.market
             .dollarVolume(maker.price, volume)
-            .round(this.context.config.CURRENCY_DP);
+            .round(this.context.config.market.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
         assets.payFee(dollarVolume
-            .times(this.context.config.MAKER_FEE_RATE)
-            .round(this.context.config.CURRENCY_DP, 3 /* RoundUp */));
+            .times(this.context.config.account.MAKER_FEE_RATE)
+            .round(this.context.config.market.CURRENCY_DP, 3 /* RoundUp */));
         if (maker.operation === interfaces_1.Operation.OPEN) {
             margin.incMargin(maker.length, volume, dollarVolume);
             assets.openPosition(maker.length, volume, dollarVolume);

@@ -80,12 +80,12 @@ export abstract class Makers extends Model<Snapshot>
 	private normalizeFrozen(frozen: Readonly<Frozen>): Frozen {
 		return {
 			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.context.config.CURRENCY_DP),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.config.CURRENCY_DP),
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.context.config.market.CURRENCY_DP),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.config.market.CURRENCY_DP),
 			},
 			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.context.config.CURRENCY_DP),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.context.config.CURRENCY_DP),
+				[Length.LONG]: frozen.position[Length.LONG].round(this.context.config.market.CURRENCY_DP),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.context.config.market.CURRENCY_DP),
 			},
 		};
 	}

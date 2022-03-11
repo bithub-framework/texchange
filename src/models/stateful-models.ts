@@ -8,7 +8,7 @@ import { Pricing } from '../models.d/pricing';
 import { ReadonlyRecur } from 'interfaces';
 
 
-export abstract class ModelsStatic implements StatefulLike<Snapshot> {
+export abstract class StatefulModels implements StatefulLike<Snapshot> {
 	public abstract readonly assets: Assets;
 	public abstract readonly margin: Margin;
 	public abstract readonly makers: Makers;
@@ -46,7 +46,7 @@ export interface SnapshotStruct {
 	pricing: any;
 	progress: any;
 }
-export namespace ModelsStatic {
+export namespace StatefulModels {
 	export type Snapshot = ReadonlyRecur<SnapshotStruct>;
 }
-import Snapshot = ModelsStatic.Snapshot;
+import Snapshot = StatefulModels.Snapshot;

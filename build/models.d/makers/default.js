@@ -15,7 +15,7 @@ class DefaultMakers extends makers_1.Makers {
         const length = order.side * interfaces_1.Operation.OPEN;
         return {
             balance: {
-                [length]: this.context.config.dollarVolume(order.price, order.unfilled),
+                [length]: this.context.config.market.dollarVolume(order.price, order.unfilled),
                 [-length]: new big_js_1.default(0),
             },
             position: frozon_1.Frozen.ZERO.position,

@@ -4,7 +4,7 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, OrderMakesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
@@ -14,7 +14,7 @@ export class OrderMakes extends Task
     implements OrderMakesLike {
     constructor(
         protected readonly context: Context,
-        protected readonly models: ModelsStatic,
+        protected readonly models: StatefulModels,
         protected readonly broadcast: Broadcast,
         protected readonly tasks: TasksLike,
     ) { super(); }

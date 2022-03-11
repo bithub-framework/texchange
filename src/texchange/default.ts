@@ -7,7 +7,7 @@ import { Timeline } from 'interfaces';
 
 import { Mtm, DefaultMtm } from '../mark-to-market';
 
-import { ModelsStatic, DefaultModels } from '../models';
+import { StatefulModels, DefaultModels } from '../models';
 
 import { Broadcast } from '../broadcast';
 
@@ -21,7 +21,7 @@ import { Views } from '../views';
 export class DefaultTexchange extends Texchange {
 	protected readonly context: Context;
 	protected readonly mtm: Mtm | null;
-	protected readonly models: ModelsStatic;
+	protected readonly models: StatefulModels;
 	protected readonly broadcast: Broadcast;
 	protected readonly tasks: TasksLike;
 	protected readonly useCases: UseCasesLike;

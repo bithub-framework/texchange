@@ -13,21 +13,21 @@ class Margin extends model_1.Model {
     }
     incMargin(length, volume, dollarVolume) {
         this[length] = this[length]
-            .plus(this.marginIncrement(length, volume, dollarVolume)).round(this.context.config.CURRENCY_DP);
+            .plus(this.marginIncrement(length, volume, dollarVolume)).round(this.context.config.market.CURRENCY_DP);
     }
     // TODO try
     decMargin(oldAssets, length, volume, dollarVolume) {
         if (volume.lte(oldAssets.position[length])) {
             this[length] = this[length]
                 .minus(this.marginDecrement(oldAssets, length, volume, dollarVolume))
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
         }
         else {
             const restVolume = volume.minus(oldAssets.position[length]);
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
             this[length] = new big_js_1.default(0);
             this.incMargin(-length, restVolume, restDollarVolume);
         }

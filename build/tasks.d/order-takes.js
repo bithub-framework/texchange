@@ -32,8 +32,8 @@ class OrderTakes extends task_1.Task {
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(config.dollarVolume(maker.price, quantity))
-                    .round(config.CURRENCY_DP);
+                    .plus(config.market.dollarVolume(maker.price, quantity))
+                    .round(config.market.CURRENCY_DP);
                 trades.push({
                     side: taker.side,
                     price: maker.price,
@@ -43,8 +43,8 @@ class OrderTakes extends task_1.Task {
                 });
             }
         assets.payFee(dollarVolume
-            .times(config.TAKER_FEE_RATE)
-            .round(config.CURRENCY_DP, 3 /* RoundUp */));
+            .times(config.account.TAKER_FEE_RATE)
+            .round(config.market.CURRENCY_DP, 3 /* RoundUp */));
         if (taker.operation === interfaces_1.Operation.OPEN) {
             margin.incMargin(taker.length, volume, dollarVolume);
             assets.openPosition(taker.length, volume, dollarVolume);

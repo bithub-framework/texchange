@@ -39,7 +39,7 @@ export class Book extends Model<Snapshot> {
 
     public decQuantity(side: Side, price: Big, decrement: Big): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new Big(0);
         this.decrements[side].set(priceString, old.plus(decrement));
         this.time = this.context.timeline.now();
@@ -56,7 +56,7 @@ export class Book extends Model<Snapshot> {
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.context.config.PRICE_DP),
+                    order.price.toFixed(this.context.config.market.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {

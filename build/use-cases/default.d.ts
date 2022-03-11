@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Broadcast } from '../broadcast';
 import { TasksLike } from '../tasks/tasks-like';
 import { MakeOrder } from '../use-cases.d/make-order';
@@ -23,5 +23,5 @@ export declare class DefaultUseCases implements UseCasesLike {
     readonly getBalances: GetBalances;
     readonly updateOrderbook: UpdateOrderbook;
     readonly updateTrades: UpdateTrades;
-    constructor(context: Context, models: ModelsStatic, broadcast: Broadcast, tasks: TasksLike);
+    constructor(context: Context, models: StatefulModels, broadcast: Broadcast, tasks: TasksLike);
 }

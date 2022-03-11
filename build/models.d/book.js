@@ -30,7 +30,7 @@ class Book extends model_1.Model {
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.config.PRICE_DP);
+        const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const old = this.decrements[side].get(priceString) || new big_js_1.default(0);
         this.decrements[side].set(priceString, old.plus(decrement));
         this.time = this.context.timeline.now();
@@ -46,7 +46,7 @@ class Book extends model_1.Model {
         this.finalbook = { time: this.time };
         for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.context.config.PRICE_DP), order.quantity);
+                total[side].set(order.price.toFixed(this.context.config.market.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
                 if (quantity) {

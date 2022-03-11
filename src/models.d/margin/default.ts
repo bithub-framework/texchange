@@ -21,7 +21,7 @@ export class DefaultMargin extends Margin {
 	protected marginIncrement(
 		length: Length, volume: Big, dollarVolume: Big,
 	): Big {
-		return dollarVolume.div(this.context.config.LEVERAGE);
+		return dollarVolume.div(this.context.config.account.LEVERAGE);
 	}
 
 	protected marginDecrement(

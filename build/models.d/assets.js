@@ -8,7 +8,7 @@ class Assets extends model_1.Model {
     constructor(context) {
         super();
         this.context = context;
-        this.balance = this.context.config.initialBalance;
+        this.balance = this.context.config.account.initialBalance;
         this.position = {
             [interfaces_1.Length.LONG]: new big_js_1.default(0),
             [interfaces_1.Length.SHORT]: new big_js_1.default(0),
@@ -57,7 +57,7 @@ class Assets extends model_1.Model {
             const cost = this.cost[length]
                 .times(volume)
                 .div(this.position[length])
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
@@ -69,7 +69,7 @@ class Assets extends model_1.Model {
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
             const profit = this.closePosition(length, this.position[length], dollarVolume.minus(restDollarVolume));
             this.openPosition(-length, restVolume, restDollarVolume);
             return profit;

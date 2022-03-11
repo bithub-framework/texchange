@@ -9,8 +9,8 @@ class Latency extends events_1.EventEmitter {
         this.instant = instant;
         this.instant.on('orderbook', async (orderbook) => {
             try {
-                await this.context.timeline.sleep(this.context.config.PROCESSING);
-                await this.context.timeline.sleep(this.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.market.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.market.PING);
                 this.emit('orderbook', orderbook);
             }
             catch (err) {
@@ -19,8 +19,8 @@ class Latency extends events_1.EventEmitter {
         });
         this.instant.on('trades', async (trades) => {
             try {
-                await this.context.timeline.sleep(this.context.config.PROCESSING);
-                await this.context.timeline.sleep(this.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.market.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.market.PING);
                 this.emit('trades', trades);
             }
             catch (err) {
@@ -29,8 +29,8 @@ class Latency extends events_1.EventEmitter {
         });
         this.instant.on('positions', async (positions) => {
             try {
-                await this.context.timeline.sleep(this.context.config.PROCESSING);
-                await this.context.timeline.sleep(this.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.market.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.market.PING);
                 this.emit('positions', positions);
             }
             catch (err) {
@@ -39,8 +39,8 @@ class Latency extends events_1.EventEmitter {
         });
         this.instant.on('balances', async (balances) => {
             try {
-                await this.context.timeline.sleep(this.context.config.PROCESSING);
-                await this.context.timeline.sleep(this.context.config.PING);
+                await this.context.timeline.sleep(this.context.config.market.PROCESSING);
+                await this.context.timeline.sleep(this.context.config.market.PING);
                 this.emit('balances', balances);
             }
             catch (err) {
@@ -50,62 +50,62 @@ class Latency extends events_1.EventEmitter {
     }
     async makeOrders(orders) {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.makeOrders(orders);
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
     async amendOrders(amendments) {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.amendOrders(amendments);
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
     async cancelOrders(orders) {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.cancelOrders(orders);
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
     async getBalances() {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.getBalances();
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
     async getPositions() {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.getPositions();
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
     async getOpenOrders() {
         try {
-            await this.context.timeline.sleep(this.context.config.PING);
-            await this.context.timeline.sleep(this.context.config.PROCESSING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
+            await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.getOpenOrders();
         }
         finally {
-            await this.context.timeline.sleep(this.context.config.PING);
+            await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
 }

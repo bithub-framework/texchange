@@ -1,7 +1,7 @@
 import { StatefulStartable } from 'startable';
 import { Context } from '../context';
 import { Mtm } from '../mark-to-market';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Broadcast } from '../broadcast';
 import { TasksLike } from '../tasks/tasks-like';
 import { UseCasesLike } from '../use-cases';
@@ -12,7 +12,7 @@ import { Views } from '../views';
 export abstract class Texchange {
 	protected readonly abstract context: Context;
 	protected readonly abstract mtm: Mtm | null;
-	protected readonly abstract models: ModelsStatic;
+	protected readonly abstract models: StatefulModels;
 	protected readonly abstract broadcast: Broadcast;
 	protected readonly abstract tasks: TasksLike;
 	protected readonly abstract useCases: UseCasesLike;
@@ -21,6 +21,6 @@ export abstract class Texchange {
 }
 
 export namespace Texchange {
-	export type Snapshot = ModelsStatic.Snapshot;
+	export type Snapshot = StatefulModels.Snapshot;
 }
 import Snapshot = Texchange.Snapshot;

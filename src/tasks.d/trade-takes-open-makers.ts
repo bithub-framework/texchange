@@ -8,7 +8,7 @@ import {
 import { min } from '../utilities';
 import { RoundingMode } from 'big.js';
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, TradeTakesOpenMakersLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
@@ -19,7 +19,7 @@ export class TradeTakesOpenMakers extends Task
     implements TradeTakesOpenMakersLike {
     constructor(
         protected readonly context: Context,
-        protected readonly models: ModelsStatic,
+        protected readonly models: StatefulModels,
         protected readonly broadcast: Broadcast,
         protected readonly tasks: TasksLike,
     ) { super(); }
@@ -66,16 +66,16 @@ export class TradeTakesOpenMakers extends Task
         const { assets, margin, makers } = this.models;
 
         const volume = min(trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.config
+        const dollarVolume = this.context.config.market
             .dollarVolume(maker.price, volume)
-            .round(this.context.config.CURRENCY_DP);
+            .round(this.context.config.market.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
         assets.payFee(
             dollarVolume
-                .times(this.context.config.MAKER_FEE_RATE)
-                .round(this.context.config.CURRENCY_DP, RoundingMode.RoundUp)
+                .times(this.context.config.account.MAKER_FEE_RATE)
+                .round(this.context.config.market.CURRENCY_DP, RoundingMode.RoundUp)
         );
         if (maker.operation === Operation.OPEN) {
             margin.incMargin(maker.length, volume, dollarVolume);

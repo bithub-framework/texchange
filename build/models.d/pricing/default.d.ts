@@ -4,8 +4,8 @@ import { Pricing } from './pricing';
 import { Context } from '../../context';
 export declare class DefaultPricing extends Pricing<Snapshot> {
     protected readonly context: Context;
-    protected settlementPrice: Big;
-    constructor(context: Context, settlementPrice: Big);
+    private settlementPrice;
+    constructor(context: Context);
     updateTrades(trades: readonly Readonly<Trade>[]): void;
     getSettlementPrice(): Big;
     capture(): Snapshot;

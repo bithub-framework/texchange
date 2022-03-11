@@ -13,7 +13,7 @@ class Settle extends task_1.Task {
         };
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            const dollarVolume = config.dollarVolume(settlementPrice, position[length]).round(config.CURRENCY_DP);
+            const dollarVolume = config.market.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
             const profit = assets.closePosition(length, position[length], dollarVolume);
             assets.openPosition(length, position[length], dollarVolume);
             margin[length] = this.clearingMargin(length, profit);

@@ -3,7 +3,7 @@ import {
 	Closable,
 } from 'interfaces';
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, GetClosableLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
@@ -13,7 +13,7 @@ export class GetClosable extends Task
 	implements GetClosableLike {
 	constructor(
 		protected readonly context: Context,
-		protected readonly models: ModelsStatic,
+		protected readonly models: StatefulModels,
 		protected readonly broadcast: Broadcast,
 		protected readonly tasks: TasksLike,
 	) { super(); }

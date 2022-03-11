@@ -1,10 +1,10 @@
-import { ModelsStatic } from './models/models-static';
+import { StatefulModels } from './models/stateful-models';
 import { Context } from './context';
 import { TasksLike } from './tasks/tasks-like';
 import { Broadcast } from './broadcast';
 export declare abstract class Task {
     protected abstract readonly context: Context;
-    protected abstract readonly models: ModelsStatic;
+    protected abstract readonly models: StatefulModels;
     protected abstract readonly broadcast: Broadcast;
     protected abstract readonly tasks: TasksLike;
 }

@@ -8,6 +8,7 @@ export interface MarketConfig extends MarketSpec, MarketCalc {
 export interface AccountConfig extends AccountSpec {
     readonly initialBalance: Big;
 }
-export interface Config extends MarketConfig, AccountConfig {
-    readonly marketName: string;
+export interface Config {
+    readonly market: MarketConfig;
+    readonly account: AccountConfig;
 }

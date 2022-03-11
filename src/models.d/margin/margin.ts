@@ -27,7 +27,7 @@ export abstract class Margin extends Model<Snapshot> {
 				this.marginIncrement(
 					length, volume, dollarVolume,
 				)
-			).round(this.context.config.CURRENCY_DP);
+			).round(this.context.config.market.CURRENCY_DP);
 	}
 
 	// TODO try
@@ -41,13 +41,13 @@ export abstract class Margin extends Model<Snapshot> {
 					oldAssets,
 					length, volume, dollarVolume,
 				))
-				.round(this.context.config.CURRENCY_DP);
+				.round(this.context.config.market.CURRENCY_DP);
 		} else {
 			const restVolume = volume.minus(oldAssets.position[length]);
 			const restDollarVolume = dollarVolume
 				.times(restVolume)
 				.div(volume)
-				.round(this.context.config.CURRENCY_DP);
+				.round(this.context.config.market.CURRENCY_DP);
 			this[length] = new Big(0);
 			this.incMargin(-length, restVolume, restDollarVolume);
 		}

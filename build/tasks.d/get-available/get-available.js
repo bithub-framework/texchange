@@ -7,7 +7,7 @@ class GetAvailable extends task_1.Task {
         return this.models.assets.balance
             .minus(this.finalMargin())
             .minus(this.finalFrozenBalance())
-            .round(this.context.config.CURRENCY_DP);
+            .round(this.context.config.market.CURRENCY_DP);
     }
 }
 exports.GetAvailable = GetAvailable;

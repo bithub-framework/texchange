@@ -19,7 +19,7 @@ export class Assets extends Model<Snapshot> {
     ) {
         super();
 
-        this.balance = this.context.config.initialBalance;
+        this.balance = this.context.config.account.initialBalance;
         this.position = {
             [Length.LONG]: new Big(0),
             [Length.SHORT]: new Big(0),
@@ -81,7 +81,7 @@ export class Assets extends Model<Snapshot> {
             const cost = this.cost[length]
                 .times(volume)
                 .div(this.position[length])
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
             const profit = dollarVolume.minus(cost).times(length);
             this.position[length] = this.position[length].minus(volume);
             this.cost[length] = this.cost[length].minus(cost);
@@ -92,7 +92,7 @@ export class Assets extends Model<Snapshot> {
             const restDollarVolume = dollarVolume
                 .times(restVolume)
                 .div(volume)
-                .round(this.context.config.CURRENCY_DP);
+                .round(this.context.config.market.CURRENCY_DP);
             const profit = this.closePosition(
                 length,
                 this.position[length],

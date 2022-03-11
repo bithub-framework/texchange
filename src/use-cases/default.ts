@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { Broadcast } from '../broadcast';
 import { TasksLike } from '../tasks/tasks-like';
 import { MakeOrder } from '../use-cases.d/make-order';
@@ -28,7 +28,7 @@ export class DefaultUseCases implements UseCasesLike {
 
 	constructor(
 		context: Context,
-		models: ModelsStatic,
+		models: StatefulModels,
 		broadcast: Broadcast,
 		tasks: TasksLike,
 	) {

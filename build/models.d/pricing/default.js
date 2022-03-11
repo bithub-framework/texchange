@@ -4,10 +4,10 @@ exports.DefaultPricing = void 0;
 const big_js_1 = require("big.js");
 const pricing_1 = require("./pricing");
 class DefaultPricing extends pricing_1.Pricing {
-    constructor(context, settlementPrice) {
+    constructor(context) {
         super();
         this.context = context;
-        this.settlementPrice = settlementPrice;
+        this.settlementPrice = context.config.account.initialBalance;
     }
     updateTrades(trades) {
         this.settlementPrice = trades[trades.length - 1].price;

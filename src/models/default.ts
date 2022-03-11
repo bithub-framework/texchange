@@ -1,15 +1,14 @@
 import { Context } from '../context';
-import { ModelsStatic } from './models-static';
+import { StatefulModels } from './stateful-models';
 import { Assets } from '../models.d/assets';
 import { Margin, DefaultMargin } from '../models.d/margin';
 import { Makers, DefaultMakers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing, DefaultPricing } from '../models.d/pricing';
-import Big from 'big.js';
 
 
-export class DefaultModels extends ModelsStatic {
+export class DefaultModels extends StatefulModels {
 	public readonly assets: Assets;
 	public readonly margin: Margin;
 	public readonly makers: Makers;
@@ -26,6 +25,6 @@ export class DefaultModels extends ModelsStatic {
 		this.makers = new DefaultMakers(context);
 		this.book = new Book(context);
 		this.progress = new Progress(context);
-		this.pricing = new DefaultPricing(context, new Big(0));
+		this.pricing = new DefaultPricing(context);
 	}
 }

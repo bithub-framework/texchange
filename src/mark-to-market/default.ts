@@ -1,6 +1,6 @@
 import { Startable } from 'startable';
 import { Context } from '../context';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 import { TasksLike } from '../tasks/tasks-like';
 import { Mtm } from './mtm';
 
@@ -16,7 +16,7 @@ export class DefaultMtm extends Mtm {
 
 	constructor(
 		protected readonly context: Context,
-		protected readonly models: ModelsStatic,
+		protected readonly models: StatefulModels,
 		protected readonly tasks: TasksLike,
 	) { super(); }
 

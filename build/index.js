@@ -20,7 +20,7 @@ var mark_to_market_1 = require("./mark-to-market");
 Object.defineProperty(exports, "Mtm", { enumerable: true, get: function () { return mark_to_market_1.Mtm; } });
 Object.defineProperty(exports, "DefaultMtm", { enumerable: true, get: function () { return mark_to_market_1.DefaultMtm; } });
 var models_1 = require("./models");
-Object.defineProperty(exports, "ModelsStatic", { enumerable: true, get: function () { return models_1.ModelsStatic; } });
+Object.defineProperty(exports, "ModelsStatic", { enumerable: true, get: function () { return models_1.StatefulModels; } });
 Object.defineProperty(exports, "DefaultModels", { enumerable: true, get: function () { return models_1.DefaultModels; } });
 var tasks_1 = require("./tasks");
 Object.defineProperty(exports, "DefaultTasks", { enumerable: true, get: function () { return tasks_1.DefaultTasks; } });

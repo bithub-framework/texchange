@@ -15,7 +15,7 @@ import {
 
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { ModelsStatic } from '../models/models-static';
+import { StatefulModels } from '../models/stateful-models';
 
 import { MakeOpenOrder } from '../tasks.d/make-open-order';
 import { CancelOpenOrder } from '../tasks.d/cancel-open-order';
@@ -45,7 +45,7 @@ export class DefaultTasks implements TasksLike {
 
 	constructor(
 		context: Context,
-		models: ModelsStatic,
+		models: StatefulModels,
 		broadcast: Broadcast,
 	) {
 		this.cancelOpenOrder = new CancelOpenOrder(context, models, broadcast, this);

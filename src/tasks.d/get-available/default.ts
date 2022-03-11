@@ -5,7 +5,7 @@ import {
 } from 'interfaces';
 import Big from 'big.js';
 import { Context } from '../../context';
-import { ModelsStatic } from '../../models/models-static';
+import { StatefulModels } from '../../models/stateful-models';
 import { TasksLike } from '../../tasks/tasks-like';
 import { Broadcast } from '../../broadcast';
 import { max } from '../../utilities';
@@ -16,7 +16,7 @@ import { GetAvailable } from './get-available';
 export class DefaultGetAvailable extends GetAvailable {
 	constructor(
 		protected readonly context: Context,
-		protected readonly models: ModelsStatic,
+		protected readonly models: StatefulModels,
 		protected readonly broadcast: Broadcast,
 		protected readonly tasks: TasksLike,
 	) { super(); }
