@@ -1,4 +1,4 @@
-import { Balances, Closable, Positions, Length, HLike, ConcreteOpenOrder, ConcreteTrade } from 'interfaces';
+import { Balances, Closable, Positions, Length, HLike, TexchangeOpenOrder, TexchangeTrade } from 'interfaces';
 export interface GetBalancesLike<H extends HLike<H>> {
     getBalances(): Balances<H>;
 }
@@ -15,22 +15,22 @@ export interface SettleLike {
     settle(): void;
 }
 export interface OrderMakesLike<H extends HLike<H>> {
-    orderMakes(openOrder: ConcreteOpenOrder<H>): void;
+    orderMakes(openOrder: TexchangeOpenOrder<H>): void;
 }
 export interface OrderTakesLike<H extends HLike<H>> {
-    orderTakes(taker: ConcreteOpenOrder<H>): ConcreteTrade<H>[];
+    orderTakes(taker: TexchangeOpenOrder<H>): TexchangeTrade<H>[];
 }
 export interface TradeTakesOpenMakersLike<H extends HLike<H>> {
-    tradeTakesOpenMakers(trade: ConcreteTrade<H>): void;
+    tradeTakesOpenMakers(trade: TexchangeTrade<H>): void;
 }
 export interface MakeOpenOrderLike<H extends HLike<H>> {
-    makeOpenOrder(order: ConcreteOpenOrder<H>): ConcreteOpenOrder<H>;
+    makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }
 export interface CancelOpenOrderLike<H extends HLike<H>> {
-    cancelOpenOrder(order: ConcreteOpenOrder<H>): ConcreteOpenOrder<H>;
+    cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }
 export interface ValidateOrderLike<H extends HLike<H>> {
-    validateOrder(order: ConcreteOpenOrder<H>): void;
+    validateOrder(order: TexchangeOpenOrder<H>): void;
 }
 export interface MarginAccumulationLike<H extends HLike<H>> {
     newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;

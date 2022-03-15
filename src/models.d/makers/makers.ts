@@ -1,11 +1,11 @@
 import {
 	Side, Length,
 	HLike,
-	ConcreteOrderId,
-	ConcreteOrderIdStatic,
-	ConcreteOpenMakerStatic,
-	ConcreteOpenMaker,
-	ConcreteOpenOrder,
+	TexchangeOrderId,
+	TexchangeOrderIdStatic,
+	TexchangeOpenMakerStatic,
+	TexchangeOpenMaker,
+	TexchangeOpenOrder,
 	OpenMaker,
 } from 'interfaces';
 import {
@@ -20,17 +20,17 @@ import assert = require('assert');
 
 export abstract class Makers<H extends HLike<H>>
 	extends Model<H, Makers.Snapshot>
-	implements Iterable<ConcreteOpenMaker<H>> {
+	implements Iterable<TexchangeOpenMaker<H>> {
 
-	private orders = new Map<ConcreteOrderId, ConcreteOpenMaker<H>>();
-	private frozens = new Map<ConcreteOrderId, Frozen<H>>();
+	private orders = new Map<TexchangeOrderId, TexchangeOpenMaker<H>>();
+	private frozens = new Map<TexchangeOrderId, Frozen<H>>();
 	private totalUnfilled: Makers.TotalUnfilled.MutablePlain<H> = {
 		[Side.ASK]: this.context.H.from(0),
 		[Side.BID]: this.context.H.from(0),
 	};
 
-	protected readonly OrderId = new ConcreteOrderIdStatic();
-	protected readonly OpenMaker = new ConcreteOpenMakerStatic<H>(
+	protected readonly OrderId = new TexchangeOrderIdStatic();
+	protected readonly OpenMaker = new TexchangeOpenMakerStatic<H>(
 		this.context.H, this.OrderId,
 	);
 	protected readonly Frozen = new FrozenStatic<H>(this.context.H);
@@ -53,7 +53,7 @@ export abstract class Makers<H extends HLike<H>>
 		return this.orders.values();
 	}
 
-	public getOrder(id: ConcreteOrderId): ConcreteOpenMaker<H> {
+	public getOrder(id: TexchangeOrderId): TexchangeOpenMaker<H> {
 		const order = this.orders.get(id);
 		assert(typeof order !== 'undefined');
 		return order;
@@ -105,9 +105,9 @@ export abstract class Makers<H extends HLike<H>>
 		};
 	}
 
-	protected abstract toFreeze(order: ConcreteOpenOrder<H>): Frozen<H>;
+	protected abstract toFreeze(order: TexchangeOpenOrder<H>): Frozen<H>;
 
-	public appendOrder(order: ConcreteOpenMaker<H>): void {
+	public appendOrder(order: TexchangeOpenMaker<H>): void {
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.normalizeFrozen(
 			this.toFreeze(order),
@@ -119,12 +119,12 @@ export abstract class Makers<H extends HLike<H>>
 			.plus(order.unfilled);
 	}
 
-	public takeOrder(oid: ConcreteOrderId, volume: H): void {
+	public takeOrder(oid: TexchangeOrderId, volume: H): void {
 		const order = this.getOrder(oid);
 		assert(volume.lte(order.unfilled));
 		assert(order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
-		const newOrder: ConcreteOpenMaker<H> = {
+		const newOrder: TexchangeOpenMaker<H> = {
 			id: order.id,
 			price: order.price,
 			quantity: order.quantity,
@@ -138,9 +138,9 @@ export abstract class Makers<H extends HLike<H>>
 		this.appendOrder(newOrder);
 	}
 
-	public takeOrderQueue(oid: ConcreteOrderId, volume?: H): void {
+	public takeOrderQueue(oid: TexchangeOrderId, volume?: H): void {
 		const order = this.getOrder(oid);
-		const newOrder: ConcreteOpenMaker<H> = {
+		const newOrder: TexchangeOpenMaker<H> = {
 			id: order.id,
 			price: order.price,
 			quantity: order.quantity,
@@ -156,7 +156,7 @@ export abstract class Makers<H extends HLike<H>>
 		this.orders.set(oid, newOrder);
 	}
 
-	public removeOrder(oid: ConcreteOrderId): void {
+	public removeOrder(oid: TexchangeOrderId): void {
 		const order = this.getOrder(oid);
 		const toThaw = this.frozens.get(oid)!;
 		this.orders.delete(oid);
@@ -166,7 +166,7 @@ export abstract class Makers<H extends HLike<H>>
 		this.totalFrozen = this.Frozen.minus(this.totalFrozen, toThaw);
 	}
 
-	public forcedlyRemoveOrder(oid: ConcreteOrderId): void {
+	public forcedlyRemoveOrder(oid: TexchangeOrderId): void {
 		try {
 			this.removeOrder(oid);
 		} catch (err) { }

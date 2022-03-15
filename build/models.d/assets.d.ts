@@ -1,4 +1,4 @@
-import { Length, ConcretePosition, Position, HLike, H } from 'interfaces';
+import { Length, Position, HLike, H } from 'interfaces';
 import { Context } from '../context';
 import { Model } from '../model';
 export declare class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
@@ -8,7 +8,7 @@ export declare class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot
     private cost;
     constructor(context: Context<H>);
     getBalance(): H;
-    getPosition(): Readonly<ConcretePosition<H>>;
+    getPosition(): Readonly<Position<H>>;
     getCost(): Readonly<Assets.Cost<H>>;
     capture(): Assets.Snapshot;
     restore(snapshot: Assets.Snapshot): void;

@@ -2,7 +2,7 @@ import { StatefulModels } from '../models/stateful-models';
 import { Context } from '../context';
 import { TasksLike } from '../tasks/tasks-like';
 import {
-	ConcreteOpenOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 import { UseCase } from '../use-case';
@@ -18,7 +18,7 @@ export class CancelOrder<H extends HLike<H>>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public cancelOrder(order: ConcreteOpenOrder<H>): ConcreteOpenOrder<H> {
+	public cancelOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
 		return this.tasks.cancelOpenOrder.cancelOpenOrder(order);
 	}
 }

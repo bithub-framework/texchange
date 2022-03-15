@@ -3,7 +3,7 @@ import { Context } from '../context';
 import {
     Trade,
     H, HLike,
-    ConcreteTradeId,
+    TexchangeTradeId,
 } from 'interfaces';
 
 
@@ -47,7 +47,7 @@ export class Progress<H extends HLike<H>>
     }
 }
 
-export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, ConcreteTradeId> {
+export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, TexchangeTradeId> {
     readonly id: string;
 }
 

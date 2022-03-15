@@ -1,7 +1,7 @@
 import { StatefulModels } from '../models/stateful-models';
 import { Context } from '../context';
 import {
-	ConcretePositions,
+	Positions,
 	HLike,
 	Length,
 } from 'interfaces';
@@ -19,7 +19,7 @@ export class GetPositions<H extends HLike<H>> extends Task<H>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getPositions(): ConcretePositions<H> {
+	public getPositions(): Positions<H> {
 		return {
 			position: {
 				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],

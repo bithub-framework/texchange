@@ -1,4 +1,4 @@
-import { ConcreteOpenOrder, ConcreteTrade, HLike } from 'interfaces';
+import { TexchangeOpenOrder, TexchangeTrade, HLike } from 'interfaces';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -13,5 +13,5 @@ export declare class OrderTakes<H extends HLike<H>> extends Task<H> implements O
     /**
      * @param taker variable
      */
-    orderTakes(taker: ConcreteOpenOrder.MutablePlain<H>): ConcreteTrade.MutablePlain<H>[];
+    orderTakes(taker: TexchangeOpenOrder.MutablePlain<H>): TexchangeTrade.MutablePlain<H>[];
 }

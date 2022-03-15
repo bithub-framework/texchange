@@ -4,7 +4,7 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	ConcreteOpenOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 
@@ -17,7 +17,7 @@ export class GetOpenOrders<H extends HLike<H>> extends UseCase<H> {
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getOpenOrders(): ConcreteOpenOrder<H>[] {
+	public getOpenOrders(): TexchangeOpenOrder<H>[] {
 		const openOrders = [...this.models.makers];
 		return openOrders.map(order => ({
 			price: order.price,

@@ -1,6 +1,6 @@
 import {
 	Length,
-	ConcreteClosable,
+	Closable,
 	HLike,
 } from 'interfaces';
 import { Context } from '../context';
@@ -19,7 +19,7 @@ export class GetClosable<H extends HLike<H>> extends Task<H>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getClosable(): ConcreteClosable<H> {
+	public getClosable(): Closable<H> {
 		const { assets, makers } = this.models;
 		const totalFrozen = makers.getTotalFrozen();
 		const position = assets.getPosition();

@@ -1,5 +1,5 @@
 import {
-    ConcreteOpenOrder,
+    TexchangeOpenOrder,
     Operation, Length,
     HLike,
 } from 'interfaces';
@@ -21,12 +21,12 @@ export class ValidateOrder<H extends HLike<H>> extends Task<H>
         protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
-    public validateOrder(order: ConcreteOpenOrder<H>): void {
+    public validateOrder(order: TexchangeOpenOrder<H>): void {
         this.validateFormat(order);
         this.validateQuantity(order);
     }
 
-    private validateQuantity(order: ConcreteOpenOrder<H>): void {
+    private validateQuantity(order: TexchangeOpenOrder<H>): void {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder({
@@ -54,7 +54,7 @@ export class ValidateOrder<H extends HLike<H>> extends Task<H>
         }
     }
 
-    private validateFormat(order: ConcreteOpenOrder<H>) {
+    private validateFormat(order: TexchangeOpenOrder<H>) {
         assert(order.price.eq(order.price.round(this.context.config.market.PRICE_DP)));
         assert(order.price.mod(this.context.config.market.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));

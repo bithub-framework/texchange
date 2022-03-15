@@ -1,4 +1,4 @@
-import { ConcreteTrade, HLike, H } from 'interfaces';
+import { TexchangeTrade, HLike, H } from 'interfaces';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
 /**
@@ -8,7 +8,7 @@ export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, Defau
     protected readonly context: Context<H>;
     private settlementPrice;
     constructor(context: Context<H>);
-    updateTrades(trades: readonly ConcreteTrade<H>[]): void;
+    updateTrades(trades: readonly TexchangeTrade<H>[]): void;
     getSettlementPrice(): H;
     capture(): DefaultPricing.Snapshot;
     restore(snapshot: DefaultPricing.Snapshot): void;

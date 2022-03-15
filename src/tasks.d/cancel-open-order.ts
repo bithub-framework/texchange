@@ -4,7 +4,7 @@ import { Task } from '../task';
 import { TasksLike, CancelOpenOrderLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 import {
-	ConcreteOpenOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 
@@ -18,7 +18,7 @@ export class CancelOpenOrder<H extends HLike<H>> extends Task<H>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public cancelOpenOrder(order: ConcreteOpenOrder<H>): ConcreteOpenOrder<H> {
+	public cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
 		const { makers } = this.models;
 
 		let filled: H;

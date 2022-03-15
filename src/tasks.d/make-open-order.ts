@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import {
-	ConcreteOpenOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 import { StatefulModels } from '../models/stateful-models';
@@ -18,7 +18,7 @@ export class MakeOpenOrder<H extends HLike<H>> extends Task<H>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public makeOpenOrder(order: ConcreteOpenOrder<H>): ConcreteOpenOrder<H> {
+	public makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
 		this.tasks.validateOrder.validateOrder(order);
 		const trades = this.tasks.orderTakes.orderTakes(order);
 		this.tasks.orderMakes.orderMakes(order);

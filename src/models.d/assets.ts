@@ -1,6 +1,5 @@
 import {
     Length,
-    ConcretePosition,
     Position,
     HLike,
     H,
@@ -12,7 +11,7 @@ import assert = require('assert');
 
 
 export class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
-    private position: ConcretePosition.MutablePlain<H>;
+    private position: Position.MutablePlain<H>;
     private balance: H;
     private cost: Assets.Cost.MutablePlain<H>;
 
@@ -36,7 +35,7 @@ export class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
         return this.balance;
     }
 
-    public getPosition(): Readonly<ConcretePosition<H>> {
+    public getPosition(): Readonly<Position<H>> {
         return this.position;
     }
 

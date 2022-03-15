@@ -1,8 +1,8 @@
 import {
-    ConcreteOpenOrder,
+    TexchangeOpenOrder,
     Side,
     Operation,
-    ConcreteTrade,
+    TexchangeTrade,
     Length,
     HLike, H,
 } from 'interfaces';
@@ -26,12 +26,12 @@ export class OrderTakes<H extends HLike<H>> extends Task<H>
     /**
      * @param taker variable
      */
-    public orderTakes(taker: ConcreteOpenOrder.MutablePlain<H>): ConcreteTrade.MutablePlain<H>[] {
+    public orderTakes(taker: TexchangeOpenOrder.MutablePlain<H>): TexchangeTrade.MutablePlain<H>[] {
         const { margins, assets, progress, book } = this.models;
         const { config, timeline } = this.context;
         const orderbook = book.getBook();
 
-        const trades: ConcreteTrade<H>[] = [];
+        const trades: TexchangeTrade<H>[] = [];
         let volume = this.context.H.from(0);
         let dollarVolume = this.context.H.from(0);
         for (const maker of orderbook[-taker.side])

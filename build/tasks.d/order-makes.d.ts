@@ -1,4 +1,4 @@
-import { ConcreteOpenOrder, HLike } from 'interfaces';
+import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -10,5 +10,5 @@ export declare class OrderMakes<H extends HLike<H>> extends Task<H> implements O
     protected readonly broadcast: Broadcast<H>;
     protected readonly tasks: TasksLike<H>;
     constructor(context: Context<H>, models: StatefulModels<H>, broadcast: Broadcast<H>, tasks: TasksLike<H>);
-    orderMakes(openOrder: ConcreteOpenOrder<H>): void;
+    orderMakes(openOrder: TexchangeOpenOrder<H>): void;
 }

@@ -1,20 +1,20 @@
 /// <reference types="node" />
-import { ConcreteLimitOrder, ConcreteAmendment, ConcreteOpenOrder, ConcreteBalances, ConcretePositions, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents, HLike, ConcreteTradeId, ConcreteOrderId } from 'interfaces';
+import { LimitOrder, TexchangeAmendment, TexchangeOpenOrder, Balances, Positions, ContextMarketApiLike, ContextAccountApiLike, MarketEvents, AccountEvents, HLike, TexchangeTradeId, TexchangeOrderId } from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { Instant } from './instant';
-export declare class Latency<H extends HLike<H>> extends EventEmitter implements ContextMarketApiLike<H, ConcreteTradeId>, ContextAccountApiLike<H, ConcreteOrderId> {
+export declare class Latency<H extends HLike<H>> extends EventEmitter implements ContextMarketApiLike<H, TexchangeTradeId>, ContextAccountApiLike<H, TexchangeOrderId> {
     private context;
     private instant;
     constructor(context: Context<H>, instant: Instant<H>);
-    makeOrders(orders: ConcreteLimitOrder<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]>;
-    amendOrders(amendments: ConcreteAmendment<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]>;
-    cancelOrders(orders: ConcreteOpenOrder<H>[]): Promise<ConcreteOpenOrder<H>[]>;
-    getBalances(): Promise<ConcreteBalances<H>>;
-    getPositions(): Promise<ConcretePositions<H>>;
-    getOpenOrders(): Promise<ConcreteOpenOrder<H>[]>;
+    makeOrders(orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
+    amendOrders(amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
+    cancelOrders(orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]>;
+    getBalances(): Promise<Balances<H>>;
+    getPositions(): Promise<Positions<H>>;
+    getOpenOrders(): Promise<TexchangeOpenOrder<H>[]>;
 }
-export declare type Events<H extends HLike<H>> = MarketEvents<H, ConcreteTradeId> & AccountEvents<H>;
+export declare type Events<H extends HLike<H>> = MarketEvents<H, TexchangeTradeId> & AccountEvents<H>;
 export interface Latency<H extends HLike<H>> {
     on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
     once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

@@ -1,7 +1,7 @@
 import { Model } from '../../model';
 import {
 	HLike,
-	ConcreteTrade,
+	TexchangeTrade,
 } from 'interfaces';
 
 
@@ -11,6 +11,6 @@ export abstract class Pricing<H extends HLike<H>, Snapshot>
 
 	public abstract getSettlementPrice(): H;
 	public abstract updateTrades(
-		trades: readonly ConcreteTrade<H>[],
+		trades: readonly TexchangeTrade<H>[],
 	): void;
 }

@@ -4,8 +4,8 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	ConcreteLimitOrder,
-	ConcreteOpenOrder,
+	LimitOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 
@@ -19,7 +19,7 @@ export class MakeOrder<H extends HLike<H>>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public makeOrder(order: ConcreteLimitOrder<H>): ConcreteOpenOrder<H> {
+	public makeOrder(order: LimitOrder<H>): TexchangeOpenOrder<H> {
 		const openOrder = {
 			price: order.price,
 			quantity: order.quantity,

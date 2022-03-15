@@ -4,7 +4,7 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	ConcretePositions,
+	Positions,
 	Length,
 	HLike,
 } from 'interfaces';
@@ -19,7 +19,7 @@ export class GetPositions<H extends HLike<H>>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getPositions(): ConcretePositions<H> {
+	public getPositions(): Positions<H> {
 		return {
 			position: {
 				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],

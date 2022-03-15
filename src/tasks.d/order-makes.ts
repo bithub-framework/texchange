@@ -1,6 +1,6 @@
 import {
-    ConcreteOpenOrder,
-    ConcreteOpenMaker,
+    TexchangeOpenOrder,
+    TexchangeOpenMaker,
     HLike,
 } from 'interfaces';
 import { Context } from '../context';
@@ -20,9 +20,9 @@ export class OrderMakes<H extends HLike<H>> extends Task<H>
     ) { super(); }
 
     public orderMakes(
-        openOrder: ConcreteOpenOrder<H>,
+        openOrder: TexchangeOpenOrder<H>,
     ): void {
-        const openMaker: ConcreteOpenMaker.MutablePlain<H> = {
+        const openMaker: TexchangeOpenMaker.MutablePlain<H> = {
             price: openOrder.price,
             quantity: openOrder.quantity,
             side: openOrder.side,

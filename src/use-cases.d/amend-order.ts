@@ -4,8 +4,8 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	ConcreteAmendment,
-	ConcreteOpenOrder,
+	TexchangeAmendment,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 
@@ -19,9 +19,9 @@ export class AmendOrder<H extends HLike<H>>
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public amendOrder(amendment: ConcreteAmendment<H>): ConcreteOpenOrder<H> {
+	public amendOrder(amendment: TexchangeAmendment<H>): TexchangeOpenOrder<H> {
 		const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);
-		const newOrder: ConcreteOpenOrder<H> = {
+		const newOrder: TexchangeOpenOrder<H> = {
 			price: amendment.newPrice,
 			filled: oldOrder.filled,
 			unfilled: amendment.newUnfilled,

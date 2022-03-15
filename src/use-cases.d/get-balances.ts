@@ -4,7 +4,7 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	ConcreteBalances,
+	Balances,
 	HLike,
 } from 'interfaces';
 
@@ -18,7 +18,7 @@ export class GetBalances<H extends HLike<H>> extends UseCase<H> {
 		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getBalances(): ConcreteBalances<H> {
+	public getBalances(): Balances<H> {
 		return this.tasks.getBalances.getBalances();
 	}
 }

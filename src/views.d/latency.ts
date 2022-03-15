@@ -1,16 +1,16 @@
 import {
-    ConcreteLimitOrder,
-    ConcreteAmendment,
-    ConcreteOpenOrder,
-    ConcreteBalances,
-    ConcretePositions,
+    LimitOrder,
+    TexchangeAmendment,
+    TexchangeOpenOrder,
+    Balances,
+    Positions,
     ContextMarketApiLike,
     ContextAccountApiLike,
     MarketEvents,
     AccountEvents,
     HLike,
-    ConcreteTradeId,
-    ConcreteOrderId,
+    TexchangeTradeId,
+    TexchangeOrderId,
 } from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../context';
@@ -21,8 +21,8 @@ import { Instant } from './instant';
 export class Latency<H extends HLike<H>>
     extends EventEmitter
     implements
-    ContextMarketApiLike<H, ConcreteTradeId>,
-    ContextAccountApiLike<H, ConcreteOrderId> {
+    ContextMarketApiLike<H, TexchangeTradeId>,
+    ContextAccountApiLike<H, TexchangeOrderId> {
 
     constructor(
         private context: Context<H>,
@@ -67,7 +67,7 @@ export class Latency<H extends HLike<H>>
         });
     }
 
-    public async makeOrders(orders: ConcreteLimitOrder<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]> {
+    public async makeOrders(orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -77,7 +77,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async amendOrders(amendments: ConcreteAmendment<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]> {
+    public async amendOrders(amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -87,7 +87,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async cancelOrders(orders: ConcreteOpenOrder<H>[]): Promise<ConcreteOpenOrder<H>[]> {
+    public async cancelOrders(orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -97,7 +97,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async getBalances(): Promise<ConcreteBalances<H>> {
+    public async getBalances(): Promise<Balances<H>> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -107,7 +107,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async getPositions(): Promise<ConcretePositions<H>> {
+    public async getPositions(): Promise<Positions<H>> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -117,7 +117,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async getOpenOrders(): Promise<ConcreteOpenOrder<H>[]> {
+    public async getOpenOrders(): Promise<TexchangeOpenOrder<H>[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -129,7 +129,7 @@ export class Latency<H extends HLike<H>>
 }
 
 export type Events<H extends HLike<H>>
-    = MarketEvents<H, ConcreteTradeId> & AccountEvents<H>;
+    = MarketEvents<H, TexchangeTradeId> & AccountEvents<H>;
 
 export interface Latency<H extends HLike<H>> {
     on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

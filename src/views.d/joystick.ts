@@ -2,7 +2,7 @@ import { Context } from '../context';
 import { UseCasesLike } from '../use-cases';
 import { DatabaseTrade } from '../models.d/progress';
 import {
-	ConcreteOrderbook,
+	Orderbook,
 	HLike,
 } from 'interfaces';
 
@@ -17,7 +17,7 @@ export class Joystick<H extends HLike<H>> {
 		this.useCases.updateTrades.updateTrades(trades);
 	}
 
-	public updateOrderbook(orderbook: ConcreteOrderbook<H>): void {
+	public updateOrderbook(orderbook: Orderbook<H>): void {
 		this.useCases.updateOrderbook.updateOrderbook(orderbook);
 	}
 }

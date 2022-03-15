@@ -1,8 +1,8 @@
 import {
     Side,
-    ConcreteOpenOrder,
-    ConcreteTrade,
-    ConcreteOpenMaker,
+    TexchangeOpenOrder,
+    TexchangeTrade,
+    TexchangeOpenMaker,
     Operation,
     HLike, H,
 } from 'interfaces';
@@ -25,8 +25,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
         protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
-    public tradeTakesOpenMakers(roTrade: ConcreteTrade<H>): void {
-        const trade: ConcreteTrade.MutablePlain<H> = {
+    public tradeTakesOpenMakers(roTrade: TexchangeTrade<H>): void {
+        const trade: TexchangeTrade.MutablePlain<H> = {
             price: roTrade.price,
             quantity: roTrade.quantity,
             side: roTrade.side,
@@ -41,7 +41,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private tradeShouldTakeOpenOrder(
-        trade: ConcreteTrade<H>, maker: ConcreteOpenOrder<H>,
+        trade: TexchangeTrade<H>, maker: TexchangeOpenOrder<H>,
     ): boolean {
         return (
             maker.side === Side.BID &&
@@ -55,8 +55,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private tradeTakesOrderQueue(
-        trade: ConcreteTrade.MutablePlain<H>,
-        maker: ConcreteOpenMaker<H>,
+        trade: TexchangeTrade.MutablePlain<H>,
+        maker: TexchangeOpenMaker<H>,
     ): void {
         const { makers } = this.models;
         if (trade.price.eq(maker.price)) {
@@ -67,8 +67,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private tradeTakesOpenMaker(
-        trade: ConcreteTrade.MutablePlain<H>,
-        maker: ConcreteOpenMaker<H>,
+        trade: TexchangeTrade.MutablePlain<H>,
+        maker: TexchangeOpenMaker<H>,
     ): void {
         const { assets, margins: margin, makers } = this.models;
 

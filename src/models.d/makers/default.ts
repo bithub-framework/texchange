@@ -1,6 +1,6 @@
 import {
 	Length, Operation,
-	ConcreteOpenOrder,
+	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
 import { Frozen } from './frozon';
@@ -15,7 +15,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	) { super(context); }
 
 	protected toFreeze(
-		order: ConcreteOpenOrder<H>,
+		order: TexchangeOpenOrder<H>,
 	): Frozen<H> {
 		// 默认单向持仓模式
 		const length: Length = order.side * Operation.OPEN;

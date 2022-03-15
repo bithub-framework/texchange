@@ -1,6 +1,5 @@
 import {
     Orderbook,
-    ConcreteOrderbook,
     Side,
     HLike, H, HStatic,
     ConcreteOrderbookStatic,
@@ -13,7 +12,7 @@ import { Context } from '../context';
 
 export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
     private time = Number.NEGATIVE_INFINITY;
-    private basebook: ConcreteOrderbook<H> = {
+    private basebook: Orderbook<H> = {
         [Side.ASK]: [],
         [Side.BID]: [],
         time: Number.NEGATIVE_INFINITY,
@@ -23,7 +22,7 @@ export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
         [Side.ASK]: new Map<string, H>(),
         [Side.BID]: new Map<string, H>(),
     };
-    private finalbookCache: ConcreteOrderbook.MutablePlain<H> | null = null;
+    private finalbookCache: Orderbook.MutablePlain<H> | null = null;
     private Orderbook = new ConcreteOrderbookStatic<H>(this.context.H);
     private Decrements = new DecrementsStatic<H>(this.context.H);
 
@@ -33,7 +32,7 @@ export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
         super();
     }
 
-    public setBasebook(newBasebook: ConcreteOrderbook<H>) {
+    public setBasebook(newBasebook: Orderbook<H>) {
         assert(newBasebook.time === this.context.timeline.now());
         this.basebook = newBasebook;
         this.time = newBasebook.time;
@@ -51,7 +50,7 @@ export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
         this.finalbookCache = null;
     }
 
-    private apply(): ConcreteOrderbook<H> {
+    private apply(): Orderbook<H> {
         if (this.finalbookCache) return this.finalbookCache;
         const total: Decrements<H> = {
             [Side.ASK]: new Map<string, H>(),
@@ -83,7 +82,7 @@ export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
         return this.finalbookCache;
     }
 
-    public getBook(): ConcreteOrderbook<H> {
+    public getBook(): Orderbook<H> {
         return this.apply();
     }
 

@@ -15,8 +15,8 @@ class Makers extends model_1.Model {
             [interfaces_1.Side.ASK]: this.context.H.from(0),
             [interfaces_1.Side.BID]: this.context.H.from(0),
         };
-        this.OrderId = new interfaces_1.ConcreteOrderIdStatic();
-        this.OpenMaker = new interfaces_1.ConcreteOpenMakerStatic(this.context.H, this.OrderId);
+        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
+        this.OpenMaker = new interfaces_1.TexchangeOpenMakerStatic(this.context.H, this.OrderId);
         this.Frozen = new frozon_1.FrozenStatic(this.context.H);
         this.totalFrozen = this.Frozen.ZERO;
     }

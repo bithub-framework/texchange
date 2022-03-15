@@ -1,6 +1,6 @@
 import {
     Length,
-    ConcretePosition,
+    Position,
     HLike,
 } from 'interfaces';
 import { Context } from '../../context';
@@ -23,7 +23,7 @@ export abstract class Settle<H extends HLike<H>>
         const { config } = this.context;
         const { assets, margins: margin, pricing } = this.models;
 
-        const position: ConcretePosition<H> = {
+        const position: Position<H> = {
             [Length.LONG]: assets.getPosition()[Length.LONG],
             [Length.SHORT]: assets.getPosition()[Length.SHORT],
         };

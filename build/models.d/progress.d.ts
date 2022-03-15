@@ -1,6 +1,6 @@
 import { Model } from '../model';
 import { Context } from '../context';
-import { Trade, H, HLike, ConcreteTradeId } from 'interfaces';
+import { Trade, H, HLike, TexchangeTradeId } from 'interfaces';
 export declare class Progress<H extends HLike<H>> extends Model<H, Progress.Snapshot> {
     protected readonly context: Context<H>;
     latestPrice: H | null;
@@ -12,7 +12,7 @@ export declare class Progress<H extends HLike<H>> extends Model<H, Progress.Snap
     capture(): Progress.Snapshot;
     restore(snapshot: Progress.Snapshot): void;
 }
-export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, ConcreteTradeId> {
+export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, TexchangeTradeId> {
     readonly id: string;
 }
 export declare namespace Progress {

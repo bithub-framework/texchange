@@ -1,12 +1,12 @@
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import {
-    ConcreteOpenOrder,
-    ConcreteLimitOrder,
-    ConcreteAmendment,
-    ConcretePositions,
-    ConcreteBalances,
-    ConcreteTradeId,
+    TexchangeOpenOrder,
+    LimitOrder,
+    TexchangeAmendment,
+    Positions,
+    Balances,
+    TexchangeTradeId,
     MarketEvents,
     AccountEvents,
 } from 'interfaces';
@@ -56,8 +56,8 @@ export class Instant<H extends HLike<H>>
     // }
 
     public makeOrders(
-        orders: readonly ConcreteLimitOrder<H>[],
-    ): (ConcreteOpenOrder<H> | Error)[] {
+        orders: readonly LimitOrder<H>[],
+    ): (TexchangeOpenOrder<H> | Error)[] {
         return orders.map(order => {
             try {
                 return this.useCases.makeOrder.makeOrder(order);
@@ -68,14 +68,14 @@ export class Instant<H extends HLike<H>>
     }
 
     public cancelOrders(
-        orders: readonly ConcreteOpenOrder<H>[],
-    ): ConcreteOpenOrder<H>[] {
+        orders: readonly TexchangeOpenOrder<H>[],
+    ): TexchangeOpenOrder<H>[] {
         return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
-        amendments: readonly ConcreteAmendment<H>[],
-    ): (ConcreteOpenOrder<H> | Error)[] {
+        amendments: readonly TexchangeAmendment<H>[],
+    ): (TexchangeOpenOrder<H> | Error)[] {
         return amendments.map(amendment => {
             try {
                 return this.useCases.amendOrder.amendOrder(amendment);
@@ -85,21 +85,21 @@ export class Instant<H extends HLike<H>>
         });
     }
 
-    public getOpenOrders(): ConcreteOpenOrder<H>[] {
+    public getOpenOrders(): TexchangeOpenOrder<H>[] {
         return this.useCases.getOpenOrders.getOpenOrders();
     }
 
-    public getPositions(): ConcretePositions<H> {
+    public getPositions(): Positions<H> {
         return this.useCases.getPositions.getPositions();
     }
 
-    public getBalances(): ConcreteBalances<H> {
+    public getBalances(): Balances<H> {
         return this.useCases.getBalances.getBalances();
     }
 }
 
 export type Events<H extends HLike<H>>
-    = MarketEvents<H, ConcreteTradeId> & AccountEvents<H>;
+    = MarketEvents<H, TexchangeTradeId> & AccountEvents<H>;
 
 export interface Instant<H extends HLike<H>> extends EventEmitter {
     on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
