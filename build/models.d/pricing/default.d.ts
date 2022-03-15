@@ -1,19 +1,18 @@
-import { Trade, JsonCompatible, ReadonlyRecur } from 'interfaces';
-import Big from 'big.js';
+import { ConcreteTrade, HLike, H } from 'interfaces';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
-export declare class DefaultPricing extends Pricing<Snapshot> {
-    protected readonly context: Context;
+/**
+ * 默认以最新价格作为结算价。
+ */
+export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, DefaultPricing.Snapshot> {
+    protected readonly context: Context<H>;
     private settlementPrice;
-    constructor(context: Context);
-    updateTrades(trades: readonly Readonly<Trade>[]): void;
-    getSettlementPrice(): Big;
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
+    constructor(context: Context<H>);
+    updateTrades(trades: readonly ConcreteTrade<H>[]): void;
+    getSettlementPrice(): H;
+    capture(): DefaultPricing.Snapshot;
+    restore(snapshot: DefaultPricing.Snapshot): void;
 }
-declare type SnapshotStruct = Big;
 export declare namespace DefaultPricing {
-    type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
+    type Snapshot = H.Snapshot;
 }
-import Snapshot = DefaultPricing.Snapshot;
-export {};

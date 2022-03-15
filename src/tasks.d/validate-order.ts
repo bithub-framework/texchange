@@ -1,10 +1,9 @@
 import {
-    OpenOrder,
-    Operation,
-    Length,
+    ConcreteOpenOrder,
+    Operation, Length,
+    HLike,
 } from 'interfaces';
 import assert = require('assert');
-import Big from 'big.js';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -13,24 +12,28 @@ import { Broadcast } from '../broadcast';
 
 
 
-export class ValidateOrder extends Task
-    implements ValidateOrderLike {
+export class ValidateOrder<H extends HLike<H>> extends Task<H>
+    implements ValidateOrderLike<H> {
     constructor(
-        protected readonly context: Context,
-        protected readonly models: StatefulModels,
-        protected readonly broadcast: Broadcast,
-        protected readonly tasks: TasksLike,
+        protected readonly context: Context<H>,
+        protected readonly models: StatefulModels<H>,
+        protected readonly broadcast: Broadcast<H>,
+        protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
-    public validateOrder(order: Readonly<OpenOrder>): void {
+    public validateOrder(order: ConcreteOpenOrder<H>): void {
         this.validateFormat(order);
         this.validateQuantity(order);
     }
 
-    private validateQuantity(order: Readonly<OpenOrder>): void {
+    private validateQuantity(order: ConcreteOpenOrder<H>): void {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
-        makers.appendOrder({ ...order, behind: new Big(0) });
+        makers.appendOrder({
+            // TODO remove "..."
+            ...order,
+            behind: this.context.H.from(0),
+        });
         try {
             const enoughPosition =
                 closable[Length.LONG].gte(0) &&
@@ -51,7 +54,7 @@ export class ValidateOrder extends Task
         }
     }
 
-    private validateFormat(order: Readonly<OpenOrder>) {
+    private validateFormat(order: ConcreteOpenOrder<H>) {
         assert(order.price.eq(order.price.round(this.context.config.market.PRICE_DP)));
         assert(order.price.mod(this.context.config.market.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));

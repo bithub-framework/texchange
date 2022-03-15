@@ -3,14 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Margins = void 0;
 const interfaces_1 = require("interfaces");
 const model_1 = require("../model");
-const big_js_1 = require("big.js");
 class Margins extends model_1.Model {
     constructor(context) {
         super();
         this.context = context;
         this.margin = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: this.context.H.from(0),
+            [interfaces_1.Length.SHORT]: this.context.H.from(0),
         };
     }
     getMargin() {
@@ -21,14 +20,14 @@ class Margins extends model_1.Model {
     }
     capture() {
         return {
-            [interfaces_1.Length.LONG]: this.margin[interfaces_1.Length.LONG].toString(),
-            [interfaces_1.Length.SHORT]: this.margin[interfaces_1.Length.SHORT].toString(),
+            [interfaces_1.Length.LONG]: this.context.H.capture(this.margin[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: this.context.H.capture(this.margin[interfaces_1.Length.SHORT]),
         };
     }
     restore(snapshot) {
         this.margin = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot[interfaces_1.Length.SHORT]),
+            [interfaces_1.Length.LONG]: this.context.H.restore(snapshot[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: this.context.H.restore(snapshot[interfaces_1.Length.SHORT]),
         };
     }
 }

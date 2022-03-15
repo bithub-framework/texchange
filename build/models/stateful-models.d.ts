@@ -5,26 +5,24 @@ import { Makers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing';
-import { ReadonlyRecur } from 'interfaces';
-export declare abstract class StatefulModels implements StatefulLike<Snapshot> {
-    abstract readonly assets: Assets;
-    abstract readonly margins: Margins;
-    abstract readonly makers: Makers;
-    abstract readonly book: Book;
-    abstract readonly progress: Progress;
-    abstract readonly pricing: Pricing<any>;
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
-}
-export interface SnapshotStruct {
-    assets: any;
-    margin: any;
-    makers: any;
-    book: any;
-    pricing: any;
-    progress: any;
+import { HLike } from 'interfaces';
+export declare abstract class StatefulModels<H extends HLike<H>> implements StatefulLike<StatefulModels.Snapshot> {
+    abstract readonly assets: Assets<H>;
+    abstract readonly margins: Margins<H>;
+    abstract readonly makers: Makers<H>;
+    abstract readonly book: Book<H>;
+    abstract readonly progress: Progress<H>;
+    abstract readonly pricing: Pricing<H, any>;
+    capture(): StatefulModels.Snapshot;
+    restore(snapshot: StatefulModels.Snapshot): void;
 }
 export declare namespace StatefulModels {
-    type Snapshot = ReadonlyRecur<SnapshotStruct>;
+    interface Snapshot {
+        readonly assets: any;
+        readonly margins: any;
+        readonly makers: any;
+        readonly book: any;
+        readonly pricing: any;
+        readonly progress: any;
+    }
 }
-import Snapshot = StatefulModels.Snapshot;

@@ -10,11 +10,12 @@ const tasks_1 = require("../tasks");
 const use_cases_1 = require("../use-cases");
 const views_1 = require("../views");
 class DefaultTexchange extends texchange_1.Texchange {
-    constructor(config, timeline) {
+    constructor(config, timeline, H) {
         super();
         this.context = {
             config,
             timeline,
+            H,
         };
         this.models = new models_1.DefaultModels(this.context);
         this.broadcast = new broadcast_1.Broadcast();

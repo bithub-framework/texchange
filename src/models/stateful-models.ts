@@ -5,21 +5,25 @@ import { Makers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing';
-import { ReadonlyRecur } from 'interfaces';
+import {
+	HLike,
+} from 'interfaces';
 
 
-export abstract class StatefulModels implements StatefulLike<Snapshot> {
-	public abstract readonly assets: Assets;
-	public abstract readonly margins: Margins;
-	public abstract readonly makers: Makers;
-	public abstract readonly book: Book;
-	public abstract readonly progress: Progress;
-	public abstract readonly pricing: Pricing<any>;
+export abstract class StatefulModels<H extends HLike<H>>
+	implements StatefulLike<StatefulModels.Snapshot> {
 
-	public capture(): Snapshot {
+	public abstract readonly assets: Assets<H>;
+	public abstract readonly margins: Margins<H>;
+	public abstract readonly makers: Makers<H>;
+	public abstract readonly book: Book<H>;
+	public abstract readonly progress: Progress<H>;
+	public abstract readonly pricing: Pricing<H, any>;
+
+	public capture(): StatefulModels.Snapshot {
 		return {
 			assets: this.assets.capture(),
-			margin: this.margins.capture(),
+			margins: this.margins.capture(),
 			makers: this.makers.capture(),
 			book: this.book.capture(),
 			pricing: this.pricing.capture(),
@@ -27,9 +31,9 @@ export abstract class StatefulModels implements StatefulLike<Snapshot> {
 		}
 	}
 
-	public restore(snapshot: Snapshot): void {
+	public restore(snapshot: StatefulModels.Snapshot): void {
 		this.assets.restore(snapshot.assets);
-		this.margins.restore(snapshot.margin);
+		this.margins.restore(snapshot.margins);
 		this.makers.restore(snapshot.makers);
 		this.book.restore(snapshot.book);
 		this.pricing.restore(snapshot.pricing);
@@ -38,15 +42,13 @@ export abstract class StatefulModels implements StatefulLike<Snapshot> {
 }
 
 
-export interface SnapshotStruct {
-	assets: any;
-	margin: any;
-	makers: any;
-	book: any;
-	pricing: any;
-	progress: any;
-}
 export namespace StatefulModels {
-	export type Snapshot = ReadonlyRecur<SnapshotStruct>;
+	export interface Snapshot {
+		readonly assets: any;
+		readonly margins: any;
+		readonly makers: any;
+		readonly book: any;
+		readonly pricing: any;
+		readonly progress: any;
+	}
 }
-import Snapshot = StatefulModels.Snapshot;

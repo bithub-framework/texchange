@@ -1,7 +1,7 @@
 import {
 	Length,
+	HLike,
 } from 'interfaces';
-import Big from 'big.js';
 import { Context } from '../../context';
 import { StatefulModels } from '../../models/stateful-models';
 import assert = require('assert');
@@ -10,17 +10,17 @@ import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
 
 
-export class DefaultSettle extends Settle {
+export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
 	protected clearingMargin(
-		length: Length, profit: Big,
-	): Big {
+		length: Length, profit: H,
+	): H {
 		// 默认逐仓
 		return this.models.margins.getMargin()[length]
 			.plus(profit);

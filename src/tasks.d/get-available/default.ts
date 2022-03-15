@@ -1,9 +1,7 @@
 import {
-	Side,
-	Length,
-	Operation,
+	Side, Length, Operation,
+	HLike,
 } from 'interfaces';
-import Big from 'big.js';
 import { Context } from '../../context';
 import { StatefulModels } from '../../models/stateful-models';
 import { TasksLike } from '../../tasks/tasks-like';
@@ -13,15 +11,16 @@ import { GetAvailable } from './get-available';
 
 
 
-export class DefaultGetAvailable extends GetAvailable {
+export class DefaultGetAvailable<H extends HLike<H>>
+	extends GetAvailable<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	protected finalMargin(): Big {
+	protected finalMargin(): H {
 		// 默认无锁仓优惠
 		// 默认非实时结算
 		const margin = this.models.margins.getMargin();
@@ -29,20 +28,21 @@ export class DefaultGetAvailable extends GetAvailable {
 			.plus(margin[Length.SHORT]);
 	}
 
-	protected finalFrozenBalance(): Big {
+	protected finalFrozenBalance(): H {
 		// 默认单向持仓模式
 		const position = this.models.assets.getPosition();
-		const { totalFrozen, totalUnfilledQuantity } = this.models.makers;
-		const final: { [length: number]: Big; } = {};
+		const totalFrozen = this.models.makers.getTotalFrozen();
+		const totalUnfilled = this.models.makers.getTotalUnfilled();
+		const final: { [length: number]: H; } = {};
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side: Side = length * Operation.OPEN;
 			const afterDeduction = max(
-				totalUnfilledQuantity[side].minus(position[-length]),
-				new Big(0),
+				totalUnfilled[side].minus(position[-length]),
+				this.context.H.from(0),
 			);
 			final[length] = totalFrozen.balance[length]
 				.times(afterDeduction)
-				.div(totalUnfilledQuantity[side]);
+				.div(totalUnfilled[side]);
 		}
 		return final[Length.LONG].plus(final[Length.SHORT]);
 	}

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderMakes = void 0;
-const big_js_1 = require("big.js");
 const task_1 = require("../task");
 class OrderMakes extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
@@ -21,7 +20,7 @@ class OrderMakes extends task_1.Task {
             filled: openOrder.filled,
             unfilled: openOrder.unfilled,
             id: openOrder.id,
-            behind: new big_js_1.default(0),
+            behind: this.context.H.from(0),
         };
         const makers = this.models.book.getBook()[openOrder.side];
         for (const maker of makers)

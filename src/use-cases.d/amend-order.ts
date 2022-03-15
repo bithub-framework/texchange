@@ -4,22 +4,24 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	Amendment,
-	OpenOrder,
+	ConcreteAmendment,
+	ConcreteOpenOrder,
+	HLike,
 } from 'interfaces';
 
 
-export class AmendOrder extends UseCase {
+export class AmendOrder<H extends HLike<H>>
+	extends UseCase<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public amendOrder(amendment: Readonly<Amendment>): OpenOrder {
+	public amendOrder(amendment: ConcreteAmendment<H>): ConcreteOpenOrder<H> {
 		const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);
-		const newOrder: OpenOrder = {
+		const newOrder: ConcreteOpenOrder<H> = {
 			price: amendment.newPrice,
 			filled: oldOrder.filled,
 			unfilled: amendment.newUnfilled,

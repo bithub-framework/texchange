@@ -1,11 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Frozen = void 0;
+exports.FrozenStatic = void 0;
 const interfaces_1 = require("interfaces");
-const big_js_1 = require("big.js");
-var Frozen;
-(function (Frozen) {
-    function plus(x, y) {
+class FrozenStatic {
+    constructor(H) {
+        this.H = H;
+        this.ZERO = {
+            balance: {
+                [interfaces_1.Length.LONG]: this.H.from(0),
+                [interfaces_1.Length.SHORT]: this.H.from(0),
+            },
+            position: {
+                [interfaces_1.Length.LONG]: this.H.from(0),
+                [interfaces_1.Length.SHORT]: this.H.from(0),
+            },
+        };
+    }
+    plus(x, y) {
         return {
             balance: {
                 [interfaces_1.Length.LONG]: x.balance[interfaces_1.Length.LONG].plus(y.balance[interfaces_1.Length.LONG]),
@@ -17,21 +28,10 @@ var Frozen;
             },
         };
     }
-    Frozen.plus = plus;
-    Frozen.ZERO = {
-        balance: {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-        },
-        position: {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
-        },
-    };
-    function minus(x, y) {
-        if (!y) {
+    minus(x, y) {
+        if (typeof y === 'undefined') {
             y = x;
-            x = Frozen.ZERO;
+            x = this.ZERO;
         }
         return {
             balance: {
@@ -44,19 +44,30 @@ var Frozen;
             },
         };
     }
-    Frozen.minus = minus;
-    function jsonCompatiblize(frozen) {
+    capture(frozen) {
         return {
             balance: {
-                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].toString(),
-                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].toString(),
+                [interfaces_1.Length.LONG]: this.H.capture(frozen.balance[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.capture(frozen.balance[interfaces_1.Length.SHORT]),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].toString(),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].toString(),
+                [interfaces_1.Length.LONG]: this.H.capture(frozen.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.capture(frozen.position[interfaces_1.Length.SHORT]),
             },
         };
     }
-    Frozen.jsonCompatiblize = jsonCompatiblize;
-})(Frozen = exports.Frozen || (exports.Frozen = {}));
+    restore(snapshot) {
+        return {
+            balance: {
+                [interfaces_1.Length.LONG]: this.H.restore(snapshot.balance[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.restore(snapshot.balance[interfaces_1.Length.SHORT]),
+            },
+            position: {
+                [interfaces_1.Length.LONG]: this.H.restore(snapshot.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.restore(snapshot.position[interfaces_1.Length.SHORT]),
+            },
+        };
+    }
+}
+exports.FrozenStatic = FrozenStatic;
 //# sourceMappingURL=frozon.js.map

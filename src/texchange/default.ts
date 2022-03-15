@@ -17,26 +17,31 @@ import { UseCasesLike, DefaultUseCases } from '../use-cases';
 
 import { Views } from '../views';
 
+import { HLike, HStatic } from 'interfaces';
 
-export class DefaultTexchange extends Texchange {
-	protected readonly context: Context;
-	protected readonly mtm: Mtm | null;
-	protected readonly models: StatefulModels;
-	protected readonly broadcast: Broadcast;
-	protected readonly tasks: TasksLike;
-	protected readonly useCases: UseCasesLike;
-	protected readonly views: Views;
+
+export class DefaultTexchange<H extends HLike<H>>
+	extends Texchange<H> {
+	protected readonly context: Context<H>;
+	protected readonly mtm: Mtm<H> | null;
+	protected readonly models: StatefulModels<H>;
+	protected readonly broadcast: Broadcast<H>;
+	protected readonly tasks: TasksLike<H>;
+	protected readonly useCases: UseCasesLike<H>;
+	protected readonly views: Views<H>;
 	protected readonly startable: StatefulStartable<Texchange.Snapshot>;
 
 	constructor(
-		config: Config,
+		config: Config<H>,
 		timeline: Timeline,
+		H: HStatic<H>,
 	) {
 		super();
 
 		this.context = {
 			config,
 			timeline,
+			H,
 		}
 		this.models = new DefaultModels(this.context);
 		this.broadcast = new Broadcast();
@@ -62,4 +67,8 @@ export class DefaultTexchange extends Texchange {
 		if (this.mtm)
 			await this.mtm.startable.stop();
 	}
+}
+
+export namespace DefaultTexchange {
+	export type Snapshot = Texchange.Snapshot;
 }

@@ -1,13 +1,16 @@
 import {
-    LimitOrder,
-    Amendment,
-    OpenOrder,
-    Balances,
-    Positions,
+    ConcreteLimitOrder,
+    ConcreteAmendment,
+    ConcreteOpenOrder,
+    ConcreteBalances,
+    ConcretePositions,
     ContextMarketApiLike,
     ContextAccountApiLike,
     MarketEvents,
     AccountEvents,
+    HLike,
+    ConcreteTradeId,
+    ConcreteOrderId,
 } from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../context';
@@ -15,12 +18,15 @@ import { Instant } from './instant';
 
 
 
-export class Latency extends EventEmitter
-    implements ContextMarketApiLike, ContextAccountApiLike {
+export class Latency<H extends HLike<H>>
+    extends EventEmitter
+    implements
+    ContextMarketApiLike<H, ConcreteTradeId>,
+    ContextAccountApiLike<H, ConcreteOrderId> {
 
     constructor(
-        private context: Context,
-        private instant: Instant,
+        private context: Context<H>,
+        private instant: Instant<H>,
     ) {
         super();
         this.instant.on('orderbook', async orderbook => {
@@ -61,7 +67,7 @@ export class Latency extends EventEmitter
         });
     }
 
-    public async makeOrders(orders: LimitOrder[]): Promise<(OpenOrder | Error)[]> {
+    public async makeOrders(orders: ConcreteLimitOrder<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -71,7 +77,7 @@ export class Latency extends EventEmitter
         }
     }
 
-    public async amendOrders(amendments: Amendment[]): Promise<(OpenOrder | Error)[]> {
+    public async amendOrders(amendments: ConcreteAmendment<H>[]): Promise<(ConcreteOpenOrder<H> | Error)[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -81,7 +87,7 @@ export class Latency extends EventEmitter
         }
     }
 
-    public async cancelOrders(orders: OpenOrder[]): Promise<OpenOrder[]> {
+    public async cancelOrders(orders: ConcreteOpenOrder<H>[]): Promise<ConcreteOpenOrder<H>[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -91,7 +97,7 @@ export class Latency extends EventEmitter
         }
     }
 
-    public async getBalances(): Promise<Balances> {
+    public async getBalances(): Promise<ConcreteBalances<H>> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -101,7 +107,7 @@ export class Latency extends EventEmitter
         }
     }
 
-    public async getPositions(): Promise<Positions> {
+    public async getPositions(): Promise<ConcretePositions<H>> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -111,7 +117,7 @@ export class Latency extends EventEmitter
         }
     }
 
-    public async getOpenOrders(): Promise<OpenOrder[]> {
+    public async getOpenOrders(): Promise<ConcreteOpenOrder<H>[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -122,11 +128,12 @@ export class Latency extends EventEmitter
     }
 }
 
-export type Events = MarketEvents & AccountEvents;
+export type Events<H extends HLike<H>>
+    = MarketEvents<H, ConcreteTradeId> & AccountEvents<H>;
 
-export interface Latency {
-    on<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
-    once<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
-    off<Event extends keyof Events>(event: Event, listener: (...args: Events[Event]) => void): this;
-    emit<Event extends keyof Events>(event: Event, ...args: Events[Event]): boolean;
+export interface Latency<H extends HLike<H>> {
+    on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
+    once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
+    off<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
+    emit<Event extends keyof Events<H>>(event: Event, ...args: Events<H>[Event]): boolean;
 }

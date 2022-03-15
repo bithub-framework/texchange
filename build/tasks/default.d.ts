@@ -2,19 +2,20 @@ import { TasksLike, GetBalancesLike, GetPositionsLike, GetAvailableLike, GetClos
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { StatefulModels } from '../models/stateful-models';
-export declare class DefaultTasks implements TasksLike {
-    readonly getBalances: GetBalancesLike;
-    readonly getPositions: GetPositionsLike;
-    readonly getAvailable: GetAvailableLike;
-    readonly getClosable: GetClosableLike;
+import { HLike } from 'interfaces';
+export declare class DefaultTasks<H extends HLike<H>> implements TasksLike<H> {
+    readonly getBalances: GetBalancesLike<H>;
+    readonly getPositions: GetPositionsLike<H>;
+    readonly getAvailable: GetAvailableLike<H>;
+    readonly getClosable: GetClosableLike<H>;
     readonly settle: SettleLike;
-    readonly orderMakes: OrderMakesLike;
-    readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike;
-    readonly orderTakes: OrderTakesLike;
-    readonly validateOrder: ValidateOrderLike;
-    readonly makeOpenOrder: MakeOpenOrderLike;
-    readonly cancelOpenOrder: CancelOpenOrderLike;
-    readonly marginAccumulation: MarginAccumulationLike;
-    readonly orderVolumes: OrderVolumesLike;
-    constructor(context: Context, models: StatefulModels, broadcast: Broadcast);
+    readonly orderMakes: OrderMakesLike<H>;
+    readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
+    readonly orderTakes: OrderTakesLike<H>;
+    readonly validateOrder: ValidateOrderLike<H>;
+    readonly makeOpenOrder: MakeOpenOrderLike<H>;
+    readonly cancelOpenOrder: CancelOpenOrderLike<H>;
+    readonly marginAccumulation: MarginAccumulationLike<H>;
+    readonly orderVolumes: OrderVolumesLike<H>;
+    constructor(context: Context<H>, models: StatefulModels<H>, broadcast: Broadcast<H>);
 }

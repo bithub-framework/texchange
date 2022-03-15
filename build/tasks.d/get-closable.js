@@ -13,11 +13,13 @@ class GetClosable extends task_1.Task {
     }
     getClosable() {
         const { assets, makers } = this.models;
+        const totalFrozen = makers.getTotalFrozen();
+        const position = assets.getPosition();
         return {
-            [interfaces_1.Length.LONG]: assets.getPosition()[interfaces_1.Length.LONG]
-                .minus(makers.totalFrozen.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: assets.getPosition()[interfaces_1.Length.SHORT]
-                .minus(makers.totalFrozen.position[interfaces_1.Length.SHORT]),
+            [interfaces_1.Length.LONG]: position[interfaces_1.Length.LONG]
+                .minus(totalFrozen.position[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: position[interfaces_1.Length.SHORT]
+                .minus(totalFrozen.position[interfaces_1.Length.SHORT]),
         };
     }
 }

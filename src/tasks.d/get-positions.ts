@@ -1,7 +1,8 @@
 import { StatefulModels } from '../models/stateful-models';
 import { Context } from '../context';
 import {
-	Positions,
+	ConcretePositions,
+	HLike,
 	Length,
 } from 'interfaces';
 import { Task } from '../task';
@@ -9,16 +10,16 @@ import { TasksLike, GetPositionsLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 
 
-export class GetPositions extends Task
-	implements GetPositionsLike {
+export class GetPositions<H extends HLike<H>> extends Task<H>
+	implements GetPositionsLike<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getPositions(): Positions {
+	public getPositions(): ConcretePositions<H> {
 		return {
 			position: {
 				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],

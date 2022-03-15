@@ -1,76 +1,76 @@
 import {
     Length,
-    ReadonlyRecur,
-    JsonCompatible,
+    ConcretePosition,
     Position,
+    HLike,
+    H,
 } from 'interfaces';
-import Big from 'big.js';
 import { Context } from '../context';
 import { Model } from '../model';
 import assert = require('assert');
 
 
 
-export class Assets extends Model<Assets.Snapshot> {
-    private position: Position;
-    private balance: Big;
-    private cost: Assets.Cost;
+export class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
+    private position: ConcretePosition.MutablePlain<H>;
+    private balance: H;
+    private cost: Assets.Cost.MutablePlain<H>;
 
     constructor(
-        protected readonly context: Context,
+        protected readonly context: Context<H>,
     ) {
         super();
 
         this.balance = this.context.config.account.initialBalance;
         this.position = {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
+            [Length.LONG]: this.context.H.from(0),
+            [Length.SHORT]: this.context.H.from(0),
         };
         this.cost = {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
+            [Length.LONG]: this.context.H.from(0),
+            [Length.SHORT]: this.context.H.from(0),
         };
     }
 
-    public getBalance(): Big {
+    public getBalance(): H {
         return this.balance;
     }
 
-    public getPosition(): Readonly<Position> {
+    public getPosition(): Readonly<ConcretePosition<H>> {
         return this.position;
     }
 
-    public getCost(): Readonly<Assets.Cost> {
+    public getCost(): Readonly<Assets.Cost<H>> {
         return this.cost;
     }
 
     public capture(): Assets.Snapshot {
         return {
             position: {
-                [Length.LONG]: this.position[Length.LONG].toString(),
-                [Length.SHORT]: this.position[Length.SHORT].toString(),
+                [Length.LONG]: this.context.H.capture(this.position[Length.LONG]),
+                [Length.SHORT]: this.context.H.capture(this.position[Length.SHORT]),
             },
             cost: {
-                [Length.LONG]: this.cost[Length.LONG].toString(),
-                [Length.SHORT]: this.cost[Length.SHORT].toString(),
+                [Length.LONG]: this.context.H.capture(this.cost[Length.LONG]),
+                [Length.SHORT]: this.context.H.capture(this.cost[Length.SHORT]),
             },
-            balance: this.balance.toString(),
+            balance: this.context.H.capture(this.balance),
         };
     }
 
     public restore(snapshot: Assets.Snapshot): void {
-        this.balance = new Big(snapshot.balance);
+        this.balance = this.context.H.from(snapshot.balance);
         this.position = {
-            [Length.LONG]: new Big(snapshot.position[Length.LONG]),
-            [Length.SHORT]: new Big(snapshot.position[Length.SHORT]),
+            [Length.LONG]: this.context.H.from(snapshot.position[Length.LONG]),
+            [Length.SHORT]: this.context.H.from(snapshot.position[Length.SHORT]),
         };
         this.cost = {
-            [Length.LONG]: new Big(snapshot.cost[Length.LONG]),
-            [Length.SHORT]: new Big(snapshot.cost[Length.SHORT]),
+            [Length.LONG]: this.context.H.from(snapshot.cost[Length.LONG]),
+            [Length.SHORT]: this.context.H.from(snapshot.cost[Length.SHORT]),
         };
     }
 
-    public payFee(fee: Big): void {
+    public payFee(fee: H): void {
         this.balance = this.balance.minus(fee);
     }
 
@@ -78,7 +78,7 @@ export class Assets extends Model<Assets.Snapshot> {
         length,
         volume,
         dollarVolume,
-    }: Assets.Volumes): void {
+    }: Readonly<Assets.Volumes<H>>): void {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);
     }
@@ -90,7 +90,7 @@ export class Assets extends Model<Assets.Snapshot> {
         length,
         volume,
         dollarVolume,
-    }: Assets.Volumes): Big {
+    }: Readonly<Assets.Volumes<H>>): H {
         assert(volume.lte(this.position[length]));
         const cost = this.cost[length]
             .times(volume)
@@ -101,49 +101,32 @@ export class Assets extends Model<Assets.Snapshot> {
         this.cost[length] = this.cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
         return profit;
-        /* volume.gt(this.position[length]) */ {
-            // const restVolume = volume.minus(this.position[length]);
-            // const restDollarVolume = dollarVolume
-            //     .times(restVolume)
-            //     .div(volume)
-            //     .round(this.context.config.market.CURRENCY_DP);
-            // const profit = this.closePosition({
-            //     length,
-            //     volume: this.position[length],
-            //     dollarVolume: dollarVolume.minus(restDollarVolume),
-            // });
-            // this.openPosition({
-            //     length: -length,
-            //     volume: restVolume,
-            //     dollarVolume: restDollarVolume,
-            // });
-            // return profit;
-        }
     }
-
-    // public [inspect.custom]() {
-    //     return JSON.stringify({
-    //         balance: this.balance,
-    //         cost: this.cost,
-    //         position: this.position,
-    //     });
-    // }
 }
 
 
 export namespace Assets {
-    export interface Cost { [length: number]: Big; }
+    export interface Cost<H extends HLike<H>> {
+        readonly [length: Length]: H;
+    }
+    export namespace Cost {
+        export interface MutablePlain<H extends HLike<H>> {
+            [length: Length]: H;
+        }
+        export interface Snapshot {
+            readonly [length: Length]: H.Snapshot;
+        }
+    }
 
-    export interface Volumes {
+    export interface Volumes<H extends HLike<H>> {
         readonly length: Length;
-        readonly volume: Big;
-        readonly dollarVolume: Big;
+        readonly volume: H;
+        readonly dollarVolume: H;
     }
 
-    interface SnapshotStruct {
-        position: Position;
-        balance: Big;
-        cost: Cost;
+    export interface Snapshot {
+        readonly position: Position.Snapshot;
+        readonly balance: H.Snapshot;
+        readonly cost: Cost.Snapshot;
     }
-    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }

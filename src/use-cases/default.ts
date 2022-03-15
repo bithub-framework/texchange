@@ -11,26 +11,28 @@ import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 import { UseCasesLike } from './use-cases-like';
+import { HLike } from 'interfaces';
 
 
 /**
  * 默认实时结算
  */
-export class DefaultUseCases implements UseCasesLike {
-	public readonly makeOrder: MakeOrder;
-	public readonly cancelOrder: CancelOrder;
-	public readonly amendOrder: AmendOrder;
-	public readonly getOpenOrders: GetOpenOrders;
-	public readonly getPositions: GetPositions;
-	public readonly getBalances: GetBalances;
-	public readonly updateOrderbook: UpdateOrderbook;
-	public readonly updateTrades: UpdateTrades;
+export class DefaultUseCases<H extends HLike<H>>
+	implements UseCasesLike<H> {
+	public readonly makeOrder: MakeOrder<H>;
+	public readonly cancelOrder: CancelOrder<H>;
+	public readonly amendOrder: AmendOrder<H>;
+	public readonly getOpenOrders: GetOpenOrders<H>;
+	public readonly getPositions: GetPositions<H>;
+	public readonly getBalances: GetBalances<H>;
+	public readonly updateOrderbook: UpdateOrderbook<H>;
+	public readonly updateTrades: UpdateTrades<H>;
 
 	constructor(
-		context: Context,
-		models: StatefulModels,
-		broadcast: Broadcast,
-		tasks: TasksLike,
+		context: Context<H>,
+		models: StatefulModels<H>,
+		broadcast: Broadcast<H>,
+		tasks: TasksLike<H>,
 	) {
 		this.amendOrder = new AmendOrder(context, models, broadcast, tasks);
 		this.cancelOrder = new CancelOrder(context, models, broadcast, tasks);

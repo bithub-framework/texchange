@@ -1,3 +1,3 @@
-import Big from 'big.js';
-export declare function min(x: Big, y: Big): Big;
-export declare function max(x: Big, y: Big): Big;
+import { HLike } from 'interfaces';
+export declare function min<H extends HLike<H>>(x: H, y: H): H;
+export declare function max<H extends HLike<H>>(x: H, y: H): H;

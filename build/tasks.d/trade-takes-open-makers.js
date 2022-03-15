@@ -55,7 +55,7 @@ class TradeTakesOpenMakers extends task_1.Task {
         makers.takeOrder(maker.id, volume);
         assets.payFee(dollarVolume
             .times(this.context.config.account.MAKER_FEE_RATE)
-            .round(this.context.config.market.CURRENCY_DP, 3 /* RoundUp */));
+            .round(this.context.config.market.CURRENCY_DP, interfaces_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if (maker.operation === interfaces_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: maker.length,

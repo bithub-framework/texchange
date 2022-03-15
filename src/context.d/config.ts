@@ -3,19 +3,21 @@ import {
 	AccountSpec,
 	MarketCalc,
 } from 'interfaces';
-import Big from 'big.js';
+import { HLike } from 'interfaces';
 
-export interface MarketConfig extends MarketSpec, MarketCalc {
+
+export interface MarketConfig<H extends HLike<H>>
+	extends MarketSpec<H>, MarketCalc<H> {
 	readonly PING: number;
 	readonly PROCESSING: number;
-	readonly initialSettlementPrice: Big;
+	readonly initialSettlementPrice: H;
 }
 
-export interface AccountConfig extends AccountSpec {
-	readonly initialBalance: Big;
+export interface AccountConfig<H extends HLike<H>> extends AccountSpec {
+	readonly initialBalance: H;
 }
 
-export interface Config {
-	readonly market: MarketConfig;
-	readonly account: AccountConfig;
+export interface Config<H extends HLike<H>> {
+	readonly market: MarketConfig<H>;
+	readonly account: AccountConfig<H>;
 }

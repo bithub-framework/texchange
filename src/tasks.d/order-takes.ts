@@ -1,12 +1,12 @@
 import {
-    OpenOrder,
+    ConcreteOpenOrder,
     Side,
     Operation,
-    Trade,
+    ConcreteTrade,
     Length,
+    HLike, H,
 } from 'interfaces';
 import { min } from '../utilities';
-import { Big, RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -14,26 +14,26 @@ import { TasksLike, OrderTakesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 
 
-export class OrderTakes extends Task
-    implements OrderTakesLike {
+export class OrderTakes<H extends HLike<H>> extends Task<H>
+    implements OrderTakesLike<H> {
     constructor(
-        protected readonly context: Context,
-        protected readonly models: StatefulModels,
-        protected readonly broadcast: Broadcast,
-        protected readonly tasks: TasksLike,
+        protected readonly context: Context<H>,
+        protected readonly models: StatefulModels<H>,
+        protected readonly broadcast: Broadcast<H>,
+        protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
     /**
      * @param taker variable
      */
-    public orderTakes(taker: OpenOrder): Trade[] {
+    public orderTakes(taker: ConcreteOpenOrder.MutablePlain<H>): ConcreteTrade.MutablePlain<H>[] {
         const { margins, assets, progress, book } = this.models;
         const { config, timeline } = this.context;
         const orderbook = book.getBook();
 
-        const trades: Trade[] = [];
-        let volume = new Big(0);
-        let dollarVolume = new Big(0);
+        const trades: ConcreteTrade<H>[] = [];
+        let volume = this.context.H.from(0);
+        let dollarVolume = this.context.H.from(0);
         for (const maker of orderbook[-taker.side])
             if (
                 (
@@ -61,7 +61,7 @@ export class OrderTakes extends Task
         assets.payFee(
             dollarVolume
                 .times(config.account.TAKER_FEE_RATE)
-                .round(config.market.CURRENCY_DP, RoundingMode.RoundUp)
+                .round(config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
         );
         if (taker.operation === Operation.OPEN)
             this.tasks.orderVolumes.open({

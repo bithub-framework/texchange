@@ -1,25 +1,25 @@
 import { Model } from '../model';
-import Big from 'big.js';
 import { Context } from '../context';
 import {
     Trade,
-    ReadonlyRecur,
-    JsonCompatible,
+    H, HLike,
+    ConcreteTradeId,
 } from 'interfaces';
 
 
 
-export class Progress extends Model<Progress.Snapshot> {
-    public latestPrice: Big | null = null;
+export class Progress<H extends HLike<H>>
+    extends Model<H, Progress.Snapshot> {
+    public latestPrice: H | null = null;
     public latestDatabaseTradeTime: number | null = null;
     public userTradeCount = 0;
     public userOrderCount = 0;
 
     constructor(
-        protected readonly context: Context,
+        protected readonly context: Context<H>,
     ) { super(); }
 
-    public updateDatabaseTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
+    public updateDatabaseTrades(trades: readonly DatabaseTrade<H>[]): void {
         const now = this.context.timeline.now();
 
         this.latestDatabaseTradeTime = now;
@@ -29,7 +29,7 @@ export class Progress extends Model<Progress.Snapshot> {
     public capture(): Progress.Snapshot {
         return {
             latestPrice: this.latestPrice
-                ? this.latestPrice.toString()
+                ? this.context.H.capture(this.latestPrice)
                 : null,
             latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
@@ -40,24 +40,22 @@ export class Progress extends Model<Progress.Snapshot> {
     public restore(snapshot: Progress.Snapshot): void {
         this.latestPrice = snapshot.latestPrice === null
             ? null
-            : new Big(snapshot.latestPrice);
+            : this.context.H.restore(snapshot.latestPrice);
         this.latestDatabaseTradeTime = snapshot.latestDatabaseTradeTime;
         this.userTradeCount = snapshot.userTradeCount;
         this.userOrderCount = snapshot.userOrderCount;
     }
 }
 
-export interface DatabaseTrade extends Trade {
-    id: string;
+export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, ConcreteTradeId> {
+    readonly id: string;
 }
 
-
 export namespace Progress {
-    interface SnapshotStruct {
-        latestPrice: Big | null;
-        latestDatabaseTradeTime: number | null;
-        userTradeCount: number;
-        userOrderCount: number;
+    export interface Snapshot {
+        readonly latestPrice: H.Snapshot | null;
+        readonly latestDatabaseTradeTime: number | null;
+        readonly userTradeCount: number;
+        readonly userOrderCount: number;
     }
-    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
 }

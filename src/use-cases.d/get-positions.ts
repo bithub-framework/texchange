@@ -4,20 +4,22 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	Positions,
+	ConcretePositions,
 	Length,
+	HLike,
 } from 'interfaces';
 
 
-export class GetPositions extends UseCase {
+export class GetPositions<H extends HLike<H>>
+	extends UseCase<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getPositions(): Positions {
+	public getPositions(): ConcretePositions<H> {
 		return {
 			position: {
 				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],

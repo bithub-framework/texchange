@@ -1,5 +1,5 @@
 export { Pricing, DefaultPricing } from './models.d/pricing';
-export { Makers, DefaultMakers } from './models.d/makers';
+export { Makers, Frozen, DefaultMakers } from './models.d/makers';
 export { Margins } from './models.d/margins';
 export { Settle, DefaultSettle } from './tasks.d/settle';
 export { GetAvailable, DefaultGetAvailable } from './tasks.d/get-available';

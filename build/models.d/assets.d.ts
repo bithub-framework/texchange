@@ -1,39 +1,44 @@
-import { Length, ReadonlyRecur, JsonCompatible, Position } from 'interfaces';
-import Big from 'big.js';
+import { Length, ConcretePosition, Position, HLike, H } from 'interfaces';
 import { Context } from '../context';
 import { Model } from '../model';
-export declare class Assets extends Model<Assets.Snapshot> {
-    protected readonly context: Context;
+export declare class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
+    protected readonly context: Context<H>;
     private position;
     private balance;
     private cost;
-    constructor(context: Context);
-    getBalance(): Big;
-    getPosition(): Readonly<Position>;
-    getCost(): Readonly<Assets.Cost>;
+    constructor(context: Context<H>);
+    getBalance(): H;
+    getPosition(): Readonly<ConcretePosition<H>>;
+    getCost(): Readonly<Assets.Cost<H>>;
     capture(): Assets.Snapshot;
     restore(snapshot: Assets.Snapshot): void;
-    payFee(fee: Big): void;
-    open({ length, volume, dollarVolume, }: Assets.Volumes): void;
+    payFee(fee: H): void;
+    open({ length, volume, dollarVolume, }: Readonly<Assets.Volumes<H>>): void;
     /**
      * @returns Profit.
      */
-    close({ length, volume, dollarVolume, }: Assets.Volumes): Big;
+    close({ length, volume, dollarVolume, }: Readonly<Assets.Volumes<H>>): H;
 }
 export declare namespace Assets {
-    export interface Cost {
-        [length: number]: Big;
+    interface Cost<H extends HLike<H>> {
+        readonly [length: Length]: H;
     }
-    export interface Volumes {
+    namespace Cost {
+        interface MutablePlain<H extends HLike<H>> {
+            [length: Length]: H;
+        }
+        interface Snapshot {
+            readonly [length: Length]: H.Snapshot;
+        }
+    }
+    interface Volumes<H extends HLike<H>> {
         readonly length: Length;
-        readonly volume: Big;
-        readonly dollarVolume: Big;
+        readonly volume: H;
+        readonly dollarVolume: H;
     }
-    interface SnapshotStruct {
-        position: Position;
-        balance: Big;
-        cost: Cost;
+    interface Snapshot {
+        readonly position: Position.Snapshot;
+        readonly balance: H.Snapshot;
+        readonly cost: Cost.Snapshot;
     }
-    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
-    export {};
 }

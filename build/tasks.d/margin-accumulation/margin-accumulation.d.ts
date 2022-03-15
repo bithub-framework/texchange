@@ -1,10 +1,10 @@
-import Big from 'big.js';
 import { Task } from '../../task';
 import { MarginAccumulationLike } from '../../tasks/tasks-like';
-export declare abstract class MarginAccumulation extends Task implements MarginAccumulationLike {
-    abstract newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes): Big;
-    abstract newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes): Big;
+import { HLike } from 'interfaces';
+export declare abstract class MarginAccumulation<H extends HLike<H>> extends Task<H> implements MarginAccumulationLike<H> {
+    abstract newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;
+    abstract newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes<H>): H;
 }
 export declare namespace MarginAccumulation {
-    type Volumes = MarginAccumulationLike.Volumes;
+    type Volumes<H extends HLike<H>> = MarginAccumulationLike.Volumes<H>;
 }

@@ -15,7 +15,7 @@ class CancelOpenOrder extends task_1.Task {
         let filled;
         try {
             filled = makers.getOrder(order.id).filled;
-            makers.tryRemoveOrder(order.id);
+            makers.forcedlyRemoveOrder(order.id);
         }
         catch (err) {
             filled = order.quantity;

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const interfaces_1 = require("interfaces");
-const big_js_1 = require("big.js");
 const model_1 = require("../model");
 const assert = require("assert");
 class Assets extends model_1.Model {
@@ -11,12 +10,12 @@ class Assets extends model_1.Model {
         this.context = context;
         this.balance = this.context.config.account.initialBalance;
         this.position = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: this.context.H.from(0),
+            [interfaces_1.Length.SHORT]: this.context.H.from(0),
         };
         this.cost = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(0),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(0),
+            [interfaces_1.Length.LONG]: this.context.H.from(0),
+            [interfaces_1.Length.SHORT]: this.context.H.from(0),
         };
     }
     getBalance() {
@@ -31,25 +30,25 @@ class Assets extends model_1.Model {
     capture() {
         return {
             position: {
-                [interfaces_1.Length.LONG]: this.position[interfaces_1.Length.LONG].toString(),
-                [interfaces_1.Length.SHORT]: this.position[interfaces_1.Length.SHORT].toString(),
+                [interfaces_1.Length.LONG]: this.context.H.capture(this.position[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.context.H.capture(this.position[interfaces_1.Length.SHORT]),
             },
             cost: {
-                [interfaces_1.Length.LONG]: this.cost[interfaces_1.Length.LONG].toString(),
-                [interfaces_1.Length.SHORT]: this.cost[interfaces_1.Length.SHORT].toString(),
+                [interfaces_1.Length.LONG]: this.context.H.capture(this.cost[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.context.H.capture(this.cost[interfaces_1.Length.SHORT]),
             },
-            balance: this.balance.toString(),
+            balance: this.context.H.capture(this.balance),
         };
     }
     restore(snapshot) {
-        this.balance = new big_js_1.default(snapshot.balance);
+        this.balance = this.context.H.from(snapshot.balance);
         this.position = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.position[interfaces_1.Length.SHORT]),
+            [interfaces_1.Length.LONG]: this.context.H.from(snapshot.position[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: this.context.H.from(snapshot.position[interfaces_1.Length.SHORT]),
         };
         this.cost = {
-            [interfaces_1.Length.LONG]: new big_js_1.default(snapshot.cost[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: new big_js_1.default(snapshot.cost[interfaces_1.Length.SHORT]),
+            [interfaces_1.Length.LONG]: this.context.H.from(snapshot.cost[interfaces_1.Length.LONG]),
+            [interfaces_1.Length.SHORT]: this.context.H.from(snapshot.cost[interfaces_1.Length.SHORT]),
         };
     }
     payFee(fee) {
@@ -73,24 +72,6 @@ class Assets extends model_1.Model {
         this.cost[length] = this.cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
         return profit;
-        /* volume.gt(this.position[length]) */ {
-            // const restVolume = volume.minus(this.position[length]);
-            // const restDollarVolume = dollarVolume
-            //     .times(restVolume)
-            //     .div(volume)
-            //     .round(this.context.config.market.CURRENCY_DP);
-            // const profit = this.closePosition({
-            //     length,
-            //     volume: this.position[length],
-            //     dollarVolume: dollarVolume.minus(restDollarVolume),
-            // });
-            // this.openPosition({
-            //     length: -length,
-            //     volume: restVolume,
-            //     dollarVolume: restDollarVolume,
-            // });
-            // return profit;
-        }
     }
 }
 exports.Assets = Assets;

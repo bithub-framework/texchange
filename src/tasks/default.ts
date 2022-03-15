@@ -33,26 +33,28 @@ import { ValidateOrder } from '../tasks.d/validate-order';
 import { DefaultMarginAccumulation } from '../tasks.d/margin-accumulation';
 import { OrderVolumes } from '../tasks.d/order-volumes';
 
+import { HLike } from 'interfaces';
 
-export class DefaultTasks implements TasksLike {
-	public readonly getBalances: GetBalancesLike;
-	public readonly getPositions: GetPositionsLike;
-	public readonly getAvailable: GetAvailableLike;
-	public readonly getClosable: GetClosableLike;
+export class DefaultTasks<H extends HLike<H>>
+	implements TasksLike<H> {
+	public readonly getBalances: GetBalancesLike<H>;
+	public readonly getPositions: GetPositionsLike<H>;
+	public readonly getAvailable: GetAvailableLike<H>;
+	public readonly getClosable: GetClosableLike<H>;
 	public readonly settle: SettleLike;
-	public readonly orderMakes: OrderMakesLike;
-	public readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike;
-	public readonly orderTakes: OrderTakesLike;
-	public readonly validateOrder: ValidateOrderLike;
-	public readonly makeOpenOrder: MakeOpenOrderLike;
-	public readonly cancelOpenOrder: CancelOpenOrderLike;
-	public readonly marginAccumulation: MarginAccumulationLike;
-	public readonly orderVolumes: OrderVolumesLike;
+	public readonly orderMakes: OrderMakesLike<H>;
+	public readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
+	public readonly orderTakes: OrderTakesLike<H>;
+	public readonly validateOrder: ValidateOrderLike<H>;
+	public readonly makeOpenOrder: MakeOpenOrderLike<H>;
+	public readonly cancelOpenOrder: CancelOpenOrderLike<H>;
+	public readonly marginAccumulation: MarginAccumulationLike<H>;
+	public readonly orderVolumes: OrderVolumesLike<H>;
 
 	constructor(
-		context: Context,
-		models: StatefulModels,
-		broadcast: Broadcast,
+		context: Context<H>,
+		models: StatefulModels<H>,
+		broadcast: Broadcast<H>,
 	) {
 		this.cancelOpenOrder = new CancelOpenOrder(context, models, broadcast, this);
 		this.getAvailable = new DefaultGetAvailable(context, models, broadcast, this);

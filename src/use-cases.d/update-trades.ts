@@ -5,18 +5,19 @@ import { UseCase } from '../use-case';
 import { DatabaseTrade } from '../models.d/progress';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
+import { HLike } from 'interfaces';
 
 
-export class UpdateTrades extends UseCase {
+export class UpdateTrades<H extends HLike<H>> extends UseCase<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 		private readonly realTimeSettlement: boolean,
 	) { super(); }
 
-	public updateTrades(trades: readonly Readonly<DatabaseTrade>[]): void {
+	public updateTrades(trades: readonly DatabaseTrade<H>[]): void {
 		const { tradeTakesOpenMakers, settle } = this.tasks;
 		assert(trades.length);
 		const now = this.context.timeline.now();

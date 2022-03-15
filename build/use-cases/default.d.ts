@@ -11,17 +11,18 @@ import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 import { UseCasesLike } from './use-cases-like';
+import { HLike } from 'interfaces';
 /**
  * 默认实时结算
  */
-export declare class DefaultUseCases implements UseCasesLike {
-    readonly makeOrder: MakeOrder;
-    readonly cancelOrder: CancelOrder;
-    readonly amendOrder: AmendOrder;
-    readonly getOpenOrders: GetOpenOrders;
-    readonly getPositions: GetPositions;
-    readonly getBalances: GetBalances;
-    readonly updateOrderbook: UpdateOrderbook;
-    readonly updateTrades: UpdateTrades;
-    constructor(context: Context, models: StatefulModels, broadcast: Broadcast, tasks: TasksLike);
+export declare class DefaultUseCases<H extends HLike<H>> implements UseCasesLike<H> {
+    readonly makeOrder: MakeOrder<H>;
+    readonly cancelOrder: CancelOrder<H>;
+    readonly amendOrder: AmendOrder<H>;
+    readonly getOpenOrders: GetOpenOrders<H>;
+    readonly getPositions: GetPositions<H>;
+    readonly getBalances: GetBalances<H>;
+    readonly updateOrderbook: UpdateOrderbook<H>;
+    readonly updateTrades: UpdateTrades<H>;
+    constructor(context: Context<H>, models: StatefulModels<H>, broadcast: Broadcast<H>, tasks: TasksLike<H>);
 }

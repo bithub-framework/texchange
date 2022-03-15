@@ -11,6 +11,7 @@ const pricing_1 = require("../models.d/pricing");
 class DefaultModels extends stateful_models_1.StatefulModels {
     constructor(context) {
         super();
+        this.context = context;
         this.assets = new assets_1.Assets(context);
         this.margins = new margins_1.Margins(context);
         this.makers = new makers_1.DefaultMakers(context);

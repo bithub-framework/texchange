@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Progress = void 0;
 const model_1 = require("../model");
-const big_js_1 = require("big.js");
 class Progress extends model_1.Model {
     constructor(context) {
         super();
@@ -20,7 +19,7 @@ class Progress extends model_1.Model {
     capture() {
         return {
             latestPrice: this.latestPrice
-                ? this.latestPrice.toString()
+                ? this.context.H.capture(this.latestPrice)
                 : null,
             latestDatabaseTradeTime: this.latestDatabaseTradeTime,
             userTradeCount: this.userTradeCount,
@@ -30,7 +29,7 @@ class Progress extends model_1.Model {
     restore(snapshot) {
         this.latestPrice = snapshot.latestPrice === null
             ? null
-            : new big_js_1.default(snapshot.latestPrice);
+            : this.context.H.restore(snapshot.latestPrice);
         this.latestDatabaseTradeTime = snapshot.latestDatabaseTradeTime;
         this.userTradeCount = snapshot.userTradeCount;
         this.userOrderCount = snapshot.userOrderCount;

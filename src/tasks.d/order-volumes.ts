@@ -3,19 +3,24 @@ import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
 import { TasksLike, OrderVolumesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
+import {
+	HLike,
+} from 'interfaces';
 
 
-export class OrderVolumes extends Task implements OrderVolumesLike {
+export class OrderVolumes<H extends HLike<H>>
+	extends Task<H>
+	implements OrderVolumesLike<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
 	public open({
 		length, volume, dollarVolume,
-	}: OrderVolumesLike.Volumes): void {
+	}: OrderVolumesLike.Volumes<H>): void {
 		const newMargin = this.tasks.marginAccumulation.newMarginAfterOpening({
 			length,
 			volume,
@@ -31,7 +36,7 @@ export class OrderVolumes extends Task implements OrderVolumesLike {
 
 	public close({
 		length, volume, dollarVolume,
-	}: OrderVolumesLike.Volumes): void {
+	}: OrderVolumesLike.Volumes<H>): void {
 		const position = this.models.assets.getPosition()[length];
 		if (volume.gt(position)) {
 			const openVolume = volume.minus(position);

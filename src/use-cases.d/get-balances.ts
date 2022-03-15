@@ -4,20 +4,21 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	Balances,
+	ConcreteBalances,
+	HLike,
 } from 'interfaces';
 
 
-export class GetBalances extends UseCase {
+export class GetBalances<H extends HLike<H>> extends UseCase<H> {
 
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getBalances(): Balances {
+	public getBalances(): ConcreteBalances<H> {
 		return this.tasks.getBalances.getBalances();
 	}
 }

@@ -4,19 +4,20 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	OpenOrder,
+	ConcreteOpenOrder,
+	HLike,
 } from 'interfaces';
 
 
-export class GetOpenOrders extends UseCase {
+export class GetOpenOrders<H extends HLike<H>> extends UseCase<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getOpenOrders(): OpenOrder[] {
+	public getOpenOrders(): ConcreteOpenOrder<H>[] {
 		const openOrders = [...this.models.makers];
 		return openOrders.map(order => ({
 			price: order.price,

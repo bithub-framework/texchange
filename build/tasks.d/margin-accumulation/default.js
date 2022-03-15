@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMarginAccumulation = void 0;
-const big_js_1 = require("big.js");
 const margin_accumulation_1 = require("./margin-accumulation");
 class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation {
     constructor(context, models, broadcast, tasks) {
@@ -17,7 +16,7 @@ class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation
     }
     newMarginAfterClosing({ length, volume, dollarVolume, }) {
         if (volume.eq(this.models.assets.getPosition()[length]))
-            return new big_js_1.default(0);
+            return this.context.H.from(0);
         const margin = this.models.margins.getMargin()[length];
         const decrement = margin
             .times(volume)

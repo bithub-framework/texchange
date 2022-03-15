@@ -1,6 +1,7 @@
 import {
 	Length,
-	Closable,
+	ConcreteClosable,
+	HLike,
 } from 'interfaces';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
@@ -9,22 +10,24 @@ import { TasksLike, GetClosableLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 
 
-export class GetClosable extends Task
-	implements GetClosableLike {
+export class GetClosable<H extends HLike<H>> extends Task<H>
+	implements GetClosableLike<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public getClosable(): Closable {
+	public getClosable(): ConcreteClosable<H> {
 		const { assets, makers } = this.models;
+		const totalFrozen = makers.getTotalFrozen();
+		const position = assets.getPosition();
 		return {
-			[Length.LONG]: assets.getPosition()[Length.LONG]
-				.minus(makers.totalFrozen.position[Length.LONG]),
-			[Length.SHORT]: assets.getPosition()[Length.SHORT]
-				.minus(makers.totalFrozen.position[Length.SHORT]),
+			[Length.LONG]: position[Length.LONG]
+				.minus(totalFrozen.position[Length.LONG]),
+			[Length.SHORT]: position[Length.SHORT]
+				.minus(totalFrozen.position[Length.SHORT]),
 		};
 	}
 }

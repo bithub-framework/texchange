@@ -1,21 +1,26 @@
-import { Length, JsonCompatible, ReadonlyRecur } from 'interfaces';
+import { Length, H, HLike } from 'interfaces';
 import { Model } from '../model';
 import { Context } from '../context';
-import Big from 'big.js';
-export declare class Margins extends Model<Margins.Snapshot> {
-    protected readonly context: Context;
-    protected margin: Margins.Margin;
-    constructor(context: Context);
-    getMargin(): Readonly<Margins.Margin>;
-    setMargin(length: Length, margin: Big): void;
+export declare class Margins<H extends HLike<H>> extends Model<H, Margins.Snapshot> {
+    protected readonly context: Context<H>;
+    protected margin: Margins.Margin.MutablePlain<H>;
+    constructor(context: Context<H>);
+    getMargin(): Margins.Margin<H>;
+    setMargin(length: Length, margin: H): void;
     capture(): Margins.Snapshot;
     restore(snapshot: Margins.Snapshot): void;
 }
 export declare namespace Margins {
-    export interface Margin {
-        [length: number]: Big;
+    interface Margin<H extends HLike<H>> {
+        readonly [length: Length]: H;
     }
-    type SnapshotStruct = Margin;
-    export type Snapshot = ReadonlyRecur<JsonCompatible<SnapshotStruct>>;
-    export {};
+    namespace Margin {
+        interface MutablePlain<H extends HLike<H>> {
+            [length: Length]: H;
+        }
+        interface Snapshot {
+            readonly [length: Length]: H.Snapshot;
+        }
+    }
+    type Snapshot = Margin.Snapshot;
 }

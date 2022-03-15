@@ -1,20 +1,36 @@
 import {
     Length,
-    JsonCompatible,
+    H, HLike, HStatic,
 } from 'interfaces';
-import Big from 'big.js';
 
-export interface Frozen {
+
+export interface Frozen<H> {
     readonly balance: {
-        readonly [length: number]: Big;
+        readonly [length: Length]: H;
     };
     readonly position: {
-        readonly [length: number]: Big;
+        readonly [length: Length]: H;
     };
 }
 
 export namespace Frozen {
-    export function plus(x: Frozen, y: Frozen): Frozen {
+    export interface Snapshot {
+        readonly balance: {
+            readonly [length: Length]: H.Snapshot;
+        };
+        readonly position: {
+            readonly [length: Length]: H.Snapshot;
+        };
+    }
+
+}
+
+export class FrozenStatic<H extends HLike<H>> {
+    public constructor(
+        private H: HStatic<H>,
+    ) { }
+
+    public plus(x: Frozen<H>, y: Frozen<H>): Frozen<H> {
         return {
             balance: {
                 [Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
@@ -27,21 +43,21 @@ export namespace Frozen {
         }
     }
 
-    export const ZERO: Frozen = {
+    public readonly ZERO: Frozen<H> = {
         balance: {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
+            [Length.LONG]: this.H.from(0),
+            [Length.SHORT]: this.H.from(0),
         },
         position: {
-            [Length.LONG]: new Big(0),
-            [Length.SHORT]: new Big(0),
+            [Length.LONG]: this.H.from(0),
+            [Length.SHORT]: this.H.from(0),
         },
     };
 
-    export function minus(x: Frozen, y?: Frozen): Frozen {
-        if (!y) {
+    public minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H> {
+        if (typeof y === 'undefined') {
             y = x;
-            x = ZERO;
+            x = this.ZERO;
         }
         return {
             balance: {
@@ -55,15 +71,28 @@ export namespace Frozen {
         }
     }
 
-    export function jsonCompatiblize(frozen: Frozen): JsonCompatible<Frozen> {
+    public capture(frozen: Frozen<H>): Frozen.Snapshot {
         return {
             balance: {
-                [Length.LONG]: frozen.balance[Length.LONG].toString(),
-                [Length.SHORT]: frozen.balance[Length.SHORT].toString(),
+                [Length.LONG]: this.H.capture(frozen.balance[Length.LONG]),
+                [Length.SHORT]: this.H.capture(frozen.balance[Length.SHORT]),
             },
             position: {
-                [Length.LONG]: frozen.position[Length.LONG].toString(),
-                [Length.SHORT]: frozen.position[Length.SHORT].toString(),
+                [Length.LONG]: this.H.capture(frozen.position[Length.LONG]),
+                [Length.SHORT]: this.H.capture(frozen.position[Length.SHORT]),
+            },
+        }
+    }
+
+    public restore(snapshot: Frozen.Snapshot): Frozen<H> {
+        return {
+            balance: {
+                [Length.LONG]: this.H.restore(snapshot.balance[Length.LONG]),
+                [Length.SHORT]: this.H.restore(snapshot.balance[Length.SHORT]),
+            },
+            position: {
+                [Length.LONG]: this.H.restore(snapshot.position[Length.LONG]),
+                [Length.SHORT]: this.H.restore(snapshot.position[Length.SHORT]),
             },
         }
     }

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderTakes = void 0;
 const interfaces_1 = require("interfaces");
 const utilities_1 = require("../utilities");
-const big_js_1 = require("big.js");
 const task_1 = require("../task");
 class OrderTakes extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
@@ -21,8 +20,8 @@ class OrderTakes extends task_1.Task {
         const { config, timeline } = this.context;
         const orderbook = book.getBook();
         const trades = [];
-        let volume = new big_js_1.Big(0);
-        let dollarVolume = new big_js_1.Big(0);
+        let volume = this.context.H.from(0);
+        let dollarVolume = this.context.H.from(0);
         for (const maker of orderbook[-taker.side])
             if ((taker.side === interfaces_1.Side.BID && taker.price.gte(maker.price) ||
                 taker.side === interfaces_1.Side.ASK && taker.price.lte(maker.price)) && taker.unfilled.gt(0)) {
@@ -44,7 +43,7 @@ class OrderTakes extends task_1.Task {
             }
         assets.payFee(dollarVolume
             .times(config.account.TAKER_FEE_RATE)
-            .round(config.market.CURRENCY_DP, 3 /* RoundUp */));
+            .round(config.market.CURRENCY_DP, interfaces_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if (taker.operation === interfaces_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: taker.length,

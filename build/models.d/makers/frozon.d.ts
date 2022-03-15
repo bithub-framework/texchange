@@ -1,16 +1,28 @@
-import { JsonCompatible } from 'interfaces';
-import Big from 'big.js';
-export interface Frozen {
+import { Length, H, HLike, HStatic } from 'interfaces';
+export interface Frozen<H> {
     readonly balance: {
-        readonly [length: number]: Big;
+        readonly [length: Length]: H;
     };
     readonly position: {
-        readonly [length: number]: Big;
+        readonly [length: Length]: H;
     };
 }
 export declare namespace Frozen {
-    function plus(x: Frozen, y: Frozen): Frozen;
-    const ZERO: Frozen;
-    function minus(x: Frozen, y?: Frozen): Frozen;
-    function jsonCompatiblize(frozen: Frozen): JsonCompatible<Frozen>;
+    interface Snapshot {
+        readonly balance: {
+            readonly [length: Length]: H.Snapshot;
+        };
+        readonly position: {
+            readonly [length: Length]: H.Snapshot;
+        };
+    }
+}
+export declare class FrozenStatic<H extends HLike<H>> {
+    private H;
+    constructor(H: HStatic<H>);
+    plus(x: Frozen<H>, y: Frozen<H>): Frozen<H>;
+    readonly ZERO: Frozen<H>;
+    minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H>;
+    capture(frozen: Frozen<H>): Frozen.Snapshot;
+    restore(snapshot: Frozen.Snapshot): Frozen<H>;
 }

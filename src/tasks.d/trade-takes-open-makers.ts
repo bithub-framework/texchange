@@ -1,12 +1,12 @@
 import {
     Side,
-    OpenOrder,
-    Trade,
-    OpenMaker,
+    ConcreteOpenOrder,
+    ConcreteTrade,
+    ConcreteOpenMaker,
     Operation,
+    HLike, H,
 } from 'interfaces';
 import { min } from '../utilities';
-import { RoundingMode } from 'big.js';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -15,17 +15,18 @@ import { Broadcast } from '../broadcast';
 
 
 
-export class TradeTakesOpenMakers extends Task
-    implements TradeTakesOpenMakersLike {
+export class TradeTakesOpenMakers<H extends HLike<H>>
+    extends Task<H>
+    implements TradeTakesOpenMakersLike<H> {
     constructor(
-        protected readonly context: Context,
-        protected readonly models: StatefulModels,
-        protected readonly broadcast: Broadcast,
-        protected readonly tasks: TasksLike,
+        protected readonly context: Context<H>,
+        protected readonly models: StatefulModels<H>,
+        protected readonly broadcast: Broadcast<H>,
+        protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
-    public tradeTakesOpenMakers(roTrade: Readonly<Trade>): void {
-        const trade: Trade = {
+    public tradeTakesOpenMakers(roTrade: ConcreteTrade<H>): void {
+        const trade: ConcreteTrade.MutablePlain<H> = {
             price: roTrade.price,
             quantity: roTrade.quantity,
             side: roTrade.side,
@@ -40,7 +41,7 @@ export class TradeTakesOpenMakers extends Task
     }
 
     private tradeShouldTakeOpenOrder(
-        trade: Readonly<Trade>, maker: Readonly<OpenOrder>,
+        trade: ConcreteTrade<H>, maker: ConcreteOpenOrder<H>,
     ): boolean {
         return (
             maker.side === Side.BID &&
@@ -53,7 +54,10 @@ export class TradeTakesOpenMakers extends Task
         );
     }
 
-    private tradeTakesOrderQueue(trade: Trade, maker: OpenMaker): void {
+    private tradeTakesOrderQueue(
+        trade: ConcreteTrade.MutablePlain<H>,
+        maker: ConcreteOpenMaker<H>,
+    ): void {
         const { makers } = this.models;
         if (trade.price.eq(maker.price)) {
             const volume = min(trade.quantity, maker.behind);
@@ -62,7 +66,10 @@ export class TradeTakesOpenMakers extends Task
         } else makers.takeOrderQueue(maker.id);
     }
 
-    private tradeTakesOpenMaker(trade: Trade, maker: Readonly<OpenMaker>): void {
+    private tradeTakesOpenMaker(
+        trade: ConcreteTrade.MutablePlain<H>,
+        maker: ConcreteOpenMaker<H>,
+    ): void {
         const { assets, margins: margin, makers } = this.models;
 
         const volume = min(trade.quantity, maker.unfilled);
@@ -75,7 +82,7 @@ export class TradeTakesOpenMakers extends Task
         assets.payFee(
             dollarVolume
                 .times(this.context.config.account.MAKER_FEE_RATE)
-                .round(this.context.config.market.CURRENCY_DP, RoundingMode.RoundUp)
+                .round(this.context.config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
         );
         if (maker.operation === Operation.OPEN)
             this.tasks.orderVolumes.open({

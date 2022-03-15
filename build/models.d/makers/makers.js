@@ -4,65 +4,57 @@ exports.Makers = void 0;
 const interfaces_1 = require("interfaces");
 const frozon_1 = require("./frozon");
 const model_1 = require("../../model");
-const big_js_1 = require("big.js");
 const assert = require("assert");
 class Makers extends model_1.Model {
-    constructor() {
-        super(...arguments);
+    constructor(context) {
+        super();
+        this.context = context;
         this.orders = new Map();
         this.frozens = new Map();
-        this.totalUnfilledQuantity = {
-            [interfaces_1.Side.ASK]: new big_js_1.default(0),
-            [interfaces_1.Side.BID]: new big_js_1.default(0),
+        this.totalUnfilled = {
+            [interfaces_1.Side.ASK]: this.context.H.from(0),
+            [interfaces_1.Side.BID]: this.context.H.from(0),
         };
-        this.totalFrozen = frozon_1.Frozen.ZERO;
+        this.OrderId = new interfaces_1.ConcreteOrderIdStatic();
+        this.OpenMaker = new interfaces_1.ConcreteOpenMakerStatic(this.context.H, this.OrderId);
+        this.Frozen = new frozon_1.FrozenStatic(this.context.H);
+        this.totalFrozen = this.Frozen.ZERO;
+    }
+    getTotalUnfilled() {
+        return this.totalUnfilled;
+    }
+    getTotalFrozen() {
+        return this.totalFrozen;
     }
     [Symbol.iterator]() {
         return this.orders.values();
     }
     getOrder(id) {
         const order = this.orders.get(id);
-        assert(order);
+        assert(typeof order !== 'undefined');
         return order;
     }
     capture() {
         return [...this.orders.keys()]
             .map(oid => ({
-            order: interfaces_1.OpenMaker.jsonCompatiblize(this.orders.get(oid)),
-            frozen: frozon_1.Frozen.jsonCompatiblize(this.frozens.get(oid)),
+            order: this.OpenMaker.capture(this.orders.get(oid)),
+            frozen: this.Frozen.capture(this.frozens.get(oid)),
         }));
     }
     restore(snapshot) {
-        for (const { order, frozen } of snapshot) {
-            this.orders.set(order.id, {
-                price: new big_js_1.default(order.price),
-                quantity: new big_js_1.default(order.quantity),
-                side: order.side,
-                length: order.length,
-                operation: order.operation,
-                filled: new big_js_1.default(order.filled),
-                unfilled: new big_js_1.default(order.unfilled),
-                id: order.id,
-                behind: new big_js_1.default(order.behind),
-            });
-            this.frozens.set(order.id, {
-                balance: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(frozen.balance[interfaces_1.Length.LONG]),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(frozen.balance[interfaces_1.Length.SHORT]),
-                },
-                position: {
-                    [interfaces_1.Length.LONG]: new big_js_1.default(frozen.position[interfaces_1.Length.LONG]),
-                    [interfaces_1.Length.SHORT]: new big_js_1.default(frozen.position[interfaces_1.Length.SHORT]),
-                },
-            });
+        for (const { order: orderSnapshot, frozen: frozenSnapshot, } of snapshot) {
+            const order = this.OpenMaker.restore(orderSnapshot);
+            const frozen = this.Frozen.restore(frozenSnapshot);
+            this.orders.set(order.id, order);
+            this.frozens.set(order.id, frozen);
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.totalUnfilledQuantity[side] = [...this.orders.values()]
+            this.totalUnfilled[side] = [...this.orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), new big_js_1.default(0));
+                .reduce((total, order) => total.plus(order.unfilled), this.context.H.from(0));
         }
         this.totalFrozen = [...this.frozens.values()]
-            .reduce((total, frozen) => frozon_1.Frozen.plus(total, frozen), frozon_1.Frozen.ZERO);
+            .reduce((total, frozen) => this.Frozen.plus(total, frozen), this.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
@@ -71,53 +63,65 @@ class Makers extends model_1.Model {
                 [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
+                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.market.QUANTITY_DP),
+                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.market.QUANTITY_DP),
             },
         };
     }
     appendOrder(order) {
-        if (order.unfilled.eq(0))
-            return;
+        assert(order.unfilled.gt(0));
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         this.orders.set(order.id, order);
         this.frozens.set(order.id, toFreeze);
-        this.totalFrozen = frozon_1.Frozen.plus(this.totalFrozen, toFreeze);
-        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
+        this.totalFrozen = this.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .plus(order.unfilled);
     }
     takeOrder(oid, volume) {
-        const order = this.orders.get(oid);
-        assert(order);
+        const order = this.getOrder(oid);
         assert(volume.lte(order.unfilled));
-        this.tryRemoveOrder(oid);
+        assert(order.behind.eq(0));
+        this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...order,
+            id: order.id,
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            behind: order.behind,
             filled: order.filled.plus(volume),
             unfilled: order.unfilled.minus(volume),
         };
         this.appendOrder(newOrder);
     }
     takeOrderQueue(oid, volume) {
-        const order = this.orders.get(oid);
-        assert(order);
+        const order = this.getOrder(oid);
         const newOrder = {
-            ...order,
-            behind: volume ? order.behind.minus(volume) : new big_js_1.default(0),
+            id: order.id,
+            price: order.price,
+            quantity: order.quantity,
+            side: order.side,
+            length: order.length,
+            operation: order.operation,
+            filled: order.filled,
+            unfilled: order.unfilled,
+            behind: typeof volume !== 'undefined'
+                ? order.behind.minus(volume)
+                : this.context.H.from(0),
         };
         this.orders.set(oid, newOrder);
     }
     removeOrder(oid) {
-        const order = this.orders.get(oid);
-        assert(order);
+        const order = this.getOrder(oid);
         const toThaw = this.frozens.get(oid);
         this.orders.delete(oid);
         this.frozens.delete(oid);
-        this.totalUnfilledQuantity[order.side] = this.totalUnfilledQuantity[order.side]
+        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
             .minus(order.unfilled);
-        this.totalFrozen = frozon_1.Frozen.minus(this.totalFrozen, toThaw);
+        this.totalFrozen = this.Frozen.minus(this.totalFrozen, toThaw);
     }
-    tryRemoveOrder(oid) {
+    forcedlyRemoveOrder(oid) {
         try {
             this.removeOrder(oid);
         }

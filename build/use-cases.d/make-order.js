@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakeOrder = void 0;
 const use_case_1 = require("../use-case");
-const big_js_1 = require("big.js");
 class MakeOrder extends use_case_1.UseCase {
     constructor(context, models, broadcast, tasks) {
         super();
@@ -19,7 +18,7 @@ class MakeOrder extends use_case_1.UseCase {
             length: order.length,
             operation: order.operation,
             id: ++this.models.progress.userOrderCount,
-            filled: new big_js_1.default(0),
+            filled: this.context.H.from(0),
             unfilled: order.quantity,
         };
         return this.tasks.makeOpenOrder.makeOpenOrder(openOrder);

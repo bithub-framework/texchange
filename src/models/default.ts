@@ -6,18 +6,20 @@ import { Makers, DefaultMakers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing, DefaultPricing } from '../models.d/pricing';
+import { HLike } from 'interfaces';
 
 
-export class DefaultModels extends StatefulModels {
-	public readonly assets: Assets;
-	public readonly margins: Margins;
-	public readonly makers: Makers;
-	public readonly book: Book;
-	public readonly progress: Progress;
-	public readonly pricing: Pricing<any>;
+export class DefaultModels<H extends HLike<H>>
+	extends StatefulModels<H> {
+	public readonly assets: Assets<H>;
+	public readonly margins: Margins<H>;
+	public readonly makers: Makers<H>;
+	public readonly book: Book<H>;
+	public readonly progress: Progress<H>;
+	public readonly pricing: Pricing<H, any>;
 
 	constructor(
-		context: Context,
+		protected readonly context: Context<H>,
 	) {
 		super();
 		this.assets = new Assets(context);

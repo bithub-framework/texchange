@@ -1,8 +1,8 @@
 import {
     Length,
-    Position,
+    ConcretePosition,
+    HLike,
 } from 'interfaces';
-import Big from 'big.js';
 import { Context } from '../../context';
 import { StatefulModels } from '../../models/stateful-models';
 import { Task } from '../../task';
@@ -10,19 +10,20 @@ import { TasksLike, SettleLike } from '../../tasks/tasks-like';
 import { Broadcast } from '../../broadcast';
 
 
-export abstract class Settle extends Task
+export abstract class Settle<H extends HLike<H>>
+    extends Task<H>
     implements SettleLike {
 
-    protected abstract readonly context: Context;
-    protected abstract readonly models: StatefulModels;
-    protected abstract readonly broadcast: Broadcast;
-    protected abstract readonly tasks: TasksLike;
+    protected abstract readonly context: Context<H>;
+    protected abstract readonly models: StatefulModels<H>;
+    protected abstract readonly broadcast: Broadcast<H>;
+    protected abstract readonly tasks: TasksLike<H>;
 
     public settle(): void {
         const { config } = this.context;
         const { assets, margins: margin, pricing } = this.models;
 
-        const position: Position = {
+        const position: ConcretePosition<H> = {
             [Length.LONG]: assets.getPosition()[Length.LONG],
             [Length.SHORT]: assets.getPosition()[Length.SHORT],
         };
@@ -47,8 +48,8 @@ export abstract class Settle extends Task
     }
 
     protected abstract clearingMargin(
-        length: Length, profit: Big,
-    ): Big;
+        length: Length, profit: H,
+    ): H;
 
     protected abstract assertEnoughBalance(): void;
 }

@@ -4,20 +4,22 @@ import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
-	Orderbook,
+	ConcreteOrderbook,
+	HLike,
 } from 'interfaces';
 import assert = require('assert');
 
 
-export class UpdateOrderbook extends UseCase {
+export class UpdateOrderbook<H extends HLike<H>>
+	extends UseCase<H> {
 	constructor(
-		protected readonly context: Context,
-		protected readonly models: StatefulModels,
-		protected readonly broadcast: Broadcast,
-		protected readonly tasks: TasksLike,
+		protected readonly context: Context<H>,
+		protected readonly models: StatefulModels<H>,
+		protected readonly broadcast: Broadcast<H>,
+		protected readonly tasks: TasksLike<H>,
 	) { super(); }
 
-	public updateOrderbook(orderbook: Readonly<Orderbook>): void {
+	public updateOrderbook(orderbook: ConcreteOrderbook<H>): void {
 		assert(orderbook.time === this.context.timeline.now());
 		this.models.book.setBasebook(orderbook);
 		this.broadcast.emit('orderbook', this.models.book.getBook());

@@ -3,12 +3,12 @@ import { Context } from '../context';
 import { TasksLike } from '../tasks/tasks-like';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
-import { Orderbook } from 'interfaces';
-export declare class UpdateOrderbook extends UseCase {
-    protected readonly context: Context;
-    protected readonly models: StatefulModels;
-    protected readonly broadcast: Broadcast;
-    protected readonly tasks: TasksLike;
-    constructor(context: Context, models: StatefulModels, broadcast: Broadcast, tasks: TasksLike);
-    updateOrderbook(orderbook: Readonly<Orderbook>): void;
+import { ConcreteOrderbook, HLike } from 'interfaces';
+export declare class UpdateOrderbook<H extends HLike<H>> extends UseCase<H> {
+    protected readonly context: Context<H>;
+    protected readonly models: StatefulModels<H>;
+    protected readonly broadcast: Broadcast<H>;
+    protected readonly tasks: TasksLike<H>;
+    constructor(context: Context<H>, models: StatefulModels<H>, broadcast: Broadcast<H>, tasks: TasksLike<H>);
+    updateOrderbook(orderbook: ConcreteOrderbook<H>): void;
 }

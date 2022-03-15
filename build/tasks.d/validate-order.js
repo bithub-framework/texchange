@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidateOrder = void 0;
 const interfaces_1 = require("interfaces");
 const assert = require("assert");
-const big_js_1 = require("big.js");
 const task_1 = require("../task");
 class ValidateOrder extends task_1.Task {
     constructor(context, models, broadcast, tasks) {
@@ -20,7 +19,11 @@ class ValidateOrder extends task_1.Task {
     validateQuantity(order) {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
-        makers.appendOrder({ ...order, behind: new big_js_1.default(0) });
+        makers.appendOrder({
+            // TODO remove "..."
+            ...order,
+            behind: this.context.H.from(0),
+        });
         try {
             const enoughPosition = closable[interfaces_1.Length.LONG].gte(0) &&
                 closable[interfaces_1.Length.SHORT].gte(0);

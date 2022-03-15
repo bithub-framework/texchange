@@ -2,9 +2,10 @@ import { Startable } from 'startable';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { TasksLike } from '../tasks/tasks-like';
-export declare abstract class Mtm {
+import { HLike } from 'interfaces';
+export declare abstract class Mtm<H extends HLike<H>> {
     abstract readonly startable: Startable;
-    protected abstract readonly context: Context;
-    protected abstract readonly models: StatefulModels;
-    protected abstract readonly tasks: TasksLike;
+    protected abstract readonly context: Context<H>;
+    protected abstract readonly models: StatefulModels<H>;
+    protected abstract readonly tasks: TasksLike<H>;
 }

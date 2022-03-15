@@ -1,8 +1,8 @@
 import {
-    OpenOrder,
-    OpenMaker,
+    ConcreteOpenOrder,
+    ConcreteOpenMaker,
+    HLike,
 } from 'interfaces';
-import Big from 'big.js';
 import { Context } from '../context';
 import { StatefulModels } from '../models/stateful-models';
 import { Task } from '../task';
@@ -10,19 +10,19 @@ import { TasksLike, OrderMakesLike } from '../tasks/tasks-like';
 import { Broadcast } from '../broadcast';
 
 
-export class OrderMakes extends Task
-    implements OrderMakesLike {
+export class OrderMakes<H extends HLike<H>> extends Task<H>
+    implements OrderMakesLike<H> {
     constructor(
-        protected readonly context: Context,
-        protected readonly models: StatefulModels,
-        protected readonly broadcast: Broadcast,
-        protected readonly tasks: TasksLike,
+        protected readonly context: Context<H>,
+        protected readonly models: StatefulModels<H>,
+        protected readonly broadcast: Broadcast<H>,
+        protected readonly tasks: TasksLike<H>,
     ) { super(); }
 
     public orderMakes(
-        openOrder: Readonly<OpenOrder>,
+        openOrder: ConcreteOpenOrder<H>,
     ): void {
-        const openMaker: OpenMaker = {
+        const openMaker: ConcreteOpenMaker.MutablePlain<H> = {
             price: openOrder.price,
             quantity: openOrder.quantity,
             side: openOrder.side,
@@ -31,7 +31,7 @@ export class OrderMakes extends Task
             filled: openOrder.filled,
             unfilled: openOrder.unfilled,
             id: openOrder.id,
-            behind: new Big(0),
+            behind: this.context.H.from(0),
         };
         const makers = this.models.book.getBook()[openOrder.side];
         for (const maker of makers)
