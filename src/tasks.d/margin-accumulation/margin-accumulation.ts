@@ -1,5 +1,5 @@
 import { Task } from '../../task';
-import { MarginAccumulationLike } from '../../tasks/tasks-like';
+import { MarginAccumulationLike } from '../../tasks/tasks';
 import { HLike } from 'interfaces';
 
 

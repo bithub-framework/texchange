@@ -1,3 +1,7 @@
+import { Context } from '../context';
+import { Models } from '../models/models';
+import { Broadcast } from '../broadcast';
+import { Tasks } from '../tasks/tasks';
 import { MakeOrder } from '../use-cases.d/make-order';
 import { CancelOrder } from '../use-cases.d/cancel-order';
 import { AmendOrder } from '../use-cases.d/amend-order';
@@ -7,7 +11,7 @@ import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 import { HLike } from 'interfaces';
-export interface UseCasesLike<H extends HLike<H>> {
+export declare abstract class UseCases<H extends HLike<H>> {
     readonly makeOrder: MakeOrder<H>;
     readonly cancelOrder: CancelOrder<H>;
     readonly amendOrder: AmendOrder<H>;
@@ -15,5 +19,6 @@ export interface UseCasesLike<H extends HLike<H>> {
     readonly getPositions: GetPositions<H>;
     readonly getBalances: GetBalances<H>;
     readonly updateOrderbook: UpdateOrderbook<H>;
-    readonly updateTrades: UpdateTrades<H>;
+    abstract readonly updateTrades: UpdateTrades<H>;
+    protected constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
 }

@@ -2,12 +2,12 @@
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { TexchangeOpenOrder, LimitOrder, TexchangeAmendment, Positions, Balances, TexchangeTradeId, MarketEvents, AccountEvents } from 'interfaces';
-import { UseCasesLike } from '../use-cases';
+import { UseCases } from '../use-cases';
 import { HLike } from 'interfaces';
 export declare class Instant<H extends HLike<H>> extends EventEmitter {
     private context;
     private useCases;
-    constructor(context: Context<H>, useCases: UseCasesLike<H>);
+    constructor(context: Context<H>, useCases: UseCases<H>);
     makeOrders(orders: readonly LimitOrder<H>[]): (TexchangeOpenOrder<H> | Error)[];
     cancelOrders(orders: readonly TexchangeOpenOrder<H>[]): TexchangeOpenOrder<H>[];
     amendOrders(amendments: readonly TexchangeAmendment<H>[]): (TexchangeOpenOrder<H> | Error)[];

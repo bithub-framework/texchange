@@ -3,9 +3,9 @@ import {
 	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
-import { StatefulModels } from '../models/stateful-models';
+import { Models } from '../models/models';
 import { Task } from '../task';
-import { TasksLike, MakeOpenOrderLike } from '../tasks/tasks-like';
+import { Tasks, MakeOpenOrderLike } from '../tasks/tasks';
 import { Broadcast } from '../broadcast';
 
 
@@ -13,9 +13,9 @@ export class MakeOpenOrder<H extends HLike<H>> extends Task<H>
 	implements MakeOpenOrderLike<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: StatefulModels<H>,
+		protected readonly models: Models<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: TasksLike<H>,
+		protected readonly tasks: Tasks<H>,
 	) { super(); }
 
 	public makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {

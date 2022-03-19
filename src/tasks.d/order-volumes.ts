@@ -1,7 +1,7 @@
 import { Context } from '../context';
-import { StatefulModels } from '../models/stateful-models';
+import { Models } from '../models/models';
 import { Task } from '../task';
-import { TasksLike, OrderVolumesLike } from '../tasks/tasks-like';
+import { Tasks, OrderVolumesLike } from '../tasks/tasks';
 import { Broadcast } from '../broadcast';
 import {
 	HLike,
@@ -13,9 +13,9 @@ export class OrderVolumes<H extends HLike<H>>
 	implements OrderVolumesLike<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: StatefulModels<H>,
+		protected readonly models: Models<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: TasksLike<H>,
+		protected readonly tasks: Tasks<H>,
 	) { super(); }
 
 	public open({

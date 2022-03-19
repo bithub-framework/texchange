@@ -5,22 +5,32 @@ import { Makers } from '../models.d/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing';
+import { Context } from '../context';
 import {
 	HLike,
 } from 'interfaces';
 
 
-export abstract class StatefulModels<H extends HLike<H>>
-	implements StatefulLike<StatefulModels.Snapshot> {
+export abstract class Models<H extends HLike<H>>
+	implements StatefulLike<Models.Snapshot> {
 
-	public abstract readonly assets: Assets<H>;
-	public abstract readonly margins: Margins<H>;
+	public readonly assets: Assets<H>;
+	public readonly margins: Margins<H>;
 	public abstract readonly makers: Makers<H>;
-	public abstract readonly book: Book<H>;
-	public abstract readonly progress: Progress<H>;
+	public readonly book: Book<H>;
+	public readonly progress: Progress<H>;
 	public abstract readonly pricing: Pricing<H, any>;
 
-	public capture(): StatefulModels.Snapshot {
+	protected constructor(
+		context: Context<H>,
+	) {
+		this.assets = new Assets(context);
+		this.margins = new Margins(context);
+		this.book = new Book(context);
+		this.progress = new Progress(context);
+	}
+
+	public capture(): Models.Snapshot {
 		return {
 			assets: this.assets.capture(),
 			margins: this.margins.capture(),
@@ -31,7 +41,7 @@ export abstract class StatefulModels<H extends HLike<H>>
 		}
 	}
 
-	public restore(snapshot: StatefulModels.Snapshot): void {
+	public restore(snapshot: Models.Snapshot): void {
 		this.assets.restore(snapshot.assets);
 		this.margins.restore(snapshot.margins);
 		this.makers.restore(snapshot.makers);
@@ -42,7 +52,7 @@ export abstract class StatefulModels<H extends HLike<H>>
 }
 
 
-export namespace StatefulModels {
+export namespace Models {
 	export interface Snapshot {
 		readonly assets: any;
 		readonly margins: any;

@@ -10,7 +10,7 @@ import {
     MarketEvents,
     AccountEvents,
 } from 'interfaces';
-import { UseCasesLike } from '../use-cases';
+import { UseCases } from '../use-cases';
 import { HLike } from 'interfaces';
 
 
@@ -18,7 +18,7 @@ export class Instant<H extends HLike<H>>
     extends EventEmitter {
     constructor(
         private context: Context<H>,
-        private useCases: UseCasesLike<H>,
+        private useCases: UseCases<H>,
     ) {
         super();
         // this.initializePushingTrades();

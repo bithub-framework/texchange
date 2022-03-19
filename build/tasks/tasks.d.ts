@@ -1,4 +1,23 @@
+import { Context } from '../context';
+import { Broadcast } from '../broadcast';
+import { Models } from '../models/models';
 import { Balances, Closable, Positions, Length, HLike, TexchangeOpenOrder, TexchangeTrade } from 'interfaces';
+export declare abstract class Tasks<H extends HLike<H>> {
+    readonly getBalances: GetBalancesLike<H>;
+    readonly getPositions: GetPositionsLike<H>;
+    abstract readonly getAvailable: GetAvailableLike<H>;
+    readonly getClosable: GetClosableLike<H>;
+    abstract readonly settle: SettleLike;
+    readonly orderMakes: OrderMakesLike<H>;
+    readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
+    readonly orderTakes: OrderTakesLike<H>;
+    readonly validateOrder: ValidateOrderLike<H>;
+    readonly makeOpenOrder: MakeOpenOrderLike<H>;
+    readonly cancelOpenOrder: CancelOpenOrderLike<H>;
+    abstract readonly marginAccumulation: MarginAccumulationLike<H>;
+    readonly orderVolumes: OrderVolumesLike<H>;
+    protected constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>);
+}
 export interface GetBalancesLike<H extends HLike<H>> {
     getBalances(): Balances<H>;
 }
@@ -53,19 +72,4 @@ export declare namespace OrderVolumesLike {
         volume: H;
         dollarVolume: H;
     }
-}
-export interface TasksLike<H extends HLike<H>> {
-    readonly getBalances: GetBalancesLike<H>;
-    readonly getPositions: GetPositionsLike<H>;
-    readonly getAvailable: GetAvailableLike<H>;
-    readonly getClosable: GetClosableLike<H>;
-    readonly settle: SettleLike;
-    readonly orderMakes: OrderMakesLike<H>;
-    readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
-    readonly orderTakes: OrderTakesLike<H>;
-    readonly validateOrder: ValidateOrderLike<H>;
-    readonly makeOpenOrder: MakeOpenOrderLike<H>;
-    readonly cancelOpenOrder: CancelOpenOrderLike<H>;
-    readonly marginAccumulation: MarginAccumulationLike<H>;
-    readonly orderVolumes: OrderVolumesLike<H>;
 }

@@ -1,6 +1,6 @@
-import { StatefulModels } from '../models/stateful-models';
+import { Models } from '../models/models';
 import { Context } from '../context';
-import { TasksLike } from '../tasks/tasks-like';
+import { Tasks } from '../tasks/tasks';
 import {
 	TexchangeOpenOrder,
 	HLike,
@@ -13,9 +13,9 @@ export class CancelOrder<H extends HLike<H>>
 	extends UseCase<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: StatefulModels<H>,
+		protected readonly models: Models<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: TasksLike<H>,
+		protected readonly tasks: Tasks<H>,
 	) { super(); }
 
 	public cancelOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {

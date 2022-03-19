@@ -1,5 +1,5 @@
 import { Task } from '../../task';
-import { MarginAccumulationLike } from '../../tasks/tasks-like';
+import { MarginAccumulationLike } from '../../tasks/tasks';
 import { HLike } from 'interfaces';
 export declare abstract class MarginAccumulation<H extends HLike<H>> extends Task<H> implements MarginAccumulationLike<H> {
     abstract newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;

@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { UseCasesLike } from '../use-cases';
+import { UseCases } from '../use-cases';
 import { DatabaseTrade } from '../models.d/progress';
 import {
 	Orderbook,
@@ -10,7 +10,7 @@ import {
 export class Joystick<H extends HLike<H>> {
 	constructor(
 		private context: Context<H>,
-		private useCases: UseCasesLike<H>,
+		private useCases: UseCases<H>,
 	) { }
 
 	public updateTrades(trades: readonly DatabaseTrade<H>[]): void {

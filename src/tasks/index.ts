@@ -1,2 +1,1 @@
-export * from './tasks-like';
-export * from './default';
+export * from './tasks';

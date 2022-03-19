@@ -1,2 +1,1 @@
-export * from './stateful-models';
-export * from './default';
+export * from './models';
