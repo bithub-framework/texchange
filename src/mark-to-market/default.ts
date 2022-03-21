@@ -25,3 +25,10 @@ export class DefaultMtm<H extends HLike<H>>
 	private async start(): Promise<void> { }
 	private async stop(): Promise<void> { }
 }
+
+export namespace DefaultMtm {
+	export interface ModelDeps<H extends HLike<H>>
+		extends Mtm.ModelDeps<H> { }
+	export interface TaskDeps<H extends HLike<H>>
+		extends Mtm.TaskDeps<H> { }
+}

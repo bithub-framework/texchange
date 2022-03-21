@@ -40,3 +40,14 @@ export class DefaultMarginAccumulation<H extends HLike<H>>
 		return margin.minus(decrement);
 	}
 }
+
+export namespace DefaultMarginAccumulation {
+	export type Volumes<H extends HLike<H>>
+		= MarginAccumulation.Volumes<H>;
+
+	export interface ModelDeps<H extends HLike<H>>
+		extends MarginAccumulation.ModelDeps<H> { }
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends MarginAccumulation.TaskDeps<H> { }
+}

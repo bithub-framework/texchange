@@ -4,10 +4,13 @@ import {
     HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Models } from '../../models/models';
 import { Task } from '../../task';
-import { Tasks, SettleLike } from '../../tasks/tasks';
+import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
+
+import { Assets } from '../../models.d/assets';
+import { Margins } from '../../models.d/margins';
+import { Pricing } from '../../models.d/pricing';
 
 
 export abstract class Settle<H extends HLike<H>>
@@ -15,13 +18,13 @@ export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
 
     protected abstract readonly context: Context<H>;
-    protected abstract readonly models: Models<H>;
+    protected abstract readonly models: Settle.ModelDeps<H>;
     protected abstract readonly broadcast: Broadcast<H>;
-    protected abstract readonly tasks: Tasks<H>;
+    protected abstract readonly tasks: Settle.TaskDeps<H>;
 
     public settle(): void {
         const { config } = this.context;
-        const { assets, margins: margin, pricing } = this.models;
+        const { assets, margins, pricing } = this.models;
 
         const position: Position<H> = {
             [Length.LONG]: assets.getPosition()[Length.LONG],
@@ -42,7 +45,7 @@ export abstract class Settle<H extends HLike<H>>
                 volume: position[length],
                 dollarVolume,
             });
-            margin.setMargin(length, this.clearingMargin(length, profit));
+            margins.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();
     }
@@ -52,4 +55,16 @@ export abstract class Settle<H extends HLike<H>>
     ): H;
 
     protected abstract assertEnoughBalance(): void;
+}
+
+export namespace Settle {
+    export interface ModelDeps<H extends HLike<H>>
+        extends Task.ModelDeps<H> {
+        assets: Assets<H>;
+        margins: Margins<H>;
+        pricing: Pricing<H, unknown>;
+    }
+
+    export interface TaskDeps<H extends HLike<H>>
+        extends Task.TaskDeps<H> { }
 }

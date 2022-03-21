@@ -1,6 +1,4 @@
-import { Models } from '../models/models';
 import { Context } from '../context';
-import { Tasks } from '../tasks/tasks';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
@@ -9,14 +7,16 @@ import {
 } from 'interfaces';
 import assert = require('assert');
 
+import { Book } from '../models.d/book';
+
 
 export class UpdateOrderbook<H extends HLike<H>>
 	extends UseCase<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: UpdateOrderbook.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: UpdateOrderbook.TaskDeps<H>,
 	) { super(); }
 
 	public updateOrderbook(orderbook: Orderbook<H>): void {
@@ -24,4 +24,14 @@ export class UpdateOrderbook<H extends HLike<H>>
 		this.models.book.setBasebook(orderbook);
 		this.broadcast.emit('orderbook', this.models.book.getBook());
 	}
+}
+
+export namespace UpdateOrderbook {
+	export interface ModelDeps<H extends HLike<H>>
+		extends UseCase.ModelDeps<H> {
+		book: Book<H>;
+	}
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends UseCase.TaskDeps<H> { }
 }

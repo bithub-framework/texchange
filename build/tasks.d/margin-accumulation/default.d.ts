@@ -13,3 +13,10 @@ export declare class DefaultMarginAccumulation<H extends HLike<H>> extends Margi
     newMarginAfterOpening({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
     newMarginAfterClosing({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
 }
+export declare namespace DefaultMarginAccumulation {
+    type Volumes<H extends HLike<H>> = MarginAccumulation.Volumes<H>;
+    interface ModelDeps<H extends HLike<H>> extends MarginAccumulation.ModelDeps<H> {
+    }
+    interface TaskDeps<H extends HLike<H>> extends MarginAccumulation.TaskDeps<H> {
+    }
+}

@@ -28,7 +28,6 @@ export class DefaultUseCases<H extends HLike<H>>
 			broadcast,
 			tasks,
 		);
-
 		this.updateTrades = new UpdateTrades(context, models, broadcast, tasks, true);
 	}
 }

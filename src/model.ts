@@ -6,10 +6,9 @@ import { HLike } from 'interfaces';
 /**
  * @param Snapshot stringifyable
  */
-export abstract class Model<
-	H extends HLike<H>,
-	Snapshot,
-	> implements StatefulLike<Snapshot> {
+export abstract class Model<H extends HLike<H>, Snapshot>
+	implements StatefulLike<Snapshot> {
+
 	protected abstract readonly context: Context<H>;
 
 	public abstract capture(): Snapshot;

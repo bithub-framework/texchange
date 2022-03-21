@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultTexchange = exports.Texchange = exports.DefaultUseCases = exports.UseCases = exports.DefaultTasks = exports.Tasks = exports.DefaultModels = exports.Models = exports.DefaultMtm = exports.Mtm = exports.DefaultMarginAccumulation = exports.MarginAccumulation = exports.DefaultGetAvailable = exports.GetAvailable = exports.DefaultSettle = exports.Settle = exports.Margins = exports.DefaultMakers = exports.Makers = exports.DefaultPricing = exports.Pricing = void 0;
+exports.DefaultTexchange = exports.Texchange = exports.DefaultUseCases = exports.UseCases = exports.DefaultTasks = exports.Tasks = exports.DefaultModels = exports.Models = exports.DefaultMtm = exports.Mtm = exports.DefaultMarginAccumulation = exports.MarginAccumulation = exports.DefaultGetAvailable = exports.GetAvailable = exports.DefaultSettle = exports.Settle = exports.DefaultMakers = exports.Makers = exports.DefaultPricing = exports.Pricing = void 0;
 var pricing_1 = require("./models.d/pricing");
 Object.defineProperty(exports, "Pricing", { enumerable: true, get: function () { return pricing_1.Pricing; } });
 var default_1 = require("./models.d/pricing/default");
@@ -9,8 +9,6 @@ var makers_1 = require("./models.d/makers");
 Object.defineProperty(exports, "Makers", { enumerable: true, get: function () { return makers_1.Makers; } });
 var default_2 = require("./models.d/makers/default");
 Object.defineProperty(exports, "DefaultMakers", { enumerable: true, get: function () { return default_2.DefaultMakers; } });
-var margins_1 = require("./models.d/margins");
-Object.defineProperty(exports, "Margins", { enumerable: true, get: function () { return margins_1.Margins; } });
 var settle_1 = require("./tasks.d/settle");
 Object.defineProperty(exports, "Settle", { enumerable: true, get: function () { return settle_1.Settle; } });
 var default_3 = require("./tasks.d/settle/default");

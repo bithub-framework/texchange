@@ -16,3 +16,9 @@ export declare class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
     private start;
     private stop;
 }
+export declare namespace DefaultMtm {
+    interface ModelDeps<H extends HLike<H>> extends Mtm.ModelDeps<H> {
+    }
+    interface TaskDeps<H extends HLike<H>> extends Mtm.TaskDeps<H> {
+    }
+}

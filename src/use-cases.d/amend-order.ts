@@ -1,6 +1,4 @@
-import { Models } from '../models/models';
 import { Context } from '../context';
-import { Tasks } from '../tasks/tasks';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
@@ -9,14 +7,18 @@ import {
 	HLike,
 } from 'interfaces';
 
+import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
+import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
+import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
+
 
 export class AmendOrder<H extends HLike<H>>
 	extends UseCase<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: AmendOrder.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: AmendOrder.TaskDeps<H>,
 	) { super(); }
 
 	public amendOrder(amendment: TexchangeAmendment<H>): TexchangeOpenOrder<H> {
@@ -33,5 +35,17 @@ export class AmendOrder<H extends HLike<H>>
 		};
 		this.tasks.validateOrder.validateOrder(newOrder);
 		return this.tasks.makeOpenOrder.makeOpenOrder(newOrder);
+	}
+}
+
+export namespace AmendOrder {
+	export interface ModelDeps<H extends HLike<H>>
+		extends UseCase.ModelDeps<H> { }
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends UseCase.TaskDeps<H> {
+		makeOpenOrder: MakeOpenOrderLike<H>;
+		cancelOpenOrder: CancelOpenOrderLike<H>;
+		validateOrder: ValidateOrderLike<H>;
 	}
 }

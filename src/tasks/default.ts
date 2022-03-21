@@ -1,13 +1,12 @@
-import {
-	Tasks,
-	GetAvailableLike,
-	SettleLike,
-	MarginAccumulationLike,
-} from './tasks';
+import { Tasks } from './tasks';
 
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { Models } from '../models/models';
+
+import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
+import { SettleLike } from '../tasks.d/settle/settle-like';
+import { MarginAccumulationLike } from '../tasks.d/margin-accumulation/margin-accumulation-like';
 
 import { DefaultGetAvailable } from '../tasks.d/get-available/default';
 import { DefaultSettle } from '../tasks.d/settle/default';

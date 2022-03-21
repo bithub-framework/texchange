@@ -1,14 +1,20 @@
-import { Models } from '../models/models';
 import { Context } from '../context';
-import { Tasks } from '../tasks/tasks';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import { Balances, HLike } from 'interfaces';
+import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
 export declare class GetBalances<H extends HLike<H>> extends UseCase<H> {
     protected readonly context: Context<H>;
-    protected readonly models: Models<H>;
+    protected readonly models: GetBalances.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: Tasks<H>;
-    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
+    protected readonly tasks: GetBalances.TaskDeps<H>;
+    constructor(context: Context<H>, models: GetBalances.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetBalances.TaskDeps<H>);
     getBalances(): Balances<H>;
+}
+export declare namespace GetBalances {
+    interface ModelDeps<H extends HLike<H>> extends UseCase.ModelDeps<H> {
+    }
+    interface TaskDeps<H extends HLike<H>> extends UseCase.TaskDeps<H> {
+        getBalances: GetBalancesLike<H>;
+    }
 }

@@ -3,9 +3,7 @@ import {
 	HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Models } from '../../models/models';
 import assert = require('assert');
-import { Tasks } from '../../tasks/tasks';
 import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
 
@@ -13,9 +11,9 @@ import { Settle } from './settle';
 export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: DefaultSettle.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: DefaultSettle.TaskDeps<H>,
 	) { super(); }
 
 	protected clearingMargin(
@@ -31,4 +29,12 @@ export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
 		for (const length of [Length.SHORT, Length.LONG])
 			assert(this.models.margins.getMargin()[length].gte(0));
 	}
+}
+
+export namespace DefaultSettle {
+	export interface ModelDeps<H extends HLike<H>>
+		extends Settle.ModelDeps<H> { }
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends Settle.TaskDeps<H> { }
 }

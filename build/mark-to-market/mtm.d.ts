@@ -9,3 +9,9 @@ export declare abstract class Mtm<H extends HLike<H>> {
     protected abstract readonly models: Models<H>;
     protected abstract readonly tasks: Tasks<H>;
 }
+export declare namespace Mtm {
+    interface ModelDeps<H extends HLike<H>> {
+    }
+    interface TaskDeps<H extends HLike<H>> {
+    }
+}

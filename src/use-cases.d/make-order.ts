@@ -1,6 +1,4 @@
-import { Models } from '../models/models';
 import { Context } from '../context';
-import { Tasks } from '../tasks/tasks';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
@@ -9,14 +7,17 @@ import {
 	HLike,
 } from 'interfaces';
 
+import { Progress } from '../models.d/progress';
+import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
+
 
 export class MakeOrder<H extends HLike<H>>
 	extends UseCase<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: MakeOrder.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: MakeOrder.TaskDeps<H>,
 	) { super(); }
 
 	public makeOrder(order: LimitOrder<H>): TexchangeOpenOrder<H> {
@@ -31,5 +32,17 @@ export class MakeOrder<H extends HLike<H>>
 			unfilled: order.quantity,
 		};
 		return this.tasks.makeOpenOrder.makeOpenOrder(openOrder);
+	}
+}
+
+export namespace MakeOrder {
+	export interface ModelDeps<H extends HLike<H>>
+		extends UseCase.ModelDeps<H> {
+		progress: Progress<H>;
+	}
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends UseCase.TaskDeps<H> {
+		makeOpenOrder: MakeOpenOrderLike<H>;
 	}
 }

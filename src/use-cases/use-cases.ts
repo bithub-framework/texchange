@@ -11,6 +11,8 @@ import { GetPositions } from '../use-cases.d/get-positions';
 import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
+import { Subscription } from '../use-cases.d/subscription';
+
 import { HLike } from 'interfaces';
 
 
@@ -23,6 +25,7 @@ export abstract class UseCases<H extends HLike<H>> {
 	public readonly getBalances: GetBalances<H>;
 	public readonly updateOrderbook: UpdateOrderbook<H>;
 	public abstract readonly updateTrades: UpdateTrades<H>;
+	public readonly subscription: Subscription<H>;
 
 	protected constructor(
 		context: Context<H>,
@@ -37,6 +40,6 @@ export abstract class UseCases<H extends HLike<H>> {
 		this.getPositions = new GetPositions(context, models, broadcast, tasks);
 		this.makeOrder = new MakeOrder(context, models, broadcast, tasks);
 		this.updateOrderbook = new UpdateOrderbook(context, models, broadcast, tasks);
-
+		this.subscription = new Subscription(context, models, broadcast, tasks);
 	}
 }

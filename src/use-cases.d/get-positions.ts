@@ -1,6 +1,4 @@
-import { Models } from '../models/models';
 import { Context } from '../context';
-import { Tasks } from '../tasks/tasks';
 import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import {
@@ -9,14 +7,16 @@ import {
 	HLike,
 } from 'interfaces';
 
+import { Assets } from '../models.d/assets';
+import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>>
 	extends UseCase<H> {
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: GetPositions.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: GetPositions.TaskDeps<H>,
 	) { super(); }
 
 	public getPositions(): Positions<H> {
@@ -28,5 +28,17 @@ export class GetPositions<H extends HLike<H>>
 			closable: this.tasks.getClosable.getClosable(),
 			time: this.context.timeline.now(),
 		};
+	}
+}
+
+export namespace GetPositions {
+	export interface ModelDeps<H extends HLike<H>>
+		extends UseCase.ModelDeps<H> {
+		assets: Assets<H>;
+	}
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends UseCase.TaskDeps<H> {
+		getClosable: GetClosableLike<H>;
 	}
 }

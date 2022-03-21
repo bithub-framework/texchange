@@ -10,15 +10,21 @@ import {
     MarketEvents,
     AccountEvents,
 } from 'interfaces';
-import { UseCases } from '../use-cases';
 import { HLike } from 'interfaces';
+
+import { MakeOrder } from '../use-cases.d/make-order';
+import { CancelOrder } from '../use-cases.d/cancel-order';
+import { AmendOrder } from '../use-cases.d/amend-order';
+import { GetPositions } from '../use-cases.d/get-positions';
+import { GetBalances } from '../use-cases.d/get-balances';
+import { GetOpenOrders } from '../use-cases.d/get-open-orders';
 
 
 export class Instant<H extends HLike<H>>
     extends EventEmitter {
     constructor(
         private context: Context<H>,
-        private useCases: UseCases<H>,
+        private useCases: Instant.UseCaseDeps<H>,
     ) {
         super();
         // this.initializePushingTrades();
@@ -106,4 +112,15 @@ export interface Instant<H extends HLike<H>> extends EventEmitter {
     once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
     off<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
     emit<Event extends keyof Events<H>>(event: Event, ...args: Events<H>[Event]): boolean;
+}
+
+export namespace Instant {
+    export interface UseCaseDeps<H extends HLike<H>> {
+        makeOrder: MakeOrder<H>;
+        cancelOrder: CancelOrder<H>;
+        amendOrder: AmendOrder<H>;
+        getOpenOrders: GetOpenOrders<H>;
+        getBalances: GetBalances<H>;
+        getPositions: GetPositions<H>;
+    }
 }

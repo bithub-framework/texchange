@@ -2,7 +2,6 @@ export { Pricing } from './models.d/pricing';
 export { DefaultPricing } from './models.d/pricing/default';
 export { Makers, Frozen } from './models.d/makers';
 export { DefaultMakers } from './models.d/makers/default';
-export { Margins } from './models.d/margins';
 export { Settle } from './tasks.d/settle';
 export { DefaultSettle } from './tasks.d/settle/default';
 export { GetAvailable } from './tasks.d/get-available';

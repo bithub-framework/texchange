@@ -3,21 +3,22 @@ import {
 	HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Models } from '../../models/models';
-import { Tasks } from '../../tasks/tasks';
 import { Broadcast } from '../../broadcast';
 import { max } from '../../utilities';
 import { GetAvailable } from './get-available';
 
+import { Margins } from '../../models.d/margins';
+import { Makers } from '../../models.d/makers';
 
 
 export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
+
 	constructor(
 		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
+		protected readonly models: DefaultGetAvailable.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
+		protected readonly tasks: DefaultGetAvailable.TaskDeps<H>,
 	) { super(); }
 
 	protected finalMargin(): H {
@@ -46,4 +47,15 @@ export class DefaultGetAvailable<H extends HLike<H>>
 		}
 		return final[Length.LONG].plus(final[Length.SHORT]);
 	}
+}
+
+export namespace DefaultGetAvailable {
+	export interface ModelDeps<H extends HLike<H>>
+		extends GetAvailable.ModelDeps<H> {
+		margins: Margins<H>;
+		makers: Makers<H>;
+	}
+
+	export interface TaskDeps<H extends HLike<H>>
+		extends GetAvailable.TaskDeps<H> { }
 }

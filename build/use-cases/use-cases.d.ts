@@ -10,6 +10,7 @@ import { GetPositions } from '../use-cases.d/get-positions';
 import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
+import { Subscription } from '../use-cases.d/subscription';
 import { HLike } from 'interfaces';
 export declare abstract class UseCases<H extends HLike<H>> {
     readonly makeOrder: MakeOrder<H>;
@@ -20,5 +21,6 @@ export declare abstract class UseCases<H extends HLike<H>> {
     readonly getBalances: GetBalances<H>;
     readonly updateOrderbook: UpdateOrderbook<H>;
     abstract readonly updateTrades: UpdateTrades<H>;
+    readonly subscription: Subscription<H>;
     protected constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
 }

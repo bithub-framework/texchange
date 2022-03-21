@@ -1,16 +1,18 @@
 import { Context } from '../context';
-import { UseCases } from '../use-cases';
 import { DatabaseTrade } from '../models.d/progress';
 import {
 	Orderbook,
 	HLike,
 } from 'interfaces';
 
+import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
+import { UpdateTrades } from '../use-cases.d/update-trades';
+
 
 export class Joystick<H extends HLike<H>> {
 	constructor(
 		private context: Context<H>,
-		private useCases: UseCases<H>,
+		private useCases: Joystick.UseCaseDeps<H>,
 	) { }
 
 	public updateTrades(trades: readonly DatabaseTrade<H>[]): void {
@@ -19,5 +21,12 @@ export class Joystick<H extends HLike<H>> {
 
 	public updateOrderbook(orderbook: Orderbook<H>): void {
 		this.useCases.updateOrderbook.updateOrderbook(orderbook);
+	}
+}
+
+export namespace Joystick {
+	export interface UseCaseDeps<H extends HLike<H>> {
+		updateTrades: UpdateTrades<H>;
+		updateOrderbook: UpdateOrderbook<H>;
 	}
 }

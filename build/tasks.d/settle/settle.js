@@ -6,7 +6,7 @@ const task_1 = require("../../task");
 class Settle extends task_1.Task {
     settle() {
         const { config } = this.context;
-        const { assets, margins: margin, pricing } = this.models;
+        const { assets, margins, pricing } = this.models;
         const position = {
             [interfaces_1.Length.LONG]: assets.getPosition()[interfaces_1.Length.LONG],
             [interfaces_1.Length.SHORT]: assets.getPosition()[interfaces_1.Length.SHORT],
@@ -24,7 +24,7 @@ class Settle extends task_1.Task {
                 volume: position[length],
                 dollarVolume,
             });
-            margin.setMargin(length, this.clearingMargin(length, profit));
+            margins.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();
     }
