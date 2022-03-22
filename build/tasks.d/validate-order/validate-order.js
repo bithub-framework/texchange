@@ -3,10 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidateOrder = void 0;
 const interfaces_1 = require("interfaces");
 const assert = require("assert");
-const task_1 = require("../../task");
-class ValidateOrder extends task_1.Task {
+class ValidateOrder {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

@@ -8,7 +8,6 @@ import {
 } from 'interfaces';
 import { min } from '../../utilities';
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
 
@@ -19,14 +18,13 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
-    extends Task<H>
     implements TradeTakesOpenMakersLike<H> {
     constructor(
         protected readonly context: Context<H>,
         protected readonly models: TradeTakesOpenMakers.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
         protected readonly tasks: TradeTakesOpenMakers.TaskDeps<H>,
-    ) { super(); }
+    ) { }
 
     public tradeTakesOpenMakers(roTrade: TexchangeTrade<H>): void {
         const trade: TexchangeTrade.MutablePlain<H> = {
@@ -103,15 +101,13 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
 }
 
 export namespace TradeTakesOpenMakers {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
         margins: Margins<H>;
         makers: Makers<H>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> {
+    export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
 }

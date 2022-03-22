@@ -7,7 +7,6 @@ import {
 } from 'interfaces';
 import { min } from '../../utilities';
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
 
@@ -18,14 +17,14 @@ import { Book } from '../../models.d/book';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 
-export class OrderTakes<H extends HLike<H>> extends Task<H>
+export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
     constructor(
         protected readonly context: Context<H>,
         protected readonly models: OrderTakes.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
         protected readonly tasks: OrderTakes.TaskDeps<H>,
-    ) { super(); }
+    ) { }
 
     /**
      * @param taker variable
@@ -85,16 +84,14 @@ export class OrderTakes<H extends HLike<H>> extends Task<H>
 }
 
 export namespace OrderTakes {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         margins: Margins<H>;
         assets: Assets<H>;
         progress: Progress<H>;
         book: Book<H>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> {
+    export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
 }

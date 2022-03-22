@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAvailable = void 0;
-const task_1 = require("../../task");
-class GetAvailable extends task_1.Task {
+class GetAvailable {
     getAvailable() {
         return this.models.assets.getBalance()
             .minus(this.finalMargin())

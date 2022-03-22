@@ -5,12 +5,14 @@ import {
     H,
 } from 'interfaces';
 import { Context } from '../context';
-import { Model } from '../model';
 import assert = require('assert');
+import { StatefulLike } from 'startable';
 
 
 
-export class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
+export class Assets<H extends HLike<H>>
+    implements StatefulLike<Assets.Snapshot> {
+
     private position: Position.MutablePlain<H>;
     private balance: H;
     private cost: Assets.Cost.MutablePlain<H>;
@@ -18,8 +20,6 @@ export class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
     constructor(
         protected readonly context: Context<H>,
     ) {
-        super();
-
         this.balance = this.context.config.account.initialBalance;
         this.position = {
             [Length.LONG]: this.context.H.from(0),

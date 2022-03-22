@@ -3,7 +3,6 @@ import {
     TexchangeOpenOrder,
     HLike,
 } from 'interfaces';
-import { Task } from '../../task';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
 
@@ -15,14 +14,14 @@ import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 
-export class MakeOpenOrder<H extends HLike<H>> extends Task<H>
+export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
     constructor(
         protected readonly context: Context<H>,
         protected readonly models: MakeOpenOrder.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
         protected readonly tasks: MakeOpenOrder.TaskDeps<H>,
-    ) { super(); }
+    ) { }
 
     public makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
         this.tasks.validateOrder.validateOrder(order);
@@ -39,13 +38,11 @@ export class MakeOpenOrder<H extends HLike<H>> extends Task<H>
 }
 
 export namespace MakeOpenOrder {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         book: Book<H>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> {
+    export interface TaskDeps<H extends HLike<H>> {
         validateOrder: ValidateOrderLike<H>;
         orderTakes: OrderTakesLike<H>;
         orderMakes: OrderMakesLike<H>;

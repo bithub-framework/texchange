@@ -1,10 +1,9 @@
 import { Context } from '../context';
-import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import { Positions, HLike } from 'interfaces';
 import { Assets } from '../models.d/assets';
 import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
-export declare class GetPositions<H extends HLike<H>> extends UseCase<H> {
+export declare class GetPositions<H extends HLike<H>> {
     protected readonly context: Context<H>;
     protected readonly models: GetPositions.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
@@ -13,10 +12,10 @@ export declare class GetPositions<H extends HLike<H>> extends UseCase<H> {
     getPositions(): Positions<H>;
 }
 export declare namespace GetPositions {
-    interface ModelDeps<H extends HLike<H>> extends UseCase.ModelDeps<H> {
+    interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
     }
-    interface TaskDeps<H extends HLike<H>> extends UseCase.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> {
         getClosable: GetClosableLike<H>;
     }
 }

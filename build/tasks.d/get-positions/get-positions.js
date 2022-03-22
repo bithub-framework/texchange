@@ -2,10 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPositions = void 0;
 const interfaces_1 = require("interfaces");
-const task_1 = require("../../task");
-class GetPositions extends task_1.Task {
+class GetPositions {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

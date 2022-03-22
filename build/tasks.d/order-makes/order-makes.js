@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderMakes = void 0;
-const task_1 = require("../../task");
-class OrderMakes extends task_1.Task {
+class OrderMakes {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

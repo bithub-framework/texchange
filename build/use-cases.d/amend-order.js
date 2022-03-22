@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AmendOrder = void 0;
-const use_case_1 = require("../use-case");
-class AmendOrder extends use_case_1.UseCase {
+class AmendOrder {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

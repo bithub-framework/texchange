@@ -1,15 +1,15 @@
-import { Model } from '../model';
 import { Context } from '../context';
 import {
     Trade,
     H, HLike,
     TexchangeTradeId,
 } from 'interfaces';
-
+import { StatefulLike } from 'startable';
 
 
 export class Progress<H extends HLike<H>>
-    extends Model<H, Progress.Snapshot> {
+    implements StatefulLike<Progress.Snapshot> {
+
     public latestPrice: H | null = null;
     public latestDatabaseTradeTime: number | null = null;
     public userTradeCount = 0;
@@ -17,7 +17,7 @@ export class Progress<H extends HLike<H>>
 
     constructor(
         protected readonly context: Context<H>,
-    ) { super(); }
+    ) { }
 
     public updateDatabaseTrades(trades: readonly DatabaseTrade<H>[]): void {
         const now = this.context.timeline.now();

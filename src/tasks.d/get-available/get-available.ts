@@ -1,15 +1,17 @@
-import { Task } from '../../task';
 import { GetAvailableLike } from './get-available-like';
+import { Context } from '../../context';
+import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
 
 import { Assets } from '../../models.d/assets';
 
 
 export abstract class GetAvailable<H extends HLike<H>>
-	extends Task<H>
 	implements GetAvailableLike<H> {
 
+	protected abstract readonly context: Context<H>;
 	protected abstract readonly models: GetAvailable.ModelDeps<H>;
+	protected abstract readonly broadcast: Broadcast<H>;
 	protected abstract readonly tasks: GetAvailable.TaskDeps<H>;
 
 	public getAvailable(): H {
@@ -25,11 +27,9 @@ export abstract class GetAvailable<H extends HLike<H>>
 
 
 export namespace GetAvailable {
-	export interface ModelDeps<H extends HLike<H>>
-		extends Task.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends Task.TaskDeps<H> { }
+	export interface TaskDeps<H extends HLike<H>> { }
 }

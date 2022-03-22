@@ -3,11 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const interfaces_1 = require("interfaces");
 const frozon_1 = require("./frozon");
-const model_1 = require("../../model");
 const assert = require("assert");
-class Makers extends model_1.Model {
+class Makers {
     constructor(context) {
-        super();
         this.context = context;
         this.orders = new Map();
         this.frozens = new Map();

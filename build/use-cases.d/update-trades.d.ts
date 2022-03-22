@@ -1,5 +1,4 @@
 import { Context } from '../context';
-import { UseCase } from '../use-case';
 import { DatabaseTrade } from '../models.d/progress';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
@@ -7,7 +6,7 @@ import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/tra
 import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing';
-export declare class UpdateTrades<H extends HLike<H>> extends UseCase<H> {
+export declare class UpdateTrades<H extends HLike<H>> {
     protected readonly context: Context<H>;
     protected readonly models: UpdateTrades.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
@@ -17,11 +16,11 @@ export declare class UpdateTrades<H extends HLike<H>> extends UseCase<H> {
     updateTrades(trades: readonly DatabaseTrade<H>[]): void;
 }
 export declare namespace UpdateTrades {
-    interface ModelDeps<H extends HLike<H>> extends UseCase.ModelDeps<H> {
+    interface ModelDeps<H extends HLike<H>> {
         progress: Progress<H>;
         pricing: Pricing<H, unknown>;
     }
-    interface TaskDeps<H extends HLike<H>> extends UseCase.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> {
         tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
         settle: SettleLike;
     }

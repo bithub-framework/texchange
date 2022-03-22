@@ -2,11 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const interfaces_1 = require("interfaces");
-const model_1 = require("../model");
 const assert = require("assert");
-class Assets extends model_1.Model {
+class Assets {
     constructor(context) {
-        super();
         this.context = context;
         this.balance = this.context.config.account.initialBalance;
         this.position = {

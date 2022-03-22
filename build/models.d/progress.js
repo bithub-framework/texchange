@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Progress = void 0;
-const model_1 = require("../model");
-class Progress extends model_1.Model {
+class Progress {
     constructor(context) {
-        super();
         this.context = context;
         this.latestPrice = null;
         this.latestDatabaseTradeTime = null;

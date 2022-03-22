@@ -1,7 +1,7 @@
 import { Length, Position, HLike, H } from 'interfaces';
 import { Context } from '../context';
-import { Model } from '../model';
-export declare class Assets<H extends HLike<H>> extends Model<H, Assets.Snapshot> {
+import { StatefulLike } from 'startable';
+export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     protected readonly context: Context<H>;
     private position;
     private balance;

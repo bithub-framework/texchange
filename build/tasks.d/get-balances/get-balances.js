@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetBalances = void 0;
-const task_1 = require("../../task");
-class GetBalances extends task_1.Task {
+class GetBalances {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

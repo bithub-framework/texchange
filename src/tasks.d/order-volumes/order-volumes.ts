@@ -1,5 +1,4 @@
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
@@ -10,14 +9,13 @@ import { Margins } from '../../models.d/margins';
 
 
 export class OrderVolumes<H extends HLike<H>>
-	extends Task<H>
 	implements OrderVolumesLike<H> {
 	constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: OrderVolumes.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
 		protected readonly tasks: OrderVolumes.TaskDeps<H>,
-	) { super(); }
+	) { }
 
 	public open({
 		length, volume, dollarVolume,
@@ -77,14 +75,12 @@ export namespace OrderVolumes {
 	export interface Volumes<H extends HLike<H>>
 		extends OrderVolumesLike.Volumes<H> { }
 
-	export interface ModelDeps<H extends HLike<H>>
-		extends Task.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 		margins: Margins<H>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends Task.TaskDeps<H> {
+	export interface TaskDeps<H extends HLike<H>> {
 		marginAccumulation: MarginAccumulationLike<H>;
 	}
 }

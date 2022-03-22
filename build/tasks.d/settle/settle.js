@@ -2,8 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settle = void 0;
 const interfaces_1 = require("interfaces");
-const task_1 = require("../../task");
-class Settle extends task_1.Task {
+class Settle {
     settle() {
         const { config } = this.context;
         const { assets, margins, pricing } = this.models;

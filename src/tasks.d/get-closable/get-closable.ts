@@ -4,7 +4,6 @@ import {
 	HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { GetClosableLike } from './get-closable-like';
 import { Broadcast } from '../../broadcast';
 
@@ -12,14 +11,14 @@ import { Assets } from '../../models.d/assets';
 import { Makers } from '../../models.d/makers';
 
 
-export class GetClosable<H extends HLike<H>> extends Task<H>
+export class GetClosable<H extends HLike<H>>
 	implements GetClosableLike<H> {
 	constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: GetClosable.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
 		protected readonly tasks: GetClosable.TaskDeps<H>,
-	) { super(); }
+	) { }
 
 	public getClosable(): Closable<H> {
 		const { assets, makers } = this.models;
@@ -35,12 +34,10 @@ export class GetClosable<H extends HLike<H>> extends Task<H>
 }
 
 export namespace GetClosable {
-	export interface ModelDeps<H extends HLike<H>>
-		extends Task.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 		makers: Makers<H>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends Task.TaskDeps<H> { }
+	export interface TaskDeps<H extends HLike<H>> { }
 }

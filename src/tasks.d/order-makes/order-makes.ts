@@ -4,7 +4,6 @@ import {
     HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
 
@@ -12,14 +11,14 @@ import { Book } from '../../models.d/book';
 import { Makers } from '../../models.d/makers';
 
 
-export class OrderMakes<H extends HLike<H>> extends Task<H>
+export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
     constructor(
         protected readonly context: Context<H>,
         protected readonly models: OrderMakes.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
         protected readonly tasks: OrderMakes.TaskDeps<H>,
-    ) { super(); }
+    ) { }
 
     public orderMakes(
         openOrder: TexchangeOpenOrder<H>,
@@ -45,12 +44,10 @@ export class OrderMakes<H extends HLike<H>> extends Task<H>
 }
 
 export namespace OrderMakes {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         book: Book<H>;
         makers: Makers<H>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> { }
+    export interface TaskDeps<H extends HLike<H>> { }
 }

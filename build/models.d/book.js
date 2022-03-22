@@ -2,11 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DecrementsStatic = exports.Book = void 0;
 const interfaces_1 = require("interfaces");
-const model_1 = require("../model");
 const assert = require("assert");
-class Book extends model_1.Model {
+class Book {
     constructor(context) {
-        super();
         this.context = context;
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {

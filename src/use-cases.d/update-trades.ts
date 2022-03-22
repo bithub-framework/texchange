@@ -1,5 +1,4 @@
 import { Context } from '../context';
-import { UseCase } from '../use-case';
 import { DatabaseTrade } from '../models.d/progress';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
@@ -11,14 +10,14 @@ import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing';
 
 
-export class UpdateTrades<H extends HLike<H>> extends UseCase<H> {
+export class UpdateTrades<H extends HLike<H>> {
 	constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: UpdateTrades.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
 		protected readonly tasks: UpdateTrades.TaskDeps<H>,
 		private readonly realTimeSettlement: boolean,
-	) { super(); }
+	) { }
 
 	public updateTrades(trades: readonly DatabaseTrade<H>[]): void {
 		const { tradeTakesOpenMakers, settle } = this.tasks;
@@ -38,14 +37,12 @@ export class UpdateTrades<H extends HLike<H>> extends UseCase<H> {
 }
 
 export namespace UpdateTrades {
-	export interface ModelDeps<H extends HLike<H>>
-		extends UseCase.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		progress: Progress<H>;
 		pricing: Pricing<H, unknown>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends UseCase.TaskDeps<H> {
+	export interface TaskDeps<H extends HLike<H>> {
 		tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
 		settle: SettleLike;
 	}

@@ -12,15 +12,15 @@ import {
 	Frozen,
 	FrozenStatic,
 } from './frozon';
-import { Model } from '../../model';
 import { Context } from '../../context';
 import assert = require('assert');
+import { StatefulLike } from 'startable';
 
 
 
-export abstract class Makers<H extends HLike<H>>
-	extends Model<H, Makers.Snapshot>
-	implements Iterable<TexchangeOpenMaker<H>> {
+export abstract class Makers<H extends HLike<H>> implements
+	StatefulLike<Makers.Snapshot>,
+	Iterable<TexchangeOpenMaker<H>> {
 
 	private orders = new Map<TexchangeOrderId, TexchangeOpenMaker<H>>();
 	private frozens = new Map<TexchangeOrderId, Frozen<H>>();
@@ -37,7 +37,7 @@ export abstract class Makers<H extends HLike<H>>
 
 	protected constructor(
 		protected readonly context: Context<H>,
-	) { super(); }
+	) { }
 
 	private totalFrozen: Frozen<H> = this.Frozen.ZERO;
 

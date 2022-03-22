@@ -4,7 +4,6 @@ import {
     HLike,
 } from 'interfaces';
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 
@@ -14,7 +13,6 @@ import { Pricing } from '../../models.d/pricing';
 
 
 export abstract class Settle<H extends HLike<H>>
-    extends Task<H>
     implements SettleLike {
 
     protected abstract readonly context: Context<H>;
@@ -58,13 +56,11 @@ export abstract class Settle<H extends HLike<H>>
 }
 
 export namespace Settle {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
         margins: Margins<H>;
         pricing: Pricing<H, unknown>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> { }
+    export interface TaskDeps<H extends HLike<H>> { }
 }

@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CancelOpenOrder = void 0;
-const task_1 = require("../../task");
-class CancelOpenOrder extends task_1.Task {
+class CancelOpenOrder {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

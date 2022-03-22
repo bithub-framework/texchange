@@ -1,9 +1,8 @@
 import { Context } from '../context';
-import { UseCase } from '../use-case';
 import { Broadcast } from '../broadcast';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { Makers } from '../models.d/makers';
-export declare class GetOpenOrders<H extends HLike<H>> extends UseCase<H> {
+export declare class GetOpenOrders<H extends HLike<H>> {
     protected readonly context: Context<H>;
     protected readonly models: GetOpenOrders.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
@@ -12,9 +11,9 @@ export declare class GetOpenOrders<H extends HLike<H>> extends UseCase<H> {
     getOpenOrders(): TexchangeOpenOrder<H>[];
 }
 export declare namespace GetOpenOrders {
-    interface ModelDeps<H extends HLike<H>> extends UseCase.ModelDeps<H> {
+    interface ModelDeps<H extends HLike<H>> {
         makers: Makers<H>;
     }
-    interface TaskDeps<H extends HLike<H>> extends UseCase.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> {
     }
 }

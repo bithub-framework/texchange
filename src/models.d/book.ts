@@ -4,13 +4,14 @@ import {
     HLike, H, HStatic,
     ConcreteOrderbookStatic,
 } from 'interfaces';
-import { Model } from '../model';
 import assert = require('assert');
 import { Context } from '../context';
+import { StatefulLike } from 'startable';
 
 
 
-export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
+export class Book<H extends HLike<H>>
+    implements StatefulLike<Book.Snapshot> {
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Orderbook<H> = {
         [Side.ASK]: [],
@@ -28,9 +29,7 @@ export class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
 
     constructor(
         protected readonly context: Context<H>,
-    ) {
-        super();
-    }
+    ) { }
 
     public setBasebook(newBasebook: Orderbook<H>) {
         assert(newBasebook.time === this.context.timeline.now());

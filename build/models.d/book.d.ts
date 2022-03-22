@@ -1,7 +1,7 @@
 import { Orderbook, Side, HLike, H, HStatic } from 'interfaces';
-import { Model } from '../model';
 import { Context } from '../context';
-export declare class Book<H extends HLike<H>> extends Model<H, Book.Snapshot> {
+import { StatefulLike } from 'startable';
+export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
     protected readonly context: Context<H>;
     private time;
     private basebook;

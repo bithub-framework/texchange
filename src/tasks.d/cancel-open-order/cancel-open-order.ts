@@ -1,5 +1,4 @@
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
 import {
@@ -10,14 +9,14 @@ import {
 import { Makers } from '../../models.d/makers';
 
 
-export class CancelOpenOrder<H extends HLike<H>> extends Task<H>
+export class CancelOpenOrder<H extends HLike<H>>
 	implements CancelOpenOrderLike<H> {
 	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: CancelOpenOrder.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
 		protected readonly tasks: CancelOpenOrder.TaskDeps<H>,
-	) { super(); }
+	) { }
 
 	public cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
 		const { makers } = this.models;
@@ -44,11 +43,9 @@ export class CancelOpenOrder<H extends HLike<H>> extends Task<H>
 }
 
 export namespace CancelOpenOrder {
-	export interface ModelDeps<H extends HLike<H>>
-		extends Task.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		makers: Makers<H>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends Task.TaskDeps<H> { }
+	export interface TaskDeps<H extends HLike<H>> { }
 }

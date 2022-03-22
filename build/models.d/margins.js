@@ -2,10 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Margins = void 0;
 const interfaces_1 = require("interfaces");
-const model_1 = require("../model");
-class Margins extends model_1.Model {
+class Margins {
     constructor(context) {
-        super();
         this.context = context;
         this.margin = {
             [interfaces_1.Length.LONG]: this.context.H.from(0),

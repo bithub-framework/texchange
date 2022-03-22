@@ -1,6 +1,5 @@
 import { Context } from '../../context';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Task } from '../../task';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
 import { ValidateOrderLike } from '../validate-order/validate-order-like';
@@ -9,7 +8,7 @@ import { OrderMakesLike } from '../order-makes/order-makes-like';
 import { Book } from '../../models.d/book';
 import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
-export declare class MakeOpenOrder<H extends HLike<H>> extends Task<H> implements MakeOpenOrderLike<H> {
+export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderLike<H> {
     protected readonly context: Context<H>;
     protected readonly models: MakeOpenOrder.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
@@ -18,10 +17,10 @@ export declare class MakeOpenOrder<H extends HLike<H>> extends Task<H> implement
     makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }
 export declare namespace MakeOpenOrder {
-    interface ModelDeps<H extends HLike<H>> extends Task.ModelDeps<H> {
+    interface ModelDeps<H extends HLike<H>> {
         book: Book<H>;
     }
-    interface TaskDeps<H extends HLike<H>> extends Task.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> {
         validateOrder: ValidateOrderLike<H>;
         orderTakes: OrderTakesLike<H>;
         orderMakes: OrderMakesLike<H>;

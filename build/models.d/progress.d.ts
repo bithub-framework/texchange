@@ -1,7 +1,7 @@
-import { Model } from '../model';
 import { Context } from '../context';
 import { Trade, H, HLike, TexchangeTradeId } from 'interfaces';
-export declare class Progress<H extends HLike<H>> extends Model<H, Progress.Snapshot> {
+import { StatefulLike } from 'startable';
+export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
     protected readonly context: Context<H>;
     latestPrice: H | null;
     latestDatabaseTradeTime: number | null;

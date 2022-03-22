@@ -4,7 +4,6 @@ import {
 	HLike,
 	Length,
 } from 'interfaces';
-import { Task } from '../../task';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';
 
@@ -12,14 +11,14 @@ import { Assets } from '../../models.d/assets';
 import { GetClosableLike } from '../get-closable/get-closable-like';
 
 
-export class GetPositions<H extends HLike<H>> extends Task<H>
+export class GetPositions<H extends HLike<H>>
 	implements GetPositionsLike<H> {
 	constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: GetPositions.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
 		protected readonly tasks: GetPositions.TaskDeps<H>,
-	) { super(); }
+	) { }
 
 	public getPositions(): Positions<H> {
 		return {
@@ -34,13 +33,11 @@ export class GetPositions<H extends HLike<H>> extends Task<H>
 }
 
 export namespace GetPositions {
-	export interface ModelDeps<H extends HLike<H>>
-		extends Task.ModelDeps<H> {
+	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 	}
 
-	export interface TaskDeps<H extends HLike<H>>
-		extends Task.TaskDeps<H> {
+	export interface TaskDeps<H extends HLike<H>> {
 		getClosable: GetClosableLike<H>;
 	}
 }

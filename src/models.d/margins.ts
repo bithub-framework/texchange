@@ -2,20 +2,18 @@ import {
 	Length,
 	H, HLike,
 } from 'interfaces';
-import { Model } from '../model';
 import { Context } from '../context';
-
+import { StatefulLike } from 'startable';
 
 
 export class Margins<H extends HLike<H>>
-	extends Model<H, Margins.Snapshot> {
+	implements StatefulLike<Margins.Snapshot> {
+
 	protected margin: Margins.Margin.MutablePlain<H>;
 
 	constructor(
 		protected readonly context: Context<H>,
 	) {
-		super();
-
 		this.margin = {
 			[Length.LONG]: this.context.H.from(0),
 			[Length.SHORT]: this.context.H.from(0),

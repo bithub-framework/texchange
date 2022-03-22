@@ -2,10 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetClosable = void 0;
 const interfaces_1 = require("interfaces");
-const task_1 = require("../../task");
-class GetClosable extends task_1.Task {
+class GetClosable {
     constructor(context, models, broadcast, tasks) {
-        super();
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;

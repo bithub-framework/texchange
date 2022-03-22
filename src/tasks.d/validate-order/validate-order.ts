@@ -5,7 +5,6 @@ import {
 } from 'interfaces';
 import assert = require('assert');
 import { Context } from '../../context';
-import { Task } from '../../task';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
 
@@ -14,14 +13,14 @@ import { GetClosableLike } from '../get-closable/get-closable-like';
 import { Makers } from '../../models.d/makers';
 
 
-export class ValidateOrder<H extends HLike<H>> extends Task<H>
+export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
     constructor(
         protected readonly context: Context<H>,
         protected readonly models: ValidateOrder.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
         protected readonly tasks: ValidateOrder.TaskDeps<H>,
-    ) { super(); }
+    ) { }
 
     public validateOrder(order: TexchangeOpenOrder<H>): void {
         this.validateFormat(order);
@@ -68,13 +67,11 @@ export class ValidateOrder<H extends HLike<H>> extends Task<H>
 }
 
 export namespace ValidateOrder {
-    export interface ModelDeps<H extends HLike<H>>
-        extends Task.ModelDeps<H> {
+    export interface ModelDeps<H extends HLike<H>> {
         makers: Makers<H>;
     }
 
-    export interface TaskDeps<H extends HLike<H>>
-        extends Task.TaskDeps<H> {
+    export interface TaskDeps<H extends HLike<H>> {
         getAvailable: GetAvailableLike<H>;
         getClosable: GetClosableLike<H>;
     }
