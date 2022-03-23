@@ -10,6 +10,8 @@ import { Broadcast } from '../broadcast';
 import { Tasks } from '../tasks/tasks';
 import { UseCases } from '../use-cases';
 import { Views } from '../views';
+import { Latency } from '../views.d/latency';
+import { Joystick } from '../views.d/joystick';
 
 
 export abstract class Texchange<H extends HLike<H>> {
@@ -19,8 +21,11 @@ export abstract class Texchange<H extends HLike<H>> {
 	protected readonly broadcast: Broadcast<H>;
 	protected readonly abstract tasks: Tasks<H>;
 	protected readonly abstract useCases: UseCases<H>;
-	public readonly abstract views: Views<H>;
+	protected readonly abstract views: Views<H>;
+
 	public readonly startable: StatefulStartable<Texchange.Snapshot>;
+	public abstract readonly latency: Latency<H>;
+	public abstract readonly joystick: Joystick<H>;
 
 	public constructor() {
 		this.broadcast = new Broadcast();

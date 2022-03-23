@@ -17,6 +17,8 @@ class DefaultTexchange extends texchange_1.Texchange {
         this.mtm = new default_2.DefaultMtm(this.context, this.models, this.tasks);
         this.useCases = new default_5.DefaultUseCases(this.context, this.models, this.broadcast, this.tasks);
         this.views = new views_1.Views(this.context, this.useCases);
+        this.latency = this.views.latency;
+        this.joystick = this.views.joystick;
     }
 }
 exports.DefaultTexchange = DefaultTexchange;

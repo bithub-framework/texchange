@@ -20,6 +20,8 @@ import { UseCases } from '../use-cases';
 import { DefaultUseCases } from '../use-cases/default';
 
 import { Views } from '../views';
+import { Latency } from '../views.d/latency';
+import { Joystick } from '../views.d/joystick';
 
 
 
@@ -30,7 +32,9 @@ export class DefaultTexchange<H extends HLike<H>>
 	protected readonly models: Models<H>;
 	protected readonly tasks: Tasks<H>;
 	protected readonly useCases: UseCases<H>;
-	public readonly views: Views<H>;
+	protected readonly views: Views<H>;
+	public joystick: Joystick<H>;
+	public latency: Latency<H>;
 
 	public constructor(
 		config: Config<H>,
@@ -44,6 +48,8 @@ export class DefaultTexchange<H extends HLike<H>>
 		this.mtm = new DefaultMtm(this.context, this.models, this.tasks);
 		this.useCases = new DefaultUseCases(this.context, this.models, this.broadcast, this.tasks);
 		this.views = new Views(this.context, this.useCases);
+		this.latency = this.views.latency;
+		this.joystick = this.views.joystick;
 	}
 }
 

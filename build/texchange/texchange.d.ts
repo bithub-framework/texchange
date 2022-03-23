@@ -7,6 +7,8 @@ import { Broadcast } from '../broadcast';
 import { Tasks } from '../tasks/tasks';
 import { UseCases } from '../use-cases';
 import { Views } from '../views';
+import { Latency } from '../views.d/latency';
+import { Joystick } from '../views.d/joystick';
 export declare abstract class Texchange<H extends HLike<H>> {
     protected abstract readonly context: Context<H>;
     protected readonly abstract mtm: Mtm<H> | null;
@@ -14,8 +16,10 @@ export declare abstract class Texchange<H extends HLike<H>> {
     protected readonly broadcast: Broadcast<H>;
     protected readonly abstract tasks: Tasks<H>;
     protected readonly abstract useCases: UseCases<H>;
-    abstract readonly views: Views<H>;
+    protected readonly abstract views: Views<H>;
     readonly startable: StatefulStartable<Texchange.Snapshot>;
+    abstract readonly latency: Latency<H>;
+    abstract readonly joystick: Joystick<H>;
     constructor();
     private start;
     private stop;
