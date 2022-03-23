@@ -16,7 +16,7 @@ export declare abstract class Texchange<H extends HLike<H>> {
     protected readonly abstract useCases: UseCases<H>;
     abstract readonly views: Views<H>;
     readonly startable: StatefulStartable<Texchange.Snapshot>;
-    protected constructor();
+    constructor();
     private start;
     private stop;
 }

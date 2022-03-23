@@ -22,7 +22,7 @@ export abstract class Texchange<H extends HLike<H>> {
 	public readonly abstract views: Views<H>;
 	public readonly startable: StatefulStartable<Texchange.Snapshot>;
 
-	protected constructor() {
+	public constructor() {
 		this.broadcast = new Broadcast();
 		this.startable = new StatefulStartable(
 			() => this.start(),
