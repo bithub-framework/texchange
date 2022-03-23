@@ -19,8 +19,8 @@ export abstract class Texchange<H extends HLike<H>> {
 	protected readonly broadcast: Broadcast<H>;
 	protected readonly abstract tasks: Tasks<H>;
 	protected readonly abstract useCases: UseCases<H>;
-	protected readonly abstract views: Views<H>;
-	protected readonly startable: StatefulStartable<Texchange.Snapshot>;
+	public readonly abstract views: Views<H>;
+	public readonly startable: StatefulStartable<Texchange.Snapshot>;
 
 	protected constructor(
 		config: Config<H>,

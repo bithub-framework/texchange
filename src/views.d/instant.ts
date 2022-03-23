@@ -18,6 +18,7 @@ import { AmendOrder } from '../use-cases.d/amend-order';
 import { GetPositions } from '../use-cases.d/get-positions';
 import { GetBalances } from '../use-cases.d/get-balances';
 import { GetOpenOrders } from '../use-cases.d/get-open-orders';
+import { MarketCalc } from '../use-cases.d/market-calc';
 
 
 export class Instant<H extends HLike<H>>
@@ -102,6 +103,14 @@ export class Instant<H extends HLike<H>>
     public getBalances(): Balances<H> {
         return this.useCases.getBalances.getBalances();
     }
+
+    public quantity(price: H, dollarVolume: H): H {
+        return this.useCases.marketCalc.quantity(price, dollarVolume);
+    };
+
+    public dollarVolume(price: H, quantity: H): H {
+        return this.useCases.marketCalc.dollarVolume(price, quantity);
+    }
 }
 
 export type Events<H extends HLike<H>>
@@ -122,5 +131,6 @@ export namespace Instant {
         getOpenOrders: GetOpenOrders<H>;
         getBalances: GetBalances<H>;
         getPositions: GetPositions<H>;
+        marketCalc: MarketCalc<H>;
     }
 }

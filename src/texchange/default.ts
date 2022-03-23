@@ -26,9 +26,9 @@ export class DefaultTexchange<H extends HLike<H>>
 	protected readonly models: Models<H>;
 	protected readonly tasks: Tasks<H>;
 	protected readonly useCases: UseCases<H>;
-	protected readonly views: Views<H>;
+	public readonly views: Views<H>;
 
-	constructor(
+	public constructor(
 		config: Config<H>,
 		timeline: Timeline,
 		H: HStatic<H>,
