@@ -22,5 +22,5 @@ export declare abstract class UseCases<H extends HLike<H>> {
     readonly updateOrderbook: UpdateOrderbook<H>;
     abstract readonly updateTrades: UpdateTrades<H>;
     readonly subscription: Subscription<H>;
-    protected constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
+    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
 }

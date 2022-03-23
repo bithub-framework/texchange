@@ -14,7 +14,7 @@ export declare abstract class Models<H extends HLike<H>> implements StatefulLike
     readonly book: Book<H>;
     readonly progress: Progress<H>;
     abstract readonly pricing: Pricing<H, any>;
-    protected constructor(context: Context<H>);
+    constructor(context: Context<H>);
     capture(): Models.Snapshot;
     restore(snapshot: Models.Snapshot): void;
 }

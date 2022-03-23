@@ -10,7 +10,7 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     protected readonly OrderId: TexchangeOrderIdStatic;
     protected readonly OpenMaker: TexchangeOpenMakerStatic<H>;
     protected readonly Frozen: FrozenStatic<H>;
-    protected constructor(context: Context<H>);
+    constructor(context: Context<H>);
     private totalFrozen;
     getTotalUnfilled(): Makers.TotalUnfilled<H>;
     getTotalFrozen(): Frozen<H>;

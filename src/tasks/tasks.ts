@@ -46,7 +46,7 @@ export abstract class Tasks<H extends HLike<H>> {
 	public abstract readonly marginAccumulation: MarginAccumulationLike<H>;
 	public readonly orderVolumes: OrderVolumesLike<H>;
 
-	protected constructor(
+	public constructor(
 		context: Context<H>,
 		models: Models<H>,
 		broadcast: Broadcast<H>,

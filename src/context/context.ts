@@ -8,7 +8,7 @@ import {
 export abstract class Context<H extends HLike<H>> {
 	public abstract calc: MarketCalc<H>;
 
-	constructor(
+	public constructor(
 		public readonly config: Config<H>,
 		public readonly timeline: Timeline,
 		public readonly H: HStatic<H>,

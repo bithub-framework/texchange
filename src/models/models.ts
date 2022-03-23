@@ -21,7 +21,7 @@ export abstract class Models<H extends HLike<H>>
 	public readonly progress: Progress<H>;
 	public abstract readonly pricing: Pricing<H, any>;
 
-	protected constructor(
+	public constructor(
 		context: Context<H>,
 	) {
 		this.assets = new Assets(context);

@@ -35,7 +35,7 @@ export abstract class Makers<H extends HLike<H>> implements
 	);
 	protected readonly Frozen = new FrozenStatic<H>(this.context.H);
 
-	protected constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 	) { }
 

@@ -29,5 +29,5 @@ export declare abstract class Tasks<H extends HLike<H>> {
     readonly cancelOpenOrder: CancelOpenOrderLike<H>;
     abstract readonly marginAccumulation: MarginAccumulationLike<H>;
     readonly orderVolumes: OrderVolumesLike<H>;
-    protected constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>);
 }
