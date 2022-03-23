@@ -1,12 +1,11 @@
 import { Context } from '../context';
-import { Config } from '../context.d/config';
-import { Timeline } from 'interfaces';
 import { HLike, HStatic } from 'interfaces';
 
 import { StatefulStartable } from 'startable';
 import { Mtm } from '../mark-to-market';
 import { Models } from '../models/models';
 import { Broadcast } from '../broadcast';
+import { EventEmitter } from 'events';
 import { Tasks } from '../tasks/tasks';
 import { UseCases } from '../use-cases';
 import { Views } from '../views';
@@ -28,7 +27,7 @@ export abstract class Texchange<H extends HLike<H>> {
 	public abstract readonly joystick: Joystick<H>;
 
 	public constructor() {
-		this.broadcast = new Broadcast();
+		this.broadcast = <Broadcast<H>>new EventEmitter();
 		this.startable = new StatefulStartable(
 			() => this.start(),
 			() => this.stop(),

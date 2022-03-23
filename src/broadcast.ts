@@ -9,8 +9,6 @@ import {
 import { EventEmitter } from 'events';
 
 
-export class Broadcast<H extends HLike<H>> extends EventEmitter { }
-
 export namespace Broadcast {
 	export interface Events<H extends HLike<H>> {
 		trades: [readonly Trade<H, TexchangeTradeId>[]];

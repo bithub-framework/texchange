@@ -1,8 +1,6 @@
 /// <reference types="node" />
 import { Trade, Orderbook, Positions, Balances, HLike, TexchangeTradeId } from 'interfaces';
 import { EventEmitter } from 'events';
-export declare class Broadcast<H extends HLike<H>> extends EventEmitter {
-}
 export declare namespace Broadcast {
     interface Events<H extends HLike<H>> {
         trades: [readonly Trade<H, TexchangeTradeId>[]];
