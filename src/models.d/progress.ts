@@ -15,7 +15,7 @@ export class Progress<H extends HLike<H>>
     public userTradeCount = 0;
     public userOrderCount = 0;
 
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
     ) { }
 

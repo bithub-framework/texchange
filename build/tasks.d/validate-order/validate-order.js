@@ -27,7 +27,7 @@ class ValidateOrder {
                 closable[interfaces_1.Length.SHORT].gte(0);
             assert(enoughPosition);
             const enoughBalance = this.tasks.getAvailable.getAvailable()
-                .gte(this.context.config.market.dollarVolume(order.price, order.unfilled).times(Math.max(this.context.config.account.TAKER_FEE_RATE, 0)).round(this.context.config.market.CURRENCY_DP));
+                .gte(this.context.calc.dollarVolume(order.price, order.unfilled).times(Math.max(this.context.config.account.TAKER_FEE_RATE, 0)).round(this.context.config.market.CURRENCY_DP));
             assert(enoughBalance);
         }
         finally {

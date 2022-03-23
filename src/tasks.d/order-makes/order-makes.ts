@@ -13,7 +13,7 @@ import { Makers } from '../../models.d/makers';
 
 export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
         protected readonly models: OrderMakes.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,

@@ -11,7 +11,7 @@ import { Pricing } from '../models.d/pricing';
 
 
 export class UpdateTrades<H extends HLike<H>> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: UpdateTrades.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

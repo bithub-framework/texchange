@@ -4,7 +4,7 @@ exports.Settle = void 0;
 const interfaces_1 = require("interfaces");
 class Settle {
     settle() {
-        const { config } = this.context;
+        const { config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
         const position = {
             [interfaces_1.Length.LONG]: assets.getPosition()[interfaces_1.Length.LONG],
@@ -12,7 +12,7 @@ class Settle {
         };
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
-            const dollarVolume = config.market.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
+            const dollarVolume = calc.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
             const profit = assets.close({
                 length,
                 volume: position[length],

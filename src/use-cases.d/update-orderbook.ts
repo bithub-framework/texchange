@@ -10,7 +10,7 @@ import { Book } from '../models.d/book';
 
 
 export class UpdateOrderbook<H extends HLike<H>>{
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: UpdateOrderbook.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

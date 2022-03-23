@@ -4,12 +4,7 @@ exports.Texchange = void 0;
 const startable_1 = require("startable");
 const broadcast_1 = require("../broadcast");
 class Texchange {
-    constructor(config, timeline, H) {
-        this.context = {
-            config,
-            timeline,
-            H,
-        };
+    constructor() {
         this.broadcast = new broadcast_1.Broadcast();
         this.startable = new startable_1.StatefulStartable(() => this.start(), () => this.stop(), () => this.models.capture(), snapshot => this.models.restore(snapshot));
     }

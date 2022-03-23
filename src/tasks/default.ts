@@ -20,7 +20,7 @@ export class DefaultTasks<H extends HLike<H>>
 	public readonly settle: SettleLike;
 	public readonly marginAccumulation: MarginAccumulationLike<H>;
 
-	constructor(
+	public constructor(
 		context: Context<H>,
 		models: Models<H>,
 		broadcast: Broadcast<H>,

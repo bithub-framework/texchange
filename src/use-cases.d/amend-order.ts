@@ -12,7 +12,7 @@ import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-li
 
 
 export class AmendOrder<H extends HLike<H>> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: AmendOrder.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

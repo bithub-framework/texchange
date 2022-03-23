@@ -1,6 +1,6 @@
-import { MarketSpec, AccountSpec, MarketCalc } from 'interfaces';
+import { MarketSpec, AccountSpec } from 'interfaces';
 import { HLike } from 'interfaces';
-export interface MarketConfig<H extends HLike<H>> extends MarketSpec<H>, MarketCalc<H> {
+export interface MarketConfig<H extends HLike<H>> extends MarketSpec<H> {
     readonly PING: number;
     readonly PROCESSING: number;
     readonly initialSettlementPrice: H;

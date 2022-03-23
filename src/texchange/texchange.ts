@@ -13,7 +13,7 @@ import { Views } from '../views';
 
 
 export abstract class Texchange<H extends HLike<H>> {
-	protected readonly context: Context<H>;
+	protected abstract readonly context: Context<H>;
 	protected readonly abstract mtm: Mtm<H> | null;
 	protected readonly abstract models: Models<H>;
 	protected readonly broadcast: Broadcast<H>;
@@ -22,16 +22,7 @@ export abstract class Texchange<H extends HLike<H>> {
 	public readonly abstract views: Views<H>;
 	public readonly startable: StatefulStartable<Texchange.Snapshot>;
 
-	protected constructor(
-		config: Config<H>,
-		timeline: Timeline,
-		H: HStatic<H>,
-	) {
-		this.context = {
-			config,
-			timeline,
-			H,
-		};
+	protected constructor() {
 		this.broadcast = new Broadcast();
 		this.startable = new StatefulStartable(
 			() => this.start(),

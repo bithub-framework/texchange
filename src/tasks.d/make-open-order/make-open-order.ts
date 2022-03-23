@@ -16,7 +16,7 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
         protected readonly models: MakeOpenOrder.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,

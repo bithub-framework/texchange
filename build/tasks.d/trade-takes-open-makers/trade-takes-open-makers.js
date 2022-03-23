@@ -46,7 +46,7 @@ class TradeTakesOpenMakers {
     tradeTakesOpenMaker(trade, maker) {
         const { assets, margins, makers } = this.models;
         const volume = (0, utilities_1.min)(trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.config.market
+        const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);

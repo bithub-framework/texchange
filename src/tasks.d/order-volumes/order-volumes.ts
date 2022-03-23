@@ -10,7 +10,7 @@ import { Margins } from '../../models.d/margins';
 
 export class OrderVolumes<H extends HLike<H>>
 	implements OrderVolumesLike<H> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: OrderVolumes.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

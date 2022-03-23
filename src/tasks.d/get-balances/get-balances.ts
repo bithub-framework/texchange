@@ -11,7 +11,7 @@ import { GetAvailableLike } from '../get-available/get-available-like';
 
 export class GetBalances<H extends HLike<H>>
 	implements GetBalancesLike<H> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: GetBalances.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

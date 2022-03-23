@@ -14,7 +14,7 @@ import { Makers } from '../../models.d/makers';
 export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
 
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: DefaultGetAvailable.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

@@ -2,7 +2,7 @@ import {
     Orderbook,
     Side,
     HLike, H, HStatic,
-    ConcreteOrderbookStatic,
+    OrderbookStatic,
 } from 'interfaces';
 import assert = require('assert');
 import { Context } from '../context';
@@ -24,10 +24,10 @@ export class Book<H extends HLike<H>>
         [Side.BID]: new Map<string, H>(),
     };
     private finalbookCache: Orderbook.MutablePlain<H> | null = null;
-    private Orderbook = new ConcreteOrderbookStatic<H>(this.context.H);
+    private Orderbook = new OrderbookStatic<H>(this.context.H);
     private Decrements = new DecrementsStatic<H>(this.context.H);
 
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
     ) { }
 

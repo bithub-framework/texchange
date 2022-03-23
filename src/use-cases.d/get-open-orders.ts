@@ -9,7 +9,7 @@ import { Makers } from '../models.d/makers';
 
 
 export class GetOpenOrders<H extends HLike<H>> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: GetOpenOrders.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

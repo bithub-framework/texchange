@@ -19,7 +19,7 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
         protected readonly models: TradeTakesOpenMakers.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
@@ -74,7 +74,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
         const { assets, margins, makers } = this.models;
 
         const volume = min(trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.config.market
+        const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);
         trade.quantity = trade.quantity.minus(volume);

@@ -19,7 +19,7 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
         protected readonly models: OrderTakes.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
@@ -30,8 +30,8 @@ export class OrderTakes<H extends HLike<H>>
      * @param taker variable
      */
     public orderTakes(taker: TexchangeOpenOrder.MutablePlain<H>): TexchangeTrade.MutablePlain<H>[] {
-        const { margins, assets, progress, book } = this.models;
-        const { config, timeline } = this.context;
+        const { assets, progress, book } = this.models;
+        const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
         const trades: TexchangeTrade<H>[] = [];
@@ -50,7 +50,7 @@ export class OrderTakes<H extends HLike<H>>
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(config.market.dollarVolume(maker.price, quantity))
+                    .plus(calc.dollarVolume(maker.price, quantity))
                     .round(config.market.CURRENCY_DP);
                 trades.push({
                     side: taker.side,

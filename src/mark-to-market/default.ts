@@ -16,7 +16,7 @@ export class DefaultMtm<H extends HLike<H>>
 		() => this.stop(),
 	);
 
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: Models<H>,
 		protected readonly tasks: Tasks<H>,

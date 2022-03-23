@@ -15,7 +15,7 @@ import { Makers } from '../../models.d/makers';
 
 export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
         protected readonly models: ValidateOrder.ModelDeps<H>,
         protected readonly broadcast: Broadcast<H>,
@@ -43,7 +43,7 @@ export class ValidateOrder<H extends HLike<H>>
 
             const enoughBalance = this.tasks.getAvailable.getAvailable()
                 .gte(
-                    this.context.config.market.dollarVolume(
+                    this.context.calc.dollarVolume(
                         order.price, order.unfilled,
                     ).times(
                         Math.max(this.context.config.account.TAKER_FEE_RATE, 0)

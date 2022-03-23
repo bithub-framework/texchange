@@ -18,7 +18,7 @@ class Book {
             [interfaces_1.Side.BID]: new Map(),
         };
         this.finalbookCache = null;
-        this.Orderbook = new interfaces_1.ConcreteOrderbookStatic(this.context.H);
+        this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
         this.Decrements = new DecrementsStatic(this.context.H);
     }
     setBasebook(newBasebook) {

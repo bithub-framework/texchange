@@ -10,7 +10,7 @@ import { Makers } from './makers';
 
 
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 	) { super(context); }
 
@@ -21,7 +21,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 		const length: Length = order.side * Operation.OPEN;
 		return {
 			balance: {
-				[length]: this.context.config.market.dollarVolume(order.price, order.unfilled),
+				[length]: this.context.calc.dollarVolume(order.price, order.unfilled),
 				[-length]: this.context.H.from(0),
 			},
 			position: this.Frozen.ZERO.position,

@@ -14,8 +14,8 @@ class OrderTakes {
      * @param taker variable
      */
     orderTakes(taker) {
-        const { margins, assets, progress, book } = this.models;
-        const { config, timeline } = this.context;
+        const { assets, progress, book } = this.models;
+        const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
         const trades = [];
         let volume = this.context.H.from(0);
@@ -29,7 +29,7 @@ class OrderTakes {
                 taker.unfilled = taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(config.market.dollarVolume(maker.price, quantity))
+                    .plus(calc.dollarVolume(maker.price, quantity))
                     .round(config.market.CURRENCY_DP);
                 trades.push({
                     side: taker.side,

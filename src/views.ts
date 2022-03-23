@@ -13,12 +13,12 @@ export class Views<H extends HLike<H>> {
 	public readonly latency: Latency<H>;
 	public readonly joystick: Joystick<H>;
 
-	constructor(
+	public constructor(
 		context: Context<H>,
 		useCases: UseCases<H>,
 	) {
 		this.instant = new Instant(context, useCases);
-		this.latency = new Latency(context, this.instant);
+		this.latency = new Latency(context, useCases, this.instant);
 		this.joystick = new Joystick(context, useCases);
 	}
 }

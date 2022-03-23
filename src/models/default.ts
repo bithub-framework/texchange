@@ -14,7 +14,7 @@ export class DefaultModels<H extends HLike<H>>
 	public readonly makers: Makers<H>;
 	public readonly pricing: Pricing<H, any>;
 
-	constructor(
+	public constructor(
 		context: Context<H>,
 	) {
 		super(context);

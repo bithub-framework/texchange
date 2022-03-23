@@ -10,7 +10,7 @@ import { MarginAccumulation } from './margin-accumulation';
 
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: Models<H>,
 		protected readonly broadcast: Broadcast<H>,

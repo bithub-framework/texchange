@@ -14,7 +14,7 @@ export class DefaultPricing<H extends HLike<H>>
 
 	private settlementPrice: H;
 
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 	) {
 		super();

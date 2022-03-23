@@ -10,7 +10,7 @@ import { Assets } from '../models.d/assets';
 import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: GetPositions.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

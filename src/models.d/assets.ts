@@ -17,7 +17,7 @@ export class Assets<H extends HLike<H>>
     private balance: H;
     private cost: Assets.Cost.MutablePlain<H>;
 
-    constructor(
+    public constructor(
         protected readonly context: Context<H>,
     ) {
         this.balance = this.context.config.account.initialBalance;

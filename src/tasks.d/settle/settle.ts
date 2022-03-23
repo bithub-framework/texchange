@@ -21,7 +21,7 @@ export abstract class Settle<H extends HLike<H>>
     protected abstract readonly tasks: Settle.TaskDeps<H>;
 
     public settle(): void {
-        const { config } = this.context;
+        const { config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
 
         const position: Position<H> = {
@@ -30,7 +30,7 @@ export abstract class Settle<H extends HLike<H>>
         };
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [Length.LONG, Length.SHORT]) {
-            const dollarVolume = config.market.dollarVolume(
+            const dollarVolume = calc.dollarVolume(
                 settlementPrice, position[length],
             ).round(config.market.CURRENCY_DP);
             const profit = assets.close({

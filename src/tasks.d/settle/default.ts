@@ -9,7 +9,7 @@ import { Settle } from './settle';
 
 
 export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: DefaultSettle.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

@@ -6,9 +6,6 @@ import {
     TexchangeAmendment,
     Positions,
     Balances,
-    TexchangeTradeId,
-    MarketEvents,
-    AccountEvents,
 } from 'interfaces';
 import { HLike } from 'interfaces';
 
@@ -18,49 +15,14 @@ import { AmendOrder } from '../use-cases.d/amend-order';
 import { GetPositions } from '../use-cases.d/get-positions';
 import { GetBalances } from '../use-cases.d/get-balances';
 import { GetOpenOrders } from '../use-cases.d/get-open-orders';
-import { MarketCalc } from '../use-cases.d/market-calc';
 
 
-export class Instant<H extends HLike<H>>
-    extends EventEmitter {
-    constructor(
+
+export class Instant<H extends HLike<H>> {
+    public constructor(
         private context: Context<H>,
         private useCases: Instant.UseCaseDeps<H>,
-    ) {
-        super();
-        // this.initializePushingTrades();
-        // this.initializePushingOrderbook();
-    }
-
-    // private initializePushingTrades(): void {
-    //     this.tasks.on('pushTrades', trades => {
-    //         this.emit('trades', trades.map(trade => ({
-    //             id: trade.id,
-    //             price: trade.price,
-    //             quantity: trade.quantity,
-    //             side: trade.side,
-    //             time: trade.time,
-    //         })));
-    //     })
-    // }
-
-    // private initializePushingOrderbook(): void {
-    //     this.scheduler.on('pushOrderbook', orderbook => {
-    //         this.emit('orderbook', {
-    //             [Side.ASK]: orderbook[Side.ASK].map(order => ({
-    //                 price: order.price,
-    //                 quantity: order.quantity,
-    //                 side: order.side,
-    //             })),
-    //             [Side.BID]: orderbook[Side.BID].map(order => ({
-    //                 price: order.price,
-    //                 quantity: order.quantity,
-    //                 side: order.side,
-    //             })),
-    //             time: orderbook.time,
-    //         });
-    //     });
-    // }
+    ) { }
 
     public makeOrders(
         orders: readonly LimitOrder<H>[],
@@ -103,24 +65,6 @@ export class Instant<H extends HLike<H>>
     public getBalances(): Balances<H> {
         return this.useCases.getBalances.getBalances();
     }
-
-    public quantity(price: H, dollarVolume: H): H {
-        return this.useCases.marketCalc.quantity(price, dollarVolume);
-    };
-
-    public dollarVolume(price: H, quantity: H): H {
-        return this.useCases.marketCalc.dollarVolume(price, quantity);
-    }
-}
-
-export type Events<H extends HLike<H>>
-    = MarketEvents<H, TexchangeTradeId> & AccountEvents<H>;
-
-export interface Instant<H extends HLike<H>> extends EventEmitter {
-    on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
-    once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
-    off<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
-    emit<Event extends keyof Events<H>>(event: Event, ...args: Events<H>[Event]): boolean;
 }
 
 export namespace Instant {
@@ -131,6 +75,5 @@ export namespace Instant {
         getOpenOrders: GetOpenOrders<H>;
         getBalances: GetBalances<H>;
         getPositions: GetPositions<H>;
-        marketCalc: MarketCalc<H>;
     }
 }

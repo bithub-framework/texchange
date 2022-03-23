@@ -9,7 +9,7 @@ import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-or
 
 
 export class CancelOrder<H extends HLike<H>> {
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: CancelOrder.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,

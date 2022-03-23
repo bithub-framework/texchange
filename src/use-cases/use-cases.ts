@@ -12,7 +12,6 @@ import { GetBalances } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
-import { MarketCalc } from '../use-cases.d/market-calc';
 
 import { HLike } from 'interfaces';
 
@@ -27,7 +26,6 @@ export abstract class UseCases<H extends HLike<H>> {
 	public readonly updateOrderbook: UpdateOrderbook<H>;
 	public abstract readonly updateTrades: UpdateTrades<H>;
 	public readonly subscription: Subscription<H>;
-	public abstract readonly marketCalc: MarketCalc<H>;
 
 	protected constructor(
 		context: Context<H>,

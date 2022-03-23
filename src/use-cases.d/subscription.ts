@@ -13,7 +13,7 @@ import { EventEmitter } from 'events';
 export class Subscription<H extends HLike<H>>
 	extends EventEmitter {
 
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: Subscription.ModelDeps<H>,
 		protected readonly broadcast: Broadcast<H>,
@@ -41,7 +41,16 @@ export namespace Subscription {
 		balances: [Balances<H>];
 	}
 }
-import Events = Broadcast.Events;
+
+export namespace Subscription {
+	export interface Events<H extends HLike<H>> {
+		trades: [readonly Trade<H, TexchangeTradeId>[]];
+		orderbook: [Orderbook<H>];
+		positions: [Positions<H>];
+		balances: [Balances<H>];
+	}
+}
+import Events = Subscription.Events;
 
 export interface Subscription<H extends HLike<H>> extends EventEmitter {
 	on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

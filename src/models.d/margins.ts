@@ -11,7 +11,7 @@ export class Margins<H extends HLike<H>>
 
 	protected margin: Margins.Margin.MutablePlain<H>;
 
-	constructor(
+	public constructor(
 		protected readonly context: Context<H>,
 	) {
 		this.margin = {
