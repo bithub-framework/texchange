@@ -8,6 +8,8 @@ export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOr
     protected readonly models: CancelOpenOrder.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
     protected readonly tasks: CancelOpenOrder.TaskDeps<H>;
+    private OrderId;
+    private OpenOrder;
     constructor(context: Context<H>, models: CancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: CancelOpenOrder.TaskDeps<H>);
     cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }

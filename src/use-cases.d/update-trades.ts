@@ -23,7 +23,6 @@ export class UpdateTrades<H extends HLike<H>> {
 		const { tradeTakesOpenMakers, settle } = this.tasks;
 		assert(trades.length);
 		const now = this.context.timeline.now();
-		assert(now !== this.models.progress.latestDatabaseTradeTime);
 		for (const trade of trades) assert(trade.time === now);
 		this.models.progress.updateDatabaseTrades(trades);
 

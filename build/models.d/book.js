@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DecrementsStatic = exports.Book = void 0;
+exports.Book = void 0;
 const interfaces_1 = require("interfaces");
 const assert = require("assert");
 class Book {
@@ -21,11 +21,11 @@ class Book {
         this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
         this.Decrements = new DecrementsStatic(this.context.H);
     }
-    setBasebook(newBasebook) {
-        assert(newBasebook.time === this.context.timeline.now());
-        this.basebook = newBasebook;
-        this.time = newBasebook.time;
-        this.finalbookCache = null;
+    setBasebook(basebook) {
+        assert(basebook.time === this.context.timeline.now());
+        this.basebook = basebook;
+        this.time = basebook.time;
+        this.tryApply();
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
@@ -37,7 +37,7 @@ class Book {
         this.time = this.context.timeline.now();
         this.finalbookCache = null;
     }
-    apply() {
+    tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
         const total = {
@@ -50,7 +50,7 @@ class Book {
                 total[side].set(order.price.toFixed(this.context.config.market.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
-                if (quantity) {
+                if (typeof quantity !== 'undefined') {
                     quantity = quantity.minus(decrement);
                     if (quantity.lte(0))
                         total[side].delete(priceString);
@@ -71,7 +71,7 @@ class Book {
         return this.finalbookCache;
     }
     getBook() {
-        return this.apply();
+        return this.tryApply();
     }
     capture() {
         return {
@@ -110,5 +110,4 @@ class DecrementsStatic {
         return decrements;
     }
 }
-exports.DecrementsStatic = DecrementsStatic;
 //# sourceMappingURL=book.js.map

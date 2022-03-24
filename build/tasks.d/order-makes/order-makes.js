@@ -1,28 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderMakes = void 0;
+const interfaces_1 = require("interfaces");
 class OrderMakes {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
         this.tasks = tasks;
+        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
+        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
-    orderMakes(openOrder) {
+    orderMakes(order) {
         const openMaker = {
-            price: openOrder.price,
-            quantity: openOrder.quantity,
-            side: openOrder.side,
-            length: openOrder.length,
-            operation: openOrder.operation,
-            filled: openOrder.filled,
-            unfilled: openOrder.unfilled,
-            id: openOrder.id,
+            ...this.OpenOrder.copy(order),
             behind: this.context.H.from(0),
         };
-        const makers = this.models.book.getBook()[openOrder.side];
+        const makers = this.models.book.getBook()[order.side];
         for (const maker of makers)
-            if (maker.price.eq(openOrder.price))
+            if (maker.price.eq(openMaker.price))
                 // TODO addBehind()
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         this.models.makers.appendOrder(openMaker);

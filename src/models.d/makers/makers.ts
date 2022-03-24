@@ -75,7 +75,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			const order = this.OpenMaker.restore(orderSnapshot);
 			const frozen = this.Frozen.restore(frozenSnapshot);
 			this.orders.set(order.id, order);
-			this.frozens.set(order.id!, frozen);
+			this.frozens.set(order.id, frozen);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
 			this.totalUnfilled[side] = [...this.orders.values()]
@@ -125,13 +125,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
 		const newOrder: TexchangeOpenMaker<H> = {
-			id: order.id,
-			price: order.price,
-			quantity: order.quantity,
-			side: order.side,
-			length: order.length,
-			operation: order.operation,
-			behind: order.behind,
+			...this.OpenMaker.copy(order),
 			filled: order.filled.plus(volume),
 			unfilled: order.unfilled.minus(volume),
 		};
@@ -140,15 +134,10 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public takeOrderQueue(oid: TexchangeOrderId, volume?: H): void {
 		const order = this.getOrder(oid);
+		if (typeof volume !== 'undefined')
+			assert(volume.lte(order.behind));
 		const newOrder: TexchangeOpenMaker<H> = {
-			id: order.id,
-			price: order.price,
-			quantity: order.quantity,
-			side: order.side,
-			length: order.length,
-			operation: order.operation,
-			filled: order.filled,
-			unfilled: order.unfilled,
+			...this.OpenMaker.copy(order),
 			behind: typeof volume !== 'undefined'
 				? order.behind.minus(volume)
 				: this.context.H.from(0),

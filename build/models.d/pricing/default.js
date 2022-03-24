@@ -7,9 +7,8 @@ const pricing_1 = require("./pricing");
  */
 class DefaultPricing extends pricing_1.Pricing {
     constructor(context) {
-        super();
-        this.context = context;
-        this.settlementPrice = context.config.account.initialBalance;
+        super(context);
+        this.settlementPrice = context.config.market.initialSettlementPrice;
     }
     updateTrades(trades) {
         this.settlementPrice = trades[trades.length - 1].price;

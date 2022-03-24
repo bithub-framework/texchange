@@ -9,15 +9,11 @@ class TradeTakesOpenMakers {
         this.models = models;
         this.broadcast = broadcast;
         this.tasks = tasks;
+        this.TradeId = new interfaces_1.TexchangeTradeIdStatic();
+        this.Trade = new interfaces_1.TexchangeTradeStatic(this.context.H, this.TradeId);
     }
     tradeTakesOpenMakers(roTrade) {
-        const trade = {
-            price: roTrade.price,
-            quantity: roTrade.quantity,
-            side: roTrade.side,
-            time: roTrade.time,
-            id: roTrade.id,
-        };
+        const trade = this.Trade.copy(roTrade);
         for (const order of [...this.models.makers])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);

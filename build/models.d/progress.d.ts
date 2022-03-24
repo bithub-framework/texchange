@@ -1,10 +1,8 @@
 import { Context } from '../context/context';
-import { Trade, H, HLike, TexchangeTradeId } from 'interfaces';
+import { Trade, HLike, TexchangeTradeId } from 'interfaces';
 import { StatefulLike } from 'startable';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
-    protected readonly context: Context<H>;
-    latestPrice: H | null;
-    latestDatabaseTradeTime: number | null;
+    private readonly context;
     userTradeCount: number;
     userOrderCount: number;
     constructor(context: Context<H>);
@@ -17,8 +15,6 @@ export interface DatabaseTrade<H extends HLike<H>> extends Trade<H, TexchangeTra
 }
 export declare namespace Progress {
     interface Snapshot {
-        readonly latestPrice: H.Snapshot | null;
-        readonly latestDatabaseTradeTime: number | null;
         readonly userTradeCount: number;
         readonly userOrderCount: number;
     }

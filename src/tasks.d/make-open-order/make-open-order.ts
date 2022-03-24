@@ -1,6 +1,8 @@
 import { Context } from '../../context/context';
 import {
     TexchangeOpenOrder,
+    TexchangeOpenOrderStatic,
+    TexchangeOrderIdStatic,
     HLike,
 } from 'interfaces';
 import { MakeOpenOrderLike } from './make-open-order-like';
@@ -16,6 +18,10 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
+
+    private OrderId = new TexchangeOrderIdStatic();
+    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+
     public constructor(
         protected readonly context: Context<H>,
         protected readonly models: MakeOpenOrder.ModelDeps<H>,
@@ -25,6 +31,7 @@ export class MakeOpenOrder<H extends HLike<H>>
 
     public makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
         this.tasks.validateOrder.validateOrder(order);
+        order = this.OpenOrder.copy(order);
         const trades = this.tasks.orderTakes.orderTakes(order);
         this.tasks.orderMakes.orderMakes(order);
         if (trades.length) {

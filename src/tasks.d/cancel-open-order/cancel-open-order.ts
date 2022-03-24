@@ -4,6 +4,8 @@ import { Broadcast } from '../../broadcast';
 import {
 	TexchangeOpenOrder,
 	HLike,
+	TexchangeOpenOrderStatic,
+	TexchangeOrderIdStatic,
 } from 'interfaces';
 
 import { Makers } from '../../models.d/makers/makers';
@@ -11,6 +13,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class CancelOpenOrder<H extends HLike<H>>
 	implements CancelOpenOrderLike<H> {
+
+	private OrderId = new TexchangeOrderIdStatic();
+	private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+
 	public constructor(
 		protected readonly context: Context<H>,
 		protected readonly models: CancelOpenOrder.ModelDeps<H>,
@@ -24,18 +30,13 @@ export class CancelOpenOrder<H extends HLike<H>>
 		let filled: H;
 		try {
 			filled = makers.getOrder(order.id).filled;
-			makers.forcedlyRemoveOrder(order.id)!;
+			makers.forcedlyRemoveOrder(order.id);
 		} catch (err) {
 			filled = order.quantity;
 		}
 
 		return {
-			price: order.price,
-			quantity: order.quantity,
-			side: order.side,
-			length: order.length,
-			operation: order.operation,
-			id: order.id,
+			...this.OpenOrder.copy(order),
 			filled,
 			unfilled: order.quantity.minus(filled),
 		};

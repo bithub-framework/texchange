@@ -1,5 +1,7 @@
 import {
     TexchangeOpenOrder,
+    TexchangeOrderIdStatic,
+    TexchangeOpenOrderStatic,
     Operation, Length,
     HLike,
 } from 'interfaces';
@@ -15,6 +17,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
+
+    private OrderId = new TexchangeOrderIdStatic();
+    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+
     public constructor(
         protected readonly context: Context<H>,
         protected readonly models: ValidateOrder.ModelDeps<H>,
@@ -31,8 +37,7 @@ export class ValidateOrder<H extends HLike<H>>
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder({
-            // TODO remove "..."
-            ...order,
+            ...this.OpenOrder.copy(order),
             behind: this.context.H.from(0),
         });
         try {

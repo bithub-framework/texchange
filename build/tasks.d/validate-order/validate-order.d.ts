@@ -10,6 +10,8 @@ export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderL
     protected readonly models: ValidateOrder.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
     protected readonly tasks: ValidateOrder.TaskDeps<H>;
+    private OrderId;
+    private OpenOrder;
     constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: ValidateOrder.TaskDeps<H>);
     validateOrder(order: TexchangeOpenOrder<H>): void;
     private validateQuantity;

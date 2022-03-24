@@ -11,6 +11,8 @@ export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTa
     protected readonly models: TradeTakesOpenMakers.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
     protected readonly tasks: TradeTakesOpenMakers.TaskDeps<H>;
+    private TradeId;
+    private Trade;
     constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>, tasks: TradeTakesOpenMakers.TaskDeps<H>);
     tradeTakesOpenMakers(roTrade: TexchangeTrade<H>): void;
     private tradeShouldTakeOpenOrder;

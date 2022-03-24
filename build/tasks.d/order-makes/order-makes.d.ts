@@ -9,8 +9,10 @@ export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H>
     protected readonly models: OrderMakes.ModelDeps<H>;
     protected readonly broadcast: Broadcast<H>;
     protected readonly tasks: OrderMakes.TaskDeps<H>;
+    private OrderId;
+    private OpenOrder;
     constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderMakes.TaskDeps<H>);
-    orderMakes(openOrder: TexchangeOpenOrder<H>): void;
+    orderMakes(order: TexchangeOpenOrder<H>): void;
 }
 export declare namespace OrderMakes {
     interface ModelDeps<H extends HLike<H>> {

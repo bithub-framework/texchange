@@ -1,23 +1,25 @@
-import { Length, Position, HLike, H } from 'interfaces';
+import { Length, Position, HLike, H, HStatic } from 'interfaces';
 import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
-    protected readonly context: Context<H>;
+    private readonly context;
     private position;
     private balance;
     private cost;
+    private Position;
+    private Cost;
     constructor(context: Context<H>);
     getBalance(): H;
-    getPosition(): Readonly<Position<H>>;
-    getCost(): Readonly<Assets.Cost<H>>;
+    getPosition(): Position<H>;
+    getCost(): Assets.Cost<H>;
     capture(): Assets.Snapshot;
     restore(snapshot: Assets.Snapshot): void;
     payFee(fee: H): void;
-    open({ length, volume, dollarVolume, }: Readonly<Assets.Volumes<H>>): void;
+    open({ length, volume, dollarVolume, }: Assets.Volumes<H>): void;
     /**
      * @returns Profit.
      */
-    close({ length, volume, dollarVolume, }: Readonly<Assets.Volumes<H>>): H;
+    close({ length, volume, dollarVolume, }: Assets.Volumes<H>): H;
 }
 export declare namespace Assets {
     interface Cost<H extends HLike<H>> {
@@ -30,6 +32,12 @@ export declare namespace Assets {
         interface Snapshot {
             readonly [length: Length]: H.Snapshot;
         }
+    }
+    class CostStatic<H extends HLike<H>> {
+        private H;
+        constructor(H: HStatic<H>);
+        capture(cost: Cost<H>): Cost.Snapshot;
+        restore(snapshot: Cost.Snapshot): Cost.MutablePlain<H>;
     }
     interface Volumes<H extends HLike<H>> {
         readonly length: Length;

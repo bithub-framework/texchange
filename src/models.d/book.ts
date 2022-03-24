@@ -12,6 +12,7 @@ import { StatefulLike } from 'startable';
 
 export class Book<H extends HLike<H>>
     implements StatefulLike<Book.Snapshot> {
+
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Orderbook<H> = {
         [Side.ASK]: [],
@@ -24,18 +25,19 @@ export class Book<H extends HLike<H>>
         [Side.BID]: new Map<string, H>(),
     };
     private finalbookCache: Orderbook.MutablePlain<H> | null = null;
+
     private Orderbook = new OrderbookStatic<H>(this.context.H);
     private Decrements = new DecrementsStatic<H>(this.context.H);
 
     public constructor(
-        protected readonly context: Context<H>,
+        private readonly context: Context<H>,
     ) { }
 
-    public setBasebook(newBasebook: Orderbook<H>) {
-        assert(newBasebook.time === this.context.timeline.now());
-        this.basebook = newBasebook;
-        this.time = newBasebook.time;
-        this.finalbookCache = null;
+    public setBasebook(basebook: Orderbook<H>) {
+        assert(basebook.time === this.context.timeline.now());
+        this.basebook = basebook;
+        this.time = basebook.time;
+        this.tryApply();
     }
 
     public decQuantity(side: Side, price: H, decrement: H): void {
@@ -49,7 +51,7 @@ export class Book<H extends HLike<H>>
         this.finalbookCache = null;
     }
 
-    private apply(): Orderbook<H> {
+    private tryApply(): Orderbook<H> {
         if (this.finalbookCache) return this.finalbookCache;
         const total: Decrements<H> = {
             [Side.ASK]: new Map<string, H>(),
@@ -64,7 +66,7 @@ export class Book<H extends HLike<H>>
                 );
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
-                if (quantity) {
+                if (typeof quantity !== 'undefined') {
                     quantity = quantity.minus(decrement);
                     if (quantity.lte(0)) total[side].delete(priceString);
                     else total[side].set(priceString, quantity);
@@ -82,7 +84,7 @@ export class Book<H extends HLike<H>>
     }
 
     public getBook(): Orderbook<H> {
-        return this.apply();
+        return this.tryApply();
     }
 
     public capture(): Book.Snapshot {
@@ -115,12 +117,12 @@ namespace Decrements {
     }
 }
 
-export class DecrementsStatic<H extends HLike<H>> {
+class DecrementsStatic<H extends HLike<H>> {
     public constructor(
         private H: HStatic<H>,
     ) { }
 
-    capture(decrements: Decrements<H>): Decrements.Snapshot {
+    public capture(decrements: Decrements<H>): Decrements.Snapshot {
         return {
             [Side.ASK]: [...decrements[Side.ASK]].map(
                 ([priceString, decrement]) =>
@@ -133,7 +135,7 @@ export class DecrementsStatic<H extends HLike<H>> {
         };
     }
 
-    restore(snapshot: Decrements.Snapshot): Decrements<H> {
+    public restore(snapshot: Decrements.Snapshot): Decrements<H> {
         const decrements: Decrements<H> = {};
         for (const side of [Side.ASK, Side.BID]) {
             decrements[side] = new Map<string, H>(

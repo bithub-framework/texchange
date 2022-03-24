@@ -6,15 +6,11 @@ const utilities_1 = require("../../utilities");
 const get_available_1 = require("./get-available");
 class DefaultGetAvailable extends get_available_1.GetAvailable {
     constructor(context, models, broadcast, tasks) {
-        super();
-        this.context = context;
+        super(context, models, broadcast, tasks);
         this.models = models;
-        this.broadcast = broadcast;
-        this.tasks = tasks;
     }
     finalMargin() {
         // 默认无锁仓优惠
-        // 默认非实时结算
         const margin = this.models.margins.getMargin();
         return margin[interfaces_1.Length.LONG]
             .plus(margin[interfaces_1.Length.SHORT]);

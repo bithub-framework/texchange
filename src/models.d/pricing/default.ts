@@ -15,10 +15,10 @@ export class DefaultPricing<H extends HLike<H>>
 	private settlementPrice: H;
 
 	public constructor(
-		protected readonly context: Context<H>,
+		context: Context<H>,
 	) {
-		super();
-		this.settlementPrice = context.config.account.initialBalance;
+		super(context);
+		this.settlementPrice = context.config.market.initialSettlementPrice;
 	}
 
 	public updateTrades(trades: readonly TexchangeTrade<H>[]): void {

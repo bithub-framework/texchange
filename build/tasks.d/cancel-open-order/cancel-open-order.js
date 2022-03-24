@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CancelOpenOrder = void 0;
+const interfaces_1 = require("interfaces");
 class CancelOpenOrder {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
         this.tasks = tasks;
+        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
+        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
     cancelOpenOrder(order) {
         const { makers } = this.models;
@@ -19,12 +22,7 @@ class CancelOpenOrder {
             filled = order.quantity;
         }
         return {
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            id: order.id,
+            ...this.OpenOrder.copy(order),
             filled,
             unfilled: order.quantity.minus(filled),
         };

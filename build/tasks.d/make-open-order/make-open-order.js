@@ -1,15 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakeOpenOrder = void 0;
+const interfaces_1 = require("interfaces");
 class MakeOpenOrder {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
         this.tasks = tasks;
+        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
+        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
     makeOpenOrder(order) {
         this.tasks.validateOrder.validateOrder(order);
+        order = this.OpenOrder.copy(order);
         const trades = this.tasks.orderTakes.orderTakes(order);
         this.tasks.orderMakes.orderMakes(order);
         if (trades.length) {

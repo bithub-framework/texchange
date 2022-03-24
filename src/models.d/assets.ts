@@ -1,8 +1,8 @@
 import {
     Length,
     Position,
-    HLike,
-    H,
+    HLike, H, HStatic,
+    PositionStatic,
 } from 'interfaces';
 import { Context } from '../context/context';
 import assert = require('assert');
@@ -17,8 +17,11 @@ export class Assets<H extends HLike<H>>
     private balance: H;
     private cost: Assets.Cost.MutablePlain<H>;
 
+    private Position = new PositionStatic(this.context.H);
+    private Cost = new Assets.CostStatic(this.context.H);
+
     public constructor(
-        protected readonly context: Context<H>,
+        private readonly context: Context<H>,
     ) {
         this.balance = this.context.config.account.initialBalance;
         this.position = {
@@ -35,49 +38,39 @@ export class Assets<H extends HLike<H>>
         return this.balance;
     }
 
-    public getPosition(): Readonly<Position<H>> {
+    public getPosition(): Position<H> {
         return this.position;
     }
 
-    public getCost(): Readonly<Assets.Cost<H>> {
+    public getCost(): Assets.Cost<H> {
         return this.cost;
     }
 
     public capture(): Assets.Snapshot {
         return {
-            position: {
-                [Length.LONG]: this.context.H.capture(this.position[Length.LONG]),
-                [Length.SHORT]: this.context.H.capture(this.position[Length.SHORT]),
-            },
-            cost: {
-                [Length.LONG]: this.context.H.capture(this.cost[Length.LONG]),
-                [Length.SHORT]: this.context.H.capture(this.cost[Length.SHORT]),
-            },
+            position: this.Position.capture(this.position),
+            cost: this.Cost.capture(this.cost),
             balance: this.context.H.capture(this.balance),
         };
     }
 
     public restore(snapshot: Assets.Snapshot): void {
         this.balance = this.context.H.from(snapshot.balance);
-        this.position = {
-            [Length.LONG]: this.context.H.from(snapshot.position[Length.LONG]),
-            [Length.SHORT]: this.context.H.from(snapshot.position[Length.SHORT]),
-        };
-        this.cost = {
-            [Length.LONG]: this.context.H.from(snapshot.cost[Length.LONG]),
-            [Length.SHORT]: this.context.H.from(snapshot.cost[Length.SHORT]),
-        };
+        this.position = this.Position.restore(snapshot.position);
+        this.cost = this.Cost.restore(snapshot.cost);
     }
 
     public payFee(fee: H): void {
         this.balance = this.balance.minus(fee);
     }
 
-    public open({
-        length,
-        volume,
-        dollarVolume,
-    }: Readonly<Assets.Volumes<H>>): void {
+    public open(
+        {
+            length,
+            volume,
+            dollarVolume,
+        }: Assets.Volumes<H>,
+    ): void {
         this.position[length] = this.position[length].plus(volume);
         this.cost[length] = this.cost[length].plus(dollarVolume);
     }
@@ -85,11 +78,13 @@ export class Assets<H extends HLike<H>>
     /**
      * @returns Profit.
      */
-    public close({
-        length,
-        volume,
-        dollarVolume,
-    }: Readonly<Assets.Volumes<H>>): H {
+    public close(
+        {
+            length,
+            volume,
+            dollarVolume,
+        }: Assets.Volumes<H>,
+    ): H {
         assert(volume.lte(this.position[length]));
         const cost = this.cost[length]
             .times(volume)
@@ -108,12 +103,34 @@ export namespace Assets {
     export interface Cost<H extends HLike<H>> {
         readonly [length: Length]: H;
     }
+
     export namespace Cost {
         export interface MutablePlain<H extends HLike<H>> {
             [length: Length]: H;
         }
+
         export interface Snapshot {
             readonly [length: Length]: H.Snapshot;
+        }
+    }
+
+    export class CostStatic<H extends HLike<H>> {
+        public constructor(
+            private H: HStatic<H>,
+        ) { }
+
+        public capture(cost: Cost<H>): Cost.Snapshot {
+            return {
+                [Length.LONG]: this.H.capture(cost[Length.LONG]),
+                [Length.SHORT]: this.H.capture(cost[Length.SHORT]),
+            };
+        }
+
+        public restore(snapshot: Cost.Snapshot): Cost.MutablePlain<H> {
+            return {
+                [Length.LONG]: this.H.from(snapshot[Length.LONG]),
+                [Length.SHORT]: this.H.from(snapshot[Length.SHORT]),
+            };
         }
     }
 

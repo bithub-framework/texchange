@@ -9,6 +9,8 @@ class ValidateOrder {
         this.models = models;
         this.broadcast = broadcast;
         this.tasks = tasks;
+        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
+        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
     validateOrder(order) {
         this.validateFormat(order);
@@ -18,8 +20,7 @@ class ValidateOrder {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder({
-            // TODO remove "..."
-            ...order,
+            ...this.OpenOrder.copy(order),
             behind: this.context.H.from(0),
         });
         try {

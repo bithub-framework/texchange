@@ -22,10 +22,7 @@ export class GetPositions<H extends HLike<H>>
 
 	public getPositions(): Positions<H> {
 		return {
-			position: {
-				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],
-				[Length.SHORT]: this.models.assets.getPosition()[Length.SHORT],
-			},
+			position: this.models.assets.getPosition(),
 			closable: this.tasks.getClosable.getClosable(),
 			time: this.context.timeline.now(),
 		};

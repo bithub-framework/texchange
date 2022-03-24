@@ -1,6 +1,7 @@
 import { Config } from '../context.d/config';
-import { Timeline, MarketCalc } from 'interfaces';
 import {
+	Timeline,
+	MarketCalc,
 	HStatic, HLike,
 } from 'interfaces';
 

@@ -6,6 +6,8 @@ const assert = require("assert");
 class Assets {
     constructor(context) {
         this.context = context;
+        this.Position = new interfaces_1.PositionStatic(this.context.H);
+        this.Cost = new Assets.CostStatic(this.context.H);
         this.balance = this.context.config.account.initialBalance;
         this.position = {
             [interfaces_1.Length.LONG]: this.context.H.from(0),
@@ -27,27 +29,15 @@ class Assets {
     }
     capture() {
         return {
-            position: {
-                [interfaces_1.Length.LONG]: this.context.H.capture(this.position[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.context.H.capture(this.position[interfaces_1.Length.SHORT]),
-            },
-            cost: {
-                [interfaces_1.Length.LONG]: this.context.H.capture(this.cost[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.context.H.capture(this.cost[interfaces_1.Length.SHORT]),
-            },
+            position: this.Position.capture(this.position),
+            cost: this.Cost.capture(this.cost),
             balance: this.context.H.capture(this.balance),
         };
     }
     restore(snapshot) {
         this.balance = this.context.H.from(snapshot.balance);
-        this.position = {
-            [interfaces_1.Length.LONG]: this.context.H.from(snapshot.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: this.context.H.from(snapshot.position[interfaces_1.Length.SHORT]),
-        };
-        this.cost = {
-            [interfaces_1.Length.LONG]: this.context.H.from(snapshot.cost[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: this.context.H.from(snapshot.cost[interfaces_1.Length.SHORT]),
-        };
+        this.position = this.Position.restore(snapshot.position);
+        this.cost = this.Cost.restore(snapshot.cost);
     }
     payFee(fee) {
         this.balance = this.balance.minus(fee);
@@ -73,4 +63,24 @@ class Assets {
     }
 }
 exports.Assets = Assets;
+(function (Assets) {
+    class CostStatic {
+        constructor(H) {
+            this.H = H;
+        }
+        capture(cost) {
+            return {
+                [interfaces_1.Length.LONG]: this.H.capture(cost[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.capture(cost[interfaces_1.Length.SHORT]),
+            };
+        }
+        restore(snapshot) {
+            return {
+                [interfaces_1.Length.LONG]: this.H.from(snapshot[interfaces_1.Length.LONG]),
+                [interfaces_1.Length.SHORT]: this.H.from(snapshot[interfaces_1.Length.SHORT]),
+            };
+        }
+    }
+    Assets.CostStatic = CostStatic;
+})(Assets = exports.Assets || (exports.Assets = {}));
 //# sourceMappingURL=assets.js.map

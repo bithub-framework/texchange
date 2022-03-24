@@ -81,13 +81,7 @@ class Makers {
         assert(order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            id: order.id,
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            behind: order.behind,
+            ...this.OpenMaker.copy(order),
             filled: order.filled.plus(volume),
             unfilled: order.unfilled.minus(volume),
         };
@@ -95,15 +89,10 @@ class Makers {
     }
     takeOrderQueue(oid, volume) {
         const order = this.getOrder(oid);
+        if (typeof volume !== 'undefined')
+            assert(volume.lte(order.behind));
         const newOrder = {
-            id: order.id,
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            filled: order.filled,
-            unfilled: order.unfilled,
+            ...this.OpenMaker.copy(order),
             behind: typeof volume !== 'undefined'
                 ? order.behind.minus(volume)
                 : this.context.H.from(0),

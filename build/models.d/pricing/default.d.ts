@@ -5,7 +5,6 @@ import { Context } from '../../context/context';
  * 默认以最新价格作为结算价。
  */
 export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, DefaultPricing.Snapshot> {
-    protected readonly context: Context<H>;
     private settlementPrice;
     constructor(context: Context<H>);
     updateTrades(trades: readonly TexchangeTrade<H>[]): void;

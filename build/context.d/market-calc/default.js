@@ -7,7 +7,7 @@ const assert = require("assert");
  */
 class DefaultMarketCalc {
     quantity(price, dollarVolume) {
-        assert(price.gt(0));
+        assert(price.neq(0));
         return dollarVolume.div(price);
     }
     dollarVolume(price, quantity) {

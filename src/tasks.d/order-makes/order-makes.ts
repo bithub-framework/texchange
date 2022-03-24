@@ -1,6 +1,8 @@
 import {
     TexchangeOpenOrder,
     TexchangeOpenMaker,
+    TexchangeOpenOrderStatic,
+    TexchangeOrderIdStatic,
     HLike,
 } from 'interfaces';
 import { Context } from '../../context/context';
@@ -13,6 +15,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
+
+    private OrderId = new TexchangeOrderIdStatic();
+    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+
     public constructor(
         protected readonly context: Context<H>,
         protected readonly models: OrderMakes.ModelDeps<H>,
@@ -21,22 +27,15 @@ export class OrderMakes<H extends HLike<H>>
     ) { }
 
     public orderMakes(
-        openOrder: TexchangeOpenOrder<H>,
+        order: TexchangeOpenOrder<H>,
     ): void {
         const openMaker: TexchangeOpenMaker.MutablePlain<H> = {
-            price: openOrder.price,
-            quantity: openOrder.quantity,
-            side: openOrder.side,
-            length: openOrder.length,
-            operation: openOrder.operation,
-            filled: openOrder.filled,
-            unfilled: openOrder.unfilled,
-            id: openOrder.id,
+            ...this.OpenOrder.copy(order),
             behind: this.context.H.from(0),
         };
-        const makers = this.models.book.getBook()[openOrder.side];
+        const makers = this.models.book.getBook()[order.side];
         for (const maker of makers)
-            if (maker.price.eq(openOrder.price))
+            if (maker.price.eq(openMaker.price))
                 // TODO addBehind()
                 openMaker.behind = openMaker.behind.plus(maker.quantity);
         this.models.makers.appendOrder(openMaker);

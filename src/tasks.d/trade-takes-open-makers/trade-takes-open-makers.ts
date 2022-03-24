@@ -5,6 +5,8 @@ import {
     TexchangeOpenMaker,
     Operation,
     HLike, H,
+    TexchangeTradeStatic,
+    TexchangeTradeIdStatic,
 } from 'interfaces';
 import { min } from '../../utilities';
 import { Context } from '../../context/context';
@@ -19,6 +21,10 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
+
+    private TradeId = new TexchangeTradeIdStatic();
+    private Trade = new TexchangeTradeStatic(this.context.H, this.TradeId);
+
     public constructor(
         protected readonly context: Context<H>,
         protected readonly models: TradeTakesOpenMakers.ModelDeps<H>,
@@ -27,13 +33,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     ) { }
 
     public tradeTakesOpenMakers(roTrade: TexchangeTrade<H>): void {
-        const trade: TexchangeTrade.MutablePlain<H> = {
-            price: roTrade.price,
-            quantity: roTrade.quantity,
-            side: roTrade.side,
-            time: roTrade.time,
-            id: roTrade.id,
-        };
+        const trade: TexchangeTrade.MutablePlain<H> = this.Trade.copy(roTrade);
         for (const order of [...this.models.makers])
             if (this.tradeShouldTakeOpenOrder(trade, order)) {
                 this.tradeTakesOrderQueue(trade, order);

@@ -15,15 +15,21 @@ export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
 
 	public constructor(
-		protected readonly context: Context<H>,
+		context: Context<H>,
 		protected readonly models: DefaultGetAvailable.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: DefaultGetAvailable.TaskDeps<H>,
-	) { super(); }
+		broadcast: Broadcast<H>,
+		tasks: DefaultGetAvailable.TaskDeps<H>,
+	) {
+		super(
+			context,
+			models,
+			broadcast,
+			tasks,
+		);
+	}
 
 	protected finalMargin(): H {
 		// 默认无锁仓优惠
-		// 默认非实时结算
 		const margin = this.models.margins.getMargin();
 		return margin[Length.LONG]
 			.plus(margin[Length.SHORT]);

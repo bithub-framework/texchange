@@ -1,6 +1,5 @@
 import { Config } from '../context.d/config';
-import { Timeline, MarketCalc } from 'interfaces';
-import { HStatic, HLike } from 'interfaces';
+import { Timeline, MarketCalc, HStatic, HLike } from 'interfaces';
 export declare abstract class Context<H extends HLike<H>> {
     readonly config: Config<H>;
     readonly timeline: Timeline;

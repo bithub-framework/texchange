@@ -1,9 +1,10 @@
-import { Length, H, HLike } from 'interfaces';
+import { Length, H, HLike, HStatic } from 'interfaces';
 import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Margins<H extends HLike<H>> implements StatefulLike<Margins.Snapshot> {
-    protected readonly context: Context<H>;
-    protected margin: Margins.Margin.MutablePlain<H>;
+    private readonly context;
+    private margin;
+    private Margin;
     constructor(context: Context<H>);
     getMargin(): Margins.Margin<H>;
     setMargin(length: Length, margin: H): void;
@@ -21,6 +22,12 @@ export declare namespace Margins {
         interface Snapshot {
             readonly [length: Length]: H.Snapshot;
         }
+    }
+    class MarginStatic<H extends HLike<H>> {
+        private H;
+        constructor(H: HStatic<H>);
+        capture(margin: Margin<H>): Margin.Snapshot;
+        restore(snapshot: Margin.Snapshot): Margin.MutablePlain<H>;
     }
     type Snapshot = Margin.Snapshot;
 }

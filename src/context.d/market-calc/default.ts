@@ -9,7 +9,7 @@ export class DefaultMarketCalc<H extends HLike<H>>
 	implements MarketCalc<H> {
 
 	public quantity(price: H, dollarVolume: H): H {
-		assert(price.gt(0));
+		assert(price.neq(0));
 		return dollarVolume.div(price);
 	}
 
