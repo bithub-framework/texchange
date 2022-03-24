@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { LimitOrder, TexchangeAmendment, TexchangeOpenOrder, Balances, Positions, MarketApiLike, AccountApiLike, MarketEvents, AccountEvents, MarketCalc, HLike, TexchangeTradeId, TexchangeOrderId } from 'interfaces';
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Instant } from './instant';
 import { Subscription } from '../use-cases.d/subscription';
 export declare class Latency<H extends HLike<H>> implements MarketApiLike<H, TexchangeOrderId, TexchangeTradeId>, AccountApiLike<H, TexchangeOrderId, TexchangeTradeId>, MarketCalc<H> {

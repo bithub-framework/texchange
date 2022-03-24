@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Broadcast } from '../broadcast';
 import { Balances, HLike } from 'interfaces';
 import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';

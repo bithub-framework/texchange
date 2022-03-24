@@ -1,5 +1,5 @@
-import { Context } from './context';
-import { UseCases } from './use-cases';
+import { Context } from './context/context';
+import { UseCases } from './use-cases/use-cases';
 
 import { Instant } from './views.d/instant';
 import { Latency } from './views.d/latency';

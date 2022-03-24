@@ -5,7 +5,7 @@ import {
     OrderbookStatic,
 } from 'interfaces';
 import assert = require('assert');
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 
 

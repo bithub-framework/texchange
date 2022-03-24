@@ -1,4 +1,4 @@
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
 import {
@@ -6,7 +6,7 @@ import {
 	HLike,
 } from 'interfaces';
 
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 
 
 export class CancelOpenOrder<H extends HLike<H>>

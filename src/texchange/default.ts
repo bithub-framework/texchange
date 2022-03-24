@@ -4,19 +4,19 @@ import { Config } from '../context.d/config';
 import { Timeline } from 'interfaces';
 import { HLike, HStatic } from 'interfaces';
 
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { DefaultContext } from '../context/default';
 
-import { Mtm } from '../mark-to-market';
+import { Mtm } from '../mark-to-market/mtm';
 import { DefaultMtm } from '../mark-to-market/default';
 
-import { Models } from '../models';
+import { Models } from '../models/models';
 import { DefaultModels } from '../models/default';
 
-import { Tasks } from '../tasks';
+import { Tasks } from '../tasks/tasks';
 import { DefaultTasks } from '../tasks/default';
 
-import { UseCases } from '../use-cases';
+import { UseCases } from '../use-cases/use-cases';
 import { DefaultUseCases } from '../use-cases/default';
 
 import { Views } from '../views';

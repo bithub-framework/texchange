@@ -4,13 +4,13 @@ import {
     HLike,
 } from 'interfaces';
 import assert = require('assert');
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
 
 import { GetAvailableLike } from '../get-available/get-available-like';
 import { GetClosableLike } from '../get-closable/get-closable-like';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 
 
 export class ValidateOrder<H extends HLike<H>>

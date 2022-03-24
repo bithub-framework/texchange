@@ -1,9 +1,9 @@
 import { Closable, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { GetClosableLike } from './get-closable-like';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 export declare class GetClosable<H extends HLike<H>> implements GetClosableLike<H> {
     protected readonly context: Context<H>;
     protected readonly models: GetClosable.ModelDeps<H>;

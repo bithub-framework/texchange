@@ -1,6 +1,6 @@
 import { Side, HLike, TexchangeOrderId, TexchangeOrderIdStatic, TexchangeOpenMakerStatic, TexchangeOpenMaker, TexchangeOpenOrder, OpenMaker } from 'interfaces';
 import { Frozen, FrozenStatic } from './frozon';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { StatefulLike } from 'startable';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<TexchangeOpenMaker<H>> {
     protected readonly context: Context<H>;

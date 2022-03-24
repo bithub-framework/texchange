@@ -4,7 +4,7 @@ import {
     HLike,
     H,
 } from 'interfaces';
-import { Context } from '../context';
+import { Context } from '../context/context';
 import assert = require('assert');
 import { StatefulLike } from 'startable';
 

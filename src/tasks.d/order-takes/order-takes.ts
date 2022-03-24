@@ -6,7 +6,7 @@ import {
     HLike, H,
 } from 'interfaces';
 import { min } from '../../utilities';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
 

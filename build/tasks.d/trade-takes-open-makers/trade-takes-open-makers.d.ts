@@ -1,8 +1,8 @@
 import { TexchangeTrade, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';

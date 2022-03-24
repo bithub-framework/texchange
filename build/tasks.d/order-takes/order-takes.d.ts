@@ -1,5 +1,5 @@
 import { TexchangeOpenOrder, TexchangeTrade, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
 import { Margins } from '../../models.d/margins';

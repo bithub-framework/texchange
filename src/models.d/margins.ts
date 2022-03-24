@@ -2,7 +2,7 @@ import {
 	Length,
 	H, HLike,
 } from 'interfaces';
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 
 

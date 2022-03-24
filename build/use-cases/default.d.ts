@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Models } from '../models/models';
 import { Broadcast } from '../broadcast';
 import { Tasks } from '../tasks/tasks';

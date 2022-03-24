@@ -4,7 +4,7 @@ import {
 	HLike,
 } from 'interfaces';
 import { Frozen } from './frozon';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Makers } from './makers';
 
 

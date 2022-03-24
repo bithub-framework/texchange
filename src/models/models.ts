@@ -1,11 +1,11 @@
 import { StatefulLike } from 'startable';
 import { Assets } from '../models.d/assets';
 import { Margins } from '../models.d/margins';
-import { Makers } from '../models.d/makers';
+import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
-import { Pricing } from '../models.d/pricing';
-import { Context } from '../context';
+import { Pricing } from '../models.d/pricing/pricing';
+import { Context } from '../context/context';
 import {
 	HLike,
 } from 'interfaces';

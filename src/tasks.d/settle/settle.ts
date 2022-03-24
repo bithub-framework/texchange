@@ -3,13 +3,13 @@ import {
     Position,
     HLike,
 } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 
 import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
-import { Pricing } from '../../models.d/pricing';
+import { Pricing } from '../../models.d/pricing/pricing';
 
 
 export abstract class Settle<H extends HLike<H>>

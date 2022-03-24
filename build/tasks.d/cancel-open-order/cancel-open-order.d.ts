@@ -1,8 +1,8 @@
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOrderLike<H> {
     protected readonly context: Context<H>;
     protected readonly models: CancelOpenOrder.ModelDeps<H>;

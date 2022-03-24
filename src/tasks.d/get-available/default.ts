@@ -2,13 +2,13 @@ import {
 	Side, Length, Operation,
 	HLike,
 } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Broadcast } from '../../broadcast';
 import { max } from '../../utilities';
 import { GetAvailable } from './get-available';
 
 import { Margins } from '../../models.d/margins';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 
 
 export class DefaultGetAvailable<H extends HLike<H>>

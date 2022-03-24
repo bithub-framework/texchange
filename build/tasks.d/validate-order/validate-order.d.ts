@@ -1,10 +1,10 @@
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
 import { GetAvailableLike } from '../get-available/get-available-like';
 import { GetClosableLike } from '../get-closable/get-closable-like';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderLike<H> {
     protected readonly context: Context<H>;
     protected readonly models: ValidateOrder.ModelDeps<H>;

@@ -1,5 +1,5 @@
 import { HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Models } from '../../models/models';
 import { Tasks } from '../../tasks/tasks';
 import { Broadcast } from '../../broadcast';

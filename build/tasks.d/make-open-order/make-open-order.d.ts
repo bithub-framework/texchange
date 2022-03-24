@@ -1,4 +1,4 @@
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';

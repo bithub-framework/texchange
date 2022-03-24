@@ -1,5 +1,5 @@
 import { Length, H, HLike } from 'interfaces';
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Margins<H extends HLike<H>> implements StatefulLike<Margins.Snapshot> {
     protected readonly context: Context<H>;

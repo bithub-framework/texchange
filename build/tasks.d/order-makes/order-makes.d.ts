@@ -1,9 +1,9 @@
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
 import { Book } from '../../models.d/book';
-import { Makers } from '../../models.d/makers';
+import { Makers } from '../../models.d/makers/makers';
 export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H> {
     protected readonly context: Context<H>;
     protected readonly models: OrderMakes.ModelDeps<H>;

@@ -1,4 +1,4 @@
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Positions, HLike } from 'interfaces';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';

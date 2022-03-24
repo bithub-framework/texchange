@@ -1,5 +1,5 @@
 import { Length, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
 export declare class DefaultSettle<H extends HLike<H>> extends Settle<H> {

@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Broadcast } from '../broadcast';
 import { Positions, HLike } from 'interfaces';
 import { Assets } from '../models.d/assets';

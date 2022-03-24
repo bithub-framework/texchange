@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Trade, H, HLike, TexchangeTradeId } from 'interfaces';
 import { StatefulLike } from 'startable';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {

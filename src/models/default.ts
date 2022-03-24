@@ -1,9 +1,9 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Models } from './models';
 
-import { Makers } from '../models.d/makers';
+import { Makers } from '../models.d/makers/makers';
 import { DefaultMakers } from '../models.d/makers/default';
-import { Pricing } from '../models.d/pricing';
+import { Pricing } from '../models.d/pricing/pricing';
 import { DefaultPricing } from '../models.d/pricing/default';
 
 import { HLike } from 'interfaces';

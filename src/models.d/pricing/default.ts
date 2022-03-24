@@ -3,7 +3,7 @@ import {
 	HLike, H,
 } from 'interfaces';
 import { Pricing } from './pricing';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 
 
 /**

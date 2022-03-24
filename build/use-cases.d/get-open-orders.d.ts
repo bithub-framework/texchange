@@ -1,7 +1,7 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Broadcast } from '../broadcast';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Makers } from '../models.d/makers';
+import { Makers } from '../models.d/makers/makers';
 export declare class GetOpenOrders<H extends HLike<H>> {
     protected readonly context: Context<H>;
     protected readonly models: GetOpenOrders.ModelDeps<H>;

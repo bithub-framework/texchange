@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { DatabaseTrade } from '../models.d/progress';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
@@ -7,7 +7,7 @@ import { HLike } from 'interfaces';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
-import { Pricing } from '../models.d/pricing';
+import { Pricing } from '../models.d/pricing/pricing';
 
 
 export class UpdateTrades<H extends HLike<H>> {

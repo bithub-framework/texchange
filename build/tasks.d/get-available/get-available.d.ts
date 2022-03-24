@@ -1,5 +1,5 @@
 import { GetAvailableLike } from './get-available-like';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
 import { Assets } from '../../models.d/assets';

@@ -1,6 +1,6 @@
 import { TexchangeTrade, HLike, H } from 'interfaces';
 import { Pricing } from './pricing';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 /**
  * 默认以最新价格作为结算价。
  */

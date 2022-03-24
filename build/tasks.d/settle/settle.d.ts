@@ -1,10 +1,10 @@
 import { Length, HLike } from 'interfaces';
-import { Context } from '../../context';
+import { Context } from '../../context/context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
-import { Pricing } from '../../models.d/pricing';
+import { Pricing } from '../../models.d/pricing/pricing';
 export declare abstract class Settle<H extends HLike<H>> implements SettleLike {
     protected abstract readonly context: Context<H>;
     protected abstract readonly models: Settle.ModelDeps<H>;

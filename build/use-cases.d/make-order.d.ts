@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { Context } from '../context/context';
 import { Broadcast } from '../broadcast';
 import { LimitOrder, TexchangeOpenOrder, HLike } from 'interfaces';
 import { Progress } from '../models.d/progress';
