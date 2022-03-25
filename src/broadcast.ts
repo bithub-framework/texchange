@@ -1,13 +1,10 @@
 import {
-	Trade,
 	Orderbook,
 	Positions,
 	Balances,
 	HLike,
-	TexchangeTradeId,
 	TexchangeTrades,
 } from 'interfaces';
-import { EventEmitter } from 'events';
 
 
 export namespace Broadcast {
