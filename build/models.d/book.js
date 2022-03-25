@@ -40,11 +40,11 @@ class Book {
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
+        const $final = { time: this.time };
         const total = {
             [interfaces_1.Side.ASK]: new Map(),
             [interfaces_1.Side.BID]: new Map(),
         };
-        this.finalbookCache = { time: this.time };
         for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(order.price.toFixed(this.context.config.market.PRICE_DP), order.quantity);
@@ -61,14 +61,14 @@ class Book {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this.finalbookCache[side] = [...total[side]]
+            $final[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                 price: this.context.H.from(priceString),
                 quantity,
                 side,
             }));
         }
-        return this.finalbookCache;
+        return this.finalbookCache = $final;
     }
     getBook() {
         return this.tryApply();

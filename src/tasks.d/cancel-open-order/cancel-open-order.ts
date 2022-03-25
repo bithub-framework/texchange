@@ -18,13 +18,15 @@ export class CancelOpenOrder<H extends HLike<H>>
 	private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: CancelOpenOrder.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: CancelOpenOrder.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: CancelOpenOrder.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: CancelOpenOrder.TaskDeps<H>,
 	) { }
 
-	public cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
+	public cancelOpenOrder(
+		order: TexchangeOpenOrder<H>,
+	): TexchangeOpenOrder<H> {
 		const { makers } = this.models;
 
 		let filled: H;
@@ -36,7 +38,7 @@ export class CancelOpenOrder<H extends HLike<H>>
 		}
 
 		return {
-			...this.OpenOrder.copy(order),
+			...order,
 			filled,
 			unfilled: order.quantity.minus(filled),
 		};

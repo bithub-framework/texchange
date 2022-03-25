@@ -8,48 +8,43 @@ import { StatefulLike } from 'startable';
 
 export class Margins<H extends HLike<H>>
 	implements StatefulLike<Margins.Snapshot> {
-
-	private margin: Margins.Margin.MutablePlain<H>;
-
 	private Margin = new Margins.MarginStatic<H>(this.context.H);
 
+	private $margin: Margins.Margin<H>;
+
 	public constructor(
-		private readonly context: Context<H>,
+		private context: Context<H>,
 	) {
-		this.margin = {
+		this.$margin = {
 			[Length.LONG]: this.context.H.from(0),
 			[Length.SHORT]: this.context.H.from(0),
 		};
 	}
 
 	public getMargin(): Margins.Margin<H> {
-		return this.margin;
+		return this.Margin.copy(this.$margin);
 	}
 
-	public setMargin(length: Length, margin: H): void {
-		this.margin[length] = margin;
+	public setMargin(length: Length, marginNumber: H): void {
+		this.$margin[length] = marginNumber;
 	}
 
 	public capture(): Margins.Snapshot {
-		return this.Margin.capture(this.margin);
+		return this.Margin.capture(this.$margin);
 	}
 
 	public restore(snapshot: Margins.Snapshot): void {
-		this.margin = this.Margin.restore(snapshot);
+		this.$margin = this.Margin.restore(snapshot);
 	}
 }
 
 
 export namespace Margins {
 	export interface Margin<H extends HLike<H>> {
-		readonly [length: Length]: H;
+		[length: Length]: H;
 	}
 
 	export namespace Margin {
-		export interface MutablePlain<H extends HLike<H>> {
-			[length: Length]: H;
-		}
-
 		export interface Snapshot {
 			readonly [length: Length]: H.Snapshot;
 		}
@@ -67,10 +62,17 @@ export namespace Margins {
 			};
 		}
 
-		public restore(snapshot: Margin.Snapshot): Margin.MutablePlain<H> {
+		public restore(snapshot: Margin.Snapshot): Margin<H> {
 			return {
 				[Length.LONG]: this.H.restore(snapshot[Length.LONG]),
 				[Length.SHORT]: this.H.restore(snapshot[Length.SHORT]),
+			};
+		}
+
+		public copy(margin: Margin<H>): Margin<H> {
+			return {
+				[Length.LONG]: margin[Length.LONG],
+				[Length.SHORT]: margin[Length.SHORT],
 			};
 		}
 	}

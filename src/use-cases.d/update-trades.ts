@@ -1,8 +1,10 @@
 import { Context } from '../context/context';
-import { DatabaseTrade } from '../models.d/progress';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import {
+	HLike,
+	TexchangeTrade,
+} from 'interfaces';
 
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
@@ -12,19 +14,18 @@ import { Pricing } from '../models.d/pricing/pricing';
 
 export class UpdateTrades<H extends HLike<H>> {
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: UpdateTrades.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: UpdateTrades.TaskDeps<H>,
-		private readonly realTimeSettlement: boolean,
+		protected context: Context<H>,
+		protected models: UpdateTrades.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: UpdateTrades.TaskDeps<H>,
+		private realTimeSettlement: boolean,
 	) { }
 
-	public updateTrades(trades: readonly DatabaseTrade<H>[]): void {
+	public updateTrades(trades: DatabaseTrades<H>): void {
 		const { tradeTakesOpenMakers, settle } = this.tasks;
 		assert(trades.length);
 		const now = this.context.timeline.now();
 		for (const trade of trades) assert(trade.time === now);
-		this.models.progress.updateDatabaseTrades(trades);
 
 		this.broadcast.emit('trades', trades);
 
@@ -46,3 +47,13 @@ export namespace UpdateTrades {
 		settle: SettleLike;
 	}
 }
+
+
+export interface DatabaseTrade<H extends HLike<H>>
+	extends TexchangeTrade<H> {
+
+	id: string;
+}
+
+export type DatabaseTrades<H extends HLike<H>>
+	= DatabaseTrade<H>[];

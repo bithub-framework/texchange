@@ -11,9 +11,9 @@ export declare class Instant<H extends HLike<H>> {
     private context;
     private useCases;
     constructor(context: Context<H>, useCases: Instant.UseCaseDeps<H>);
-    makeOrders(orders: readonly LimitOrder<H>[]): (TexchangeOpenOrder<H> | Error)[];
-    cancelOrders(orders: readonly TexchangeOpenOrder<H>[]): TexchangeOpenOrder<H>[];
-    amendOrders(amendments: readonly TexchangeAmendment<H>[]): (TexchangeOpenOrder<H> | Error)[];
+    makeOrders(orders: LimitOrder<H>[]): (TexchangeOpenOrder<H> | Error)[];
+    cancelOrders(orders: TexchangeOpenOrder<H>[]): TexchangeOpenOrder<H>[];
+    amendOrders(amendments: TexchangeAmendment<H>[]): (TexchangeOpenOrder<H> | Error)[];
     getOpenOrders(): TexchangeOpenOrder<H>[];
     getPositions(): Positions<H>;
     getBalances(): Balances<H>;

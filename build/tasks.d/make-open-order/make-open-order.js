@@ -13,16 +13,15 @@ class MakeOpenOrder {
     }
     makeOpenOrder(order) {
         this.tasks.validateOrder.validateOrder(order);
-        order = this.OpenOrder.copy(order);
-        const trades = this.tasks.orderTakes.orderTakes(order);
-        this.tasks.orderMakes.orderMakes(order);
+        const { trades, maker, } = this.tasks.orderTakes.orderTakes(order);
+        this.tasks.orderMakes.orderMakes(maker);
         if (trades.length) {
             this.broadcast.emit('trades', trades);
             this.broadcast.emit('orderbook', this.models.book.getBook());
             this.broadcast.emit('balances', this.tasks.getBalances.getBalances());
             this.broadcast.emit('positions', this.tasks.getPositions.getPositions());
         }
-        return order;
+        return this.OpenOrder.copy(maker);
     }
 }
 exports.MakeOpenOrder = MakeOpenOrder;

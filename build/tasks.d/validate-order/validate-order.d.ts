@@ -6,10 +6,10 @@ import { GetAvailableLike } from '../get-available/get-available-like';
 import { GetClosableLike } from '../get-closable/get-closable-like';
 import { Makers } from '../../models.d/makers/makers';
 export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: ValidateOrder.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: ValidateOrder.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: ValidateOrder.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: ValidateOrder.TaskDeps<H>;
     private OrderId;
     private OpenOrder;
     constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: ValidateOrder.TaskDeps<H>);

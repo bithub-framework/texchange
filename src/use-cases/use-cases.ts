@@ -17,15 +17,15 @@ import { HLike } from 'interfaces';
 
 
 export abstract class UseCases<H extends HLike<H>> {
-	public readonly makeOrder: MakeOrder<H>;
-	public readonly cancelOrder: CancelOrder<H>;
-	public readonly amendOrder: AmendOrder<H>;
-	public readonly getOpenOrders: GetOpenOrders<H>;
-	public readonly getPositions: GetPositions<H>;
-	public readonly getBalances: GetBalances<H>;
-	public readonly updateOrderbook: UpdateOrderbook<H>;
-	public abstract readonly updateTrades: UpdateTrades<H>;
-	public readonly subscription: Subscription<H>;
+	public makeOrder: MakeOrder<H>;
+	public cancelOrder: CancelOrder<H>;
+	public amendOrder: AmendOrder<H>;
+	public getOpenOrders: GetOpenOrders<H>;
+	public getPositions: GetPositions<H>;
+	public getBalances: GetBalances<H>;
+	public updateOrderbook: UpdateOrderbook<H>;
+	public abstract updateTrades: UpdateTrades<H>;
+	public subscription: Subscription<H>;
 
 	public constructor(
 		context: Context<H>,

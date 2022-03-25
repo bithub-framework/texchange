@@ -10,24 +10,14 @@ import { Makers } from '../models.d/makers/makers';
 
 export class GetOpenOrders<H extends HLike<H>> {
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: GetOpenOrders.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: GetOpenOrders.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: GetOpenOrders.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: GetOpenOrders.TaskDeps<H>,
 	) { }
 
 	public getOpenOrders(): TexchangeOpenOrder<H>[] {
-		const openOrders = [...this.models.makers];
-		return openOrders.map(order => ({
-			price: order.price,
-			quantity: order.quantity,
-			side: order.side,
-			length: order.length,
-			operation: order.operation,
-			id: order.id,
-			filled: order.filled,
-			unfilled: order.unfilled,
-		}));
+		return [...this.models.makers];
 	}
 }
 

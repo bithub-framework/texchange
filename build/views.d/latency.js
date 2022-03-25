@@ -59,9 +59,9 @@ class Latency {
             }
         });
     }
-    async makeOrders(orders) {
+    async makeOrders($orders) {
         try {
-            orders = orders.map(order => this.LimitOrder.copy(order));
+            const orders = $orders.map(order => this.LimitOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
@@ -72,9 +72,9 @@ class Latency {
             await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
-    async amendOrders(amendments) {
+    async amendOrders($amendments) {
         try {
-            amendments = amendments.map(amendment => this.Amendment.copy(amendment));
+            const amendments = $amendments.map(amendment => this.Amendment.copy(amendment));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
@@ -85,8 +85,9 @@ class Latency {
             await this.context.timeline.sleep(this.context.config.market.PING);
         }
     }
-    async cancelOrders(orders) {
+    async cancelOrders($orders) {
         try {
+            const orders = $orders.map(order => this.OpenOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error

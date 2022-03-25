@@ -16,7 +16,7 @@ export class DefaultGetAvailable<H extends HLike<H>>
 
 	public constructor(
 		context: Context<H>,
-		protected readonly models: DefaultGetAvailable.ModelDeps<H>,
+		protected models: DefaultGetAvailable.ModelDeps<H>,
 		broadcast: Broadcast<H>,
 		tasks: DefaultGetAvailable.TaskDeps<H>,
 	) {
@@ -40,18 +40,18 @@ export class DefaultGetAvailable<H extends HLike<H>>
 		const position = this.models.assets.getPosition();
 		const totalFrozen = this.models.makers.getTotalFrozen();
 		const totalUnfilled = this.models.makers.getTotalUnfilled();
-		const final: { [length: number]: H; } = {};
+		const $final: { [length: number]: H; } = {};
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side: Side = length * Operation.OPEN;
 			const afterDeduction = max(
 				totalUnfilled[side].minus(position[-length]),
 				this.context.H.from(0),
 			);
-			final[length] = totalFrozen.balance[length]
+			$final[length] = totalFrozen.balance[length]
 				.times(afterDeduction)
 				.div(totalUnfilled[side]);
 		}
-		return final[Length.LONG].plus(final[Length.SHORT]);
+		return $final[Length.LONG].plus($final[Length.SHORT]);
 	}
 }
 

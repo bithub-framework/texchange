@@ -1,4 +1,4 @@
-import { TexchangeOpenOrder, TexchangeTrade, HLike } from 'interfaces';
+import { TexchangeOpenOrder, TexchangeTrades, HLike } from 'interfaces';
 import { Context } from '../../context/context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
@@ -8,15 +8,17 @@ import { Progress } from '../../models.d/progress';
 import { Book } from '../../models.d/book';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export declare class OrderTakes<H extends HLike<H>> implements OrderTakesLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: OrderTakes.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: OrderTakes.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: OrderTakes.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: OrderTakes.TaskDeps<H>;
+    private OrderId;
+    private OpenOrder;
     constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderTakes.TaskDeps<H>);
-    /**
-     * @param taker variable
-     */
-    orderTakes(taker: TexchangeOpenOrder.MutablePlain<H>): TexchangeTrade.MutablePlain<H>[];
+    orderTakes(taker: TexchangeOpenOrder<H>): {
+        trades: TexchangeTrades<H>;
+        maker: TexchangeOpenOrder<H>;
+    };
 }
 export declare namespace OrderTakes {
     interface ModelDeps<H extends HLike<H>> {

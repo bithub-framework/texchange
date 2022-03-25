@@ -5,10 +5,10 @@ import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
 import { Makers } from '../../models.d/makers/makers';
 export declare class GetClosable<H extends HLike<H>> implements GetClosableLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: GetClosable.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: GetClosable.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: GetClosable.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: GetClosable.TaskDeps<H>;
     constructor(context: Context<H>, models: GetClosable.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetClosable.TaskDeps<H>);
     getClosable(): Closable<H>;
 }

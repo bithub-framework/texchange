@@ -11,14 +11,10 @@ class AmendOrder {
     amendOrder(amendment) {
         const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);
         const newOrder = {
+            ...oldOrder,
             price: amendment.newPrice,
-            filled: oldOrder.filled,
             unfilled: amendment.newUnfilled,
             quantity: amendment.newUnfilled.plus(oldOrder.filled),
-            id: amendment.id,
-            side: amendment.side,
-            length: amendment.length,
-            operation: amendment.operation,
         };
         this.tasks.validateOrder.validateOrder(newOrder);
         return this.tasks.makeOpenOrder.makeOpenOrder(newOrder);

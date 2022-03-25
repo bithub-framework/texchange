@@ -10,10 +10,10 @@ export abstract class GetAvailable<H extends HLike<H>>
 	implements GetAvailableLike<H> {
 
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: GetAvailable.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: GetAvailable.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: GetAvailable.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: GetAvailable.TaskDeps<H>,
 	) { }
 
 	public getAvailable(): H {

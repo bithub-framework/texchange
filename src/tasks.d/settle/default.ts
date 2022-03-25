@@ -8,24 +8,34 @@ import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
 
 
+/**
+* 默认逐仓
+*/
 export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: DefaultSettle.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: DefaultSettle.TaskDeps<H>,
-	) { super(); }
+		context: Context<H>,
+		protected models: DefaultSettle.ModelDeps<H>,
+		broadcast: Broadcast<H>,
+		protected tasks: DefaultSettle.TaskDeps<H>,
+	) {
+		super(
+			context,
+			models,
+			broadcast,
+			tasks,
+		);
+	}
+
 
 	protected clearingMargin(
 		length: Length, profit: H,
 	): H {
-		// 默认逐仓
+
 		return this.models.margins.getMargin()[length]
 			.plus(profit);
 	}
 
 	protected assertEnoughBalance(): void {
-		// 默认逐仓
 		for (const length of [Length.SHORT, Length.LONG])
 			assert(this.models.margins.getMargin()[length].gte(0));
 	}

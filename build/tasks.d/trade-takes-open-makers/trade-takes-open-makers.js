@@ -12,40 +12,40 @@ class TradeTakesOpenMakers {
         this.TradeId = new interfaces_1.TexchangeTradeIdStatic();
         this.Trade = new interfaces_1.TexchangeTradeStatic(this.context.H, this.TradeId);
     }
-    tradeTakesOpenMakers(roTrade) {
-        const trade = this.Trade.copy(roTrade);
+    tradeTakesOpenMakers(trade) {
+        const $trade = this.Trade.copy(trade);
         for (const order of [...this.models.makers])
-            if (this.tradeShouldTakeOpenOrder(trade, order)) {
-                this.tradeTakesOrderQueue(trade, order);
-                this.tradeTakesOpenMaker(trade, order);
+            if (this.$tradeShouldTakeOpenOrder($trade, order)) {
+                this.$tradeTakesOrderQueue($trade, order);
+                this.tradeTakesOpenMaker($trade, order);
             }
     }
-    tradeShouldTakeOpenOrder(trade, maker) {
+    $tradeShouldTakeOpenOrder($trade, maker) {
         return (maker.side === interfaces_1.Side.BID &&
-            trade.side === interfaces_1.Side.ASK &&
-            trade.price.lte(maker.price)
+            $trade.side === interfaces_1.Side.ASK &&
+            $trade.price.lte(maker.price)
             ||
                 maker.side === interfaces_1.Side.ASK &&
-                    trade.side === interfaces_1.Side.BID &&
-                    trade.price.gte(maker.price));
+                    $trade.side === interfaces_1.Side.BID &&
+                    $trade.price.gte(maker.price));
     }
-    tradeTakesOrderQueue(trade, maker) {
+    $tradeTakesOrderQueue($trade, maker) {
         const { makers } = this.models;
-        if (trade.price.eq(maker.price)) {
-            const volume = (0, utilities_1.min)(trade.quantity, maker.behind);
-            trade.quantity = trade.quantity.minus(volume);
+        if ($trade.price.eq(maker.price)) {
+            const volume = (0, utilities_1.min)($trade.quantity, maker.behind);
+            $trade.quantity = $trade.quantity.minus(volume);
             makers.takeOrderQueue(maker.id, volume);
         }
         else
             makers.takeOrderQueue(maker.id);
     }
-    tradeTakesOpenMaker(trade, maker) {
-        const { assets, margins, makers } = this.models;
-        const volume = (0, utilities_1.min)(trade.quantity, maker.unfilled);
+    tradeTakesOpenMaker($trade, maker) {
+        const { assets, makers } = this.models;
+        const volume = (0, utilities_1.min)($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);
-        trade.quantity = trade.quantity.minus(volume);
+        $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
         assets.payFee(dollarVolume
             .times(this.context.config.account.MAKER_FEE_RATE)

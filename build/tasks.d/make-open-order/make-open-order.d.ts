@@ -9,10 +9,10 @@ import { Book } from '../../models.d/book';
 import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
 export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: MakeOpenOrder.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: MakeOpenOrder.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: MakeOpenOrder.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: MakeOpenOrder.TaskDeps<H>;
     private OrderId;
     private OpenOrder;
     constructor(context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: MakeOpenOrder.TaskDeps<H>);

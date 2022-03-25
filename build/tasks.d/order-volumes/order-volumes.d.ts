@@ -6,10 +6,10 @@ import { MarginAccumulationLike } from '../margin-accumulation/margin-accumulati
 import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
 export declare class OrderVolumes<H extends HLike<H>> implements OrderVolumesLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: OrderVolumes.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: OrderVolumes.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: OrderVolumes.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: OrderVolumes.TaskDeps<H>;
     constructor(context: Context<H>, models: OrderVolumes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderVolumes.TaskDeps<H>);
     open({ length, volume, dollarVolume, }: OrderVolumesLike.Volumes<H>): void;
     close({ length, volume, dollarVolume, }: OrderVolumesLike.Volumes<H>): void;

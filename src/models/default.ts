@@ -11,8 +11,8 @@ import { HLike } from 'interfaces';
 
 export class DefaultModels<H extends HLike<H>>
 	extends Models<H> {
-	public readonly makers: Makers<H>;
-	public readonly pricing: Pricing<H, any>;
+	public makers: Makers<H>;
+	public pricing: Pricing<H, any>;
 
 	public constructor(
 		context: Context<H>,

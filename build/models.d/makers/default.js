@@ -4,9 +4,13 @@ exports.DefaultMakers = void 0;
 const interfaces_1 = require("interfaces");
 const makers_1 = require("./makers");
 class DefaultMakers extends makers_1.Makers {
-    constructor(context) { super(context); }
+    constructor(context) {
+        super(context);
+    }
+    /**
+     * 默认单向持仓模式
+     */
     toFreeze(order) {
-        // 默认单向持仓模式
         if (order.operation === interfaces_1.Operation.OPEN)
             return {
                 balance: {

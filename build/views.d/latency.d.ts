@@ -18,9 +18,9 @@ export declare class Latency<H extends HLike<H>> implements MarketApiLike<H, Tex
     private Amendment;
     private OpenOrder;
     constructor(context: Context<H>, useCases: Latency.UseCaseDeps<H>, instant: Instant<H>);
-    makeOrders(orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
-    amendOrders(amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
-    cancelOrders(orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]>;
+    makeOrders($orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
+    amendOrders($amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]>;
+    cancelOrders($orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]>;
     getBalances(): Promise<Balances<H>>;
     getPositions(): Promise<Positions<H>>;
     getOpenOrders(): Promise<TexchangeOpenOrder<H>[]>;

@@ -2,7 +2,7 @@ import { Orderbook, Side, HLike, H } from 'interfaces';
 import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
-    private readonly context;
+    private context;
     private time;
     private basebook;
     private decrements;

@@ -24,16 +24,16 @@ export class Book<H extends HLike<H>>
         [Side.ASK]: new Map<string, H>(),
         [Side.BID]: new Map<string, H>(),
     };
-    private finalbookCache: Orderbook.MutablePlain<H> | null = null;
+    private finalbookCache: Orderbook<H> | null = null;
 
     private Orderbook = new OrderbookStatic<H>(this.context.H);
     private Decrements = new DecrementsStatic<H>(this.context.H);
 
     public constructor(
-        private readonly context: Context<H>,
+        private context: Context<H>,
     ) { }
 
-    public setBasebook(basebook: Orderbook<H>) {
+    public setBasebook(basebook: Orderbook<H>): void {
         assert(basebook.time === this.context.timeline.now());
         this.basebook = basebook;
         this.time = basebook.time;
@@ -53,11 +53,11 @@ export class Book<H extends HLike<H>>
 
     private tryApply(): Orderbook<H> {
         if (this.finalbookCache) return this.finalbookCache;
+        const $final: Orderbook<H> = { time: this.time };
         const total: Decrements<H> = {
             [Side.ASK]: new Map<string, H>(),
             [Side.BID]: new Map<string, H>(),
         };
-        this.finalbookCache = { time: this.time };
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
@@ -73,14 +73,14 @@ export class Book<H extends HLike<H>>
                 } else this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            this.finalbookCache[side] = [...total[side]]
+            $final[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
                     price: this.context.H.from(priceString),
                     quantity,
                     side,
                 }));
         }
-        return this.finalbookCache;
+        return this.finalbookCache = $final;
     }
 
     public getBook(): Orderbook<H> {

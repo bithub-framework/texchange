@@ -1,11 +1,11 @@
-import { HLike, TexchangeTrade } from 'interfaces';
+import { HLike, TexchangeTrades } from 'interfaces';
 import { StatefulLike } from 'startable';
 import { Context } from '../../context/context';
 export declare abstract class Pricing<H extends HLike<H>, Snapshot> implements StatefulLike<Snapshot> {
-    protected readonly context: Context<H>;
+    protected context: Context<H>;
     constructor(context: Context<H>);
     abstract getSettlementPrice(): H;
-    abstract updateTrades(trades: readonly TexchangeTrade<H>[]): void;
+    abstract updateTrades(trades: TexchangeTrades<H>): void;
     abstract capture(): Snapshot;
     abstract restore(snapshot: Snapshot): void;
 }

@@ -4,5 +4,7 @@ import {
 } from 'interfaces';
 
 export interface CancelOpenOrderLike<H extends HLike<H>> {
-	cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
+	cancelOpenOrder(
+		order: TexchangeOpenOrder<H>,
+	): TexchangeOpenOrder<H>;
 }

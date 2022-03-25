@@ -9,17 +9,7 @@ class GetOpenOrders {
         this.tasks = tasks;
     }
     getOpenOrders() {
-        const openOrders = [...this.models.makers];
-        return openOrders.map(order => ({
-            price: order.price,
-            quantity: order.quantity,
-            side: order.side,
-            length: order.length,
-            operation: order.operation,
-            id: order.id,
-            filled: order.filled,
-            unfilled: order.unfilled,
-        }));
+        return [...this.models.makers];
     }
 }
 exports.GetOpenOrders = GetOpenOrders;

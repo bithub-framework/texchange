@@ -7,10 +7,12 @@ import { HLike } from 'interfaces';
 export abstract class MarginAccumulation<H extends HLike<H>>
 	implements MarginAccumulationLike<H> {
 
-	protected abstract readonly context: Context<H>;
-	protected abstract readonly models: MarginAccumulation.ModelDeps<H>;
-	protected abstract readonly broadcast: Broadcast<H>;
-	protected abstract readonly tasks: MarginAccumulation.TaskDeps<H>;
+	public constructor(
+		protected context: Context<H>,
+		protected models: MarginAccumulation.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: MarginAccumulation.TaskDeps<H>,
+	) { }
 
 	public abstract newMarginAfterOpening(
 		volumes: MarginAccumulationLike.Volumes<H>,

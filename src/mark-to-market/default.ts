@@ -1,8 +1,7 @@
 import { Startable } from 'startable';
 import { Context } from '../context/context';
-import { Models } from '../models/models';
-import { Tasks } from '../tasks/tasks';
 import { Mtm } from './mtm';
+import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
 
 
@@ -17,10 +16,18 @@ export class DefaultMtm<H extends HLike<H>>
 	);
 
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
-		protected readonly tasks: Tasks<H>,
-	) { super(); }
+		context: Context<H>,
+		protected models: DefaultMtm.ModelDeps<H>,
+		broadcast: Broadcast<H>,
+		protected tasks: DefaultMtm.TaskDeps<H>,
+	) {
+		super(
+			context,
+			models,
+			broadcast,
+			tasks,
+		);
+	}
 
 	private async start(): Promise<void> { }
 	private async stop(): Promise<void> { }

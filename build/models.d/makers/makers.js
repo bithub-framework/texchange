@@ -7,51 +7,53 @@ const assert = require("assert");
 class Makers {
     constructor(context) {
         this.context = context;
-        this.orders = new Map();
-        this.frozens = new Map();
-        this.totalUnfilled = {
+        this.$orders = new Map();
+        this.$frozens = new Map();
+        this.$totalUnfilled = {
             [interfaces_1.Side.ASK]: this.context.H.from(0),
             [interfaces_1.Side.BID]: this.context.H.from(0),
         };
         this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
         this.OpenMaker = new interfaces_1.TexchangeOpenMakerStatic(this.context.H, this.OrderId);
         this.Frozen = new frozon_1.FrozenStatic(this.context.H);
+        this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
         this.totalFrozen = this.Frozen.ZERO;
     }
     getTotalUnfilled() {
-        return this.totalUnfilled;
+        return this.TotalUnfilled.copy(this.$totalUnfilled);
     }
     getTotalFrozen() {
         return this.totalFrozen;
     }
     [Symbol.iterator]() {
-        return this.orders.values();
+        return [...this.$orders.values()][Symbol.iterator]();
     }
     getOrder(id) {
-        const order = this.orders.get(id);
+        const order = this.$orders.get(id);
         assert(typeof order !== 'undefined');
         return order;
     }
+    // TODO zap
     capture() {
-        return [...this.orders.keys()]
+        return [...this.$orders.keys()]
             .map(oid => ({
-            order: this.OpenMaker.capture(this.orders.get(oid)),
-            frozen: this.Frozen.capture(this.frozens.get(oid)),
+            order: this.OpenMaker.capture(this.$orders.get(oid)),
+            frozen: this.Frozen.capture(this.$frozens.get(oid)),
         }));
     }
     restore(snapshot) {
         for (const { order: orderSnapshot, frozen: frozenSnapshot, } of snapshot) {
             const order = this.OpenMaker.restore(orderSnapshot);
             const frozen = this.Frozen.restore(frozenSnapshot);
-            this.orders.set(order.id, order);
-            this.frozens.set(order.id, frozen);
+            this.$orders.set(order.id, order);
+            this.$frozens.set(order.id, frozen);
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
-            this.totalUnfilled[side] = [...this.orders.values()]
+            this.$totalUnfilled[side] = [...this.$orders.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), this.context.H.from(0));
         }
-        this.totalFrozen = [...this.frozens.values()]
+        this.totalFrozen = [...this.$frozens.values()]
             .reduce((total, frozen) => this.Frozen.plus(total, frozen), this.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
@@ -69,10 +71,10 @@ class Makers {
     appendOrder(order) {
         assert(order.unfilled.gt(0));
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
-        this.orders.set(order.id, order);
-        this.frozens.set(order.id, toFreeze);
+        this.$orders.set(order.id, order);
+        this.$frozens.set(order.id, toFreeze);
         this.totalFrozen = this.Frozen.plus(this.totalFrozen, toFreeze);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
             .plus(order.unfilled);
     }
     takeOrder(oid, volume) {
@@ -81,7 +83,7 @@ class Makers {
         assert(order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...this.OpenMaker.copy(order),
+            ...order,
             filled: order.filled.plus(volume),
             unfilled: order.unfilled.minus(volume),
         };
@@ -92,19 +94,19 @@ class Makers {
         if (typeof volume !== 'undefined')
             assert(volume.lte(order.behind));
         const newOrder = {
-            ...this.OpenMaker.copy(order),
+            ...order,
             behind: typeof volume !== 'undefined'
                 ? order.behind.minus(volume)
                 : this.context.H.from(0),
         };
-        this.orders.set(oid, newOrder);
+        this.$orders.set(oid, newOrder);
     }
     removeOrder(oid) {
         const order = this.getOrder(oid);
-        const toThaw = this.frozens.get(oid);
-        this.orders.delete(oid);
-        this.frozens.delete(oid);
-        this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+        const toThaw = this.$frozens.get(oid);
+        this.$orders.delete(oid);
+        this.$frozens.delete(oid);
+        this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
             .minus(order.unfilled);
         this.totalFrozen = this.Frozen.minus(this.totalFrozen, toThaw);
     }
@@ -116,4 +118,18 @@ class Makers {
     }
 }
 exports.Makers = Makers;
+(function (Makers) {
+    class TotalUnfilledStatic {
+        constructor(H) {
+            this.H = H;
+        }
+        copy(totalUnfilled) {
+            return {
+                [interfaces_1.Side.ASK]: totalUnfilled[interfaces_1.Side.ASK],
+                [interfaces_1.Side.BID]: totalUnfilled[interfaces_1.Side.BID],
+            };
+        }
+    }
+    Makers.TotalUnfilledStatic = TotalUnfilledStatic;
+})(Makers = exports.Makers || (exports.Makers = {}));
 //# sourceMappingURL=makers.js.map

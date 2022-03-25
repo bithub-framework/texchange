@@ -20,15 +20,15 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
         const position = this.models.assets.getPosition();
         const totalFrozen = this.models.makers.getTotalFrozen();
         const totalUnfilled = this.models.makers.getTotalUnfilled();
-        const final = {};
+        const $final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const side = length * interfaces_1.Operation.OPEN;
             const afterDeduction = (0, utilities_1.max)(totalUnfilled[side].minus(position[-length]), this.context.H.from(0));
-            final[length] = totalFrozen.balance[length]
+            $final[length] = totalFrozen.balance[length]
                 .times(afterDeduction)
                 .div(totalUnfilled[side]);
         }
-        return final[interfaces_1.Length.LONG].plus(final[interfaces_1.Length.SHORT]);
+        return $final[interfaces_1.Length.LONG].plus($final[interfaces_1.Length.SHORT]);
     }
 }
 exports.DefaultGetAvailable = DefaultGetAvailable;

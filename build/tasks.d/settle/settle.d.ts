@@ -6,10 +6,11 @@ import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
 import { Pricing } from '../../models.d/pricing/pricing';
 export declare abstract class Settle<H extends HLike<H>> implements SettleLike {
-    protected abstract readonly context: Context<H>;
-    protected abstract readonly models: Settle.ModelDeps<H>;
-    protected abstract readonly broadcast: Broadcast<H>;
-    protected abstract readonly tasks: Settle.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: Settle.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: Settle.TaskDeps<H>;
+    constructor(context: Context<H>, models: Settle.ModelDeps<H>, broadcast: Broadcast<H>, tasks: Settle.TaskDeps<H>);
     settle(): void;
     protected abstract clearingMargin(length: Length, profit: H): H;
     protected abstract assertEnoughBalance(): void;

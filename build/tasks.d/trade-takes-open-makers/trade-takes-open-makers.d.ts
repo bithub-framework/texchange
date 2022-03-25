@@ -7,16 +7,16 @@ import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTakesOpenMakersLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: TradeTakesOpenMakers.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: TradeTakesOpenMakers.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: TradeTakesOpenMakers.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: TradeTakesOpenMakers.TaskDeps<H>;
     private TradeId;
     private Trade;
     constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>, tasks: TradeTakesOpenMakers.TaskDeps<H>);
-    tradeTakesOpenMakers(roTrade: TexchangeTrade<H>): void;
-    private tradeShouldTakeOpenOrder;
-    private tradeTakesOrderQueue;
+    tradeTakesOpenMakers(trade: TexchangeTrade<H>): void;
+    private $tradeShouldTakeOpenOrder;
+    private $tradeTakesOrderQueue;
     private tradeTakesOpenMaker;
 }
 export declare namespace TradeTakesOpenMakers {

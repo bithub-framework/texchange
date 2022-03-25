@@ -20,7 +20,7 @@ class ValidateOrder {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder({
-            ...this.OpenOrder.copy(order),
+            ...order,
             behind: this.context.H.from(0),
         });
         try {

@@ -14,17 +14,17 @@ import { Joystick } from '../views.d/joystick';
 
 
 export abstract class Texchange<H extends HLike<H>> {
-	protected abstract readonly context: Context<H>;
-	protected readonly abstract mtm: Mtm<H> | null;
-	protected readonly abstract models: Models<H>;
-	protected readonly broadcast: Broadcast<H>;
-	protected readonly abstract tasks: Tasks<H>;
-	protected readonly abstract useCases: UseCases<H>;
-	protected readonly abstract views: Views<H>;
+	protected abstract context: Context<H>;
+	protected abstract mtm: Mtm<H> | null;
+	protected abstract models: Models<H>;
+	protected broadcast: Broadcast<H>;
+	protected abstract tasks: Tasks<H>;
+	protected abstract useCases: UseCases<H>;
+	protected abstract views: Views<H>;
 
-	public readonly startable: StatefulStartable<Texchange.Snapshot>;
-	public abstract readonly latency: Latency<H>;
-	public abstract readonly joystick: Joystick<H>;
+	public startable: StatefulStartable<Texchange.Snapshot>;
+	public abstract latency: Latency<H>;
+	public abstract joystick: Joystick<H>;
 
 	public constructor() {
 		this.broadcast = <Broadcast<H>>new EventEmitter();

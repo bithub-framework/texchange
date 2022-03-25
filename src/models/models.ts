@@ -14,12 +14,12 @@ import {
 export abstract class Models<H extends HLike<H>>
 	implements StatefulLike<Models.Snapshot> {
 
-	public readonly assets: Assets<H>;
-	public readonly margins: Margins<H>;
-	public abstract readonly makers: Makers<H>;
-	public readonly book: Book<H>;
-	public readonly progress: Progress<H>;
-	public abstract readonly pricing: Pricing<H, any>;
+	public assets: Assets<H>;
+	public margins: Margins<H>;
+	public abstract makers: Makers<H>;
+	public book: Book<H>;
+	public progress: Progress<H>;
+	public abstract pricing: Pricing<H, any>;
 
 	public constructor(
 		context: Context<H>,

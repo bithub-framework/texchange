@@ -16,9 +16,9 @@ import { HLike } from 'interfaces';
 
 export class DefaultTasks<H extends HLike<H>>
 	extends Tasks<H> {
-	public readonly getAvailable: GetAvailableLike<H>;
-	public readonly settle: SettleLike;
-	public readonly marginAccumulation: MarginAccumulationLike<H>;
+	public getAvailable: GetAvailableLike<H>;
+	public settle: SettleLike;
+	public marginAccumulation: MarginAccumulationLike<H>;
 
 	public constructor(
 		context: Context<H>,

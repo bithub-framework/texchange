@@ -13,14 +13,14 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
 import { HLike } from 'interfaces';
 export declare abstract class UseCases<H extends HLike<H>> {
-    readonly makeOrder: MakeOrder<H>;
-    readonly cancelOrder: CancelOrder<H>;
-    readonly amendOrder: AmendOrder<H>;
-    readonly getOpenOrders: GetOpenOrders<H>;
-    readonly getPositions: GetPositions<H>;
-    readonly getBalances: GetBalances<H>;
-    readonly updateOrderbook: UpdateOrderbook<H>;
-    abstract readonly updateTrades: UpdateTrades<H>;
-    readonly subscription: Subscription<H>;
+    makeOrder: MakeOrder<H>;
+    cancelOrder: CancelOrder<H>;
+    amendOrder: AmendOrder<H>;
+    getOpenOrders: GetOpenOrders<H>;
+    getPositions: GetPositions<H>;
+    getBalances: GetBalances<H>;
+    updateOrderbook: UpdateOrderbook<H>;
+    abstract updateTrades: UpdateTrades<H>;
+    subscription: Subscription<H>;
     constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
 }

@@ -22,7 +22,6 @@ export namespace Frozen {
             readonly [length: Length]: H.Snapshot;
         };
     }
-
 }
 
 export class FrozenStatic<H extends HLike<H>> {
@@ -43,7 +42,7 @@ export class FrozenStatic<H extends HLike<H>> {
         }
     }
 
-    public readonly ZERO: Frozen<H> = {
+    public ZERO: Frozen<H> = {
         balance: {
             [Length.LONG]: this.H.from(0),
             [Length.SHORT]: this.H.from(0),

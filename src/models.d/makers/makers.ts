@@ -1,6 +1,6 @@
 import {
 	Side, Length,
-	HLike,
+	HLike, HStatic,
 	TexchangeOrderId,
 	TexchangeOrderIdStatic,
 	TexchangeOpenMakerStatic,
@@ -22,27 +22,26 @@ export abstract class Makers<H extends HLike<H>> implements
 	StatefulLike<Makers.Snapshot>,
 	Iterable<TexchangeOpenMaker<H>> {
 
-	private orders = new Map<TexchangeOrderId, TexchangeOpenMaker<H>>();
-	private frozens = new Map<TexchangeOrderId, Frozen<H>>();
-	private totalUnfilled: Makers.TotalUnfilled.MutablePlain<H> = {
+	private $orders = new Map<TexchangeOrderId, TexchangeOpenMaker<H>>();
+	private $frozens = new Map<TexchangeOrderId, Frozen<H>>();
+	private $totalUnfilled: Makers.TotalUnfilled<H> = {
 		[Side.ASK]: this.context.H.from(0),
 		[Side.BID]: this.context.H.from(0),
 	};
 
-	protected readonly OrderId = new TexchangeOrderIdStatic();
-	protected readonly OpenMaker = new TexchangeOpenMakerStatic<H>(
-		this.context.H, this.OrderId,
-	);
-	protected readonly Frozen = new FrozenStatic<H>(this.context.H);
+	protected OrderId = new TexchangeOrderIdStatic();
+	protected OpenMaker = new TexchangeOpenMakerStatic<H>(this.context.H, this.OrderId);
+	protected Frozen = new FrozenStatic<H>(this.context.H);
+	protected TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
 
 	public constructor(
-		protected readonly context: Context<H>,
+		protected context: Context<H>,
 	) { }
 
 	private totalFrozen: Frozen<H> = this.Frozen.ZERO;
 
-	public getTotalUnfilled(): Makers.TotalUnfilled<H> {
-		return this.totalUnfilled;
+	public getTotalUnfilled(): Makers.TotalUnfilled.Functional<H> {
+		return this.TotalUnfilled.copy(this.$totalUnfilled);
 	}
 
 	public getTotalFrozen(): Frozen<H> {
@@ -50,20 +49,21 @@ export abstract class Makers<H extends HLike<H>> implements
 	}
 
 	public [Symbol.iterator]() {
-		return this.orders.values();
+		return [...this.$orders.values()][Symbol.iterator]();
 	}
 
 	public getOrder(id: TexchangeOrderId): TexchangeOpenMaker<H> {
-		const order = this.orders.get(id);
+		const order = this.$orders.get(id);
 		assert(typeof order !== 'undefined');
 		return order;
 	}
 
+	// TODO zap
 	public capture(): Makers.Snapshot {
-		return [...this.orders.keys()]
+		return [...this.$orders.keys()]
 			.map(oid => ({
-				order: this.OpenMaker.capture(this.orders.get(oid)!),
-				frozen: this.Frozen.capture(this.frozens.get(oid)!),
+				order: this.OpenMaker.capture(this.$orders.get(oid)!),
+				frozen: this.Frozen.capture(this.$frozens.get(oid)!),
 			}));
 	}
 
@@ -74,18 +74,18 @@ export abstract class Makers<H extends HLike<H>> implements
 		} of snapshot) {
 			const order = this.OpenMaker.restore(orderSnapshot);
 			const frozen = this.Frozen.restore(frozenSnapshot);
-			this.orders.set(order.id, order);
-			this.frozens.set(order.id, frozen);
+			this.$orders.set(order.id, order);
+			this.$frozens.set(order.id, frozen);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
-			this.totalUnfilled[side] = [...this.orders.values()]
+			this.$totalUnfilled[side] = [...this.$orders.values()]
 				.filter(order => order.side === side)
 				.reduce(
 					(total, order) => total.plus(order.unfilled),
 					this.context.H.from(0),
 				);
 		}
-		this.totalFrozen = [...this.frozens.values()]
+		this.totalFrozen = [...this.$frozens.values()]
 			.reduce(
 				(total, frozen) => this.Frozen.plus(total, frozen),
 				this.Frozen.ZERO,
@@ -109,13 +109,11 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public appendOrder(order: TexchangeOpenMaker<H>): void {
 		assert(order.unfilled.gt(0));
-		const toFreeze = this.normalizeFrozen(
-			this.toFreeze(order),
-		);
-		this.orders.set(order.id, order);
-		this.frozens.set(order.id, toFreeze);
+		const toFreeze = this.normalizeFrozen(this.toFreeze(order));
+		this.$orders.set(order.id, order);
+		this.$frozens.set(order.id, toFreeze);
 		this.totalFrozen = this.Frozen.plus(this.totalFrozen, toFreeze);
-		this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
 			.plus(order.unfilled);
 	}
 
@@ -125,7 +123,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
 		const newOrder: TexchangeOpenMaker<H> = {
-			...this.OpenMaker.copy(order),
+			...order,
 			filled: order.filled.plus(volume),
 			unfilled: order.unfilled.minus(volume),
 		};
@@ -137,20 +135,20 @@ export abstract class Makers<H extends HLike<H>> implements
 		if (typeof volume !== 'undefined')
 			assert(volume.lte(order.behind));
 		const newOrder: TexchangeOpenMaker<H> = {
-			...this.OpenMaker.copy(order),
+			...order,
 			behind: typeof volume !== 'undefined'
 				? order.behind.minus(volume)
 				: this.context.H.from(0),
 		};
-		this.orders.set(oid, newOrder);
+		this.$orders.set(oid, newOrder);
 	}
 
 	public removeOrder(oid: TexchangeOrderId): void {
 		const order = this.getOrder(oid);
-		const toThaw = this.frozens.get(oid)!;
-		this.orders.delete(oid);
-		this.frozens.delete(oid);
-		this.totalUnfilled[order.side] = this.totalUnfilled[order.side]
+		const toThaw = this.$frozens.get(oid)!;
+		this.$orders.delete(oid);
+		this.$frozens.delete(oid);
+		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
 			.minus(order.unfilled);
 		this.totalFrozen = this.Frozen.minus(this.totalFrozen, toThaw);
 	}
@@ -168,11 +166,27 @@ export abstract class Makers<H extends HLike<H>> implements
 
 export namespace Makers {
 	export interface TotalUnfilled<H> {
-		readonly [side: Side]: H;
+		[side: Side]: H;
 	}
+
 	export namespace TotalUnfilled {
-		export interface MutablePlain<H> {
-			[side: Side]: H;
+		export interface Functional<H> {
+			readonly [side: Side]: H;
+		}
+	}
+
+	export class TotalUnfilledStatic<H extends HLike<H>>{
+		public constructor(
+			private H: HStatic<H>,
+		) { }
+
+		public copy(
+			totalUnfilled: TotalUnfilled<H> | TotalUnfilled.Functional<H>,
+		): TotalUnfilled<H> | TotalUnfilled.Functional<H> {
+			return {
+				[Side.ASK]: totalUnfilled[Side.ASK],
+				[Side.BID]: totalUnfilled[Side.BID],
+			};
 		}
 	}
 

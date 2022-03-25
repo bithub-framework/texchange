@@ -20,25 +20,25 @@ export class OrderMakes<H extends HLike<H>>
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
-        protected readonly context: Context<H>,
-        protected readonly models: OrderMakes.ModelDeps<H>,
-        protected readonly broadcast: Broadcast<H>,
-        protected readonly tasks: OrderMakes.TaskDeps<H>,
+        protected context: Context<H>,
+        protected models: OrderMakes.ModelDeps<H>,
+        protected broadcast: Broadcast<H>,
+        protected tasks: OrderMakes.TaskDeps<H>,
     ) { }
 
     public orderMakes(
         order: TexchangeOpenOrder<H>,
     ): void {
-        const openMaker: TexchangeOpenMaker.MutablePlain<H> = {
+        const $order: TexchangeOpenMaker<H> = {
             ...this.OpenOrder.copy(order),
             behind: this.context.H.from(0),
         };
         const makers = this.models.book.getBook()[order.side];
         for (const maker of makers)
-            if (maker.price.eq(openMaker.price))
+            if (maker.price.eq($order.price))
                 // TODO addBehind()
-                openMaker.behind = openMaker.behind.plus(maker.quantity);
-        this.models.makers.appendOrder(openMaker);
+                $order.behind = $order.behind.plus(maker.quantity);
+        this.models.makers.appendOrder($order);
     }
 }
 

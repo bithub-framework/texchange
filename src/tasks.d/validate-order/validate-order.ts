@@ -22,10 +22,10 @@ export class ValidateOrder<H extends HLike<H>>
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
-        protected readonly context: Context<H>,
-        protected readonly models: ValidateOrder.ModelDeps<H>,
-        protected readonly broadcast: Broadcast<H>,
-        protected readonly tasks: ValidateOrder.TaskDeps<H>,
+        protected context: Context<H>,
+        protected models: ValidateOrder.ModelDeps<H>,
+        protected broadcast: Broadcast<H>,
+        protected tasks: ValidateOrder.TaskDeps<H>,
     ) { }
 
     public validateOrder(order: TexchangeOpenOrder<H>): void {
@@ -37,7 +37,7 @@ export class ValidateOrder<H extends HLike<H>>
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder({
-            ...this.OpenOrder.copy(order),
+            ...order,
             behind: this.context.H.from(0),
         });
         try {

@@ -9,6 +9,6 @@ import { HLike } from 'interfaces';
  * 默认实时结算
  */
 export declare class DefaultUseCases<H extends HLike<H>> extends UseCases<H> {
-    readonly updateTrades: UpdateTrades<H>;
+    updateTrades: UpdateTrades<H>;
     constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>);
 }

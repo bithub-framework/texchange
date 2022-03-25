@@ -13,12 +13,14 @@ import assert = require('assert');
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	public constructor(
 		context: Context<H>,
-	) { super(context); }
+	) {
+		super(context);
+	}
 
-	protected toFreeze(
-		order: TexchangeOpenOrder<H>,
-	): Frozen<H> {
-		// 默认单向持仓模式
+	/**
+	 * 默认单向持仓模式
+	 */
+	protected toFreeze(order: TexchangeOpenOrder<H>): Frozen<H> {
 		if (order.operation === Operation.OPEN)
 			return {
 				balance: {

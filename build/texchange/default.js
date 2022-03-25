@@ -14,7 +14,7 @@ class DefaultTexchange extends texchange_1.Texchange {
         this.context = new default_1.DefaultContext(config, timeline, H);
         this.models = new default_3.DefaultModels(this.context);
         this.tasks = new default_4.DefaultTasks(this.context, this.models, this.broadcast);
-        this.mtm = new default_2.DefaultMtm(this.context, this.models, this.tasks);
+        this.mtm = new default_2.DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
         this.useCases = new default_5.DefaultUseCases(this.context, this.models, this.broadcast, this.tasks);
         this.views = new views_1.Views(this.context, this.useCases);
         this.latency = this.views.latency;

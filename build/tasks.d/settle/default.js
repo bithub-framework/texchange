@@ -4,21 +4,20 @@ exports.DefaultSettle = void 0;
 const interfaces_1 = require("interfaces");
 const assert = require("assert");
 const settle_1 = require("./settle");
+/**
+* 默认逐仓
+*/
 class DefaultSettle extends settle_1.Settle {
     constructor(context, models, broadcast, tasks) {
-        super();
-        this.context = context;
+        super(context, models, broadcast, tasks);
         this.models = models;
-        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     clearingMargin(length, profit) {
-        // 默认逐仓
         return this.models.margins.getMargin()[length]
             .plus(profit);
     }
     assertEnoughBalance() {
-        // 默认逐仓
         for (const length of [interfaces_1.Length.SHORT, interfaces_1.Length.LONG])
             assert(this.models.margins.getMargin()[length].gte(0));
     }

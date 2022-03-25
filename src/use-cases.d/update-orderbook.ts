@@ -11,10 +11,10 @@ import { Book } from '../models.d/book';
 
 export class UpdateOrderbook<H extends HLike<H>>{
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: UpdateOrderbook.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: UpdateOrderbook.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: UpdateOrderbook.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: UpdateOrderbook.TaskDeps<H>,
 	) { }
 
 	public updateOrderbook(orderbook: Orderbook<H>): void {

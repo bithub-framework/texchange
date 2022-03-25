@@ -14,7 +14,7 @@ import { HLike } from 'interfaces';
 export class DefaultUseCases<H extends HLike<H>>
 	extends UseCases<H> {
 
-	public readonly updateTrades: UpdateTrades<H>;
+	public updateTrades: UpdateTrades<H>;
 
 	public constructor(
 		context: Context<H>,

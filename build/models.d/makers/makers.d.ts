@@ -1,18 +1,19 @@
-import { Side, HLike, TexchangeOrderId, TexchangeOrderIdStatic, TexchangeOpenMakerStatic, TexchangeOpenMaker, TexchangeOpenOrder, OpenMaker } from 'interfaces';
+import { Side, HLike, HStatic, TexchangeOrderId, TexchangeOrderIdStatic, TexchangeOpenMakerStatic, TexchangeOpenMaker, TexchangeOpenOrder, OpenMaker } from 'interfaces';
 import { Frozen, FrozenStatic } from './frozon';
 import { Context } from '../../context/context';
 import { StatefulLike } from 'startable';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<TexchangeOpenMaker<H>> {
-    protected readonly context: Context<H>;
-    private orders;
-    private frozens;
-    private totalUnfilled;
-    protected readonly OrderId: TexchangeOrderIdStatic;
-    protected readonly OpenMaker: TexchangeOpenMakerStatic<H>;
-    protected readonly Frozen: FrozenStatic<H>;
+    protected context: Context<H>;
+    private $orders;
+    private $frozens;
+    private $totalUnfilled;
+    protected OrderId: TexchangeOrderIdStatic;
+    protected OpenMaker: TexchangeOpenMakerStatic<H>;
+    protected Frozen: FrozenStatic<H>;
+    protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
     constructor(context: Context<H>);
     private totalFrozen;
-    getTotalUnfilled(): Makers.TotalUnfilled<H>;
+    getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<TexchangeOpenMaker<H>>;
     getOrder(id: TexchangeOrderId): TexchangeOpenMaker<H>;
@@ -28,12 +29,17 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
 }
 export declare namespace Makers {
     interface TotalUnfilled<H> {
-        readonly [side: Side]: H;
+        [side: Side]: H;
     }
     namespace TotalUnfilled {
-        interface MutablePlain<H> {
-            [side: Side]: H;
+        interface Functional<H> {
+            readonly [side: Side]: H;
         }
+    }
+    class TotalUnfilledStatic<H extends HLike<H>> {
+        private H;
+        constructor(H: HStatic<H>);
+        copy(totalUnfilled: TotalUnfilled<H> | TotalUnfilled.Functional<H>): TotalUnfilled<H> | TotalUnfilled.Functional<H>;
     }
     type Snapshot = {
         order: OpenMaker.Snapshot;

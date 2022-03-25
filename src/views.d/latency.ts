@@ -90,9 +90,9 @@ export class Latency<H extends HLike<H>>
         });
     }
 
-    public async makeOrders(orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
+    public async makeOrders($orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
         try {
-            orders = orders.map(order => this.LimitOrder.copy(order));
+            const orders = $orders.map(order => this.LimitOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.makeOrders(orders).map(order =>
@@ -105,9 +105,9 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async amendOrders(amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
+    public async amendOrders($amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
         try {
-            amendments = amendments.map(amendment => this.Amendment.copy(amendment));
+            const amendments = $amendments.map(amendment => this.Amendment.copy(amendment));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.amendOrders(amendments).map(order =>
@@ -120,8 +120,9 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async cancelOrders(orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]> {
+    public async cancelOrders($orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]> {
         try {
+            const orders = $orders.map(order => this.OpenOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.cancelOrders(orders).map(order =>

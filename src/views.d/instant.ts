@@ -25,7 +25,7 @@ export class Instant<H extends HLike<H>> {
     ) { }
 
     public makeOrders(
-        orders: readonly LimitOrder<H>[],
+        orders: LimitOrder<H>[],
     ): (TexchangeOpenOrder<H> | Error)[] {
         return orders.map(order => {
             try {
@@ -37,13 +37,13 @@ export class Instant<H extends HLike<H>> {
     }
 
     public cancelOrders(
-        orders: readonly TexchangeOpenOrder<H>[],
+        orders: TexchangeOpenOrder<H>[],
     ): TexchangeOpenOrder<H>[] {
         return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
-        amendments: readonly TexchangeAmendment<H>[],
+        amendments: TexchangeAmendment<H>[],
     ): (TexchangeOpenOrder<H> | Error)[] {
         return amendments.map(amendment => {
             try {

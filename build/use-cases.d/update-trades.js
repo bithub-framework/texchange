@@ -16,7 +16,6 @@ class UpdateTrades {
         const now = this.context.timeline.now();
         for (const trade of trades)
             assert(trade.time === now);
-        this.models.progress.updateDatabaseTrades(trades);
         this.broadcast.emit('trades', trades);
         for (const trade of trades)
             tradeTakesOpenMakers.tradeTakesOpenMakers(trade);

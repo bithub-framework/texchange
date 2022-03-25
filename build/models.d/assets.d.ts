@@ -2,10 +2,10 @@ import { Length, Position, HLike, H, HStatic } from 'interfaces';
 import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
-    private readonly context;
-    private position;
+    private context;
+    private $position;
     private balance;
-    private cost;
+    private $cost;
     private Position;
     private Cost;
     constructor(context: Context<H>);
@@ -23,12 +23,9 @@ export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.S
 }
 export declare namespace Assets {
     interface Cost<H extends HLike<H>> {
-        readonly [length: Length]: H;
+        [length: Length]: H;
     }
     namespace Cost {
-        interface MutablePlain<H extends HLike<H>> {
-            [length: Length]: H;
-        }
         interface Snapshot {
             readonly [length: Length]: H.Snapshot;
         }
@@ -37,7 +34,8 @@ export declare namespace Assets {
         private H;
         constructor(H: HStatic<H>);
         capture(cost: Cost<H>): Cost.Snapshot;
-        restore(snapshot: Cost.Snapshot): Cost.MutablePlain<H>;
+        restore(snapshot: Cost.Snapshot): Cost<H>;
+        copy(cost: Cost<H>): Cost<H>;
     }
     interface Volumes<H extends HLike<H>> {
         readonly length: Length;

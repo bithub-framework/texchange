@@ -21,7 +21,7 @@ export declare class FrozenStatic<H extends HLike<H>> {
     private H;
     constructor(H: HStatic<H>);
     plus(x: Frozen<H>, y: Frozen<H>): Frozen<H>;
-    readonly ZERO: Frozen<H>;
+    ZERO: Frozen<H>;
     minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H>;
     capture(frozen: Frozen<H>): Frozen.Snapshot;
     restore(snapshot: Frozen.Snapshot): Frozen<H>;

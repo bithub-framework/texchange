@@ -1,19 +1,18 @@
 import { Context } from '../context/context';
-import { DatabaseTrade } from '../models.d/progress';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import { HLike, TexchangeTrade } from 'interfaces';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 export declare class UpdateTrades<H extends HLike<H>> {
-    protected readonly context: Context<H>;
-    protected readonly models: UpdateTrades.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: UpdateTrades.TaskDeps<H>;
-    private readonly realTimeSettlement;
+    protected context: Context<H>;
+    protected models: UpdateTrades.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: UpdateTrades.TaskDeps<H>;
+    private realTimeSettlement;
     constructor(context: Context<H>, models: UpdateTrades.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UpdateTrades.TaskDeps<H>, realTimeSettlement: boolean);
-    updateTrades(trades: readonly DatabaseTrade<H>[]): void;
+    updateTrades(trades: DatabaseTrades<H>): void;
 }
 export declare namespace UpdateTrades {
     interface ModelDeps<H extends HLike<H>> {
@@ -25,3 +24,7 @@ export declare namespace UpdateTrades {
         settle: SettleLike;
     }
 }
+export interface DatabaseTrade<H extends HLike<H>> extends TexchangeTrade<H> {
+    id: string;
+}
+export declare type DatabaseTrades<H extends HLike<H>> = DatabaseTrade<H>[];

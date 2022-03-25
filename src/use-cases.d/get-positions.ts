@@ -11,18 +11,15 @@ import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>> {
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: GetPositions.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: GetPositions.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: GetPositions.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: GetPositions.TaskDeps<H>,
 	) { }
 
 	public getPositions(): Positions<H> {
 		return {
-			position: {
-				[Length.LONG]: this.models.assets.getPosition()[Length.LONG],
-				[Length.SHORT]: this.models.assets.getPosition()[Length.SHORT],
-			},
+			position: this.models.assets.getPosition(),
 			closable: this.tasks.getClosable.getClosable(),
 			time: this.context.timeline.now(),
 		};

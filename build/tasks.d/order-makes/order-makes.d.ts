@@ -5,10 +5,10 @@ import { Broadcast } from '../../broadcast';
 import { Book } from '../../models.d/book';
 import { Makers } from '../../models.d/makers/makers';
 export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H> {
-    protected readonly context: Context<H>;
-    protected readonly models: OrderMakes.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: OrderMakes.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: OrderMakes.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: OrderMakes.TaskDeps<H>;
     private OrderId;
     private OpenOrder;
     constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderMakes.TaskDeps<H>);

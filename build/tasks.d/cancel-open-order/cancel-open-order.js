@@ -22,7 +22,7 @@ class CancelOpenOrder {
             filled = order.quantity;
         }
         return {
-            ...this.OpenOrder.copy(order),
+            ...order,
             filled,
             unfilled: order.quantity.minus(filled),
         };

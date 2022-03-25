@@ -4,10 +4,10 @@ import { Broadcast } from '../broadcast';
 import { HLike, TexchangeTradeId, Trade, Orderbook, Positions, Balances } from 'interfaces';
 import { EventEmitter } from 'events';
 export declare class Subscription<H extends HLike<H>> extends EventEmitter {
-    protected readonly context: Context<H>;
-    protected readonly models: Subscription.ModelDeps<H>;
-    protected readonly broadcast: Broadcast<H>;
-    protected readonly tasks: Subscription.TaskDeps<H>;
+    protected context: Context<H>;
+    protected models: Subscription.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: Subscription.TaskDeps<H>;
     constructor(context: Context<H>, models: Subscription.ModelDeps<H>, broadcast: Broadcast<H>, tasks: Subscription.TaskDeps<H>);
 }
 export declare namespace Subscription {

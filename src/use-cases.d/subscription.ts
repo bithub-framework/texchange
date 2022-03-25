@@ -14,10 +14,10 @@ export class Subscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: Subscription.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Subscription.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: Subscription.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: Subscription.TaskDeps<H>,
 	) {
 		super();
 

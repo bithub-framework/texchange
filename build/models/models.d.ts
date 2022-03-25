@@ -8,12 +8,12 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { Context } from '../context/context';
 import { HLike } from 'interfaces';
 export declare abstract class Models<H extends HLike<H>> implements StatefulLike<Models.Snapshot> {
-    readonly assets: Assets<H>;
-    readonly margins: Margins<H>;
-    abstract readonly makers: Makers<H>;
-    readonly book: Book<H>;
-    readonly progress: Progress<H>;
-    abstract readonly pricing: Pricing<H, any>;
+    assets: Assets<H>;
+    margins: Margins<H>;
+    abstract makers: Makers<H>;
+    book: Book<H>;
+    progress: Progress<H>;
+    abstract pricing: Pricing<H, any>;
     constructor(context: Context<H>);
     capture(): Models.Snapshot;
     restore(snapshot: Models.Snapshot): void;

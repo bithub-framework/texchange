@@ -27,12 +27,12 @@ import { Joystick } from '../views.d/joystick';
 
 export class DefaultTexchange<H extends HLike<H>>
 	extends Texchange<H> {
-	protected readonly context: Context<H>;
-	protected readonly mtm: Mtm<H> | null;
-	protected readonly models: Models<H>;
-	protected readonly tasks: Tasks<H>;
-	protected readonly useCases: UseCases<H>;
-	protected readonly views: Views<H>;
+	protected context: Context<H>;
+	protected mtm: Mtm<H> | null;
+	protected models: Models<H>;
+	protected tasks: Tasks<H>;
+	protected useCases: UseCases<H>;
+	protected views: Views<H>;
 	public joystick: Joystick<H>;
 	public latency: Latency<H>;
 
@@ -45,7 +45,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		this.context = new DefaultContext(config, timeline, H);
 		this.models = new DefaultModels(this.context);
 		this.tasks = new DefaultTasks(this.context, this.models, this.broadcast);
-		this.mtm = new DefaultMtm(this.context, this.models, this.tasks);
+		this.mtm = new DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
 		this.useCases = new DefaultUseCases(this.context, this.models, this.broadcast, this.tasks);
 		this.views = new Views(this.context, this.useCases);
 		this.latency = this.views.latency;

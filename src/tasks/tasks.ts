@@ -32,19 +32,19 @@ import { HLike } from 'interfaces';
 
 
 export abstract class Tasks<H extends HLike<H>> {
-	public readonly getBalances: GetBalancesLike<H>;
-	public readonly getPositions: GetPositionsLike<H>;
-	public abstract readonly getAvailable: GetAvailableLike<H>;
-	public readonly getClosable: GetClosableLike<H>;
-	public abstract readonly settle: SettleLike;
-	public readonly orderMakes: OrderMakesLike<H>;
-	public readonly tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
-	public readonly orderTakes: OrderTakesLike<H>;
-	public readonly validateOrder: ValidateOrderLike<H>;
-	public readonly makeOpenOrder: MakeOpenOrderLike<H>;
-	public readonly cancelOpenOrder: CancelOpenOrderLike<H>;
-	public abstract readonly marginAccumulation: MarginAccumulationLike<H>;
-	public readonly orderVolumes: OrderVolumesLike<H>;
+	public getBalances: GetBalancesLike<H>;
+	public getPositions: GetPositionsLike<H>;
+	public abstract getAvailable: GetAvailableLike<H>;
+	public getClosable: GetClosableLike<H>;
+	public abstract settle: SettleLike;
+	public orderMakes: OrderMakesLike<H>;
+	public tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
+	public orderTakes: OrderTakesLike<H>;
+	public validateOrder: ValidateOrderLike<H>;
+	public makeOpenOrder: MakeOpenOrderLike<H>;
+	public cancelOpenOrder: CancelOpenOrderLike<H>;
+	public abstract marginAccumulation: MarginAccumulationLike<H>;
+	public orderVolumes: OrderVolumesLike<H>;
 
 	public constructor(
 		context: Context<H>,

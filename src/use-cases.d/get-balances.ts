@@ -9,12 +9,11 @@ import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
 
 
 export class GetBalances<H extends HLike<H>> {
-
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: GetBalances.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: GetBalances.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: GetBalances.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: GetBalances.TaskDeps<H>,
 	) { }
 
 	public getBalances(): Balances<H> {

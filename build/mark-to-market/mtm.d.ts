@@ -1,13 +1,14 @@
 import { Startable } from 'startable';
 import { Context } from '../context/context';
-import { Models } from '../models/models';
-import { Tasks } from '../tasks/tasks';
+import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
 export declare abstract class Mtm<H extends HLike<H>> {
-    abstract readonly startable: Startable;
-    protected abstract readonly context: Context<H>;
-    protected abstract readonly models: Models<H>;
-    protected abstract readonly tasks: Tasks<H>;
+    protected context: Context<H>;
+    protected models: Mtm.ModelDeps<H>;
+    protected broadcast: Broadcast<H>;
+    protected tasks: Mtm.TaskDeps<H>;
+    abstract startable: Startable;
+    constructor(context: Context<H>, models: Mtm.ModelDeps<H>, broadcast: Broadcast<H>, tasks: Mtm.TaskDeps<H>);
 }
 export declare namespace Mtm {
     interface ModelDeps<H extends HLike<H>> {

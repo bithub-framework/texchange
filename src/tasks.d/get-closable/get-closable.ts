@@ -13,11 +13,12 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class GetClosable<H extends HLike<H>>
 	implements GetClosableLike<H> {
+
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: GetClosable.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: GetClosable.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: GetClosable.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: GetClosable.TaskDeps<H>,
 	) { }
 
 	public getClosable(): Closable<H> {

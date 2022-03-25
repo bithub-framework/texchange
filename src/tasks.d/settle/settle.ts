@@ -15,19 +15,18 @@ import { Pricing } from '../../models.d/pricing/pricing';
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
 
-    protected abstract readonly context: Context<H>;
-    protected abstract readonly models: Settle.ModelDeps<H>;
-    protected abstract readonly broadcast: Broadcast<H>;
-    protected abstract readonly tasks: Settle.TaskDeps<H>;
+    public constructor(
+        protected context: Context<H>,
+        protected models: Settle.ModelDeps<H>,
+        protected broadcast: Broadcast<H>,
+        protected tasks: Settle.TaskDeps<H>,
+    ) { }
 
     public settle(): void {
         const { config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
 
-        const position: Position<H> = {
-            [Length.LONG]: assets.getPosition()[Length.LONG],
-            [Length.SHORT]: assets.getPosition()[Length.SHORT],
-        };
+        const position = assets.getPosition();
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [Length.LONG, Length.SHORT]) {
             const dollarVolume = calc.dollarVolume(

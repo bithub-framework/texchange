@@ -4,5 +4,7 @@ import {
 } from 'interfaces';
 
 export interface OrderMakesLike<H extends HLike<H>> {
-	orderMakes(openOrder: TexchangeOpenOrder<H>): void;
+	orderMakes(
+		order: TexchangeOpenOrder<H>,
+	): void;
 }

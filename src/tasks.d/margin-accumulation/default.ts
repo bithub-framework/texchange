@@ -2,20 +2,29 @@ import {
 	HLike,
 } from 'interfaces';
 import { Context } from '../../context/context';
-import { Models } from '../../models/models';
-import { Tasks } from '../../tasks/tasks';
 import { Broadcast } from '../../broadcast';
 import { MarginAccumulation } from './margin-accumulation';
+import { Margins } from '../../models.d/margins';
+import { Assets } from '../../models.d/assets';
+
 
 
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
+
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: Models<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: Tasks<H>,
-	) { super(); }
+		context: Context<H>,
+		protected models: DefaultMarginAccumulation.ModelDeps<H>,
+		broadcast: Broadcast<H>,
+		protected tasks: DefaultMarginAccumulation.TaskDeps<H>,
+	) {
+		super(
+			context,
+			models,
+			broadcast,
+			tasks,
+		);
+	}
 
 	public newMarginAfterOpening({
 		length,
@@ -46,7 +55,10 @@ export namespace DefaultMarginAccumulation {
 		= MarginAccumulation.Volumes<H>;
 
 	export interface ModelDeps<H extends HLike<H>>
-		extends MarginAccumulation.ModelDeps<H> { }
+		extends MarginAccumulation.ModelDeps<H> {
+		margins: Margins<H>;
+		assets: Assets<H>;
+	}
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends MarginAccumulation.TaskDeps<H> { }

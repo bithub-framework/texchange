@@ -13,23 +13,19 @@ import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-li
 
 export class AmendOrder<H extends HLike<H>> {
 	public constructor(
-		protected readonly context: Context<H>,
-		protected readonly models: AmendOrder.ModelDeps<H>,
-		protected readonly broadcast: Broadcast<H>,
-		protected readonly tasks: AmendOrder.TaskDeps<H>,
+		protected context: Context<H>,
+		protected models: AmendOrder.ModelDeps<H>,
+		protected broadcast: Broadcast<H>,
+		protected tasks: AmendOrder.TaskDeps<H>,
 	) { }
 
 	public amendOrder(amendment: TexchangeAmendment<H>): TexchangeOpenOrder<H> {
 		const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);
 		const newOrder: TexchangeOpenOrder<H> = {
+			...oldOrder,
 			price: amendment.newPrice,
-			filled: oldOrder.filled,
 			unfilled: amendment.newUnfilled,
 			quantity: amendment.newUnfilled.plus(oldOrder.filled),
-			id: amendment.id,
-			side: amendment.side,
-			length: amendment.length,
-			operation: amendment.operation,
 		};
 		this.tasks.validateOrder.validateOrder(newOrder);
 		return this.tasks.makeOpenOrder.makeOpenOrder(newOrder);

@@ -5,5 +5,7 @@ import {
 
 
 export interface MakeOpenOrderLike<H extends HLike<H>> {
-	makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
+	makeOpenOrder(
+		order: TexchangeOpenOrder<H>,
+	): TexchangeOpenOrder<H>;
 }

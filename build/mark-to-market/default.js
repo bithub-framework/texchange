@@ -7,9 +7,8 @@ const mtm_1 = require("./mtm");
  * 默认永不结算
  */
 class DefaultMtm extends mtm_1.Mtm {
-    constructor(context, models, tasks) {
-        super();
-        this.context = context;
+    constructor(context, models, broadcast, tasks) {
+        super(context, models, broadcast, tasks);
         this.models = models;
         this.tasks = tasks;
         this.startable = new startable_1.Startable(() => this.start(), () => this.stop());

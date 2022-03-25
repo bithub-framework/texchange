@@ -29,4 +29,4 @@ export { DefaultUseCases } from './use-cases/default';
 export { Texchange } from './texchange/texchange';
 export { DefaultTexchange } from './texchange/default';
 
-export { DatabaseTrade } from './models.d/progress';
+export { DatabaseTrades, DatabaseTrade } from './use-cases.d/update-trades';

@@ -4,10 +4,8 @@ exports.DefaultMarginAccumulation = void 0;
 const margin_accumulation_1 = require("./margin-accumulation");
 class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation {
     constructor(context, models, broadcast, tasks) {
-        super();
-        this.context = context;
+        super(context, models, broadcast, tasks);
         this.models = models;
-        this.broadcast = broadcast;
         this.tasks = tasks;
     }
     newMarginAfterOpening({ length, volume, dollarVolume, }) {
