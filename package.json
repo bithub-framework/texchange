@@ -11,10 +11,10 @@
     "author": "Zim",
     "license": "SEE LICENSE IN ./LICENSE",
     "dependencies": {
-        "@types/big.js": "^6.0.1",
         "@types/node": "^16.11.22",
-        "big.js": "^6.0.3",
-        "interfaces": "github:bithub-framework/interfaces",
         "startable": "github:zimtsui/startable"
+    },
+    "peerDependencies": {
+        "interfaces": "github:bithub-framework/interfaces"
     }
 }
