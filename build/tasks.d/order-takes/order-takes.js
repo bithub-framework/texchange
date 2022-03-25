@@ -12,12 +12,11 @@ class OrderTakes {
         this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
         this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
-    orderTakes(taker) {
+    $orderTakes($taker) {
         const { assets, progress, book } = this.models;
         const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
         const trades = [];
-        const $taker = this.OpenOrder.copy(taker);
         let volume = this.context.H.from(0);
         let dollarVolume = this.context.H.from(0);
         for (const maker of orderbook[-$taker.side])
@@ -54,10 +53,7 @@ class OrderTakes {
                 volume,
                 dollarVolume,
             });
-        return {
-            trades,
-            maker: $taker,
-        };
+        return trades;
     }
 }
 exports.OrderTakes = OrderTakes;

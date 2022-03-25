@@ -15,10 +15,7 @@ export declare class OrderTakes<H extends HLike<H>> implements OrderTakesLike<H>
     private OrderId;
     private OpenOrder;
     constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderTakes.TaskDeps<H>);
-    orderTakes(taker: TexchangeOpenOrder<H>): {
-        trades: TexchangeTrades<H>;
-        maker: TexchangeOpenOrder<H>;
-    };
+    $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H>;
 }
 export declare namespace OrderTakes {
     interface ModelDeps<H extends HLike<H>> {

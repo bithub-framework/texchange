@@ -33,18 +33,16 @@ export class MakeOpenOrder<H extends HLike<H>>
         order: TexchangeOpenOrder<H>,
     ): TexchangeOpenOrder<H> {
         this.tasks.validateOrder.validateOrder(order);
-        const {
-            trades,
-            maker,
-        } = this.tasks.orderTakes.orderTakes(order);
-        this.tasks.orderMakes.orderMakes(maker);
+        const $order = this.OpenOrder.copy(order);
+        const trades = this.tasks.orderTakes.$orderTakes($order);
+        this.tasks.orderMakes.orderMakes($order);
         if (trades.length) {
             this.broadcast.emit('trades', trades);
             this.broadcast.emit('orderbook', this.models.book.getBook());
             this.broadcast.emit('balances', this.tasks.getBalances.getBalances());
             this.broadcast.emit('positions', this.tasks.getPositions.getPositions());
         }
-        return this.OpenOrder.copy(maker);
+        return $order;
     }
 }
 

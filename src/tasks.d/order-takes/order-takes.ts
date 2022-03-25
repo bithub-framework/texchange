@@ -32,16 +32,12 @@ export class OrderTakes<H extends HLike<H>>
         protected tasks: OrderTakes.TaskDeps<H>,
     ) { }
 
-    public orderTakes(taker: TexchangeOpenOrder<H>): {
-        trades: TexchangeTrades<H>;
-        maker: TexchangeOpenOrder<H>;
-    } {
+    public $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H> {
         const { assets, progress, book } = this.models;
         const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
         const trades: TexchangeTrades<H> = [];
-        const $taker = this.OpenOrder.copy(taker);
         let volume = this.context.H.from(0);
         let dollarVolume = this.context.H.from(0);
         for (const maker of orderbook[-$taker.side])
@@ -86,10 +82,7 @@ export class OrderTakes<H extends HLike<H>>
                 dollarVolume,
             });
 
-        return {
-            trades,
-            maker: $taker,
-        };
+        return trades;
     }
 }
 
