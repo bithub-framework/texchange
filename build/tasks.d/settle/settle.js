@@ -16,16 +16,8 @@ class Settle {
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const dollarVolume = calc.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
-            const profit = assets.close({
-                length,
-                volume: position[length],
-                dollarVolume,
-            });
-            assets.open({
-                length,
-                volume: position[length],
-                dollarVolume,
-            });
+            const profit = assets.close(length, position[length], dollarVolume);
+            assets.open(length, position[length], dollarVolume);
             margins.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();

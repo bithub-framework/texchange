@@ -11,7 +11,7 @@ export declare class Progress<H extends HLike<H>> implements StatefulLike<Progre
 }
 export declare namespace Progress {
     interface Snapshot {
-        readonly userTradeCount: number;
-        readonly userOrderCount: number;
+        userTradeCount: number;
+        userOrderCount: number;
     }
 }

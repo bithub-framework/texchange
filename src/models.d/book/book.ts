@@ -1,17 +1,20 @@
 import {
     Orderbook,
     Side,
-    HLike, H, HStatic,
+    HLike,
     OrderbookStatic,
 } from 'interfaces';
 import assert = require('assert');
-import { Context } from '../context/context';
+import { Context } from '../../context/context';
 import { StatefulLike } from 'startable';
+import { Decrements, DecrementsStatic } from './decrements';
 
 
 
 export class Book<H extends HLike<H>>
     implements StatefulLike<Book.Snapshot> {
+    private Orderbook = new OrderbookStatic<H>(this.context.H);
+    private Decrements = new DecrementsStatic<H>(this.context.H);
 
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Orderbook<H> = {
@@ -19,15 +22,11 @@ export class Book<H extends HLike<H>>
         [Side.BID]: [],
         time: Number.NEGATIVE_INFINITY,
     };
-    // decrement 必须是正数
     private decrements: Decrements<H> = {
         [Side.ASK]: new Map<string, H>(),
         [Side.BID]: new Map<string, H>(),
     };
     private finalbookCache: Orderbook<H> | null = null;
-
-    private Orderbook = new OrderbookStatic<H>(this.context.H);
-    private Decrements = new DecrementsStatic<H>(this.context.H);
 
     public constructor(
         private context: Context<H>,
@@ -40,7 +39,11 @@ export class Book<H extends HLike<H>>
         this.tryApply();
     }
 
-    public decQuantity(side: Side, price: H, decrement: H): void {
+    public decQuantity(
+        side: Side,
+        price: H,
+        decrement: H,
+    ): void {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
@@ -53,6 +56,7 @@ export class Book<H extends HLike<H>>
 
     private tryApply(): Orderbook<H> {
         if (this.finalbookCache) return this.finalbookCache;
+
         const $final: Orderbook<H> = { time: this.time };
         const total: Decrements<H> = {
             [Side.ASK]: new Map<string, H>(),
@@ -107,51 +111,10 @@ export class Book<H extends HLike<H>>
     }
 }
 
-
-interface Decrements<H extends HLike<H>> {
-    [side: Side]: Map<string, H>;
-}
-namespace Decrements {
-    export interface Snapshot {
-        readonly [side: Side]: readonly (readonly [string, H.Snapshot])[],
-    }
-}
-
-class DecrementsStatic<H extends HLike<H>> {
-    public constructor(
-        private H: HStatic<H>,
-    ) { }
-
-    public capture(decrements: Decrements<H>): Decrements.Snapshot {
-        return {
-            [Side.ASK]: [...decrements[Side.ASK]].map(
-                ([priceString, decrement]) =>
-                    [priceString, this.H.capture(decrement)],
-            ),
-            [Side.BID]: [...decrements[Side.BID]].map(
-                ([priceString, decrement]) =>
-                    [priceString, this.H.capture(decrement)],
-            ),
-        };
-    }
-
-    public restore(snapshot: Decrements.Snapshot): Decrements<H> {
-        const decrements: Decrements<H> = {};
-        for (const side of [Side.ASK, Side.BID]) {
-            decrements[side] = new Map<string, H>(
-                snapshot[side].map(
-                    ([priceString, decrement]) =>
-                        [priceString, this.H.restore(decrement)]
-                ));
-        }
-        return decrements;
-    }
-}
-
 export namespace Book {
     export interface Snapshot {
-        readonly basebook: Orderbook.Snapshot;
-        readonly decrements: Decrements.Snapshot;
-        readonly time: Orderbook.Snapshot['time'];
+        basebook: Orderbook.Snapshot;
+        decrements: Decrements.Snapshot;
+        time: Orderbook.Snapshot['time'];
     }
 }

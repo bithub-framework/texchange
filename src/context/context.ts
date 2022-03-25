@@ -10,8 +10,8 @@ export abstract class Context<H extends HLike<H>> {
 	public abstract calc: MarketCalc<H>;
 
 	public constructor(
-		public readonly config: Config<H>,
-		public readonly timeline: Timeline,
-		public readonly H: HStatic<H>,
+		public config: Config<H>,
+		public timeline: Timeline,
+		public H: HStatic<H>,
 	) { }
 }

@@ -64,7 +64,7 @@ export class OrderTakes<H extends HLike<H>>
                 });
             }
 
-        assets.payFee(
+        assets.pay(
             dollarVolume
                 .times(config.account.TAKER_FEE_RATE)
                 .round(config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)

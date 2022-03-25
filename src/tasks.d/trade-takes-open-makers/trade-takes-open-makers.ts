@@ -80,7 +80,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
         $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
-        assets.payFee(
+        assets.pay(
             dollarVolume
                 .times(this.context.config.account.MAKER_FEE_RATE)
                 .round(this.context.config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)

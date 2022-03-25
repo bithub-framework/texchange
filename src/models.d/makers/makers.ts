@@ -160,10 +160,6 @@ export abstract class Makers<H extends HLike<H>> implements
 	}
 }
 
-
-
-
-
 export namespace Makers {
 	export interface TotalUnfilled<H> {
 		[side: Side]: H;

@@ -30,7 +30,7 @@ export class Progress<H extends HLike<H>>
 
 export namespace Progress {
     export interface Snapshot {
-        readonly userTradeCount: number;
-        readonly userOrderCount: number;
+        userTradeCount: number;
+        userOrderCount: number;
     }
 }

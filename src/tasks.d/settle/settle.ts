@@ -32,16 +32,16 @@ export abstract class Settle<H extends HLike<H>>
             const dollarVolume = calc.dollarVolume(
                 settlementPrice, position[length],
             ).round(config.market.CURRENCY_DP);
-            const profit = assets.close({
+            const profit = assets.close(
                 length,
-                volume: position[length],
+                position[length],
                 dollarVolume,
-            });
-            assets.open({
+            );
+            assets.open(
                 length,
-                volume: position[length],
+                position[length],
                 dollarVolume,
-            });
+            );
             margins.setMargin(length, this.clearingMargin(length, profit));
         }
         this.assertEnoughBalance();

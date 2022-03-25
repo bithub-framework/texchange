@@ -3,25 +3,30 @@ import { Context } from '../context/context';
 import { StatefulLike } from 'startable';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private context;
+    private Position;
+    private Cost;
     private $position;
     private balance;
     private $cost;
-    private Position;
-    private Cost;
     constructor(context: Context<H>);
     getBalance(): H;
     getPosition(): Position<H>;
     getCost(): Assets.Cost<H>;
     capture(): Assets.Snapshot;
     restore(snapshot: Assets.Snapshot): void;
-    payFee(fee: H): void;
-    open({ length, volume, dollarVolume, }: Assets.Volumes<H>): void;
+    pay(fee: H): void;
+    open(length: Length, volume: H, dollarVolume: H): void;
     /**
      * @returns Profit.
      */
-    close({ length, volume, dollarVolume, }: Assets.Volumes<H>): H;
+    close(length: Length, volume: H, dollarVolume: H): H;
 }
 export declare namespace Assets {
+    interface Snapshot {
+        position: Position.Snapshot;
+        balance: H.Snapshot;
+        cost: Cost.Snapshot;
+    }
     interface Cost<H extends HLike<H>> {
         [length: Length]: H;
     }
@@ -36,15 +41,5 @@ export declare namespace Assets {
         capture(cost: Cost<H>): Cost.Snapshot;
         restore(snapshot: Cost.Snapshot): Cost<H>;
         copy(cost: Cost<H>): Cost<H>;
-    }
-    interface Volumes<H extends HLike<H>> {
-        readonly length: Length;
-        readonly volume: H;
-        readonly dollarVolume: H;
-    }
-    interface Snapshot {
-        readonly position: Position.Snapshot;
-        readonly balance: H.Snapshot;
-        readonly cost: Cost.Snapshot;
     }
 }

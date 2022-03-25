@@ -38,7 +38,7 @@ class OrderTakes {
                     id: ++progress.userTradeCount,
                 });
             }
-        assets.payFee(dollarVolume
+        assets.pay(dollarVolume
             .times(config.account.TAKER_FEE_RATE)
             .round(config.market.CURRENCY_DP, interfaces_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if ($taker.operation === interfaces_1.Operation.OPEN)

@@ -14,11 +14,7 @@ class OrderVolumes {
             volume,
             dollarVolume,
         }).round(this.context.config.market.CURRENCY_DP);
-        this.models.assets.open({
-            length,
-            volume,
-            dollarVolume,
-        });
+        this.models.assets.open(length, volume, dollarVolume);
         this.models.margins.setMargin(length, newMargin);
     }
     close({ length, volume, dollarVolume, }) {
@@ -48,11 +44,7 @@ class OrderVolumes {
                 volume,
                 dollarVolume,
             }).round(this.context.config.market.CURRENCY_DP);
-            this.models.assets.close({
-                length,
-                volume,
-                dollarVolume,
-            });
+            this.models.assets.close(length, volume, dollarVolume);
             this.models.margins.setMargin(length, newMargin);
         }
     }

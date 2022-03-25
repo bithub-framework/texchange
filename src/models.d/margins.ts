@@ -46,7 +46,7 @@ export namespace Margins {
 
 	export namespace Margin {
 		export interface Snapshot {
-			readonly [length: Length]: H.Snapshot;
+			[length: Length]: H.Snapshot;
 		}
 	}
 

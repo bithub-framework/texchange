@@ -12,13 +12,12 @@ import { StatefulLike } from 'startable';
 
 export class Assets<H extends HLike<H>>
     implements StatefulLike<Assets.Snapshot> {
+    private Position = new PositionStatic(this.context.H);
+    private Cost = new Assets.CostStatic(this.context.H);
 
     private $position: Position<H>;
     private balance: H;
     private $cost: Assets.Cost<H>;
-
-    private Position = new PositionStatic(this.context.H);
-    private Cost = new Assets.CostStatic(this.context.H);
 
     public constructor(
         private context: Context<H>,
@@ -60,16 +59,14 @@ export class Assets<H extends HLike<H>>
         this.$cost = this.Cost.restore(snapshot.cost);
     }
 
-    public payFee(fee: H): void {
+    public pay(fee: H): void {
         this.balance = this.balance.minus(fee);
     }
 
     public open(
-        {
-            length,
-            volume,
-            dollarVolume,
-        }: Assets.Volumes<H>,
+        length: Length,
+        volume: H,
+        dollarVolume: H,
     ): void {
         this.$position[length] = this.$position[length].plus(volume);
         this.$cost[length] = this.$cost[length].plus(dollarVolume);
@@ -79,11 +76,9 @@ export class Assets<H extends HLike<H>>
      * @returns Profit.
      */
     public close(
-        {
-            length,
-            volume,
-            dollarVolume,
-        }: Assets.Volumes<H>,
+        length: Length,
+        volume: H,
+        dollarVolume: H,
     ): H {
         assert(volume.lte(this.$position[length]));
         const cost = this.$cost[length]
@@ -100,6 +95,12 @@ export class Assets<H extends HLike<H>>
 
 
 export namespace Assets {
+    export interface Snapshot {
+        position: Position.Snapshot;
+        balance: H.Snapshot;
+        cost: Cost.Snapshot;
+    }
+
     export interface Cost<H extends HLike<H>> {
         [length: Length]: H;
     }
@@ -135,17 +136,5 @@ export namespace Assets {
                 [Length.SHORT]: cost[Length.SHORT],
             };
         }
-    }
-
-    export interface Volumes<H extends HLike<H>> {
-        readonly length: Length;
-        readonly volume: H;
-        readonly dollarVolume: H;
-    }
-
-    export interface Snapshot {
-        readonly position: Position.Snapshot;
-        readonly balance: H.Snapshot;
-        readonly cost: Cost.Snapshot;
     }
 }

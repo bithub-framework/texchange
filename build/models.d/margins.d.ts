@@ -17,7 +17,7 @@ export declare namespace Margins {
     }
     namespace Margin {
         interface Snapshot {
-            readonly [length: Length]: H.Snapshot;
+            [length: Length]: H.Snapshot;
         }
     }
     class MarginStatic<H extends HLike<H>> {

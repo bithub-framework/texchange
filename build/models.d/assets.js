@@ -39,17 +39,17 @@ class Assets {
         this.$position = this.Position.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
-    payFee(fee) {
+    pay(fee) {
         this.balance = this.balance.minus(fee);
     }
-    open({ length, volume, dollarVolume, }) {
+    open(length, volume, dollarVolume) {
         this.$position[length] = this.$position[length].plus(volume);
         this.$cost[length] = this.$cost[length].plus(dollarVolume);
     }
     /**
      * @returns Profit.
      */
-    close({ length, volume, dollarVolume, }) {
+    close(length, volume, dollarVolume) {
         assert(volume.lte(this.$position[length]));
         const cost = this.$cost[length]
             .times(volume)
