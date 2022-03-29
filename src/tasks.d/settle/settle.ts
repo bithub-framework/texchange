@@ -1,9 +1,9 @@
+import { inject } from 'injektor';
 import {
     Length,
-    Position,
     HLike,
 } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 
@@ -14,12 +14,13 @@ import { Pricing } from '../../models.d/pricing/pricing';
 
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
+    @inject(Settle.TaskDeps)
+    protected tasks!: Settle.TaskDeps<H>;
 
     public constructor(
         protected context: Context<H>,
         protected models: Settle.ModelDeps<H>,
         protected broadcast: Broadcast<H>,
-        protected tasks: Settle.TaskDeps<H>,
     ) { }
 
     public settle(): void {
@@ -62,4 +63,5 @@ export namespace Settle {
     }
 
     export interface TaskDeps<H extends HLike<H>> { }
+    export const TaskDeps = {};
 }

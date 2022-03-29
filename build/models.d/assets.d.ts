@@ -1,6 +1,6 @@
 import { Length, Position, HLike, H, HStatic } from 'interfaces';
-import { Context } from '../context/context';
-import { StatefulLike } from 'startable';
+import { Context } from '../context';
+import { StatefulLike } from '../stateful-like';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private context;
     private Position;

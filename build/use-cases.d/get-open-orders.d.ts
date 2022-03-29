@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { Makers } from '../models.d/makers/makers';

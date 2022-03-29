@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { TexchangeOpenOrder, LimitOrder, TexchangeAmendment, Positions, Balances } from 'interfaces';
 import { HLike } from 'interfaces';
 import { MakeOrder } from '../use-cases.d/make-order';

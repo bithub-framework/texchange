@@ -1,3 +1,4 @@
+import { inject } from 'injektor';
 import {
     TexchangeOpenOrder,
     TexchangeOrderIdStatic,
@@ -6,7 +7,7 @@ import {
     HLike,
 } from 'interfaces';
 import assert = require('assert');
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
 
@@ -17,15 +18,16 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
+    @inject(ValidateOrder.TaskDeps)
+    private tasks!: ValidateOrder.TaskDeps<H>;
 
     private OrderId = new TexchangeOrderIdStatic();
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
-        protected context: Context<H>,
-        protected models: ValidateOrder.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-        protected tasks: ValidateOrder.TaskDeps<H>,
+        private context: Context<H>,
+        private models: ValidateOrder.ModelDeps<H>,
+        private broadcast: Broadcast<H>,
     ) { }
 
     public validateOrder(order: TexchangeOpenOrder<H>): void {
@@ -80,4 +82,5 @@ export namespace ValidateOrder {
         getAvailable: GetAvailableLike<H>;
         getClosable: GetClosableLike<H>;
     }
+    export const TaskDeps = {};
 }

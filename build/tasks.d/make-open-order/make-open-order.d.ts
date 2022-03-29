@@ -1,4 +1,4 @@
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
@@ -9,13 +9,13 @@ import { Book } from '../../models.d/book';
 import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
 export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderLike<H> {
-    protected context: Context<H>;
-    protected models: MakeOpenOrder.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: MakeOpenOrder.TaskDeps<H>;
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
     private OrderId;
     private OpenOrder;
-    constructor(context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: MakeOpenOrder.TaskDeps<H>);
+    constructor(context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     makeOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }
 export declare namespace MakeOpenOrder {
@@ -29,4 +29,5 @@ export declare namespace MakeOpenOrder {
         getBalances: GetBalancesLike<H>;
         getPositions: GetPositionsLike<H>;
     }
+    const TaskDeps: {};
 }

@@ -1,6 +1,6 @@
 import { Orderbook, Side, HLike } from 'interfaces';
-import { Context } from '../../context/context';
-import { StatefulLike } from 'startable';
+import { Context } from '../../context';
+import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';
 export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
     private context;

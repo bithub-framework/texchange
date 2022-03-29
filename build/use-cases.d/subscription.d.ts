@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, TexchangeTradeId, Trade, Orderbook, Positions, Balances } from 'interfaces';
 import { EventEmitter } from 'events';

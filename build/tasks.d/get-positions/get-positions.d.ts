@@ -1,15 +1,15 @@
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { Positions, HLike } from 'interfaces';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
 import { GetClosableLike } from '../get-closable/get-closable-like';
 export declare class GetPositions<H extends HLike<H>> implements GetPositionsLike<H> {
-    protected context: Context<H>;
-    protected models: GetPositions.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: GetPositions.TaskDeps<H>;
-    constructor(context: Context<H>, models: GetPositions.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetPositions.TaskDeps<H>);
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
+    constructor(context: Context<H>, models: GetPositions.ModelDeps<H>, broadcast: Broadcast<H>);
     getPositions(): Positions<H>;
 }
 export declare namespace GetPositions {
@@ -19,4 +19,5 @@ export declare namespace GetPositions {
     interface TaskDeps<H extends HLike<H>> {
         getClosable: GetClosableLike<H>;
     }
+    const TaskDeps: {};
 }

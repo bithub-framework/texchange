@@ -1,8 +1,9 @@
+import { inject } from 'injektor';
 import {
 	Length,
 	HLike,
 } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import assert = require('assert');
 import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
@@ -11,18 +12,20 @@ import { Settle } from './settle';
 /**
 * 默认逐仓
 */
-export class DefaultSettle<H extends HLike<H>> extends Settle<H> {
+export class DefaultSettle<H extends HLike<H>>
+	extends Settle<H> {
+	@inject(DefaultSettle.TaskDeps)
+	protected tasks!: DefaultSettle.TaskDeps<H>;
+
 	public constructor(
 		context: Context<H>,
 		protected models: DefaultSettle.ModelDeps<H>,
 		broadcast: Broadcast<H>,
-		protected tasks: DefaultSettle.TaskDeps<H>,
 	) {
 		super(
 			context,
 			models,
 			broadcast,
-			tasks,
 		);
 	}
 
@@ -47,4 +50,5 @@ export namespace DefaultSettle {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends Settle.TaskDeps<H> { }
+	export const TaskDeps = {}
 }

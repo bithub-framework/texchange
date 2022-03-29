@@ -1,5 +1,6 @@
+import { inject } from 'injektor';
 import { GetAvailableLike } from './get-available-like';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
 
@@ -8,12 +9,13 @@ import { Assets } from '../../models.d/assets';
 
 export abstract class GetAvailable<H extends HLike<H>>
 	implements GetAvailableLike<H> {
+	@inject(GetAvailable.TaskDeps)
+	protected tasks!: GetAvailable.TaskDeps<H>;
 
 	public constructor(
 		protected context: Context<H>,
 		protected models: GetAvailable.ModelDeps<H>,
 		protected broadcast: Broadcast<H>,
-		protected tasks: GetAvailable.TaskDeps<H>,
 	) { }
 
 	public getAvailable(): H {
@@ -34,4 +36,5 @@ export namespace GetAvailable {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
+	export const TaskDeps = {};
 }

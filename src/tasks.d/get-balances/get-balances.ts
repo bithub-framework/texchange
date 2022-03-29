@@ -1,4 +1,5 @@
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { Context } from '../../context';
 import {
 	Balances,
 	HLike,
@@ -11,12 +12,13 @@ import { GetAvailableLike } from '../get-available/get-available-like';
 
 export class GetBalances<H extends HLike<H>>
 	implements GetBalancesLike<H> {
+	@inject(GetBalances.TaskDeps)
+	private tasks!: GetBalances.TaskDeps<H>;
 
 	public constructor(
-		protected context: Context<H>,
-		protected models: GetBalances.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-		protected tasks: GetBalances.TaskDeps<H>,
+		private context: Context<H>,
+		private models: GetBalances.ModelDeps<H>,
+		private broadcast: Broadcast<H>,
 	) { }
 
 	public getBalances(): Balances<H> {
@@ -36,4 +38,5 @@ export namespace GetBalances {
 	export interface TaskDeps<H extends HLike<H>> {
 		getAvailable: GetAvailableLike<H>;
 	}
+	export const TaskDeps = {};
 }

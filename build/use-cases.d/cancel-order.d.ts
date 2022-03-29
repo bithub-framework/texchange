@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { TexchangeOpenOrder, HLike } from 'interfaces';
 import { Broadcast } from '../broadcast';
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';

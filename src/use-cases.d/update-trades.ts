@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
 import {

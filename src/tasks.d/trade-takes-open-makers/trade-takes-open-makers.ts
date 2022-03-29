@@ -1,3 +1,4 @@
+import { inject } from 'injektor';
 import {
     Side,
     TexchangeOpenOrder,
@@ -9,7 +10,7 @@ import {
     TexchangeTradeIdStatic,
 } from 'interfaces';
 import { min } from '../../utilities';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
 
@@ -21,15 +22,16 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
+    @inject(TradeTakesOpenMakers.TaskDeps)
+    private tasks!: TradeTakesOpenMakers.TaskDeps<H>;
 
     private TradeId = new TexchangeTradeIdStatic();
     private Trade = new TexchangeTradeStatic(this.context.H, this.TradeId);
 
     public constructor(
-        protected context: Context<H>,
-        protected models: TradeTakesOpenMakers.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-        protected tasks: TradeTakesOpenMakers.TaskDeps<H>,
+        private context: Context<H>,
+        private models: TradeTakesOpenMakers.ModelDeps<H>,
+        private broadcast: Broadcast<H>,
     ) { }
 
     public tradeTakesOpenMakers(trade: TexchangeTrade<H>): void {
@@ -110,4 +112,5 @@ export namespace TradeTakesOpenMakers {
     export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
+    export const TaskDeps = {};
 }

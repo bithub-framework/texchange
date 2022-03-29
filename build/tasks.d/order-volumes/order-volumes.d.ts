@@ -1,4 +1,4 @@
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
@@ -6,11 +6,11 @@ import { MarginAccumulationLike } from '../margin-accumulation/margin-accumulati
 import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
 export declare class OrderVolumes<H extends HLike<H>> implements OrderVolumesLike<H> {
-    protected context: Context<H>;
-    protected models: OrderVolumes.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: OrderVolumes.TaskDeps<H>;
-    constructor(context: Context<H>, models: OrderVolumes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderVolumes.TaskDeps<H>);
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
+    constructor(context: Context<H>, models: OrderVolumes.ModelDeps<H>, broadcast: Broadcast<H>);
     open({ length, volume, dollarVolume, }: OrderVolumesLike.Volumes<H>): void;
     close({ length, volume, dollarVolume, }: OrderVolumesLike.Volumes<H>): void;
 }
@@ -24,4 +24,5 @@ export declare namespace OrderVolumes {
     interface TaskDeps<H extends HLike<H>> {
         marginAccumulation: MarginAccumulationLike<H>;
     }
+    const TaskDeps: {};
 }

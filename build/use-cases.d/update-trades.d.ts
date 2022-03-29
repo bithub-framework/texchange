@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, TexchangeTrade } from 'interfaces';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';

@@ -1,17 +1,17 @@
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
 import { Book } from '../../models.d/book';
 import { Makers } from '../../models.d/makers/makers';
 export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H> {
-    protected context: Context<H>;
-    protected models: OrderMakes.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: OrderMakes.TaskDeps<H>;
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
     private OrderId;
     private OpenOrder;
-    constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderMakes.TaskDeps<H>);
+    constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>);
     orderMakes(order: TexchangeOpenOrder<H>): void;
 }
 export declare namespace OrderMakes {
@@ -21,4 +21,5 @@ export declare namespace OrderMakes {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
+    const TaskDeps: {};
 }

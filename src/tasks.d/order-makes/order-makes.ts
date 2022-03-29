@@ -1,3 +1,4 @@
+import { inject } from 'injektor';
 import {
     TexchangeOpenOrder,
     TexchangeOpenMaker,
@@ -5,7 +6,7 @@ import {
     TexchangeOrderIdStatic,
     HLike,
 } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
 
@@ -15,15 +16,16 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
+    @inject(OrderMakes.TaskDeps)
+    private tasks!: OrderMakes.TaskDeps<H>;
 
     private OrderId = new TexchangeOrderIdStatic();
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
-        protected context: Context<H>,
-        protected models: OrderMakes.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-        protected tasks: OrderMakes.TaskDeps<H>,
+        private context: Context<H>,
+        private models: OrderMakes.ModelDeps<H>,
+        private broadcast: Broadcast<H>,
     ) { }
 
     public orderMakes(
@@ -49,4 +51,5 @@ export namespace OrderMakes {
     }
 
     export interface TaskDeps<H extends HLike<H>> { }
+    export const TaskDeps = {};
 }

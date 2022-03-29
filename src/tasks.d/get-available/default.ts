@@ -1,8 +1,9 @@
+import { inject } from 'injektor';
 import {
 	Side, Length, Operation,
 	HLike,
 } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { max } from '../../utilities';
 import { GetAvailable } from './get-available';
@@ -13,18 +14,18 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
+	@inject(DefaultGetAvailable.TaskDeps)
+	protected tasks!: DefaultGetAvailable.TaskDeps<H>;
 
 	public constructor(
 		context: Context<H>,
 		protected models: DefaultGetAvailable.ModelDeps<H>,
 		broadcast: Broadcast<H>,
-		tasks: DefaultGetAvailable.TaskDeps<H>,
 	) {
 		super(
 			context,
 			models,
 			broadcast,
-			tasks,
 		);
 	}
 
@@ -64,4 +65,5 @@ export namespace DefaultGetAvailable {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends GetAvailable.TaskDeps<H> { }
+	export const TaskDeps = {};
 }

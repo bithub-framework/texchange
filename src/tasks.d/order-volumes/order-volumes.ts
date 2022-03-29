@@ -1,4 +1,5 @@
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'interfaces';
@@ -10,11 +11,13 @@ import { Margins } from '../../models.d/margins';
 
 export class OrderVolumes<H extends HLike<H>>
 	implements OrderVolumesLike<H> {
+	@inject(OrderVolumes.TaskDeps)
+	private tasks!: OrderVolumes.TaskDeps<H>;
+
 	public constructor(
-		protected context: Context<H>,
-		protected models: OrderVolumes.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-		protected tasks: OrderVolumes.TaskDeps<H>,
+		private context: Context<H>,
+		private models: OrderVolumes.ModelDeps<H>,
+		private broadcast: Broadcast<H>,
 	) { }
 
 	public open({
@@ -83,4 +86,5 @@ export namespace OrderVolumes {
 	export interface TaskDeps<H extends HLike<H>> {
 		marginAccumulation: MarginAccumulationLike<H>;
 	}
+	export const TaskDeps = {};
 }

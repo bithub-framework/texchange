@@ -1,5 +1,4 @@
-import { EventEmitter } from 'events';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import {
     TexchangeOpenOrder,
     LimitOrder,

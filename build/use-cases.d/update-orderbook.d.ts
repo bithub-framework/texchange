@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { Orderbook, HLike } from 'interfaces';
 import { Book } from '../models.d/book';

@@ -1,5 +1,5 @@
 import { TexchangeOpenOrder, TexchangeTrades, HLike } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
 import { Margins } from '../../models.d/margins';
@@ -14,7 +14,7 @@ export declare class OrderTakes<H extends HLike<H>> implements OrderTakesLike<H>
     protected tasks: OrderTakes.TaskDeps<H>;
     private OrderId;
     private OpenOrder;
-    constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>, tasks: OrderTakes.TaskDeps<H>);
+    constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>);
     $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H>;
 }
 export declare namespace OrderTakes {
@@ -27,4 +27,5 @@ export declare namespace OrderTakes {
     interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
+    const TaskDeps: {};
 }

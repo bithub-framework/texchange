@@ -1,9 +1,10 @@
+import { inject } from 'injektor';
 import {
 	Length,
 	Closable,
 	HLike,
 } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { GetClosableLike } from './get-closable-like';
 import { Broadcast } from '../../broadcast';
 
@@ -13,12 +14,13 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class GetClosable<H extends HLike<H>>
 	implements GetClosableLike<H> {
+	@inject(GetClosable.TaskDeps)
+	private tasks!: GetClosable.TaskDeps<H>;
 
 	public constructor(
-		protected context: Context<H>,
-		protected models: GetClosable.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-		protected tasks: GetClosable.TaskDeps<H>,
+		private context: Context<H>,
+		private models: GetClosable.ModelDeps<H>,
+		private broadcast: Broadcast<H>,
 	) { }
 
 	public getClosable(): Closable<H> {
@@ -41,4 +43,5 @@ export namespace GetClosable {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
+	export const TaskDeps = {};
 }

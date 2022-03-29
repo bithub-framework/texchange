@@ -1,6 +1,6 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { HLike } from 'interfaces';
-import { StatefulLike } from 'startable';
+import { StatefulLike } from '../stateful-like';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
     private context;
     userTradeCount: number;

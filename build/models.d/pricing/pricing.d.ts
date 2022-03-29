@@ -1,6 +1,6 @@
 import { HLike, TexchangeTrades } from 'interfaces';
-import { StatefulLike } from 'startable';
-import { Context } from '../../context/context';
+import { StatefulLike } from '../../stateful-like';
+import { Context } from '../../context';
 export declare abstract class Pricing<H extends HLike<H>, Snapshot> implements StatefulLike<Snapshot> {
     protected context: Context<H>;
     constructor(context: Context<H>);

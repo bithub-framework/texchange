@@ -1,5 +1,5 @@
 import { TexchangeTrade, HLike } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
 import { Makers } from '../../models.d/makers/makers';
@@ -7,13 +7,13 @@ import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTakesOpenMakersLike<H> {
-    protected context: Context<H>;
-    protected models: TradeTakesOpenMakers.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: TradeTakesOpenMakers.TaskDeps<H>;
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
     private TradeId;
     private Trade;
-    constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>, tasks: TradeTakesOpenMakers.TaskDeps<H>);
+    constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
     tradeTakesOpenMakers(trade: TexchangeTrade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;
@@ -28,4 +28,5 @@ export declare namespace TradeTakesOpenMakers {
     interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
+    const TaskDeps: {};
 }

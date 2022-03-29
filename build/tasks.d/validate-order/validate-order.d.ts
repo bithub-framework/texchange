@@ -1,18 +1,18 @@
 import { TexchangeOpenOrder, HLike } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
 import { GetAvailableLike } from '../get-available/get-available-like';
 import { GetClosableLike } from '../get-closable/get-closable-like';
 import { Makers } from '../../models.d/makers/makers';
 export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderLike<H> {
-    protected context: Context<H>;
-    protected models: ValidateOrder.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: ValidateOrder.TaskDeps<H>;
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
     private OrderId;
     private OpenOrder;
-    constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: ValidateOrder.TaskDeps<H>);
+    constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     validateOrder(order: TexchangeOpenOrder<H>): void;
     private validateQuantity;
     private validateFormat;
@@ -25,4 +25,5 @@ export declare namespace ValidateOrder {
         getAvailable: GetAvailableLike<H>;
         getClosable: GetClosableLike<H>;
     }
+    const TaskDeps: {};
 }

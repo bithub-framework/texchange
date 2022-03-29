@@ -11,12 +11,6 @@ export { MarginAccumulation } from './tasks.d/margin-accumulation/margin-accumul
 export { DefaultMarginAccumulation } from './tasks.d/margin-accumulation/default';
 export { Mtm } from './mark-to-market/mtm';
 export { DefaultMtm } from './mark-to-market/default';
-export { Models } from './models/models';
-export { DefaultModels } from './models/default';
-export { Tasks } from './tasks/tasks';
-export { DefaultTasks } from './tasks/default';
-export { UseCases } from './use-cases/use-cases';
-export { DefaultUseCases } from './use-cases/default';
-export { Texchange } from './texchange/texchange';
+export { TexchangeLike } from './texchange/texchange-like';
 export { DefaultTexchange } from './texchange/default';
 export { DatabaseTrades, DatabaseTrade } from './use-cases.d/update-trades';

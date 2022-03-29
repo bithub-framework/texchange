@@ -1,4 +1,5 @@
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { Context } from '../../context';
 import {
     TexchangeOpenOrder,
     TexchangeOpenOrderStatic,
@@ -18,15 +19,16 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
+    @inject(MakeOpenOrder.TaskDeps)
+    private tasks!: MakeOpenOrder.TaskDeps<H>;
 
     private OrderId = new TexchangeOrderIdStatic();
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
-        protected context: Context<H>,
-        protected models: MakeOpenOrder.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-        protected tasks: MakeOpenOrder.TaskDeps<H>,
+        private context: Context<H>,
+        private models: MakeOpenOrder.ModelDeps<H>,
+        private broadcast: Broadcast<H>,
     ) { }
 
     public makeOpenOrder(
@@ -58,4 +60,5 @@ export namespace MakeOpenOrder {
         getBalances: GetBalancesLike<H>;
         getPositions: GetPositionsLike<H>;
     }
+    export const TaskDeps = {};
 }

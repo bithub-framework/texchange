@@ -12,6 +12,7 @@
     "license": "SEE LICENSE IN ./LICENSE",
     "dependencies": {
         "@types/node": "^16.11.22",
+        "injektor": "github:zimtsui/injektor",
         "startable": "github:zimtsui/startable"
     },
     "peerDependencies": {

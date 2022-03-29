@@ -1,4 +1,4 @@
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Orderbook, HLike } from 'interfaces';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades, DatabaseTrades } from '../use-cases.d/update-trades';

@@ -5,8 +5,8 @@ import {
     OrderbookStatic,
 } from 'interfaces';
 import assert = require('assert');
-import { Context } from '../../context/context';
-import { StatefulLike } from 'startable';
+import { Context } from '../../context';
+import { StatefulLike } from '../../stateful-like';
 import { Decrements, DecrementsStatic } from './decrements';
 
 

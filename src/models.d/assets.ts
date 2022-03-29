@@ -4,10 +4,9 @@ import {
     HLike, H, HStatic,
     PositionStatic,
 } from 'interfaces';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import assert = require('assert');
-import { StatefulLike } from 'startable';
-
+import { StatefulLike } from '../stateful-like';
 
 
 export class Assets<H extends HLike<H>>

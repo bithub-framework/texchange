@@ -1,5 +1,5 @@
 import { Length, HLike } from 'interfaces';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
@@ -10,7 +10,7 @@ export declare abstract class Settle<H extends HLike<H>> implements SettleLike {
     protected models: Settle.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
     protected tasks: Settle.TaskDeps<H>;
-    constructor(context: Context<H>, models: Settle.ModelDeps<H>, broadcast: Broadcast<H>, tasks: Settle.TaskDeps<H>);
+    constructor(context: Context<H>, models: Settle.ModelDeps<H>, broadcast: Broadcast<H>);
     settle(): void;
     protected abstract clearingMargin(length: Length, profit: H): H;
     protected abstract assertEnoughBalance(): void;
@@ -23,4 +23,5 @@ export declare namespace Settle {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
+    const TaskDeps: {};
 }

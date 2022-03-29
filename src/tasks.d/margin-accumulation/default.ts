@@ -1,7 +1,6 @@
-import {
-	HLike,
-} from 'interfaces';
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { HLike } from 'interfaces';
+import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { MarginAccumulation } from './margin-accumulation';
 import { Margins } from '../../models.d/margins';
@@ -11,18 +10,18 @@ import { Assets } from '../../models.d/assets';
 
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
+	@inject(DefaultMarginAccumulation.TaskDeps)
+	protected tasks!: DefaultMarginAccumulation.TaskDeps<H>;
 
 	public constructor(
 		context: Context<H>,
 		protected models: DefaultMarginAccumulation.ModelDeps<H>,
 		broadcast: Broadcast<H>,
-		protected tasks: DefaultMarginAccumulation.TaskDeps<H>,
 	) {
 		super(
 			context,
 			models,
 			broadcast,
-			tasks,
 		);
 	}
 
@@ -62,4 +61,5 @@ export namespace DefaultMarginAccumulation {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends MarginAccumulation.TaskDeps<H> { }
+	export const TaskDeps = {};
 }

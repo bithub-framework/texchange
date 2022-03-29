@@ -1,4 +1,5 @@
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { Context } from '../../context';
 import {
 	Positions,
 	HLike,
@@ -13,11 +14,13 @@ import { GetClosableLike } from '../get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>>
 	implements GetPositionsLike<H> {
+	@inject(GetPositions.TaskDeps)
+	private tasks!: GetPositions.TaskDeps<H>;
+
 	public constructor(
-		protected context: Context<H>,
-		protected models: GetPositions.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-		protected tasks: GetPositions.TaskDeps<H>,
+		private context: Context<H>,
+		private models: GetPositions.ModelDeps<H>,
+		private broadcast: Broadcast<H>,
 	) { }
 
 	public getPositions(): Positions<H> {
@@ -37,4 +40,5 @@ export namespace GetPositions {
 	export interface TaskDeps<H extends HLike<H>> {
 		getClosable: GetClosableLike<H>;
 	}
+	export const TaskDeps = {};
 }

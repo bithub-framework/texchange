@@ -1,5 +1,5 @@
 import { Startable } from 'startable';
-import { Context } from '../context/context';
+import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
 export declare abstract class Mtm<H extends HLike<H>> {

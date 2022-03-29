@@ -1,4 +1,5 @@
-import { Context } from '../../context/context';
+import { inject } from 'injektor';
+import { Context } from '../../context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
 import {
@@ -13,15 +14,16 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class CancelOpenOrder<H extends HLike<H>>
 	implements CancelOpenOrderLike<H> {
+	@inject(CancelOpenOrder.TaskDeps)
+	private tasks!: CancelOpenOrder.TaskDeps<H>;
 
 	private OrderId = new TexchangeOrderIdStatic();
 	private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
 	public constructor(
-		protected context: Context<H>,
-		protected models: CancelOpenOrder.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-		protected tasks: CancelOpenOrder.TaskDeps<H>,
+		private context: Context<H>,
+		private models: CancelOpenOrder.ModelDeps<H>,
+		private broadcast: Broadcast<H>,
 	) { }
 
 	public cancelOpenOrder(
@@ -51,4 +53,5 @@ export namespace CancelOpenOrder {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
+	export const TaskDeps = {};
 }

@@ -1,3 +1,4 @@
+import { inject } from 'injektor';
 import {
     TexchangeOpenOrder,
     TexchangeOpenOrderStatic,
@@ -8,7 +9,7 @@ import {
     HLike, H,
 } from 'interfaces';
 import { min } from '../../utilities';
-import { Context } from '../../context/context';
+import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
 
@@ -21,6 +22,8 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
+    @inject(OrderTakes.TaskDeps)
+    protected tasks!: OrderTakes.TaskDeps<H>;
 
     private OrderId = new TexchangeOrderIdStatic();
     private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
@@ -29,7 +32,6 @@ export class OrderTakes<H extends HLike<H>>
         protected context: Context<H>,
         protected models: OrderTakes.ModelDeps<H>,
         protected broadcast: Broadcast<H>,
-        protected tasks: OrderTakes.TaskDeps<H>,
     ) { }
 
     public $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H> {
@@ -97,4 +99,5 @@ export namespace OrderTakes {
     export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
+    export const TaskDeps = {};
 }
