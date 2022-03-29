@@ -82,13 +82,13 @@ import { Joystick } from '../views.d/joystick';
 export class DefaultTexchange<H extends HLike<H>>
 	implements TexchangeLike<H> {
 
-	private context!: Context<H>;
-	private models!: Models<H>;
+	private context: Context<H>;
+	private models: Models<H>;
 	private broadcast: Broadcast<H>;
-	private tasks!: Tasks<H>;
+	private tasks: Tasks<H>;
 	private mtm: Mtm<H> | null;
-	private useCases!: UseCases<H>;
-	private views!: Views<H>;
+	private useCases: UseCases<H>;
+	private views: Views<H>;
 	public user: Latency<H>;
 	public admin: Joystick<H>;
 	public startable: Startable;
@@ -98,13 +98,13 @@ export class DefaultTexchange<H extends HLike<H>>
 		timeline: Timeline,
 		H: HStatic<H>,
 	) {
-		this.assembleContext(config, timeline, H);
-		this.assembleModels();
+		this.context = this.assembleContext(config, timeline, H);
+		this.models = this.assembleModels();
 		this.broadcast = <Broadcast<H>>new EventEmitter();;
-		this.assembleTasks();
+		this.tasks = this.assembleTasks();
 		this.mtm = new DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
-		this.assembleUseCases();
-		this.assembleViews();
+		this.useCases = this.assembleUseCases();
+		this.views = this.assembleViews();
 		this.user = this.views.latency;
 		this.admin = this.views.joystick;
 		this.startable = new Startable(
@@ -127,8 +127,8 @@ export class DefaultTexchange<H extends HLike<H>>
 		config: Config<H>,
 		timeline: Timeline,
 		H: HStatic<H>,
-	): void {
-		this.context = {
+	): Context<H> {
+		return {
 			config,
 			timeline,
 			H,
@@ -136,8 +136,8 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleModels(): void {
-		this.models = {
+	private assembleModels(): Models<H> {
+		return {
 			assets: new Assets(this.context),
 			margins: new Margins(this.context),
 			book: new Book(this.context),
@@ -147,9 +147,9 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleTasks(): void {
+	private assembleTasks(): Tasks<H> {
 		const container = new Container();
-		this.tasks = {
+		const tasks = {
 			cancelOpenOrder: new CancelOpenOrder(this.context, this.models, this.broadcast),
 			getBalances: new GetBalancesTask(this.context, this.models, this.broadcast),
 			getClosable: new GetClosable(this.context, this.models, this.broadcast),
@@ -164,36 +164,38 @@ export class DefaultTexchange<H extends HLike<H>>
 			settle: new DefaultSettle(this.context, this.models, this.broadcast),
 			marginAccumulation: new DefaultMarginAccumulation(this.context, this.models, this.broadcast),
 		};
-		container.register(CancelOpenOrder.TaskDeps, () => this.tasks);
-		container.register(DefaultGetAvailable.TaskDeps, () => this.tasks);
-		container.register(GetBalancesTask.TaskDeps, () => this.tasks);
-		container.register(GetClosable.TaskDeps, () => this.tasks);
-		container.register(GetPositionsTask.TaskDeps, () => this.tasks);
-		container.register(MakeOpenOrder.TaskDeps, () => this.tasks);
-		container.register(DefaultMarginAccumulation.TaskDeps, () => this.tasks);
-		container.register(OrderMakes.TaskDeps, () => this.tasks);
-		container.register(OrderTakes.TaskDeps, () => this.tasks);
-		container.register(OrderVolumes.TaskDeps, () => this.tasks);
-		container.register(DefaultSettle.TaskDeps, () => this.tasks);
-		container.register(TradeTakesOpenMakers.TaskDeps, () => this.tasks);
-		container.register(ValidateOrder.TaskDeps, () => this.tasks);
-		container.inject(this.tasks.cancelOpenOrder);
-		container.inject(this.tasks.getAvailable);
-		container.inject(this.tasks.getBalances);
-		container.inject(this.tasks.getClosable);
-		container.inject(this.tasks.getPositions);
-		container.inject(this.tasks.makeOpenOrder);
-		container.inject(this.tasks.marginAccumulation);
-		container.inject(this.tasks.orderMakes);
-		container.inject(this.tasks.orderTakes);
-		container.inject(this.tasks.orderVolumes);
-		container.inject(this.tasks.settle);
-		container.inject(this.tasks.tradeTakesOpenMakers);
-		container.inject(this.tasks.validateOrder);
+		container.register(CancelOpenOrder.TaskDeps, () => tasks);
+		container.register(DefaultGetAvailable.TaskDeps, () => tasks);
+		container.register(GetBalancesTask.TaskDeps, () => tasks);
+		container.register(GetClosable.TaskDeps, () => tasks);
+		container.register(GetPositionsTask.TaskDeps, () => tasks);
+		container.register(MakeOpenOrder.TaskDeps, () => tasks);
+		container.register(DefaultMarginAccumulation.TaskDeps, () => tasks);
+		container.register(OrderMakes.TaskDeps, () => tasks);
+		container.register(OrderTakes.TaskDeps, () => tasks);
+		container.register(OrderVolumes.TaskDeps, () => tasks);
+		container.register(DefaultSettle.TaskDeps, () => tasks);
+		container.register(TradeTakesOpenMakers.TaskDeps, () => tasks);
+		container.register(ValidateOrder.TaskDeps, () => tasks);
+		container.inject(tasks.cancelOpenOrder);
+		container.inject(tasks.getAvailable);
+		container.inject(tasks.getBalances);
+		container.inject(tasks.getClosable);
+		container.inject(tasks.getPositions);
+		container.inject(tasks.makeOpenOrder);
+		container.inject(tasks.marginAccumulation);
+		container.inject(tasks.orderMakes);
+		container.inject(tasks.orderTakes);
+		container.inject(tasks.orderVolumes);
+		container.inject(tasks.settle);
+		container.inject(tasks.tradeTakesOpenMakers);
+		container.inject(tasks.validateOrder);
+
+		return tasks;
 	}
 
-	private assembleUseCases(): void {
-		this.useCases = {
+	private assembleUseCases(): UseCases<H> {
+		return {
 			amendOrder: new AmendOrder(this.context, this.models, this.broadcast, this.tasks),
 			cancelOrder: new CancelOrder(this.context, this.models, this.broadcast, this.tasks),
 			getBalances: new GetBalancesUseCase(this.context, this.models, this.broadcast, this.tasks),
@@ -207,11 +209,11 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleViews(): void {
+	private assembleViews(): Views<H> {
 		const instant = new Instant(this.context, this.useCases);
 		const latency = new Latency(this.context, this.useCases, instant);
 		const joystick = new Joystick(this.context, this.useCases);
-		this.views = {
+		return {
 			instant,
 			latency,
 			joystick,

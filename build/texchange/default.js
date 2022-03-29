@@ -42,14 +42,14 @@ const latency_1 = require("../views.d/latency");
 const joystick_1 = require("../views.d/joystick");
 class DefaultTexchange {
     constructor(config, timeline, H) {
-        this.assembleContext(config, timeline, H);
-        this.assembleModels();
+        this.context = this.assembleContext(config, timeline, H);
+        this.models = this.assembleModels();
         this.broadcast = new events_1.EventEmitter();
         ;
-        this.assembleTasks();
+        this.tasks = this.assembleTasks();
         this.mtm = new default_7.DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
-        this.assembleUseCases();
-        this.assembleViews();
+        this.useCases = this.assembleUseCases();
+        this.views = this.assembleViews();
         this.user = this.views.latency;
         this.admin = this.views.joystick;
         this.startable = new startable_1.Startable(() => this.start(), () => this.stop());
@@ -63,7 +63,7 @@ class DefaultTexchange {
             await this.mtm.startable.stop();
     }
     assembleContext(config, timeline, H) {
-        this.context = {
+        return {
             config,
             timeline,
             H,
@@ -71,7 +71,7 @@ class DefaultTexchange {
         };
     }
     assembleModels() {
-        this.models = {
+        return {
             assets: new assets_1.Assets(this.context),
             margins: new margins_1.Margins(this.context),
             book: new book_1.Book(this.context),
@@ -82,7 +82,7 @@ class DefaultTexchange {
     }
     assembleTasks() {
         const container = new injektor_1.Container();
-        this.tasks = {
+        const tasks = {
             cancelOpenOrder: new cancel_open_order_1.CancelOpenOrder(this.context, this.models, this.broadcast),
             getBalances: new get_balances_1.GetBalances(this.context, this.models, this.broadcast),
             getClosable: new get_closable_1.GetClosable(this.context, this.models, this.broadcast),
@@ -97,35 +97,36 @@ class DefaultTexchange {
             settle: new default_5.DefaultSettle(this.context, this.models, this.broadcast),
             marginAccumulation: new default_6.DefaultMarginAccumulation(this.context, this.models, this.broadcast),
         };
-        container.register(cancel_open_order_1.CancelOpenOrder.TaskDeps, () => this.tasks);
-        container.register(default_4.DefaultGetAvailable.TaskDeps, () => this.tasks);
-        container.register(get_balances_1.GetBalances.TaskDeps, () => this.tasks);
-        container.register(get_closable_1.GetClosable.TaskDeps, () => this.tasks);
-        container.register(get_positions_1.GetPositions.TaskDeps, () => this.tasks);
-        container.register(make_open_order_1.MakeOpenOrder.TaskDeps, () => this.tasks);
-        container.register(default_6.DefaultMarginAccumulation.TaskDeps, () => this.tasks);
-        container.register(order_makes_1.OrderMakes.TaskDeps, () => this.tasks);
-        container.register(order_takes_1.OrderTakes.TaskDeps, () => this.tasks);
-        container.register(order_volumes_1.OrderVolumes.TaskDeps, () => this.tasks);
-        container.register(default_5.DefaultSettle.TaskDeps, () => this.tasks);
-        container.register(trade_takes_open_makers_1.TradeTakesOpenMakers.TaskDeps, () => this.tasks);
-        container.register(validate_order_1.ValidateOrder.TaskDeps, () => this.tasks);
-        container.inject(this.tasks.cancelOpenOrder);
-        container.inject(this.tasks.getAvailable);
-        container.inject(this.tasks.getBalances);
-        container.inject(this.tasks.getClosable);
-        container.inject(this.tasks.getPositions);
-        container.inject(this.tasks.makeOpenOrder);
-        container.inject(this.tasks.marginAccumulation);
-        container.inject(this.tasks.orderMakes);
-        container.inject(this.tasks.orderTakes);
-        container.inject(this.tasks.orderVolumes);
-        container.inject(this.tasks.settle);
-        container.inject(this.tasks.tradeTakesOpenMakers);
-        container.inject(this.tasks.validateOrder);
+        container.register(cancel_open_order_1.CancelOpenOrder.TaskDeps, () => tasks);
+        container.register(default_4.DefaultGetAvailable.TaskDeps, () => tasks);
+        container.register(get_balances_1.GetBalances.TaskDeps, () => tasks);
+        container.register(get_closable_1.GetClosable.TaskDeps, () => tasks);
+        container.register(get_positions_1.GetPositions.TaskDeps, () => tasks);
+        container.register(make_open_order_1.MakeOpenOrder.TaskDeps, () => tasks);
+        container.register(default_6.DefaultMarginAccumulation.TaskDeps, () => tasks);
+        container.register(order_makes_1.OrderMakes.TaskDeps, () => tasks);
+        container.register(order_takes_1.OrderTakes.TaskDeps, () => tasks);
+        container.register(order_volumes_1.OrderVolumes.TaskDeps, () => tasks);
+        container.register(default_5.DefaultSettle.TaskDeps, () => tasks);
+        container.register(trade_takes_open_makers_1.TradeTakesOpenMakers.TaskDeps, () => tasks);
+        container.register(validate_order_1.ValidateOrder.TaskDeps, () => tasks);
+        container.inject(tasks.cancelOpenOrder);
+        container.inject(tasks.getAvailable);
+        container.inject(tasks.getBalances);
+        container.inject(tasks.getClosable);
+        container.inject(tasks.getPositions);
+        container.inject(tasks.makeOpenOrder);
+        container.inject(tasks.marginAccumulation);
+        container.inject(tasks.orderMakes);
+        container.inject(tasks.orderTakes);
+        container.inject(tasks.orderVolumes);
+        container.inject(tasks.settle);
+        container.inject(tasks.tradeTakesOpenMakers);
+        container.inject(tasks.validateOrder);
+        return tasks;
     }
     assembleUseCases() {
-        this.useCases = {
+        return {
             amendOrder: new amend_order_1.AmendOrder(this.context, this.models, this.broadcast, this.tasks),
             cancelOrder: new cancel_order_1.CancelOrder(this.context, this.models, this.broadcast, this.tasks),
             getBalances: new get_balances_2.GetBalances(this.context, this.models, this.broadcast, this.tasks),
@@ -141,7 +142,7 @@ class DefaultTexchange {
         const instant = new instant_1.Instant(this.context, this.useCases);
         const latency = new latency_1.Latency(this.context, this.useCases, instant);
         const joystick = new joystick_1.Joystick(this.context, this.useCases);
-        this.views = {
+        return {
             instant,
             latency,
             joystick,
