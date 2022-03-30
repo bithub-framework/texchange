@@ -8,6 +8,7 @@ export declare class GetClosable<H extends HLike<H>> implements GetClosableLike<
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: GetClosable.ModelDeps<H>, broadcast: Broadcast<H>);
     getClosable(): Closable<H>;
@@ -19,5 +20,4 @@ export declare namespace GetClosable {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
-    const TaskDeps: {};
 }

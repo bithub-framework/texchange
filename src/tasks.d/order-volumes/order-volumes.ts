@@ -11,6 +11,7 @@ import { Margins } from '../../models.d/margins';
 
 export class OrderVolumes<H extends HLike<H>>
 	implements OrderVolumesLike<H> {
+	public static TaskDeps = {};
 	@inject(OrderVolumes.TaskDeps)
 	private tasks!: OrderVolumes.TaskDeps<H>;
 
@@ -86,5 +87,4 @@ export namespace OrderVolumes {
 	export interface TaskDeps<H extends HLike<H>> {
 		marginAccumulation: MarginAccumulationLike<H>;
 	}
-	export const TaskDeps = {};
 }

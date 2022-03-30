@@ -12,6 +12,7 @@ export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderL
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     private OrderId;
     private OpenOrder;
@@ -29,5 +30,4 @@ export declare namespace MakeOpenOrder {
         getBalances: GetBalancesLike<H>;
         getPositions: GetPositionsLike<H>;
     }
-    const TaskDeps: {};
 }

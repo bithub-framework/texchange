@@ -15,8 +15,6 @@ class ValidateOrder {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
-        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
     validateOrder(order) {
         this.validateFormat(order);
@@ -51,11 +49,9 @@ class ValidateOrder {
         assert(order.operation * order.length === order.side);
     }
 }
+ValidateOrder.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(ValidateOrder.TaskDeps)
 ], ValidateOrder.prototype, "tasks", void 0);
 exports.ValidateOrder = ValidateOrder;
-(function (ValidateOrder) {
-    ValidateOrder.TaskDeps = {};
-})(ValidateOrder = exports.ValidateOrder || (exports.ValidateOrder = {}));
 //# sourceMappingURL=validate-order.js.map

@@ -22,6 +22,7 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
+    public static TaskDeps = {};
     @inject(TradeTakesOpenMakers.TaskDeps)
     private tasks!: TradeTakesOpenMakers.TaskDeps<H>;
 
@@ -112,5 +113,4 @@ export namespace TradeTakesOpenMakers {
     export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
-    export const TaskDeps = {};
 }

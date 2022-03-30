@@ -8,6 +8,7 @@ export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H>
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     private OrderId;
     private OpenOrder;
@@ -21,5 +22,4 @@ export declare namespace OrderMakes {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
-    const TaskDeps: {};
 }

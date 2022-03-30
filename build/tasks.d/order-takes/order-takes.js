@@ -15,8 +15,6 @@ class OrderTakes {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
-        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
     }
     $orderTakes($taker) {
         const { assets, progress, book } = this.models;
@@ -62,11 +60,9 @@ class OrderTakes {
         return trades;
     }
 }
+OrderTakes.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(OrderTakes.TaskDeps)
 ], OrderTakes.prototype, "tasks", void 0);
 exports.OrderTakes = OrderTakes;
-(function (OrderTakes) {
-    OrderTakes.TaskDeps = {};
-})(OrderTakes = exports.OrderTakes || (exports.OrderTakes = {}));
 //# sourceMappingURL=order-takes.js.map

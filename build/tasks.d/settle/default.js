@@ -28,11 +28,9 @@ class DefaultSettle extends settle_1.Settle {
             assert(this.models.margins.getMargin()[length].gte(0));
     }
 }
+DefaultSettle.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(DefaultSettle.TaskDeps)
 ], DefaultSettle.prototype, "tasks", void 0);
 exports.DefaultSettle = DefaultSettle;
-(function (DefaultSettle) {
-    DefaultSettle.TaskDeps = {};
-})(DefaultSettle = exports.DefaultSettle || (exports.DefaultSettle = {}));
 //# sourceMappingURL=default.js.map

@@ -9,6 +9,7 @@ export declare abstract class Settle<H extends HLike<H>> implements SettleLike {
     protected context: Context<H>;
     protected models: Settle.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
+    static TaskDeps: {};
     protected tasks: Settle.TaskDeps<H>;
     constructor(context: Context<H>, models: Settle.ModelDeps<H>, broadcast: Broadcast<H>);
     settle(): void;
@@ -23,5 +24,4 @@ export declare namespace Settle {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
-    const TaskDeps: {};
 }

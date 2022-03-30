@@ -14,6 +14,7 @@ import { Pricing } from '../../models.d/pricing/pricing';
 
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
+    public static TaskDeps = {};
     @inject(Settle.TaskDeps)
     protected tasks!: Settle.TaskDeps<H>;
 
@@ -63,5 +64,4 @@ export namespace Settle {
     }
 
     export interface TaskDeps<H extends HLike<H>> { }
-    export const TaskDeps = {};
 }

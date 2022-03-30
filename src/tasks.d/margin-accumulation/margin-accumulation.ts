@@ -7,6 +7,7 @@ import { HLike } from 'interfaces';
 
 export abstract class MarginAccumulation<H extends HLike<H>>
 	implements MarginAccumulationLike<H> {
+	public static TaskDeps = {};
 	@inject(MarginAccumulation.TaskDeps)
 	protected tasks!: MarginAccumulation.TaskDeps<H>;
 
@@ -30,5 +31,4 @@ export namespace MarginAccumulation {
 
 	export interface ModelDeps<H extends HLike<H>> { }
 	export interface TaskDeps<H extends HLike<H>> { }
-	export const TaskDeps = {};
 }

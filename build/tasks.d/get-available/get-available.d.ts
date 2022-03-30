@@ -7,6 +7,7 @@ export declare abstract class GetAvailable<H extends HLike<H>> implements GetAva
     protected context: Context<H>;
     protected models: GetAvailable.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
+    static TaskDeps: {};
     protected tasks: GetAvailable.TaskDeps<H>;
     constructor(context: Context<H>, models: GetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
     getAvailable(): H;
@@ -19,5 +20,4 @@ export declare namespace GetAvailable {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
-    const TaskDeps: {};
 }

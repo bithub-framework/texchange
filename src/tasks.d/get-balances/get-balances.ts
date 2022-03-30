@@ -12,6 +12,7 @@ import { GetAvailableLike } from '../get-available/get-available-like';
 
 export class GetBalances<H extends HLike<H>>
 	implements GetBalancesLike<H> {
+	public static TaskDeps = {};
 	@inject(GetBalances.TaskDeps)
 	private tasks!: GetBalances.TaskDeps<H>;
 
@@ -38,5 +39,4 @@ export namespace GetBalances {
 	export interface TaskDeps<H extends HLike<H>> {
 		getAvailable: GetAvailableLike<H>;
 	}
-	export const TaskDeps = {};
 }

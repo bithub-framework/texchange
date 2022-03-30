@@ -10,6 +10,7 @@ export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTa
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     private TradeId;
     private Trade;
@@ -28,5 +29,4 @@ export declare namespace TradeTakesOpenMakers {
     interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
-    const TaskDeps: {};
 }

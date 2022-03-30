@@ -7,6 +7,7 @@ import { Settle } from './settle';
 */
 export declare class DefaultSettle<H extends HLike<H>> extends Settle<H> {
     protected models: DefaultSettle.ModelDeps<H>;
+    static TaskDeps: {};
     protected tasks: DefaultSettle.TaskDeps<H>;
     constructor(context: Context<H>, models: DefaultSettle.ModelDeps<H>, broadcast: Broadcast<H>);
     protected clearingMargin(length: Length, profit: H): H;
@@ -17,5 +18,4 @@ export declare namespace DefaultSettle {
     }
     interface TaskDeps<H extends HLike<H>> extends Settle.TaskDeps<H> {
     }
-    const TaskDeps: {};
 }

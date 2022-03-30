@@ -21,11 +21,9 @@ class GetAvailable {
             .round(this.context.config.market.CURRENCY_DP);
     }
 }
+GetAvailable.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(GetAvailable.TaskDeps)
 ], GetAvailable.prototype, "tasks", void 0);
 exports.GetAvailable = GetAvailable;
-(function (GetAvailable) {
-    GetAvailable.TaskDeps = {};
-})(GetAvailable = exports.GetAvailable || (exports.GetAvailable = {}));
 //# sourceMappingURL=get-available.js.map

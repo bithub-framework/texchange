@@ -14,6 +14,7 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class GetClosable<H extends HLike<H>>
 	implements GetClosableLike<H> {
+	public static TaskDeps = {};
 	@inject(GetClosable.TaskDeps)
 	private tasks!: GetClosable.TaskDeps<H>;
 
@@ -43,5 +44,4 @@ export namespace GetClosable {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
-	export const TaskDeps = {};
 }

@@ -19,6 +19,7 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
+    public static TaskDeps = {};
     @inject(MakeOpenOrder.TaskDeps)
     private tasks!: MakeOpenOrder.TaskDeps<H>;
 
@@ -60,5 +61,4 @@ export namespace MakeOpenOrder {
         getBalances: GetBalancesLike<H>;
         getPositions: GetPositionsLike<H>;
     }
-    export const TaskDeps = {};
 }

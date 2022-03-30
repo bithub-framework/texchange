@@ -8,6 +8,7 @@ export declare class GetBalances<H extends HLike<H>> implements GetBalancesLike<
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: GetBalances.ModelDeps<H>, broadcast: Broadcast<H>);
     getBalances(): Balances<H>;
@@ -19,5 +20,4 @@ export declare namespace GetBalances {
     interface TaskDeps<H extends HLike<H>> {
         getAvailable: GetAvailableLike<H>;
     }
-    const TaskDeps: {};
 }

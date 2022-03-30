@@ -9,6 +9,7 @@ export declare class OrderVolumes<H extends HLike<H>> implements OrderVolumesLik
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: OrderVolumes.ModelDeps<H>, broadcast: Broadcast<H>);
     open({ length, volume, dollarVolume, }: OrderVolumesLike.Volumes<H>): void;
@@ -24,5 +25,4 @@ export declare namespace OrderVolumes {
     interface TaskDeps<H extends HLike<H>> {
         marginAccumulation: MarginAccumulationLike<H>;
     }
-    const TaskDeps: {};
 }

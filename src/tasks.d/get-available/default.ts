@@ -14,6 +14,7 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
+	public static TaskDeps = {};
 	@inject(DefaultGetAvailable.TaskDeps)
 	protected tasks!: DefaultGetAvailable.TaskDeps<H>;
 
@@ -65,5 +66,4 @@ export namespace DefaultGetAvailable {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends GetAvailable.TaskDeps<H> { }
-	export const TaskDeps = {};
 }

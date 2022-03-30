@@ -38,11 +38,9 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
         return $final[interfaces_1.Length.LONG].plus($final[interfaces_1.Length.SHORT]);
     }
 }
+DefaultGetAvailable.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(DefaultGetAvailable.TaskDeps)
 ], DefaultGetAvailable.prototype, "tasks", void 0);
 exports.DefaultGetAvailable = DefaultGetAvailable;
-(function (DefaultGetAvailable) {
-    DefaultGetAvailable.TaskDeps = {};
-})(DefaultGetAvailable = exports.DefaultGetAvailable || (exports.DefaultGetAvailable = {}));
 //# sourceMappingURL=default.js.map

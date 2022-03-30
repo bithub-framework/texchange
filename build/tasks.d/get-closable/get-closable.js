@@ -27,11 +27,9 @@ class GetClosable {
         };
     }
 }
+GetClosable.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(GetClosable.TaskDeps)
 ], GetClosable.prototype, "tasks", void 0);
 exports.GetClosable = GetClosable;
-(function (GetClosable) {
-    GetClosable.TaskDeps = {};
-})(GetClosable = exports.GetClosable || (exports.GetClosable = {}));
 //# sourceMappingURL=get-closable.js.map

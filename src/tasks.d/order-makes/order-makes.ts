@@ -16,6 +16,7 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
+    public static TaskDeps = {};
     @inject(OrderMakes.TaskDeps)
     private tasks!: OrderMakes.TaskDeps<H>;
 
@@ -51,5 +52,4 @@ export namespace OrderMakes {
     }
 
     export interface TaskDeps<H extends HLike<H>> { }
-    export const TaskDeps = {};
 }

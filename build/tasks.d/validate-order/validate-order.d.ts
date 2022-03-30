@@ -9,9 +9,8 @@ export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderL
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
-    private OrderId;
-    private OpenOrder;
     constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     validateOrder(order: TexchangeOpenOrder<H>): void;
     private validateQuantity;
@@ -25,5 +24,4 @@ export declare namespace ValidateOrder {
         getAvailable: GetAvailableLike<H>;
         getClosable: GetClosableLike<H>;
     }
-    const TaskDeps: {};
 }

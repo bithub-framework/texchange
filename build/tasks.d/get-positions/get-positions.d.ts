@@ -8,6 +8,7 @@ export declare class GetPositions<H extends HLike<H>> implements GetPositionsLik
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: GetPositions.ModelDeps<H>, broadcast: Broadcast<H>);
     getPositions(): Positions<H>;
@@ -19,5 +20,4 @@ export declare namespace GetPositions {
     interface TaskDeps<H extends HLike<H>> {
         getClosable: GetClosableLike<H>;
     }
-    const TaskDeps: {};
 }

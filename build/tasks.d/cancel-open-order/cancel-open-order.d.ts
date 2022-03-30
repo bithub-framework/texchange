@@ -7,9 +7,8 @@ export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOr
     private context;
     private models;
     private broadcast;
+    static TaskDeps: {};
     private tasks;
-    private OrderId;
-    private OpenOrder;
     constructor(context: Context<H>, models: CancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
 }
@@ -19,5 +18,4 @@ export declare namespace CancelOpenOrder {
     }
     interface TaskDeps<H extends HLike<H>> {
     }
-    const TaskDeps: {};
 }

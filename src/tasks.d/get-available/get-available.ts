@@ -9,6 +9,7 @@ import { Assets } from '../../models.d/assets';
 
 export abstract class GetAvailable<H extends HLike<H>>
 	implements GetAvailableLike<H> {
+	public static TaskDeps = {};
 	@inject(GetAvailable.TaskDeps)
 	protected tasks!: GetAvailable.TaskDeps<H>;
 
@@ -36,5 +37,4 @@ export namespace GetAvailable {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
-	export const TaskDeps = {};
 }

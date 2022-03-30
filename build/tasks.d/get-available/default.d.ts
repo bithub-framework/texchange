@@ -6,6 +6,7 @@ import { Margins } from '../../models.d/margins';
 import { Makers } from '../../models.d/makers/makers';
 export declare class DefaultGetAvailable<H extends HLike<H>> extends GetAvailable<H> {
     protected models: DefaultGetAvailable.ModelDeps<H>;
+    static TaskDeps: {};
     protected tasks: DefaultGetAvailable.TaskDeps<H>;
     constructor(context: Context<H>, models: DefaultGetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
     protected finalMargin(): H;
@@ -18,5 +19,4 @@ export declare namespace DefaultGetAvailable {
     }
     interface TaskDeps<H extends HLike<H>> extends GetAvailable.TaskDeps<H> {
     }
-    const TaskDeps: {};
 }

@@ -55,11 +55,9 @@ class OrderVolumes {
         }
     }
 }
+OrderVolumes.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(OrderVolumes.TaskDeps)
 ], OrderVolumes.prototype, "tasks", void 0);
 exports.OrderVolumes = OrderVolumes;
-(function (OrderVolumes) {
-    OrderVolumes.TaskDeps = {};
-})(OrderVolumes = exports.OrderVolumes || (exports.OrderVolumes = {}));
 //# sourceMappingURL=order-volumes.js.map

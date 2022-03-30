@@ -10,6 +10,7 @@ import { Assets } from '../../models.d/assets';
 
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
+	public static TaskDeps = {};
 	@inject(DefaultMarginAccumulation.TaskDeps)
 	protected tasks!: DefaultMarginAccumulation.TaskDeps<H>;
 
@@ -61,5 +62,4 @@ export namespace DefaultMarginAccumulation {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends MarginAccumulation.TaskDeps<H> { }
-	export const TaskDeps = {};
 }

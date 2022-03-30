@@ -16,11 +16,9 @@ class MarginAccumulation {
         this.broadcast = broadcast;
     }
 }
+MarginAccumulation.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(MarginAccumulation.TaskDeps)
 ], MarginAccumulation.prototype, "tasks", void 0);
 exports.MarginAccumulation = MarginAccumulation;
-(function (MarginAccumulation) {
-    MarginAccumulation.TaskDeps = {};
-})(MarginAccumulation = exports.MarginAccumulation || (exports.MarginAccumulation = {}));
 //# sourceMappingURL=margin-accumulation.js.map

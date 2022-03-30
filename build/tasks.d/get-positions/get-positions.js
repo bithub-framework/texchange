@@ -22,11 +22,9 @@ class GetPositions {
         };
     }
 }
+GetPositions.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(GetPositions.TaskDeps)
 ], GetPositions.prototype, "tasks", void 0);
 exports.GetPositions = GetPositions;
-(function (GetPositions) {
-    GetPositions.TaskDeps = {};
-})(GetPositions = exports.GetPositions || (exports.GetPositions = {}));
 //# sourceMappingURL=get-positions.js.map

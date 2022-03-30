@@ -70,11 +70,9 @@ class TradeTakesOpenMakers {
             });
     }
 }
+TradeTakesOpenMakers.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(TradeTakesOpenMakers.TaskDeps)
 ], TradeTakesOpenMakers.prototype, "tasks", void 0);
 exports.TradeTakesOpenMakers = TradeTakesOpenMakers;
-(function (TradeTakesOpenMakers) {
-    TradeTakesOpenMakers.TaskDeps = {};
-})(TradeTakesOpenMakers = exports.TradeTakesOpenMakers || (exports.TradeTakesOpenMakers = {}));
 //# sourceMappingURL=trade-takes-open-makers.js.map

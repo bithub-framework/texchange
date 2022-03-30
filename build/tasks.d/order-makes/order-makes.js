@@ -30,11 +30,9 @@ class OrderMakes {
         this.models.makers.appendOrder($order);
     }
 }
+OrderMakes.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(OrderMakes.TaskDeps)
 ], OrderMakes.prototype, "tasks", void 0);
 exports.OrderMakes = OrderMakes;
-(function (OrderMakes) {
-    OrderMakes.TaskDeps = {};
-})(OrderMakes = exports.OrderMakes || (exports.OrderMakes = {}));
 //# sourceMappingURL=order-makes.js.map

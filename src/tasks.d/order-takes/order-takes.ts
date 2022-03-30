@@ -1,8 +1,6 @@
 import { inject } from 'injektor';
 import {
     TexchangeOpenOrder,
-    TexchangeOpenOrderStatic,
-    TexchangeOrderIdStatic,
     Side,
     Operation,
     TexchangeTrades,
@@ -22,11 +20,9 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
+    public static TaskDeps = {};
     @inject(OrderTakes.TaskDeps)
     protected tasks!: OrderTakes.TaskDeps<H>;
-
-    private OrderId = new TexchangeOrderIdStatic();
-    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
         protected context: Context<H>,
@@ -99,5 +95,4 @@ export namespace OrderTakes {
     export interface TaskDeps<H extends HLike<H>> {
         orderVolumes: OrderVolumesLike<H>;
     }
-    export const TaskDeps = {};
 }

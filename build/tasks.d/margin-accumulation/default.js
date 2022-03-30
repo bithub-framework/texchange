@@ -28,11 +28,9 @@ class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation
         return margin.minus(decrement);
     }
 }
+DefaultMarginAccumulation.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(DefaultMarginAccumulation.TaskDeps)
 ], DefaultMarginAccumulation.prototype, "tasks", void 0);
 exports.DefaultMarginAccumulation = DefaultMarginAccumulation;
-(function (DefaultMarginAccumulation) {
-    DefaultMarginAccumulation.TaskDeps = {};
-})(DefaultMarginAccumulation = exports.DefaultMarginAccumulation || (exports.DefaultMarginAccumulation = {}));
 //# sourceMappingURL=default.js.map

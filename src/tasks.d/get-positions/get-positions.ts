@@ -14,6 +14,7 @@ import { GetClosableLike } from '../get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>>
 	implements GetPositionsLike<H> {
+	public static TaskDeps = {};
 	@inject(GetPositions.TaskDeps)
 	private tasks!: GetPositions.TaskDeps<H>;
 
@@ -40,5 +41,4 @@ export namespace GetPositions {
 	export interface TaskDeps<H extends HLike<H>> {
 		getClosable: GetClosableLike<H>;
 	}
-	export const TaskDeps = {};
 }

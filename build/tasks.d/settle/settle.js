@@ -29,11 +29,9 @@ class Settle {
         this.assertEnoughBalance();
     }
 }
+Settle.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(Settle.TaskDeps)
 ], Settle.prototype, "tasks", void 0);
 exports.Settle = Settle;
-(function (Settle) {
-    Settle.TaskDeps = {};
-})(Settle = exports.Settle || (exports.Settle = {}));
 //# sourceMappingURL=settle.js.map

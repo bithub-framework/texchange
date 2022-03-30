@@ -14,6 +14,7 @@ import { Settle } from './settle';
 */
 export class DefaultSettle<H extends HLike<H>>
 	extends Settle<H> {
+	public static TaskDeps = {};
 	@inject(DefaultSettle.TaskDeps)
 	protected tasks!: DefaultSettle.TaskDeps<H>;
 
@@ -50,5 +51,4 @@ export namespace DefaultSettle {
 
 	export interface TaskDeps<H extends HLike<H>>
 		extends Settle.TaskDeps<H> { }
-	export const TaskDeps = {}
 }

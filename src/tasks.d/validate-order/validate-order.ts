@@ -1,8 +1,6 @@
 import { inject } from 'injektor';
 import {
     TexchangeOpenOrder,
-    TexchangeOrderIdStatic,
-    TexchangeOpenOrderStatic,
     Operation, Length,
     HLike,
 } from 'interfaces';
@@ -18,11 +16,9 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
+    public static TaskDeps = {};
     @inject(ValidateOrder.TaskDeps)
     private tasks!: ValidateOrder.TaskDeps<H>;
-
-    private OrderId = new TexchangeOrderIdStatic();
-    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
         private context: Context<H>,
@@ -82,5 +78,4 @@ export namespace ValidateOrder {
         getAvailable: GetAvailableLike<H>;
         getClosable: GetClosableLike<H>;
     }
-    export const TaskDeps = {};
 }

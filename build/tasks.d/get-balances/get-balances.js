@@ -22,11 +22,9 @@ class GetBalances {
         };
     }
 }
+GetBalances.TaskDeps = {};
 __decorate([
     (0, injektor_1.inject)(GetBalances.TaskDeps)
 ], GetBalances.prototype, "tasks", void 0);
 exports.GetBalances = GetBalances;
-(function (GetBalances) {
-    GetBalances.TaskDeps = {};
-})(GetBalances = exports.GetBalances || (exports.GetBalances = {}));
 //# sourceMappingURL=get-balances.js.map

@@ -5,8 +5,6 @@ import { Broadcast } from '../../broadcast';
 import {
 	TexchangeOpenOrder,
 	HLike,
-	TexchangeOpenOrderStatic,
-	TexchangeOrderIdStatic,
 } from 'interfaces';
 
 import { Makers } from '../../models.d/makers/makers';
@@ -14,11 +12,9 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class CancelOpenOrder<H extends HLike<H>>
 	implements CancelOpenOrderLike<H> {
+	public static TaskDeps = {};
 	@inject(CancelOpenOrder.TaskDeps)
 	private tasks!: CancelOpenOrder.TaskDeps<H>;
-
-	private OrderId = new TexchangeOrderIdStatic();
-	private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
 
 	public constructor(
 		private context: Context<H>,
@@ -53,5 +49,4 @@ export namespace CancelOpenOrder {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
-	export const TaskDeps = {};
 }
