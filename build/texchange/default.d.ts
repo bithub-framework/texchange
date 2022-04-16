@@ -9,6 +9,7 @@ import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
+import { DefaultPricing } from '../models.d/pricing/default';
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
@@ -34,7 +35,7 @@ import { Subscription } from '../use-cases.d/subscription';
 import { Instant } from '../views.d/instant';
 import { Latency } from '../views.d/latency';
 import { Joystick } from '../views.d/joystick';
-export declare class DefaultTexchange<H extends HLike<H>> implements TexchangeLike<H> {
+export declare class DefaultTexchange<H extends HLike<H>> implements TexchangeLike<H, DefaultPricing.Snapshot> {
     private context;
     private models;
     private broadcast;
@@ -53,16 +54,16 @@ export declare class DefaultTexchange<H extends HLike<H>> implements TexchangeLi
     private assembleTasks;
     private assembleUseCases;
     private assembleViews;
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
+    capture(): Snapshot<DefaultPricing.Snapshot>;
+    restore(snapshot: Snapshot<DefaultPricing.Snapshot>): void;
 }
-export interface Models<H extends HLike<H>> {
+export interface Models<H extends HLike<H>, PricingSnapshot> {
     assets: Assets<H>;
     margins: Margins<H>;
     makers: Makers<H>;
     book: Book<H>;
     progress: Progress<H>;
-    pricing: Pricing<H, any>;
+    pricing: Pricing<H, PricingSnapshot>;
 }
 export interface Tasks<H extends HLike<H>> {
     getBalances: GetBalancesLike<H>;

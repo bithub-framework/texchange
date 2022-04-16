@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderTakes = void 0;
 const injektor_1 = require("injektor");
 const interfaces_1 = require("interfaces");
-const utilities_1 = require("../../utilities");
 class OrderTakes {
     constructor(context, models, broadcast) {
         this.context = context;
@@ -26,7 +25,7 @@ class OrderTakes {
         for (const maker of orderbook[-$taker.side])
             if (($taker.side === interfaces_1.Side.BID && $taker.price.gte(maker.price) ||
                 $taker.side === interfaces_1.Side.ASK && $taker.price.lte(maker.price)) && $taker.unfilled.gt(0)) {
-                const quantity = (0, utilities_1.min)($taker.unfilled, maker.quantity);
+                const quantity = this.context.H.min($taker.unfilled, maker.quantity);
                 book.decQuantity(maker.side, maker.price, quantity);
                 $taker.filled = $taker.filled.plus(quantity);
                 $taker.unfilled = $taker.unfilled.minus(quantity);

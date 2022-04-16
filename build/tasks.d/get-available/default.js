@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultGetAvailable = void 0;
 const injektor_1 = require("injektor");
 const interfaces_1 = require("interfaces");
-const utilities_1 = require("../../utilities");
 const get_available_1 = require("./get-available");
 class DefaultGetAvailable extends get_available_1.GetAvailable {
     constructor(context, models, broadcast) {
@@ -30,7 +29,7 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
         const $final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const side = length * interfaces_1.Operation.OPEN;
-            const afterDeduction = (0, utilities_1.max)(totalUnfilled[side].minus(position[-length]), this.context.H.from(0));
+            const afterDeduction = this.context.H.max(totalUnfilled[side].minus(position[-length]), this.context.H.from(0));
             $final[length] = totalFrozen.balance[length]
                 .times(afterDeduction)
                 .div(totalUnfilled[side]);

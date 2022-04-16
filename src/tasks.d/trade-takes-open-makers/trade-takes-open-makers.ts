@@ -9,7 +9,6 @@ import {
     TexchangeTradeStatic,
     TexchangeTradeIdStatic,
 } from 'interfaces';
-import { min } from '../../utilities';
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
@@ -64,7 +63,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     ): void {
         const { makers } = this.models;
         if ($trade.price.eq(maker.price)) {
-            const volume = min($trade.quantity, maker.behind);
+            const volume = this.context.H.min($trade.quantity, maker.behind);
             $trade.quantity = $trade.quantity.minus(volume);
             makers.takeOrderQueue(maker.id, volume);
         } else makers.takeOrderQueue(maker.id);
@@ -76,7 +75,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     ): void {
         const { assets, makers } = this.models;
 
-        const volume = min($trade.quantity, maker.unfilled);
+        const volume = this.context.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);

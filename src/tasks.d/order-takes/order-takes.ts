@@ -6,7 +6,6 @@ import {
     TexchangeTrades,
     HLike, H,
 } from 'interfaces';
-import { min } from '../../utilities';
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
@@ -45,7 +44,7 @@ export class OrderTakes<H extends HLike<H>>
                     $taker.side === Side.ASK && $taker.price.lte(maker.price)
                 ) && $taker.unfilled.gt(0)
             ) {
-                const quantity = min($taker.unfilled, maker.quantity);
+                const quantity = this.context.H.min($taker.unfilled, maker.quantity);
                 book.decQuantity(maker.side, maker.price, quantity);
                 $taker.filled = $taker.filled.plus(quantity);
                 $taker.unfilled = $taker.unfilled.minus(quantity);

@@ -5,7 +5,6 @@ import {
 } from 'interfaces';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
-import { max } from '../../utilities';
 import { GetAvailable } from './get-available';
 
 import { Margins } from '../../models.d/margins';
@@ -45,7 +44,7 @@ export class DefaultGetAvailable<H extends HLike<H>>
 		const $final: { [length: number]: H; } = {};
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side: Side = length * Operation.OPEN;
-			const afterDeduction = max(
+			const afterDeduction = this.context.H.max(
 				totalUnfilled[side].minus(position[-length]),
 				this.context.H.from(0),
 			);

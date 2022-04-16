@@ -80,10 +80,10 @@ import { Joystick } from '../views.d/joystick';
 
 
 export class DefaultTexchange<H extends HLike<H>>
-	implements TexchangeLike<H> {
+	implements TexchangeLike<H, DefaultPricing.Snapshot> {
 
 	private context: Context<H>;
-	private models: Models<H>;
+	private models: Models<H, DefaultPricing.Snapshot>;
 	private broadcast: Broadcast<H>;
 	private tasks: Tasks<H>;
 	private mtm: Mtm<H> | null;
@@ -136,7 +136,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleModels(): Models<H> {
+	private assembleModels(): Models<H, DefaultPricing.Snapshot> {
 		return {
 			assets: new Assets(this.context),
 			margins: new Margins(this.context),
@@ -220,7 +220,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	public capture(): Snapshot {
+	public capture(): Snapshot<DefaultPricing.Snapshot> {
 		return {
 			assets: this.models.assets.capture(),
 			margins: this.models.margins.capture(),
@@ -231,7 +231,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		}
 	}
 
-	public restore(snapshot: Snapshot): void {
+	public restore(snapshot: Snapshot<DefaultPricing.Snapshot>): void {
 		this.models.assets.restore(snapshot.assets);
 		this.models.margins.restore(snapshot.margins);
 		this.models.makers.restore(snapshot.makers);
@@ -241,13 +241,16 @@ export class DefaultTexchange<H extends HLike<H>>
 	}
 }
 
-export interface Models<H extends HLike<H>> {
+export interface Models<
+	H extends HLike<H>,
+	PricingSnapshot,
+	> {
 	assets: Assets<H>;
 	margins: Margins<H>;
 	makers: Makers<H>;
 	book: Book<H>;
 	progress: Progress<H>;
-	pricing: Pricing<H, any>;
+	pricing: Pricing<H, PricingSnapshot>;
 }
 
 export interface Tasks<H extends HLike<H>> {

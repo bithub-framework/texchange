@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
 const injektor_1 = require("injektor");
 const interfaces_1 = require("interfaces");
-const utilities_1 = require("../../utilities");
 class TradeTakesOpenMakers {
     constructor(context, models, broadcast) {
         this.context = context;
@@ -38,7 +37,7 @@ class TradeTakesOpenMakers {
     $tradeTakesOrderQueue($trade, maker) {
         const { makers } = this.models;
         if ($trade.price.eq(maker.price)) {
-            const volume = (0, utilities_1.min)($trade.quantity, maker.behind);
+            const volume = this.context.H.min($trade.quantity, maker.behind);
             $trade.quantity = $trade.quantity.minus(volume);
             makers.takeOrderQueue(maker.id, volume);
         }
@@ -47,7 +46,7 @@ class TradeTakesOpenMakers {
     }
     tradeTakesOpenMaker($trade, maker) {
         const { assets, makers } = this.models;
-        const volume = (0, utilities_1.min)($trade.quantity, maker.unfilled);
+        const volume = this.context.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);
