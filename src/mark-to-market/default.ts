@@ -10,7 +10,7 @@ import { HLike } from 'interfaces';
  */
 export class DefaultMtm<H extends HLike<H>>
 	extends Mtm<H> {
-	public readonly startable = new Startable(
+	public readonly startable = Startable.create(
 		() => this.start(),
 		() => this.stop(),
 	);

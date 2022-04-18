@@ -11,7 +11,7 @@ class DefaultMtm extends mtm_1.Mtm {
         super(context, models, broadcast, tasks);
         this.models = models;
         this.tasks = tasks;
-        this.startable = new startable_1.Startable(() => this.start(), () => this.stop());
+        this.startable = startable_1.Startable.create(() => this.start(), () => this.stop());
     }
     async start() { }
     async stop() { }

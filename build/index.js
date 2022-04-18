@@ -1,6 +1,16 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultTexchange = exports.DefaultMtm = exports.Mtm = exports.DefaultMarginAccumulation = exports.MarginAccumulation = exports.DefaultGetAvailable = exports.GetAvailable = exports.DefaultSettle = exports.Settle = exports.DefaultMakers = exports.Makers = exports.DefaultPricing = exports.Pricing = void 0;
+exports.DefaultMtm = exports.Mtm = exports.DefaultMarginAccumulation = exports.MarginAccumulation = exports.DefaultGetAvailable = exports.GetAvailable = exports.DefaultSettle = exports.Settle = exports.DefaultMakers = exports.Makers = exports.DefaultPricing = exports.Pricing = void 0;
 var pricing_1 = require("./models.d/pricing/pricing");
 Object.defineProperty(exports, "Pricing", { enumerable: true, get: function () { return pricing_1.Pricing; } });
 var default_1 = require("./models.d/pricing/default");
@@ -25,6 +35,6 @@ var mtm_1 = require("./mark-to-market/mtm");
 Object.defineProperty(exports, "Mtm", { enumerable: true, get: function () { return mtm_1.Mtm; } });
 var default_6 = require("./mark-to-market/default");
 Object.defineProperty(exports, "DefaultMtm", { enumerable: true, get: function () { return default_6.DefaultMtm; } });
-var default_7 = require("./texchange/default");
-Object.defineProperty(exports, "DefaultTexchange", { enumerable: true, get: function () { return default_7.DefaultTexchange; } });
+__exportStar(require("./texchange/texchange"), exports);
+__exportStar(require("./texchange/default"), exports);
 //# sourceMappingURL=index.js.map

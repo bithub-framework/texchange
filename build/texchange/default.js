@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultTexchange = void 0;
-const startable_1 = require("startable");
+const texchange_1 = require("./texchange");
 const default_1 = require("../context.d/market-calc/default");
 // Models
 const assets_1 = require("../models.d/assets");
+const default_2 = require("../models.d/makers/default");
 const margins_1 = require("../models.d/margins");
 const book_1 = require("../models.d/book");
 const progress_1 = require("../models.d/progress");
-const default_2 = require("../models.d/makers/default");
 const default_3 = require("../models.d/pricing/default");
 const events_1 = require("events");
 const make_open_order_1 = require("../tasks.d/make-open-order/make-open-order");
@@ -26,7 +26,6 @@ const default_5 = require("../tasks.d/settle/default");
 const default_6 = require("../tasks.d/margin-accumulation/default");
 const injektor_1 = require("injektor");
 const default_7 = require("../mark-to-market/default");
-// Use cases
 const make_order_1 = require("../use-cases.d/make-order");
 const cancel_order_1 = require("../use-cases.d/cancel-order");
 const amend_order_1 = require("../use-cases.d/amend-order");
@@ -36,12 +35,12 @@ const get_balances_2 = require("../use-cases.d/get-balances");
 const update_orderbook_1 = require("../use-cases.d/update-orderbook");
 const update_trades_1 = require("../use-cases.d/update-trades");
 const subscription_1 = require("../use-cases.d/subscription");
-// Views
 const instant_1 = require("../views.d/instant");
 const latency_1 = require("../views.d/latency");
 const joystick_1 = require("../views.d/joystick");
-class DefaultTexchange {
+class DefaultTexchange extends texchange_1.Texchange {
     constructor(config, timeline, H) {
+        super();
         this.context = this.assembleContext(config, timeline, H);
         this.models = this.assembleModels();
         this.broadcast = new events_1.EventEmitter();
@@ -52,15 +51,6 @@ class DefaultTexchange {
         this.views = this.assembleViews();
         this.user = this.views.latency;
         this.admin = this.views.joystick;
-        this.startable = new startable_1.Startable(() => this.start(), () => this.stop());
-    }
-    async start() {
-        if (this.mtm)
-            await this.mtm.startable.start(this.startable.stop);
-    }
-    async stop() {
-        if (this.mtm)
-            await this.mtm.startable.stop();
     }
     assembleContext(config, timeline, H) {
         return {

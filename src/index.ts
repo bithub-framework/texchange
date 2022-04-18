@@ -17,7 +17,7 @@ export { DefaultMarginAccumulation } from './tasks.d/margin-accumulation/default
 export { Mtm } from './mark-to-market/mtm';
 export { DefaultMtm } from './mark-to-market/default';
 
-export { TexchangeLike } from './texchange/texchange-like';
-export { DefaultTexchange } from './texchange/default';
+export * from './texchange/texchange';
+export * from './texchange/default';
 
 export { DatabaseTrades, DatabaseTrade } from './use-cases.d/update-trades';

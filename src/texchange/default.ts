@@ -1,6 +1,5 @@
-import { TexchangeLike, Snapshot } from './texchange-like';
+import { Texchange, Models, Snapshot } from './texchange';
 import { HLike } from 'interfaces';
-import { Startable } from 'startable';
 
 // Context
 import { Context } from '../context';
@@ -13,13 +12,10 @@ import { DefaultMarketCalc } from '../context.d/market-calc/default';
 
 // Models
 import { Assets } from '../models.d/assets';
+import { DefaultMakers } from '../models.d/makers/default';
 import { Margins } from '../models.d/margins';
-import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
-import { Pricing } from '../models.d/pricing/pricing';
-
-import { DefaultMakers } from '../models.d/makers/default';
 import { DefaultPricing } from '../models.d/pricing/default';
 
 // Broadcast
@@ -27,19 +23,7 @@ import { Broadcast } from '../broadcast';
 import { EventEmitter } from 'events';
 
 // Tasks
-import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
-import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
-import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
-import { GetPositionsLike } from '../tasks.d/get-positions/get-positions-like';
-import { OrderMakesLike } from '../tasks.d/order-makes/order-makes-like';
-import { OrderTakesLike } from '../tasks.d/order-takes/order-takes-like';
-import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
-import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
-import { OrderVolumesLike } from '../tasks.d/order-volumes/order-volumes-like';
-import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
-import { SettleLike } from '../tasks.d/settle/settle-like';
-import { MarginAccumulationLike } from '../tasks.d/margin-accumulation/margin-accumulation-like';
+import { Tasks } from './texchange';
 
 import { MakeOpenOrder } from '../tasks.d/make-open-order/make-open-order';
 import { CancelOpenOrder } from '../tasks.d/cancel-open-order/cancel-open-order';
@@ -63,6 +47,7 @@ import { Mtm } from '../mark-to-market/mtm';
 import { DefaultMtm } from '../mark-to-market/default';
 
 // Use cases
+import { UseCases } from './texchange';
 import { MakeOrder } from '../use-cases.d/make-order';
 import { CancelOrder } from '../use-cases.d/cancel-order';
 import { AmendOrder } from '../use-cases.d/amend-order';
@@ -74,30 +59,31 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
 
 // Views
+import { Views } from './texchange';
 import { Instant } from '../views.d/instant';
 import { Latency } from '../views.d/latency';
 import { Joystick } from '../views.d/joystick';
 
 
 export class DefaultTexchange<H extends HLike<H>>
-	implements TexchangeLike<H, DefaultPricing.Snapshot> {
+	extends Texchange<H, DefaultPricing.Snapshot>{
 
-	private context: Context<H>;
-	private models: Models<H, DefaultPricing.Snapshot>;
-	private broadcast: Broadcast<H>;
-	private tasks: Tasks<H>;
-	private mtm: Mtm<H> | null;
-	private useCases: UseCases<H>;
-	private views: Views<H>;
+	protected context: Context<H>;
+	protected models: DefaultModels<H>;
+	protected broadcast: Broadcast<H>;
+	protected tasks: Tasks<H>;
+	protected mtm: Mtm<H> | null;
+	protected useCases: UseCases<H>;
+	protected views: Views<H>;
 	public user: Latency<H>;
 	public admin: Joystick<H>;
-	public startable: Startable;
 
 	public constructor(
 		config: Config<H>,
 		timeline: Timeline,
 		H: HStatic<H>,
 	) {
+		super();
 		this.context = this.assembleContext(config, timeline, H);
 		this.models = this.assembleModels();
 		this.broadcast = <Broadcast<H>>new EventEmitter();;
@@ -107,20 +93,6 @@ export class DefaultTexchange<H extends HLike<H>>
 		this.views = this.assembleViews();
 		this.user = this.views.latency;
 		this.admin = this.views.joystick;
-		this.startable = new Startable(
-			() => this.start(),
-			() => this.stop(),
-		);
-	}
-
-	private async start() {
-		if (this.mtm)
-			await this.mtm.startable.start(this.startable.stop);
-	}
-
-	private async stop() {
-		if (this.mtm)
-			await this.mtm.startable.stop();
 	}
 
 	private assembleContext(
@@ -136,7 +108,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleModels(): Models<H, DefaultPricing.Snapshot> {
+	private assembleModels(): DefaultModels<H> {
 		return {
 			assets: new Assets(this.context),
 			margins: new Margins(this.context),
@@ -220,7 +192,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	public capture(): Snapshot<DefaultPricing.Snapshot> {
+	public capture(): DefaultSnapshot {
 		return {
 			assets: this.models.assets.capture(),
 			margins: this.models.margins.capture(),
@@ -231,7 +203,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		}
 	}
 
-	public restore(snapshot: Snapshot<DefaultPricing.Snapshot>): void {
+	public restore(snapshot: DefaultSnapshot): void {
 		this.models.assets.restore(snapshot.assets);
 		this.models.margins.restore(snapshot.margins);
 		this.models.makers.restore(snapshot.makers);
@@ -241,48 +213,8 @@ export class DefaultTexchange<H extends HLike<H>>
 	}
 }
 
-export interface Models<
-	H extends HLike<H>,
-	PricingSnapshot,
-	> {
-	assets: Assets<H>;
-	margins: Margins<H>;
-	makers: Makers<H>;
-	book: Book<H>;
-	progress: Progress<H>;
-	pricing: Pricing<H, PricingSnapshot>;
-}
+export interface DefaultModels<H extends HLike<H>>
+	extends Models<H, DefaultPricing.Snapshot> { }
 
-export interface Tasks<H extends HLike<H>> {
-	getBalances: GetBalancesLike<H>;
-	getPositions: GetPositionsLike<H>;
-	getAvailable: GetAvailableLike<H>;
-	getClosable: GetClosableLike<H>;
-	settle: SettleLike;
-	orderMakes: OrderMakesLike<H>;
-	tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
-	orderTakes: OrderTakesLike<H>;
-	validateOrder: ValidateOrderLike<H>;
-	makeOpenOrder: MakeOpenOrderLike<H>;
-	cancelOpenOrder: CancelOpenOrderLike<H>;
-	marginAccumulation: MarginAccumulationLike<H>;
-	orderVolumes: OrderVolumesLike<H>;
-}
-
-export interface UseCases<H extends HLike<H>> {
-	makeOrder: MakeOrder<H>;
-	cancelOrder: CancelOrder<H>;
-	amendOrder: AmendOrder<H>;
-	getOpenOrders: GetOpenOrders<H>;
-	getPositions: GetPositionsUseCase<H>;
-	getBalances: GetBalancesUseCase<H>;
-	updateOrderbook: UpdateOrderbook<H>;
-	updateTrades: UpdateTrades<H>;
-	subscription: Subscription<H>;
-}
-
-export interface Views<H extends HLike<H>> {
-	instant: Instant<H>;
-	latency: Latency<H>;
-	joystick: Joystick<H>;
-}
+export interface DefaultSnapshot
+	extends Snapshot<DefaultPricing.Snapshot> { }
