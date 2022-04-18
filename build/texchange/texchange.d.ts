@@ -32,9 +32,9 @@ import { GetBalances as GetBalancesUseCase } from '../use-cases.d/get-balances';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
-import { Instant } from '../views.d/instant';
-import { Latency } from '../views.d/latency';
-import { Joystick } from '../views.d/joystick';
+import { Instant } from '../facades.d/instant';
+import { Latency } from '../facades.d/latency';
+import { Joystick } from '../facades.d/joystick';
 export declare abstract class Texchange<H extends HLike<H>, PricingSnapshot> implements StatefulLike<Snapshot<PricingSnapshot>> {
     protected abstract context: Context<H>;
     protected abstract models: Models<H, PricingSnapshot>;
@@ -42,7 +42,7 @@ export declare abstract class Texchange<H extends HLike<H>, PricingSnapshot> imp
     protected abstract tasks: Tasks<H>;
     protected abstract mtm: Mtm<H> | null;
     protected abstract useCases: UseCases<H>;
-    protected abstract views: Views<H>;
+    protected abstract facades: Facades<H>;
     abstract user: Latency<H>;
     abstract admin: Joystick<H>;
     startable: StartableLike;
@@ -86,7 +86,7 @@ export interface UseCases<H extends HLike<H>> {
     updateTrades: UpdateTrades<H>;
     subscription: Subscription<H>;
 }
-export interface Views<H extends HLike<H>> {
+export interface Facades<H extends HLike<H>> {
     instant: Instant<H>;
     latency: Latency<H>;
     joystick: Joystick<H>;

@@ -46,9 +46,9 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
 
 // Views
-import { Instant } from '../views.d/instant';
-import { Latency } from '../views.d/latency';
-import { Joystick } from '../views.d/joystick';
+import { Instant } from '../facades.d/instant';
+import { Latency } from '../facades.d/latency';
+import { Joystick } from '../facades.d/joystick';
 
 
 export abstract class Texchange<
@@ -62,7 +62,7 @@ export abstract class Texchange<
 	protected abstract tasks: Tasks<H>;
 	protected abstract mtm: Mtm<H> | null;
 	protected abstract useCases: UseCases<H>;
-	protected abstract views: Views<H>;
+	protected abstract facades: Facades<H>;
 	public abstract user: Latency<H>;
 	public abstract admin: Joystick<H>;
 	public startable: StartableLike;
@@ -145,7 +145,7 @@ export interface UseCases<H extends HLike<H>> {
 	subscription: Subscription<H>;
 }
 
-export interface Views<H extends HLike<H>> {
+export interface Facades<H extends HLike<H>> {
 	instant: Instant<H>;
 	latency: Latency<H>;
 	joystick: Joystick<H>;

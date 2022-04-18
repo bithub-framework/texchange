@@ -6,7 +6,8 @@
     "types": "./build/index.d.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc -b ./src/tsconfig.json"
+        "build": "tsc -b ./src/tsconfig.json",
+        "clean": "rm -rf ./build"
     },
     "author": "Zim",
     "license": "SEE LICENSE IN ./LICENSE",

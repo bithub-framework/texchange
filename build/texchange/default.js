@@ -35,9 +35,9 @@ const get_balances_2 = require("../use-cases.d/get-balances");
 const update_orderbook_1 = require("../use-cases.d/update-orderbook");
 const update_trades_1 = require("../use-cases.d/update-trades");
 const subscription_1 = require("../use-cases.d/subscription");
-const instant_1 = require("../views.d/instant");
-const latency_1 = require("../views.d/latency");
-const joystick_1 = require("../views.d/joystick");
+const instant_1 = require("../facades.d/instant");
+const latency_1 = require("../facades.d/latency");
+const joystick_1 = require("../facades.d/joystick");
 class DefaultTexchange extends texchange_1.Texchange {
     constructor(config, timeline, H) {
         super();
@@ -48,9 +48,9 @@ class DefaultTexchange extends texchange_1.Texchange {
         this.tasks = this.assembleTasks();
         this.mtm = new default_7.DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
         this.useCases = this.assembleUseCases();
-        this.views = this.assembleViews();
-        this.user = this.views.latency;
-        this.admin = this.views.joystick;
+        this.facades = this.assembleViews();
+        this.user = this.facades.latency;
+        this.admin = this.facades.joystick;
     }
     assembleContext(config, timeline, H) {
         return {

@@ -8,9 +8,9 @@ import { Broadcast } from '../broadcast';
 import { Tasks } from './texchange';
 import { Mtm } from '../mark-to-market/mtm';
 import { UseCases } from './texchange';
-import { Views } from './texchange';
-import { Latency } from '../views.d/latency';
-import { Joystick } from '../views.d/joystick';
+import { Facades } from './texchange';
+import { Latency } from '../facades.d/latency';
+import { Joystick } from '../facades.d/joystick';
 export declare class DefaultTexchange<H extends HLike<H>> extends Texchange<H, DefaultPricing.Snapshot> {
     protected context: Context<H>;
     protected models: DefaultModels<H>;
@@ -18,7 +18,7 @@ export declare class DefaultTexchange<H extends HLike<H>> extends Texchange<H, D
     protected tasks: Tasks<H>;
     protected mtm: Mtm<H> | null;
     protected useCases: UseCases<H>;
-    protected views: Views<H>;
+    protected facades: Facades<H>;
     user: Latency<H>;
     admin: Joystick<H>;
     constructor(config: Config<H>, timeline: Timeline, H: HStatic<H>);

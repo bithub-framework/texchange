@@ -59,10 +59,10 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { Subscription } from '../use-cases.d/subscription';
 
 // Views
-import { Views } from './texchange';
-import { Instant } from '../views.d/instant';
-import { Latency } from '../views.d/latency';
-import { Joystick } from '../views.d/joystick';
+import { Facades } from './texchange';
+import { Instant } from '../facades.d/instant';
+import { Latency } from '../facades.d/latency';
+import { Joystick } from '../facades.d/joystick';
 
 
 export class DefaultTexchange<H extends HLike<H>>
@@ -74,7 +74,7 @@ export class DefaultTexchange<H extends HLike<H>>
 	protected tasks: Tasks<H>;
 	protected mtm: Mtm<H> | null;
 	protected useCases: UseCases<H>;
-	protected views: Views<H>;
+	protected facades: Facades<H>;
 	public user: Latency<H>;
 	public admin: Joystick<H>;
 
@@ -90,9 +90,9 @@ export class DefaultTexchange<H extends HLike<H>>
 		this.tasks = this.assembleTasks();
 		this.mtm = new DefaultMtm(this.context, this.models, this.broadcast, this.tasks);
 		this.useCases = this.assembleUseCases();
-		this.views = this.assembleViews();
-		this.user = this.views.latency;
-		this.admin = this.views.joystick;
+		this.facades = this.assembleViews();
+		this.user = this.facades.latency;
+		this.admin = this.facades.joystick;
 	}
 
 	private assembleContext(
@@ -181,7 +181,7 @@ export class DefaultTexchange<H extends HLike<H>>
 		};
 	}
 
-	private assembleViews(): Views<H> {
+	private assembleViews(): Facades<H> {
 		const instant = new Instant(this.context, this.useCases);
 		const latency = new Latency(this.context, this.useCases, instant);
 		const joystick = new Joystick(this.context, this.useCases);
