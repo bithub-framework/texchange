@@ -24,9 +24,6 @@ const order_takes_1 = require("../tasks.d/order-takes/order-takes");
 const trade_takes_open_makers_1 = require("../tasks.d/trade-takes-open-makers/trade-takes-open-makers");
 const validate_order_1 = require("../tasks.d/validate-order/validate-order");
 const order_volumes_1 = require("../tasks.d/order-volumes/order-volumes");
-const get_available_1 = require("../tasks.d/get-available/get-available");
-const settle_1 = require("../tasks.d/settle/settle");
-const margin_accumulation_1 = require("../tasks.d/margin-accumulation/margin-accumulation");
 const tasks_1 = require("../tasks/tasks");
 // Mark to market
 const mtm_1 = require("../mark-to-market/mtm");
@@ -51,9 +48,6 @@ class Texchange {
         this.c.ra(trade_takes_open_makers_1.TradeTakesOpenMakers.TaskDeps, tasks_1.Tasks);
         this.c.ra(validate_order_1.ValidateOrder.TaskDeps, tasks_1.Tasks);
         this.c.ra(order_volumes_1.OrderVolumes.TaskDeps, tasks_1.Tasks);
-        this.c.ra(get_available_1.GetAvailable.TaskDeps, tasks_1.Tasks);
-        this.c.ra(settle_1.Settle.TaskDeps, tasks_1.Tasks);
-        this.c.ra(margin_accumulation_1.MarginAccumulation.TaskDeps, tasks_1.Tasks);
         this.c.rcs(1 /* MakeOpenOrderLike */, make_open_order_1.MakeOpenOrder);
         this.c.rcs(2 /* CancelOpenOrderLike */, cancel_open_order_1.CancelOpenOrder);
         this.c.rcs(3 /* GetBalancesLike */, get_balances_1.GetBalances);

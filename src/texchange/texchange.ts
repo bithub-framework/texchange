@@ -105,9 +105,6 @@ export abstract class Texchange<
 		this.c.ra(TradeTakesOpenMakers.TaskDeps, Tasks);
 		this.c.ra(ValidateOrder.TaskDeps, Tasks);
 		this.c.ra(OrderVolumes.TaskDeps, Tasks);
-		this.c.ra(GetAvailable.TaskDeps, Tasks);
-		this.c.ra(Settle.TaskDeps, Tasks);
-		this.c.ra(MarginAccumulation.TaskDeps, Tasks);
 
 		this.c.rcs(TYPES.MakeOpenOrderLike, MakeOpenOrder);
 		this.c.rcs(TYPES.CancelOpenOrderLike, CancelOpenOrder);
