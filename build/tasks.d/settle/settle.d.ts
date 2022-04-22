@@ -10,7 +10,7 @@ export declare abstract class Settle<H extends HLike<H>> implements SettleLike {
     protected models: Settle.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
     static TaskDeps: {};
-    protected tasks: Settle.TaskDeps<H>;
+    protected abstract tasks: Settle.TaskDeps<H>;
     constructor(context: Context<H>, models: Settle.ModelDeps<H>, broadcast: Broadcast<H>);
     settle(): void;
     protected abstract clearingMargin(length: Length, profit: H): H;

@@ -30,7 +30,7 @@ class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation
 }
 DefaultMarginAccumulation.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(DefaultMarginAccumulation.TaskDeps)
+    (0, injektor_1.instantInject)(DefaultMarginAccumulation.TaskDeps)
 ], DefaultMarginAccumulation.prototype, "tasks", void 0);
 exports.DefaultMarginAccumulation = DefaultMarginAccumulation;
 //# sourceMappingURL=default.js.map

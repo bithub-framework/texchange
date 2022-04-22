@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import {
     Length,
     HLike,
@@ -15,8 +14,7 @@ import { Pricing } from '../../models.d/pricing/pricing';
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
     public static TaskDeps = {};
-    @inject(Settle.TaskDeps)
-    protected tasks!: Settle.TaskDeps<H>;
+    protected abstract tasks: Settle.TaskDeps<H>;
 
     public constructor(
         protected context: Context<H>,

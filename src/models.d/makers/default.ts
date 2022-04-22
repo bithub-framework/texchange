@@ -6,16 +6,14 @@ import {
 import { Frozen } from './frozon';
 import { Context } from '../../context';
 import { Makers } from './makers';
-import assert = require('assert');
-
+import { inject } from 'injektor';
 
 
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	public constructor(
+		@inject(Context)
 		context: Context<H>,
-	) {
-		super(context);
-	}
+	) { super(context); }
 
 	/**
 	 * 默认单向持仓模式

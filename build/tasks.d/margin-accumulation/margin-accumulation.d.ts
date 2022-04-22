@@ -7,7 +7,7 @@ export declare abstract class MarginAccumulation<H extends HLike<H>> implements 
     protected models: MarginAccumulation.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
     static TaskDeps: {};
-    protected tasks: MarginAccumulation.TaskDeps<H>;
+    protected abstract tasks: MarginAccumulation.TaskDeps<H>;
     constructor(context: Context<H>, models: MarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
     abstract newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;
     abstract newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes<H>): H;

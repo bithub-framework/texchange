@@ -39,7 +39,7 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
 }
 DefaultGetAvailable.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(DefaultGetAvailable.TaskDeps)
+    (0, injektor_1.instantInject)(DefaultGetAvailable.TaskDeps)
 ], DefaultGetAvailable.prototype, "tasks", void 0);
 exports.DefaultGetAvailable = DefaultGetAvailable;
 //# sourceMappingURL=default.js.map

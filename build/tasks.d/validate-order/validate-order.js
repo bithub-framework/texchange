@@ -51,7 +51,7 @@ class ValidateOrder {
 }
 ValidateOrder.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(ValidateOrder.TaskDeps)
+    (0, injektor_1.instantInject)(ValidateOrder.TaskDeps)
 ], ValidateOrder.prototype, "tasks", void 0);
 exports.ValidateOrder = ValidateOrder;
 //# sourceMappingURL=validate-order.js.map

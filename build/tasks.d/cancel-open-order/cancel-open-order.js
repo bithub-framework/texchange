@@ -33,7 +33,7 @@ class CancelOpenOrder {
 }
 CancelOpenOrder.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(CancelOpenOrder.TaskDeps)
+    (0, injektor_1.instantInject)(CancelOpenOrder.TaskDeps)
 ], CancelOpenOrder.prototype, "tasks", void 0);
 exports.CancelOpenOrder = CancelOpenOrder;
 //# sourceMappingURL=cancel-open-order.js.map

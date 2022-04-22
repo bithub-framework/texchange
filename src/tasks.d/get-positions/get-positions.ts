@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import { Context } from '../../context';
 import {
 	Positions,
@@ -15,7 +15,7 @@ import { GetClosableLike } from '../get-closable/get-closable-like';
 export class GetPositions<H extends HLike<H>>
 	implements GetPositionsLike<H> {
 	public static TaskDeps = {};
-	@inject(GetPositions.TaskDeps)
+	@instantInject(GetPositions.TaskDeps)
 	private tasks!: GetPositions.TaskDeps<H>;
 
 	public constructor(

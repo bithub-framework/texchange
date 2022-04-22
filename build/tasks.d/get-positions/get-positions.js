@@ -24,7 +24,7 @@ class GetPositions {
 }
 GetPositions.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(GetPositions.TaskDeps)
+    (0, injektor_1.instantInject)(GetPositions.TaskDeps)
 ], GetPositions.prototype, "tasks", void 0);
 exports.GetPositions = GetPositions;
 //# sourceMappingURL=get-positions.js.map

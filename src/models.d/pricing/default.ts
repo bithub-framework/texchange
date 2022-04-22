@@ -4,6 +4,7 @@ import {
 } from 'interfaces';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
+import { inject } from 'injektor';
 
 
 /**
@@ -15,9 +16,10 @@ export class DefaultPricing<H extends HLike<H>>
 	private settlementPrice: H;
 
 	public constructor(
-		context: Context<H>,
+		@inject(Context)
+		protected context: Context<H>,
 	) {
-		super(context);
+		super();
 		this.settlementPrice = context.config.market.initialSettlementPrice;
 	}
 

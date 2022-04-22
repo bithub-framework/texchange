@@ -16,6 +16,8 @@ export declare class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
 export declare namespace DefaultMtm {
     interface ModelDeps<H extends HLike<H>> extends Mtm.ModelDeps<H> {
     }
+    const ModelDeps: {};
     interface TaskDeps<H extends HLike<H>> extends Mtm.TaskDeps<H> {
     }
+    const TaskDeps: {};
 }

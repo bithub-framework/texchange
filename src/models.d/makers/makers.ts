@@ -34,11 +34,11 @@ export abstract class Makers<H extends HLike<H>> implements
 	protected Frozen = new FrozenStatic<H>(this.context.H);
 	protected TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
 
+	private totalFrozen: Frozen<H> = this.Frozen.ZERO;
+
 	public constructor(
 		protected context: Context<H>,
 	) { }
-
-	private totalFrozen: Frozen<H> = this.Frozen.ZERO;
 
 	public getTotalUnfilled(): Makers.TotalUnfilled.Functional<H> {
 		return this.TotalUnfilled.copy(this.$totalUnfilled);

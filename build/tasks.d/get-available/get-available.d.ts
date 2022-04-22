@@ -8,7 +8,7 @@ export declare abstract class GetAvailable<H extends HLike<H>> implements GetAva
     protected models: GetAvailable.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
     static TaskDeps: {};
-    protected tasks: GetAvailable.TaskDeps<H>;
+    protected abstract tasks: GetAvailable.TaskDeps<H>;
     constructor(context: Context<H>, models: GetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
     getAvailable(): H;
     protected abstract finalMargin(): H;

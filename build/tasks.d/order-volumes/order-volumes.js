@@ -57,7 +57,7 @@ class OrderVolumes {
 }
 OrderVolumes.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(OrderVolumes.TaskDeps)
+    (0, injektor_1.instantInject)(OrderVolumes.TaskDeps)
 ], OrderVolumes.prototype, "tasks", void 0);
 exports.OrderVolumes = OrderVolumes;
 //# sourceMappingURL=order-volumes.js.map

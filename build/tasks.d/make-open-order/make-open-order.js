@@ -33,7 +33,7 @@ class MakeOpenOrder {
 }
 MakeOpenOrder.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(MakeOpenOrder.TaskDeps)
+    (0, injektor_1.instantInject)(MakeOpenOrder.TaskDeps)
 ], MakeOpenOrder.prototype, "tasks", void 0);
 exports.MakeOpenOrder = MakeOpenOrder;
 //# sourceMappingURL=make-open-order.js.map

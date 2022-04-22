@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import { Context } from '../../context';;
 import { Broadcast } from '../../broadcast';
 import { MarginAccumulationLike } from './margin-accumulation-like';
@@ -8,8 +7,7 @@ import { HLike } from 'interfaces';
 export abstract class MarginAccumulation<H extends HLike<H>>
 	implements MarginAccumulationLike<H> {
 	public static TaskDeps = {};
-	@inject(MarginAccumulation.TaskDeps)
-	protected tasks!: MarginAccumulation.TaskDeps<H>;
+	protected abstract tasks: MarginAccumulation.TaskDeps<H>;
 
 	public constructor(
 		protected context: Context<H>,

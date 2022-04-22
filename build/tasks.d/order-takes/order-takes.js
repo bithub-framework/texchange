@@ -61,7 +61,7 @@ class OrderTakes {
 }
 OrderTakes.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(OrderTakes.TaskDeps)
+    (0, injektor_1.instantInject)(OrderTakes.TaskDeps)
 ], OrderTakes.prototype, "tasks", void 0);
 exports.OrderTakes = OrderTakes;
 //# sourceMappingURL=order-takes.js.map

@@ -5,10 +5,17 @@ import {
 	HStatic,
 } from 'interfaces';
 import { Config } from './context.d/config';
+import { instantInject } from 'injektor';
+import { TYPES } from './types';
 
-export interface Context<H extends HLike<H>> {
-	calc: MarketCalc<H>;
-	config: Config<H>;
-	timeline: Timeline;
-	H: HStatic<H>;
+
+export class Context<H extends HLike<H>> {
+	@instantInject(TYPES.MarketCalc)
+	public calc!: MarketCalc<H>;
+
+	public constructor(
+		public config: Config<H>,
+		public timeline: Timeline,
+		public H: HStatic<H>,
+	) { }
 }

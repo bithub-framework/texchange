@@ -29,7 +29,7 @@ class GetClosable {
 }
 GetClosable.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(GetClosable.TaskDeps)
+    (0, injektor_1.instantInject)(GetClosable.TaskDeps)
 ], GetClosable.prototype, "tasks", void 0);
 exports.GetClosable = GetClosable;
 //# sourceMappingURL=get-closable.js.map

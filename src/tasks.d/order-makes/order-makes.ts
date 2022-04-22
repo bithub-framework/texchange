@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import {
     TexchangeOpenOrder,
     TexchangeOpenMaker,
@@ -17,7 +17,7 @@ import { Makers } from '../../models.d/makers/makers';
 export class OrderMakes<H extends HLike<H>>
     implements OrderMakesLike<H> {
     public static TaskDeps = {};
-    @inject(OrderMakes.TaskDeps)
+    @instantInject(OrderMakes.TaskDeps)
     private tasks!: OrderMakes.TaskDeps<H>;
 
     private OrderId = new TexchangeOrderIdStatic();

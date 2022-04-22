@@ -71,7 +71,7 @@ class TradeTakesOpenMakers {
 }
 TradeTakesOpenMakers.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(TradeTakesOpenMakers.TaskDeps)
+    (0, injektor_1.instantInject)(TradeTakesOpenMakers.TaskDeps)
 ], TradeTakesOpenMakers.prototype, "tasks", void 0);
 exports.TradeTakesOpenMakers = TradeTakesOpenMakers;
 //# sourceMappingURL=trade-takes-open-makers.js.map

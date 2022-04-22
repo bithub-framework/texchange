@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import { GetAvailableLike } from './get-available-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
@@ -10,8 +9,7 @@ import { Assets } from '../../models.d/assets';
 export abstract class GetAvailable<H extends HLike<H>>
 	implements GetAvailableLike<H> {
 	public static TaskDeps = {};
-	@inject(GetAvailable.TaskDeps)
-	protected tasks!: GetAvailable.TaskDeps<H>;
+	protected abstract tasks: GetAvailable.TaskDeps<H>;
 
 	public constructor(
 		protected context: Context<H>,

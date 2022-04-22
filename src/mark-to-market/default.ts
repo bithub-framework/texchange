@@ -3,6 +3,8 @@ import { Context } from '../context';
 import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
+import { inject } from 'injektor';
+import { TYPES } from '../types';
 
 
 /**
@@ -16,9 +18,13 @@ export class DefaultMtm<H extends HLike<H>>
 	);
 
 	public constructor(
+		@inject(Context)
 		context: Context<H>,
+		@inject(DefaultMtm.ModelDeps)
 		protected models: DefaultMtm.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		broadcast: Broadcast<H>,
+		@inject(DefaultMtm.TaskDeps)
 		protected tasks: DefaultMtm.TaskDeps<H>,
 	) {
 		super(
@@ -36,6 +42,8 @@ export class DefaultMtm<H extends HLike<H>>
 export namespace DefaultMtm {
 	export interface ModelDeps<H extends HLike<H>>
 		extends Mtm.ModelDeps<H> { }
+	export const ModelDeps = {};
 	export interface TaskDeps<H extends HLike<H>>
 		extends Mtm.TaskDeps<H> { }
+	export const TaskDeps = {};
 }

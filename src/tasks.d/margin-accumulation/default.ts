@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import { HLike } from 'interfaces';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
@@ -11,7 +11,7 @@ import { Assets } from '../../models.d/assets';
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
 	public static TaskDeps = {};
-	@inject(DefaultMarginAccumulation.TaskDeps)
+	@instantInject(DefaultMarginAccumulation.TaskDeps)
 	protected tasks!: DefaultMarginAccumulation.TaskDeps<H>;
 
 	public constructor(

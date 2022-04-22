@@ -11,8 +11,8 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     protected OpenMaker: TexchangeOpenMakerStatic<H>;
     protected Frozen: FrozenStatic<H>;
     protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
-    constructor(context: Context<H>);
     private totalFrozen;
+    constructor(context: Context<H>);
     getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<TexchangeOpenMaker<H>>;

@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
@@ -12,7 +12,7 @@ import { Margins } from '../../models.d/margins';
 export class OrderVolumes<H extends HLike<H>>
 	implements OrderVolumesLike<H> {
 	public static TaskDeps = {};
-	@inject(OrderVolumes.TaskDeps)
+	@instantInject(OrderVolumes.TaskDeps)
 	private tasks!: OrderVolumes.TaskDeps<H>;
 
 	public constructor(

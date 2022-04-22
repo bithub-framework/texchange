@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import {
     TexchangeOpenOrder,
     Side,
@@ -20,7 +20,7 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
     public static TaskDeps = {};
-    @inject(OrderTakes.TaskDeps)
+    @instantInject(OrderTakes.TaskDeps)
     protected tasks!: OrderTakes.TaskDeps<H>;
 
     public constructor(

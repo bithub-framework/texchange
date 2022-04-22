@@ -1,4 +1,4 @@
-import { inject } from 'injektor';
+import { instantInject } from 'injektor';
 import { Context } from '../../context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
@@ -13,7 +13,7 @@ import { Makers } from '../../models.d/makers/makers';
 export class CancelOpenOrder<H extends HLike<H>>
 	implements CancelOpenOrderLike<H> {
 	public static TaskDeps = {};
-	@inject(CancelOpenOrder.TaskDeps)
+	@instantInject(CancelOpenOrder.TaskDeps)
 	private tasks!: CancelOpenOrder.TaskDeps<H>;
 
 	public constructor(

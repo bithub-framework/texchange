@@ -8,10 +8,7 @@ import { Context } from '../../context';
 
 export abstract class Pricing<H extends HLike<H>, Snapshot>
 	implements StatefulLike<Snapshot> {
-
-	public constructor(
-		protected context: Context<H>,
-	) { }
+	protected abstract context: Context<H>;
 
 	public abstract getSettlementPrice(): H;
 	public abstract updateTrades(trades: TexchangeTrades<H>): void;

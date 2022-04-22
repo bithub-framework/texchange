@@ -30,7 +30,7 @@ class DefaultSettle extends settle_1.Settle {
 }
 DefaultSettle.TaskDeps = {};
 __decorate([
-    (0, injektor_1.inject)(DefaultSettle.TaskDeps)
+    (0, injektor_1.instantInject)(DefaultSettle.TaskDeps)
 ], DefaultSettle.prototype, "tasks", void 0);
 exports.DefaultSettle = DefaultSettle;
 //# sourceMappingURL=default.js.map
