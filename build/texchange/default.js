@@ -22,7 +22,6 @@ const mtm_1 = require("../mark-to-market/mtm");
 const default_8 = require("../mark-to-market/default");
 // Use cases
 const update_trades_1 = require("../use-cases.d/update-trades");
-const facades_1 = require("../facades");
 class DefaultTexchange extends texchange_1.Texchange {
     constructor(config, timeline, H) {
         super(config, timeline, H);
@@ -38,29 +37,8 @@ class DefaultTexchange extends texchange_1.Texchange {
         this.c.rcs(13 /* MarginAccumulationLike */, default_6.DefaultMarginAccumulation);
         this.c.rcs(tasks_1.Tasks, default_7.DefaultTasks);
         this.c.rfs(update_trades_1.UpdateTrades, () => new update_trades_1.UpdateTrades(this.c.i(context_1.Context), this.c.i(models_1.Models), this.c.i(14 /* Broadcast */), this.c.i(tasks_1.Tasks), true));
-        this.models = this.c.i(models_1.Models);
-        this.mtm = this.c.i(mtm_1.Mtm);
-        const facades = this.c.i(facades_1.Facades);
-        this.user = facades.latency;
-        this.admin = facades.joystick;
-    }
-    capture() {
-        return {
-            assets: this.models.assets.capture(),
-            margins: this.models.margins.capture(),
-            makers: this.models.makers.capture(),
-            book: this.models.book.capture(),
-            pricing: this.models.pricing.capture(),
-            progress: this.models.progress.capture(),
-        };
-    }
-    restore(snapshot) {
-        this.models.assets.restore(snapshot.assets);
-        this.models.margins.restore(snapshot.margins);
-        this.models.makers.restore(snapshot.makers);
-        this.models.book.restore(snapshot.book);
-        this.models.pricing.restore(snapshot.pricing);
-        this.models.progress.restore(snapshot.progress);
+        this.c.rfs(texchange_1.Texchange, () => this);
+        this.c.i(texchange_1.Texchange);
     }
 }
 exports.DefaultTexchange = DefaultTexchange;

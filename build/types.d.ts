@@ -13,5 +13,7 @@ export declare const enum TYPES {
     GetAvailableLike = 11,
     SettleLike = 12,
     MarginAccumulationLike = 13,
-    Broadcast = 14
+    Broadcast = 14,
+    User = 15,
+    Admin = 16
 }

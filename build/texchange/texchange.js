@@ -1,4 +1,10 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const startable_1 = require("startable");
@@ -22,6 +28,8 @@ const get_available_1 = require("../tasks.d/get-available/get-available");
 const settle_1 = require("../tasks.d/settle/settle");
 const margin_accumulation_1 = require("../tasks.d/margin-accumulation/margin-accumulation");
 const tasks_1 = require("../tasks/tasks");
+// Mark to market
+const mtm_1 = require("../mark-to-market/mtm");
 // UseCases
 const use_cases_1 = require("../use-cases");
 // Facades
@@ -57,7 +65,9 @@ class Texchange {
         this.c.rcs(9 /* ValidateOrderLike */, validate_order_1.ValidateOrder);
         this.c.rcs(10 /* OrderVolumesLike */, order_volumes_1.OrderVolumes);
         this.c.rcs(use_cases_1.UseCases, use_cases_1.UseCases);
-        this.c.registerConstructorSingleton(facades_1.Facades, facades_1.Facades);
+        this.c.rcs(facades_1.Facades, facades_1.Facades);
+        this.c.rfs(15 /* User */, () => this.c.i(facades_1.Facades).latency);
+        this.c.rfs(16 /* Admin */, () => this.c.i(facades_1.Facades).joystick);
         this.startable = startable_1.Startable.create(() => this.start(), () => this.stop());
     }
     async start() {
@@ -87,5 +97,17 @@ class Texchange {
         this.models.progress.restore(snapshot.progress);
     }
 }
+__decorate([
+    (0, injektor_1.instantInject)(models_1.Models)
+], Texchange.prototype, "models", void 0);
+__decorate([
+    (0, injektor_1.instantInject)(mtm_1.Mtm)
+], Texchange.prototype, "mtm", void 0);
+__decorate([
+    (0, injektor_1.instantInject)(15 /* User */)
+], Texchange.prototype, "user", void 0);
+__decorate([
+    (0, injektor_1.instantInject)(16 /* Admin */)
+], Texchange.prototype, "admin", void 0);
 exports.Texchange = Texchange;
 //# sourceMappingURL=texchange.js.map

@@ -16,4 +16,7 @@ export const enum TYPES {
 	MarginAccumulationLike,
 
 	Broadcast,
+
+	User,
+	Admin,
 }

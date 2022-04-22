@@ -16,11 +16,11 @@ import { Latency } from '../facades.d/latency';
 import { Joystick } from '../facades.d/joystick';
 export declare abstract class Texchange<H extends HLike<H>, PricingSnapshot> implements StatefulLike<Snapshot<PricingSnapshot>> {
     protected c: Container;
-    protected abstract models: Models<H, PricingSnapshot>;
+    protected models: Models<H, PricingSnapshot>;
     protected broadcast: Broadcast<H>;
-    protected abstract mtm: Mtm<H> | null;
-    abstract user: Latency<H>;
-    abstract admin: Joystick<H>;
+    protected mtm: Mtm<H> | null;
+    user: Latency<H>;
+    admin: Joystick<H>;
     startable: StartableLike;
     constructor(config: Config<H>, timeline: Timeline, H: HStatic<H>);
     private start;
@@ -29,10 +29,10 @@ export declare abstract class Texchange<H extends HLike<H>, PricingSnapshot> imp
     restore(snapshot: Snapshot<PricingSnapshot>): void;
 }
 export interface Snapshot<PricingSnapshot> {
-    readonly assets: Assets.Snapshot;
-    readonly margins: Margins.Snapshot;
-    readonly makers: Makers.Snapshot;
-    readonly book: Book.Snapshot;
-    readonly pricing: PricingSnapshot;
-    readonly progress: Progress.Snapshot;
+    assets: Assets.Snapshot;
+    margins: Margins.Snapshot;
+    makers: Makers.Snapshot;
+    book: Book.Snapshot;
+    pricing: PricingSnapshot;
+    progress: Progress.Snapshot;
 }

@@ -34,21 +34,9 @@ import { DefaultMtm } from '../mark-to-market/default';
 // Use cases
 import { UpdateTrades } from '../use-cases.d/update-trades';
 
-// Facades
-import { Latency } from '../facades.d/latency';
-import { Joystick } from '../facades.d/joystick';
-
-import { Facades } from '../facades';
-
-
 
 export class DefaultTexchange<H extends HLike<H>>
 	extends Texchange<H, DefaultPricing.Snapshot>{
-
-	protected models: Models<H, DefaultPricing.Snapshot>;
-	protected mtm: Mtm<H> | null;
-	public user: Latency<H>;
-	public admin: Joystick<H>;
 
 	public constructor(
 		config: Config<H>,
@@ -101,31 +89,8 @@ export class DefaultTexchange<H extends HLike<H>>
 			),
 		);
 
-		this.models = this.c.i(Models);
-		this.mtm = this.c.i(Mtm);
-		const facades: Facades<H> = this.c.i(Facades);
-		this.user = facades.latency;
-		this.admin = facades.joystick;
-	}
-
-	public capture(): DefaultSnapshot {
-		return {
-			assets: this.models.assets.capture(),
-			margins: this.models.margins.capture(),
-			makers: this.models.makers.capture(),
-			book: this.models.book.capture(),
-			pricing: this.models.pricing.capture(),
-			progress: this.models.progress.capture(),
-		}
-	}
-
-	public restore(snapshot: DefaultSnapshot): void {
-		this.models.assets.restore(snapshot.assets);
-		this.models.margins.restore(snapshot.margins);
-		this.models.makers.restore(snapshot.makers);
-		this.models.book.restore(snapshot.book);
-		this.models.pricing.restore(snapshot.pricing);
-		this.models.progress.restore(snapshot.progress);
+		this.c.rfs(Texchange, () => this);
+		this.c.i(Texchange);
 	}
 }
 
