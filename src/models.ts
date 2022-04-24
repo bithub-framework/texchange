@@ -6,7 +6,7 @@ import { Progress } from './models.d/progress';
 import { Pricing } from './models.d/pricing/pricing';
 import { HLike } from 'interfaces';
 import { Context } from './context';
-import { instantInject, inject } from 'injektor';
+import { inject } from 'injektor';
 
 
 
@@ -16,16 +16,16 @@ export class Models<
 	> {
 	public assets: Assets<H>;
 	public margins: Margins<H>;
-	@instantInject(Makers)
-	public makers!: Makers<H>;
 	public book: Book<H>;
 	public progress: Progress<H>;
-	@instantInject(Pricing)
-	public pricing!: Pricing<H, PricingSnapshot>;
 
 	public constructor(
 		@inject(Context)
 		context: Context<H>,
+		@inject(Makers)
+		public makers: Makers<H>,
+		@inject(Pricing)
+		public pricing: Pricing<H, PricingSnapshot>,
 	) {
 		this.assets = new Assets(context);
 		this.margins = new Margins(context);

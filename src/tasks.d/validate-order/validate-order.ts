@@ -1,9 +1,10 @@
 import { instantInject } from 'injektor';
 import {
-    TexchangeOpenOrder,
     Operation, Length,
     HLike,
 } from 'interfaces';
+import { OpenOrder } from '../../interfaces';
+
 import assert = require('assert');
 import { Context } from '../../context';
 import { ValidateOrderLike } from './validate-order-like';
@@ -26,18 +27,18 @@ export class ValidateOrder<H extends HLike<H>>
         private broadcast: Broadcast<H>,
     ) { }
 
-    public validateOrder(order: TexchangeOpenOrder<H>): void {
+    public validateOrder(order: OpenOrder<H>): void {
         this.validateFormat(order);
         this.validateQuantity(order);
     }
 
-    private validateQuantity(order: TexchangeOpenOrder<H>): void {
+    private validateQuantity(order: OpenOrder<H>): void {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
-        makers.appendOrder({
-            ...order,
-            behind: this.context.H.from(0),
-        });
+        makers.appendOrder(
+            order,
+            new this.context.H(0),
+        );
         try {
             const enoughPosition =
                 closable[Length.LONG].gte(0) &&
@@ -58,7 +59,7 @@ export class ValidateOrder<H extends HLike<H>>
         }
     }
 
-    private validateFormat(order: TexchangeOpenOrder<H>) {
+    private validateFormat(order: OpenOrder<H>) {
         assert(order.price.eq(order.price.round(this.context.config.market.PRICE_DP)));
         assert(order.price.mod(this.context.config.market.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));

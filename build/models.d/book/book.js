@@ -31,7 +31,7 @@ class Book {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
-            || this.context.H.from(0);
+            || new this.context.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements[side].set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
@@ -63,7 +63,7 @@ class Book {
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
             $final[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
-                price: this.context.H.from(priceString),
+                price: new this.context.H(priceString),
                 quantity,
                 side,
             }));

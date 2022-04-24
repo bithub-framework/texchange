@@ -1,4 +1,5 @@
-import { TexchangeTrade, HLike } from 'interfaces';
+import { HLike } from 'interfaces';
+import { Trade } from '../../interfaces';
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
@@ -15,7 +16,7 @@ export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTa
     private TradeId;
     private Trade;
     constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
-    tradeTakesOpenMakers(trade: TexchangeTrade<H>): void;
+    tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;
     private tradeTakesOpenMaker;

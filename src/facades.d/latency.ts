@@ -1,7 +1,5 @@
 import {
     LimitOrder,
-    TexchangeAmendment,
-    TexchangeOpenOrder,
     Balances,
     Positions,
     MarketApiLike,
@@ -10,18 +8,22 @@ import {
     AccountEvents,
     MarketCalc,
     HLike,
-    TexchangeTradeId,
-    TexchangeTradeIdStatic,
-    TexchangeOrderId,
     OrderbookStatic,
     TradeStatic,
     PositionsStatic,
     BalancesStatic,
     LimitOrderStatic,
-    TexchangeOrderIdStatic,
-    TexchangeOpenOrderStatic,
-    TexchangeAmendmentStatic
 } from 'interfaces';
+import {
+    TradeId,
+    TradeIdStatic,
+    OrderId,
+    OrderIdStatic,
+    OpenOrder,
+    OpenOrderStatic,
+    Amendment,
+    AmendmentStatic,
+} from '../interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../context';
 import { Instant } from './instant';
@@ -31,21 +33,21 @@ import { Subscription } from '../use-cases.d/subscription';
 
 export class Latency<H extends HLike<H>>
     implements
-    MarketApiLike<H, TexchangeOrderId, TexchangeTradeId>,
-    AccountApiLike<H, TexchangeOrderId, TexchangeTradeId>,
+    MarketApiLike<H, OrderId, TradeId>,
+    AccountApiLike<H, OrderId, TradeId>,
     MarketCalc<H> {
 
     public events = <EventsLike<H>>new EventEmitter();
 
     private Orderbook = new OrderbookStatic(this.context.H);
-    private TradeId = new TexchangeTradeIdStatic();
+    private TradeId = new TradeIdStatic();
     private Trade = new TradeStatic(this.context.H, this.TradeId);
     private Positions = new PositionsStatic(this.context.H);
     private Balances = new BalancesStatic(this.context.H);
     private LimitOrder = new LimitOrderStatic(this.context.H);
-    private OrderId = new TexchangeOrderIdStatic();
-    private Amendment = new TexchangeAmendmentStatic(this.context.H, this.OrderId);
-    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+    private OrderId = new OrderIdStatic();
+    private Amendment = new AmendmentStatic(this.context.H, this.OrderId);
+    private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
 
     constructor(
         private context: Context<H>,
@@ -90,7 +92,7 @@ export class Latency<H extends HLike<H>>
         });
     }
 
-    public async makeOrders($orders: LimitOrder<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
+    public async makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]> {
         try {
             const orders = $orders.map(order => this.LimitOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -105,7 +107,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async amendOrders($amendments: TexchangeAmendment<H>[]): Promise<(TexchangeOpenOrder<H> | Error)[]> {
+    public async amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]> {
         try {
             const amendments = $amendments.map(amendment => this.Amendment.copy(amendment));
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -120,7 +122,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async cancelOrders($orders: TexchangeOpenOrder<H>[]): Promise<TexchangeOpenOrder<H>[]> {
+    public async cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]> {
         try {
             const orders = $orders.map(order => this.OpenOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -155,7 +157,7 @@ export class Latency<H extends HLike<H>>
         }
     }
 
-    public async getOpenOrders(): Promise<TexchangeOpenOrder<H>[]> {
+    public async getOpenOrders(): Promise<OpenOrder<H>[]> {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
@@ -185,8 +187,8 @@ export namespace Latency {
 }
 
 export type Events<H extends HLike<H>>
-    = MarketEvents<H, TexchangeOrderId, TexchangeTradeId>
-    & AccountEvents<H, TexchangeOrderId, TexchangeTradeId>;
+    = MarketEvents<H, OrderId, TradeId>
+    & AccountEvents<H, OrderId, TradeId>;
 
 export interface EventsLike<H extends HLike<H>> extends NodeJS.EventEmitter {
     on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

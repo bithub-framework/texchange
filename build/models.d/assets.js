@@ -10,12 +10,12 @@ class Assets {
         this.Cost = new Assets.CostStatic(this.context.H);
         this.balance = this.context.config.account.initialBalance;
         this.$position = {
-            [interfaces_1.Length.LONG]: this.context.H.from(0),
-            [interfaces_1.Length.SHORT]: this.context.H.from(0),
+            [interfaces_1.Length.LONG]: new this.context.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.H(0),
         };
         this.$cost = {
-            [interfaces_1.Length.LONG]: this.context.H.from(0),
-            [interfaces_1.Length.SHORT]: this.context.H.from(0),
+            [interfaces_1.Length.LONG]: new this.context.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.H(0),
         };
     }
     getBalance() {

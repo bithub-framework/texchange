@@ -16,8 +16,8 @@ export class Margins<H extends HLike<H>>
 		private context: Context<H>,
 	) {
 		this.$margin = {
-			[Length.LONG]: this.context.H.from(0),
-			[Length.SHORT]: this.context.H.from(0),
+			[Length.LONG]: new this.context.H(0),
+			[Length.SHORT]: new this.context.H(0),
 		};
 	}
 

@@ -9,13 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
 const injektor_1 = require("injektor");
 const interfaces_1 = require("interfaces");
+const interfaces_2 = require("../../interfaces");
 class TradeTakesOpenMakers {
     constructor(context, models, broadcast) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.TradeId = new interfaces_1.TexchangeTradeIdStatic();
-        this.Trade = new interfaces_1.TexchangeTradeStatic(this.context.H, this.TradeId);
+        this.TradeId = new interfaces_2.TradeIdStatic();
+        this.Trade = new interfaces_2.TradeStatic(this.context.H, this.TradeId);
     }
     tradeTakesOpenMakers(trade) {
         const $trade = this.Trade.copy(trade);

@@ -13,7 +13,7 @@ import { Models } from './models';
 import { Broadcast } from './broadcast';
 import { Tasks } from './tasks/tasks';
 
-import { instantInject, inject } from 'injektor';
+import { inject } from 'injektor';
 import { TYPES } from './types';
 
 
@@ -26,8 +26,6 @@ export class UseCases<H extends HLike<H>> {
 	public getPositions: GetPositions<H>;
 	public getBalances: GetBalances<H>;
 	public updateOrderbook: UpdateOrderbook<H>;
-	@instantInject(UpdateTrades)
-	public updateTrades!: UpdateTrades<H>;
 	public subscription: Subscription<H>;
 
 	public constructor(
@@ -35,10 +33,12 @@ export class UseCases<H extends HLike<H>> {
 		context: Context<H>,
 		@inject(Models)
 		models: Models<H, unknown>,
-		@inject(TYPES.Broadcast)
+		@inject(Broadcast)
 		broadcast: Broadcast<H>,
 		@inject(Tasks)
 		tasks: Tasks<H>,
+		@inject(UpdateTrades)
+		public updateTrades: UpdateTrades<H>,
 	) {
 		this.amendOrder = new AmendOrder(context, models, broadcast, tasks);
 		this.cancelOrder = new CancelOrder(context, models, broadcast, tasks);

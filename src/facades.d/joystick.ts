@@ -2,18 +2,20 @@ import { Context } from '../context';
 import {
 	Orderbook,
 	HLike,
-	TexchangeTradesStatic,
-	TexchangeTradeIdStatic,
 	OrderbookStatic,
 } from 'interfaces';
+import {
+	TradesStatic,
+	TradeIdStatic,
+} from '../interfaces';
 
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UpdateTrades, DatabaseTrades } from '../use-cases.d/update-trades';
 
 
 export class Joystick<H extends HLike<H>> {
-	private TradeId = new TexchangeTradeIdStatic();
-	private Trades = new TexchangeTradesStatic(this.context.H, this.TradeId);
+	private TradeId = new TradeIdStatic();
+	private Trades = new TradesStatic(this.context.H, this.TradeId);
 	private Orderbook = new OrderbookStatic(this.context.H);
 
 	public constructor(

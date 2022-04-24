@@ -41,7 +41,7 @@ export class DefaultMarginAccumulation<H extends HLike<H>>
 		dollarVolume,
 	}: MarginAccumulation.Volumes<H>): H {
 		if (volume.eq(this.models.assets.getPosition()[length]))
-			return this.context.H.from(0);
+			return new this.context.H(0);
 		const margin = this.models.margins.getMargin()[length];
 		const decrement = margin
 			.times(volume)

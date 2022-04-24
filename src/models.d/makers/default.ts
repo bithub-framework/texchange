@@ -1,9 +1,11 @@
 import {
 	Operation,
-	TexchangeOpenOrder,
 	HLike,
 } from 'interfaces';
-import { Frozen } from './frozon';
+import {
+	OpenOrder,
+	Frozen,
+} from '../../interfaces';
 import { Context } from '../../context';
 import { Makers } from './makers';
 import { inject } from 'injektor';
@@ -18,12 +20,12 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	/**
 	 * 默认单向持仓模式
 	 */
-	protected toFreeze(order: TexchangeOpenOrder<H>): Frozen<H> {
+	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.operation === Operation.OPEN)
 			return {
 				balance: {
 					[order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),
-					[-order.length]: this.context.H.from(0),
+					[-order.length]: new this.context.H(0),
 				},
 				position: this.Frozen.ZERO.position,
 			};
@@ -32,7 +34,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 				balance: this.Frozen.ZERO.balance,
 				position: {
 					[order.length]: order.unfilled,
-					[-order.length]: this.context.H.from(0),
+					[-order.length]: new this.context.H(0),
 				},
 			};
 	}

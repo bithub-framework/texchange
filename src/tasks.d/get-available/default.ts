@@ -46,7 +46,7 @@ export class DefaultGetAvailable<H extends HLike<H>>
 			const side: Side = length * Operation.OPEN;
 			const afterDeduction = this.context.H.max(
 				totalUnfilled[side].minus(position[-length]),
-				this.context.H.from(0),
+				new this.context.H(0),
 			);
 			$final[length] = totalFrozen.balance[length]
 				.times(afterDeduction)

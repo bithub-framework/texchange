@@ -1,11 +1,12 @@
 import { instantInject } from 'injektor';
+import { HLike } from 'interfaces';
 import {
-    TexchangeOpenOrder,
-    TexchangeOpenMaker,
-    TexchangeOpenOrderStatic,
-    TexchangeOrderIdStatic,
-    HLike,
-} from 'interfaces';
+    OpenOrder,
+    OpenOrderStatic,
+    OpenMaker,
+    OrderIdStatic,
+} from '../../interfaces';
+
 import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
@@ -20,8 +21,8 @@ export class OrderMakes<H extends HLike<H>>
     @instantInject(OrderMakes.TaskDeps)
     private tasks!: OrderMakes.TaskDeps<H>;
 
-    private OrderId = new TexchangeOrderIdStatic();
-    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+    private OrderId = new OrderIdStatic();
+    private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
         private context: Context<H>,
@@ -30,18 +31,14 @@ export class OrderMakes<H extends HLike<H>>
     ) { }
 
     public orderMakes(
-        order: TexchangeOpenOrder<H>,
+        order: OpenOrder<H>,
     ): void {
-        const $order: TexchangeOpenMaker<H> = {
-            ...this.OpenOrder.copy(order),
-            behind: this.context.H.from(0),
-        };
         const makers = this.models.book.getBook()[order.side];
+        let behind = new this.context.H(0);
         for (const maker of makers)
-            if (maker.price.eq($order.price))
-                // TODO addBehind()
-                $order.behind = $order.behind.plus(maker.quantity);
-        this.models.makers.appendOrder($order);
+            if (maker.price.eq(order.price))
+                behind = behind.plus(maker.quantity);
+        this.models.makers.appendOrder(order, behind);
     }
 }
 

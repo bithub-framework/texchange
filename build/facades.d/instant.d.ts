@@ -1,5 +1,6 @@
 import { Context } from '../context';
-import { TexchangeOpenOrder, LimitOrder, TexchangeAmendment, Positions, Balances } from 'interfaces';
+import { LimitOrder, Positions, Balances } from 'interfaces';
+import { OpenOrder, Amendment } from '../interfaces';
 import { HLike } from 'interfaces';
 import { MakeOrder } from '../use-cases.d/make-order';
 import { CancelOrder } from '../use-cases.d/cancel-order';
@@ -11,10 +12,10 @@ export declare class Instant<H extends HLike<H>> {
     private context;
     private useCases;
     constructor(context: Context<H>, useCases: Instant.UseCaseDeps<H>);
-    makeOrders(orders: LimitOrder<H>[]): (TexchangeOpenOrder<H> | Error)[];
-    cancelOrders(orders: TexchangeOpenOrder<H>[]): TexchangeOpenOrder<H>[];
-    amendOrders(amendments: TexchangeAmendment<H>[]): (TexchangeOpenOrder<H> | Error)[];
-    getOpenOrders(): TexchangeOpenOrder<H>[];
+    makeOrders(orders: LimitOrder<H>[]): (OpenOrder<H> | Error)[];
+    cancelOrders(orders: OpenOrder<H>[]): OpenOrder<H>[];
+    amendOrders(amendments: Amendment<H>[]): (OpenOrder<H> | Error)[];
+    getOpenOrders(): OpenOrder<H>[];
     getPositions(): Positions<H>;
     getBalances(): Balances<H>;
 }

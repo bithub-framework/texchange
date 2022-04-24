@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Joystick = void 0;
 const interfaces_1 = require("interfaces");
+const interfaces_2 = require("../interfaces");
 class Joystick {
     constructor(context, useCases) {
         this.context = context;
         this.useCases = useCases;
-        this.TradeId = new interfaces_1.TexchangeTradeIdStatic();
-        this.Trades = new interfaces_1.TexchangeTradesStatic(this.context.H, this.TradeId);
+        this.TradeId = new interfaces_2.TradeIdStatic();
+        this.Trades = new interfaces_2.TradesStatic(this.context.H, this.TradeId);
         this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
     }
     updateTrades($trades) {

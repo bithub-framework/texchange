@@ -20,8 +20,8 @@ class OrderTakes {
         const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
         const trades = [];
-        let volume = this.context.H.from(0);
-        let dollarVolume = this.context.H.from(0);
+        let volume = new this.context.H(0);
+        let dollarVolume = new this.context.H(0);
         for (const maker of orderbook[-$taker.side])
             if (($taker.side === interfaces_1.Side.BID && $taker.price.gte(maker.price) ||
                 $taker.side === interfaces_1.Side.ASK && $taker.price.lte(maker.price)) && $taker.unfilled.gt(0)) {

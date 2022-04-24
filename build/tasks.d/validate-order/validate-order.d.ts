@@ -1,4 +1,5 @@
-import { TexchangeOpenOrder, HLike } from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../../interfaces';
 import { Context } from '../../context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';
@@ -12,7 +13,7 @@ export declare class ValidateOrder<H extends HLike<H>> implements ValidateOrderL
     static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: ValidateOrder.ModelDeps<H>, broadcast: Broadcast<H>);
-    validateOrder(order: TexchangeOpenOrder<H>): void;
+    validateOrder(order: OpenOrder<H>): void;
     private validateQuantity;
     private validateFormat;
 }

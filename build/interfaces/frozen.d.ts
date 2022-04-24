@@ -1,4 +1,4 @@
-import { Length, H, HLike, HStatic } from 'interfaces';
+import { Length, HLike, H, HStatic } from 'interfaces';
 export interface Frozen<H> {
     readonly balance: {
         readonly [length: Length]: H;

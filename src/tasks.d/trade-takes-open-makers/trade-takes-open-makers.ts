@@ -1,14 +1,17 @@
 import { instantInject } from 'injektor';
 import {
     Side,
-    TexchangeOpenOrder,
-    TexchangeTrade,
-    TexchangeOpenMaker,
     Operation,
     HLike, H,
-    TexchangeTradeStatic,
-    TexchangeTradeIdStatic,
 } from 'interfaces';
+import {
+    OpenOrder,
+    Trade,
+    OpenMaker,
+    TradeStatic,
+    TradeIdStatic,
+} from '../../interfaces';
+
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
@@ -25,8 +28,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     @instantInject(TradeTakesOpenMakers.TaskDeps)
     private tasks!: TradeTakesOpenMakers.TaskDeps<H>;
 
-    private TradeId = new TexchangeTradeIdStatic();
-    private Trade = new TexchangeTradeStatic(this.context.H, this.TradeId);
+    private TradeId = new TradeIdStatic();
+    private Trade = new TradeStatic(this.context.H, this.TradeId);
 
     public constructor(
         private context: Context<H>,
@@ -34,7 +37,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
         private broadcast: Broadcast<H>,
     ) { }
 
-    public tradeTakesOpenMakers(trade: TexchangeTrade<H>): void {
+    public tradeTakesOpenMakers(trade: Trade<H>): void {
         const $trade = this.Trade.copy(trade);
         for (const order of [...this.models.makers])
             if (this.$tradeShouldTakeOpenOrder($trade, order)) {
@@ -44,7 +47,7 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private $tradeShouldTakeOpenOrder(
-        $trade: TexchangeTrade<H>, maker: TexchangeOpenOrder<H>,
+        $trade: Trade<H>, maker: OpenOrder<H>,
     ): boolean {
         return (
             maker.side === Side.BID &&
@@ -58,8 +61,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private $tradeTakesOrderQueue(
-        $trade: TexchangeTrade<H>,
-        maker: TexchangeOpenMaker<H>,
+        $trade: Trade<H>,
+        maker: OpenMaker<H>,
     ): void {
         const { makers } = this.models;
         if ($trade.price.eq(maker.price)) {
@@ -70,8 +73,8 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
     }
 
     private tradeTakesOpenMaker(
-        $trade: TexchangeTrade<H>,
-        maker: TexchangeOpenMaker<H>,
+        $trade: Trade<H>,
+        maker: OpenMaker<H>,
     ): void {
         const { assets, makers } = this.models;
 

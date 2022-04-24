@@ -1,11 +1,12 @@
 import { instantInject } from 'injektor';
 import { Context } from '../../context';
+import { HLike } from 'interfaces';
 import {
-    TexchangeOpenOrder,
-    TexchangeOpenOrderStatic,
-    TexchangeOrderIdStatic,
-    HLike,
-} from 'interfaces';
+    OpenOrder,
+    OpenOrderStatic,
+    OrderIdStatic,
+} from '../../interfaces';
+
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
 
@@ -23,8 +24,8 @@ export class MakeOpenOrder<H extends HLike<H>>
     @instantInject(MakeOpenOrder.TaskDeps)
     private tasks!: MakeOpenOrder.TaskDeps<H>;
 
-    private OrderId = new TexchangeOrderIdStatic();
-    private OpenOrder = new TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+    private OrderId = new OrderIdStatic();
+    private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
         private context: Context<H>,
@@ -32,9 +33,7 @@ export class MakeOpenOrder<H extends HLike<H>>
         private broadcast: Broadcast<H>,
     ) { }
 
-    public makeOpenOrder(
-        order: TexchangeOpenOrder<H>,
-    ): TexchangeOpenOrder<H> {
+    public makeOpenOrder(order: OpenOrder<H>): OpenOrder<H> {
         this.tasks.validateOrder.validateOrder(order);
         const $order = this.OpenOrder.copy(order);
         const trades = this.tasks.orderTakes.$orderTakes($order);

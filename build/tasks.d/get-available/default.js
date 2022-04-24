@@ -29,7 +29,7 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
         const $final = {};
         for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
             const side = length * interfaces_1.Operation.OPEN;
-            const afterDeduction = this.context.H.max(totalUnfilled[side].minus(position[-length]), this.context.H.from(0));
+            const afterDeduction = this.context.H.max(totalUnfilled[side].minus(position[-length]), new this.context.H(0));
             $final[length] = totalFrozen.balance[length]
                 .times(afterDeduction)
                 .div(totalUnfilled[side]);

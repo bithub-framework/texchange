@@ -1,11 +1,13 @@
 import { Context } from '../context';
 import {
-    TexchangeOpenOrder,
     LimitOrder,
-    TexchangeAmendment,
     Positions,
     Balances,
 } from 'interfaces';
+import {
+    OpenOrder,
+    Amendment,
+} from '../interfaces';
 import { HLike } from 'interfaces';
 
 import { MakeOrder } from '../use-cases.d/make-order';
@@ -25,7 +27,7 @@ export class Instant<H extends HLike<H>> {
 
     public makeOrders(
         orders: LimitOrder<H>[],
-    ): (TexchangeOpenOrder<H> | Error)[] {
+    ): (OpenOrder<H> | Error)[] {
         return orders.map(order => {
             try {
                 return this.useCases.makeOrder.makeOrder(order);
@@ -36,14 +38,14 @@ export class Instant<H extends HLike<H>> {
     }
 
     public cancelOrders(
-        orders: TexchangeOpenOrder<H>[],
-    ): TexchangeOpenOrder<H>[] {
+        orders: OpenOrder<H>[],
+    ): OpenOrder<H>[] {
         return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
-        amendments: TexchangeAmendment<H>[],
-    ): (TexchangeOpenOrder<H> | Error)[] {
+        amendments: Amendment<H>[],
+    ): (OpenOrder<H> | Error)[] {
         return amendments.map(amendment => {
             try {
                 return this.useCases.amendOrder.amendOrder(amendment);
@@ -53,7 +55,7 @@ export class Instant<H extends HLike<H>> {
         });
     }
 
-    public getOpenOrders(): TexchangeOpenOrder<H>[] {
+    public getOpenOrders(): OpenOrder<H>[] {
         return this.useCases.getOpenOrders.getOpenOrders();
     }
 

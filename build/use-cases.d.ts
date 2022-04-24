@@ -13,6 +13,7 @@ import { Models } from './models';
 import { Broadcast } from './broadcast';
 import { Tasks } from './tasks/tasks';
 export declare class UseCases<H extends HLike<H>> {
+    updateTrades: UpdateTrades<H>;
     makeOrder: MakeOrder<H>;
     cancelOrder: CancelOrder<H>;
     amendOrder: AmendOrder<H>;
@@ -20,7 +21,6 @@ export declare class UseCases<H extends HLike<H>> {
     getPositions: GetPositions<H>;
     getBalances: GetBalances<H>;
     updateOrderbook: UpdateOrderbook<H>;
-    updateTrades: UpdateTrades<H>;
     subscription: Subscription<H>;
-    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>, tasks: Tasks<H>);
+    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>, tasks: Tasks<H>, updateTrades: UpdateTrades<H>);
 }

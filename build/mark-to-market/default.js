@@ -13,6 +13,7 @@ exports.DefaultMtm = void 0;
 const startable_1 = require("startable");
 const context_1 = require("../context");
 const mtm_1 = require("./mtm");
+const broadcast_1 = require("../broadcast");
 const injektor_1 = require("injektor");
 /**
  * 默认永不结算
@@ -30,7 +31,7 @@ let DefaultMtm = class DefaultMtm extends mtm_1.Mtm {
 DefaultMtm = __decorate([
     __param(0, (0, injektor_1.inject)(context_1.Context)),
     __param(1, (0, injektor_1.inject)(DefaultMtm.ModelDeps)),
-    __param(2, (0, injektor_1.inject)(14 /* Broadcast */)),
+    __param(2, (0, injektor_1.inject)(broadcast_1.Broadcast)),
     __param(3, (0, injektor_1.inject)(DefaultMtm.TaskDeps))
 ], DefaultMtm);
 exports.DefaultMtm = DefaultMtm;

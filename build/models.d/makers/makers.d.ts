@@ -1,31 +1,32 @@
-import { Side, HLike, HStatic, TexchangeOrderId, TexchangeOrderIdStatic, TexchangeOpenMakerStatic, TexchangeOpenMaker, TexchangeOpenOrder, OpenMaker } from 'interfaces';
-import { Frozen, FrozenStatic } from './frozon';
+import { Side, HLike, HStatic } from 'interfaces';
+import { OrderId, OrderIdStatic, OpenMaker, OpenMakerStatic, OpenOrder, Frozen, FrozenStatic, OpenOrderStatic } from '../../interfaces';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
-export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<TexchangeOpenMaker<H>> {
+export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
     protected context: Context<H>;
     private $orders;
-    private $frozens;
     private $totalUnfilled;
-    protected OrderId: TexchangeOrderIdStatic;
-    protected OpenMaker: TexchangeOpenMakerStatic<H>;
+    protected OrderId: OrderIdStatic;
     protected Frozen: FrozenStatic<H>;
+    protected OpenOrder: OpenOrderStatic<H>;
+    protected OpenMaker: OpenMakerStatic<H>;
     protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
     private totalFrozen;
     constructor(context: Context<H>);
     getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
     getTotalFrozen(): Frozen<H>;
-    [Symbol.iterator](): IterableIterator<TexchangeOpenMaker<H>>;
-    getOrder(id: TexchangeOrderId): TexchangeOpenMaker<H>;
+    [Symbol.iterator](): IterableIterator<OpenMaker<H>>;
+    getOrder(oid: OrderId): OpenMaker<H>;
+    protected $getOrder(oid: OrderId): OpenMaker<H>;
     capture(): Makers.Snapshot;
     restore(snapshot: Makers.Snapshot): void;
     private normalizeFrozen;
-    protected abstract toFreeze(order: TexchangeOpenOrder<H>): Frozen<H>;
-    appendOrder(order: TexchangeOpenMaker<H>): void;
-    takeOrder(oid: TexchangeOrderId, volume: H): void;
-    takeOrderQueue(oid: TexchangeOrderId, volume?: H): void;
-    removeOrder(oid: TexchangeOrderId): void;
-    forcedlyRemoveOrder(oid: TexchangeOrderId): void;
+    protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
+    appendOrder(order: OpenOrder<H>, behind: H): void;
+    takeOrder(oid: OrderId, volume: H): void;
+    takeOrderQueue(oid: OrderId, volume?: H): void;
+    removeOrder(oid: OrderId): void;
+    forcedlyRemoveOrder(oid: OrderId): void;
 }
 export declare namespace Makers {
     interface TotalUnfilled<H> {
@@ -41,8 +42,5 @@ export declare namespace Makers {
         constructor(H: HStatic<H>);
         copy(totalUnfilled: TotalUnfilled<H> | TotalUnfilled.Functional<H>): TotalUnfilled<H> | TotalUnfilled.Functional<H>;
     }
-    type Snapshot = {
-        order: OpenMaker.Snapshot;
-        frozen: Frozen.Snapshot;
-    }[];
+    type Snapshot = readonly OpenMaker.Snapshot[];
 }

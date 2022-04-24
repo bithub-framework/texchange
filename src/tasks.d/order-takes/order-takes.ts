@@ -1,11 +1,14 @@
 import { instantInject } from 'injektor';
 import {
-    TexchangeOpenOrder,
     Side,
     Operation,
-    TexchangeTrades,
     HLike, H,
 } from 'interfaces';
+import {
+    OpenOrder,
+    Trades,
+} from '../../interfaces';
+
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
@@ -29,14 +32,14 @@ export class OrderTakes<H extends HLike<H>>
         protected broadcast: Broadcast<H>,
     ) { }
 
-    public $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H> {
+    public $orderTakes($taker: OpenOrder<H>): Trades<H> {
         const { assets, progress, book } = this.models;
         const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
-        const trades: TexchangeTrades<H> = [];
-        let volume = this.context.H.from(0);
-        let dollarVolume = this.context.H.from(0);
+        const trades: Trades<H> = [];
+        let volume = new this.context.H(0);
+        let dollarVolume = new this.context.H(0);
         for (const maker of orderbook[-$taker.side])
             if (
                 (

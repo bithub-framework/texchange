@@ -8,14 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MakeOpenOrder = void 0;
 const injektor_1 = require("injektor");
-const interfaces_1 = require("interfaces");
+const interfaces_1 = require("../../interfaces");
 class MakeOpenOrder {
     constructor(context, models, broadcast) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
-        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+        this.OrderId = new interfaces_1.OrderIdStatic();
+        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H, this.OrderId);
     }
     makeOpenOrder(order) {
         this.tasks.validateOrder.validateOrder(order);

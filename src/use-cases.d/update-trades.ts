@@ -1,10 +1,8 @@
 import { Context } from '../context';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
-import {
-	HLike,
-	TexchangeTrade,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { Trade } from '../interfaces';
 
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
@@ -50,7 +48,7 @@ export namespace UpdateTrades {
 
 
 export interface DatabaseTrade<H extends HLike<H>>
-	extends TexchangeTrade<H> {
+	extends Trade<H> {
 
 	id: string;
 }

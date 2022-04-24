@@ -1,7 +1,8 @@
 import { Context } from '../../context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
-import { TexchangeOpenOrder, HLike } from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../../interfaces';
 import { Makers } from '../../models.d/makers/makers';
 export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOrderLike<H> {
     private context;
@@ -10,7 +11,7 @@ export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOr
     static TaskDeps: {};
     private tasks;
     constructor(context: Context<H>, models: CancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
-    cancelOpenOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H>;
+    cancelOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }
 export declare namespace CancelOpenOrder {
     interface ModelDeps<H extends HLike<H>> {

@@ -19,21 +19,19 @@ const pricing_1 = require("./models.d/pricing/pricing");
 const context_1 = require("./context");
 const injektor_1 = require("injektor");
 let Models = class Models {
-    constructor(context) {
+    constructor(context, makers, pricing) {
+        this.makers = makers;
+        this.pricing = pricing;
         this.assets = new assets_1.Assets(context);
         this.margins = new margins_1.Margins(context);
         this.book = new book_1.Book(context);
         this.progress = new progress_1.Progress(context);
     }
 };
-__decorate([
-    (0, injektor_1.instantInject)(makers_1.Makers)
-], Models.prototype, "makers", void 0);
-__decorate([
-    (0, injektor_1.instantInject)(pricing_1.Pricing)
-], Models.prototype, "pricing", void 0);
 Models = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context))
+    __param(0, (0, injektor_1.inject)(context_1.Context)),
+    __param(1, (0, injektor_1.inject)(makers_1.Makers)),
+    __param(2, (0, injektor_1.inject)(pricing_1.Pricing))
 ], Models);
 exports.Models = Models;
 //# sourceMappingURL=models.js.map

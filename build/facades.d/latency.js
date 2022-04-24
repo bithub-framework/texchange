@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Latency = void 0;
 const interfaces_1 = require("interfaces");
+const interfaces_2 = require("../interfaces");
 const events_1 = require("events");
 class Latency {
     constructor(context, useCases, instant) {
@@ -10,14 +11,14 @@ class Latency {
         this.instant = instant;
         this.events = new events_1.EventEmitter();
         this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
-        this.TradeId = new interfaces_1.TexchangeTradeIdStatic();
+        this.TradeId = new interfaces_2.TradeIdStatic();
         this.Trade = new interfaces_1.TradeStatic(this.context.H, this.TradeId);
         this.Positions = new interfaces_1.PositionsStatic(this.context.H);
         this.Balances = new interfaces_1.BalancesStatic(this.context.H);
         this.LimitOrder = new interfaces_1.LimitOrderStatic(this.context.H);
-        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
-        this.Amendment = new interfaces_1.TexchangeAmendmentStatic(this.context.H, this.OrderId);
-        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+        this.OrderId = new interfaces_2.OrderIdStatic();
+        this.Amendment = new interfaces_2.AmendmentStatic(this.context.H, this.OrderId);
+        this.OpenOrder = new interfaces_2.OpenOrderStatic(this.context.H, this.OrderId);
         this.useCases.subscription.on('orderbook', async (orderbook) => {
             try {
                 await this.context.timeline.sleep(this.context.config.market.PROCESSING);

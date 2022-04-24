@@ -7,8 +7,8 @@ class Margins {
         this.context = context;
         this.Margin = new Margins.MarginStatic(this.context.H);
         this.$margin = {
-            [interfaces_1.Length.LONG]: this.context.H.from(0),
-            [interfaces_1.Length.SHORT]: this.context.H.from(0),
+            [interfaces_1.Length.LONG]: new this.context.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.H(0),
         };
     }
     getMargin() {

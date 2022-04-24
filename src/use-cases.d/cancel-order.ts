@@ -1,8 +1,6 @@
 import { Context } from '../context';
-import {
-	TexchangeOpenOrder,
-	HLike,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../interfaces';
 import { Broadcast } from '../broadcast';
 
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
@@ -16,7 +14,7 @@ export class CancelOrder<H extends HLike<H>> {
 		protected tasks: CancelOrder.TaskDeps<H>,
 	) { }
 
-	public cancelOrder(order: TexchangeOpenOrder<H>): TexchangeOpenOrder<H> {
+	public cancelOrder(order: OpenOrder<H>): OpenOrder<H> {
 		return this.tasks.cancelOpenOrder.cancelOpenOrder(order);
 	}
 }

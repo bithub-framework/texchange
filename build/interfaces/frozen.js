@@ -7,12 +7,12 @@ class FrozenStatic {
         this.H = H;
         this.ZERO = {
             balance: {
-                [interfaces_1.Length.LONG]: this.H.from(0),
-                [interfaces_1.Length.SHORT]: this.H.from(0),
+                [interfaces_1.Length.LONG]: new this.H(0),
+                [interfaces_1.Length.SHORT]: new this.H(0),
             },
             position: {
-                [interfaces_1.Length.LONG]: this.H.from(0),
-                [interfaces_1.Length.SHORT]: this.H.from(0),
+                [interfaces_1.Length.LONG]: new this.H(0),
+                [interfaces_1.Length.SHORT]: new this.H(0),
             },
         };
     }
@@ -70,4 +70,4 @@ class FrozenStatic {
     }
 }
 exports.FrozenStatic = FrozenStatic;
-//# sourceMappingURL=frozon.js.map
+//# sourceMappingURL=frozen.js.map

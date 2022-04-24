@@ -1,4 +1,8 @@
 export const enum TYPES {
+	Config,
+	Timeline,
+	HStatic,
+
 	MarketCalc,
 
 	MakeOpenOrderLike,
@@ -14,8 +18,6 @@ export const enum TYPES {
 	GetAvailableLike,
 	SettleLike,
 	MarginAccumulationLike,
-
-	Broadcast,
 
 	User,
 	Admin,

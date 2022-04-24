@@ -1,17 +1,17 @@
 import {
 	Side, Length,
 	HLike, HStatic,
-	TexchangeOrderId,
-	TexchangeOrderIdStatic,
-	TexchangeOpenMakerStatic,
-	TexchangeOpenMaker,
-	TexchangeOpenOrder,
-	OpenMaker,
 } from 'interfaces';
 import {
+	OrderId,
+	OrderIdStatic,
+	OpenMaker,
+	OpenMakerStatic,
+	OpenOrder,
 	Frozen,
 	FrozenStatic,
-} from './frozon';
+	OpenOrderStatic,
+} from '../../interfaces';
 import { Context } from '../../context';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';
@@ -20,18 +20,25 @@ import { StatefulLike } from '../../stateful-like';
 
 export abstract class Makers<H extends HLike<H>> implements
 	StatefulLike<Makers.Snapshot>,
-	Iterable<TexchangeOpenMaker<H>> {
+	Iterable<OpenMaker<H>> {
 
-	private $orders = new Map<TexchangeOrderId, TexchangeOpenMaker<H>>();
-	private $frozens = new Map<TexchangeOrderId, Frozen<H>>();
+	private $orders = new Map<OrderId, OpenMaker<H>>();
 	private $totalUnfilled: Makers.TotalUnfilled<H> = {
-		[Side.ASK]: this.context.H.from(0),
-		[Side.BID]: this.context.H.from(0),
+		[Side.ASK]: new this.context.H(0),
+		[Side.BID]: new this.context.H(0),
 	};
 
-	protected OrderId = new TexchangeOrderIdStatic();
-	protected OpenMaker = new TexchangeOpenMakerStatic<H>(this.context.H, this.OrderId);
+	protected OrderId = new OrderIdStatic();
 	protected Frozen = new FrozenStatic<H>(this.context.H);
+	protected OpenOrder = new OpenOrderStatic<H>(
+		this.context.H,
+		this.OrderId,
+	)
+	protected OpenMaker = new OpenMakerStatic<H>(
+		this.context.H,
+		this.OrderId,
+		this.Frozen,
+	);
 	protected TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
 
 	private totalFrozen: Frozen<H> = this.Frozen.ZERO;
@@ -52,42 +59,39 @@ export abstract class Makers<H extends HLike<H>> implements
 		return [...this.$orders.values()][Symbol.iterator]();
 	}
 
-	public getOrder(id: TexchangeOrderId): TexchangeOpenMaker<H> {
-		const order = this.$orders.get(id);
+	public getOrder(oid: OrderId): OpenMaker<H> {
+		const $order = this.$getOrder(oid);
+		return this.OpenMaker.copy($order);
+	}
+
+	protected $getOrder(oid: OrderId): OpenMaker<H> {
+		const order = this.$orders.get(oid);
 		assert(typeof order !== 'undefined');
 		return order;
 	}
 
-	// TODO zap
 	public capture(): Makers.Snapshot {
-		return [...this.$orders.keys()]
-			.map(oid => ({
-				order: this.OpenMaker.capture(this.$orders.get(oid)!),
-				frozen: this.Frozen.capture(this.$frozens.get(oid)!),
-			}));
+		return [...this.$orders.keys()].map(
+			oid => this.OpenMaker.capture(this.$orders.get(oid)!),
+		);
 	}
 
 	public restore(snapshot: Makers.Snapshot): void {
-		for (const {
-			order: orderSnapshot,
-			frozen: frozenSnapshot,
-		} of snapshot) {
+		for (const orderSnapshot of snapshot) {
 			const order = this.OpenMaker.restore(orderSnapshot);
-			const frozen = this.Frozen.restore(frozenSnapshot);
 			this.$orders.set(order.id, order);
-			this.$frozens.set(order.id, frozen);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
 			this.$totalUnfilled[side] = [...this.$orders.values()]
 				.filter(order => order.side === side)
 				.reduce(
 					(total, order) => total.plus(order.unfilled),
-					this.context.H.from(0),
+					new this.context.H(0),
 				);
 		}
-		this.totalFrozen = [...this.$frozens.values()]
+		this.totalFrozen = [...this.$orders.values()]
 			.reduce(
-				(total, frozen) => this.Frozen.plus(total, frozen),
+				(total, order) => this.Frozen.plus(total, order.frozen),
 				this.Frozen.ZERO,
 			);
 	}
@@ -105,55 +109,58 @@ export abstract class Makers<H extends HLike<H>> implements
 		};
 	}
 
-	protected abstract toFreeze(order: TexchangeOpenOrder<H>): Frozen<H>;
+	protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
 
-	public appendOrder(order: TexchangeOpenMaker<H>): void {
+	public appendOrder(
+		order: OpenOrder<H>,
+		behind: H,
+	): void {
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.normalizeFrozen(this.toFreeze(order));
-		this.$orders.set(order.id, order);
-		this.$frozens.set(order.id, toFreeze);
+		const $order: OpenMaker<H> = {
+			...this.OpenOrder.copy(order),
+			behind,
+			frozen: toFreeze,
+		};
+		this.$orders.set(order.id, $order);
 		this.totalFrozen = this.Frozen.plus(this.totalFrozen, toFreeze);
 		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
 			.plus(order.unfilled);
 	}
 
-	public takeOrder(oid: TexchangeOrderId, volume: H): void {
-		const order = this.getOrder(oid);
-		assert(volume.lte(order.unfilled));
-		assert(order.behind.eq(0));
+	public takeOrder(oid: OrderId, volume: H): void {
+		const $order = this.$getOrder(oid);
+		assert(volume.lte($order.unfilled));
+		assert($order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
-		const newOrder: TexchangeOpenMaker<H> = {
-			...order,
-			filled: order.filled.plus(volume),
-			unfilled: order.unfilled.minus(volume),
+		const newOrder: OpenOrder<H> = {
+			...this.OpenOrder.copy($order),
+			filled: $order.filled.plus(volume),
+			unfilled: $order.unfilled.minus(volume),
 		};
-		this.appendOrder(newOrder);
+		if (newOrder.unfilled.gt(0))
+			this.appendOrder(newOrder, new this.context.H(0));
 	}
 
-	public takeOrderQueue(oid: TexchangeOrderId, volume?: H): void {
-		const order = this.getOrder(oid);
+	public takeOrderQueue(oid: OrderId, volume?: H): void {
+		const $order = this.$getOrder(oid);
 		if (typeof volume !== 'undefined')
-			assert(volume.lte(order.behind));
-		const newOrder: TexchangeOpenMaker<H> = {
-			...order,
-			behind: typeof volume !== 'undefined'
-				? order.behind.minus(volume)
-				: this.context.H.from(0),
-		};
-		this.$orders.set(oid, newOrder);
+			assert(volume.lte($order.behind));
+		$order.behind = typeof volume !== 'undefined'
+			? $order.behind.minus(volume)
+			: new this.context.H(0);
+		this.$orders.set(oid, $order);
 	}
 
-	public removeOrder(oid: TexchangeOrderId): void {
-		const order = this.getOrder(oid);
-		const toThaw = this.$frozens.get(oid)!;
+	public removeOrder(oid: OrderId): void {
+		const $order = this.$getOrder(oid);
 		this.$orders.delete(oid);
-		this.$frozens.delete(oid);
-		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
-			.minus(order.unfilled);
-		this.totalFrozen = this.Frozen.minus(this.totalFrozen, toThaw);
+		this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
+			.minus($order.unfilled);
+		this.totalFrozen = this.Frozen.minus(this.totalFrozen, $order.frozen);
 	}
 
-	public forcedlyRemoveOrder(oid: TexchangeOrderId): void {
+	public forcedlyRemoveOrder(oid: OrderId): void {
 		try {
 			this.removeOrder(oid);
 		} catch (err) { }
@@ -186,8 +193,5 @@ export namespace Makers {
 		}
 	}
 
-	export type Snapshot = {
-		order: OpenMaker.Snapshot;
-		frozen: Frozen.Snapshot;
-	}[];
+	export type Snapshot = readonly OpenMaker.Snapshot[];
 }

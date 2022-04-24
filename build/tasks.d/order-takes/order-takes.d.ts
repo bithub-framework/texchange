@@ -1,4 +1,5 @@
-import { TexchangeOpenOrder, TexchangeTrades, HLike } from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder, Trades } from '../../interfaces';
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
@@ -14,7 +15,7 @@ export declare class OrderTakes<H extends HLike<H>> implements OrderTakesLike<H>
     static TaskDeps: {};
     protected tasks: OrderTakes.TaskDeps<H>;
     constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>);
-    $orderTakes($taker: TexchangeOpenOrder<H>): TexchangeTrades<H>;
+    $orderTakes($taker: OpenOrder<H>): Trades<H>;
 }
 export declare namespace OrderTakes {
     interface ModelDeps<H extends HLike<H>> {

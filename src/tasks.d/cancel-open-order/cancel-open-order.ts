@@ -2,10 +2,8 @@ import { instantInject } from 'injektor';
 import { Context } from '../../context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
-import {
-	TexchangeOpenOrder,
-	HLike,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../../interfaces';
 
 import { Makers } from '../../models.d/makers/makers';
 
@@ -22,9 +20,7 @@ export class CancelOpenOrder<H extends HLike<H>>
 		private broadcast: Broadcast<H>,
 	) { }
 
-	public cancelOpenOrder(
-		order: TexchangeOpenOrder<H>,
-	): TexchangeOpenOrder<H> {
+	public cancelOpenOrder(order: OpenOrder<H>): OpenOrder<H> {
 		const { makers } = this.models;
 
 		let filled: H;

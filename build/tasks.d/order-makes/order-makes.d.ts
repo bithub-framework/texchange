@@ -1,4 +1,5 @@
-import { TexchangeOpenOrder, HLike } from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../../interfaces';
 import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
@@ -13,7 +14,7 @@ export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H>
     private OrderId;
     private OpenOrder;
     constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>);
-    orderMakes(order: TexchangeOpenOrder<H>): void;
+    orderMakes(order: OpenOrder<H>): void;
 }
 export declare namespace OrderMakes {
     interface ModelDeps<H extends HLike<H>> {

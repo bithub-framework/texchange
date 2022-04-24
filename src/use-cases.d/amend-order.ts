@@ -1,10 +1,10 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
+import { HLike } from 'interfaces';
 import {
-	TexchangeAmendment,
-	TexchangeOpenOrder,
-	HLike,
-} from 'interfaces';
+	Amendment,
+	OpenOrder,
+} from '../interfaces';
 
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
@@ -19,9 +19,9 @@ export class AmendOrder<H extends HLike<H>> {
 		protected tasks: AmendOrder.TaskDeps<H>,
 	) { }
 
-	public amendOrder(amendment: TexchangeAmendment<H>): TexchangeOpenOrder<H> {
+	public amendOrder(amendment: Amendment<H>): OpenOrder<H> {
 		const oldOrder = this.tasks.cancelOpenOrder.cancelOpenOrder(amendment);
-		const newOrder: TexchangeOpenOrder<H> = {
+		const newOrder: OpenOrder<H> = {
 			...oldOrder,
 			price: amendment.newPrice,
 			unfilled: amendment.newUnfilled,

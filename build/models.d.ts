@@ -7,11 +7,11 @@ import { Pricing } from './models.d/pricing/pricing';
 import { HLike } from 'interfaces';
 import { Context } from './context';
 export declare class Models<H extends HLike<H>, PricingSnapshot> {
+    makers: Makers<H>;
+    pricing: Pricing<H, PricingSnapshot>;
     assets: Assets<H>;
     margins: Margins<H>;
-    makers: Makers<H>;
     book: Book<H>;
     progress: Progress<H>;
-    pricing: Pricing<H, PricingSnapshot>;
-    constructor(context: Context<H>);
+    constructor(context: Context<H>, makers: Makers<H>, pricing: Pricing<H, PricingSnapshot>);
 }

@@ -23,12 +23,12 @@ export class Assets<H extends HLike<H>>
     ) {
         this.balance = this.context.config.account.initialBalance;
         this.$position = {
-            [Length.LONG]: this.context.H.from(0),
-            [Length.SHORT]: this.context.H.from(0),
+            [Length.LONG]: new this.context.H(0),
+            [Length.SHORT]: new this.context.H(0),
         };
         this.$cost = {
-            [Length.LONG]: this.context.H.from(0),
-            [Length.SHORT]: this.context.H.from(0),
+            [Length.LONG]: new this.context.H(0),
+            [Length.SHORT]: new this.context.H(0),
         };
     }
 

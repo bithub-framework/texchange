@@ -8,26 +8,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderMakes = void 0;
 const injektor_1 = require("injektor");
-const interfaces_1 = require("interfaces");
+const interfaces_1 = require("../../interfaces");
 class OrderMakes {
     constructor(context, models, broadcast) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.OrderId = new interfaces_1.TexchangeOrderIdStatic();
-        this.OpenOrder = new interfaces_1.TexchangeOpenOrderStatic(this.context.H, this.OrderId);
+        this.OrderId = new interfaces_1.OrderIdStatic();
+        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H, this.OrderId);
     }
     orderMakes(order) {
-        const $order = {
-            ...this.OpenOrder.copy(order),
-            behind: this.context.H.from(0),
-        };
         const makers = this.models.book.getBook()[order.side];
+        let behind = new this.context.H(0);
         for (const maker of makers)
-            if (maker.price.eq($order.price))
-                // TODO addBehind()
-                $order.behind = $order.behind.plus(maker.quantity);
-        this.models.makers.appendOrder($order);
+            if (maker.price.eq(order.price))
+                behind = behind.plus(maker.quantity);
+        this.models.makers.appendOrder(order, behind);
     }
 }
 OrderMakes.TaskDeps = {};

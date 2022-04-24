@@ -11,43 +11,43 @@ const injektor_1 = require("injektor");
 class Tasks {
 }
 __decorate([
-    (0, injektor_1.instantInject)(3 /* GetBalancesLike */)
+    (0, injektor_1.instantInject)(6 /* GetBalancesLike */)
 ], Tasks.prototype, "getBalances", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(5 /* GetPositionsLike */)
+    (0, injektor_1.instantInject)(8 /* GetPositionsLike */)
 ], Tasks.prototype, "getPositions", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(11 /* GetAvailableLike */)
+    (0, injektor_1.instantInject)(14 /* GetAvailableLike */)
 ], Tasks.prototype, "getAvailable", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(4 /* GetClosableLike */)
+    (0, injektor_1.instantInject)(7 /* GetClosableLike */)
 ], Tasks.prototype, "getClosable", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(12 /* SettleLike */)
+    (0, injektor_1.instantInject)(15 /* SettleLike */)
 ], Tasks.prototype, "settle", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(6 /* OrderMakesLike */)
+    (0, injektor_1.instantInject)(9 /* OrderMakesLike */)
 ], Tasks.prototype, "orderMakes", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(8 /* TradeTakesOpenMakersLike */)
+    (0, injektor_1.instantInject)(11 /* TradeTakesOpenMakersLike */)
 ], Tasks.prototype, "tradeTakesOpenMakers", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(7 /* OrderTakesLike */)
+    (0, injektor_1.instantInject)(10 /* OrderTakesLike */)
 ], Tasks.prototype, "orderTakes", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(9 /* ValidateOrderLike */)
+    (0, injektor_1.instantInject)(12 /* ValidateOrderLike */)
 ], Tasks.prototype, "validateOrder", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(1 /* MakeOpenOrderLike */)
+    (0, injektor_1.instantInject)(4 /* MakeOpenOrderLike */)
 ], Tasks.prototype, "makeOpenOrder", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(2 /* CancelOpenOrderLike */)
+    (0, injektor_1.instantInject)(5 /* CancelOpenOrderLike */)
 ], Tasks.prototype, "cancelOpenOrder", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(13 /* MarginAccumulationLike */)
+    (0, injektor_1.instantInject)(16 /* MarginAccumulationLike */)
 ], Tasks.prototype, "marginAccumulation", void 0);
 __decorate([
-    (0, injektor_1.instantInject)(10 /* OrderVolumesLike */)
+    (0, injektor_1.instantInject)(13 /* OrderVolumesLike */)
 ], Tasks.prototype, "orderVolumes", void 0);
 exports.Tasks = Tasks;
 //# sourceMappingURL=tasks.js.map

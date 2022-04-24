@@ -21,10 +21,12 @@ const update_trades_1 = require("./use-cases.d/update-trades");
 const subscription_1 = require("./use-cases.d/subscription");
 const context_1 = require("./context");
 const models_1 = require("./models");
+const broadcast_1 = require("./broadcast");
 const tasks_1 = require("./tasks/tasks");
 const injektor_1 = require("injektor");
 let UseCases = class UseCases {
-    constructor(context, models, broadcast, tasks) {
+    constructor(context, models, broadcast, tasks, updateTrades) {
+        this.updateTrades = updateTrades;
         this.amendOrder = new amend_order_1.AmendOrder(context, models, broadcast, tasks);
         this.cancelOrder = new cancel_order_1.CancelOrder(context, models, broadcast, tasks);
         this.getBalances = new get_balances_1.GetBalances(context, models, broadcast, tasks);
@@ -35,14 +37,12 @@ let UseCases = class UseCases {
         this.subscription = new subscription_1.Subscription(context, models, broadcast, tasks);
     }
 };
-__decorate([
-    (0, injektor_1.instantInject)(update_trades_1.UpdateTrades)
-], UseCases.prototype, "updateTrades", void 0);
 UseCases = __decorate([
     __param(0, (0, injektor_1.inject)(context_1.Context)),
     __param(1, (0, injektor_1.inject)(models_1.Models)),
-    __param(2, (0, injektor_1.inject)(14 /* Broadcast */)),
-    __param(3, (0, injektor_1.inject)(tasks_1.Tasks))
+    __param(2, (0, injektor_1.inject)(broadcast_1.Broadcast)),
+    __param(3, (0, injektor_1.inject)(tasks_1.Tasks)),
+    __param(4, (0, injektor_1.inject)(update_trades_1.UpdateTrades))
 ], UseCases);
 exports.UseCases = UseCases;
 //# sourceMappingURL=use-cases.js.map

@@ -1,9 +1,7 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import {
-	TexchangeOpenOrder,
-	HLike,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { OpenOrder } from '../interfaces';
 
 import { Makers } from '../models.d/makers/makers';
 
@@ -16,7 +14,7 @@ export class GetOpenOrders<H extends HLike<H>> {
 		protected tasks: GetOpenOrders.TaskDeps<H>,
 	) { }
 
-	public getOpenOrders(): TexchangeOpenOrder<H>[] {
+	public getOpenOrders(): OpenOrder<H>[] {
 		return [...this.models.makers];
 	}
 }

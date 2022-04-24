@@ -4,7 +4,6 @@ import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
 import { inject } from 'injektor';
-import { TYPES } from '../types';
 
 
 /**
@@ -22,7 +21,7 @@ export class DefaultMtm<H extends HLike<H>>
 		context: Context<H>,
 		@inject(DefaultMtm.ModelDeps)
 		protected models: DefaultMtm.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(Broadcast)
 		broadcast: Broadcast<H>,
 		@inject(DefaultMtm.TaskDeps)
 		protected tasks: DefaultMtm.TaskDeps<H>,
