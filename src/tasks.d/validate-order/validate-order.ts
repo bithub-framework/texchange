@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
     Operation, Length,
     HLike,
@@ -17,11 +17,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class ValidateOrder<H extends HLike<H>>
     implements ValidateOrderLike<H> {
-    public static TaskDeps = {};
-    @instantInject(ValidateOrder.TaskDeps)
-    private tasks!: ValidateOrder.TaskDeps<H>;
 
     public constructor(
+        private tasks: ValidateOrder.TaskDeps<H>,
+
         private context: Context<H>,
         private models: ValidateOrder.ModelDeps<H>,
         private broadcast: Broadcast<H>,

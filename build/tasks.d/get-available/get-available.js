@@ -15,5 +15,4 @@ class GetAvailable {
     }
 }
 exports.GetAvailable = GetAvailable;
-GetAvailable.TaskDeps = {};
 //# sourceMappingURL=get-available.js.map

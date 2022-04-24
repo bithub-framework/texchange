@@ -53,8 +53,8 @@ let Texchange = class Texchange {
 Texchange = __decorate([
     __param(0, (0, injektor_1.inject)(models_1.Models)),
     __param(1, (0, injektor_1.inject)(mtm_1.Mtm)),
-    __param(2, (0, injektor_1.inject)(17 /* User */)),
-    __param(3, (0, injektor_1.inject)(18 /* Admin */))
+    __param(2, (0, injektor_1.inject)(4 /* User */)),
+    __param(3, (0, injektor_1.inject)(5 /* Admin */))
 ], Texchange);
 exports.Texchange = Texchange;
 //# sourceMappingURL=texchange.js.map

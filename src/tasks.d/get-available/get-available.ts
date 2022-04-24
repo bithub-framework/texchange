@@ -8,7 +8,6 @@ import { Assets } from '../../models.d/assets';
 
 export abstract class GetAvailable<H extends HLike<H>>
 	implements GetAvailableLike<H> {
-	public static TaskDeps = {};
 	protected abstract tasks: GetAvailable.TaskDeps<H>;
 
 	public constructor(

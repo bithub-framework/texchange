@@ -13,7 +13,6 @@ import { Pricing } from '../../models.d/pricing/pricing';
 
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
-    public static TaskDeps = {};
     protected abstract tasks: Settle.TaskDeps<H>;
 
     public constructor(

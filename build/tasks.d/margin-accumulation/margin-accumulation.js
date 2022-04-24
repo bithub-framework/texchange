@@ -10,5 +10,4 @@ class MarginAccumulation {
     }
 }
 exports.MarginAccumulation = MarginAccumulation;
-MarginAccumulation.TaskDeps = {};
 //# sourceMappingURL=margin-accumulation.js.map

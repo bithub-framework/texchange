@@ -6,10 +6,9 @@ import { Settle } from './settle';
 * 默认逐仓
 */
 export declare class DefaultSettle<H extends HLike<H>> extends Settle<H> {
-    protected models: DefaultSettle.ModelDeps<H>;
-    static TaskDeps: {};
     protected tasks: DefaultSettle.TaskDeps<H>;
-    constructor(context: Context<H>, models: DefaultSettle.ModelDeps<H>, broadcast: Broadcast<H>);
+    protected models: DefaultSettle.ModelDeps<H>;
+    constructor(tasks: DefaultSettle.TaskDeps<H>, context: Context<H>, models: DefaultSettle.ModelDeps<H>, broadcast: Broadcast<H>);
     protected clearingMargin(length: Length, profit: H): H;
     protected assertEnoughBalance(): void;
 }

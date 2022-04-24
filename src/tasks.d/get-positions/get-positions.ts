@@ -1,9 +1,8 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import { Context } from '../../context';
 import {
 	Positions,
 	HLike,
-	Length,
 } from 'interfaces';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';
@@ -14,11 +13,10 @@ import { GetClosableLike } from '../get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>>
 	implements GetPositionsLike<H> {
-	public static TaskDeps = {};
-	@instantInject(GetPositions.TaskDeps)
-	private tasks!: GetPositions.TaskDeps<H>;
 
 	public constructor(
+		private tasks: GetPositions.TaskDeps<H>,
+
 		private context: Context<H>,
 		private models: GetPositions.ModelDeps<H>,
 		private broadcast: Broadcast<H>,

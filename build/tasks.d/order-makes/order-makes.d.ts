@@ -6,14 +6,11 @@ import { Broadcast } from '../../broadcast';
 import { Book } from '../../models.d/book';
 import { Makers } from '../../models.d/makers/makers';
 export declare class OrderMakes<H extends HLike<H>> implements OrderMakesLike<H> {
+    private tasks;
     private context;
     private models;
     private broadcast;
-    static TaskDeps: {};
-    private tasks;
-    private OrderId;
-    private OpenOrder;
-    constructor(context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(tasks: OrderMakes.TaskDeps<H>, context: Context<H>, models: OrderMakes.ModelDeps<H>, broadcast: Broadcast<H>);
     orderMakes(order: OpenOrder<H>): void;
 }
 export declare namespace OrderMakes {

@@ -1,15 +1,8 @@
-import { HLike, HStatic } from 'interfaces';
+import { HLike } from 'interfaces';
 import { Startable, StartableLike } from 'startable';
 import { StatefulLike } from './stateful-like';
-import { Container, instantInject, inject } from 'injektor';
+import { inject } from 'injektor';
 import { TYPES } from './types';
-import { EventEmitter } from 'events';
-
-// Context
-import { Context } from './context';
-import { Config } from './context.d/config';
-import { Timeline } from 'interfaces';
-import { MarketCalc } from 'interfaces';
 
 // Models
 import { Assets } from './models.d/assets';
@@ -17,38 +10,11 @@ import { Margins } from './models.d/margins';
 import { Makers } from './models.d/makers/makers';
 import { Book } from './models.d/book';
 import { Progress } from './models.d/progress';
-import { Pricing } from './models.d/pricing/pricing';
 
 import { Models } from './models';
 
-// Broadcast
-import { Broadcast } from './broadcast';
-
-// Tasks
-import { MakeOpenOrder } from './tasks.d/make-open-order/make-open-order';
-import { CancelOpenOrder } from './tasks.d/cancel-open-order/cancel-open-order';
-import { GetBalances as GetBalancesTask } from './tasks.d/get-balances/get-balances';
-import { GetClosable } from './tasks.d/get-closable/get-closable';
-import { GetPositions as GetPositionsTask } from './tasks.d/get-positions/get-positions';
-import { OrderMakes } from './tasks.d/order-makes/order-makes';
-import { OrderTakes } from './tasks.d/order-takes/order-takes';
-import { TradeTakesOpenMakers } from './tasks.d/trade-takes-open-makers/trade-takes-open-makers';
-import { ValidateOrder } from './tasks.d/validate-order/validate-order';
-import { OrderVolumes } from './tasks.d/order-volumes/order-volumes';
-import { GetAvailable } from './tasks.d/get-available/get-available';
-import { Settle } from './tasks.d/settle/settle';
-import { MarginAccumulation } from './tasks.d/margin-accumulation/margin-accumulation';
-
-import { Tasks } from './tasks/tasks';
-
 // Mark to market
 import { Mtm } from './mark-to-market/mtm';
-
-// UseCases
-import { UseCases } from './use-cases';
-
-// Facades
-import { Facades } from './facades';
 
 // Controller
 import { Latency } from './facades.d/latency';

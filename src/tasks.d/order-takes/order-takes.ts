@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
     Side,
     Operation,
@@ -22,11 +22,10 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class OrderTakes<H extends HLike<H>>
     implements OrderTakesLike<H> {
-    public static TaskDeps = {};
-    @instantInject(OrderTakes.TaskDeps)
-    protected tasks!: OrderTakes.TaskDeps<H>;
 
     public constructor(
+        protected tasks: OrderTakes.TaskDeps<H>,
+
         protected context: Context<H>,
         protected models: OrderTakes.ModelDeps<H>,
         protected broadcast: Broadcast<H>,

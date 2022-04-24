@@ -23,5 +23,4 @@ class Settle {
     }
 }
 exports.Settle = Settle;
-Settle.TaskDeps = {};
 //# sourceMappingURL=settle.js.map

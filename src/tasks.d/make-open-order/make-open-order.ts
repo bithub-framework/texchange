@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import { Context } from '../../context';
 import { HLike } from 'interfaces';
 import {
@@ -20,14 +20,13 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
-    public static TaskDeps = {};
-    @instantInject(MakeOpenOrder.TaskDeps)
-    private tasks!: MakeOpenOrder.TaskDeps<H>;
 
     private OrderId = new OrderIdStatic();
     private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
 
     public constructor(
+        private tasks: MakeOpenOrder.TaskDeps<H>,
+
         private context: Context<H>,
         private models: MakeOpenOrder.ModelDeps<H>,
         private broadcast: Broadcast<H>,

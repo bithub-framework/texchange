@@ -8,14 +8,13 @@ import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTakesOpenMakersLike<H> {
+    private tasks;
     private context;
     private models;
     private broadcast;
-    static TaskDeps: {};
-    private tasks;
     private TradeId;
     private Trade;
-    constructor(context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(tasks: TradeTakesOpenMakers.TaskDeps<H>, context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
     tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;

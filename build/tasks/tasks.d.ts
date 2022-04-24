@@ -1,3 +1,6 @@
+import { Context } from '../context';
+import { Models } from '../models';
+import { Broadcast } from '../broadcast';
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
@@ -28,15 +31,16 @@ import { HLike } from 'interfaces';
 export declare abstract class Tasks<H extends HLike<H>> implements MakeOpenOrder.TaskDeps<H>, CancelOpenOrder.TaskDeps<H>, GetBalances.TaskDeps<H>, GetClosable.TaskDeps<H>, GetPositions.TaskDeps<H>, OrderMakes.TaskDeps<H>, OrderTakes.TaskDeps<H>, TradeTakesOpenMakers.TaskDeps<H>, ValidateOrder.TaskDeps<H>, OrderVolumes.TaskDeps<H>, GetAvailable.TaskDeps<H>, Settle.TaskDeps<H>, MarginAccumulation.TaskDeps<H> {
     getBalances: GetBalancesLike<H>;
     getPositions: GetPositionsLike<H>;
-    getAvailable: GetAvailableLike<H>;
+    abstract getAvailable: GetAvailableLike<H>;
     getClosable: GetClosableLike<H>;
-    settle: SettleLike;
+    abstract settle: SettleLike;
     orderMakes: OrderMakesLike<H>;
     tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
     orderTakes: OrderTakesLike<H>;
     validateOrder: ValidateOrderLike<H>;
     makeOpenOrder: MakeOpenOrderLike<H>;
     cancelOpenOrder: CancelOpenOrderLike<H>;
-    marginAccumulation: MarginAccumulationLike<H>;
+    abstract marginAccumulation: MarginAccumulationLike<H>;
     orderVolumes: OrderVolumesLike<H>;
+    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>);
 }

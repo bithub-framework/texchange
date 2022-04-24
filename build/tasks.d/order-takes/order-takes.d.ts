@@ -9,12 +9,11 @@ import { Progress } from '../../models.d/progress';
 import { Book } from '../../models.d/book';
 import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export declare class OrderTakes<H extends HLike<H>> implements OrderTakesLike<H> {
+    protected tasks: OrderTakes.TaskDeps<H>;
     protected context: Context<H>;
     protected models: OrderTakes.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    static TaskDeps: {};
-    protected tasks: OrderTakes.TaskDeps<H>;
-    constructor(context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(tasks: OrderTakes.TaskDeps<H>, context: Context<H>, models: OrderTakes.ModelDeps<H>, broadcast: Broadcast<H>);
     $orderTakes($taker: OpenOrder<H>): Trades<H>;
 }
 export declare namespace OrderTakes {

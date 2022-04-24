@@ -6,7 +6,6 @@ import { HLike } from 'interfaces';
 
 export abstract class MarginAccumulation<H extends HLike<H>>
 	implements MarginAccumulationLike<H> {
-	public static TaskDeps = {};
 	protected abstract tasks: MarginAccumulation.TaskDeps<H>;
 
 	public constructor(

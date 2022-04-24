@@ -22,14 +22,6 @@ import { Models } from '../models';
 import { Broadcast } from '../broadcast';
 
 // Tasks
-import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
-import { SettleLike } from '../tasks.d/settle/settle-like';
-import { MarginAccumulationLike } from '../tasks.d/margin-accumulation/margin-accumulation-like';
-
-import { DefaultGetAvailable } from '../tasks.d/get-available/default';
-import { DefaultSettle } from '../tasks.d/settle/default';
-import { DefaultMarginAccumulation } from '../tasks.d/margin-accumulation/default';
-
 import { Tasks } from '../tasks/tasks';
 import { DefaultTasks } from '../tasks/default';
 
@@ -70,15 +62,6 @@ export function createDefaultContainer<H extends HLike<H>>(
 		Mtm,
 		DefaultMtm,
 	);
-
-
-	c.ra(DefaultGetAvailable.TaskDeps, Tasks);
-	c.ra(DefaultSettle.TaskDeps, Tasks);
-	c.ra(DefaultMarginAccumulation.TaskDeps, Tasks);
-
-	c.rcs<GetAvailableLike<H>>(TYPES.GetAvailableLike, DefaultGetAvailable);
-	c.rcs<SettleLike>(TYPES.SettleLike, DefaultSettle);
-	c.rcs<MarginAccumulationLike<H>>(TYPES.MarginAccumulationLike, DefaultMarginAccumulation);
 
 	c.rcs<Tasks<H>>(
 		Tasks,

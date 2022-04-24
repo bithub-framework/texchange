@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
 	Length,
 	HLike,
@@ -14,11 +14,10 @@ import { Settle } from './settle';
 */
 export class DefaultSettle<H extends HLike<H>>
 	extends Settle<H> {
-	public static TaskDeps = {};
-	@instantInject(DefaultSettle.TaskDeps)
-	protected tasks!: DefaultSettle.TaskDeps<H>;
 
 	public constructor(
+		protected tasks: DefaultSettle.TaskDeps<H>,
+
 		context: Context<H>,
 		protected models: DefaultSettle.ModelDeps<H>,
 		broadcast: Broadcast<H>,

@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
     Side,
     Operation,
@@ -24,14 +24,13 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
-    public static TaskDeps = {};
-    @instantInject(TradeTakesOpenMakers.TaskDeps)
-    private tasks!: TradeTakesOpenMakers.TaskDeps<H>;
 
     private TradeId = new TradeIdStatic();
     private Trade = new TradeStatic(this.context.H, this.TradeId);
 
     public constructor(
+        private tasks: TradeTakesOpenMakers.TaskDeps<H>,
+
         private context: Context<H>,
         private models: TradeTakesOpenMakers.ModelDeps<H>,
         private broadcast: Broadcast<H>,

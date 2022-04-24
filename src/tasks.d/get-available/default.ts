@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
 	Side, Length, Operation,
 	HLike,
@@ -13,11 +13,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
-	public static TaskDeps = {};
-	@instantInject(DefaultGetAvailable.TaskDeps)
-	protected tasks!: DefaultGetAvailable.TaskDeps<H>;
 
 	public constructor(
+		protected tasks: DefaultGetAvailable.TaskDeps<H>,
+
 		context: Context<H>,
 		protected models: DefaultGetAvailable.ModelDeps<H>,
 		broadcast: Broadcast<H>,

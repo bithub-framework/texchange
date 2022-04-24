@@ -10,14 +10,13 @@ import { Book } from '../../models.d/book';
 import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
 export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderLike<H> {
+    private tasks;
     private context;
     private models;
     private broadcast;
-    static TaskDeps: {};
-    private tasks;
     private OrderId;
     private OpenOrder;
-    constructor(context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(tasks: MakeOpenOrder.TaskDeps<H>, context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     makeOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }
 export declare namespace MakeOpenOrder {

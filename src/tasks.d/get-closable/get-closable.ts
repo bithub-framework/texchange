@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import {
 	Length,
 	Closable,
@@ -14,11 +14,10 @@ import { Makers } from '../../models.d/makers/makers';
 
 export class GetClosable<H extends HLike<H>>
 	implements GetClosableLike<H> {
-	public static TaskDeps = {};
-	@instantInject(GetClosable.TaskDeps)
-	private tasks!: GetClosable.TaskDeps<H>;
 
 	public constructor(
+		private tasks: GetClosable.TaskDeps<H>,
+
 		private context: Context<H>,
 		private models: GetClosable.ModelDeps<H>,
 		private broadcast: Broadcast<H>,

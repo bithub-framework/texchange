@@ -1,3 +1,7 @@
+import { Context } from '../context';
+import { Models } from '../models';
+import { Broadcast } from '../broadcast';
+
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
@@ -27,8 +31,7 @@ import { MarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumu
 import { Settle } from '../tasks.d/settle/settle';
 
 import { HLike } from 'interfaces';
-import { instantInject } from 'injektor';
-import { TYPES } from '../types';
+import { inject } from 'injektor';
 
 
 export abstract class Tasks<H extends HLike<H>> implements
@@ -46,30 +49,37 @@ export abstract class Tasks<H extends HLike<H>> implements
 	Settle.TaskDeps<H>,
 	MarginAccumulation.TaskDeps<H> {
 
-	@instantInject(TYPES.GetBalancesLike)
-	public getBalances!: GetBalancesLike<H>;
-	@instantInject(TYPES.GetPositionsLike)
-	public getPositions!: GetPositionsLike<H>;
-	@instantInject(TYPES.GetAvailableLike)
-	public getAvailable!: GetAvailableLike<H>;
-	@instantInject(TYPES.GetClosableLike)
-	public getClosable!: GetClosableLike<H>;
-	@instantInject(TYPES.SettleLike)
-	public settle!: SettleLike;
-	@instantInject(TYPES.OrderMakesLike)
-	public orderMakes!: OrderMakesLike<H>;
-	@instantInject(TYPES.TradeTakesOpenMakersLike)
-	public tradeTakesOpenMakers!: TradeTakesOpenMakersLike<H>;
-	@instantInject(TYPES.OrderTakesLike)
-	public orderTakes!: OrderTakesLike<H>;
-	@instantInject(TYPES.ValidateOrderLike)
-	public validateOrder!: ValidateOrderLike<H>;
-	@instantInject(TYPES.MakeOpenOrderLike)
-	public makeOpenOrder!: MakeOpenOrderLike<H>;
-	@instantInject(TYPES.CancelOpenOrderLike)
-	public cancelOpenOrder!: CancelOpenOrderLike<H>;
-	@instantInject(TYPES.MarginAccumulationLike)
-	public marginAccumulation!: MarginAccumulationLike<H>;
-	@instantInject(TYPES.OrderVolumesLike)
-	public orderVolumes!: OrderVolumesLike<H>;
+	public getBalances: GetBalancesLike<H>;
+	public getPositions: GetPositionsLike<H>;
+	public abstract getAvailable: GetAvailableLike<H>;
+	public getClosable: GetClosableLike<H>;
+	public abstract settle: SettleLike;
+	public orderMakes: OrderMakesLike<H>;
+	public tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
+	public orderTakes: OrderTakesLike<H>;
+	public validateOrder: ValidateOrderLike<H>;
+	public makeOpenOrder: MakeOpenOrderLike<H>;
+	public cancelOpenOrder: CancelOpenOrderLike<H>;
+	public abstract marginAccumulation: MarginAccumulationLike<H>;
+	public orderVolumes: OrderVolumesLike<H>;
+
+	public constructor(
+		@inject(Context)
+		context: Context<H>,
+		@inject(Models)
+		models: Models<H, unknown>,
+		@inject(Broadcast)
+		broadcast: Broadcast<H>,
+	) {
+		this.getBalances = new GetBalances(this, context, models, broadcast);
+		this.getPositions = new GetPositions(this, context, models, broadcast);
+		this.getClosable = new GetClosable(this, context, models, broadcast);
+		this.orderMakes = new OrderMakes(this, context, models, broadcast);
+		this.tradeTakesOpenMakers = new TradeTakesOpenMakers(this, context, models, broadcast);
+		this.orderTakes = new OrderTakes(this, context, models, broadcast);
+		this.validateOrder = new ValidateOrder(this, context, models, broadcast);
+		this.makeOpenOrder = new MakeOpenOrder(this, context, models, broadcast);
+		this.cancelOpenOrder = new CancelOpenOrder(this, context, models, broadcast);
+		this.orderVolumes = new OrderVolumes(this, context, models, broadcast);
+	}
 }

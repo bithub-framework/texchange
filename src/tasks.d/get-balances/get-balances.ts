@@ -1,4 +1,4 @@
-import { instantInject } from 'injektor';
+import { inject } from 'injektor';
 import { Context } from '../../context';
 import {
 	Balances,
@@ -12,11 +12,10 @@ import { GetAvailableLike } from '../get-available/get-available-like';
 
 export class GetBalances<H extends HLike<H>>
 	implements GetBalancesLike<H> {
-	public static TaskDeps = {};
-	@instantInject(GetBalances.TaskDeps)
-	private tasks!: GetBalances.TaskDeps<H>;
 
 	public constructor(
+		private tasks: GetBalances.TaskDeps<H>,
+
 		private context: Context<H>,
 		private models: GetBalances.ModelDeps<H>,
 		private broadcast: Broadcast<H>,
