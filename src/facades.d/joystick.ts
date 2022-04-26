@@ -1,8 +1,10 @@
 import { Context } from '../context';
+import { Config } from '../context.d/config';
 import {
 	Orderbook,
 	HLike,
 	OrderbookStatic,
+	MarketCalc,
 } from 'interfaces';
 import {
 	TradesStatic,
@@ -14,6 +16,8 @@ import { UpdateTrades, DatabaseTrades } from '../use-cases.d/update-trades';
 
 
 export class Joystick<H extends HLike<H>> {
+	public config: Config<H>;
+
 	private TradeId = new TradeIdStatic();
 	private Trades = new TradesStatic(this.context.H, this.TradeId);
 	private Orderbook = new OrderbookStatic(this.context.H);
@@ -21,7 +25,9 @@ export class Joystick<H extends HLike<H>> {
 	public constructor(
 		private context: Context<H>,
 		private useCases: Joystick.UseCaseDeps<H>,
-	) { }
+	) {
+		this.config = this.context.config;
+	}
 
 	public updateTrades($trades: DatabaseTrades<H>): void {
 		this.useCases.updateTrades.updateTrades(
@@ -33,6 +39,14 @@ export class Joystick<H extends HLike<H>> {
 		this.useCases.updateOrderbook.updateOrderbook(
 			this.Orderbook.copy($orderbook),
 		);
+	}
+
+	public quantity(price: H, dollarVolume: H): H {
+		return this.context.calc.quantity(price, dollarVolume);
+	};
+
+	public dollarVolume(price: H, quantity: H): H {
+		return this.context.calc.dollarVolume(price, quantity);
 	}
 }
 

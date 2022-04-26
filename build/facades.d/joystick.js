@@ -10,12 +10,20 @@ class Joystick {
         this.TradeId = new interfaces_2.TradeIdStatic();
         this.Trades = new interfaces_2.TradesStatic(this.context.H, this.TradeId);
         this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
+        this.config = this.context.config;
     }
     updateTrades($trades) {
         this.useCases.updateTrades.updateTrades(this.Trades.copy($trades));
     }
     updateOrderbook($orderbook) {
         this.useCases.updateOrderbook.updateOrderbook(this.Orderbook.copy($orderbook));
+    }
+    quantity(price, dollarVolume) {
+        return this.context.calc.quantity(price, dollarVolume);
+    }
+    ;
+    dollarVolume(price, quantity) {
+        return this.context.calc.dollarVolume(price, quantity);
     }
 }
 exports.Joystick = Joystick;
