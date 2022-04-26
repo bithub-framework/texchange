@@ -10,11 +10,11 @@ export declare class MarketLatency<H extends HLike<H>> implements MarketApiLike<
     private Orderbook;
     private TradeId;
     private Trade;
-    constructor(context: Context<H>, useCases: Latency.UseCaseDeps<H>);
+    constructor(context: Context<H>, useCases: MarketLatency.UseCaseDeps<H>);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }
-export declare namespace Latency {
+export declare namespace MarketLatency {
     interface UseCaseDeps<H extends HLike<H>> {
         subscription: Subscription<H>;
     }

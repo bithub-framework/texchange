@@ -5,15 +5,13 @@ import { Context } from '../../context';
 import { Instant } from '../instant';
 import { MarketLatency } from './market';
 import { AccountLatency } from './account';
-import { Subscription } from '../../use-cases.d/subscription';
 export declare class Latency<H extends HLike<H>> {
     market: MarketLatency<H>;
     account: AccountLatency<H>;
     constructor(context: Context<H>, useCases: Latency.UseCaseDeps<H>, instant: Instant<H>);
 }
 export declare namespace Latency {
-    interface UseCaseDeps<H extends HLike<H>> {
-        subscription: Subscription<H>;
+    interface UseCaseDeps<H extends HLike<H>> extends MarketLatency.UseCaseDeps<H>, AccountLatency.UseCaseDeps<H> {
     }
 }
 export interface MarketAccountSpec<H extends HLike<H>> extends MarketSpec<H>, AccountSpec {

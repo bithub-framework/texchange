@@ -27,7 +27,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H, Order
 
 	constructor(
 		private context: Context<H>,
-		private useCases: Latency.UseCaseDeps<H>,
+		private useCases: MarketLatency.UseCaseDeps<H>,
 	) {
 		this.spec = this.context.config.market;
 
@@ -61,7 +61,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H, Order
 	}
 }
 
-export namespace Latency {
+export namespace MarketLatency {
 	export interface UseCaseDeps<H extends HLike<H>> {
 		subscription: Subscription<H>;
 	}

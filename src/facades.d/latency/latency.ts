@@ -15,7 +15,6 @@ import { Instant } from '../instant';
 import { MarketLatency } from './market';
 import { AccountLatency } from './account';
 
-import { Subscription } from '../../use-cases.d/subscription';
 
 
 export class Latency<H extends HLike<H>> {
@@ -40,9 +39,9 @@ export class Latency<H extends HLike<H>> {
 }
 
 export namespace Latency {
-    export interface UseCaseDeps<H extends HLike<H>> {
-        subscription: Subscription<H>;
-    }
+    export interface UseCaseDeps<H extends HLike<H>>
+        extends MarketLatency.UseCaseDeps<H>,
+        AccountLatency.UseCaseDeps<H> { }
 }
 
 export interface MarketAccountSpec<H extends HLike<H>> extends

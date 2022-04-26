@@ -15,7 +15,7 @@ export declare class AccountLatency<H extends HLike<H>> implements AccountApiLik
     private OrderId;
     private Amendment;
     private OpenOrder;
-    constructor(context: Context<H>, useCases: Latency.UseCaseDeps<H>, instant: Instant<H>);
+    constructor(context: Context<H>, useCases: AccountLatency.UseCaseDeps<H>, instant: Instant<H>);
     makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]>;
@@ -25,7 +25,7 @@ export declare class AccountLatency<H extends HLike<H>> implements AccountApiLik
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }
-export declare namespace Latency {
+export declare namespace AccountLatency {
     interface UseCaseDeps<H extends HLike<H>> {
         subscription: Subscription<H>;
     }

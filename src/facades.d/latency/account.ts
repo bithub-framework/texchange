@@ -39,7 +39,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H, Ord
 
 	constructor(
 		private context: Context<H>,
-		private useCases: Latency.UseCaseDeps<H>,
+		private useCases: AccountLatency.UseCaseDeps<H>,
 		private instant: Instant<H>,
 	) {
 		this.spec = this.context.config.account;
@@ -153,7 +153,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H, Ord
 	}
 }
 
-export namespace Latency {
+export namespace AccountLatency {
 	export interface UseCaseDeps<H extends HLike<H>> {
 		subscription: Subscription<H>;
 	}
