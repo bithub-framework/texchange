@@ -4,7 +4,6 @@ import {
 	Orderbook,
 	HLike,
 	OrderbookStatic,
-	MarketCalc,
 } from 'interfaces';
 import {
 	TradesStatic,

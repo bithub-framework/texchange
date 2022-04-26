@@ -34,9 +34,9 @@ export class Texchange<
 		@inject(Mtm)
 		protected mtm: Mtm<H> | null,
 		@inject(TYPES.User)
-		public user: Latency<H>,
+		public user: UserTex<H>,
 		@inject(TYPES.Admin)
-		public admin: Joystick<H>,
+		public admin: AdminTex<H>,
 	) {
 		this.startable = Startable.create(
 			() => this.start(),
@@ -83,3 +83,6 @@ export interface Snapshot<PricingSnapshot> {
 	pricing: PricingSnapshot;
 	progress: Progress.Snapshot;
 }
+
+export interface AdminTex<H extends HLike<H>> extends Joystick<H> { }
+export interface UserTex<H extends HLike<H>> extends Latency<H> { }
