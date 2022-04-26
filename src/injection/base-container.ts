@@ -20,7 +20,7 @@ import { UseCases } from '../use-cases';
 import { Facades } from '../facades';
 
 // Controller
-import { Latency } from '../facades.d/latency';
+import { Latency } from '../facades.d/latency/latency';
 import { Joystick } from '../facades.d/joystick';
 
 // Texchange

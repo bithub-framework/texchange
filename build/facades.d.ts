@@ -1,5 +1,5 @@
 import { Instant } from './facades.d/instant';
-import { Latency } from './facades.d/latency';
+import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
 import { HLike } from 'interfaces';
 import { Context } from './context';

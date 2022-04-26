@@ -11,7 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Facades = void 0;
 const instant_1 = require("./facades.d/instant");
-const latency_1 = require("./facades.d/latency");
+const latency_1 = require("./facades.d/latency/latency");
 const joystick_1 = require("./facades.d/joystick");
 const context_1 = require("./context");
 const use_cases_1 = require("./use-cases");

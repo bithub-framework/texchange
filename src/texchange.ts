@@ -17,7 +17,7 @@ import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';
 
 // Controller
-import { Latency } from './facades.d/latency';
+import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
 
 

@@ -8,7 +8,7 @@ import { Book } from './models.d/book';
 import { Progress } from './models.d/progress';
 import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';
-import { Latency } from './facades.d/latency';
+import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
 export declare class Texchange<H extends HLike<H>, PricingSnapshot> implements StatefulLike<Snapshot<PricingSnapshot>> {
     protected models: Models<H, PricingSnapshot>;
