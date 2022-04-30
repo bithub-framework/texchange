@@ -23,7 +23,7 @@ export class UpdateTrades<H extends HLike<H>> {
 		private realTimeSettlement: boolean,
 	) { }
 
-	public updateTrades(trades: DatabaseTrades<H>): void {
+	public updateTrades(trades: DatabaseTrade<H>[]): void {
 		const { tradeTakesOpenMakers, settle } = this.tasks;
 		assert(trades.length);
 		const now = this.context.timeline.now();
@@ -72,29 +72,5 @@ export class DatabaseTradeStatic<H extends HLike<H>> {
 			...this.Trade.copy(trade),
 			id: trade.id,
 		}
-	}
-}
-
-
-export type DatabaseTrades<H extends HLike<H>>
-	= DatabaseTrade<H>[];
-
-export class DatabaseTradesStatic<H extends HLike<H>> {
-	private DatabaseTrade = new DatabaseTradeStatic(
-		this.H,
-		this.TradeId,
-	);
-
-	public constructor(
-		private H: HStatic<H>,
-		private TradeId: TradeIdStatic,
-	) { }
-
-	public copy(
-		trades: DatabaseTrades<H>,
-	): DatabaseTrades<H> {
-		return trades.map(
-			trade => this.DatabaseTrade.copy(trade),
-		)
 	}
 }

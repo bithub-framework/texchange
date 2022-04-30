@@ -14,8 +14,8 @@ import {
 } from '../use-cases.d/update-orderbook';
 import {
 	UpdateTrades,
-	DatabaseTrades,
-	DatabaseTradesStatic,
+	DatabaseTrade,
+	DatabaseTradeStatic,
 } from '../use-cases.d/update-trades';
 
 
@@ -24,7 +24,7 @@ export class Joystick<H extends HLike<H>> {
 
 	private TradeId = new TradeIdStatic();
 	private DatabaseOrderbook = new DatabaseOrderbookStatic(this.context.H);
-	private DatabaseTrades = new DatabaseTradesStatic(this.context.H, this.TradeId);
+	private DatabaseTrade = new DatabaseTradeStatic(this.context.H, this.TradeId);
 
 	public constructor(
 		private context: Context<H>,
@@ -33,9 +33,11 @@ export class Joystick<H extends HLike<H>> {
 		this.config = this.context.config;
 	}
 
-	public updateTrades($trades: DatabaseTrades<H>): void {
+	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCases.updateTrades.updateTrades(
-			this.DatabaseTrades.copy($trades),
+			$trades.map(
+				trade => this.DatabaseTrade.copy(trade),
+			),
 		);
 	}
 

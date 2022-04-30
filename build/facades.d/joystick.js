@@ -10,11 +10,11 @@ class Joystick {
         this.useCases = useCases;
         this.TradeId = new interfaces_1.TradeIdStatic();
         this.DatabaseOrderbook = new update_orderbook_1.DatabaseOrderbookStatic(this.context.H);
-        this.DatabaseTrades = new update_trades_1.DatabaseTradesStatic(this.context.H, this.TradeId);
+        this.DatabaseTrade = new update_trades_1.DatabaseTradeStatic(this.context.H, this.TradeId);
         this.config = this.context.config;
     }
     updateTrades($trades) {
-        this.useCases.updateTrades.updateTrades(this.DatabaseTrades.copy($trades));
+        this.useCases.updateTrades.updateTrades($trades.map(trade => this.DatabaseTrade.copy(trade)));
     }
     updateOrderbook($orderbook) {
         this.useCases.updateOrderbook.updateOrderbook(this.DatabaseOrderbook.copy($orderbook));

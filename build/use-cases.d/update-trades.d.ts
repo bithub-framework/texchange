@@ -13,7 +13,7 @@ export declare class UpdateTrades<H extends HLike<H>> {
     protected tasks: UpdateTrades.TaskDeps<H>;
     private realTimeSettlement;
     constructor(context: Context<H>, models: UpdateTrades.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UpdateTrades.TaskDeps<H>, realTimeSettlement: boolean);
-    updateTrades(trades: DatabaseTrades<H>): void;
+    updateTrades(trades: DatabaseTrade<H>[]): void;
 }
 export declare namespace UpdateTrades {
     interface ModelDeps<H extends HLike<H>> {
@@ -34,12 +34,4 @@ export declare class DatabaseTradeStatic<H extends HLike<H>> {
     private Trade;
     constructor(H: HStatic<H>, TradeId: TradeIdStatic);
     copy(trade: DatabaseTrade<H>): DatabaseTrade<H>;
-}
-export declare type DatabaseTrades<H extends HLike<H>> = DatabaseTrade<H>[];
-export declare class DatabaseTradesStatic<H extends HLike<H>> {
-    private H;
-    private TradeId;
-    private DatabaseTrade;
-    constructor(H: HStatic<H>, TradeId: TradeIdStatic);
-    copy(trades: DatabaseTrades<H>): DatabaseTrades<H>;
 }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DatabaseTradesStatic = exports.DatabaseTradeStatic = exports.UpdateTrades = void 0;
+exports.DatabaseTradeStatic = exports.UpdateTrades = void 0;
 const assert = require("assert");
 const interfaces_1 = require("../interfaces");
 class UpdateTrades {
@@ -40,15 +40,4 @@ class DatabaseTradeStatic {
     }
 }
 exports.DatabaseTradeStatic = DatabaseTradeStatic;
-class DatabaseTradesStatic {
-    constructor(H, TradeId) {
-        this.H = H;
-        this.TradeId = TradeId;
-        this.DatabaseTrade = new DatabaseTradeStatic(this.H, this.TradeId);
-    }
-    copy(trades) {
-        return trades.map(trade => this.DatabaseTrade.copy(trade));
-    }
-}
-exports.DatabaseTradesStatic = DatabaseTradesStatic;
 //# sourceMappingURL=update-trades.js.map
