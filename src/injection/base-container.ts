@@ -5,7 +5,7 @@ import { TYPES } from '../types';
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { Timeline } from 'interfaces';
+import { TimelineLike } from 'interfaces';
 
 // Models
 import { Models } from '../models';
@@ -32,7 +32,7 @@ export function createBaseContainer<
 	PricingSnapshot,
 	>(
 		config: Config<H>,
-		timeline: Timeline,
+		timeline: TimelineLike,
 		H: HStatic<H>,
 ): Container {
 	const c = new Container();

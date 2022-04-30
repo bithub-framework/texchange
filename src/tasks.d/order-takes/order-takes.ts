@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import {
     Side,
     Operation,
@@ -6,7 +5,7 @@ import {
 } from 'interfaces';
 import {
     OpenOrder,
-    Trades,
+    Trade,
 } from '../../interfaces';
 
 import { Context } from '../../context';
@@ -31,12 +30,12 @@ export class OrderTakes<H extends HLike<H>>
         protected broadcast: Broadcast<H>,
     ) { }
 
-    public $orderTakes($taker: OpenOrder<H>): Trades<H> {
+    public $orderTakes($taker: OpenOrder<H>): Trade<H>[] {
         const { assets, progress, book } = this.models;
         const { config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
-        const trades: Trades<H> = [];
+        const trades: Trade<H>[] = [];
         let volume = new this.context.H(0);
         let dollarVolume = new this.context.H(0);
         for (const maker of orderbook[-$taker.side])

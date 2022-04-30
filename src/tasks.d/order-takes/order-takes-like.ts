@@ -1,10 +1,10 @@
 import { HLike } from 'interfaces';
 import {
 	OpenOrder,
-	Trades,
+	Trade,
 } from '../../interfaces';
 
 
 export interface OrderTakesLike<H extends HLike<H>> {
-	$orderTakes($taker: OpenOrder<H>): Trades<H>;
+	$orderTakes($taker: OpenOrder<H>): Trade<H>[];
 }

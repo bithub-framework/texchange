@@ -17,6 +17,5 @@ __exportStar(require("./amendment"), exports);
 __exportStar(require("./frozen"), exports);
 __exportStar(require("./open-maker"), exports);
 __exportStar(require("./trade"), exports);
-__exportStar(require("./trades"), exports);
 __exportStar(require("./event-emitter"), exports);
 //# sourceMappingURL=index.js.map

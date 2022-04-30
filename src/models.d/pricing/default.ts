@@ -1,5 +1,5 @@
 import { HLike, H } from 'interfaces';
-import { Trades } from '../../interfaces';
+import { Trade } from '../../interfaces';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
 import { inject } from 'injektor';
@@ -21,7 +21,7 @@ export class DefaultPricing<H extends HLike<H>>
 		this.settlementPrice = context.config.market.initialSettlementPrice;
 	}
 
-	public updateTrades(trades: Trades<H>): void {
+	public updateTrades(trades: Trade<H>[]): void {
 		this.settlementPrice = trades[trades.length - 1].price;
 	}
 

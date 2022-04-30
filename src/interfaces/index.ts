@@ -5,5 +5,4 @@ export * from './amendment'
 export * from './frozen';
 export * from './open-maker';
 export * from './trade';
-export * from './trades';
 export * from './event-emitter'

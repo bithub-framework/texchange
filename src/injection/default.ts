@@ -6,7 +6,7 @@ import { TYPES } from '../types';
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { Timeline } from 'interfaces';
+import { TimelineLike } from 'interfaces';
 import { MarketCalc } from 'interfaces';
 import { DefaultMarketCalc } from '../context.d/market-calc/default';
 
@@ -35,7 +35,7 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 
 export function createDefaultContainer<H extends HLike<H>>(
 	config: Config<H>,
-	timeline: Timeline,
+	timeline: TimelineLike,
 	H: HStatic<H>,
 ): Container {
 	const c = createBaseContainer(

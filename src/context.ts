@@ -1,7 +1,7 @@
 import {
 	HLike,
 	MarketCalc,
-	Timeline,
+	TimelineLike,
 	HStatic,
 } from 'interfaces';
 import { Config } from './context.d/config';
@@ -14,7 +14,7 @@ export class Context<H extends HLike<H>> {
 		@inject(TYPES.MarketCalc)
 		public calc: MarketCalc<H>,
 		public config: Config<H>,
-		public timeline: Timeline,
+		public timeline: TimelineLike,
 		public H: HStatic<H>,
 	) { }
 }
