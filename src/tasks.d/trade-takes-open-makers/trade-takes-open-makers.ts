@@ -1,16 +1,12 @@
-import { inject } from 'injektor';
 import {
     Side,
     Operation,
     HLike, H,
-} from 'interfaces';
-import {
     OpenOrder,
     Trade,
-    OpenMaker,
     TradeStatic,
-    TradeIdStatic,
-} from '../../interfaces';
+} from 'interfaces';
+import { OpenMaker } from '../../interfaces/open-maker';
 
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
@@ -25,8 +21,7 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 export class TradeTakesOpenMakers<H extends HLike<H>>
     implements TradeTakesOpenMakersLike<H> {
 
-    private TradeId = new TradeIdStatic();
-    private Trade = new TradeStatic(this.context.H, this.TradeId);
+    private Trade = new TradeStatic(this.context.H);
 
     public constructor(
         private tasks: TradeTakesOpenMakers.TaskDeps<H>,

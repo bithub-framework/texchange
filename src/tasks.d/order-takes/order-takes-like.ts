@@ -1,8 +1,8 @@
-import { HLike } from 'interfaces';
 import {
+	HLike,
 	OpenOrder,
 	Trade,
-} from '../../interfaces';
+} from 'interfaces';
 
 
 export interface OrderTakesLike<H extends HLike<H>> {

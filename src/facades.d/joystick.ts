@@ -3,9 +3,6 @@ import { Config } from '../context.d/config';
 import {
 	HLike,
 } from 'interfaces';
-import {
-	TradeIdStatic,
-} from '../interfaces';
 
 import {
 	UpdateOrderbook,
@@ -22,9 +19,8 @@ import {
 export class Joystick<H extends HLike<H>> {
 	public config: Config<H>;
 
-	private TradeId = new TradeIdStatic();
 	private DatabaseOrderbook = new DatabaseOrderbookStatic(this.context.H);
-	private DatabaseTrade = new DatabaseTradeStatic(this.context.H, this.TradeId);
+	private DatabaseTrade = new DatabaseTradeStatic(this.context.H);
 
 	public constructor(
 		private context: Context<H>,

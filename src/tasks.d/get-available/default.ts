@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import {
 	Side, Length, Operation,
 	HLike,

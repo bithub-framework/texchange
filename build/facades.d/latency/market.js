@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarketLatency = void 0;
 const interfaces_1 = require("interfaces");
-const interfaces_2 = require("../../interfaces");
 const events_1 = require("events");
 class MarketLatency {
     constructor(context, useCases) {
@@ -10,8 +9,7 @@ class MarketLatency {
         this.useCases = useCases;
         this.events = new events_1.EventEmitter();
         this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
-        this.TradeId = new interfaces_2.TradeIdStatic();
-        this.Trade = new interfaces_1.TradeStatic(this.context.H, this.TradeId);
+        this.Trade = new interfaces_1.TradeStatic(this.context.H);
         this.spec = this.context.config.market;
         this.useCases.subscription.on('orderbook', async (orderbook) => {
             try {

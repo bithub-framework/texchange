@@ -2,7 +2,6 @@ import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import {
 	Positions,
-	Length,
 	HLike,
 } from 'interfaces';
 

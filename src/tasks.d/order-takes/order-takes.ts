@@ -2,11 +2,9 @@ import {
     Side,
     Operation,
     HLike, H,
-} from 'interfaces';
-import {
     OpenOrder,
     Trade,
-} from '../../interfaces';
+} from 'interfaces';
 
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';

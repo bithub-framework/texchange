@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseTradeStatic = exports.UpdateTrades = void 0;
 const assert = require("assert");
-const interfaces_1 = require("../interfaces");
+const interfaces_1 = require("interfaces");
 class UpdateTrades {
     constructor(context, models, broadcast, tasks, realTimeSettlement) {
         this.context = context;
@@ -27,10 +27,9 @@ class UpdateTrades {
 }
 exports.UpdateTrades = UpdateTrades;
 class DatabaseTradeStatic {
-    constructor(H, TradeId) {
+    constructor(H) {
         this.H = H;
-        this.TradeId = TradeId;
-        this.Trade = new interfaces_1.TradeStatic(this.H, this.TradeId);
+        this.Trade = new interfaces_1.TradeStatic(this.H);
     }
     copy(trade) {
         return {

@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';

@@ -1,5 +1,7 @@
-import { HLike } from 'interfaces';
-import { Trade } from '../../interfaces';
+import {
+	HLike,
+	Trade,
+} from 'interfaces';
 
 
 export interface TradeTakesOpenMakersLike<H extends HLike<H>> {

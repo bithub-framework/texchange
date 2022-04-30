@@ -2,15 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
 const interfaces_1 = require("interfaces");
-const interfaces_2 = require("../../interfaces");
 class TradeTakesOpenMakers {
     constructor(tasks, context, models, broadcast) {
         this.tasks = tasks;
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.TradeId = new interfaces_2.TradeIdStatic();
-        this.Trade = new interfaces_2.TradeStatic(this.context.H, this.TradeId);
+        this.Trade = new interfaces_1.TradeStatic(this.context.H);
     }
     tradeTakesOpenMakers(trade) {
         const $trade = this.Trade.copy(trade);

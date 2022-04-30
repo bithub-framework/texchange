@@ -1,10 +1,10 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
 import {
+	HLike,
 	Amendment,
 	OpenOrder,
-} from '../interfaces';
+} from 'interfaces';
 
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';

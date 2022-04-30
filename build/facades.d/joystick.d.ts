@@ -7,7 +7,6 @@ export declare class Joystick<H extends HLike<H>> {
     private context;
     private useCases;
     config: Config<H>;
-    private TradeId;
     private DatabaseOrderbook;
     private DatabaseTrade;
     constructor(context: Context<H>, useCases: Joystick.UseCaseDeps<H>);

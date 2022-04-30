@@ -1,5 +1,4 @@
-import { HLike } from 'interfaces';
-import { OpenOrder, Trade } from '../../interfaces';
+import { HLike, OpenOrder, Trade } from 'interfaces';
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';

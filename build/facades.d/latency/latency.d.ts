@@ -1,6 +1,5 @@
 /// <reference types="node" />
 import { MarketEvents, AccountEvents, MarketSpec, AccountSpec, HLike } from 'interfaces';
-import { TradeId, OrderId } from '../../interfaces';
 import { Context } from '../../context';
 import { Instant } from '../instant';
 import { MarketLatency } from './market';
@@ -16,7 +15,7 @@ export declare namespace Latency {
 }
 export interface MarketAccountSpec<H extends HLike<H>> extends MarketSpec<H>, AccountSpec {
 }
-export interface MarketAccountEvents<H extends HLike<H>> extends MarketEvents<H, OrderId, TradeId>, AccountEvents<H, OrderId, TradeId> {
+export interface MarketAccountEvents<H extends HLike<H>> extends MarketEvents<H>, AccountEvents<H> {
 }
 export interface MarketAccountEventEmitterLike<H extends HLike<H>> extends NodeJS.EventEmitter {
     on<Event extends keyof MarketAccountEvents<H>>(event: Event, listener: (...args: MarketAccountEvents<H>[Event]) => void): this;

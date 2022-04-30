@@ -1,6 +1,5 @@
 import { Context } from '../context';
-import { LimitOrder, Positions, Balances } from 'interfaces';
-import { OpenOrder, Amendment } from '../interfaces';
+import { LimitOrder, Positions, Balances, OpenOrder, Amendment } from 'interfaces';
 import { HLike } from 'interfaces';
 import { MakeOrder } from '../use-cases.d/make-order';
 import { CancelOrder } from '../use-cases.d/cancel-order';

@@ -1,6 +1,5 @@
 import { Context } from '../../context';
-import { HLike } from 'interfaces';
-import { OpenOrder } from '../../interfaces';
+import { HLike, OpenOrder } from 'interfaces';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
 import { ValidateOrderLike } from '../validate-order/validate-order-like';
@@ -14,7 +13,6 @@ export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderL
     private context;
     private models;
     private broadcast;
-    private OrderId;
     private OpenOrder;
     constructor(tasks: MakeOpenOrder.TaskDeps<H>, context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     makeOpenOrder(order: OpenOrder<H>): OpenOrder<H>;

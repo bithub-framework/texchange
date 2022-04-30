@@ -1,14 +1,12 @@
-import { MarketApiLike, MarketSpec, HLike } from 'interfaces';
-import { TradeId, OrderId, MarketEventEmitterLike } from '../../interfaces';
+import { MarketApiLike, MarketSpec, HLike, MarketEventEmitterLike } from 'interfaces';
 import { Context } from '../../context';
 import { Subscription } from '../../use-cases.d/subscription';
-export declare class MarketLatency<H extends HLike<H>> implements MarketApiLike<H, OrderId, TradeId> {
+export declare class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
     private context;
     private useCases;
     spec: MarketSpec<H>;
     events: MarketEventEmitterLike<H>;
     private Orderbook;
-    private TradeId;
     private Trade;
     constructor(context: Context<H>, useCases: MarketLatency.UseCaseDeps<H>);
     quantity(price: H, dollarVolume: H): H;

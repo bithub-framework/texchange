@@ -1,5 +1,4 @@
-import { HLike } from 'interfaces';
-import { OpenOrder } from '../../interfaces';
+import { HLike, OpenOrder } from 'interfaces';
 export interface CancelOpenOrderLike<H extends HLike<H>> {
     cancelOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }

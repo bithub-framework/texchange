@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Joystick = void 0;
-const interfaces_1 = require("../interfaces");
 const update_orderbook_1 = require("../use-cases.d/update-orderbook");
 const update_trades_1 = require("../use-cases.d/update-trades");
 class Joystick {
     constructor(context, useCases) {
         this.context = context;
         this.useCases = useCases;
-        this.TradeId = new interfaces_1.TradeIdStatic();
         this.DatabaseOrderbook = new update_orderbook_1.DatabaseOrderbookStatic(this.context.H);
-        this.DatabaseTrade = new update_trades_1.DatabaseTradeStatic(this.context.H, this.TradeId);
+        this.DatabaseTrade = new update_trades_1.DatabaseTradeStatic(this.context.H);
         this.config = this.context.config;
     }
     updateTrades($trades) {

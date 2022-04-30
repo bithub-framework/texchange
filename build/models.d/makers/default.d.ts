@@ -1,5 +1,5 @@
-import { HLike } from 'interfaces';
-import { OpenOrder, Frozen } from '../../interfaces';
+import { HLike, OpenOrder } from 'interfaces';
+import { Frozen } from './frozen';
 import { Context } from '../../context';
 import { Makers } from './makers';
 export declare class DefaultMakers<H extends HLike<H>> extends Makers<H> {

@@ -1,7 +1,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { LimitOrder, HLike } from 'interfaces';
-import { OpenOrder } from '../interfaces';
+import { LimitOrder, HLike, OpenOrder } from 'interfaces';
 import { Progress } from '../models.d/progress';
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 export declare class MakeOrder<H extends HLike<H>> {

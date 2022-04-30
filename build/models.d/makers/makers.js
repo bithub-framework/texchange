@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const interfaces_1 = require("interfaces");
-const interfaces_2 = require("../../interfaces");
+const open_maker_1 = require("../../interfaces/open-maker");
+const frozen_1 = require("./frozen");
 const assert = require("assert");
 class Makers {
     constructor(context) {
@@ -12,10 +13,9 @@ class Makers {
             [interfaces_1.Side.ASK]: new this.context.H(0),
             [interfaces_1.Side.BID]: new this.context.H(0),
         };
-        this.OrderId = new interfaces_2.OrderIdStatic();
-        this.Frozen = new interfaces_2.FrozenStatic(this.context.H);
-        this.OpenOrder = new interfaces_2.OpenOrderStatic(this.context.H, this.OrderId);
-        this.OpenMaker = new interfaces_2.OpenMakerStatic(this.context.H, this.OrderId, this.Frozen);
+        this.Frozen = new frozen_1.FrozenStatic(this.context.H);
+        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H);
+        this.OpenMaker = new open_maker_1.OpenMakerStatic(this.context.H, this.Frozen);
         this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
         this.totalFrozen = this.Frozen.ZERO;
     }

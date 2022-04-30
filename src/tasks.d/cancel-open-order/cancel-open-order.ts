@@ -1,9 +1,10 @@
-import { inject } from 'injektor';
 import { Context } from '../../context';
 import { CancelOpenOrderLike } from './cancel-open-order-like';
 import { Broadcast } from '../../broadcast';
-import { HLike } from 'interfaces';
-import { OpenOrder } from '../../interfaces';
+import {
+	HLike,
+	OpenOrder,
+} from 'interfaces';
 
 import { Makers } from '../../models.d/makers/makers';
 

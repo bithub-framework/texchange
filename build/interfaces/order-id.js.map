@@ -1,1 +1,0 @@
-{"version":3,"file":"order-id.js","sourceRoot":"","sources":["../../src/interfaces/order-id.ts"],"names":[],"mappings":";;;AAQA,IAAiB,OAAO,CAEvB;AAFD,WAAiB,OAAO;AAExB,CAAC,EAFgB,OAAO,GAAP,eAAO,KAAP,eAAO,QAEvB;AAED,MAAa,aAAa;IAClB,OAAO,CAAC,EAAW;QACzB,OAAO,EAAE,CAAC;IACX,CAAC;IAEM,OAAO,CAAC,QAA0B;QACxC,OAAO,QAAQ,CAAC;IACjB,CAAC;CACD;AARD,sCAQC"}

@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import { HLike } from 'interfaces';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';

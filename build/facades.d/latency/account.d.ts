@@ -1,9 +1,8 @@
-import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike } from 'interfaces';
-import { TradeId, OrderId, OpenOrder, Amendment, AccountEventEmitterLike } from '../../interfaces';
+import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, OpenOrder, Amendment, AccountEventEmitterLike } from 'interfaces';
 import { Context } from '../../context';
 import { Instant } from '../instant';
 import { Subscription } from '../../use-cases.d/subscription';
-export declare class AccountLatency<H extends HLike<H>> implements AccountApiLike<H, OrderId, TradeId> {
+export declare class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
     private context;
     private useCases;
     private instant;
@@ -12,7 +11,6 @@ export declare class AccountLatency<H extends HLike<H>> implements AccountApiLik
     private Positions;
     private Balances;
     private LimitOrder;
-    private OrderId;
     private Amendment;
     private OpenOrder;
     constructor(context: Context<H>, useCases: AccountLatency.UseCaseDeps<H>, instant: Instant<H>);

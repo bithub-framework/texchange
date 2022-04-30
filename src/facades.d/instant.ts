@@ -3,11 +3,9 @@ import {
     LimitOrder,
     Positions,
     Balances,
-} from 'interfaces';
-import {
     OpenOrder,
     Amendment,
-} from '../interfaces';
+} from 'interfaces';
 import { HLike } from 'interfaces';
 
 import { MakeOrder } from '../use-cases.d/make-order';

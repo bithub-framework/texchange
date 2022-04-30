@@ -1,5 +1,4 @@
-import { HLike } from 'interfaces';
-import { Trade } from '../../interfaces';
+import { HLike, Trade } from 'interfaces';
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
@@ -12,7 +11,6 @@ export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTa
     private context;
     private models;
     private broadcast;
-    private TradeId;
     private Trade;
     constructor(tasks: TradeTakesOpenMakers.TaskDeps<H>, context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
     tradeTakesOpenMakers(trade: Trade<H>): void;

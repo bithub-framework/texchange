@@ -8,17 +8,14 @@ import {
 	PositionsStatic,
 	BalancesStatic,
 	LimitOrderStatic,
-} from 'interfaces';
-import {
 	TradeId,
 	OrderId,
-	OrderIdStatic,
 	OpenOrder,
 	OpenOrderStatic,
 	Amendment,
 	AmendmentStatic,
 	AccountEventEmitterLike,
-} from '../../interfaces';
+} from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../../context';
 import { Instant } from '../instant';
@@ -26,18 +23,17 @@ import { Instant } from '../instant';
 import { Subscription } from '../../use-cases.d/subscription';
 
 
-export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H, OrderId, TradeId> {
+export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 	public spec: AccountSpec;
 	public events = <AccountEventEmitterLike<H>>new EventEmitter();
 
 	private Positions = new PositionsStatic(this.context.H);
 	private Balances = new BalancesStatic(this.context.H);
 	private LimitOrder = new LimitOrderStatic(this.context.H);
-	private OrderId = new OrderIdStatic();
-	private Amendment = new AmendmentStatic(this.context.H, this.OrderId);
-	private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
+	private Amendment = new AmendmentStatic(this.context.H);
+	private OpenOrder = new OpenOrderStatic(this.context.H);
 
-	constructor(
+	public constructor(
 		private context: Context<H>,
 		private useCases: AccountLatency.UseCaseDeps<H>,
 		private instant: Instant<H>,

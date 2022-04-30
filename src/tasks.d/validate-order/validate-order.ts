@@ -1,9 +1,8 @@
-import { inject } from 'injektor';
 import {
     Operation, Length,
     HLike,
+    OpenOrder,
 } from 'interfaces';
-import { OpenOrder } from '../../interfaces';
 
 import assert = require('assert');
 import { Context } from '../../context';

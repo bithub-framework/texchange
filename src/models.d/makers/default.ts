@@ -1,11 +1,9 @@
 import {
 	Operation,
 	HLike,
-} from 'interfaces';
-import {
 	OpenOrder,
-	Frozen,
-} from '../../interfaces';
+} from 'interfaces';
+import { Frozen } from './frozen';
 import { Context } from '../../context';
 import { Makers } from './makers';
 import { inject } from 'injektor';

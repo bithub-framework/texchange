@@ -1,7 +1,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike, HStatic } from 'interfaces';
-import { Trade, TradeIdStatic } from '../interfaces';
+import { HLike, HStatic, Trade } from 'interfaces';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
@@ -30,8 +29,7 @@ export interface DatabaseTrade<H extends HLike<H>> extends Trade<H> {
 }
 export declare class DatabaseTradeStatic<H extends HLike<H>> {
     private H;
-    private TradeId;
     private Trade;
-    constructor(H: HStatic<H>, TradeId: TradeIdStatic);
+    constructor(H: HStatic<H>);
     copy(trade: DatabaseTrade<H>): DatabaseTrade<H>;
 }

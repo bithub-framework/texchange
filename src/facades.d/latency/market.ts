@@ -4,28 +4,24 @@ import {
 	HLike,
 	OrderbookStatic,
 	TradeStatic,
-} from 'interfaces';
-import {
 	TradeId,
-	TradeIdStatic,
 	OrderId,
 	MarketEventEmitterLike,
-} from '../../interfaces';
+} from 'interfaces';
 import { EventEmitter } from 'events';
 import { Context } from '../../context';
 
 import { Subscription } from '../../use-cases.d/subscription';
 
 
-export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H, OrderId, TradeId> {
+export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 	public spec: MarketSpec<H>;
 	public events = <MarketEventEmitterLike<H>>new EventEmitter();
 
 	private Orderbook = new OrderbookStatic(this.context.H);
-	private TradeId = new TradeIdStatic();
-	private Trade = new TradeStatic(this.context.H, this.TradeId);
+	private Trade = new TradeStatic(this.context.H);
 
-	constructor(
+	public constructor(
 		private context: Context<H>,
 		private useCases: MarketLatency.UseCaseDeps<H>,
 	) {

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountLatency = void 0;
 const interfaces_1 = require("interfaces");
-const interfaces_2 = require("../../interfaces");
 const events_1 = require("events");
 class AccountLatency {
     constructor(context, useCases, instant) {
@@ -13,9 +12,8 @@ class AccountLatency {
         this.Positions = new interfaces_1.PositionsStatic(this.context.H);
         this.Balances = new interfaces_1.BalancesStatic(this.context.H);
         this.LimitOrder = new interfaces_1.LimitOrderStatic(this.context.H);
-        this.OrderId = new interfaces_2.OrderIdStatic();
-        this.Amendment = new interfaces_2.AmendmentStatic(this.context.H, this.OrderId);
-        this.OpenOrder = new interfaces_2.OpenOrderStatic(this.context.H, this.OrderId);
+        this.Amendment = new interfaces_1.AmendmentStatic(this.context.H);
+        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H);
         this.spec = this.context.config.account;
         this.useCases.subscription.on('positions', async (positions) => {
             try {

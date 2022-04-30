@@ -2,7 +2,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, Trade, Orderbook, Positions, Balances } from 'interfaces';
-import { TradeId } from '../interfaces';
 import { EventEmitter } from 'events';
 export declare class Subscription<H extends HLike<H>> extends EventEmitter {
     protected context: Context<H>;
@@ -17,7 +16,7 @@ export declare namespace Subscription {
     interface TaskDeps<H extends HLike<H>> {
     }
     interface Events<H extends HLike<H>> {
-        trades: [readonly Trade<H, TradeId>[]];
+        trades: [readonly Trade<H>[]];
         orderbook: [Orderbook<H>];
         positions: [Positions<H>];
         balances: [Balances<H>];
@@ -25,7 +24,7 @@ export declare namespace Subscription {
 }
 export declare namespace Subscription {
     interface Events<H extends HLike<H>> {
-        trades: [readonly Trade<H, TradeId>[]];
+        trades: [readonly Trade<H>[]];
         orderbook: [Orderbook<H>];
         positions: [Positions<H>];
         balances: [Balances<H>];

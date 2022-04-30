@@ -14,7 +14,6 @@ import { Broadcast } from './broadcast';
 import { Tasks } from './tasks/tasks';
 
 import { inject } from 'injektor';
-import { TYPES } from './types';
 
 
 

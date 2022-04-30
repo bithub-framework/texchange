@@ -4,8 +4,8 @@ import {
 	Positions,
 	Balances,
 	HLike,
+	Trade,
 } from 'interfaces';
-import { Trade } from './interfaces';
 
 
 export class Broadcast<H extends HLike<H>> extends EventEmitter { }

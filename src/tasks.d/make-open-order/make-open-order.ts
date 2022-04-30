@@ -1,11 +1,9 @@
-import { inject } from 'injektor';
 import { Context } from '../../context';
-import { HLike } from 'interfaces';
 import {
+    HLike,
     OpenOrder,
     OpenOrderStatic,
-    OrderIdStatic,
-} from '../../interfaces';
+} from 'interfaces';
 
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
@@ -21,8 +19,7 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
 
-    private OrderId = new OrderIdStatic();
-    private OpenOrder = new OpenOrderStatic(this.context.H, this.OrderId);
+    private OpenOrder = new OpenOrderStatic(this.context.H);
 
     public constructor(
         private tasks: MakeOpenOrder.TaskDeps<H>,

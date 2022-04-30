@@ -1,4 +1,3 @@
-import { inject } from 'injektor';
 import { Context } from '../../context';
 import {
 	Balances,

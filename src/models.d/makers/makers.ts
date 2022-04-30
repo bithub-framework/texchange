@@ -1,17 +1,12 @@
 import {
 	Side, Length,
 	HLike, HStatic,
-} from 'interfaces';
-import {
-	OrderId,
-	OrderIdStatic,
-	OpenMaker,
-	OpenMakerStatic,
 	OpenOrder,
-	Frozen,
-	FrozenStatic,
 	OpenOrderStatic,
-} from '../../interfaces';
+	OrderId,
+} from 'interfaces';
+import { OpenMaker, OpenMakerStatic } from '../../interfaces/open-maker';
+import { Frozen, FrozenStatic } from './frozen';
 import { Context } from '../../context';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';
@@ -28,15 +23,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		[Side.BID]: new this.context.H(0),
 	};
 
-	protected OrderId = new OrderIdStatic();
 	protected Frozen = new FrozenStatic<H>(this.context.H);
 	protected OpenOrder = new OpenOrderStatic<H>(
 		this.context.H,
-		this.OrderId,
-	)
+	);
 	protected OpenMaker = new OpenMakerStatic<H>(
 		this.context.H,
-		this.OrderId,
 		this.Frozen,
 	);
 	protected TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);

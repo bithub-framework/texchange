@@ -1,7 +1,8 @@
-import { HLike, H, HStatic } from 'interfaces';
-import { OpenOrder, OpenOrderStatic } from './open-order';
-import { OrderIdStatic } from './order-id';
-import { Frozen, FrozenStatic } from './frozen';
+import {
+	HLike, H, HStatic,
+	OpenOrder, OpenOrderStatic,
+} from 'interfaces';
+import { Frozen, FrozenStatic } from '../models.d/makers/frozen';
 
 
 export interface OpenMaker<H extends HLike<H>>
@@ -19,13 +20,10 @@ export namespace OpenMaker {
 }
 
 export class OpenMakerStatic<H extends HLike<H>> {
-	private readonly OpenOrder = new OpenOrderStatic(
-		this.H, this.OrderId,
-	);
+	private readonly OpenOrder = new OpenOrderStatic(this.H);
 
 	public constructor(
 		private H: HStatic<H>,
-		private OrderId: OrderIdStatic,
 		private Frozen: FrozenStatic<H>,
 	) { }
 
