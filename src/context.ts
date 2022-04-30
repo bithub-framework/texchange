@@ -2,11 +2,11 @@ import {
 	HLike,
 	MarketCalc,
 	TimelineLike,
-	HStatic,
 } from 'interfaces';
 import { Config } from './context.d/config';
 import { inject } from 'injektor';
 import { TYPES } from './types';
+import { DataStatic } from './interfaces/data';
 
 
 export class Context<H extends HLike<H>> {
@@ -15,6 +15,6 @@ export class Context<H extends HLike<H>> {
 		public calc: MarketCalc<H>,
 		public config: Config<H>,
 		public timeline: TimelineLike,
-		public H: HStatic<H>,
+		public Data: DataStatic<H>,
 	) { }
 }

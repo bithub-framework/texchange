@@ -24,16 +24,16 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
             return {
                 balance: {
                     [order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),
-                    [-order.length]: new this.context.H(0),
+                    [-order.length]: new this.context.Data.H(0),
                 },
-                position: this.Frozen.ZERO.position,
+                position: this.context.Data.Frozen.ZERO.position,
             };
         else
             return {
-                balance: this.Frozen.ZERO.balance,
+                balance: this.context.Data.Frozen.ZERO.balance,
                 position: {
                     [order.length]: order.unfilled,
-                    [-order.length]: new this.context.H(0),
+                    [-order.length]: new this.context.Data.H(0),
                 },
             };
     }

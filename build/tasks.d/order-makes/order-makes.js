@@ -10,7 +10,7 @@ class OrderMakes {
     }
     orderMakes(order) {
         const makers = this.models.book.getBook()[order.side];
-        let behind = new this.context.H(0);
+        let behind = new this.context.Data.H(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);

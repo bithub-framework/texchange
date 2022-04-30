@@ -6,6 +6,7 @@ import { TYPES } from '../types';
 import { Context } from '../context';
 import { Config } from '../context.d/config';
 import { TimelineLike } from 'interfaces';
+import { DataStatic } from '../interfaces/data';
 
 // Models
 import { Models } from '../models';
@@ -43,7 +44,7 @@ export function createBaseContainer<
 			c.i(TYPES.MarketCalc),
 			config,
 			timeline,
-			H,
+			new DataStatic(H),
 		),
 	);
 

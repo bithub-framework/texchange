@@ -1,9 +1,10 @@
-import { HLike, MarketCalc, TimelineLike, HStatic } from 'interfaces';
+import { HLike, MarketCalc, TimelineLike } from 'interfaces';
 import { Config } from './context.d/config';
+import { DataStatic } from './interfaces/data';
 export declare class Context<H extends HLike<H>> {
     calc: MarketCalc<H>;
     config: Config<H>;
     timeline: TimelineLike;
-    H: HStatic<H>;
-    constructor(calc: MarketCalc<H>, config: Config<H>, timeline: TimelineLike, H: HStatic<H>);
+    Data: DataStatic<H>;
+    constructor(calc: MarketCalc<H>, config: Config<H>, timeline: TimelineLike, Data: DataStatic<H>);
 }

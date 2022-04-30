@@ -1,15 +1,16 @@
 import { Context } from '../context';
 import { Config } from '../context.d/config';
 import { HLike } from 'interfaces';
-import { UpdateOrderbook, DatabaseOrderbook } from '../use-cases.d/update-orderbook';
-import { UpdateTrades, DatabaseTrade } from '../use-cases.d/update-trades';
+import { DatabaseOrderbook } from '../interfaces/database-orderbook';
+import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
+import { DatabaseTrade } from '../interfaces/database-trade';
+import { UpdateTrades } from '../use-cases.d/update-trades';
 export declare class Joystick<H extends HLike<H>> {
     private context;
     private useCases;
     config: Config<H>;
-    private DatabaseOrderbook;
-    private DatabaseTrade;
     constructor(context: Context<H>, useCases: Joystick.UseCaseDeps<H>);
+    Data: import("../interfaces/data").DataStatic<H>;
     updateTrades($trades: DatabaseTrade<H>[]): void;
     updateOrderbook($orderbook: DatabaseOrderbook<H>): void;
     quantity(price: H, dollarVolume: H): H;

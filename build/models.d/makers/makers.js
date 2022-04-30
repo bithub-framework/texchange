@@ -2,22 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const interfaces_1 = require("interfaces");
-const open_maker_1 = require("../../interfaces/open-maker");
-const frozen_1 = require("./frozen");
 const assert = require("assert");
 class Makers {
     constructor(context) {
         this.context = context;
         this.$orders = new Map();
         this.$totalUnfilled = {
-            [interfaces_1.Side.ASK]: new this.context.H(0),
-            [interfaces_1.Side.BID]: new this.context.H(0),
+            [interfaces_1.Side.ASK]: new this.context.Data.H(0),
+            [interfaces_1.Side.BID]: new this.context.Data.H(0),
         };
-        this.Frozen = new frozen_1.FrozenStatic(this.context.H);
-        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H);
-        this.OpenMaker = new open_maker_1.OpenMakerStatic(this.context.H, this.Frozen);
-        this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.H);
-        this.totalFrozen = this.Frozen.ZERO;
+        this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.Data.H);
+        this.totalFrozen = this.context.Data.Frozen.ZERO;
     }
     getTotalUnfilled() {
         return this.TotalUnfilled.copy(this.$totalUnfilled);
@@ -30,7 +25,7 @@ class Makers {
     }
     getOrder(oid) {
         const $order = this.$getOrder(oid);
-        return this.OpenMaker.copy($order);
+        return this.context.Data.OpenMaker.copy($order);
     }
     $getOrder(oid) {
         const order = this.$orders.get(oid);
@@ -38,20 +33,20 @@ class Makers {
         return order;
     }
     capture() {
-        return [...this.$orders.keys()].map(oid => this.OpenMaker.capture(this.$orders.get(oid)));
+        return [...this.$orders.keys()].map(oid => this.context.Data.OpenMaker.capture(this.$orders.get(oid)));
     }
     restore(snapshot) {
         for (const orderSnapshot of snapshot) {
-            const order = this.OpenMaker.restore(orderSnapshot);
+            const order = this.context.Data.OpenMaker.restore(orderSnapshot);
             this.$orders.set(order.id, order);
         }
         for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
             this.$totalUnfilled[side] = [...this.$orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), new this.context.H(0));
+                .reduce((total, order) => total.plus(order.unfilled), new this.context.Data.H(0));
         }
         this.totalFrozen = [...this.$orders.values()]
-            .reduce((total, order) => this.Frozen.plus(total, order.frozen), this.Frozen.ZERO);
+            .reduce((total, order) => this.context.Data.Frozen.plus(total, order.frozen), this.context.Data.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
@@ -69,12 +64,12 @@ class Makers {
         assert(order.unfilled.gt(0));
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         const $order = {
-            ...this.OpenOrder.copy(order),
+            ...this.context.Data.OpenOrder.copy(order),
             behind,
             frozen: toFreeze,
         };
         this.$orders.set(order.id, $order);
-        this.totalFrozen = this.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalFrozen = this.context.Data.Frozen.plus(this.totalFrozen, toFreeze);
         this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
             .plus(order.unfilled);
     }
@@ -84,12 +79,12 @@ class Makers {
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...this.OpenOrder.copy($order),
+            ...this.context.Data.OpenOrder.copy($order),
             filled: $order.filled.plus(volume),
             unfilled: $order.unfilled.minus(volume),
         };
         if (newOrder.unfilled.gt(0))
-            this.appendOrder(newOrder, new this.context.H(0));
+            this.appendOrder(newOrder, new this.context.Data.H(0));
     }
     takeOrderQueue(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -97,7 +92,7 @@ class Makers {
             assert(volume.lte($order.behind));
         $order.behind = typeof volume !== 'undefined'
             ? $order.behind.minus(volume)
-            : new this.context.H(0);
+            : new this.context.Data.H(0);
         this.$orders.set(oid, $order);
     }
     removeOrder(oid) {
@@ -105,7 +100,7 @@ class Makers {
         this.$orders.delete(oid);
         this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
             .minus($order.unfilled);
-        this.totalFrozen = this.Frozen.minus(this.totalFrozen, $order.frozen);
+        this.totalFrozen = this.context.Data.Frozen.minus(this.totalFrozen, $order.frozen);
     }
     forcedlyRemoveOrder(oid) {
         try {

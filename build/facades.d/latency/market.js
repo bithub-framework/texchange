@@ -1,21 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarketLatency = void 0;
-const interfaces_1 = require("interfaces");
 const events_1 = require("events");
 class MarketLatency {
     constructor(context, useCases) {
         this.context = context;
         this.useCases = useCases;
         this.events = new events_1.EventEmitter();
-        this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
-        this.Trade = new interfaces_1.TradeStatic(this.context.H);
         this.spec = this.context.config.market;
         this.useCases.subscription.on('orderbook', async (orderbook) => {
             try {
                 await this.context.timeline.sleep(this.context.config.market.PROCESSING);
                 await this.context.timeline.sleep(this.context.config.market.PING);
-                this.events.emit('orderbook', this.Orderbook.copy(orderbook));
+                this.events.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
             }
             catch (err) {
                 this.events.emit('error', err);
@@ -25,7 +22,7 @@ class MarketLatency {
             try {
                 await this.context.timeline.sleep(this.context.config.market.PROCESSING);
                 await this.context.timeline.sleep(this.context.config.market.PING);
-                this.events.emit('trades', trades.map(trade => this.Trade.copy(trade)));
+                this.events.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
             }
             catch (err) {
                 this.events.emit('error', err);

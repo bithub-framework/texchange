@@ -35,7 +35,7 @@ export class ValidateOrder<H extends HLike<H>>
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder(
             order,
-            new this.context.H(0),
+            new this.context.Data.H(0),
         );
         try {
             const enoughPosition =

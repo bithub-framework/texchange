@@ -2,7 +2,6 @@ import {
     Length,
     Position,
     HLike, H, HStatic,
-    PositionStatic,
 } from 'interfaces';
 import { Context } from '../context';
 import assert = require('assert');
@@ -11,8 +10,7 @@ import { StatefulLike } from '../stateful-like';
 
 export class Assets<H extends HLike<H>>
     implements StatefulLike<Assets.Snapshot> {
-    private Position = new PositionStatic(this.context.H);
-    private Cost = new Assets.CostStatic(this.context.H);
+    private Cost = new Assets.CostStatic(this.context.Data.H);
 
     private $position: Position<H>;
     private balance: H;
@@ -23,12 +21,12 @@ export class Assets<H extends HLike<H>>
     ) {
         this.balance = this.context.config.account.initialBalance;
         this.$position = {
-            [Length.LONG]: new this.context.H(0),
-            [Length.SHORT]: new this.context.H(0),
+            [Length.LONG]: new this.context.Data.H(0),
+            [Length.SHORT]: new this.context.Data.H(0),
         };
         this.$cost = {
-            [Length.LONG]: new this.context.H(0),
-            [Length.SHORT]: new this.context.H(0),
+            [Length.LONG]: new this.context.Data.H(0),
+            [Length.SHORT]: new this.context.Data.H(0),
         };
     }
 
@@ -37,7 +35,7 @@ export class Assets<H extends HLike<H>>
     }
 
     public getPosition(): Position<H> {
-        return this.Position.copy(this.$position);
+        return this.context.Data.Position.copy(this.$position);
     }
 
     public getCost(): Assets.Cost<H> {
@@ -46,15 +44,15 @@ export class Assets<H extends HLike<H>>
 
     public capture(): Assets.Snapshot {
         return {
-            position: this.Position.capture(this.$position),
+            position: this.context.Data.Position.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
-            balance: this.context.H.capture(this.balance),
+            balance: this.context.Data.H.capture(this.balance),
         };
     }
 
     public restore(snapshot: Assets.Snapshot): void {
-        this.balance = this.context.H.restore(snapshot.balance);
-        this.$position = this.Position.restore(snapshot.position);
+        this.balance = this.context.Data.H.restore(snapshot.balance);
+        this.$position = this.context.Data.Position.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
 

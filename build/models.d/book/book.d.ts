@@ -4,7 +4,6 @@ import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';
 export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
     private context;
-    private Orderbook;
     private Decrements;
     private time;
     private basebook;

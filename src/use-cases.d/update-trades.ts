@@ -1,10 +1,8 @@
 import { Context } from '../context';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
-import {
-	HLike, HStatic,
-	Trade, TradeStatic,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { DatabaseTrade } from '../interfaces/database-trade';
 
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
@@ -45,29 +43,5 @@ export namespace UpdateTrades {
 	export interface TaskDeps<H extends HLike<H>> {
 		tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
 		settle: SettleLike;
-	}
-}
-
-
-export interface DatabaseTrade<H extends HLike<H>>
-	extends Trade<H> {
-
-	id: string;
-}
-
-export class DatabaseTradeStatic<H extends HLike<H>> {
-	private Trade = new TradeStatic(this.H);
-
-	public constructor(
-		private H: HStatic<H>,
-	) { }
-
-	public copy(
-		trade: DatabaseTrade<H>,
-	): DatabaseTrade<H> {
-		return {
-			...this.Trade.copy(trade),
-			id: trade.id,
-		}
 	}
 }

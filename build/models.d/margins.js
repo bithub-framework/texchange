@@ -5,10 +5,10 @@ const interfaces_1 = require("interfaces");
 class Margins {
     constructor(context) {
         this.context = context;
-        this.Margin = new Margins.MarginStatic(this.context.H);
+        this.Margin = new Margins.MarginStatic(this.context.Data.H);
         this.$margin = {
-            [interfaces_1.Length.LONG]: new this.context.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.H(0),
+            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
         };
     }
     getMargin() {

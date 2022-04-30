@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Context = void 0;
 const injektor_1 = require("injektor");
 let Context = class Context {
-    constructor(calc, config, timeline, H) {
+    constructor(calc, config, timeline, Data) {
         this.calc = calc;
         this.config = config;
         this.timeline = timeline;
-        this.H = H;
+        this.Data = Data;
     }
 };
 Context = __decorate([

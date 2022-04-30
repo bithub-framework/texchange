@@ -4,23 +4,14 @@ import {
 	HLike,
 } from 'interfaces';
 
-import {
-	UpdateOrderbook,
-	DatabaseOrderbook,
-	DatabaseOrderbookStatic,
-} from '../use-cases.d/update-orderbook';
-import {
-	UpdateTrades,
-	DatabaseTrade,
-	DatabaseTradeStatic,
-} from '../use-cases.d/update-trades';
+import { DatabaseOrderbook } from '../interfaces/database-orderbook';
+import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
+import { DatabaseTrade } from '../interfaces/database-trade';
+import { UpdateTrades } from '../use-cases.d/update-trades';
 
 
 export class Joystick<H extends HLike<H>> {
 	public config: Config<H>;
-
-	private DatabaseOrderbook = new DatabaseOrderbookStatic(this.context.H);
-	private DatabaseTrade = new DatabaseTradeStatic(this.context.H);
 
 	public constructor(
 		private context: Context<H>,
@@ -29,17 +20,19 @@ export class Joystick<H extends HLike<H>> {
 		this.config = this.context.config;
 	}
 
+	public Data = this.context.Data;
+
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCases.updateTrades.updateTrades(
 			$trades.map(
-				trade => this.DatabaseTrade.copy(trade),
+				trade => this.context.Data.DatabaseTrade.copy(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCases.updateOrderbook.updateOrderbook(
-			this.DatabaseOrderbook.copy($orderbook),
+			this.context.Data.DatabaseOrderbook.copy($orderbook),
 		);
 	}
 

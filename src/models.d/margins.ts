@@ -8,7 +8,7 @@ import { StatefulLike } from '../stateful-like';
 
 export class Margins<H extends HLike<H>>
 	implements StatefulLike<Margins.Snapshot> {
-	private Margin = new Margins.MarginStatic<H>(this.context.H);
+	private Margin = new Margins.MarginStatic<H>(this.context.Data.H);
 
 	private $margin: Margins.Margin<H>;
 
@@ -16,8 +16,8 @@ export class Margins<H extends HLike<H>>
 		private context: Context<H>,
 	) {
 		this.$margin = {
-			[Length.LONG]: new this.context.H(0),
-			[Length.SHORT]: new this.context.H(0),
+			[Length.LONG]: new this.context.Data.H(0),
+			[Length.SHORT]: new this.context.Data.H(0),
 		};
 	}
 

@@ -1,7 +1,5 @@
 import { Context } from '../context';
-import {
-    HLike,
-} from 'interfaces';
+import { HLike } from 'interfaces';
 import { StatefulLike } from '../stateful-like';
 
 

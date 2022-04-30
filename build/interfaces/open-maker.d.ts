@@ -1,5 +1,5 @@
 import { HLike, H, HStatic, OpenOrder } from 'interfaces';
-import { Frozen, FrozenStatic } from '../models.d/makers/frozen';
+import { Frozen, FrozenStatic } from './frozen';
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H> {
     behind: H;
     frozen: Frozen<H>;

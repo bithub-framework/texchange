@@ -2,10 +2,6 @@ import {
 	MarketApiLike,
 	MarketSpec,
 	HLike,
-	OrderbookStatic,
-	TradeStatic,
-	TradeId,
-	OrderId,
 	MarketEventEmitterLike,
 } from 'interfaces';
 import { EventEmitter } from 'events';
@@ -18,9 +14,6 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 	public spec: MarketSpec<H>;
 	public events = <MarketEventEmitterLike<H>>new EventEmitter();
 
-	private Orderbook = new OrderbookStatic(this.context.H);
-	private Trade = new TradeStatic(this.context.H);
-
 	public constructor(
 		private context: Context<H>,
 		private useCases: MarketLatency.UseCaseDeps<H>,
@@ -31,7 +24,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 			try {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
-				this.events.emit('orderbook', this.Orderbook.copy(orderbook));
+				this.events.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
 			} catch (err) {
 				this.events.emit('error', <Error>err);
 			}
@@ -41,7 +34,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 			try {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
-				this.events.emit('trades', trades.map(trade => this.Trade.copy(trade)));
+				this.events.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
 			} catch (err) {
 				this.events.emit('error', <Error>err);
 			}

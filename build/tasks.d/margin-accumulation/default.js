@@ -14,7 +14,7 @@ class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation
     }
     newMarginAfterClosing({ length, volume, dollarVolume, }) {
         if (volume.eq(this.models.assets.getPosition()[length]))
-            return new this.context.H(0);
+            return new this.context.Data.H(0);
         const margin = this.models.margins.getMargin()[length];
         const decrement = margin
             .times(volume)

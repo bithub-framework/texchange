@@ -34,8 +34,8 @@ export class OrderTakes<H extends HLike<H>>
         const orderbook = book.getBook();
 
         const trades: Trade<H>[] = [];
-        let volume = new this.context.H(0);
-        let dollarVolume = new this.context.H(0);
+        let volume = new this.context.Data.H(0);
+        let dollarVolume = new this.context.Data.H(0);
         for (const maker of orderbook[-$taker.side])
             if (
                 (
@@ -43,7 +43,7 @@ export class OrderTakes<H extends HLike<H>>
                     $taker.side === Side.ASK && $taker.price.lte(maker.price)
                 ) && $taker.unfilled.gt(0)
             ) {
-                const quantity = this.context.H.min($taker.unfilled, maker.quantity);
+                const quantity = this.context.Data.H.min($taker.unfilled, maker.quantity);
                 book.decQuantity(maker.side, maker.price, quantity);
                 $taker.filled = $taker.filled.plus(quantity);
                 $taker.unfilled = $taker.unfilled.minus(quantity);

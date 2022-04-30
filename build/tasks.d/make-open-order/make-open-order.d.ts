@@ -13,7 +13,6 @@ export declare class MakeOpenOrder<H extends HLike<H>> implements MakeOpenOrderL
     private context;
     private models;
     private broadcast;
-    private OpenOrder;
     constructor(tasks: MakeOpenOrder.TaskDeps<H>, context: Context<H>, models: MakeOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     makeOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }

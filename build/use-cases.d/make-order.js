@@ -12,7 +12,7 @@ class MakeOrder {
         return this.tasks.makeOpenOrder.makeOpenOrder({
             ...order,
             id: ++this.models.progress.userOrderCount,
-            filled: new this.context.H(0),
+            filled: new this.context.Data.H(0),
             unfilled: order.quantity,
         });
     }

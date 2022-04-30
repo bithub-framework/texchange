@@ -1,6 +1,7 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike, HStatic, Trade } from 'interfaces';
+import { HLike } from 'interfaces';
+import { DatabaseTrade } from '../interfaces/database-trade';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
@@ -23,13 +24,4 @@ export declare namespace UpdateTrades {
         tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
         settle: SettleLike;
     }
-}
-export interface DatabaseTrade<H extends HLike<H>> extends Trade<H> {
-    id: string;
-}
-export declare class DatabaseTradeStatic<H extends HLike<H>> {
-    private H;
-    private Trade;
-    constructor(H: HStatic<H>);
-    copy(trade: DatabaseTrade<H>): DatabaseTrade<H>;
 }

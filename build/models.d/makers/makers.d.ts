@@ -1,15 +1,12 @@
-import { Side, HLike, HStatic, OpenOrder, OpenOrderStatic, OrderId } from 'interfaces';
-import { OpenMaker, OpenMakerStatic } from '../../interfaces/open-maker';
-import { Frozen, FrozenStatic } from './frozen';
+import { Side, HLike, HStatic, OpenOrder, OrderId } from 'interfaces';
+import { OpenMaker } from '../../interfaces/open-maker';
+import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
     protected context: Context<H>;
     private $orders;
     private $totalUnfilled;
-    protected Frozen: FrozenStatic<H>;
-    protected OpenOrder: OpenOrderStatic<H>;
-    protected OpenMaker: OpenMakerStatic<H>;
     protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
     private totalFrozen;
     constructor(context: Context<H>);

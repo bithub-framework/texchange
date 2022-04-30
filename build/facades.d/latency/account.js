@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountLatency = void 0;
-const interfaces_1 = require("interfaces");
 const events_1 = require("events");
 class AccountLatency {
     constructor(context, useCases, instant) {
@@ -9,17 +8,12 @@ class AccountLatency {
         this.useCases = useCases;
         this.instant = instant;
         this.events = new events_1.EventEmitter();
-        this.Positions = new interfaces_1.PositionsStatic(this.context.H);
-        this.Balances = new interfaces_1.BalancesStatic(this.context.H);
-        this.LimitOrder = new interfaces_1.LimitOrderStatic(this.context.H);
-        this.Amendment = new interfaces_1.AmendmentStatic(this.context.H);
-        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.context.H);
         this.spec = this.context.config.account;
         this.useCases.subscription.on('positions', async (positions) => {
             try {
                 await this.context.timeline.sleep(this.context.config.market.PROCESSING);
                 await this.context.timeline.sleep(this.context.config.market.PING);
-                this.events.emit('positions', this.Positions.copy(positions));
+                this.events.emit('positions', this.context.Data.Positions.copy(positions));
             }
             catch (err) {
                 this.events.emit('error', err);
@@ -29,7 +23,7 @@ class AccountLatency {
             try {
                 await this.context.timeline.sleep(this.context.config.market.PROCESSING);
                 await this.context.timeline.sleep(this.context.config.market.PING);
-                this.events.emit('balances', this.Balances.copy(balances));
+                this.events.emit('balances', this.context.Data.Balances.copy(balances));
             }
             catch (err) {
                 this.events.emit('error', err);
@@ -38,12 +32,12 @@ class AccountLatency {
     }
     async makeOrders($orders) {
         try {
-            const orders = $orders.map(order => this.LimitOrder.copy(order));
+            const orders = $orders.map(order => this.context.Data.LimitOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copy(order));
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -51,12 +45,12 @@ class AccountLatency {
     }
     async amendOrders($amendments) {
         try {
-            const amendments = $amendments.map(amendment => this.Amendment.copy(amendment));
+            const amendments = $amendments.map(amendment => this.context.Data.Amendment.copy(amendment));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
-                : this.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copy(order));
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -64,12 +58,12 @@ class AccountLatency {
     }
     async cancelOrders($orders) {
         try {
-            const orders = $orders.map(order => this.OpenOrder.copy(order));
+            const orders = $orders.map(order => this.context.Data.OpenOrder.copy(order));
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copy(order));
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -79,7 +73,7 @@ class AccountLatency {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
-            return this.Balances.copy(this.instant.getBalances());
+            return this.context.Data.Balances.copy(this.instant.getBalances());
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -89,7 +83,7 @@ class AccountLatency {
         try {
             await this.context.timeline.sleep(this.context.config.market.PING);
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
-            return this.Positions.copy(this.instant.getPositions());
+            return this.context.Data.Positions.copy(this.instant.getPositions());
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);
@@ -101,7 +95,7 @@ class AccountLatency {
             await this.context.timeline.sleep(this.context.config.market.PROCESSING);
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
-                : this.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copy(order));
         }
         finally {
             await this.context.timeline.sleep(this.context.config.market.PING);

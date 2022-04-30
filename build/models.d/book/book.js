@@ -7,8 +7,7 @@ const decrements_1 = require("./decrements");
 class Book {
     constructor(context) {
         this.context = context;
-        this.Orderbook = new interfaces_1.OrderbookStatic(this.context.H);
-        this.Decrements = new decrements_1.DecrementsStatic(this.context.H);
+        this.Decrements = new decrements_1.DecrementsStatic(this.context.Data.H);
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {
             [interfaces_1.Side.ASK]: [],
@@ -31,7 +30,7 @@ class Book {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
-            || new this.context.H(0);
+            || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements[side].set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
@@ -63,7 +62,7 @@ class Book {
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
             $final[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
-                price: new this.context.H(priceString),
+                price: new this.context.Data.H(priceString),
                 quantity,
                 side,
             }));
@@ -75,7 +74,7 @@ class Book {
     }
     capture() {
         return {
-            basebook: this.Orderbook.capture(this.basebook),
+            basebook: this.context.Data.Orderbook.capture(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -83,7 +82,7 @@ class Book {
         };
     }
     restore(snapshot) {
-        this.basebook = this.Orderbook.restore(snapshot.basebook);
+        this.basebook = this.context.Data.Orderbook.restore(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY

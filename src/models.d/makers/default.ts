@@ -3,7 +3,7 @@ import {
 	HLike,
 	OpenOrder,
 } from 'interfaces';
-import { Frozen } from './frozen';
+import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import { Makers } from './makers';
 import { inject } from 'injektor';
@@ -23,16 +23,16 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			return {
 				balance: {
 					[order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),
-					[-order.length]: new this.context.H(0),
+					[-order.length]: new this.context.Data.H(0),
 				},
-				position: this.Frozen.ZERO.position,
+				position: this.context.Data.Frozen.ZERO.position,
 			};
 		else
 			return {
-				balance: this.Frozen.ZERO.balance,
+				balance: this.context.Data.Frozen.ZERO.balance,
 				position: {
 					[order.length]: order.unfilled,
-					[-order.length]: new this.context.H(0),
+					[-order.length]: new this.context.Data.H(0),
 				},
 			};
 	}

@@ -2,7 +2,6 @@ import {
     Orderbook,
     Side,
     HLike,
-    OrderbookStatic,
 } from 'interfaces';
 import assert = require('assert');
 import { Context } from '../../context';
@@ -13,8 +12,7 @@ import { Decrements, DecrementsStatic } from './decrements';
 
 export class Book<H extends HLike<H>>
     implements StatefulLike<Book.Snapshot> {
-    private Orderbook = new OrderbookStatic<H>(this.context.H);
-    private Decrements = new DecrementsStatic<H>(this.context.H);
+    private Decrements = new DecrementsStatic<H>(this.context.Data.H);
 
     private time = Number.NEGATIVE_INFINITY;
     private basebook: Orderbook<H> = {
@@ -47,7 +45,7 @@ export class Book<H extends HLike<H>>
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.context.config.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
-            || new this.context.H(0);
+            || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements[side].set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
@@ -79,7 +77,7 @@ export class Book<H extends HLike<H>>
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
             $final[side] = [...total[side]]
                 .map(([priceString, quantity]) => ({
-                    price: new this.context.H(priceString),
+                    price: new this.context.Data.H(priceString),
                     quantity,
                     side,
                 }));
@@ -93,7 +91,7 @@ export class Book<H extends HLike<H>>
 
     public capture(): Book.Snapshot {
         return {
-            basebook: this.Orderbook.capture(this.basebook),
+            basebook: this.context.Data.Orderbook.capture(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -102,7 +100,7 @@ export class Book<H extends HLike<H>>
     }
 
     public restore(snapshot: Book.Snapshot): void {
-        this.basebook = this.Orderbook.restore(snapshot.basebook);
+        this.basebook = this.context.Data.Orderbook.restore(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY

@@ -42,9 +42,9 @@ export class DefaultGetAvailable<H extends HLike<H>>
 		const $final: { [length: number]: H; } = {};
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side: Side = length * Operation.OPEN;
-			const afterDeduction = this.context.H.max(
+			const afterDeduction = this.context.Data.H.max(
 				totalUnfilled[side].minus(position[-length]),
-				new this.context.H(0),
+				new this.context.Data.H(0),
 			);
 			$final[length] = totalFrozen.balance[length]
 				.times(afterDeduction)

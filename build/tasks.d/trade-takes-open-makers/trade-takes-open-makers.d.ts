@@ -11,7 +11,6 @@ export declare class TradeTakesOpenMakers<H extends HLike<H>> implements TradeTa
     private context;
     private models;
     private broadcast;
-    private Trade;
     constructor(tasks: TradeTakesOpenMakers.TaskDeps<H>, context: Context<H>, models: TradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
     tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;

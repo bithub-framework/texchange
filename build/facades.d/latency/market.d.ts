@@ -6,8 +6,6 @@ export declare class MarketLatency<H extends HLike<H>> implements MarketApiLike<
     private useCases;
     spec: MarketSpec<H>;
     events: MarketEventEmitterLike<H>;
-    private Orderbook;
-    private Trade;
     constructor(context: Context<H>, useCases: MarketLatency.UseCaseDeps<H>);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;

@@ -6,37 +6,36 @@ const assert = require("assert");
 class Assets {
     constructor(context) {
         this.context = context;
-        this.Position = new interfaces_1.PositionStatic(this.context.H);
-        this.Cost = new Assets.CostStatic(this.context.H);
+        this.Cost = new Assets.CostStatic(this.context.Data.H);
         this.balance = this.context.config.account.initialBalance;
         this.$position = {
-            [interfaces_1.Length.LONG]: new this.context.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.H(0),
+            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
         };
         this.$cost = {
-            [interfaces_1.Length.LONG]: new this.context.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.H(0),
+            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
+            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
         };
     }
     getBalance() {
         return this.balance;
     }
     getPosition() {
-        return this.Position.copy(this.$position);
+        return this.context.Data.Position.copy(this.$position);
     }
     getCost() {
         return this.Cost.copy(this.$cost);
     }
     capture() {
         return {
-            position: this.Position.capture(this.$position),
+            position: this.context.Data.Position.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
-            balance: this.context.H.capture(this.balance),
+            balance: this.context.Data.H.capture(this.balance),
         };
     }
     restore(snapshot) {
-        this.balance = this.context.H.restore(snapshot.balance);
-        this.$position = this.Position.restore(snapshot.position);
+        this.balance = this.context.Data.H.restore(snapshot.balance);
+        this.$position = this.context.Data.Position.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
     pay(fee) {

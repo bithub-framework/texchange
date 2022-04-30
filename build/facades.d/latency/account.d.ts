@@ -8,11 +8,6 @@ export declare class AccountLatency<H extends HLike<H>> implements AccountApiLik
     private instant;
     spec: AccountSpec;
     events: AccountEventEmitterLike<H>;
-    private Positions;
-    private Balances;
-    private LimitOrder;
-    private Amendment;
-    private OpenOrder;
     constructor(context: Context<H>, useCases: AccountLatency.UseCaseDeps<H>, instant: Instant<H>);
     makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]>;

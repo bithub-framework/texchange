@@ -2,7 +2,6 @@ import { Context } from '../../context';
 import {
     HLike,
     OpenOrder,
-    OpenOrderStatic,
 } from 'interfaces';
 
 import { MakeOpenOrderLike } from './make-open-order-like';
@@ -19,8 +18,6 @@ import { GetPositionsLike } from '../get-positions/get-positions-like';
 export class MakeOpenOrder<H extends HLike<H>>
     implements MakeOpenOrderLike<H> {
 
-    private OpenOrder = new OpenOrderStatic(this.context.H);
-
     public constructor(
         private tasks: MakeOpenOrder.TaskDeps<H>,
 
@@ -31,7 +28,7 @@ export class MakeOpenOrder<H extends HLike<H>>
 
     public makeOpenOrder(order: OpenOrder<H>): OpenOrder<H> {
         this.tasks.validateOrder.validateOrder(order);
-        const $order = this.OpenOrder.copy(order);
+        const $order = this.context.Data.OpenOrder.copy(order);
         const trades = this.tasks.orderTakes.$orderTakes($order);
         this.tasks.orderMakes.orderMakes($order);
         if (trades.length) {

@@ -17,7 +17,7 @@ class ValidateOrder {
     validateQuantity(order) {
         const { makers } = this.models;
         const closable = this.tasks.getClosable.getClosable();
-        makers.appendOrder(order, new this.context.H(0));
+        makers.appendOrder(order, new this.context.Data.H(0));
         try {
             const enoughPosition = closable[interfaces_1.Length.LONG].gte(0) &&
                 closable[interfaces_1.Length.SHORT].gte(0);

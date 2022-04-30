@@ -8,10 +8,9 @@ class TradeTakesOpenMakers {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
-        this.Trade = new interfaces_1.TradeStatic(this.context.H);
     }
     tradeTakesOpenMakers(trade) {
-        const $trade = this.Trade.copy(trade);
+        const $trade = this.context.Data.Trade.copy(trade);
         for (const order of [...this.models.makers])
             if (this.$tradeShouldTakeOpenOrder($trade, order)) {
                 this.$tradeTakesOrderQueue($trade, order);
@@ -30,7 +29,7 @@ class TradeTakesOpenMakers {
     $tradeTakesOrderQueue($trade, maker) {
         const { makers } = this.models;
         if ($trade.price.eq(maker.price)) {
-            const volume = this.context.H.min($trade.quantity, maker.behind);
+            const volume = this.context.Data.H.min($trade.quantity, maker.behind);
             $trade.quantity = $trade.quantity.minus(volume);
             makers.takeOrderQueue(maker.id, volume);
         }
@@ -39,7 +38,7 @@ class TradeTakesOpenMakers {
     }
     tradeTakesOpenMaker($trade, maker) {
         const { assets, makers } = this.models;
-        const volume = this.context.H.min($trade.quantity, maker.unfilled);
+        const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
             .round(this.context.config.market.CURRENCY_DP);

@@ -1,10 +1,7 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import {
-	Orderbook,
-	OrderbookStatic,
-	HLike, HStatic,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { DatabaseOrderbook } from '../interfaces/database-orderbook';
 import assert = require('assert');
 
 import { Book } from '../models.d/book';
@@ -31,27 +28,4 @@ export namespace UpdateOrderbook {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
-}
-
-export interface DatabaseOrderbook<H extends HLike<H>>
-	extends Orderbook<H> {
-
-	id: string;
-}
-
-export class DatabaseOrderbookStatic<H extends HLike<H>> {
-	private Orderbook = new OrderbookStatic(this.H);
-
-	public constructor(
-		private H: HStatic<H>,
-	) { }
-
-	public copy(
-		orderbook: DatabaseOrderbook<H>,
-	): DatabaseOrderbook<H> {
-		return {
-			...this.Orderbook.copy(orderbook),
-			id: orderbook.id,
-		}
-	}
 }

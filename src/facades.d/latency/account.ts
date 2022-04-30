@@ -27,12 +27,6 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 	public spec: AccountSpec;
 	public events = <AccountEventEmitterLike<H>>new EventEmitter();
 
-	private Positions = new PositionsStatic(this.context.H);
-	private Balances = new BalancesStatic(this.context.H);
-	private LimitOrder = new LimitOrderStatic(this.context.H);
-	private Amendment = new AmendmentStatic(this.context.H);
-	private OpenOrder = new OpenOrderStatic(this.context.H);
-
 	public constructor(
 		private context: Context<H>,
 		private useCases: AccountLatency.UseCaseDeps<H>,
@@ -44,7 +38,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 			try {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
-				this.events.emit('positions', this.Positions.copy(positions));
+				this.events.emit('positions', this.context.Data.Positions.copy(positions));
 			} catch (err) {
 				this.events.emit('error', <Error>err);
 			}
@@ -54,7 +48,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 			try {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
-				this.events.emit('balances', this.Balances.copy(balances));
+				this.events.emit('balances', this.context.Data.Balances.copy(balances));
 			} catch (err) {
 				this.events.emit('error', <Error>err);
 			}
@@ -63,13 +57,13 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 
 	public async makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const orders = $orders.map(order => this.LimitOrder.copy(order));
+			const orders = $orders.map(order => this.context.Data.LimitOrder.copy(order));
 			await this.context.timeline.sleep(this.context.config.market.PING);
 			await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 			return this.instant.makeOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.OpenOrder.copy(order),
+					: this.context.Data.OpenOrder.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);
@@ -78,13 +72,13 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 
 	public async amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const amendments = $amendments.map(amendment => this.Amendment.copy(amendment));
+			const amendments = $amendments.map(amendment => this.context.Data.Amendment.copy(amendment));
 			await this.context.timeline.sleep(this.context.config.market.PING);
 			await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 			return this.instant.amendOrders(amendments).map(order =>
 				order instanceof Error
 					? order
-					: this.OpenOrder.copy(order),
+					: this.context.Data.OpenOrder.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);
@@ -93,13 +87,13 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 
 	public async cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]> {
 		try {
-			const orders = $orders.map(order => this.OpenOrder.copy(order));
+			const orders = $orders.map(order => this.context.Data.OpenOrder.copy(order));
 			await this.context.timeline.sleep(this.context.config.market.PING);
 			await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 			return this.instant.cancelOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.OpenOrder.copy(order),
+					: this.context.Data.OpenOrder.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);
@@ -110,7 +104,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 		try {
 			await this.context.timeline.sleep(this.context.config.market.PING);
 			await this.context.timeline.sleep(this.context.config.market.PROCESSING);
-			return this.Balances.copy(this.instant.getBalances());
+			return this.context.Data.Balances.copy(this.instant.getBalances());
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);
 		}
@@ -120,7 +114,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 		try {
 			await this.context.timeline.sleep(this.context.config.market.PING);
 			await this.context.timeline.sleep(this.context.config.market.PROCESSING);
-			return this.Positions.copy(this.instant.getPositions());
+			return this.context.Data.Positions.copy(this.instant.getPositions());
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);
 		}
@@ -133,7 +127,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 			return this.instant.getOpenOrders().map(order =>
 				order instanceof Error
 					? order
-					: this.OpenOrder.copy(order),
+					: this.context.Data.OpenOrder.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.context.config.market.PING);

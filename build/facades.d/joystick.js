@@ -1,21 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Joystick = void 0;
-const update_orderbook_1 = require("../use-cases.d/update-orderbook");
-const update_trades_1 = require("../use-cases.d/update-trades");
 class Joystick {
     constructor(context, useCases) {
         this.context = context;
         this.useCases = useCases;
-        this.DatabaseOrderbook = new update_orderbook_1.DatabaseOrderbookStatic(this.context.H);
-        this.DatabaseTrade = new update_trades_1.DatabaseTradeStatic(this.context.H);
+        this.Data = this.context.Data;
         this.config = this.context.config;
     }
     updateTrades($trades) {
-        this.useCases.updateTrades.updateTrades($trades.map(trade => this.DatabaseTrade.copy(trade)));
+        this.useCases.updateTrades.updateTrades($trades.map(trade => this.context.Data.DatabaseTrade.copy(trade)));
     }
     updateOrderbook($orderbook) {
-        this.useCases.updateOrderbook.updateOrderbook(this.DatabaseOrderbook.copy($orderbook));
+        this.useCases.updateOrderbook.updateOrderbook(this.context.Data.DatabaseOrderbook.copy($orderbook));
     }
     quantity(price, dollarVolume) {
         return this.context.calc.quantity(price, dollarVolume);

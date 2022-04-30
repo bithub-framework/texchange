@@ -32,11 +32,11 @@ export class DefaultPricing<H extends HLike<H>>
 	}
 
 	public capture(): DefaultPricing.Snapshot {
-		return this.context.H.capture(this.settlementPrice);
+		return this.context.Data.H.capture(this.settlementPrice);
 	}
 
 	public restore(snapshot: DefaultPricing.Snapshot): void {
-		this.settlementPrice = this.context.H.restore(snapshot);
+		this.settlementPrice = this.context.Data.H.restore(snapshot);
 	}
 }
 
