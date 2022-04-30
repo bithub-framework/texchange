@@ -2,7 +2,8 @@ import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import {
 	Orderbook,
-	HLike,
+	OrderbookStatic,
+	HLike, HStatic,
 } from 'interfaces';
 import assert = require('assert');
 
@@ -17,7 +18,7 @@ export class UpdateOrderbook<H extends HLike<H>>{
 		protected tasks: UpdateOrderbook.TaskDeps<H>,
 	) { }
 
-	public updateOrderbook(orderbook: Orderbook<H>): void {
+	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
 		assert(orderbook.time === this.context.timeline.now());
 		this.models.book.setBasebook(orderbook);
 		this.broadcast.emit('orderbook', this.models.book.getBook());
@@ -30,4 +31,27 @@ export namespace UpdateOrderbook {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> { }
+}
+
+export interface DatabaseOrderbook<H extends HLike<H>>
+	extends Orderbook<H> {
+
+	id: string;
+}
+
+export class DatabaseOrderbookStatic<H extends HLike<H>> {
+	private Orderbook = new OrderbookStatic(this.H);
+
+	public constructor(
+		private H: HStatic<H>,
+	) { }
+
+	public copy(
+		orderbook: DatabaseOrderbook<H>,
+	): DatabaseOrderbook<H> {
+		return {
+			...this.Orderbook.copy(orderbook),
+			id: orderbook.id,
+		}
+	}
 }

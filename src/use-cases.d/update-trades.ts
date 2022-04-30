@@ -1,8 +1,12 @@
 import { Context } from '../context';
 import assert = require('assert');
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
-import { Trade } from '../interfaces';
+import { HLike, HStatic } from 'interfaces';
+import {
+	Trade,
+	TradeStatic,
+	TradeIdStatic,
+} from '../interfaces';
 
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
@@ -53,5 +57,44 @@ export interface DatabaseTrade<H extends HLike<H>>
 	id: string;
 }
 
+export class DatabaseTradeStatic<H extends HLike<H>> {
+	private Trade = new TradeStatic(this.H, this.TradeId);
+
+	public constructor(
+		private H: HStatic<H>,
+		private TradeId: TradeIdStatic,
+	) { }
+
+	public copy(
+		trade: DatabaseTrade<H>,
+	): DatabaseTrade<H> {
+		return {
+			...this.Trade.copy(trade),
+			id: trade.id,
+		}
+	}
+}
+
+
 export type DatabaseTrades<H extends HLike<H>>
 	= DatabaseTrade<H>[];
+
+export class DatabaseTradesStatic<H extends HLike<H>> {
+	private DatabaseTrade = new DatabaseTradeStatic(
+		this.H,
+		this.TradeId,
+	);
+
+	public constructor(
+		private H: HStatic<H>,
+		private TradeId: TradeIdStatic,
+	) { }
+
+	public copy(
+		trades: DatabaseTrades<H>,
+	): DatabaseTrades<H> {
+		return trades.map(
+			trade => this.DatabaseTrade.copy(trade),
+		)
+	}
+}

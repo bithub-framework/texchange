@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateOrderbook = void 0;
+exports.DatabaseOrderbookStatic = exports.UpdateOrderbook = void 0;
+const interfaces_1 = require("interfaces");
 const assert = require("assert");
 class UpdateOrderbook {
     constructor(context, models, broadcast, tasks) {
@@ -16,4 +17,17 @@ class UpdateOrderbook {
     }
 }
 exports.UpdateOrderbook = UpdateOrderbook;
+class DatabaseOrderbookStatic {
+    constructor(H) {
+        this.H = H;
+        this.Orderbook = new interfaces_1.OrderbookStatic(this.H);
+    }
+    copy(orderbook) {
+        return {
+            ...this.Orderbook.copy(orderbook),
+            id: orderbook.id,
+        };
+    }
+}
+exports.DatabaseOrderbookStatic = DatabaseOrderbookStatic;
 //# sourceMappingURL=update-orderbook.js.map

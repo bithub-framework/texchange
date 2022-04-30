@@ -1,25 +1,30 @@
 import { Context } from '../context';
 import { Config } from '../context.d/config';
 import {
-	Orderbook,
 	HLike,
-	OrderbookStatic,
 } from 'interfaces';
 import {
-	TradesStatic,
 	TradeIdStatic,
 } from '../interfaces';
 
-import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { UpdateTrades, DatabaseTrades } from '../use-cases.d/update-trades';
+import {
+	UpdateOrderbook,
+	DatabaseOrderbook,
+	DatabaseOrderbookStatic,
+} from '../use-cases.d/update-orderbook';
+import {
+	UpdateTrades,
+	DatabaseTrades,
+	DatabaseTradesStatic,
+} from '../use-cases.d/update-trades';
 
 
 export class Joystick<H extends HLike<H>> {
 	public config: Config<H>;
 
 	private TradeId = new TradeIdStatic();
-	private Trades = new TradesStatic(this.context.H, this.TradeId);
-	private Orderbook = new OrderbookStatic(this.context.H);
+	private DatabaseOrderbook = new DatabaseOrderbookStatic(this.context.H);
+	private DatabaseTrades = new DatabaseTradesStatic(this.context.H, this.TradeId);
 
 	public constructor(
 		private context: Context<H>,
@@ -30,13 +35,13 @@ export class Joystick<H extends HLike<H>> {
 
 	public updateTrades($trades: DatabaseTrades<H>): void {
 		this.useCases.updateTrades.updateTrades(
-			<DatabaseTrades<H>>this.Trades.copy($trades),
+			this.DatabaseTrades.copy($trades),
 		);
 	}
 
-	public updateOrderbook($orderbook: Orderbook<H>): void {
+	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCases.updateOrderbook.updateOrderbook(
-			this.Orderbook.copy($orderbook),
+			this.DatabaseOrderbook.copy($orderbook),
 		);
 	}
 
