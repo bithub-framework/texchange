@@ -21,5 +21,7 @@ export declare namespace Progress {
     interface Snapshot {
         userTradeCount: number;
         userOrderCount: number;
+        latestDatabaseTradeId: string | null;
+        latestDatabaseOrderbookId: string | null;
     }
 }

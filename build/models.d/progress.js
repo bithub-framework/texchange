@@ -25,11 +25,15 @@ class Progress {
         return {
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
+            latestDatabaseOrderbookId: this.latestDatabaseOrderbookId,
+            latestDatabaseTradeId: this.latestDatabaseTradeId,
         };
     }
     restore(snapshot) {
         this.userTradeCount = snapshot.userTradeCount;
         this.userOrderCount = snapshot.userOrderCount;
+        this.latestDatabaseOrderbookId = snapshot.latestDatabaseOrderbookId;
+        this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
     }
 }
 exports.Progress = Progress;

@@ -37,12 +37,16 @@ export class Progress<H extends HLike<H>>
         return {
             userTradeCount: this.userTradeCount,
             userOrderCount: this.userOrderCount,
+            latestDatabaseOrderbookId: this.latestDatabaseOrderbookId,
+            latestDatabaseTradeId: this.latestDatabaseTradeId,
         };
     }
 
     public restore(snapshot: Progress.Snapshot): void {
         this.userTradeCount = snapshot.userTradeCount;
         this.userOrderCount = snapshot.userOrderCount;
+        this.latestDatabaseOrderbookId = snapshot.latestDatabaseOrderbookId;
+        this.latestDatabaseTradeId = snapshot.latestDatabaseTradeId;
     }
 }
 
@@ -50,5 +54,7 @@ export namespace Progress {
     export interface Snapshot {
         userTradeCount: number;
         userOrderCount: number;
+        latestDatabaseTradeId: string | null;
+        latestDatabaseOrderbookId: string | null;
     }
 }
