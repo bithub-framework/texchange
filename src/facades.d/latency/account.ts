@@ -5,15 +5,8 @@ import {
 	AccountApiLike,
 	AccountSpec,
 	HLike,
-	PositionsStatic,
-	BalancesStatic,
-	LimitOrderStatic,
-	TradeId,
-	OrderId,
 	OpenOrder,
-	OpenOrderStatic,
 	Amendment,
-	AmendmentStatic,
 	AccountEventEmitterLike,
 } from 'interfaces';
 import { EventEmitter } from 'events';
@@ -39,9 +32,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
 				this.events.emit('positions', this.context.Data.Positions.copy(positions));
-			} catch (err) {
-				this.events.emit('error', <Error>err);
-			}
+			} catch (err) { }
 		});
 
 		this.useCases.subscription.on('balances', async balances => {
@@ -49,9 +40,7 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
 				this.events.emit('balances', this.context.Data.Balances.copy(balances));
-			} catch (err) {
-				this.events.emit('error', <Error>err);
-			}
+			} catch (err) { }
 		});
 	}
 

@@ -25,9 +25,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
 				this.events.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
-			} catch (err) {
-				this.events.emit('error', <Error>err);
-			}
+			} catch (err) { }
 		});
 
 		this.useCases.subscription.on('trades', async trades => {
@@ -35,9 +33,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 				await this.context.timeline.sleep(this.context.config.market.PROCESSING);
 				await this.context.timeline.sleep(this.context.config.market.PING);
 				this.events.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
-			} catch (err) {
-				this.events.emit('error', <Error>err);
-			}
+			} catch (err) { }
 		});
 	}
 

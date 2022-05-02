@@ -4,8 +4,6 @@ import {
     MarketSpec,
     AccountSpec,
     HLike,
-    TradeId,
-    OrderId,
 } from 'interfaces';
 import { Context } from '../../context';
 import { Instant } from '../instant';

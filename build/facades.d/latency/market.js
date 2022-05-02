@@ -14,9 +14,7 @@ class MarketLatency {
                 await this.context.timeline.sleep(this.context.config.market.PING);
                 this.events.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
             }
-            catch (err) {
-                this.events.emit('error', err);
-            }
+            catch (err) { }
         });
         this.useCases.subscription.on('trades', async (trades) => {
             try {
@@ -24,9 +22,7 @@ class MarketLatency {
                 await this.context.timeline.sleep(this.context.config.market.PING);
                 this.events.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
             }
-            catch (err) {
-                this.events.emit('error', err);
-            }
+            catch (err) { }
         });
     }
     quantity(price, dollarVolume) {
