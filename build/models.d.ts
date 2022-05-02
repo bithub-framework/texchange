@@ -15,3 +15,11 @@ export declare class Models<H extends HLike<H>, PricingSnapshot> {
     progress: Progress<H>;
     constructor(context: Context<H>, makers: Makers<H>, pricing: Pricing<H, PricingSnapshot>);
 }
+export interface Snapshot<PricingSnapshot> {
+    assets: Assets.Snapshot;
+    margins: Margins.Snapshot;
+    makers: Makers.Snapshot;
+    book: Book.Snapshot;
+    pricing: PricingSnapshot;
+    progress: Progress.Snapshot;
+}

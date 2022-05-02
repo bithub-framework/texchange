@@ -14,18 +14,22 @@ const instant_1 = require("./facades.d/instant");
 const latency_1 = require("./facades.d/latency/latency");
 const joystick_1 = require("./facades.d/joystick");
 const context_1 = require("./context");
+const models_1 = require("./models");
+const mtm_1 = require("./mark-to-market/mtm");
 const use_cases_1 = require("./use-cases");
 const injektor_1 = require("injektor");
 let Facades = class Facades {
-    constructor(context, useCases) {
+    constructor(context, models, mtm, useCases) {
         this.instant = new instant_1.Instant(context, useCases);
         this.latency = new latency_1.Latency(context, useCases, this.instant);
-        this.joystick = new joystick_1.Joystick(context, useCases);
+        this.joystick = new joystick_1.Joystick(context, models, mtm, useCases);
     }
 };
 Facades = __decorate([
     __param(0, (0, injektor_1.inject)(context_1.Context)),
-    __param(1, (0, injektor_1.inject)(use_cases_1.UseCases))
+    __param(1, (0, injektor_1.inject)(models_1.Models)),
+    __param(2, (0, injektor_1.inject)(mtm_1.Mtm)),
+    __param(3, (0, injektor_1.inject)(use_cases_1.UseCases))
 ], Facades);
 exports.Facades = Facades;
 //# sourceMappingURL=facades.js.map

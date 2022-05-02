@@ -3,6 +3,6 @@ export declare const enum TYPES {
     Timeline = 1,
     HStatic = 2,
     MarketCalc = 3,
-    User = 4,
-    Admin = 5
+    UserTex = 4,
+    AdminTex = 5
 }

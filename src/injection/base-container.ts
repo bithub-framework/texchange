@@ -26,6 +26,8 @@ import { Joystick } from '../facades.d/joystick';
 
 // Texchange
 import { Texchange } from '../texchange';
+import { AdminTex } from '../texchange';
+import { UserTex } from '../texchange';
 
 
 export function createBaseContainer<
@@ -63,18 +65,18 @@ export function createBaseContainer<
 		UseCases,
 	);
 
-	c.rcs<Facades<H>>(
+	c.rcs<Facades<H, PricingSnapshot>>(
 		Facades,
 		Facades,
 	);
 
-	c.rfs<Latency<H>>(
-		TYPES.User,
-		() => c.i<Facades<H>>(Facades).latency,
+	c.rfs<UserTex<H>>(
+		TYPES.UserTex,
+		() => c.i<Facades<H, PricingSnapshot>>(Facades).latency,
 	);
-	c.rfs<Joystick<H>>(
-		TYPES.Admin,
-		() => c.i<Facades<H>>(Facades).joystick,
+	c.rfs<AdminTex<H, PricingSnapshot>>(
+		TYPES.AdminTex,
+		() => c.i<Facades<H, PricingSnapshot>>(Facades).joystick,
 	);
 
 	c.rcs<Texchange<H, PricingSnapshot>>(

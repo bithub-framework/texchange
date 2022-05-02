@@ -33,3 +33,12 @@ export class Models<
 		this.progress = new Progress(context);
 	}
 }
+
+export interface Snapshot<PricingSnapshot> {
+	assets: Assets.Snapshot;
+	margins: Margins.Snapshot;
+	makers: Makers.Snapshot;
+	book: Book.Snapshot;
+	pricing: PricingSnapshot;
+	progress: Progress.Snapshot;
+}

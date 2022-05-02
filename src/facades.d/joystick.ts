@@ -1,8 +1,12 @@
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import {
-	HLike,
-} from 'interfaces';
+import { HLike } from 'interfaces';
+import { Startable } from 'startable';
+import { StatefulLike } from '../stateful-like';
+
+import { Models, Snapshot } from '../models';
+
+import { Mtm } from '../mark-to-market/mtm';
 
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
@@ -11,13 +15,22 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { GetProgress } from '../use-cases.d/get-progress';
 
 
-export class Joystick<H extends HLike<H>> {
+export class Joystick<H extends HLike<H>, PricingSnapshot>
+	implements StatefulLike<Snapshot<PricingSnapshot>>{
+	private startable: Startable;
 	public config: Config<H>;
 
 	public constructor(
 		private context: Context<H>,
+		private models: Models<H, PricingSnapshot>,
+		private mtm: Mtm<H> | null,
 		private useCases: Joystick.UseCaseDeps<H>,
 	) {
+		this.startable = new Startable(
+			() => this.start(),
+			() => this.stop(),
+		);
+
 		this.config = this.context.config;
 	}
 
@@ -51,6 +64,36 @@ export class Joystick<H extends HLike<H>> {
 
 	public dollarVolume(price: H, quantity: H): H {
 		return this.context.calc.dollarVolume(price, quantity);
+	}
+
+	private async start() {
+		if (this.mtm)
+			await this.mtm.startable.start(this.startable.stop);
+	}
+
+	private async stop() {
+		if (this.mtm)
+			await this.mtm.startable.stop();
+	}
+
+	public capture(): Snapshot<PricingSnapshot> {
+		return {
+			assets: this.models.assets.capture(),
+			margins: this.models.margins.capture(),
+			makers: this.models.makers.capture(),
+			book: this.models.book.capture(),
+			pricing: this.models.pricing.capture(),
+			progress: this.models.progress.capture(),
+		}
+	}
+
+	public restore(snapshot: Snapshot<PricingSnapshot>): void {
+		this.models.assets.restore(snapshot.assets);
+		this.models.margins.restore(snapshot.margins);
+		this.models.makers.restore(snapshot.makers);
+		this.models.book.restore(snapshot.book);
+		this.models.pricing.restore(snapshot.pricing);
+		this.models.progress.restore(snapshot.progress);
 	}
 }
 

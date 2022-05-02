@@ -22,8 +22,8 @@ function createBaseContainer(config, timeline, H) {
     c.rc(broadcast_1.Broadcast, broadcast_1.Broadcast);
     c.rcs(use_cases_1.UseCases, use_cases_1.UseCases);
     c.rcs(facades_1.Facades, facades_1.Facades);
-    c.rfs(4 /* User */, () => c.i(facades_1.Facades).latency);
-    c.rfs(5 /* Admin */, () => c.i(facades_1.Facades).joystick);
+    c.rfs(4 /* UserTex */, () => c.i(facades_1.Facades).latency);
+    c.rfs(5 /* AdminTex */, () => c.i(facades_1.Facades).joystick);
     c.rcs(texchange_1.Texchange, texchange_1.Texchange);
     return c;
 }

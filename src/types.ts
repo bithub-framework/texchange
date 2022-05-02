@@ -5,6 +5,6 @@ export const enum TYPES {
 
 	MarketCalc,
 
-	User,
-	Admin,
+	UserTex,
+	AdminTex,
 }

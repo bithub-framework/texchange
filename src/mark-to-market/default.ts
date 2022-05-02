@@ -11,7 +11,7 @@ import { inject } from 'injektor';
  */
 export class DefaultMtm<H extends HLike<H>>
 	extends Mtm<H> {
-	public readonly startable = Startable.create(
+	public startable = new Startable(
 		() => this.start(),
 		() => this.stop(),
 	);
