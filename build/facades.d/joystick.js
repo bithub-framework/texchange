@@ -14,6 +14,12 @@ class Joystick {
     updateOrderbook($orderbook) {
         this.useCases.updateOrderbook.updateOrderbook(this.context.Data.DatabaseOrderbook.copy($orderbook));
     }
+    getLatestDatabaseOrderbookId() {
+        return this.useCases.getProgress.getLatestDatabaseOrderbookId();
+    }
+    getLatestDatabaseTradeId() {
+        return this.useCases.getProgress.getLatestDatabaseTradeId();
+    }
     quantity(price, dollarVolume) {
         return this.context.calc.quantity(price, dollarVolume);
     }

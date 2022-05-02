@@ -12,6 +12,7 @@ class UpdateOrderbook {
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.context.timeline.now());
         this.models.book.setBasebook(orderbook);
+        this.models.progress.updateDatabaseOrderbook(orderbook);
         this.broadcast.emit('orderbook', this.models.book.getBook());
     }
 }

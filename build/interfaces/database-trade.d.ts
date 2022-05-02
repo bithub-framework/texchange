@@ -1,6 +1,7 @@
 import { HLike, HStatic, Trade } from 'interfaces';
+export declare type DatabaseTradeId = string;
 export interface DatabaseTrade<H extends HLike<H>> extends Trade<H> {
-    id: string;
+    id: DatabaseTradeId;
 }
 export declare class DatabaseTradeStatic<H extends HLike<H>> {
     private H;

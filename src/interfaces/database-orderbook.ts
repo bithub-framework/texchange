@@ -5,10 +5,12 @@ import {
 } from 'interfaces';
 
 
+export type DatabaseOrderbookId = string;
+
 export interface DatabaseOrderbook<H extends HLike<H>>
 	extends Orderbook<H> {
 
-	id: string;
+	id: DatabaseOrderbookId;
 }
 
 export class DatabaseOrderbookStatic<H extends HLike<H>> {

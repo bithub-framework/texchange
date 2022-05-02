@@ -4,10 +4,11 @@ import {
 	HLike,
 } from 'interfaces';
 
-import { DatabaseOrderbook } from '../interfaces/database-orderbook';
+import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { DatabaseTrade } from '../interfaces/database-trade';
+import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
 import { UpdateTrades } from '../use-cases.d/update-trades';
+import { GetProgress } from '../use-cases.d/get-progress';
 
 
 export class Joystick<H extends HLike<H>> {
@@ -36,6 +37,14 @@ export class Joystick<H extends HLike<H>> {
 		);
 	}
 
+	public getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null {
+		return this.useCases.getProgress.getLatestDatabaseOrderbookId();
+	}
+
+	public getLatestDatabaseTradeId(): DatabaseTradeId | null {
+		return this.useCases.getProgress.getLatestDatabaseTradeId();
+	}
+
 	public quantity(price: H, dollarVolume: H): H {
 		return this.context.calc.quantity(price, dollarVolume);
 	};
@@ -49,5 +58,6 @@ export namespace Joystick {
 	export interface UseCaseDeps<H extends HLike<H>> {
 		updateTrades: UpdateTrades<H>;
 		updateOrderbook: UpdateOrderbook<H>;
+		getProgress: GetProgress<H>;
 	}
 }

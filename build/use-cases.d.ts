@@ -7,6 +7,7 @@ import { GetBalances } from './use-cases.d/get-balances';
 import { UpdateOrderbook } from './use-cases.d/update-orderbook';
 import { UpdateTrades } from './use-cases.d/update-trades';
 import { Subscription } from './use-cases.d/subscription';
+import { GetProgress } from './use-cases.d/get-progress';
 import { HLike } from 'interfaces';
 import { Context } from './context';
 import { Models } from './models';
@@ -22,5 +23,6 @@ export declare class UseCases<H extends HLike<H>> {
     getBalances: GetBalances<H>;
     updateOrderbook: UpdateOrderbook<H>;
     subscription: Subscription<H>;
+    getProgress: GetProgress<H>;
     constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>, tasks: Tasks<H>, updateTrades: UpdateTrades<H>);
 }

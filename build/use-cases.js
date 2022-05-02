@@ -19,6 +19,7 @@ const get_balances_1 = require("./use-cases.d/get-balances");
 const update_orderbook_1 = require("./use-cases.d/update-orderbook");
 const update_trades_1 = require("./use-cases.d/update-trades");
 const subscription_1 = require("./use-cases.d/subscription");
+const get_progress_1 = require("./use-cases.d/get-progress");
 const context_1 = require("./context");
 const models_1 = require("./models");
 const broadcast_1 = require("./broadcast");
@@ -35,6 +36,7 @@ let UseCases = class UseCases {
         this.makeOrder = new make_order_1.MakeOrder(context, models, broadcast, tasks);
         this.updateOrderbook = new update_orderbook_1.UpdateOrderbook(context, models, broadcast, tasks);
         this.subscription = new subscription_1.Subscription(context, models, broadcast, tasks);
+        this.getProgress = new get_progress_1.GetProgress(context, models, broadcast, tasks);
     }
 };
 UseCases = __decorate([

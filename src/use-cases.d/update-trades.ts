@@ -24,6 +24,7 @@ export class UpdateTrades<H extends HLike<H>> {
 		assert(trades.length);
 		const now = this.context.timeline.now();
 		for (const trade of trades) assert(trade.time === now);
+		this.models.progress.updateDatabaseTrades(trades);
 
 		this.broadcast.emit('trades', trades);
 

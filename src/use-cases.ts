@@ -7,6 +7,7 @@ import { GetBalances } from './use-cases.d/get-balances';
 import { UpdateOrderbook } from './use-cases.d/update-orderbook';
 import { UpdateTrades } from './use-cases.d/update-trades';
 import { Subscription } from './use-cases.d/subscription';
+import { GetProgress } from './use-cases.d/get-progress';
 import { HLike } from 'interfaces';
 import { Context } from './context';
 import { Models } from './models';
@@ -26,6 +27,7 @@ export class UseCases<H extends HLike<H>> {
 	public getBalances: GetBalances<H>;
 	public updateOrderbook: UpdateOrderbook<H>;
 	public subscription: Subscription<H>;
+	public getProgress: GetProgress<H>;
 
 	public constructor(
 		@inject(Context)
@@ -47,5 +49,6 @@ export class UseCases<H extends HLike<H>> {
 		this.makeOrder = new MakeOrder(context, models, broadcast, tasks);
 		this.updateOrderbook = new UpdateOrderbook(context, models, broadcast, tasks);
 		this.subscription = new Subscription(context, models, broadcast, tasks);
+		this.getProgress = new GetProgress(context, models, broadcast, tasks);
 	}
 }

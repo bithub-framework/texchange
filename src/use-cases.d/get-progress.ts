@@ -1,14 +1,13 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'interfaces';
-import { DatabaseOrderbook } from '../interfaces/database-orderbook';
-import assert = require('assert');
+import { DatabaseOrderbookId } from '../interfaces/database-orderbook';
+import { DatabaseTradeId } from '../interfaces/database-trade';
 
-import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 
 
-export class UpdateOrderbook<H extends HLike<H>>{
+export class GetProgress<H extends HLike<H>>{
 	public constructor(
 		protected context: Context<H>,
 		protected models: UpdateOrderbook.ModelDeps<H>,
@@ -16,17 +15,17 @@ export class UpdateOrderbook<H extends HLike<H>>{
 		protected tasks: UpdateOrderbook.TaskDeps<H>,
 	) { }
 
-	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
-		assert(orderbook.time === this.context.timeline.now());
-		this.models.book.setBasebook(orderbook);
-		this.models.progress.updateDatabaseOrderbook(orderbook);
-		this.broadcast.emit('orderbook', this.models.book.getBook());
+	public getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null {
+		return this.models.progress.getLatestDatabaseOrderbookId();
+	}
+
+	public getLatestDatabaseTradeId(): DatabaseTradeId | null {
+		return this.models.progress.getLatestDatabaseTradeId();
 	}
 }
 
 export namespace UpdateOrderbook {
 	export interface ModelDeps<H extends HLike<H>> {
-		book: Book<H>;
 		progress: Progress<H>;
 	}
 

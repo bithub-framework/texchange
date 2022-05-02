@@ -3,11 +3,13 @@ import {
 	Trade, TradeStatic,
 } from 'interfaces';
 
+export type DatabaseTradeId = string;
+
 
 export interface DatabaseTrade<H extends HLike<H>>
 	extends Trade<H> {
 
-	id: string;
+	id: DatabaseTradeId;
 }
 
 export class DatabaseTradeStatic<H extends HLike<H>> {
