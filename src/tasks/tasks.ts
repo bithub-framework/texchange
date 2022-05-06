@@ -31,7 +31,6 @@ import { MarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumu
 import { Settle } from '../tasks.d/settle/settle';
 
 import { HLike } from 'secretary-like';
-import { inject } from 'injektor';
 
 
 export abstract class Tasks<H extends HLike<H>> implements
@@ -64,11 +63,8 @@ export abstract class Tasks<H extends HLike<H>> implements
 	public orderVolumes: OrderVolumesLike<H>;
 
 	public constructor(
-		@inject(Context)
 		context: Context<H>,
-		@inject(Models)
-		models: Models<H, unknown>,
-		@inject(Broadcast)
+		models: Models<H>,
 		broadcast: Broadcast<H>,
 	) {
 		this.getBalances = new GetBalances(this, context, models, broadcast);

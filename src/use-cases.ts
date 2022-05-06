@@ -33,7 +33,7 @@ export class UseCases<H extends HLike<H>> {
 		@inject(Context)
 		context: Context<H>,
 		@inject(Models)
-		models: Models<H, unknown>,
+		models: Models<H>,
 		@inject(Broadcast)
 		broadcast: Broadcast<H>,
 		@inject(Tasks)

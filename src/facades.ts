@@ -10,17 +10,16 @@ import { inject } from 'injektor';
 
 
 
-
-export class Facades<H extends HLike<H>, PricingSnapshot> {
+export class Facades<H extends HLike<H>> {
 	public instant: Instant<H>;
 	public latency: Latency<H>;
-	public joystick: Joystick<H, PricingSnapshot>;
+	public joystick: Joystick<H>;
 
 	public constructor(
 		@inject(Context)
 		context: Context<H>,
 		@inject(Models)
-		models: Models<H, PricingSnapshot>,
+		models: Models<H>,
 		@inject(Mtm)
 		mtm: Mtm<H> | null,
 		@inject(UseCases)

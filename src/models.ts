@@ -10,10 +10,7 @@ import { inject } from 'injektor';
 
 
 
-export class Models<
-	H extends HLike<H>,
-	PricingSnapshot,
-	> {
+export class Models<H extends HLike<H>> {
 	public assets: Assets<H>;
 	public margins: Margins<H>;
 	public book: Book<H>;
@@ -25,7 +22,7 @@ export class Models<
 		@inject(Makers)
 		public makers: Makers<H>,
 		@inject(Pricing)
-		public pricing: Pricing<H, PricingSnapshot>,
+		public pricing: Pricing<H, any>,
 	) {
 		this.assets = new Assets(context);
 		this.margins = new Margins(context);
@@ -34,11 +31,13 @@ export class Models<
 	}
 }
 
-export interface Snapshot<PricingSnapshot> {
-	assets: Assets.Snapshot;
-	margins: Margins.Snapshot;
-	makers: Makers.Snapshot;
-	book: Book.Snapshot;
-	pricing: PricingSnapshot;
-	progress: Progress.Snapshot;
+export namespace Models {
+	export interface Snapshot {
+		assets: any;
+		margins: any;
+		makers: any;
+		book: any;
+		pricing: any;
+		progress: any;
+	}
 }

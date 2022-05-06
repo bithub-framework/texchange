@@ -42,5 +42,5 @@ export declare abstract class Tasks<H extends HLike<H>> implements MakeOpenOrder
     cancelOpenOrder: CancelOpenOrderLike<H>;
     abstract marginAccumulation: MarginAccumulationLike<H>;
     orderVolumes: OrderVolumesLike<H>;
-    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>);
 }

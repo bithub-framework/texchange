@@ -26,13 +26,10 @@ import { AdminTex } from '../texchange';
 import { UserTex } from '../texchange';
 
 
-export function createBaseContainer<
-	H extends HLike<H>,
-	PricingSnapshot,
-	>(
-		config: Config<H>,
-		timeline: TimelineLike,
-		H: HStatic<H>,
+export function createBaseContainer<H extends HLike<H>>(
+	config: Config<H>,
+	timeline: TimelineLike,
+	H: HStatic<H>,
 ): Container {
 	const c = new Container();
 
@@ -46,7 +43,7 @@ export function createBaseContainer<
 		),
 	);
 
-	c.rcs<Models<H, PricingSnapshot>>(
+	c.rcs<Models<H>>(
 		Models,
 		Models,
 	);
@@ -61,21 +58,21 @@ export function createBaseContainer<
 		UseCases,
 	);
 
-	c.rcs<Facades<H, PricingSnapshot>>(
+	c.rcs<Facades<H>>(
 		Facades,
 		Facades,
 	);
 
 	c.rfs<UserTex<H>>(
 		TYPES.UserTex,
-		() => c.i<Facades<H, PricingSnapshot>>(Facades).latency,
+		() => c.i<Facades<H>>(Facades).latency,
 	);
-	c.rfs<AdminTex<H, PricingSnapshot>>(
+	c.rfs<AdminTex<H>>(
 		TYPES.AdminTex,
-		() => c.i<Facades<H, PricingSnapshot>>(Facades).joystick,
+		() => c.i<Facades<H>>(Facades).joystick,
 	);
 
-	c.rcs<Texchange<H, PricingSnapshot>>(
+	c.rcs<Texchange<H>>(
 		Texchange,
 		Texchange,
 	);

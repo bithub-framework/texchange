@@ -4,7 +4,7 @@ import { HLike } from 'secretary-like';
 import { Startable } from 'startable';
 import { StatefulLike } from '../stateful-like';
 
-import { Models, Snapshot } from '../models';
+import { Models } from '../models';
 
 import { Mtm } from '../mark-to-market/mtm';
 
@@ -15,14 +15,14 @@ import { UpdateTrades } from '../use-cases.d/update-trades';
 import { GetProgress } from '../use-cases.d/get-progress';
 
 
-export class Joystick<H extends HLike<H>, PricingSnapshot>
-	implements StatefulLike<Snapshot<PricingSnapshot>>{
+export class Joystick<H extends HLike<H>>
+	implements StatefulLike<Models.Snapshot>{
 	private startable: Startable;
 	public config: Config<H>;
 
 	public constructor(
 		private context: Context<H>,
-		private models: Models<H, PricingSnapshot>,
+		private models: Models<H>,
 		private mtm: Mtm<H> | null,
 		private useCases: Joystick.UseCaseDeps<H>,
 	) {
@@ -76,7 +76,7 @@ export class Joystick<H extends HLike<H>, PricingSnapshot>
 			await this.mtm.startable.stop();
 	}
 
-	public capture(): Snapshot<PricingSnapshot> {
+	public capture(): Models.Snapshot {
 		return {
 			assets: this.models.assets.capture(),
 			margins: this.models.margins.capture(),
@@ -87,7 +87,7 @@ export class Joystick<H extends HLike<H>, PricingSnapshot>
 		}
 	}
 
-	public restore(snapshot: Snapshot<PricingSnapshot>): void {
+	public restore(snapshot: Models.Snapshot): void {
 		this.models.assets.restore(snapshot.assets);
 		this.models.margins.restore(snapshot.margins);
 		this.models.makers.restore(snapshot.makers);

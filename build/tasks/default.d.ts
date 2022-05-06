@@ -13,5 +13,5 @@ export declare class DefaultTasks<H extends HLike<H>> extends Tasks<H> implement
     getAvailable: GetAvailableLike<H>;
     settle: SettleLike;
     marginAccumulation: MarginAccumulationLike<H>;
-    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>);
 }

@@ -6,9 +6,9 @@ import { Context } from './context';
 import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';
 import { UseCases } from './use-cases';
-export declare class Facades<H extends HLike<H>, PricingSnapshot> {
+export declare class Facades<H extends HLike<H>> {
     instant: Instant<H>;
     latency: Latency<H>;
-    joystick: Joystick<H, PricingSnapshot>;
-    constructor(context: Context<H>, models: Models<H, PricingSnapshot>, mtm: Mtm<H> | null, useCases: UseCases<H>);
+    joystick: Joystick<H>;
+    constructor(context: Context<H>, models: Models<H>, mtm: Mtm<H> | null, useCases: UseCases<H>);
 }

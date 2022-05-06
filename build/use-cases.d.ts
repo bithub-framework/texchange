@@ -24,5 +24,5 @@ export declare class UseCases<H extends HLike<H>> {
     updateOrderbook: UpdateOrderbook<H>;
     subscription: Subscription<H>;
     getProgress: GetProgress<H>;
-    constructor(context: Context<H>, models: Models<H, unknown>, broadcast: Broadcast<H>, tasks: Tasks<H>, updateTrades: UpdateTrades<H>);
+    constructor(context: Context<H>, models: Models<H>, broadcast: Broadcast<H>, tasks: Tasks<H>, updateTrades: UpdateTrades<H>);
 }

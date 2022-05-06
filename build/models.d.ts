@@ -6,20 +6,22 @@ import { Progress } from './models.d/progress';
 import { Pricing } from './models.d/pricing/pricing';
 import { HLike } from 'secretary-like';
 import { Context } from './context';
-export declare class Models<H extends HLike<H>, PricingSnapshot> {
+export declare class Models<H extends HLike<H>> {
     makers: Makers<H>;
-    pricing: Pricing<H, PricingSnapshot>;
+    pricing: Pricing<H, any>;
     assets: Assets<H>;
     margins: Margins<H>;
     book: Book<H>;
     progress: Progress<H>;
-    constructor(context: Context<H>, makers: Makers<H>, pricing: Pricing<H, PricingSnapshot>);
+    constructor(context: Context<H>, makers: Makers<H>, pricing: Pricing<H, any>);
 }
-export interface Snapshot<PricingSnapshot> {
-    assets: Assets.Snapshot;
-    margins: Margins.Snapshot;
-    makers: Makers.Snapshot;
-    book: Book.Snapshot;
-    pricing: PricingSnapshot;
-    progress: Progress.Snapshot;
+export declare namespace Models {
+    interface Snapshot {
+        assets: any;
+        margins: any;
+        makers: any;
+        book: any;
+        pricing: any;
+        progress: any;
+    }
 }
