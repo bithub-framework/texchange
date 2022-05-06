@@ -5,7 +5,7 @@ import { TYPES } from '../types';
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { TimelineLike } from 'timeline';
+import { TimelineLike } from 'secretary-like';
 import { DataStatic } from '../interfaces/data';
 
 // Models

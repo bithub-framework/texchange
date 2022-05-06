@@ -15,7 +15,6 @@
         "@types/node": ">=16",
         "injektor": "github:zimtsui/injektor",
         "secretary-like": "github:bithub-framework/secretary-like",
-        "startable": "github:zimtsui/startable",
-        "timeline": "github:zimtsui/timeline"
+        "startable": "github:zimtsui/startable"
     }
 }

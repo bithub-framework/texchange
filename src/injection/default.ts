@@ -6,8 +6,10 @@ import { TYPES } from '../types';
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { TimelineLike } from 'timeline';
-import { MarketCalc } from 'secretary-like';
+import {
+	TimelineLike,
+	MarketCalc,
+} from 'secretary-like';
 import { DefaultMarketCalc } from '../context.d/market-calc/default';
 
 // Models
