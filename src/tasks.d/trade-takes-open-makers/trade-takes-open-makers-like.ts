@@ -1,7 +1,7 @@
 import {
 	HLike,
 	Trade,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export interface TradeTakesOpenMakersLike<H extends HLike<H>> {

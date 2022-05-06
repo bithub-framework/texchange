@@ -1,4 +1,4 @@
-import { HLike, Trade } from 'interfaces';
+import { HLike, Trade } from 'secretary-like';
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';

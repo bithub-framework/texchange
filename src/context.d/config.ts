@@ -1,8 +1,8 @@
 import {
 	MarketSpec,
 	AccountSpec,
-} from 'interfaces';
-import { HLike } from 'interfaces';
+	HLike,
+} from 'secretary-like';
 
 
 export interface MarketConfig<H extends HLike<H>>

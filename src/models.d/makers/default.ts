@@ -2,7 +2,7 @@ import {
 	Operation,
 	HLike,
 	OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import { Makers } from './makers';

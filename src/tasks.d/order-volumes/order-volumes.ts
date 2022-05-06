@@ -1,7 +1,7 @@
 import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 
 import { MarginAccumulationLike } from '../margin-accumulation/margin-accumulation-like';
 import { Assets } from '../../models.d/assets';

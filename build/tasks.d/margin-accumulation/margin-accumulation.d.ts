@@ -1,7 +1,7 @@
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { MarginAccumulationLike } from './margin-accumulation-like';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 export declare abstract class MarginAccumulation<H extends HLike<H>> implements MarginAccumulationLike<H> {
     protected context: Context<H>;
     protected models: MarginAccumulation.ModelDeps<H>;

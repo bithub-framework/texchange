@@ -1,4 +1,4 @@
-import { Length, Position, HLike, H, HStatic } from 'interfaces';
+import { Length, Position, HLike, H, HStatic } from 'secretary-like';
 import { Context } from '../context';
 import { StatefulLike } from '../stateful-like';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {

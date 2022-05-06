@@ -1,7 +1,7 @@
 import {
 	Length,
 	HLike, H, HStatic,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export interface Frozen<H> {

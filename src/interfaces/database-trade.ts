@@ -1,7 +1,7 @@
 import {
 	HLike, HStatic,
 	Trade, TradeStatic,
-} from 'interfaces';
+} from 'secretary-like';
 
 export type DatabaseTradeId = string;
 

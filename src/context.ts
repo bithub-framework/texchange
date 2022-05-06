@@ -1,8 +1,8 @@
 import {
 	HLike,
 	MarketCalc,
-	TimelineLike,
-} from 'interfaces';
+} from 'secretary-like';
+import { TimelineLike } from 'timeline';
 import { Config } from './context.d/config';
 import { inject } from 'injektor';
 import { TYPES } from './types';

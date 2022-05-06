@@ -3,7 +3,7 @@ import { Broadcast } from '../broadcast';
 import {
 	Positions,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { Assets } from '../models.d/assets';
 import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';

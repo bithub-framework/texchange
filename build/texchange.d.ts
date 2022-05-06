@@ -1,4 +1,4 @@
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
 export declare class Texchange<H extends HLike<H>, PricingSnapshot> {

@@ -4,7 +4,7 @@ import {
     MarketSpec,
     AccountSpec,
     HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../../context';
 import { Instant } from '../instant';
 

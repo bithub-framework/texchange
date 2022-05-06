@@ -1,7 +1,7 @@
 import {
 	HLike,
 	OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 export interface ValidateOrderLike<H extends HLike<H>> {
 	validateOrder(order: OpenOrder<H>): void;

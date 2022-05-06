@@ -1,7 +1,7 @@
 import {
 	Length,
 	H, HLike, HStatic,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../context';
 import { StatefulLike } from '../stateful-like';
 

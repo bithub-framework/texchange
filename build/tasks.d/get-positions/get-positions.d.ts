@@ -1,5 +1,5 @@
 import { Context } from '../../context';
-import { Positions, HLike } from 'interfaces';
+import { Positions, HLike } from 'secretary-like';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';

@@ -4,7 +4,7 @@ import {
     HLike, H,
     OpenOrder,
     Trade,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';

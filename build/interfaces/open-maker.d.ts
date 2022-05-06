@@ -1,4 +1,4 @@
-import { HLike, H, HStatic, OpenOrder } from 'interfaces';
+import { HLike, H, HStatic, OpenOrder } from 'secretary-like';
 import { Frozen, FrozenStatic } from './frozen';
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H> {
     behind: H;

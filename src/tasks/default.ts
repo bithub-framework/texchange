@@ -13,7 +13,7 @@ import { DefaultGetAvailable } from '../tasks.d/get-available/default';
 import { DefaultMarginAccumulation } from '../tasks.d/margin-accumulation/default';
 import { DefaultSettle } from '../tasks.d/settle/default';
 
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 
 export class DefaultTasks<H extends HLike<H>>
 	extends Tasks<H> implements

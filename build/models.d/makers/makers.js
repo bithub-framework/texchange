@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 class Makers {
     constructor(context) {
         this.context = context;
         this.$orders = new Map();
         this.$totalUnfilled = {
-            [interfaces_1.Side.ASK]: new this.context.Data.H(0),
-            [interfaces_1.Side.BID]: new this.context.Data.H(0),
+            [secretary_like_1.Side.ASK]: new this.context.Data.H(0),
+            [secretary_like_1.Side.BID]: new this.context.Data.H(0),
         };
         this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.Data.H);
         this.totalFrozen = this.context.Data.Frozen.ZERO;
@@ -40,7 +40,7 @@ class Makers {
             const order = this.context.Data.OpenMaker.restore(orderSnapshot);
             this.$orders.set(order.id, order);
         }
-        for (const side of [interfaces_1.Side.ASK, interfaces_1.Side.BID]) {
+        for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
             this.$totalUnfilled[side] = [...this.$orders.values()]
                 .filter(order => order.side === side)
                 .reduce((total, order) => total.plus(order.unfilled), new this.context.Data.H(0));
@@ -51,12 +51,12 @@ class Makers {
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [interfaces_1.Length.LONG]: frozen.balance[interfaces_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
-                [interfaces_1.Length.SHORT]: frozen.balance[interfaces_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
+                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
             },
             position: {
-                [interfaces_1.Length.LONG]: frozen.position[interfaces_1.Length.LONG].round(this.context.config.market.QUANTITY_DP),
-                [interfaces_1.Length.SHORT]: frozen.position[interfaces_1.Length.SHORT].round(this.context.config.market.QUANTITY_DP),
+                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.context.config.market.QUANTITY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.context.config.market.QUANTITY_DP),
             },
         };
     }
@@ -117,8 +117,8 @@ exports.Makers = Makers;
         }
         copy(totalUnfilled) {
             return {
-                [interfaces_1.Side.ASK]: totalUnfilled[interfaces_1.Side.ASK],
-                [interfaces_1.Side.BID]: totalUnfilled[interfaces_1.Side.BID],
+                [secretary_like_1.Side.ASK]: totalUnfilled[secretary_like_1.Side.ASK],
+                [secretary_like_1.Side.BID]: totalUnfilled[secretary_like_1.Side.BID],
             };
         }
     }

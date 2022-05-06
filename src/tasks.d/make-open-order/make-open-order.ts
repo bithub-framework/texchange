@@ -2,7 +2,7 @@ import { Context } from '../../context';
 import {
     HLike,
     OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';

@@ -8,7 +8,7 @@ import { UpdateOrderbook } from './use-cases.d/update-orderbook';
 import { UpdateTrades } from './use-cases.d/update-trades';
 import { Subscription } from './use-cases.d/subscription';
 import { GetProgress } from './use-cases.d/get-progress';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Context } from './context';
 import { Models } from './models';
 import { Broadcast } from './broadcast';

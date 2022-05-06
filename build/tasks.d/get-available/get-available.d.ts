@@ -1,7 +1,7 @@
 import { GetAvailableLike } from './get-available-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Assets } from '../../models.d/assets';
 export declare abstract class GetAvailable<H extends HLike<H>> implements GetAvailableLike<H> {
     protected context: Context<H>;

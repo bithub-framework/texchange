@@ -2,7 +2,7 @@ import { Context } from '../../context';
 import {
 	Balances,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Broadcast } from '../../broadcast';
 import { GetBalancesLike } from './get-balances-like';
 

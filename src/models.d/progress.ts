@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
 import { DatabaseOrderbookId, DatabaseOrderbook } from '../interfaces/database-orderbook';
 import { DatabaseTradeId, DatabaseTrade } from '../interfaces/database-trade';

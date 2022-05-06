@@ -2,7 +2,7 @@ import { Context } from '../context';
 import {
 	HLike,
 	OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 import { Broadcast } from '../broadcast';
 
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';

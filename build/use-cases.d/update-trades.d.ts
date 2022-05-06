@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { DatabaseTrade } from '../interfaces/database-trade';
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';

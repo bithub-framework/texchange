@@ -1,4 +1,4 @@
-import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, OpenOrder, Amendment, AccountEventEmitterLike } from 'interfaces';
+import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, OpenOrder, Amendment, AccountEventEmitterLike } from 'secretary-like';
 import { Context } from '../../context';
 import { Instant } from '../instant';
 import { Subscription } from '../../use-cases.d/subscription';

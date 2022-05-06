@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settle = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 class Settle {
     constructor(context, models, broadcast) {
         this.context = context;
@@ -13,7 +13,7 @@ class Settle {
         const { assets, margins, pricing } = this.models;
         const position = assets.getPosition();
         const settlementPrice = pricing.getSettlementPrice();
-        for (const length of [interfaces_1.Length.LONG, interfaces_1.Length.SHORT]) {
+        for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const dollarVolume = calc.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
             const profit = assets.close(length, position[length], dollarVolume);
             assets.open(length, position[length], dollarVolume);

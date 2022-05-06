@@ -1,7 +1,7 @@
 import {
 	HLike, H,
 	Trade,
-} from 'interfaces';
+} from 'secretary-like';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
 import { inject } from 'injektor';

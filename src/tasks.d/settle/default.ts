@@ -1,7 +1,7 @@
 import {
 	Length,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../../context';
 import assert = require('assert');
 import { Broadcast } from '../../broadcast';

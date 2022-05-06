@@ -8,7 +8,7 @@ import { SettleLike } from '../tasks.d/settle/settle-like';
 import { DefaultGetAvailable } from '../tasks.d/get-available/default';
 import { DefaultMarginAccumulation } from '../tasks.d/margin-accumulation/default';
 import { DefaultSettle } from '../tasks.d/settle/default';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 export declare class DefaultTasks<H extends HLike<H>> extends Tasks<H> implements DefaultGetAvailable.TaskDeps<H>, DefaultSettle.TaskDeps<H>, DefaultMarginAccumulation.TaskDeps<H> {
     getAvailable: GetAvailableLike<H>;
     settle: SettleLike;

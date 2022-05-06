@@ -1,7 +1,7 @@
 import {
 	Side, Length, Operation,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { GetAvailable } from './get-available';

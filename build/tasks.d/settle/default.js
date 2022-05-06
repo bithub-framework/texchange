@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultSettle = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 const settle_1 = require("./settle");
 /**
@@ -18,7 +18,7 @@ class DefaultSettle extends settle_1.Settle {
             .plus(profit);
     }
     assertEnoughBalance() {
-        for (const length of [interfaces_1.Length.SHORT, interfaces_1.Length.LONG])
+        for (const length of [secretary_like_1.Length.SHORT, secretary_like_1.Length.LONG])
             assert(this.models.margins.getMargin()[length].gte(0));
     }
 }

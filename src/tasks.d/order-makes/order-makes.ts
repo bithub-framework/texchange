@@ -1,7 +1,7 @@
 import {
     HLike,
     OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';

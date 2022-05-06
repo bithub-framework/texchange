@@ -1,4 +1,4 @@
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 
 
 export interface GetAvailableLike<H extends HLike<H>> {

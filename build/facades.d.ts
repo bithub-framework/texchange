@@ -1,7 +1,7 @@
 import { Instant } from './facades.d/instant';
 import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Context } from './context';
 import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';

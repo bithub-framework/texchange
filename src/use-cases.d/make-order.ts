@@ -4,7 +4,7 @@ import {
 	LimitOrder,
 	HLike,
 	OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { Progress } from '../models.d/progress';
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';

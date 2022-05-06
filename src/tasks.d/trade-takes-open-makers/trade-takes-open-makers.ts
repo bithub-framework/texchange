@@ -4,7 +4,7 @@ import {
     HLike, H,
     OpenOrder,
     Trade,
-} from 'interfaces';
+} from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
 
 import { Context } from '../../context';

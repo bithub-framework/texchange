@@ -5,8 +5,8 @@ import {
     Balances,
     OpenOrder,
     Amendment,
-} from 'interfaces';
-import { HLike } from 'interfaces';
+    HLike,
+} from 'secretary-like';
 
 import { MakeOrder } from '../use-cases.d/make-order';
 import { CancelOrder } from '../use-cases.d/cancel-order';

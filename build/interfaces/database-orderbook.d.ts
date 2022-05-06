@@ -1,4 +1,4 @@
-import { HLike, HStatic, Orderbook } from 'interfaces';
+import { HLike, HStatic, Orderbook } from 'secretary-like';
 export declare type DatabaseOrderbookId = string;
 export interface DatabaseOrderbook<H extends HLike<H>> extends Orderbook<H> {
     id: DatabaseOrderbookId;

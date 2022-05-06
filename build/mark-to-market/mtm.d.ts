@@ -1,7 +1,7 @@
 import { StartableLike } from 'startable';
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 export declare abstract class Mtm<H extends HLike<H>> {
     protected context: Context<H>;
     protected models: Mtm.ModelDeps<H>;

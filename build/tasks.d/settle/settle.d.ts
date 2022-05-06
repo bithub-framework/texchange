@@ -1,4 +1,4 @@
-import { Length, HLike } from 'interfaces';
+import { Length, HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';

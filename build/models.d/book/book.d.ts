@@ -1,4 +1,4 @@
-import { Orderbook, Side, HLike } from 'interfaces';
+import { Orderbook, Side, HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';

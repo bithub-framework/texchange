@@ -1,7 +1,7 @@
 import {
 	Positions,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 export interface GetPositionsLike<H extends HLike<H>> {
 	getPositions(): Positions<H>;

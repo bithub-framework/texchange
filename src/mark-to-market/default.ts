@@ -2,7 +2,7 @@ import { Startable } from 'startable';
 import { Context } from '../context';
 import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { inject } from 'injektor';
 
 

@@ -2,7 +2,7 @@ import {
 	HLike, HStatic,
 	Orderbook,
 	OrderbookStatic,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export type DatabaseOrderbookId = string;

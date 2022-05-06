@@ -3,9 +3,9 @@ import {
 	HLike, HStatic,
 	OpenOrder,
 	OrderId,
-} from 'interfaces';
-import { OpenMaker, OpenMakerStatic } from '../../interfaces/open-maker';
-import { Frozen, FrozenStatic } from '../../interfaces/frozen';
+} from 'secretary-like';
+import { OpenMaker } from '../../interfaces/open-maker';
+import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';

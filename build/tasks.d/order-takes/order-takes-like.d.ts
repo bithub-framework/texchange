@@ -1,4 +1,4 @@
-import { HLike, OpenOrder, Trade } from 'interfaces';
+import { HLike, OpenOrder, Trade } from 'secretary-like';
 export interface OrderTakesLike<H extends HLike<H>> {
     $orderTakes($taker: OpenOrder<H>): Trade<H>[];
 }

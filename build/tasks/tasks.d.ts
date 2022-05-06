@@ -27,7 +27,7 @@ import { OrderVolumes } from '../tasks.d/order-volumes/order-volumes';
 import { GetAvailable } from '../tasks.d/get-available/get-available';
 import { MarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumulation';
 import { Settle } from '../tasks.d/settle/settle';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 export declare abstract class Tasks<H extends HLike<H>> implements MakeOpenOrder.TaskDeps<H>, CancelOpenOrder.TaskDeps<H>, GetBalances.TaskDeps<H>, GetClosable.TaskDeps<H>, GetPositions.TaskDeps<H>, OrderMakes.TaskDeps<H>, OrderTakes.TaskDeps<H>, TradeTakesOpenMakers.TaskDeps<H>, ValidateOrder.TaskDeps<H>, OrderVolumes.TaskDeps<H>, GetAvailable.TaskDeps<H>, Settle.TaskDeps<H>, MarginAccumulation.TaskDeps<H> {
     getBalances: GetBalancesLike<H>;
     getPositions: GetPositionsLike<H>;

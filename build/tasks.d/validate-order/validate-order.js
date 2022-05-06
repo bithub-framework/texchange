@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidateOrder = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 class ValidateOrder {
     constructor(tasks, context, models, broadcast) {
@@ -19,8 +19,8 @@ class ValidateOrder {
         const closable = this.tasks.getClosable.getClosable();
         makers.appendOrder(order, new this.context.Data.H(0));
         try {
-            const enoughPosition = closable[interfaces_1.Length.LONG].gte(0) &&
-                closable[interfaces_1.Length.SHORT].gte(0);
+            const enoughPosition = closable[secretary_like_1.Length.LONG].gte(0) &&
+                closable[secretary_like_1.Length.SHORT].gte(0);
             assert(enoughPosition);
             const enoughBalance = this.tasks.getAvailable.getAvailable()
                 .gte(this.context.calc.dollarVolume(order.price, order.unfilled).times(Math.max(this.context.config.account.TAKER_FEE_RATE, 0)).round(this.context.config.market.CURRENCY_DP));
@@ -35,8 +35,8 @@ class ValidateOrder {
         assert(order.price.mod(this.context.config.market.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
         assert(order.unfilled.eq(order.unfilled.round(this.context.config.market.QUANTITY_DP)));
-        assert(order.length === interfaces_1.Length.LONG || order.length === interfaces_1.Length.SHORT);
-        assert(order.operation === interfaces_1.Operation.OPEN || order.operation === interfaces_1.Operation.CLOSE);
+        assert(order.length === secretary_like_1.Length.LONG || order.length === secretary_like_1.Length.SHORT);
+        assert(order.operation === secretary_like_1.Operation.OPEN || order.operation === secretary_like_1.Operation.CLOSE);
         assert(order.operation * order.length === order.side);
     }
 }

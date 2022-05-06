@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenMakerStatic = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 class OpenMakerStatic {
     constructor(H, Frozen) {
         this.H = H;
         this.Frozen = Frozen;
-        this.OpenOrder = new interfaces_1.OpenOrderStatic(this.H);
+        this.OpenOrder = new secretary_like_1.OpenOrderStatic(this.H);
     }
     capture(order) {
         return {

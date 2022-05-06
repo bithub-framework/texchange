@@ -1,7 +1,7 @@
 import {
 	Closable,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 export interface GetClosableLike<H extends HLike<H>> {
 	getClosable(): Closable<H>;

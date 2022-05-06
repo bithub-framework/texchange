@@ -4,7 +4,7 @@ import { Makers } from './models.d/makers/makers';
 import { Book } from './models.d/book';
 import { Progress } from './models.d/progress';
 import { Pricing } from './models.d/pricing/pricing';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Context } from './context';
 export declare class Models<H extends HLike<H>, PricingSnapshot> {
     makers: Makers<H>;

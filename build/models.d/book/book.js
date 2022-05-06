@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Book = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 const decrements_1 = require("./decrements");
 class Book {
@@ -10,13 +10,13 @@ class Book {
         this.Decrements = new decrements_1.DecrementsStatic(this.context.Data.H);
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {
-            [interfaces_1.Side.ASK]: [],
-            [interfaces_1.Side.BID]: [],
+            [secretary_like_1.Side.ASK]: [],
+            [secretary_like_1.Side.BID]: [],
             time: Number.NEGATIVE_INFINITY,
         };
         this.decrements = {
-            [interfaces_1.Side.ASK]: new Map(),
-            [interfaces_1.Side.BID]: new Map(),
+            [secretary_like_1.Side.ASK]: new Map(),
+            [secretary_like_1.Side.BID]: new Map(),
         };
         this.finalbookCache = null;
     }
@@ -41,10 +41,10 @@ class Book {
             return this.finalbookCache;
         const $final = { time: this.time };
         const total = {
-            [interfaces_1.Side.ASK]: new Map(),
-            [interfaces_1.Side.BID]: new Map(),
+            [secretary_like_1.Side.ASK]: new Map(),
+            [secretary_like_1.Side.BID]: new Map(),
         };
-        for (const side of [interfaces_1.Side.BID, interfaces_1.Side.ASK]) {
+        for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(order.price.toFixed(this.context.config.market.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {

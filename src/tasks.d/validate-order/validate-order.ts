@@ -2,7 +2,7 @@ import {
     Operation, Length,
     HLike,
     OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 import assert = require('assert');
 import { Context } from '../../context';

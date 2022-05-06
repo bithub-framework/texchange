@@ -13,10 +13,11 @@
     "license": "SEE LICENSE IN ./LICENSE",
     "dependencies": {
         "@types/node": "^16.11.22",
-        "injektor": "github:zimtsui/injektor",
         "startable": "github:zimtsui/startable"
     },
     "peerDependencies": {
-        "interfaces": "github:bithub-framework/interfaces"
+        "injektor": "github:zimtsui/injektor",
+        "secretary-like": "github:bithub-framework/secretary-like",
+        "timeline": "github:zimtsui/timeline"
     }
 }

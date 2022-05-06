@@ -1,4 +1,4 @@
-import { HLike, Trade } from 'interfaces';
+import { HLike, Trade } from 'secretary-like';
 import { StatefulLike } from '../../stateful-like';
 import { Context } from '../../context';
 export declare abstract class Pricing<H extends HLike<H>, Snapshot> implements StatefulLike<Snapshot> {

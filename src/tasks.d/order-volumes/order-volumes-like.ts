@@ -1,7 +1,7 @@
 import {
 	Length,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 export interface OrderVolumesLike<H extends HLike<H>> {
 	open(volumes: OrderVolumesLike.Volumes<H>): void;

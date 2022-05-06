@@ -1,4 +1,5 @@
-import { HLike, MarketCalc, TimelineLike } from 'interfaces';
+import { HLike, MarketCalc } from 'secretary-like';
+import { TimelineLike } from 'timeline';
 import { Config } from './context.d/config';
 import { DataStatic } from './interfaces/data';
 export declare class Context<H extends HLike<H>> {

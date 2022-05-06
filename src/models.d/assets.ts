@@ -2,7 +2,7 @@ import {
     Length,
     Position,
     HLike, H, HStatic,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../context';
 import assert = require('assert');
 import { StatefulLike } from '../stateful-like';

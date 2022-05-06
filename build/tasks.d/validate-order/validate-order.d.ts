@@ -1,4 +1,4 @@
-import { HLike, OpenOrder } from 'interfaces';
+import { HLike, OpenOrder } from 'secretary-like';
 import { Context } from '../../context';
 import { ValidateOrderLike } from './validate-order-like';
 import { Broadcast } from '../../broadcast';

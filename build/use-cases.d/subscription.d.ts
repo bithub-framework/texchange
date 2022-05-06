@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike, Trade, Orderbook, Positions, Balances } from 'interfaces';
+import { HLike, Trade, Orderbook, Positions, Balances } from 'secretary-like';
 import { EventEmitter } from 'events';
 export declare class Subscription<H extends HLike<H>> extends EventEmitter {
     protected context: Context<H>;

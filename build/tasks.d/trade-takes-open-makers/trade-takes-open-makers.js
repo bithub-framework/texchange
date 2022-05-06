@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 class TradeTakesOpenMakers {
     constructor(tasks, context, models, broadcast) {
         this.tasks = tasks;
@@ -18,12 +18,12 @@ class TradeTakesOpenMakers {
             }
     }
     $tradeShouldTakeOpenOrder($trade, maker) {
-        return (maker.side === interfaces_1.Side.BID &&
-            $trade.side === interfaces_1.Side.ASK &&
+        return (maker.side === secretary_like_1.Side.BID &&
+            $trade.side === secretary_like_1.Side.ASK &&
             $trade.price.lte(maker.price)
             ||
-                maker.side === interfaces_1.Side.ASK &&
-                    $trade.side === interfaces_1.Side.BID &&
+                maker.side === secretary_like_1.Side.ASK &&
+                    $trade.side === secretary_like_1.Side.BID &&
                     $trade.price.gte(maker.price));
     }
     $tradeTakesOrderQueue($trade, maker) {
@@ -46,8 +46,8 @@ class TradeTakesOpenMakers {
         makers.takeOrder(maker.id, volume);
         assets.pay(dollarVolume
             .times(this.context.config.account.MAKER_FEE_RATE)
-            .round(this.context.config.market.CURRENCY_DP, interfaces_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
-        if (maker.operation === interfaces_1.Operation.OPEN)
+            .round(this.context.config.market.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
+        if (maker.operation === secretary_like_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: maker.length,
                 volume,

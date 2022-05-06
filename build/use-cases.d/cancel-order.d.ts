@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { HLike, OpenOrder } from 'interfaces';
+import { HLike, OpenOrder } from 'secretary-like';
 import { Broadcast } from '../broadcast';
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 export declare class CancelOrder<H extends HLike<H>> {

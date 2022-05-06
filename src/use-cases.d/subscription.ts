@@ -6,7 +6,7 @@ import {
 	Orderbook,
 	Positions,
 	Balances,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { EventEmitter } from 'events';
 

@@ -1,7 +1,7 @@
 import {
 	Length,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export interface MarginAccumulationLike<H extends HLike<H>> {

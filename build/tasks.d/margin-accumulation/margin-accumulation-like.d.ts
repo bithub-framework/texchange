@@ -1,4 +1,4 @@
-import { Length, HLike } from 'interfaces';
+import { Length, HLike } from 'secretary-like';
 export interface MarginAccumulationLike<H extends HLike<H>> {
     newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;
     newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes<H>): H;

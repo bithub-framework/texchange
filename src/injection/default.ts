@@ -1,13 +1,13 @@
 import { createBaseContainer } from './base-container';
-import { HLike, HStatic } from 'interfaces';
+import { HLike, HStatic } from 'secretary-like';
 import { Container } from 'injektor';
 import { TYPES } from '../types';
 
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { TimelineLike } from 'interfaces';
-import { MarketCalc } from 'interfaces';
+import { TimelineLike } from 'timeline';
+import { MarketCalc } from 'secretary-like';
 import { DefaultMarketCalc } from '../context.d/market-calc/default';
 
 // Models

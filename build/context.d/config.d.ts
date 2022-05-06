@@ -1,5 +1,4 @@
-import { MarketSpec, AccountSpec } from 'interfaces';
-import { HLike } from 'interfaces';
+import { MarketSpec, AccountSpec, HLike } from 'secretary-like';
 export interface MarketConfig<H extends HLike<H>> extends MarketSpec<H> {
     readonly PING: number;
     readonly PROCESSING: number;

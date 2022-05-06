@@ -1,7 +1,7 @@
 import {
 	HLike, H, HStatic,
 	OpenOrder, OpenOrderStatic,
-} from 'interfaces';
+} from 'secretary-like';
 import { Frozen, FrozenStatic } from './frozen';
 
 

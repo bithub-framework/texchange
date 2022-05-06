@@ -2,7 +2,7 @@ import {
     Orderbook,
     Side,
     HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import assert = require('assert');
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';

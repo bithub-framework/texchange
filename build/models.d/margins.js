@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Margins = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 class Margins {
     constructor(context) {
         this.context = context;
         this.Margin = new Margins.MarginStatic(this.context.Data.H);
         this.$margin = {
-            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
+            [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
+            [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
         };
     }
     getMargin() {
@@ -32,20 +32,20 @@ exports.Margins = Margins;
         }
         capture(margin) {
             return {
-                [interfaces_1.Length.LONG]: this.H.capture(margin[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.H.capture(margin[interfaces_1.Length.SHORT]),
+                [secretary_like_1.Length.LONG]: this.H.capture(margin[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: this.H.capture(margin[secretary_like_1.Length.SHORT]),
             };
         }
         restore(snapshot) {
             return {
-                [interfaces_1.Length.LONG]: this.H.restore(snapshot[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.H.restore(snapshot[interfaces_1.Length.SHORT]),
+                [secretary_like_1.Length.LONG]: this.H.restore(snapshot[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: this.H.restore(snapshot[secretary_like_1.Length.SHORT]),
             };
         }
         copy(margin) {
             return {
-                [interfaces_1.Length.LONG]: margin[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: margin[interfaces_1.Length.SHORT],
+                [secretary_like_1.Length.LONG]: margin[secretary_like_1.Length.LONG],
+                [secretary_like_1.Length.SHORT]: margin[secretary_like_1.Length.SHORT],
             };
         }
     }

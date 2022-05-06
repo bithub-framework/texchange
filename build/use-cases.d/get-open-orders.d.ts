@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike, OpenOrder } from 'interfaces';
+import { HLike, OpenOrder } from 'secretary-like';
 import { Makers } from '../models.d/makers/makers';
 export declare class GetOpenOrders<H extends HLike<H>> {
     protected context: Context<H>;

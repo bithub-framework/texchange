@@ -1,13 +1,9 @@
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { inject } from 'injektor';
 import { TYPES } from './types';
 
-import { Models } from './models';
 
-// Mark to market
-import { Mtm } from './mark-to-market/mtm';
-
-// Controller
+// Facades
 import { Latency } from './facades.d/latency/latency';
 import { Joystick } from './facades.d/joystick';
 

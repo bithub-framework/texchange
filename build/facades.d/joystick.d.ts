@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
 import { Models, Snapshot } from '../models';
 import { Mtm } from '../mark-to-market/mtm';

@@ -1,4 +1,4 @@
-import { Side, HLike, HStatic, OpenOrder, OrderId } from 'interfaces';
+import { Side, HLike, HStatic, OpenOrder, OrderId } from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
 import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';

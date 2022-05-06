@@ -1,4 +1,4 @@
-import { Closable, HLike } from 'interfaces';
+import { Closable, HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { GetClosableLike } from './get-closable-like';
 import { Broadcast } from '../../broadcast';

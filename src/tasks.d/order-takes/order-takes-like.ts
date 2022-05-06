@@ -2,7 +2,7 @@ import {
 	HLike,
 	OpenOrder,
 	Trade,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export interface OrderTakesLike<H extends HLike<H>> {

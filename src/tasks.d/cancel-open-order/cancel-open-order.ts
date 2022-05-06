@@ -4,7 +4,7 @@ import { Broadcast } from '../../broadcast';
 import {
 	HLike,
 	OpenOrder,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { Makers } from '../../models.d/makers/makers';
 

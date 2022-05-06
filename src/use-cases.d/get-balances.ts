@@ -3,7 +3,7 @@ import { Broadcast } from '../broadcast';
 import {
 	Balances,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 
 import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
 

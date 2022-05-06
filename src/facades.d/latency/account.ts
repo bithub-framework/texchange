@@ -8,7 +8,7 @@ import {
 	OpenOrder,
 	Amendment,
 	AccountEventEmitterLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { EventEmitter } from 'events';
 import { Context } from '../../context';
 import { Instant } from '../instant';

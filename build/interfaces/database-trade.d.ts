@@ -1,4 +1,4 @@
-import { HLike, HStatic, Trade } from 'interfaces';
+import { HLike, HStatic, Trade } from 'secretary-like';
 export declare type DatabaseTradeId = string;
 export interface DatabaseTrade<H extends HLike<H>> extends Trade<H> {
     id: DatabaseTradeId;

@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { DatabaseTradeId } from '../interfaces/database-trade';
 import { Progress } from '../models.d/progress';

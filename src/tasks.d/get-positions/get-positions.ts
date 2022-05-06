@@ -2,7 +2,7 @@ import { Context } from '../../context';
 import {
 	Positions,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { GetPositionsLike } from './get-positions-like';
 import { Broadcast } from '../../broadcast';
 

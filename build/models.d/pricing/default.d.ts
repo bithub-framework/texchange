@@ -1,4 +1,4 @@
-import { HLike, H, Trade } from 'interfaces';
+import { HLike, H, Trade } from 'secretary-like';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
 /**

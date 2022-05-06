@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { MarketEvents, AccountEvents, MarketSpec, AccountSpec, HLike } from 'interfaces';
+import { MarketEvents, AccountEvents, MarketSpec, AccountSpec, HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { Instant } from '../instant';
 import { MarketLatency } from './market';

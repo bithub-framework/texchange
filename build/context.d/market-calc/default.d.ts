@@ -1,4 +1,4 @@
-import { HLike, MarketCalc } from 'interfaces';
+import { HLike, MarketCalc } from 'secretary-like';
 /**
  * 默认正向合约
  */

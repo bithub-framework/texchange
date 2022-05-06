@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetClosable = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 class GetClosable {
     constructor(tasks, context, models, broadcast) {
         this.tasks = tasks;
@@ -14,10 +14,10 @@ class GetClosable {
         const totalFrozen = makers.getTotalFrozen();
         const position = assets.getPosition();
         return {
-            [interfaces_1.Length.LONG]: position[interfaces_1.Length.LONG]
-                .minus(totalFrozen.position[interfaces_1.Length.LONG]),
-            [interfaces_1.Length.SHORT]: position[interfaces_1.Length.SHORT]
-                .minus(totalFrozen.position[interfaces_1.Length.SHORT]),
+            [secretary_like_1.Length.LONG]: position[secretary_like_1.Length.LONG]
+                .minus(totalFrozen.position[secretary_like_1.Length.LONG]),
+            [secretary_like_1.Length.SHORT]: position[secretary_like_1.Length.SHORT]
+                .minus(totalFrozen.position[secretary_like_1.Length.SHORT]),
         };
     }
 }

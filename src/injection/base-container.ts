@@ -1,11 +1,11 @@
-import { HLike, HStatic } from 'interfaces';
+import { HLike, HStatic } from 'secretary-like';
 import { Container } from 'injektor';
 import { TYPES } from '../types';
 
 // Context
 import { Context } from '../context';
 import { Config } from '../context.d/config';
-import { TimelineLike } from 'interfaces';
+import { TimelineLike } from 'timeline';
 import { DataStatic } from '../interfaces/data';
 
 // Models
@@ -19,10 +19,6 @@ import { UseCases } from '../use-cases';
 
 // Facades
 import { Facades } from '../facades';
-
-// Controller
-import { Latency } from '../facades.d/latency/latency';
-import { Joystick } from '../facades.d/joystick';
 
 // Texchange
 import { Texchange } from '../texchange';

@@ -1,4 +1,4 @@
-import { Side, HStatic, HLike, H } from 'interfaces';
+import { Side, HStatic, HLike, H } from 'secretary-like';
 export interface Decrements<H extends HLike<H>> {
     [side: Side]: Map<string, H>;
 }

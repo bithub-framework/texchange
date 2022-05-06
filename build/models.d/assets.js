@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 class Assets {
     constructor(context) {
@@ -9,12 +9,12 @@ class Assets {
         this.Cost = new Assets.CostStatic(this.context.Data.H);
         this.balance = this.context.config.account.initialBalance;
         this.$position = {
-            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
+            [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
+            [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
         };
         this.$cost = {
-            [interfaces_1.Length.LONG]: new this.context.Data.H(0),
-            [interfaces_1.Length.SHORT]: new this.context.Data.H(0),
+            [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
+            [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
         };
     }
     getBalance() {
@@ -69,20 +69,20 @@ exports.Assets = Assets;
         }
         capture(cost) {
             return {
-                [interfaces_1.Length.LONG]: this.H.capture(cost[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.H.capture(cost[interfaces_1.Length.SHORT]),
+                [secretary_like_1.Length.LONG]: this.H.capture(cost[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: this.H.capture(cost[secretary_like_1.Length.SHORT]),
             };
         }
         restore(snapshot) {
             return {
-                [interfaces_1.Length.LONG]: this.H.restore(snapshot[interfaces_1.Length.LONG]),
-                [interfaces_1.Length.SHORT]: this.H.restore(snapshot[interfaces_1.Length.SHORT]),
+                [secretary_like_1.Length.LONG]: this.H.restore(snapshot[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: this.H.restore(snapshot[secretary_like_1.Length.SHORT]),
             };
         }
         copy(cost) {
             return {
-                [interfaces_1.Length.LONG]: cost[interfaces_1.Length.LONG],
-                [interfaces_1.Length.SHORT]: cost[interfaces_1.Length.SHORT],
+                [secretary_like_1.Length.LONG]: cost[secretary_like_1.Length.LONG],
+                [secretary_like_1.Length.SHORT]: cost[secretary_like_1.Length.SHORT],
             };
         }
     }

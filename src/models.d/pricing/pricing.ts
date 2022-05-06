@@ -1,7 +1,7 @@
 import {
 	HLike,
 	Trade,
-} from 'interfaces';
+} from 'secretary-like';
 import { StatefulLike } from '../../stateful-like';
 import { Context } from '../../context';
 

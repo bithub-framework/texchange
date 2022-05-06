@@ -1,7 +1,7 @@
 import {
     Length,
     HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../../context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';

@@ -10,7 +10,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMakers = void 0;
-const interfaces_1 = require("interfaces");
+const secretary_like_1 = require("secretary-like");
 const context_1 = require("../../context");
 const makers_1 = require("./makers");
 const injektor_1 = require("injektor");
@@ -20,7 +20,7 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
      * 默认单向持仓模式
      */
     toFreeze(order) {
-        if (order.operation === interfaces_1.Operation.OPEN)
+        if (order.operation === secretary_like_1.Operation.OPEN)
             return {
                 balance: {
                     [order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),

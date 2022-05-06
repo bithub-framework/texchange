@@ -1,5 +1,4 @@
-import { DataStatic as SecretaryDataStatic } from 'interfaces/build/secretaries/data/data';
-import { HLike } from 'interfaces';
+import { DataStatic as SecretaryDataStatic, HLike } from 'secretary-like';
 import { OpenMakerStatic } from './open-maker';
 import { FrozenStatic } from './frozen';
 import { DatabaseTradeStatic } from './database-trade';

@@ -1,5 +1,5 @@
 import { Context } from '../../context';
-import { HLike, OpenOrder } from 'interfaces';
+import { HLike, OpenOrder } from 'secretary-like';
 import { MakeOpenOrderLike } from './make-open-order-like';
 import { Broadcast } from '../../broadcast';
 import { ValidateOrderLike } from '../validate-order/validate-order-like';

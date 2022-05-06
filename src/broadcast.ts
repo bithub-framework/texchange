@@ -5,7 +5,7 @@ import {
 	Balances,
 	HLike,
 	Trade,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export class Broadcast<H extends HLike<H>> extends EventEmitter { }

@@ -1,4 +1,4 @@
-import { HLike, MarketCalc } from 'interfaces';
+import { HLike, MarketCalc } from 'secretary-like';
 import assert = require('assert');
 
 

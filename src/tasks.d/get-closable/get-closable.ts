@@ -2,7 +2,7 @@ import {
 	Length,
 	Closable,
 	HLike,
-} from 'interfaces';
+} from 'secretary-like';
 import { Context } from '../../context';
 import { GetClosableLike } from './get-closable-like';
 import { Broadcast } from '../../broadcast';

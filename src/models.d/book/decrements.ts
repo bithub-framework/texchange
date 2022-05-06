@@ -1,7 +1,7 @@
 import {
 	Side,
 	HStatic, HLike, H,
-} from 'interfaces';
+} from 'secretary-like';
 
 
 export interface Decrements<H extends HLike<H>> {

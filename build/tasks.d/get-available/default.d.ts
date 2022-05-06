@@ -1,4 +1,4 @@
-import { HLike } from 'interfaces';
+import { HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { GetAvailable } from './get-available';
