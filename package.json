@@ -11,13 +11,11 @@
     },
     "author": "Zim",
     "license": "SEE LICENSE IN ./LICENSE",
-    "dependencies": {
-        "@types/node": "^16.11.22",
-        "startable": "github:zimtsui/startable"
-    },
     "peerDependencies": {
+        "@types/node": ">=16",
         "injektor": "github:zimtsui/injektor",
         "secretary-like": "github:bithub-framework/secretary-like",
+        "startable": "github:zimtsui/startable",
         "timeline": "github:zimtsui/timeline"
     }
 }
