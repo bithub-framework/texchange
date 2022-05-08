@@ -4,7 +4,9 @@ import {
 } from 'secretary-like';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
+
 import { inject } from 'injektor';
+import { TYPES } from '../../injection/types';
 
 
 /**
@@ -16,7 +18,7 @@ export class DefaultPricing<H extends HLike<H>>
 	private settlementPrice: H;
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		protected context: Context<H>,
 	) {
 		super();

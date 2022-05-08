@@ -15,6 +15,7 @@ import { Broadcast } from './broadcast';
 import { Tasks } from './tasks/tasks';
 
 import { inject } from 'injektor';
+import { TYPES } from './injection/types';
 
 
 
@@ -30,15 +31,15 @@ export class UseCases<H extends HLike<H>> {
 	public getProgress: GetProgress<H>;
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
-		@inject(Models)
+		@inject(TYPES.Models)
 		models: Models<H>,
-		@inject(Broadcast)
+		@inject(TYPES.Broadcast)
 		broadcast: Broadcast<H>,
-		@inject(Tasks)
+		@inject(TYPES.Tasks)
 		tasks: Tasks<H>,
-		@inject(UpdateTrades)
+		@inject(TYPES.UpdateTrades)
 		public updateTrades: UpdateTrades<H>,
 	) {
 		this.amendOrder = new AmendOrder(context, models, broadcast, tasks);

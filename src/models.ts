@@ -7,6 +7,7 @@ import { Pricing } from './models.d/pricing/pricing';
 import { HLike } from 'secretary-like';
 import { Context } from './context';
 import { inject } from 'injektor';
+import { TYPES } from './injection/types';
 
 
 
@@ -17,11 +18,11 @@ export class Models<H extends HLike<H>> {
 	public progress: Progress<H>;
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
-		@inject(Makers)
+		@inject(TYPES.Makers)
 		public makers: Makers<H>,
-		@inject(Pricing)
+		@inject(TYPES.Pricing)
 		public pricing: Pricing<H, any>,
 	) {
 		this.assets = new Assets(context);

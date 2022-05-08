@@ -1,6 +1,6 @@
 import { HLike } from 'secretary-like';
 import { inject } from 'injektor';
-import { TYPES } from './types';
+import { TYPES } from './injection/types';
 
 
 // Facades

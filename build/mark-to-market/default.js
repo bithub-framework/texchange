@@ -11,10 +11,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMtm = void 0;
 const startable_1 = require("startable");
-const context_1 = require("../context");
 const mtm_1 = require("./mtm");
-const broadcast_1 = require("../broadcast");
 const injektor_1 = require("injektor");
+const types_1 = require("../injection/types");
 /**
  * 默认永不结算
  */
@@ -29,10 +28,10 @@ let DefaultMtm = class DefaultMtm extends mtm_1.Mtm {
     async stop() { }
 };
 DefaultMtm = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context)),
-    __param(1, (0, injektor_1.inject)(DefaultMtm.ModelDeps)),
-    __param(2, (0, injektor_1.inject)(broadcast_1.Broadcast)),
-    __param(3, (0, injektor_1.inject)(DefaultMtm.TaskDeps))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
 ], DefaultMtm);
 exports.DefaultMtm = DefaultMtm;
 (function (DefaultMtm) {

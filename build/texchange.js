@@ -11,6 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Texchange = void 0;
 const injektor_1 = require("injektor");
+const types_1 = require("./injection/types");
 let Texchange = class Texchange {
     constructor(user, admin) {
         this.user = user;
@@ -18,8 +19,8 @@ let Texchange = class Texchange {
     }
 };
 Texchange = __decorate([
-    __param(0, (0, injektor_1.inject)(4 /* UserTex */)),
-    __param(1, (0, injektor_1.inject)(5 /* AdminTex */))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.UserTex)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.AdminTex))
 ], Texchange);
 exports.Texchange = Texchange;
 //# sourceMappingURL=texchange.js.map

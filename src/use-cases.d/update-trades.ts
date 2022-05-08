@@ -9,6 +9,9 @@ import { SettleLike } from '../tasks.d/settle/settle-like';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 
+import { inject } from 'injektor';
+import { TYPES } from '../injection/types';
+
 
 export class UpdateTrades<H extends HLike<H>> {
 	public constructor(

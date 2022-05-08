@@ -3,7 +3,9 @@ import { Context } from '../context';
 import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
+
 import { inject } from 'injektor';
+import { TYPES } from '../injection/types';
 
 
 /**
@@ -17,13 +19,13 @@ export class DefaultMtm<H extends HLike<H>>
 	);
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
-		@inject(DefaultMtm.ModelDeps)
+		@inject(TYPES.Models)
 		protected models: DefaultMtm.ModelDeps<H>,
-		@inject(Broadcast)
+		@inject(TYPES.Broadcast)
 		broadcast: Broadcast<H>,
-		@inject(DefaultMtm.TaskDeps)
+		@inject(TYPES.Tasks)
 		protected tasks: DefaultMtm.TaskDeps<H>,
 	) {
 		super(

@@ -11,10 +11,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultTasks = void 0;
 const tasks_1 = require("./tasks");
-const context_1 = require("../context");
-const models_1 = require("../models");
-const broadcast_1 = require("../broadcast");
 const injektor_1 = require("injektor");
+const types_1 = require("../injection/types");
 const default_1 = require("../tasks.d/get-available/default");
 const default_2 = require("../tasks.d/margin-accumulation/default");
 const default_3 = require("../tasks.d/settle/default");
@@ -27,9 +25,9 @@ let DefaultTasks = class DefaultTasks extends tasks_1.Tasks {
     }
 };
 DefaultTasks = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context)),
-    __param(1, (0, injektor_1.inject)(models_1.Models)),
-    __param(2, (0, injektor_1.inject)(broadcast_1.Broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
 ], DefaultTasks);
 exports.DefaultTasks = DefaultTasks;
 //# sourceMappingURL=default.js.map

@@ -7,6 +7,7 @@ import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';
 import { UseCases } from './use-cases';
 import { inject } from 'injektor';
+import { TYPES } from './injection/types';
 
 
 
@@ -16,13 +17,13 @@ export class Facades<H extends HLike<H>> {
 	public joystick: Joystick<H>;
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
-		@inject(Models)
+		@inject(TYPES.Models)
 		models: Models<H>,
-		@inject(Mtm)
+		@inject(TYPES.Mtm)
 		mtm: Mtm<H> | null,
-		@inject(UseCases)
+		@inject(TYPES.UseCases)
 		useCases: UseCases<H>,
 	) {
 		this.instant = new Instant(context, useCases);

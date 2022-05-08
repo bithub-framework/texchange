@@ -11,9 +11,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMakers = void 0;
 const secretary_like_1 = require("secretary-like");
-const context_1 = require("../../context");
 const makers_1 = require("./makers");
 const injektor_1 = require("injektor");
+const types_1 = require("../../injection/types");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     constructor(context) { super(context); }
     /**
@@ -39,7 +39,7 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     }
 };
 DefaultMakers = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
 ], DefaultMakers);
 exports.DefaultMakers = DefaultMakers;
 //# sourceMappingURL=default.js.map

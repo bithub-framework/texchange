@@ -4,6 +4,7 @@ import { Context } from '../context';
 import { Models } from '../models';
 import { Broadcast } from '../broadcast';
 import { inject } from 'injektor';
+import { TYPES } from '../injection/types';
 
 import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
 import { MarginAccumulationLike } from '../tasks.d/margin-accumulation/margin-accumulation-like';
@@ -25,11 +26,11 @@ export class DefaultTasks<H extends HLike<H>>
 	public marginAccumulation: MarginAccumulationLike<H>;
 
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
-		@inject(Models)
+		@inject(TYPES.Models)
 		models: Models<H>,
-		@inject(Broadcast)
+		@inject(TYPES.Broadcast)
 		broadcast: Broadcast<H>,
 	) {
 		super(

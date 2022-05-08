@@ -1,2 +1,2 @@
-export { createBaseContainer } from './injection/base-container';
-export { createDefaultContainer } from './injection/default';
+export { Container as BaseContainer } from './injection/base-container';
+export { Container as DefaultContainer } from './injection/default';

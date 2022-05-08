@@ -1,35 +1,27 @@
 "use strict";
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDefaultContainer = void 0;
+exports.Container = void 0;
 const base_container_1 = require("./base-container");
-// Context
-const context_1 = require("../context");
+const types_1 = require("./types");
 const default_1 = require("../context.d/market-calc/default");
-// Models
-const makers_1 = require("../models.d/makers/makers");
 const default_2 = require("../models.d/makers/default");
-const pricing_1 = require("../models.d/pricing/pricing");
 const default_3 = require("../models.d/pricing/default");
-const models_1 = require("../models");
-//Broadcast
-const broadcast_1 = require("../broadcast");
-// Tasks
-const tasks_1 = require("../tasks/tasks");
 const default_4 = require("../tasks/default");
-// Mark to market
-const mtm_1 = require("../mark-to-market/mtm");
 const default_5 = require("../mark-to-market/default");
 // Use cases
 const update_trades_1 = require("../use-cases.d/update-trades");
-function createDefaultContainer(config, timeline, H) {
-    const c = (0, base_container_1.createBaseContainer)(config, timeline, H);
-    c.rcs(3 /* MarketCalc */, default_1.DefaultMarketCalc);
-    c.rcs(makers_1.Makers, default_2.DefaultMakers);
-    c.rcs(pricing_1.Pricing, default_3.DefaultPricing);
-    c.rcs(mtm_1.Mtm, default_5.DefaultMtm);
-    c.rcs(tasks_1.Tasks, default_4.DefaultTasks);
-    c.rfs(update_trades_1.UpdateTrades, () => new update_trades_1.UpdateTrades(c.i(context_1.Context), c.i(models_1.Models), c.i(broadcast_1.Broadcast), c.i(tasks_1.Tasks), true));
-    return c;
+class Container extends base_container_1.Container {
+    constructor() {
+        super(...arguments);
+        this[_a] = this.rcs(default_1.DefaultMarketCalc);
+        this[_b] = this.rcs(default_2.DefaultMakers);
+        this[_c] = this.rcs(default_3.DefaultPricing);
+        this[_d] = this.rcs(default_5.DefaultMtm);
+        this[_e] = this.rcs(default_4.DefaultTasks);
+        this[_f] = this.rfs(() => new update_trades_1.UpdateTrades(this[types_1.TYPES.Context](), this[types_1.TYPES.Models](), this[types_1.TYPES.Broadcast](), this[types_1.TYPES.Tasks](), true));
+    }
 }
-exports.createDefaultContainer = createDefaultContainer;
+exports.Container = Container;
+_a = types_1.TYPES.MarketCalc, _b = types_1.TYPES.Makers, _c = types_1.TYPES.Pricing, _d = types_1.TYPES.Mtm, _e = types_1.TYPES.Tasks, _f = types_1.TYPES.UpdateTrades;
 //# sourceMappingURL=default.js.map

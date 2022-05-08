@@ -6,12 +6,14 @@ import {
 import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import { Makers } from './makers';
+
 import { inject } from 'injektor';
+import { TYPES } from '../../injection/types';
 
 
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	public constructor(
-		@inject(Context)
+		@inject(TYPES.Context)
 		context: Context<H>,
 	) { super(context); }
 

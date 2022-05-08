@@ -12,12 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Models = void 0;
 const assets_1 = require("./models.d/assets");
 const margins_1 = require("./models.d/margins");
-const makers_1 = require("./models.d/makers/makers");
 const book_1 = require("./models.d/book");
 const progress_1 = require("./models.d/progress");
-const pricing_1 = require("./models.d/pricing/pricing");
-const context_1 = require("./context");
 const injektor_1 = require("injektor");
+const types_1 = require("./injection/types");
 let Models = class Models {
     constructor(context, makers, pricing) {
         this.makers = makers;
@@ -29,9 +27,9 @@ let Models = class Models {
     }
 };
 Models = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context)),
-    __param(1, (0, injektor_1.inject)(makers_1.Makers)),
-    __param(2, (0, injektor_1.inject)(pricing_1.Pricing))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.Makers)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.Pricing))
 ], Models);
 exports.Models = Models;
 //# sourceMappingURL=models.js.map

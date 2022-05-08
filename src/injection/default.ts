@@ -1,7 +1,6 @@
-import { createBaseContainer } from './base-container';
 import { HLike, HStatic } from 'secretary-like';
-import { Container } from 'injektor';
-import { TYPES } from '../types';
+import { Container as BaseContainer } from './base-container';
+import { TYPES } from './types';
 
 // Context
 import { Context } from '../context';
@@ -35,51 +34,23 @@ import { DefaultMtm } from '../mark-to-market/default';
 import { UpdateTrades } from '../use-cases.d/update-trades';
 
 
-export function createDefaultContainer<H extends HLike<H>>(
-	config: Config<H>,
-	timeline: TimelineLike,
-	H: HStatic<H>,
-): Container {
-	const c = createBaseContainer(
-		config,
-		timeline,
-		H,
-	);
+export class Container<H extends HLike<H>> extends BaseContainer<H> {
+	public [TYPES.MarketCalc] = this.rcs<MarketCalc<H>>(DefaultMarketCalc);
 
-	c.rcs<MarketCalc<H>>(
-		TYPES.MarketCalc,
-		DefaultMarketCalc,
-	);
+	public [TYPES.Makers] = this.rcs<Makers<H>>(DefaultMakers);
+	public [TYPES.Pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
 
-	c.rcs<Makers<H>>(
-		Makers,
-		DefaultMakers,
-	);
-	c.rcs<Pricing<H, DefaultPricing.Snapshot>>(
-		Pricing,
-		DefaultPricing,
-	);
+	public [TYPES.Mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 
-	c.rcs<Mtm<H>>(
-		Mtm,
-		DefaultMtm,
-	);
+	public [TYPES.Tasks] = this.rcs<Tasks<H>>(DefaultTasks);
 
-	c.rcs<Tasks<H>>(
-		Tasks,
-		DefaultTasks,
-	);
-
-	c.rfs(
-		UpdateTrades,
+	public [TYPES.UpdateTrades] = this.rfs<UpdateTrades<H>>(
 		() => new UpdateTrades(
-			c.i<Context<H>>(Context),
-			c.i(Models),
-			c.i(Broadcast),
-			c.i(Tasks),
+			this[TYPES.Context](),
+			this[TYPES.Models](),
+			this[TYPES.Broadcast](),
+			this[TYPES.Tasks](),
 			true,
 		),
 	);
-
-	return c;
 }

@@ -11,8 +11,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultPricing = void 0;
 const pricing_1 = require("./pricing");
-const context_1 = require("../../context");
 const injektor_1 = require("injektor");
+const types_1 = require("../../injection/types");
 /**
  * 默认以最新价格作为结算价。
  */
@@ -36,7 +36,7 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
     }
 };
 DefaultPricing = __decorate([
-    __param(0, (0, injektor_1.inject)(context_1.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
 ], DefaultPricing);
 exports.DefaultPricing = DefaultPricing;
 //# sourceMappingURL=default.js.map
