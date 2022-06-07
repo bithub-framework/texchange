@@ -6,7 +6,7 @@ import { Context } from './context';
 import { Models } from './models';
 import { Mtm } from './mark-to-market/mtm';
 import { UseCases } from './use-cases';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from './injection/types';
 
 

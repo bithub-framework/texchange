@@ -2,7 +2,7 @@
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./types");
 // Context
 const context_1 = require("../context");

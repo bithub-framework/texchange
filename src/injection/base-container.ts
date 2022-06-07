@@ -1,5 +1,5 @@
 import { HLike, HStatic } from 'secretary-like';
-import { BaseContainer } from 'injektor';
+import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 
 // Context

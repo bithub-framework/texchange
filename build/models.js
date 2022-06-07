@@ -14,7 +14,7 @@ const assets_1 = require("./models.d/assets");
 const margins_1 = require("./models.d/margins");
 const book_1 = require("./models.d/book");
 const progress_1 = require("./models.d/progress");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./injection/types");
 let Models = class Models {
     constructor(context, makers, pricing) {

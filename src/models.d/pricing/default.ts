@@ -5,7 +5,7 @@ import {
 import { Pricing } from './pricing';
 import { Context } from '../../context';
 
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
 
 

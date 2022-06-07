@@ -10,7 +10,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Context = void 0;
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./injection/types");
 let Context = class Context {
     constructor(calc, config, timeline, Data) {

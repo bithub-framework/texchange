@@ -1,5 +1,5 @@
 import { HLike } from 'secretary-like';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from './injection/types';
 
 

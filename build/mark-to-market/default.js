@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMtm = void 0;
 const startable_1 = require("startable");
 const mtm_1 = require("./mtm");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 /**
  * 默认永不结算

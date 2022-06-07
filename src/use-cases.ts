@@ -14,7 +14,7 @@ import { Models } from './models';
 import { Broadcast } from './broadcast';
 import { Tasks } from './tasks/tasks';
 
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from './injection/types';
 
 

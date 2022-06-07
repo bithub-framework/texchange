@@ -13,7 +13,7 @@ exports.Facades = void 0;
 const instant_1 = require("./facades.d/instant");
 const latency_1 = require("./facades.d/latency/latency");
 const joystick_1 = require("./facades.d/joystick");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./injection/types");
 let Facades = class Facades {
     constructor(context, models, mtm, useCases) {

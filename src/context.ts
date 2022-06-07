@@ -5,7 +5,7 @@ import {
 } from 'secretary-like';
 import { Config } from './context.d/config';
 import { DataStatic } from './interfaces/data';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from './injection/types';
 
 

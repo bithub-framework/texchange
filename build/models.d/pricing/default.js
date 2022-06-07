@@ -11,7 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultPricing = void 0;
 const pricing_1 = require("./pricing");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 /**
  * 默认以最新价格作为结算价。

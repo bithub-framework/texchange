@@ -6,7 +6,7 @@ import { OpenMakerStatic } from './open-maker';
 import { FrozenStatic } from './frozen';
 import { DatabaseTradeStatic } from './database-trade';
 import { DatabaseOrderbookStatic } from './database-orderbook';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 

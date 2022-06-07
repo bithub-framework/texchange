@@ -15,7 +15,7 @@ const open_maker_1 = require("./open-maker");
 const frozen_1 = require("./frozen");
 const database_trade_1 = require("./database-trade");
 const database_orderbook_1 = require("./database-orderbook");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let DataStatic = class DataStatic extends secretary_like_1.DataStatic {
     constructor(H) {

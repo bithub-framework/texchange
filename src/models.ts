@@ -6,7 +6,7 @@ import { Progress } from './models.d/progress';
 import { Pricing } from './models.d/pricing/pricing';
 import { HLike } from 'secretary-like';
 import { Context } from './context';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from './injection/types';
 
 

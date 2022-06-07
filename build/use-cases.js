@@ -19,7 +19,7 @@ const get_balances_1 = require("./use-cases.d/get-balances");
 const update_orderbook_1 = require("./use-cases.d/update-orderbook");
 const subscription_1 = require("./use-cases.d/subscription");
 const get_progress_1 = require("./use-cases.d/get-progress");
-const injektor_1 = require("injektor");
+const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./injection/types");
 let UseCases = class UseCases {
     constructor(context, models, broadcast, tasks, updateTrades) {

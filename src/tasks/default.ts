@@ -3,7 +3,7 @@ import { Tasks } from './tasks';
 import { Context } from '../context';
 import { Models } from '../models';
 import { Broadcast } from '../broadcast';
-import { inject } from 'injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
