@@ -3,16 +3,22 @@ import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { DatabaseTradeId } from '../interfaces/database-trade';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { Progress } from '../models.d/progress';
 
 
 export class GetProgress<H extends HLike<H>>{
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
-		protected models: UpdateOrderbook.ModelDeps<H>,
+		@inject(TYPES.Models)
+		protected models: GetProgress.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
-		protected tasks: UpdateOrderbook.TaskDeps<H>,
+		@inject(TYPES.Tasks)
+		protected tasks: GetProgress.TaskDeps<H>,
 	) { }
 
 	public getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null {
@@ -24,7 +30,7 @@ export class GetProgress<H extends HLike<H>>{
 	}
 }
 
-export namespace UpdateOrderbook {
+export namespace GetProgress {
 	export interface ModelDeps<H extends HLike<H>> {
 		progress: Progress<H>;
 	}

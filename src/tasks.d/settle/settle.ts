@@ -5,6 +5,8 @@ import {
 import { Context } from '../../context';
 import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
+import { instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Assets } from '../../models.d/assets';
 import { Margins } from '../../models.d/margins';
@@ -13,16 +15,16 @@ import { Pricing } from '../../models.d/pricing/pricing';
 
 export abstract class Settle<H extends HLike<H>>
     implements SettleLike {
-    protected abstract tasks: Settle.TaskDeps<H>;
+    @instantInject(TYPES.Tasks)
+    protected tasks!: Settle.TaskDeps<H>;
 
-    public constructor(
-        protected context: Context<H>,
-        protected models: Settle.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-    ) { }
+    protected abstract context: Context<H>;
+    protected abstract models: Settle.ModelDeps<H>;
+    protected abstract broadcast: Broadcast<H>;
+
 
     public settle(): void {
-        const { config, calc } = this.context;
+        const { spec: config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
 
         const position = assets.getPosition();

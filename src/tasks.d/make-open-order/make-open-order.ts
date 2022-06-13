@@ -13,16 +13,22 @@ import { OrderMakesLike } from '../order-makes/order-makes-like';
 import { Book } from '../../models.d/book';
 import { GetBalancesLike } from '../get-balances/get-balances-like';
 import { GetPositionsLike } from '../get-positions/get-positions-like';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 
 export class MakeOpenOrder<H extends HLike<H>>
-    implements MakeOpenOrderLike<H> {
+    implements MakeOpenOrderLike<H>
+{
+    @instantInject(TYPES.Tasks)
+    private tasks!: MakeOpenOrder.TaskDeps<H>;
 
     public constructor(
-        private tasks: MakeOpenOrder.TaskDeps<H>,
-
+        @inject(TYPES.Context)
         private context: Context<H>,
+        @inject(TYPES.Models)
         private models: MakeOpenOrder.ModelDeps<H>,
+        @inject(TYPES.Broadcast)
         private broadcast: Broadcast<H>,
     ) { }
 

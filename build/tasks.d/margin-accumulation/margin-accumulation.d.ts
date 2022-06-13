@@ -3,11 +3,10 @@ import { Broadcast } from '../../broadcast';
 import { MarginAccumulationLike } from './margin-accumulation-like';
 import { HLike } from 'secretary-like';
 export declare abstract class MarginAccumulation<H extends HLike<H>> implements MarginAccumulationLike<H> {
-    protected context: Context<H>;
-    protected models: MarginAccumulation.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected abstract tasks: MarginAccumulation.TaskDeps<H>;
-    constructor(context: Context<H>, models: MarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
+    protected tasks: MarginAccumulation.TaskDeps<H>;
+    protected abstract context: Context<H>;
+    protected abstract models: MarginAccumulation.ModelDeps<H>;
+    protected abstract broadcast: Broadcast<H>;
     abstract newMarginAfterOpening(volumes: MarginAccumulationLike.Volumes<H>): H;
     abstract newMarginAfterClosing(volumes: MarginAccumulationLike.Volumes<H>): H;
 }

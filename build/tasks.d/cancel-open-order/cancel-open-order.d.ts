@@ -4,11 +4,11 @@ import { Broadcast } from '../../broadcast';
 import { HLike, OpenOrder } from 'secretary-like';
 import { Makers } from '../../models.d/makers/makers';
 export declare class CancelOpenOrder<H extends HLike<H>> implements CancelOpenOrderLike<H> {
-    private tasks;
     private context;
     private models;
     private broadcast;
-    constructor(tasks: CancelOpenOrder.TaskDeps<H>, context: Context<H>, models: CancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
+    private tasks;
+    constructor(context: Context<H>, models: CancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
     cancelOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }
 export declare namespace CancelOpenOrder {

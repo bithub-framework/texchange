@@ -6,7 +6,7 @@ import { Pricing } from './pricing';
 import { Context } from '../../context';
 
 import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/types';
+import { TYPES } from '../../injection/default/types';
 
 
 /**
@@ -15,14 +15,13 @@ import { TYPES } from '../../injection/types';
 export class DefaultPricing<H extends HLike<H>>
 	extends Pricing<H, DefaultPricing.Snapshot> {
 
-	private settlementPrice: H;
-
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.initialSettlementPrice)
+		private settlementPrice: H,
 	) {
 		super();
-		this.settlementPrice = context.config.market.initialSettlementPrice;
 	}
 
 	public updateTrades(trades: Trade<H>[]): void {

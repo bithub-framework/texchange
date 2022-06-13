@@ -12,15 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultPricing = void 0;
 const pricing_1 = require("./pricing");
 const injektor_1 = require("@zimtsui/injektor");
-const types_1 = require("../../injection/types");
+const types_1 = require("../../injection/default/types");
 /**
  * 默认以最新价格作为结算价。
  */
 let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
-    constructor(context) {
+    constructor(context, settlementPrice) {
         super();
         this.context = context;
-        this.settlementPrice = context.config.market.initialSettlementPrice;
+        this.settlementPrice = settlementPrice;
     }
     updateTrades(trades) {
         this.settlementPrice = trades[trades.length - 1].price;
@@ -36,7 +36,8 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
     }
 };
 DefaultPricing = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.initialSettlementPrice))
 ], DefaultPricing);
 exports.DefaultPricing = DefaultPricing;
 //# sourceMappingURL=default.js.map

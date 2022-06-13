@@ -6,14 +6,14 @@ import { DatabaseTradeId } from '../interfaces/database-trade';
 import { Progress } from '../models.d/progress';
 export declare class GetProgress<H extends HLike<H>> {
     protected context: Context<H>;
-    protected models: UpdateOrderbook.ModelDeps<H>;
+    protected models: GetProgress.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    protected tasks: UpdateOrderbook.TaskDeps<H>;
-    constructor(context: Context<H>, models: UpdateOrderbook.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UpdateOrderbook.TaskDeps<H>);
+    protected tasks: GetProgress.TaskDeps<H>;
+    constructor(context: Context<H>, models: GetProgress.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetProgress.TaskDeps<H>);
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;
     getLatestDatabaseTradeId(): DatabaseTradeId | null;
 }
-export declare namespace UpdateOrderbook {
+export declare namespace GetProgress {
     interface ModelDeps<H extends HLike<H>> {
         progress: Progress<H>;
     }

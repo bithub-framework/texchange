@@ -2,17 +2,20 @@ import { Context } from '../../context';;
 import { Broadcast } from '../../broadcast';
 import { MarginAccumulationLike } from './margin-accumulation-like';
 import { HLike } from 'secretary-like';
+import { instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 
 export abstract class MarginAccumulation<H extends HLike<H>>
-	implements MarginAccumulationLike<H> {
-	protected abstract tasks: MarginAccumulation.TaskDeps<H>;
+	implements MarginAccumulationLike<H>
+{
+	@instantInject(TYPES.Tasks)
+	protected tasks!: MarginAccumulation.TaskDeps<H>;
+	protected abstract context: Context<H>;
+	protected abstract models: MarginAccumulation.ModelDeps<H>;
+	protected abstract broadcast: Broadcast<H>;
 
-	public constructor(
-		protected context: Context<H>,
-		protected models: MarginAccumulation.ModelDeps<H>,
-		protected broadcast: Broadcast<H>,
-	) { }
+
 
 	public abstract newMarginAfterOpening(
 		volumes: MarginAccumulationLike.Volumes<H>,

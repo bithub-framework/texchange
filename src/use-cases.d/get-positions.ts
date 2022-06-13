@@ -4,15 +4,21 @@ import {
 	Positions,
 	HLike,
 } from 'secretary-like';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { Assets } from '../models.d/assets';
 import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
 
 export class GetPositions<H extends HLike<H>> {
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: GetPositions.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
+		@inject(TYPES.Tasks)
 		protected tasks: GetPositions.TaskDeps<H>,
 	) { }
 

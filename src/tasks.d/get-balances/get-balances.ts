@@ -5,18 +5,26 @@ import {
 } from 'secretary-like';
 import { Broadcast } from '../../broadcast';
 import { GetBalancesLike } from './get-balances-like';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Assets } from '../../models.d/assets';
 import { GetAvailableLike } from '../get-available/get-available-like';
 
+
+
 export class GetBalances<H extends HLike<H>>
-	implements GetBalancesLike<H> {
+	implements GetBalancesLike<H>
+{
+	@instantInject(TYPES.Tasks)
+	private tasks!: GetBalances.TaskDeps<H>;
 
 	public constructor(
-		private tasks: GetBalances.TaskDeps<H>,
-
+		@inject(TYPES.Context)
 		private context: Context<H>,
+		@inject(TYPES.Models)
 		private models: GetBalances.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		private broadcast: Broadcast<H>,
 	) { }
 

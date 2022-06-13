@@ -6,6 +6,8 @@ import {
 import { Context } from '../context';
 import assert = require('assert');
 import { StatefulLike } from '../stateful-like';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 
 export class Assets<H extends HLike<H>>
@@ -13,13 +15,14 @@ export class Assets<H extends HLike<H>>
     private Cost = new Assets.CostStatic(this.context.Data.H);
 
     private $position: Position<H>;
-    private balance: H;
     private $cost: Assets.Cost<H>;
 
     public constructor(
+        @inject(TYPES.Context)
         private context: Context<H>,
+        @inject(TYPES.MODELS.initialBalance)
+        private balance: H,
     ) {
-        this.balance = this.context.config.account.initialBalance;
         this.$position = {
             [Length.LONG]: new this.context.Data.H(0),
             [Length.SHORT]: new this.context.Data.H(0),
@@ -81,7 +84,7 @@ export class Assets<H extends HLike<H>>
         const cost = this.$cost[length]
             .times(volume)
             .div(this.$position[length])
-            .round(this.context.config.market.CURRENCY_DP);
+            .round(this.context.spec.market.CURRENCY_DP);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);

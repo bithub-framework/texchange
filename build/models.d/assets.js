@@ -1,13 +1,24 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
-class Assets {
-    constructor(context) {
+const injektor_1 = require("@zimtsui/injektor");
+const types_1 = require("../injection/types");
+let Assets = class Assets {
+    constructor(context, balance) {
         this.context = context;
+        this.balance = balance;
         this.Cost = new Assets.CostStatic(this.context.Data.H);
-        this.balance = this.context.config.account.initialBalance;
         this.$position = {
             [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
             [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
@@ -53,14 +64,18 @@ class Assets {
         const cost = this.$cost[length]
             .times(volume)
             .div(this.$position[length])
-            .round(this.context.config.market.CURRENCY_DP);
+            .round(this.context.spec.market.CURRENCY_DP);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
         return profit;
     }
-}
+};
+Assets = __decorate([
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
+], Assets);
 exports.Assets = Assets;
 (function (Assets) {
     class CostStatic {
@@ -88,4 +103,5 @@ exports.Assets = Assets;
     }
     Assets.CostStatic = CostStatic;
 })(Assets = exports.Assets || (exports.Assets = {}));
+exports.Assets = Assets;
 //# sourceMappingURL=assets.js.map

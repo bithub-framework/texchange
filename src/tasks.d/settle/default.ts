@@ -6,6 +6,8 @@ import { Context } from '../../context';
 import assert = require('assert');
 import { Broadcast } from '../../broadcast';
 import { Settle } from './settle';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/default/types';
 
 
 /**
@@ -15,17 +17,14 @@ export class DefaultSettle<H extends HLike<H>>
 	extends Settle<H> {
 
 	public constructor(
-		protected tasks: DefaultSettle.TaskDeps<H>,
-
-		context: Context<H>,
+		@inject(TYPES.Context)
+		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: DefaultSettle.ModelDeps<H>,
-		broadcast: Broadcast<H>,
+		@inject(TYPES.Broadcast)
+		protected broadcast: Broadcast<H>,
 	) {
-		super(
-			context,
-			models,
-			broadcast,
-		);
+		super();
 	}
 
 

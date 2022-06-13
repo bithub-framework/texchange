@@ -5,6 +5,8 @@ import {
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { GetAvailable } from './get-available';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/default/types';
 
 import { Margins } from '../../models.d/margins';
 import { Makers } from '../../models.d/makers/makers';
@@ -14,17 +16,14 @@ export class DefaultGetAvailable<H extends HLike<H>>
 	extends GetAvailable<H> {
 
 	public constructor(
-		protected tasks: DefaultGetAvailable.TaskDeps<H>,
-
-		context: Context<H>,
+		@inject(TYPES.Context)
+		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: DefaultGetAvailable.ModelDeps<H>,
-		broadcast: Broadcast<H>,
+		@inject(TYPES.Broadcast)
+		protected broadcast: Broadcast<H>,
 	) {
-		super(
-			context,
-			models,
-			broadcast,
-		);
+		super();
 	}
 
 	protected finalMargin(): H {

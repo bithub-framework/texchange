@@ -5,18 +5,24 @@ import {
 	HLike,
 	OpenOrder,
 } from 'secretary-like';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Makers } from '../../models.d/makers/makers';
 
 
 export class CancelOpenOrder<H extends HLike<H>>
-	implements CancelOpenOrderLike<H> {
+	implements CancelOpenOrderLike<H>
+{
+	@instantInject(TYPES.Tasks)
+	private tasks!: CancelOpenOrder.TaskDeps<H>;
 
 	public constructor(
-		private tasks: CancelOpenOrder.TaskDeps<H>,
-
+		@inject(TYPES.Context)
 		private context: Context<H>,
+		@inject(TYPES.Models)
 		private models: CancelOpenOrder.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		private broadcast: Broadcast<H>,
 	) { }
 

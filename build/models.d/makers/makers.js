@@ -51,12 +51,12 @@ class Makers {
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.context.config.market.CURRENCY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.context.config.market.CURRENCY_DP),
+                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.context.spec.market.CURRENCY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.context.spec.market.CURRENCY_DP),
             },
             position: {
-                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.context.config.market.QUANTITY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.context.config.market.QUANTITY_DP),
+                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.context.spec.market.QUANTITY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.context.spec.market.QUANTITY_DP),
             },
         };
     }

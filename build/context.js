@@ -13,16 +13,16 @@ exports.Context = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./injection/types");
 let Context = class Context {
-    constructor(calc, config, timeline, Data) {
+    constructor(calc, spec, timeline, Data) {
         this.calc = calc;
-        this.config = config;
+        this.spec = spec;
         this.timeline = timeline;
         this.Data = Data;
     }
 };
 Context = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.MarketCalc)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Config)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.spec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.TimelineLike)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.DataStatic))
 ], Context);

@@ -4,11 +4,10 @@ import { Broadcast } from '../../broadcast';
 import { HLike } from 'secretary-like';
 import { Assets } from '../../models.d/assets';
 export declare abstract class GetAvailable<H extends HLike<H>> implements GetAvailableLike<H> {
-    protected context: Context<H>;
-    protected models: GetAvailable.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected abstract tasks: GetAvailable.TaskDeps<H>;
-    constructor(context: Context<H>, models: GetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
+    protected tasks: GetAvailable.TaskDeps<H>;
+    protected abstract context: Context<H>;
+    protected abstract models: GetAvailable.ModelDeps<H>;
+    protected abstract broadcast: Broadcast<H>;
     getAvailable(): H;
     protected abstract finalMargin(): H;
     protected abstract finalFrozenBalance(): H;

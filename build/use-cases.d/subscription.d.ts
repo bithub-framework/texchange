@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, Trade, Orderbook, Positions, Balances } from 'secretary-like';

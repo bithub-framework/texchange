@@ -82,12 +82,12 @@ export abstract class Makers<H extends HLike<H>> implements
 	private normalizeFrozen(frozen: Frozen<H>): Frozen<H> {
 		return {
 			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.context.config.market.CURRENCY_DP),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.config.market.CURRENCY_DP),
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.context.spec.market.CURRENCY_DP),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.spec.market.CURRENCY_DP),
 			},
 			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.context.config.market.QUANTITY_DP),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.context.config.market.QUANTITY_DP),
+				[Length.LONG]: frozen.position[Length.LONG].round(this.context.spec.market.QUANTITY_DP),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.context.spec.market.QUANTITY_DP),
 			},
 		};
 	}

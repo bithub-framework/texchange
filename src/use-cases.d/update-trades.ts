@@ -3,6 +3,8 @@ import assert = require('assert');
 import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseTrade } from '../interfaces/database-trade';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
 import { SettleLike } from '../tasks.d/settle/settle-like';
@@ -12,10 +14,15 @@ import { Pricing } from '../models.d/pricing/pricing';
 
 export class UpdateTrades<H extends HLike<H>> {
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: UpdateTrades.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
+		@inject(TYPES.Tasks)
 		protected tasks: UpdateTrades.TaskDeps<H>,
+		@inject(TYPES.USE_CASES.realTimeSettlement)
 		private realTimeSettlement: boolean,
 	) { }
 

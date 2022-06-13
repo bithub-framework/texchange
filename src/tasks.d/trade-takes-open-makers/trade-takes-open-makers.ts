@@ -10,6 +10,8 @@ import { OpenMaker } from '../../interfaces/open-maker';
 import { Context } from '../../context';
 import { TradeTakesOpenMakersLike } from './trade-takes-open-makers-like';
 import { Broadcast } from '../../broadcast';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Makers } from '../../models.d/makers/makers';
 import { Margins } from '../../models.d/margins';
@@ -18,13 +20,17 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 
 export class TradeTakesOpenMakers<H extends HLike<H>>
-    implements TradeTakesOpenMakersLike<H> {
+    implements TradeTakesOpenMakersLike<H>
+{
+    @instantInject(TYPES.Tasks)
+    private tasks!: TradeTakesOpenMakers.TaskDeps<H>;
 
     public constructor(
-        private tasks: TradeTakesOpenMakers.TaskDeps<H>,
-
+        @inject(TYPES.Context)
         private context: Context<H>,
+        @inject(TYPES.Models)
         private models: TradeTakesOpenMakers.ModelDeps<H>,
+        @inject(TYPES.Broadcast)
         private broadcast: Broadcast<H>,
     ) { }
 
@@ -72,14 +78,14 @@ export class TradeTakesOpenMakers<H extends HLike<H>>
         const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
-            .round(this.context.config.market.CURRENCY_DP);
+            .round(this.context.spec.market.CURRENCY_DP);
         $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
         assets.pay(
             dollarVolume
-                .times(this.context.config.account.MAKER_FEE_RATE)
-                .round(this.context.config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
+                .times(this.context.spec.account.MAKER_FEE_RATE)
+                .round(this.context.spec.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
         );
         if (maker.operation === Operation.OPEN)
             this.tasks.orderVolumes.open({

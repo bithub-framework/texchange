@@ -5,9 +5,10 @@ import { GetAvailable } from './get-available';
 import { Margins } from '../../models.d/margins';
 import { Makers } from '../../models.d/makers/makers';
 export declare class DefaultGetAvailable<H extends HLike<H>> extends GetAvailable<H> {
-    protected tasks: DefaultGetAvailable.TaskDeps<H>;
+    protected context: Context<H>;
     protected models: DefaultGetAvailable.ModelDeps<H>;
-    constructor(tasks: DefaultGetAvailable.TaskDeps<H>, context: Context<H>, models: DefaultGetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
+    protected broadcast: Broadcast<H>;
+    constructor(context: Context<H>, models: DefaultGetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
     protected finalMargin(): H;
     protected finalFrozenBalance(): H;
 }

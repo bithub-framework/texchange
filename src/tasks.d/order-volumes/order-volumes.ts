@@ -2,6 +2,8 @@ import { Context } from '../../context';
 import { OrderVolumesLike } from './order-volumes-like';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'secretary-like';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { MarginAccumulationLike } from '../margin-accumulation/margin-accumulation-like';
 import { Assets } from '../../models.d/assets';
@@ -9,13 +11,17 @@ import { Margins } from '../../models.d/margins';
 
 
 export class OrderVolumes<H extends HLike<H>>
-	implements OrderVolumesLike<H> {
+	implements OrderVolumesLike<H>
+{
+	@instantInject(TYPES.Tasks)
+	private tasks!: OrderVolumes.TaskDeps<H>;
 
 	public constructor(
-		private tasks: OrderVolumes.TaskDeps<H>,
-
+		@inject(TYPES.Context)
 		private context: Context<H>,
+		@inject(TYPES.Models)
 		private models: OrderVolumes.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		private broadcast: Broadcast<H>,
 	) { }
 
@@ -26,7 +32,7 @@ export class OrderVolumes<H extends HLike<H>>
 			length,
 			volume,
 			dollarVolume,
-		}).round(this.context.config.market.CURRENCY_DP);
+		}).round(this.context.spec.market.CURRENCY_DP);
 		this.models.assets.open(
 			length,
 			volume,
@@ -44,7 +50,7 @@ export class OrderVolumes<H extends HLike<H>>
 			const openDollarVolume = dollarVolume
 				.times(openVolume)
 				.div(volume)
-				.round(this.context.config.market.CURRENCY_DP);
+				.round(this.context.spec.market.CURRENCY_DP);
 			const closeDollarVolume = dollarVolume
 				.minus(openDollarVolume);
 			this.close({
@@ -62,7 +68,7 @@ export class OrderVolumes<H extends HLike<H>>
 				length,
 				volume,
 				dollarVolume,
-			}).round(this.context.config.market.CURRENCY_DP);
+			}).round(this.context.spec.market.CURRENCY_DP);
 			this.models.assets.close(
 				length,
 				volume,

@@ -3,6 +3,8 @@ import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
 import { DatabaseOrderbookId, DatabaseOrderbook } from '../interfaces/database-orderbook';
 import { DatabaseTradeId, DatabaseTrade } from '../interfaces/database-trade';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 
 export class Progress<H extends HLike<H>>
@@ -14,6 +16,7 @@ export class Progress<H extends HLike<H>>
     private latestDatabaseOrderbookId: DatabaseOrderbookId | null = null;
 
     public constructor(
+        @inject(TYPES.Context)
         private context: Context<H>,
     ) { }
 

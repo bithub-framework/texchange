@@ -4,6 +4,8 @@ import {
 } from 'secretary-like';
 import { Context } from '../context';
 import { StatefulLike } from '../stateful-like';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 
 export class Margins<H extends HLike<H>>
@@ -13,6 +15,7 @@ export class Margins<H extends HLike<H>>
 	private $margin: Margins.Margin<H>;
 
 	public constructor(
+		@inject(TYPES.Context)
 		private context: Context<H>,
 	) {
 		this.$margin = {

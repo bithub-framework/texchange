@@ -1,8 +1,8 @@
 import { Context } from '../context';
-import { Config } from '../context.d/config';
+import { Spec } from '../context.d/spec';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
-import { Models } from '../models';
+import { Models } from '../texchange/models';
 import { Mtm } from '../mark-to-market/mtm';
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
@@ -15,7 +15,7 @@ export declare class Joystick<H extends HLike<H>> implements StatefulLike<Models
     private mtm;
     private useCases;
     private startable;
-    config: Config<H>;
+    config: Spec<H>;
     constructor(context: Context<H>, models: Models<H>, mtm: Mtm<H> | null, useCases: Joystick.UseCaseDeps<H>);
     Data: import("../interfaces/data").DataStatic<H>;
     updateTrades($trades: DatabaseTrade<H>[]): void;

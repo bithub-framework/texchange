@@ -1,10 +1,21 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Book = void 0;
 const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 const decrements_1 = require("./decrements");
-class Book {
+const injektor_1 = require("@zimtsui/injektor");
+const types_1 = require("../../injection/types");
+let Book = class Book {
     constructor(context) {
         this.context = context;
         this.Decrements = new decrements_1.DecrementsStatic(this.context.Data.H);
@@ -28,7 +39,7 @@ class Book {
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.config.market.PRICE_DP);
+        const priceString = price.toFixed(this.context.spec.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
             || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -46,7 +57,7 @@ class Book {
         };
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.context.config.market.PRICE_DP), order.quantity);
+                total[side].set(order.price.toFixed(this.context.spec.market.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
                 if (typeof quantity !== 'undefined') {
@@ -89,6 +100,9 @@ class Book {
             : snapshot.time;
         this.finalbookCache = null;
     }
-}
+};
+Book = __decorate([
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+], Book);
 exports.Book = Book;
 //# sourceMappingURL=book.js.map

@@ -5,9 +5,10 @@ import { MarginAccumulation } from './margin-accumulation';
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 export declare class DefaultMarginAccumulation<H extends HLike<H>> extends MarginAccumulation<H> {
-    protected tasks: DefaultMarginAccumulation.TaskDeps<H>;
+    protected context: Context<H>;
     protected models: DefaultMarginAccumulation.ModelDeps<H>;
-    constructor(tasks: DefaultMarginAccumulation.TaskDeps<H>, context: Context<H>, models: DefaultMarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
+    protected broadcast: Broadcast<H>;
+    constructor(context: Context<H>, models: DefaultMarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
     newMarginAfterOpening({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
     newMarginAfterClosing({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
 }

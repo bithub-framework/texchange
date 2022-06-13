@@ -1,13 +1,25 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultGetAvailable = void 0;
 const secretary_like_1 = require("secretary-like");
 const get_available_1 = require("./get-available");
-class DefaultGetAvailable extends get_available_1.GetAvailable {
-    constructor(tasks, context, models, broadcast) {
-        super(context, models, broadcast);
-        this.tasks = tasks;
+const injektor_1 = require("@zimtsui/injektor");
+const types_1 = require("../../injection/default/types");
+let DefaultGetAvailable = class DefaultGetAvailable extends get_available_1.GetAvailable {
+    constructor(context, models, broadcast) {
+        super();
+        this.context = context;
         this.models = models;
+        this.broadcast = broadcast;
     }
     finalMargin() {
         // 默认无锁仓优惠
@@ -30,6 +42,11 @@ class DefaultGetAvailable extends get_available_1.GetAvailable {
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }
-}
+};
+DefaultGetAvailable = __decorate([
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
+], DefaultGetAvailable);
 exports.DefaultGetAvailable = DefaultGetAvailable;
 //# sourceMappingURL=default.js.map

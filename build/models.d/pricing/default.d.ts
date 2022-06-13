@@ -7,7 +7,7 @@ import { Context } from '../../context';
 export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, DefaultPricing.Snapshot> {
     protected context: Context<H>;
     private settlementPrice;
-    constructor(context: Context<H>);
+    constructor(context: Context<H>, settlementPrice: H);
     updateTrades(trades: Trade<H>[]): void;
     getSettlementPrice(): H;
     capture(): DefaultPricing.Snapshot;

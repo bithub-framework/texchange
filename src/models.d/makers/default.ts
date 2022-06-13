@@ -8,7 +8,7 @@ import { Context } from '../../context';
 import { Makers } from './makers';
 
 import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/types';
+import { TYPES } from '../../injection/default/types';
 
 
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {

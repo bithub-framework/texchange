@@ -20,7 +20,7 @@ export namespace Broadcast {
 }
 import Events = Broadcast.Events;
 
-export interface Broadcast<H extends HLike<H>> extends NodeJS.EventEmitter {
+export interface Broadcast<H extends HLike<H>> extends EventEmitter {
 	on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
 	once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
 	off<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

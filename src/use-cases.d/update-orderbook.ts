@@ -3,6 +3,8 @@ import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseOrderbook } from '../interfaces/database-orderbook';
 import assert = require('assert');
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -10,9 +12,13 @@ import { Progress } from '../models.d/progress';
 
 export class UpdateOrderbook<H extends HLike<H>>{
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: UpdateOrderbook.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
+		@inject(TYPES.Tasks)
 		protected tasks: UpdateOrderbook.TaskDeps<H>,
 	) { }
 

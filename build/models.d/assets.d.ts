@@ -3,11 +3,11 @@ import { Context } from '../context';
 import { StatefulLike } from '../stateful-like';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private context;
+    private balance;
     private Cost;
     private $position;
-    private balance;
     private $cost;
-    constructor(context: Context<H>);
+    constructor(context: Context<H>, balance: H);
     getBalance(): H;
     getPosition(): Position<H>;
     getCost(): Assets.Cost<H>;

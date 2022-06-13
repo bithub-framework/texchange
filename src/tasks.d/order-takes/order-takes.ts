@@ -9,6 +9,8 @@ import {
 import { Context } from '../../context';
 import { OrderTakesLike } from './order-takes-like';
 import { Broadcast } from '../../broadcast';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
@@ -18,19 +20,23 @@ import { OrderVolumesLike } from '../order-volumes/order-volumes-like';
 
 
 export class OrderTakes<H extends HLike<H>>
-    implements OrderTakesLike<H> {
+    implements OrderTakesLike<H>
+{
+    @instantInject(TYPES.Tasks)
+    private tasks!: OrderTakes.TaskDeps<H>;
 
     public constructor(
-        protected tasks: OrderTakes.TaskDeps<H>,
-
-        protected context: Context<H>,
-        protected models: OrderTakes.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
+        @inject(TYPES.Context)
+        private context: Context<H>,
+        @inject(TYPES.Models)
+        private models: OrderTakes.ModelDeps<H>,
+        @inject(TYPES.Broadcast)
+        private broadcast: Broadcast<H>,
     ) { }
 
     public $orderTakes($taker: OpenOrder<H>): Trade<H>[] {
         const { assets, progress, book } = this.models;
-        const { config, timeline, calc } = this.context;
+        const { spec: config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
         const trades: Trade<H>[] = [];

@@ -5,23 +5,22 @@ import { MarginAccumulation } from './margin-accumulation';
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
 
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/default/types';
 
 
 export class DefaultMarginAccumulation<H extends HLike<H>>
 	extends MarginAccumulation<H> {
 
 	public constructor(
-		protected tasks: DefaultMarginAccumulation.TaskDeps<H>,
-
-		context: Context<H>,
+		@inject(TYPES.Context)
+		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: DefaultMarginAccumulation.ModelDeps<H>,
-		broadcast: Broadcast<H>,
+		@inject(TYPES.Broadcast)
+		protected broadcast: Broadcast<H>,
 	) {
-		super(
-			context,
-			models,
-			broadcast,
-		);
+		super();
 	}
 
 	public newMarginAfterOpening({
@@ -29,7 +28,7 @@ export class DefaultMarginAccumulation<H extends HLike<H>>
 		volume,
 		dollarVolume,
 	}: MarginAccumulation.Volumes<H>): H {
-		const increment = dollarVolume.div(this.context.config.account.LEVERAGE);
+		const increment = dollarVolume.div(this.context.spec.account.LEVERAGE);
 		return this.models.margins.getMargin()[length].plus(increment);
 	}
 

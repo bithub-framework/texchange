@@ -15,11 +15,16 @@ import { GetPositions } from '../use-cases.d/get-positions';
 import { GetBalances } from '../use-cases.d/get-balances';
 import { GetOpenOrders } from '../use-cases.d/get-open-orders';
 
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
+
 
 
 export class Instant<H extends HLike<H>> {
     public constructor(
+        @inject(TYPES.Context)
         private context: Context<H>,
+        @inject(TYPES.UseCases)
         private useCases: Instant.UseCaseDeps<H>,
     ) { }
 

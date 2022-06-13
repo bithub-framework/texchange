@@ -6,19 +6,25 @@ import {
 import { Context } from '../../context';
 import { OrderMakesLike } from './order-makes-like';
 import { Broadcast } from '../../broadcast';
+import { inject, instantInject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 import { Book } from '../../models.d/book';
 import { Makers } from '../../models.d/makers/makers';
 
 
 export class OrderMakes<H extends HLike<H>>
-    implements OrderMakesLike<H> {
+    implements OrderMakesLike<H>
+{
+    @instantInject(TYPES.Tasks)
+    private tasks!: OrderMakes.TaskDeps<H>;
 
     public constructor(
-        private tasks: OrderMakes.TaskDeps<H>,
-
+        @inject(TYPES.Context)
         private context: Context<H>,
+        @inject(TYPES.Models)
         private models: OrderMakes.ModelDeps<H>,
+        @inject(TYPES.Broadcast)
         private broadcast: Broadcast<H>,
     ) { }
 

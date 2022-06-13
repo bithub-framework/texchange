@@ -1,10 +1,20 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeTakesOpenMakers = void 0;
 const secretary_like_1 = require("secretary-like");
-class TradeTakesOpenMakers {
-    constructor(tasks, context, models, broadcast) {
-        this.tasks = tasks;
+const injektor_1 = require("@zimtsui/injektor");
+const types_1 = require("../../injection/types");
+let TradeTakesOpenMakers = class TradeTakesOpenMakers {
+    constructor(context, models, broadcast) {
         this.context = context;
         this.models = models;
         this.broadcast = broadcast;
@@ -41,12 +51,12 @@ class TradeTakesOpenMakers {
         const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.context.calc
             .dollarVolume(maker.price, volume)
-            .round(this.context.config.market.CURRENCY_DP);
+            .round(this.context.spec.market.CURRENCY_DP);
         $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
         assets.pay(dollarVolume
-            .times(this.context.config.account.MAKER_FEE_RATE)
-            .round(this.context.config.market.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
+            .times(this.context.spec.account.MAKER_FEE_RATE)
+            .round(this.context.spec.market.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if (maker.operation === secretary_like_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: maker.length,
@@ -60,6 +70,14 @@ class TradeTakesOpenMakers {
                 dollarVolume,
             });
     }
-}
+};
+__decorate([
+    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+], TradeTakesOpenMakers.prototype, "tasks", void 0);
+TradeTakesOpenMakers = __decorate([
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
+], TradeTakesOpenMakers);
 exports.TradeTakesOpenMakers = TradeTakesOpenMakers;
 //# sourceMappingURL=trade-takes-open-makers.js.map

@@ -7,6 +7,8 @@ import assert = require('assert');
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements, DecrementsStatic } from './decrements';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
 
 
 
@@ -27,6 +29,7 @@ export class Book<H extends HLike<H>>
     private finalbookCache: Orderbook<H> | null = null;
 
     public constructor(
+        @inject(TYPES.Context)
         private context: Context<H>,
     ) { }
 
@@ -43,7 +46,7 @@ export class Book<H extends HLike<H>>
         decrement: H,
     ): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.config.market.PRICE_DP);
+        const priceString = price.toFixed(this.context.spec.market.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
             || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -63,7 +66,7 @@ export class Book<H extends HLike<H>>
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.context.config.market.PRICE_DP),
+                    order.price.toFixed(this.context.spec.market.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {

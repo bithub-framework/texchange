@@ -5,6 +5,8 @@ import {
 	Amendment,
 	OpenOrder,
 } from 'secretary-like';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
 import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
@@ -12,10 +14,15 @@ import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-li
 
 
 export class AmendOrder<H extends HLike<H>> {
+
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: AmendOrder.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
+		@inject(TYPES.Tasks)
 		protected tasks: AmendOrder.TaskDeps<H>,
 	) { }
 

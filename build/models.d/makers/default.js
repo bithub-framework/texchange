@@ -13,7 +13,7 @@ exports.DefaultMakers = void 0;
 const secretary_like_1 = require("secretary-like");
 const makers_1 = require("./makers");
 const injektor_1 = require("@zimtsui/injektor");
-const types_1 = require("../../injection/types");
+const types_1 = require("../../injection/default/types");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     constructor(context) { super(context); }
     /**

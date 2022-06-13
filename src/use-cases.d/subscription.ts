@@ -7,6 +7,8 @@ import {
 	Positions,
 	Balances,
 } from 'secretary-like';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/types';
 
 import { EventEmitter } from 'events';
 
@@ -14,9 +16,13 @@ export class Subscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
+		@inject(TYPES.Context)
 		protected context: Context<H>,
+		@inject(TYPES.Models)
 		protected models: Subscription.ModelDeps<H>,
+		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
+		@inject(TYPES.Tasks)
 		protected tasks: Subscription.TaskDeps<H>,
 	) {
 		super();
