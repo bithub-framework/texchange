@@ -34,7 +34,7 @@ import { Mtm } from '../../mark-to-market/mtm';
 import { DefaultMtm } from '../../mark-to-market/default';
 
 // Use cases
-import { UpdateTrades } from '../../use-cases.d/update-trades';
+import { UseCaseUpdateTrades } from '../../use-cases.d/update-trades';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {

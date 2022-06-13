@@ -12,16 +12,16 @@ import { Progress } from '../models.d/progress';
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 
 
-export class MakeOrder<H extends HLike<H>> {
+export class UseCaseMakeOrder<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: MakeOrder.ModelDeps<H>,
+		protected models: UseCaseMakeOrder.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: MakeOrder.TaskDeps<H>,
+		protected tasks: UseCaseMakeOrder.TaskDeps<H>,
 	) { }
 
 	public makeOrder(order: LimitOrder<H>): OpenOrder<H> {
@@ -34,7 +34,7 @@ export class MakeOrder<H extends HLike<H>> {
 	}
 }
 
-export namespace MakeOrder {
+export namespace UseCaseMakeOrder {
 	export interface ModelDeps<H extends HLike<H>> {
 		progress: Progress<H>;
 	}

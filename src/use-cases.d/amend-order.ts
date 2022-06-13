@@ -13,17 +13,17 @@ import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like
 import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
 
 
-export class AmendOrder<H extends HLike<H>> {
+export class UseCaseAmendOrder<H extends HLike<H>> {
 
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: AmendOrder.ModelDeps<H>,
+		protected models: UseCaseAmendOrder.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: AmendOrder.TaskDeps<H>,
+		protected tasks: UseCaseAmendOrder.TaskDeps<H>,
 	) { }
 
 	public amendOrder(amendment: Amendment<H>): OpenOrder<H> {
@@ -39,7 +39,7 @@ export class AmendOrder<H extends HLike<H>> {
 	}
 }
 
-export namespace AmendOrder {
+export namespace UseCaseAmendOrder {
 	export interface ModelDeps<H extends HLike<H>> { }
 
 	export interface TaskDeps<H extends HLike<H>> {

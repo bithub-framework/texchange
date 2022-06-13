@@ -10,16 +10,16 @@ import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 
 
-export class UpdateOrderbook<H extends HLike<H>>{
+export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: UpdateOrderbook.ModelDeps<H>,
+		protected models: UseCaseUpdateOrderbook.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: UpdateOrderbook.TaskDeps<H>,
+		protected tasks: UseCaseUpdateOrderbook.TaskDeps<H>,
 	) { }
 
 	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
@@ -30,7 +30,7 @@ export class UpdateOrderbook<H extends HLike<H>>{
 	}
 }
 
-export namespace UpdateOrderbook {
+export namespace UseCaseUpdateOrderbook {
 	export interface ModelDeps<H extends HLike<H>> {
 		book: Book<H>;
 		progress: Progress<H>;

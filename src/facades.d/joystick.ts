@@ -9,10 +9,10 @@ import { Models } from '../texchange/models';
 import { Mtm } from '../mark-to-market/mtm';
 
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
-import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
+import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
-import { UpdateTrades } from '../use-cases.d/update-trades';
-import { GetProgress } from '../use-cases.d/get-progress';
+import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
+import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -106,7 +106,7 @@ export class Joystick<H extends HLike<H>>
 
 export namespace Joystick {
 	export interface UseCaseDeps<H extends HLike<H>> {
-		updateTrades: UpdateTrades<H>;
+		updateTrades: UseCaseUpdateTrades<H>;
 		updateOrderbook: UpdateOrderbook<H>;
 		getProgress: GetProgress<H>;
 	}

@@ -10,16 +10,16 @@ import { TYPES } from '../injection/types';
 import { Assets } from '../models.d/assets';
 import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
 
-export class GetPositions<H extends HLike<H>> {
+export class UseCaseGetPositions<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: GetPositions.ModelDeps<H>,
+		protected models: UseCaseGetPositions.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: GetPositions.TaskDeps<H>,
+		protected tasks: UseCaseGetPositions.TaskDeps<H>,
 	) { }
 
 	public getPositions(): Positions<H> {
@@ -31,7 +31,7 @@ export class GetPositions<H extends HLike<H>> {
 	}
 }
 
-export namespace GetPositions {
+export namespace UseCaseGetPositions {
 	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 	}

@@ -1,13 +1,13 @@
-import { MakeOrder } from '../use-cases.d/make-order';
-import { CancelOrder } from '../use-cases.d/cancel-order';
-import { AmendOrder } from '../use-cases.d/amend-order';
-import { GetOpenOrders } from '../use-cases.d/get-open-orders';
-import { GetPositions } from '../use-cases.d/get-positions';
-import { GetBalances } from '../use-cases.d/get-balances';
-import { UpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { UpdateTrades } from '../use-cases.d/update-trades';
-import { Subscription } from '../use-cases.d/subscription';
-import { GetProgress } from '../use-cases.d/get-progress';
+import { UseCaseMakeOrder } from '../use-cases.d/make-order';
+import { UseCaseCancelOrder } from '../use-cases.d/cancel-order';
+import { UseCaseAmendOrder } from '../use-cases.d/amend-order';
+import { UseCaseGetOpenOrders } from '../use-cases.d/get-open-orders';
+import { UseCaseGetPositions } from '../use-cases.d/get-positions';
+import { UseCaseGetBalances } from '../use-cases.d/get-balances';
+import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
+import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
+import { UseCaseSubscription } from '../use-cases.d/subscription';
+import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
 import { HLike } from 'secretary-like';
 import { Context } from '../context';
@@ -42,25 +42,25 @@ export class UseCases<H extends HLike<H>> {
 		// tasks: Tasks<H>,
 
 		@inject(TYPES.USE_CASES.MakeOrder)
-		public makeOrder: MakeOrder<H>,
+		public makeOrder: UseCaseMakeOrder<H>,
 		@inject(TYPES.USE_CASES.CancelOrder)
 		public cancelOrder: CancelOrder<H>,
 		@inject(TYPES.USE_CASES.AmendOrder)
 		public amendOrder: AmendOrder<H>,
 		@inject(TYPES.USE_CASES.GetOpenOrders)
-		public getOpenOrders: GetOpenOrders<H>,
+		public getOpenOrders: UseCaseGetOpenOrders<H>,
 		@inject(TYPES.USE_CASES.GetPositions)
-		public getPositions: GetPositions<H>,
+		public getPositions: UseCaseGetPositions<H>,
 		@inject(TYPES.USE_CASES.GetBalances)
 		public getBalances: GetBalances<H>,
 		@inject(TYPES.USE_CASES.UpdateOrderbook)
 		public updateOrderbook: UpdateOrderbook<H>,
 		@inject(TYPES.USE_CASES.Subscription)
-		public subscription: Subscription<H>,
+		public subscription: UseCaseSubscription<H>,
 		@inject(TYPES.USE_CASES.GetProgress)
 		public getProgress: GetProgress<H>,
 		@inject(TYPES.USE_CASES.UpdateTrades)
-		public updateTrades: UpdateTrades<H>,
+		public updateTrades: UseCaseUpdateTrades<H>,
 	) {
 		// this.amendOrder = new AmendOrder(context, models, broadcast, tasks);
 		// this.cancelOrder = new CancelOrder(context, models, broadcast, tasks);

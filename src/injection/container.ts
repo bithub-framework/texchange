@@ -27,7 +27,7 @@ import { Mtm } from '../mark-to-market/mtm';
 
 // Tasks
 import { Tasks } from '../texchange/tasks';
-import { UpdateTrades } from '../use-cases.d/update-trades';
+import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import * as TASKS from '../tasks.d';
 
 // UseCases

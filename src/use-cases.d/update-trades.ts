@@ -12,16 +12,16 @@ import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 
 
-export class UpdateTrades<H extends HLike<H>> {
+export class UseCaseUpdateTrades<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: UpdateTrades.ModelDeps<H>,
+		protected models: UseCaseUpdateTrades.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: UpdateTrades.TaskDeps<H>,
+		protected tasks: UseCaseUpdateTrades.TaskDeps<H>,
 		@inject(TYPES.USE_CASES.realTimeSettlement)
 		private realTimeSettlement: boolean,
 	) { }
@@ -42,7 +42,7 @@ export class UpdateTrades<H extends HLike<H>> {
 	}
 }
 
-export namespace UpdateTrades {
+export namespace UseCaseUpdateTrades {
 	export interface ModelDeps<H extends HLike<H>> {
 		progress: Progress<H>;
 		pricing: Pricing<H, unknown>;

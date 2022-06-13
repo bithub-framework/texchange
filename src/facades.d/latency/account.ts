@@ -14,7 +14,7 @@ import { Context } from '../../context';
 import { Instant } from '../instant';
 import { Config } from './config';
 
-import { Subscription } from '../../use-cases.d/subscription';
+import { UseCaseSubscription } from '../../use-cases.d/subscription';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
@@ -143,6 +143,6 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 
 export namespace AccountLatency {
 	export interface UseCaseDeps<H extends HLike<H>> {
-		subscription: Subscription<H>;
+		subscription: UseCaseSubscription<H>;
 	}
 }

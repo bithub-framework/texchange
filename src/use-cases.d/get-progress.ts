@@ -9,16 +9,16 @@ import { TYPES } from '../injection/types';
 import { Progress } from '../models.d/progress';
 
 
-export class GetProgress<H extends HLike<H>>{
+export class UseCaseGetProgress<H extends HLike<H>>{
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: GetProgress.ModelDeps<H>,
+		protected models: UseCaseGetProgress.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: GetProgress.TaskDeps<H>,
+		protected tasks: UseCaseGetProgress.TaskDeps<H>,
 	) { }
 
 	public getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null {
@@ -30,7 +30,7 @@ export class GetProgress<H extends HLike<H>>{
 	}
 }
 
-export namespace GetProgress {
+export namespace UseCaseGetProgress {
 	export interface ModelDeps<H extends HLike<H>> {
 		progress: Progress<H>;
 	}

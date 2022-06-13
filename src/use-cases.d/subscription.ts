@@ -12,18 +12,18 @@ import { TYPES } from '../injection/types';
 
 import { EventEmitter } from 'events';
 
-export class Subscription<H extends HLike<H>>
+export class UseCaseSubscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: Subscription.ModelDeps<H>,
+		protected models: UseCaseSubscription.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 		@inject(TYPES.Tasks)
-		protected tasks: Subscription.TaskDeps<H>,
+		protected tasks: UseCaseSubscription.TaskDeps<H>,
 	) {
 		super();
 
@@ -35,7 +35,7 @@ export class Subscription<H extends HLike<H>>
 
 }
 
-export namespace Subscription {
+export namespace UseCaseSubscription {
 	export interface ModelDeps<H extends HLike<H>> { }
 
 	export interface TaskDeps<H extends HLike<H>> { }
@@ -48,7 +48,7 @@ export namespace Subscription {
 	}
 }
 
-export namespace Subscription {
+export namespace UseCaseSubscription {
 	export interface Events<H extends HLike<H>> {
 		trades: [readonly Trade<H>[]];
 		orderbook: [Orderbook<H>];
@@ -56,9 +56,9 @@ export namespace Subscription {
 		balances: [Balances<H>];
 	}
 }
-import Events = Subscription.Events;
+import Events = UseCaseSubscription.Events;
 
-export interface Subscription<H extends HLike<H>> extends EventEmitter {
+export interface UseCaseSubscription<H extends HLike<H>> extends EventEmitter {
 	on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
 	once<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;
 	off<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

@@ -8,7 +8,7 @@ import { EventEmitter } from 'events';
 import { Context } from '../../context';
 import { Config } from './config';
 
-import { Subscription } from '../../use-cases.d/subscription';
+import { UseCaseSubscription } from '../../use-cases.d/subscription';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
@@ -56,6 +56,6 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 
 export namespace MarketLatency {
 	export interface UseCaseDeps<H extends HLike<H>> {
-		subscription: Subscription<H>;
+		subscription: UseCaseSubscription<H>;
 	}
 }
