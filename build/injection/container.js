@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const injektor_1 = require("@zimtsui/injektor");
@@ -41,9 +41,10 @@ const subscription_1 = require("../use-cases.d/subscription");
 const get_progress_1 = require("../use-cases.d/get-progress");
 // Facades
 const facades_1 = require("../texchange/facades");
-const instant_1 = require("../facades.d/instant");
-const latency_1 = require("../facades.d/latency");
-const joystick_1 = require("../facades.d/joystick");
+const instant_1 = require("../facades.d/user-account/instant");
+const admin_1 = require("../facades.d/admin");
+const user_market_1 = require("../facades.d/user-market");
+const user_account_1 = require("../facades.d/user-account");
 // Texchange
 const texchange_1 = require("../texchange/texchange");
 class Container extends injektor_1.BaseContainer {
@@ -81,13 +82,12 @@ class Container extends injektor_1.BaseContainer {
         this[_5] = this.rcs(get_progress_1.UseCaseGetProgress);
         this[_6] = this.rcs(facades_1.Facades);
         this[_7] = this.rcs(instant_1.Instant);
-        this[_8] = this.rcs(latency_1.Latency);
-        this[_9] = this.rcs(joystick_1.Joystick);
-        this[_10] = this.rfs(() => this[types_1.TYPES.Facades]().latency);
-        this[_11] = this.rfs(() => this[types_1.TYPES.Facades]().joystick);
-        this[_12] = this.rcs(texchange_1.Texchange);
+        this[_8] = this.rcs(user_market_1.UserMarketFacade);
+        this[_9] = this.rcs(user_account_1.UserAccountFacade);
+        this[_10] = this.rcs(admin_1.AdminFacade);
+        this[_11] = this.rcs(texchange_1.Texchange);
     }
 }
 exports.Container = Container;
-_a = types_1.TYPES.DataStatic, _b = types_1.TYPES.Context, _c = types_1.TYPES.MODELS.Assets, _d = types_1.TYPES.MODELS.Margins, _e = types_1.TYPES.MODELS.Book, _f = types_1.TYPES.MODELS.Progress, _g = types_1.TYPES.Models, _h = types_1.TYPES.Broadcast, _j = types_1.TYPES.Tasks, _k = types_1.TYPES.TASKS.MakeOpenOrder, _l = types_1.TYPES.TASKS.CancelOpenOrder, _m = types_1.TYPES.TASKS.GetBalances, _o = types_1.TYPES.TASKS.GetClosable, _p = types_1.TYPES.TASKS.GetPositions, _q = types_1.TYPES.TASKS.OrderMakes, _r = types_1.TYPES.TASKS.OrderTakes, _s = types_1.TYPES.TASKS.TradeTakesOpenMakers, _t = types_1.TYPES.TASKS.ValidateOrder, _u = types_1.TYPES.TASKS.OrderVolumes, _v = types_1.TYPES.UseCases, _w = types_1.TYPES.USE_CASES.MakeOrder, _x = types_1.TYPES.USE_CASES.CancelOrder, _y = types_1.TYPES.USE_CASES.AmendOrder, _z = types_1.TYPES.USE_CASES.GetOpenOrders, _0 = types_1.TYPES.USE_CASES.GetPositions, _1 = types_1.TYPES.USE_CASES.GetBalances, _2 = types_1.TYPES.USE_CASES.UpdateOrderbook, _3 = types_1.TYPES.USE_CASES.UpdateTrades, _4 = types_1.TYPES.USE_CASES.Subscription, _5 = types_1.TYPES.USE_CASES.GetProgress, _6 = types_1.TYPES.Facades, _7 = types_1.TYPES.Instant, _8 = types_1.TYPES.Latency, _9 = types_1.TYPES.Joystick, _10 = types_1.TYPES.UserTex, _11 = types_1.TYPES.AdminTex, _12 = types_1.TYPES.Texchange;
+_a = types_1.TYPES.DataStatic, _b = types_1.TYPES.Context, _c = types_1.TYPES.MODELS.Assets, _d = types_1.TYPES.MODELS.Margins, _e = types_1.TYPES.MODELS.Book, _f = types_1.TYPES.MODELS.Progress, _g = types_1.TYPES.Models, _h = types_1.TYPES.Broadcast, _j = types_1.TYPES.Tasks, _k = types_1.TYPES.TASKS.MakeOpenOrder, _l = types_1.TYPES.TASKS.CancelOpenOrder, _m = types_1.TYPES.TASKS.GetBalances, _o = types_1.TYPES.TASKS.GetClosable, _p = types_1.TYPES.TASKS.GetPositions, _q = types_1.TYPES.TASKS.OrderMakes, _r = types_1.TYPES.TASKS.OrderTakes, _s = types_1.TYPES.TASKS.TradeTakesOpenMakers, _t = types_1.TYPES.TASKS.ValidateOrder, _u = types_1.TYPES.TASKS.OrderVolumes, _v = types_1.TYPES.UseCases, _w = types_1.TYPES.USE_CASES.MakeOrder, _x = types_1.TYPES.USE_CASES.CancelOrder, _y = types_1.TYPES.USE_CASES.AmendOrder, _z = types_1.TYPES.USE_CASES.GetOpenOrders, _0 = types_1.TYPES.USE_CASES.GetPositions, _1 = types_1.TYPES.USE_CASES.GetBalances, _2 = types_1.TYPES.USE_CASES.UpdateOrderbook, _3 = types_1.TYPES.USE_CASES.UpdateTrades, _4 = types_1.TYPES.USE_CASES.Subscription, _5 = types_1.TYPES.USE_CASES.GetProgress, _6 = types_1.TYPES.Facades, _7 = types_1.TYPES.FACADES.Instant, _8 = types_1.TYPES.FACADES.UserMarket, _9 = types_1.TYPES.FACADES.UserAccount, _10 = types_1.TYPES.FACADES.Admin, _11 = types_1.TYPES.Texchange;
 //# sourceMappingURL=container.js.map

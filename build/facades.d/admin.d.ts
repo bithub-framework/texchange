@@ -9,7 +9,7 @@ import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
-export declare class Joystick<H extends HLike<H>> implements StatefulLike<Models.Snapshot> {
+export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Models.Snapshot> {
     private context;
     private models;
     private mtm;

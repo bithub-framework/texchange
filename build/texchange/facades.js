@@ -13,16 +13,16 @@ exports.Facades = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let Facades = class Facades {
-    constructor(instant, latency, joystick) {
-        this.instant = instant;
-        this.latency = latency;
-        this.joystick = joystick;
+    constructor(admin, userMarket, userAccount) {
+        this.admin = admin;
+        this.userMarket = userMarket;
+        this.userAccount = userAccount;
     }
 };
 Facades = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Instant)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Latency)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Joystick))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.FACADES.Admin)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.FACADES.UserMarket)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.UserAccount))
 ], Facades);
 exports.Facades = Facades;
 //# sourceMappingURL=facades.js.map

@@ -26,5 +26,5 @@ export declare class Tasks<H extends HLike<H>> {
     cancelOpenOrder: TaskCancelOpenOrder<H>;
     marginAccumulation: TaskMarginAccumulation<H>;
     orderVolumes: TaskOrderVolumes<H>;
-    constructor();
+    constructor(getBalances: TaskGetBalances<H>, getPositions: TaskGetPositions<H>, getAvailable: TaskGetAvailable<H>, getClosable: TaskGetClosable<H>, settle: TaskSettle<H>, orderMakes: TaskOrderMakes<H>, tradeTakesOpenMakers: TaskTradeTakesOpenMakers<H>, orderTakes: TaskOrderTakes<H>, validateOrder: TaskValidateOrder<H>, makeOpenOrder: TaskMakeOpenOrder<H>, cancelOpenOrder: TaskCancelOpenOrder<H>, marginAccumulation: TaskMarginAccumulation<H>, orderVolumes: TaskOrderVolumes<H>);
 }

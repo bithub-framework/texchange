@@ -11,8 +11,8 @@ import {
 } from 'secretary-like';
 import { EventEmitter } from 'events';
 import { Context } from '../../context';
-import { Instant } from '../instant';
-import { Config } from './config';
+import { Instant } from './instant';
+import { Config } from '../config';
 
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
 
@@ -20,7 +20,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
 
 
-export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
+export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> {
 	public spec: AccountSpec;
 	public events = <AccountEventEmitterLike<H>>new EventEmitter();
 
@@ -29,9 +29,9 @@ export class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
 		private context: Context<H>,
 		@inject(TYPES.UseCases)
 		private useCases: AccountLatency.UseCaseDeps<H>,
-		@inject(TYPES.Instant)
+		@inject(TYPES.FACADES.Instant)
 		private instant: Instant<H>,
-		@inject(TYPES.DelayConfig)
+		@inject(TYPES.FACADES.Config)
 		private config: Config,
 	) {
 		this.spec = this.context.spec.account;

@@ -1,12 +1,12 @@
 import { HLike } from 'secretary-like';
-import { Latency } from '../facades.d/latency/latency';
-import { Joystick } from '../facades.d/joystick';
+import { Facades } from './facades';
+import { UserMarketFacade } from '../facades.d/user-market';
+import { UserAccountFacade } from '../facades.d/user-account';
+import { AdminFacade } from '../facades.d/admin';
 export declare class Texchange<H extends HLike<H>> {
-    user: UserTex<H>;
-    admin: AdminTex<H>;
-    constructor(user: UserTex<H>, admin: AdminTex<H>);
-}
-export interface AdminTex<H extends HLike<H>> extends Joystick<H> {
-}
-export interface UserTex<H extends HLike<H>> extends Latency<H> {
+    private facades;
+    constructor(facades: Facades<H>);
+    getUserMarketFacade(): UserMarketFacade<H>;
+    getUserAccountFacade(): UserAccountFacade<H>;
+    getAdminFacade(): AdminFacade<H>;
 }

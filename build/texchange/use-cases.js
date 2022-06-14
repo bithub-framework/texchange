@@ -13,25 +13,7 @@ exports.UseCases = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCases = class UseCases {
-    // public makeOrder: MakeOrder<H>;
-    // public cancelOrder: CancelOrder<H>;
-    // public amendOrder: AmendOrder<H>;
-    // public getOpenOrders: GetOpenOrders<H>;
-    // public getPositions: GetPositions<H>;
-    // public getBalances: GetBalances<H>;
-    // public updateOrderbook: UpdateOrderbook<H>;
-    // public subscription: Subscription<H>;
-    // public getProgress: GetProgress<H>;
-    constructor(
-    // @inject(TYPES.Context)
-    // context: Context<H>,
-    // @inject(TYPES.Models)
-    // models: Models<H>,
-    // @inject(TYPES.Broadcast)
-    // broadcast: Broadcast<H>,
-    // @inject(TYPES.Tasks)
-    // tasks: Tasks<H>,
-    makeOrder, cancelOrder, amendOrder, getOpenOrders, getPositions, getBalances, updateOrderbook, subscription, getProgress, updateTrades) {
+    constructor(makeOrder, cancelOrder, amendOrder, getOpenOrders, getPositions, getBalances, updateOrderbook, subscription, getProgress, updateTrades) {
         this.makeOrder = makeOrder;
         this.cancelOrder = cancelOrder;
         this.amendOrder = amendOrder;
@@ -42,15 +24,6 @@ let UseCases = class UseCases {
         this.subscription = subscription;
         this.getProgress = getProgress;
         this.updateTrades = updateTrades;
-        // this.amendOrder = new AmendOrder(context, models, broadcast, tasks);
-        // this.cancelOrder = new CancelOrder(context, models, broadcast, tasks);
-        // this.getBalances = new GetBalances(context, models, broadcast, tasks);
-        // this.getOpenOrders = new GetOpenOrders(context, models, broadcast, tasks);
-        // this.getPositions = new GetPositions(context, models, broadcast, tasks);
-        // this.makeOrder = new MakeOrder(context, models, broadcast, tasks);
-        // this.updateOrderbook = new UpdateOrderbook(context, models, broadcast, tasks);
-        // this.subscription = new Subscription(context, models, broadcast, tasks);
-        // this.getProgress = new GetProgress(context, models, broadcast, tasks);
     }
 };
 UseCases = __decorate([

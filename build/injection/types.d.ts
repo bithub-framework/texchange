@@ -35,6 +35,13 @@ declare class TASKS {
     static readonly MarginAccumulation: unique symbol;
     static readonly Settle: unique symbol;
 }
+export declare class FACADES {
+    static readonly Admin: unique symbol;
+    static readonly UserMarket: unique symbol;
+    static readonly Instant: unique symbol;
+    static readonly Config: unique symbol;
+    static readonly UserAccount: unique symbol;
+}
 export declare class TYPES {
     static readonly spec: unique symbol;
     static readonly HStatic: unique symbol;
@@ -51,12 +58,7 @@ export declare class TYPES {
     static readonly USE_CASES: typeof USE_CASES;
     static readonly TASKS: typeof TASKS;
     static readonly Facades: unique symbol;
-    static readonly DelayConfig: unique symbol;
-    static readonly Instant: unique symbol;
-    static readonly Latency: unique symbol;
-    static readonly Joystick: unique symbol;
-    static readonly UserTex: unique symbol;
-    static readonly AdminTex: unique symbol;
+    static readonly FACADES: typeof FACADES;
     static readonly Texchange: unique symbol;
 }
 export {};

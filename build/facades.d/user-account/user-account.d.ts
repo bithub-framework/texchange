@@ -1,9 +1,9 @@
 import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, OpenOrder, Amendment, AccountEventEmitterLike } from 'secretary-like';
 import { Context } from '../../context';
-import { Instant } from '../instant';
-import { Config } from './config';
+import { Instant } from './instant';
+import { Config } from '../config';
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
-export declare class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
+export declare class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> {
     private context;
     private useCases;
     private instant;

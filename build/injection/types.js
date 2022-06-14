@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TYPES = void 0;
+exports.TYPES = exports.FACADES = void 0;
 class MODELS {
 }
 MODELS.initialBalance = Symbol();
@@ -38,10 +38,17 @@ TASKS.OrderVolumes = Symbol();
 TASKS.GetAvailable = Symbol();
 TASKS.MarginAccumulation = Symbol();
 TASKS.Settle = Symbol();
+class FACADES {
+}
+exports.FACADES = FACADES;
+FACADES.Admin = Symbol();
+FACADES.UserMarket = Symbol();
+FACADES.Instant = Symbol();
+FACADES.Config = Symbol();
+FACADES.UserAccount = Symbol();
 class TYPES {
 }
 exports.TYPES = TYPES;
-// public static readonly Config = Symbol();
 TYPES.spec = Symbol();
 TYPES.HStatic = Symbol();
 TYPES.TimelineLike = Symbol();
@@ -57,12 +64,7 @@ TYPES.UseCases = Symbol();
 TYPES.USE_CASES = USE_CASES;
 TYPES.TASKS = TASKS;
 TYPES.Facades = Symbol();
-TYPES.DelayConfig = Symbol();
-TYPES.Instant = Symbol();
-TYPES.Latency = Symbol();
-TYPES.Joystick = Symbol();
-TYPES.UserTex = Symbol();
-TYPES.AdminTex = Symbol();
+TYPES.FACADES = FACADES;
 TYPES.Texchange = Symbol();
 // export namespace TYPES {
 // 	export const Config = Symbol();

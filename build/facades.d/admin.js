@@ -9,18 +9,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Joystick = void 0;
+exports.AdminFacade = void 0;
 const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let Joystick = class Joystick {
+let AdminFacade = class AdminFacade {
     constructor(context, models, mtm, useCases) {
         this.context = context;
         this.models = models;
         this.mtm = mtm;
         this.useCases = useCases;
         this.Data = this.context.Data;
-        this.startable = new startable_1.Startable(() => this.start(), () => this.stop());
+        this.startable = startable_1.Startable.create(() => this.start(), () => this.stop());
         this.config = this.context.spec;
     }
     updateTrades($trades) {
@@ -69,11 +69,11 @@ let Joystick = class Joystick {
         this.models.progress.restore(snapshot.progress);
     }
 };
-Joystick = __decorate([
+AdminFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Mtm)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.UseCases))
-], Joystick);
-exports.Joystick = Joystick;
-//# sourceMappingURL=joystick.js.map
+], AdminFacade);
+exports.AdminFacade = AdminFacade;
+//# sourceMappingURL=admin.js.map

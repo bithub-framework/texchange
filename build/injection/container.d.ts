@@ -41,12 +41,12 @@ import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 import { Facades } from '../texchange/facades';
-import { Instant } from '../facades.d/instant';
-import { Latency } from '../facades.d/latency';
-import { Joystick } from '../facades.d/joystick';
+import { Config as DelayConfig } from '../facades.d/config';
+import { Instant } from '../facades.d/user-account/instant';
+import { AdminFacade } from '../facades.d/admin';
+import { UserMarketFacade } from '../facades.d/user-market';
+import { UserAccountFacade } from '../facades.d/user-account';
 import { Texchange } from '../texchange/texchange';
-import { AdminTex } from '../texchange/texchange';
-import { UserTex } from '../texchange/texchange';
 export declare abstract class Container<H extends HLike<H>> extends BaseContainer {
     abstract [TYPES.HStatic]: () => HStatic<H>;
     abstract [TYPES.spec]: () => Spec<H>;
@@ -90,10 +90,10 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.USE_CASES.Subscription]: () => UseCaseSubscription<H>;
     [TYPES.USE_CASES.GetProgress]: () => UseCaseGetProgress<H>;
     [TYPES.Facades]: () => Facades<H>;
-    [TYPES.Instant]: () => Instant<H>;
-    [TYPES.Latency]: () => Latency<H>;
-    [TYPES.Joystick]: () => Joystick<H>;
-    [TYPES.UserTex]: () => UserTex<H>;
-    [TYPES.AdminTex]: () => AdminTex<H>;
+    abstract [TYPES.FACADES.Config]: () => DelayConfig;
+    [TYPES.FACADES.Instant]: () => Instant<H>;
+    [TYPES.FACADES.UserMarket]: () => UserMarketFacade<H>;
+    [TYPES.FACADES.UserAccount]: () => UserAccountFacade<H>;
+    [TYPES.FACADES.Admin]: () => AdminFacade<H>;
     [TYPES.Texchange]: () => Texchange<H>;
 }

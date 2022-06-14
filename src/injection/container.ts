@@ -57,14 +57,14 @@ import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
 // Facades
 import { Facades } from '../texchange/facades';
-import { Instant } from '../facades.d/instant';
-import { Latency } from '../facades.d/latency';
-import { Joystick } from '../facades.d/joystick';
+import { Config as DelayConfig } from '../facades.d/config';
+import { Instant } from '../facades.d/user-account/instant';
+import { AdminFacade } from '../facades.d/admin';
+import { UserMarketFacade } from '../facades.d/user-market';
+import { UserAccountFacade } from '../facades.d/user-account';
 
 // Texchange
 import { Texchange } from '../texchange/texchange';
-import { AdminTex } from '../texchange/texchange';
-import { UserTex } from '../texchange/texchange';
 
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
@@ -118,13 +118,12 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.USE_CASES.GetProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
 
 
-
 	public [TYPES.Facades] = this.rcs<Facades<H>>(Facades);
-	public [TYPES.Instant] = this.rcs<Instant<H>>(Instant);
-	public [TYPES.Latency] = this.rcs<Latency<H>>(Latency);
-	public [TYPES.Joystick] = this.rcs<Joystick<H>>(Joystick);
+	public abstract [TYPES.FACADES.Config]: () => DelayConfig;
+	public [TYPES.FACADES.Instant] = this.rcs<Instant<H>>(Instant);
+	public [TYPES.FACADES.UserMarket] = this.rcs<UserMarketFacade<H>>(UserMarketFacade);
+	public [TYPES.FACADES.UserAccount] = this.rcs<UserAccountFacade<H>>(UserAccountFacade);
+	public [TYPES.FACADES.Admin] = this.rcs<AdminFacade<H>>(AdminFacade);
 
-	public [TYPES.UserTex] = this.rfs<UserTex<H>>(() => this[TYPES.Facades]().latency);
-	public [TYPES.AdminTex] = this.rfs<AdminTex<H>>(() => this[TYPES.Facades]().joystick);
 	public [TYPES.Texchange] = this.rcs<Texchange<H>>(Texchange);
 }

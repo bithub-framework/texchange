@@ -11,7 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Instant = void 0;
 const injektor_1 = require("@zimtsui/injektor");
-const types_1 = require("../injection/types");
+const types_1 = require("../../injection/types");
 let Instant = class Instant {
     constructor(context, useCases) {
         this.context = context;

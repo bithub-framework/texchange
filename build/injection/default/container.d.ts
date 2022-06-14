@@ -9,6 +9,7 @@ import { TaskGetAvailable } from '../../tasks.d/get-available/get-available';
 import { TaskMarginAccumulation } from '../../tasks.d/margin-accumulation/margin-accumulation';
 import { TaskSettle } from '../../tasks.d/settle/settle';
 import { Mtm } from '../../mark-to-market/mtm';
+import { Config as DelayConfig } from '../../facades.d/config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.HStatic]: () => HStatic<H>;
     [TYPES.spec]: () => Spec<H>;
@@ -21,5 +22,6 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.TASKS.Settle]: () => TaskSettle<H>;
     [TYPES.Mtm]: () => Mtm<H>;
     [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
+    [TYPES.FACADES.Config]: () => DelayConfig;
     constructor(timeline: TimelineLike, H: HStatic<H>, spec: Spec<H>);
 }

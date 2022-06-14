@@ -4,18 +4,27 @@ import { TYPES } from '../injection/types';
 
 
 // Facades
-import { Latency } from '../facades.d/latency/latency';
-import { Joystick } from '../facades.d/joystick';
+import { Facades } from './facades';
+import { UserMarketFacade } from '../facades.d/user-market';
+import { UserAccountFacade } from '../facades.d/user-account';
+import { AdminFacade } from '../facades.d/admin';
 
 
 export class Texchange<H extends HLike<H>>  {
 	public constructor(
-		@inject(TYPES.UserTex)
-		public user: UserTex<H>,
-		@inject(TYPES.AdminTex)
-		public admin: AdminTex<H>,
+		@inject(TYPES.Facades)
+		private facades: Facades<H>,
 	) { }
-}
 
-export interface AdminTex<H extends HLike<H>> extends Joystick<H> { }
-export interface UserTex<H extends HLike<H>> extends Latency<H> { }
+	public getUserMarketFacade(): UserMarketFacade<H> {
+		return this.facades.userMarket;
+	}
+
+	public getUserAccountFacade(): UserAccountFacade<H> {
+		return this.facades.userAccount;
+	}
+
+	public getAdminFacade(): AdminFacade<H> {
+		return this.facades.admin;
+	}
+}

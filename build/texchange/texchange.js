@@ -13,14 +13,21 @@ exports.Texchange = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let Texchange = class Texchange {
-    constructor(user, admin) {
-        this.user = user;
-        this.admin = admin;
+    constructor(facades) {
+        this.facades = facades;
+    }
+    getUserMarketFacade() {
+        return this.facades.userMarket;
+    }
+    getUserAccountFacade() {
+        return this.facades.userAccount;
+    }
+    getAdminFacade() {
+        return this.facades.admin;
     }
 };
 Texchange = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.UserTex)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.AdminTex))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.Facades))
 ], Texchange);
 exports.Texchange = Texchange;
 //# sourceMappingURL=texchange.js.map

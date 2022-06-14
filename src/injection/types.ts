@@ -41,8 +41,16 @@ class TASKS {
 }
 
 
+export class FACADES {
+	public static readonly Admin = Symbol();
+	public static readonly UserMarket = Symbol();
+	public static readonly Instant = Symbol();
+	public static readonly Config = Symbol();
+	public static readonly UserAccount = Symbol();
+}
+
+
 export class TYPES {
-	// public static readonly Config = Symbol();
 	public static readonly spec = Symbol();
 	public static readonly HStatic = Symbol();
 	public static readonly TimelineLike = Symbol();
@@ -66,13 +74,7 @@ export class TYPES {
 	public static readonly TASKS = TASKS;
 
 	public static readonly Facades = Symbol();
-	public static readonly DelayConfig = Symbol();
-	public static readonly Instant = Symbol();
-	public static readonly Latency = Symbol();
-	public static readonly Joystick = Symbol();
-
-	public static readonly UserTex = Symbol();
-	public static readonly AdminTex = Symbol();
+	public static readonly FACADES = FACADES;
 
 	public static readonly Texchange = Symbol();
 }

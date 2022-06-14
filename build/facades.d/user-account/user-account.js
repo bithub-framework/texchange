@@ -9,11 +9,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountLatency = void 0;
+exports.UserAccountFacade = void 0;
 const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
-let AccountLatency = class AccountLatency {
+let UserAccountFacade = class UserAccountFacade {
     constructor(context, useCases, instant, config) {
         this.context = context;
         this.useCases = useCases;
@@ -117,11 +117,11 @@ let AccountLatency = class AccountLatency {
         return this.context.calc.dollarVolume(price, quantity);
     }
 };
-AccountLatency = __decorate([
+UserAccountFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.UseCases)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Instant)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.DelayConfig))
-], AccountLatency);
-exports.AccountLatency = AccountLatency;
-//# sourceMappingURL=account.js.map
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.Instant)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.Config))
+], UserAccountFacade);
+exports.UserAccountFacade = UserAccountFacade;
+//# sourceMappingURL=user-account.js.map

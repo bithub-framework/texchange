@@ -3,7 +3,6 @@ import { Container as BaseContainer } from '../container';
 import { TYPES } from '../types';
 
 // Context
-import { Context } from '../../context';
 import { Spec } from '../../context.d/spec';
 import {
 	TimelineLike,
@@ -17,13 +16,7 @@ import { DefaultMakers } from '../../models.d/makers/default';
 import { Pricing } from '../../models.d/pricing/pricing';
 import { DefaultPricing } from '../../models.d/pricing/default';
 
-import { Models } from '../../texchange/models';
-
-//Broadcast
-import { Broadcast } from '../../broadcast';
-
 // Tasks
-import { Tasks } from '../../texchange/tasks';
 import { TaskGetAvailable } from '../../tasks.d/get-available/get-available';
 import { TaskMarginAccumulation } from '../../tasks.d/margin-accumulation/margin-accumulation';
 import { TaskSettle } from '../../tasks.d/settle/settle';
@@ -35,6 +28,8 @@ import { DefaultTaskSettle } from '../../tasks.d/settle/default';
 import { Mtm } from '../../mark-to-market/mtm';
 import { DefaultMtm } from '../../mark-to-market/default';
 
+// Facades
+import { Config as DelayConfig } from '../../facades.d/config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
@@ -54,6 +49,11 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.Mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 
 	public [TYPES.USE_CASES.realTimeSettlement] = this.rv(true);
+
+	public [TYPES.FACADES.Config] = this.rv<DelayConfig>({
+		ping: 20,
+		processing: 20,
+	});
 
 	public constructor(
 		timeline: TimelineLike,

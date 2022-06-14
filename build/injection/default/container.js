@@ -1,5 +1,5 @@
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const container_1 = require("../container");
@@ -22,11 +22,15 @@ class Container extends container_1.Container {
         this[_f] = this.rcs(default_6.DefaultTaskSettle);
         this[_g] = this.rcs(default_7.DefaultMtm);
         this[_h] = this.rv(true);
+        this[_j] = this.rv({
+            ping: 20,
+            processing: 20,
+        });
         this[types_1.TYPES.spec] = this.rv(spec);
         this[types_1.TYPES.TimelineLike] = this.rv(timeline);
         this[types_1.TYPES.HStatic] = this.rv(H);
     }
 }
 exports.Container = Container;
-types_1.TYPES.HStatic, types_1.TYPES.spec, types_1.TYPES.TimelineLike, _a = types_1.TYPES.MarketCalc, _b = types_1.TYPES.MODELS.Makers, _c = types_1.TYPES.MODELS.Pricing, _d = types_1.TYPES.TASKS.GetAvailable, _e = types_1.TYPES.TASKS.MarginAccumulation, _f = types_1.TYPES.TASKS.Settle, _g = types_1.TYPES.Mtm, _h = types_1.TYPES.USE_CASES.realTimeSettlement;
+types_1.TYPES.HStatic, types_1.TYPES.spec, types_1.TYPES.TimelineLike, _a = types_1.TYPES.MarketCalc, _b = types_1.TYPES.MODELS.Makers, _c = types_1.TYPES.MODELS.Pricing, _d = types_1.TYPES.TASKS.GetAvailable, _e = types_1.TYPES.TASKS.MarginAccumulation, _f = types_1.TYPES.TASKS.Settle, _g = types_1.TYPES.Mtm, _h = types_1.TYPES.USE_CASES.realTimeSettlement, _j = types_1.TYPES.FACADES.Config;
 //# sourceMappingURL=container.js.map

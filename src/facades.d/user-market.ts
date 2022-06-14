@@ -5,16 +5,16 @@ import {
 	MarketEventEmitterLike,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
-import { Context } from '../../context';
+import { Context } from '../context';
 import { Config } from './config';
 
-import { UseCaseSubscription } from '../../use-cases.d/subscription';
+import { UseCaseSubscription } from '../use-cases.d/subscription';
 
 import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/types';
+import { TYPES } from '../injection/types';
 
 
-export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
+export class UserMarketFacade<H extends HLike<H>> implements MarketApiLike<H> {
 	public spec: MarketSpec<H>;
 	public events = <MarketEventEmitterLike<H>>new EventEmitter();
 
@@ -23,7 +23,7 @@ export class MarketLatency<H extends HLike<H>> implements MarketApiLike<H> {
 		private context: Context<H>,
 		@inject(TYPES.UseCases)
 		private useCases: MarketLatency.UseCaseDeps<H>,
-		@inject(TYPES.DelayConfig)
+		@inject(TYPES.FACADES.Config)
 		private config: Config,
 	) {
 		this.spec = this.context.spec.market;

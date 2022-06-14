@@ -13,7 +13,7 @@ import { TYPES } from '../injection/types';
  */
 export class DefaultMtm<H extends HLike<H>>
 	extends Mtm<H> {
-	public startable = new Startable(
+	public startable = Startable.create(
 		() => this.start(),
 		() => this.stop(),
 	);

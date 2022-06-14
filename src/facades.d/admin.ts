@@ -18,7 +18,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class Joystick<H extends HLike<H>>
+export class AdminFacade<H extends HLike<H>>
 	implements StatefulLike<Models.Snapshot>{
 	private startable: Startable;
 	public config: Spec<H>;
@@ -33,7 +33,7 @@ export class Joystick<H extends HLike<H>>
 		@inject(TYPES.UseCases)
 		private useCases: Joystick.UseCaseDeps<H>,
 	) {
-		this.startable = new Startable(
+		this.startable = Startable.create(
 			() => this.start(),
 			() => this.stop(),
 		);
