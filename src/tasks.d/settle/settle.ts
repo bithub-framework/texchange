@@ -3,7 +3,6 @@ import {
     HLike,
 } from 'secretary-like';
 import { Context } from '../../context';
-import { SettleLike } from './settle-like';
 import { Broadcast } from '../../broadcast';
 import { instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
@@ -13,13 +12,12 @@ import { Margins } from '../../models.d/margins';
 import { Pricing } from '../../models.d/pricing/pricing';
 
 
-export abstract class Settle<H extends HLike<H>>
-    implements SettleLike {
+export abstract class TaskSettle<H extends HLike<H>> {
     @instantInject(TYPES.Tasks)
-    protected tasks!: Settle.TaskDeps<H>;
+    protected tasks!: TaskSettle.TaskDeps<H>;
 
     protected abstract context: Context<H>;
-    protected abstract models: Settle.ModelDeps<H>;
+    protected abstract models: TaskSettle.ModelDeps<H>;
     protected abstract broadcast: Broadcast<H>;
 
 
@@ -55,7 +53,7 @@ export abstract class Settle<H extends HLike<H>>
     protected abstract assertEnoughBalance(): void;
 }
 
-export namespace Settle {
+export namespace TaskSettle {
     export interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
         margins: Margins<H>;

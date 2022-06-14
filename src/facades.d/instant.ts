@@ -74,10 +74,10 @@ export class Instant<H extends HLike<H>> {
 export namespace Instant {
     export interface UseCaseDeps<H extends HLike<H>> {
         makeOrder: UseCaseMakeOrder<H>;
-        cancelOrder: CancelOrder<H>;
-        amendOrder: AmendOrder<H>;
+        cancelOrder: UseCaseCancelOrder<H>;
+        amendOrder: UseCaseAmendOrder<H>;
         getOpenOrders: UseCaseGetOpenOrders<H>;
-        getBalances: GetBalances<H>;
+        getBalances: UseCaseGetBalances<H>;
         getPositions: UseCaseGetPositions<H>;
     }
 }

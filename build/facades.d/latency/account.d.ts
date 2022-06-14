@@ -2,7 +2,7 @@ import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, Op
 import { Context } from '../../context';
 import { Instant } from '../instant';
 import { Config } from './config';
-import { Subscription } from '../../use-cases.d/subscription';
+import { UseCaseSubscription } from '../../use-cases.d/subscription';
 export declare class AccountLatency<H extends HLike<H>> implements AccountApiLike<H> {
     private context;
     private useCases;
@@ -22,6 +22,6 @@ export declare class AccountLatency<H extends HLike<H>> implements AccountApiLik
 }
 export declare namespace AccountLatency {
     interface UseCaseDeps<H extends HLike<H>> {
-        subscription: Subscription<H>;
+        subscription: UseCaseSubscription<H>;
     }
 }

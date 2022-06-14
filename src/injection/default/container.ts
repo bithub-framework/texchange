@@ -24,17 +24,17 @@ import { Broadcast } from '../../broadcast';
 
 // Tasks
 import { Tasks } from '../../texchange/tasks';
-import * as TASKS from '../../tasks.d';
-import { DefaultGetAvailable } from '../../tasks.d/get-available/default';
-import { DefaultMarginAccumulation } from '../../tasks.d/margin-accumulation/default';
-import { DefaultSettle } from '../../tasks.d/settle/default';
+import { TaskGetAvailable } from '../../tasks.d/get-available/get-available';
+import { TaskMarginAccumulation } from '../../tasks.d/margin-accumulation/margin-accumulation';
+import { TaskSettle } from '../../tasks.d/settle/settle';
+import { DefaultTaskGetAvailable } from '../../tasks.d/get-available/default';
+import { DefaultTaskMarginAccumulation } from '../../tasks.d/margin-accumulation/default';
+import { DefaultTaskSettle } from '../../tasks.d/settle/default';
 
 // Mark to market
 import { Mtm } from '../../mark-to-market/mtm';
 import { DefaultMtm } from '../../mark-to-market/default';
 
-// Use cases
-import { UseCaseUpdateTrades } from '../../use-cases.d/update-trades';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
@@ -47,9 +47,9 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.MODELS.Makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.Pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
 
-	public [TYPES.TASKS.GetAvailable] = this.rcs<TASKS.GetAvailableLike<H>>(DefaultGetAvailable);
-	public [TYPES.TASKS.MarginAccumulation] = this.rcs<TASKS.MarginAccumulationLike<H>>(DefaultMarginAccumulation);
-	public [TYPES.TASKS.Settle] = this.rcs<TASKS.SettleLike>(DefaultSettle);
+	public [TYPES.TASKS.GetAvailable] = this.rcs<TaskGetAvailable<H>>(DefaultTaskGetAvailable);
+	public [TYPES.TASKS.MarginAccumulation] = this.rcs<TaskMarginAccumulation<H>>(DefaultTaskMarginAccumulation);
+	public [TYPES.TASKS.Settle] = this.rcs<TaskSettle<H>>(DefaultTaskSettle);
 
 	public [TYPES.Mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 

@@ -9,11 +9,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Subscription = void 0;
+exports.UseCaseSubscription = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 const events_1 = require("events");
-let Subscription = class Subscription extends events_1.EventEmitter {
+let UseCaseSubscription = class UseCaseSubscription extends events_1.EventEmitter {
     constructor(context, models, broadcast, tasks) {
         super();
         this.context = context;
@@ -26,11 +26,11 @@ let Subscription = class Subscription extends events_1.EventEmitter {
         this.broadcast.on('orderbook', orderbook => this.emit('orderbook', orderbook));
     }
 };
-Subscription = __decorate([
+UseCaseSubscription = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
-], Subscription);
-exports.Subscription = Subscription;
+], UseCaseSubscription);
+exports.UseCaseSubscription = UseCaseSubscription;
 //# sourceMappingURL=subscription.js.map

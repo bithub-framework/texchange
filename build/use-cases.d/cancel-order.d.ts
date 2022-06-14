@@ -1,19 +1,19 @@
 import { Context } from '../context';
 import { HLike, OpenOrder } from 'secretary-like';
 import { Broadcast } from '../broadcast';
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
-export declare class CancelOrder<H extends HLike<H>> {
+import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
+export declare class UseCaseCancelOrder<H extends HLike<H>> {
     protected context: Context<H>;
-    protected models: CancelOrder.ModelDeps<H>;
+    protected models: UseCaseCancelOrder.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    protected tasks: CancelOrder.TaskDeps<H>;
-    constructor(context: Context<H>, models: CancelOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: CancelOrder.TaskDeps<H>);
+    protected tasks: UseCaseCancelOrder.TaskDeps<H>;
+    constructor(context: Context<H>, models: UseCaseCancelOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseCancelOrder.TaskDeps<H>);
     cancelOrder(order: OpenOrder<H>): OpenOrder<H>;
 }
-export declare namespace CancelOrder {
+export declare namespace UseCaseCancelOrder {
     interface ModelDeps<H extends HLike<H>> {
     }
     interface TaskDeps<H extends HLike<H>> {
-        cancelOpenOrder: CancelOpenOrderLike<H>;
+        cancelOpenOrder: TaskCancelOpenOrder<H>;
     }
 }

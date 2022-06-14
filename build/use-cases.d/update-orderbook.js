@@ -9,11 +9,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateOrderbook = void 0;
+exports.UseCaseUpdateOrderbook = void 0;
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let UpdateOrderbook = class UpdateOrderbook {
+let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
@@ -27,11 +27,11 @@ let UpdateOrderbook = class UpdateOrderbook {
         this.broadcast.emit('orderbook', this.models.book.getBook());
     }
 };
-UpdateOrderbook = __decorate([
+UseCaseUpdateOrderbook = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
-], UpdateOrderbook);
-exports.UpdateOrderbook = UpdateOrderbook;
+], UseCaseUpdateOrderbook);
+exports.UseCaseUpdateOrderbook = UseCaseUpdateOrderbook;
 //# sourceMappingURL=update-orderbook.js.map

@@ -1,21 +1,21 @@
 import { Length, HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
-import { Settle } from './settle';
+import { TaskSettle } from './settle';
 /**
 * 默认逐仓
 */
-export declare class DefaultSettle<H extends HLike<H>> extends Settle<H> {
+export declare class DefaultTaskSettle<H extends HLike<H>> extends TaskSettle<H> {
     protected context: Context<H>;
-    protected models: DefaultSettle.ModelDeps<H>;
+    protected models: DefaultTaskSettle.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    constructor(context: Context<H>, models: DefaultSettle.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: DefaultTaskSettle.ModelDeps<H>, broadcast: Broadcast<H>);
     protected clearingMargin(length: Length, profit: H): H;
     protected assertEnoughBalance(): void;
 }
-export declare namespace DefaultSettle {
-    interface ModelDeps<H extends HLike<H>> extends Settle.ModelDeps<H> {
+export declare namespace DefaultTaskSettle {
+    interface ModelDeps<H extends HLike<H>> extends TaskSettle.ModelDeps<H> {
     }
-    interface TaskDeps<H extends HLike<H>> extends Settle.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> extends TaskSettle.TaskDeps<H> {
     }
 }

@@ -1,4 +1,3 @@
-import { GetAvailableLike } from './get-available-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { HLike } from 'secretary-like';
@@ -8,12 +7,11 @@ import { TYPES } from '../../injection/types';
 import { Assets } from '../../models.d/assets';
 
 
-export abstract class GetAvailable<H extends HLike<H>>
-	implements GetAvailableLike<H> {
+export abstract class TaskGetAvailable<H extends HLike<H>> {
 	@instantInject(TYPES.Tasks)
-	protected tasks!: GetAvailable.TaskDeps<H>;
+	protected tasks!: TaskGetAvailable.TaskDeps<H>;
 	protected abstract context: Context<H>;
-	protected abstract models: GetAvailable.ModelDeps<H>;
+	protected abstract models: TaskGetAvailable.ModelDeps<H>;
 	protected abstract broadcast: Broadcast<H>;
 
 
@@ -29,7 +27,7 @@ export abstract class GetAvailable<H extends HLike<H>>
 }
 
 
-export namespace GetAvailable {
+export namespace TaskGetAvailable {
 	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
 	}

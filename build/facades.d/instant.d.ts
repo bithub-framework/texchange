@@ -1,11 +1,11 @@
 import { Context } from '../context';
 import { LimitOrder, Positions, Balances, OpenOrder, Amendment, HLike } from 'secretary-like';
-import { MakeOrder } from '../use-cases.d/make-order';
-import { CancelOrder } from '../use-cases.d/cancel-order';
-import { AmendOrder } from '../use-cases.d/amend-order';
-import { GetPositions } from '../use-cases.d/get-positions';
-import { GetBalances } from '../use-cases.d/get-balances';
-import { GetOpenOrders } from '../use-cases.d/get-open-orders';
+import { UseCaseMakeOrder } from '../use-cases.d/make-order';
+import { UseCaseCancelOrder } from '../use-cases.d/cancel-order';
+import { UseCaseAmendOrder } from '../use-cases.d/amend-order';
+import { UseCaseGetPositions } from '../use-cases.d/get-positions';
+import { UseCaseGetBalances } from '../use-cases.d/get-balances';
+import { UseCaseGetOpenOrders } from '../use-cases.d/get-open-orders';
 export declare class Instant<H extends HLike<H>> {
     private context;
     private useCases;
@@ -19,11 +19,11 @@ export declare class Instant<H extends HLike<H>> {
 }
 export declare namespace Instant {
     interface UseCaseDeps<H extends HLike<H>> {
-        makeOrder: MakeOrder<H>;
-        cancelOrder: CancelOrder<H>;
-        amendOrder: AmendOrder<H>;
-        getOpenOrders: GetOpenOrders<H>;
-        getBalances: GetBalances<H>;
-        getPositions: GetPositions<H>;
+        makeOrder: UseCaseMakeOrder<H>;
+        cancelOrder: UseCaseCancelOrder<H>;
+        amendOrder: UseCaseAmendOrder<H>;
+        getOpenOrders: UseCaseGetOpenOrders<H>;
+        getBalances: UseCaseGetBalances<H>;
+        getPositions: UseCaseGetPositions<H>;
     }
 }

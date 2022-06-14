@@ -1,23 +1,23 @@
 import { HLike } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
-import { MarginAccumulation } from './margin-accumulation';
+import { TaskMarginAccumulation } from './margin-accumulation';
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
-export declare class DefaultMarginAccumulation<H extends HLike<H>> extends MarginAccumulation<H> {
+export declare class DefaultTaskMarginAccumulation<H extends HLike<H>> extends TaskMarginAccumulation<H> {
     protected context: Context<H>;
-    protected models: DefaultMarginAccumulation.ModelDeps<H>;
+    protected models: DefaultTaskMarginAccumulation.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    constructor(context: Context<H>, models: DefaultMarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
-    newMarginAfterOpening({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
-    newMarginAfterClosing({ length, volume, dollarVolume, }: MarginAccumulation.Volumes<H>): H;
+    constructor(context: Context<H>, models: DefaultTaskMarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
+    newMarginAfterOpening({ length, volume, dollarVolume, }: TaskMarginAccumulation.Volumes<H>): H;
+    newMarginAfterClosing({ length, volume, dollarVolume, }: TaskMarginAccumulation.Volumes<H>): H;
 }
-export declare namespace DefaultMarginAccumulation {
-    type Volumes<H extends HLike<H>> = MarginAccumulation.Volumes<H>;
-    interface ModelDeps<H extends HLike<H>> extends MarginAccumulation.ModelDeps<H> {
+export declare namespace DefaultTaskMarginAccumulation {
+    type Volumes<H extends HLike<H>> = TaskMarginAccumulation.Volumes<H>;
+    interface ModelDeps<H extends HLike<H>> extends TaskMarginAccumulation.ModelDeps<H> {
         margins: Margins<H>;
         assets: Assets<H>;
     }
-    interface TaskDeps<H extends HLike<H>> extends MarginAccumulation.TaskDeps<H> {
+    interface TaskDeps<H extends HLike<H>> extends TaskMarginAccumulation.TaskDeps<H> {
     }
 }

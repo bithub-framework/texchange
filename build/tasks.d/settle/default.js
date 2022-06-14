@@ -9,7 +9,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultSettle = void 0;
+exports.DefaultTaskSettle = void 0;
 const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 const settle_1 = require("./settle");
@@ -18,7 +18,7 @@ const types_1 = require("../../injection/default/types");
 /**
 * 默认逐仓
 */
-let DefaultSettle = class DefaultSettle extends settle_1.Settle {
+let DefaultTaskSettle = class DefaultTaskSettle extends settle_1.TaskSettle {
     constructor(context, models, broadcast) {
         super();
         this.context = context;
@@ -34,10 +34,10 @@ let DefaultSettle = class DefaultSettle extends settle_1.Settle {
             assert(this.models.margins.getMargin()[length].gte(0));
     }
 };
-DefaultSettle = __decorate([
+DefaultTaskSettle = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
-], DefaultSettle);
-exports.DefaultSettle = DefaultSettle;
+], DefaultTaskSettle);
+exports.DefaultTaskSettle = DefaultTaskSettle;
 //# sourceMappingURL=default.js.map

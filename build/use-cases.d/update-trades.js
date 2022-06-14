@@ -9,11 +9,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateTrades = void 0;
+exports.UseCaseUpdateTrades = void 0;
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let UpdateTrades = class UpdateTrades {
+let UseCaseUpdateTrades = class UseCaseUpdateTrades {
     constructor(context, models, broadcast, tasks, realTimeSettlement) {
         this.context = context;
         this.models = models;
@@ -36,12 +36,12 @@ let UpdateTrades = class UpdateTrades {
             settle.settle();
     }
 };
-UpdateTrades = __decorate([
+UseCaseUpdateTrades = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.realTimeSettlement))
-], UpdateTrades);
-exports.UpdateTrades = UpdateTrades;
+], UseCaseUpdateTrades);
+exports.UseCaseUpdateTrades = UseCaseUpdateTrades;
 //# sourceMappingURL=update-trades.js.map

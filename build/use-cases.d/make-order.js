@@ -9,10 +9,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MakeOrder = void 0;
+exports.UseCaseMakeOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let MakeOrder = class MakeOrder {
+let UseCaseMakeOrder = class UseCaseMakeOrder {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
@@ -28,11 +28,11 @@ let MakeOrder = class MakeOrder {
         });
     }
 };
-MakeOrder = __decorate([
+UseCaseMakeOrder = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
-], MakeOrder);
-exports.MakeOrder = MakeOrder;
+], UseCaseMakeOrder);
+exports.UseCaseMakeOrder = UseCaseMakeOrder;
 //# sourceMappingURL=make-order.js.map

@@ -1,23 +1,23 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, Amendment, OpenOrder } from 'secretary-like';
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
-import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
-import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
-export declare class AmendOrder<H extends HLike<H>> {
+import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
+import { TaskValidateOrder } from '../tasks.d/validate-order';
+import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
+export declare class UseCaseAmendOrder<H extends HLike<H>> {
     protected context: Context<H>;
-    protected models: AmendOrder.ModelDeps<H>;
+    protected models: UseCaseAmendOrder.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    protected tasks: AmendOrder.TaskDeps<H>;
-    constructor(context: Context<H>, models: AmendOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: AmendOrder.TaskDeps<H>);
+    protected tasks: UseCaseAmendOrder.TaskDeps<H>;
+    constructor(context: Context<H>, models: UseCaseAmendOrder.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseAmendOrder.TaskDeps<H>);
     amendOrder(amendment: Amendment<H>): OpenOrder<H>;
 }
-export declare namespace AmendOrder {
+export declare namespace UseCaseAmendOrder {
     interface ModelDeps<H extends HLike<H>> {
     }
     interface TaskDeps<H extends HLike<H>> {
-        makeOpenOrder: MakeOpenOrderLike<H>;
-        cancelOpenOrder: CancelOpenOrderLike<H>;
-        validateOrder: ValidateOrderLike<H>;
+        makeOpenOrder: TaskMakeOpenOrder<H>;
+        cancelOpenOrder: TaskCancelOpenOrder<H>;
+        validateOrder: TaskValidateOrder<H>;
     }
 }

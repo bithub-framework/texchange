@@ -5,7 +5,7 @@ import {
 import { Context } from '../../context';
 import assert = require('assert');
 import { Broadcast } from '../../broadcast';
-import { Settle } from './settle';
+import { TaskSettle } from './settle';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
@@ -13,14 +13,14 @@ import { TYPES } from '../../injection/default/types';
 /**
 * 默认逐仓
 */
-export class DefaultSettle<H extends HLike<H>>
-	extends Settle<H> {
+export class DefaultTaskSettle<H extends HLike<H>>
+	extends TaskSettle<H> {
 
 	public constructor(
 		@inject(TYPES.Context)
 		protected context: Context<H>,
 		@inject(TYPES.Models)
-		protected models: DefaultSettle.ModelDeps<H>,
+		protected models: DefaultTaskSettle.ModelDeps<H>,
 		@inject(TYPES.Broadcast)
 		protected broadcast: Broadcast<H>,
 	) {
@@ -42,10 +42,10 @@ export class DefaultSettle<H extends HLike<H>>
 	}
 }
 
-export namespace DefaultSettle {
+export namespace DefaultTaskSettle {
 	export interface ModelDeps<H extends HLike<H>>
-		extends Settle.ModelDeps<H> { }
+		extends TaskSettle.ModelDeps<H> { }
 
 	export interface TaskDeps<H extends HLike<H>>
-		extends Settle.TaskDeps<H> { }
+		extends TaskSettle.TaskDeps<H> { }
 }

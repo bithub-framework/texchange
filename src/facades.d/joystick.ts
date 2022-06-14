@@ -107,7 +107,7 @@ export class Joystick<H extends HLike<H>>
 export namespace Joystick {
 	export interface UseCaseDeps<H extends HLike<H>> {
 		updateTrades: UseCaseUpdateTrades<H>;
-		updateOrderbook: UpdateOrderbook<H>;
-		getProgress: GetProgress<H>;
+		updateOrderbook: UseCaseUpdateOrderbook<H>;
+		getProgress: UseCaseGetProgress<H>;
 	}
 }

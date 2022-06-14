@@ -2,19 +2,19 @@ import { Context } from '../context';
 import { Models } from './models';
 import { Broadcast } from '../broadcast';
 
-import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
-import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
-import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
-import { GetPositionsLike } from '../tasks.d/get-positions/get-positions-like';
-import { OrderMakesLike } from '../tasks.d/order-makes/order-makes-like';
-import { OrderTakesLike } from '../tasks.d/order-takes/order-takes-like';
-import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
-import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
-import { OrderVolumesLike } from '../tasks.d/order-volumes/order-volumes-like';
-import { GetAvailableLike } from '../tasks.d/get-available/get-available-like';
-import { SettleLike } from '../tasks.d/settle/settle-like';
-import { MarginAccumulationLike } from '../tasks.d/margin-accumulation/margin-accumulation-like';
+import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
+import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
+import { TaskGetBalances } from '../tasks.d/get-balances';
+import { TaskGetClosable } from '../tasks.d/get-closable';
+import { TaskGetPositions } from '../tasks.d/get-positions';
+import { TaskOrderMakes } from '../tasks.d/order-makes';
+import { TaskOrderTakes } from '../tasks.d/order-takes';
+import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
+import { TaskValidateOrder } from '../tasks.d/validate-order';
+import { TaskOrderVolumes } from '../tasks.d/order-volumes';
+import { TaskGetAvailable } from '../tasks.d/get-available/get-available';
+import { TaskSettle } from '../tasks.d/settle/settle';
+import { TaskMarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumulation';
 
 // import { MakeOpenOrder } from '../tasks.d/make-open-order/make-open-order';
 // import { CancelOpenOrder } from '../tasks.d/cancel-open-order/cancel-open-order';
@@ -38,31 +38,31 @@ import { instantInject } from '@zimtsui/injektor';
 
 export class Tasks<H extends HLike<H>>  {
 	@instantInject(TYPES.TASKS.GetBalances)
-	public getBalances!: GetBalancesLike<H>;
+	public getBalances!: TaskGetBalances<H>;
 	@instantInject(TYPES.TASKS.GetPositions)
-	public getPositions!: GetPositionsLike<H>;
+	public getPositions!: TaskGetPositions<H>;
 	@instantInject(TYPES.TASKS.GetAvailable)
-	public getAvailable!: GetAvailableLike<H>;
+	public getAvailable!: TaskGetAvailable<H>;
 	@instantInject(TYPES.TASKS.GetClosable)
-	public getClosable!: GetClosableLike<H>;
+	public getClosable!: TaskGetClosable<H>;
 	@instantInject(TYPES.TASKS.Settle)
-	public settle!: SettleLike;
+	public settle!: TaskSettle<H>;
 	@instantInject(TYPES.TASKS.OrderMakes)
-	public orderMakes!: OrderMakesLike<H>;
+	public orderMakes!: TaskOrderMakes<H>;
 	@instantInject(TYPES.TASKS.TradeTakesOpenMakers)
-	public tradeTakesOpenMakers!: TradeTakesOpenMakersLike<H>;
+	public tradeTakesOpenMakers!: TaskTradeTakesOpenMakers<H>;
 	@instantInject(TYPES.TASKS.OrderTakes)
-	public orderTakes!: OrderTakesLike<H>;
+	public orderTakes!: TaskOrderTakes<H>;
 	@instantInject(TYPES.TASKS.ValidateOrder)
-	public validateOrder!: ValidateOrderLike<H>;
+	public validateOrder!: TaskValidateOrder<H>;
 	@instantInject(TYPES.TASKS.MakeOpenOrder)
-	public makeOpenOrder!: MakeOpenOrderLike<H>;
+	public makeOpenOrder!: TaskMakeOpenOrder<H>;
 	@instantInject(TYPES.TASKS.CancelOpenOrder)
-	public cancelOpenOrder!: CancelOpenOrderLike<H>;
+	public cancelOpenOrder!: TaskCancelOpenOrder<H>;
 	@instantInject(TYPES.TASKS.MarginAccumulation)
-	public marginAccumulation!: MarginAccumulationLike<H>;
+	public marginAccumulation!: TaskMarginAccumulation<H>;
 	@instantInject(TYPES.TASKS.OrderVolumes)
-	public orderVolumes!: OrderVolumesLike<H>;
+	public orderVolumes!: TaskOrderVolumes<H>;
 
 	public constructor(
 	) {

@@ -2,20 +2,20 @@ import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { Positions, HLike } from 'secretary-like';
 import { Assets } from '../models.d/assets';
-import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
-export declare class GetPositions<H extends HLike<H>> {
+import { TaskGetClosable } from '../tasks.d/get-closable';
+export declare class UseCaseGetPositions<H extends HLike<H>> {
     protected context: Context<H>;
-    protected models: GetPositions.ModelDeps<H>;
+    protected models: UseCaseGetPositions.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    protected tasks: GetPositions.TaskDeps<H>;
-    constructor(context: Context<H>, models: GetPositions.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetPositions.TaskDeps<H>);
+    protected tasks: UseCaseGetPositions.TaskDeps<H>;
+    constructor(context: Context<H>, models: UseCaseGetPositions.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseGetPositions.TaskDeps<H>);
     getPositions(): Positions<H>;
 }
-export declare namespace GetPositions {
+export declare namespace UseCaseGetPositions {
     interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
     }
     interface TaskDeps<H extends HLike<H>> {
-        getClosable: GetClosableLike<H>;
+        getClosable: TaskGetClosable<H>;
     }
 }

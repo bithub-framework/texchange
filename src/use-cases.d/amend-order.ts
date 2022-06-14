@@ -8,9 +8,9 @@ import {
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
-import { ValidateOrderLike } from '../tasks.d/validate-order/validate-order-like';
-import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
+import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
+import { TaskValidateOrder } from '../tasks.d/validate-order';
+import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
 
 
 export class UseCaseAmendOrder<H extends HLike<H>> {
@@ -43,8 +43,8 @@ export namespace UseCaseAmendOrder {
 	export interface ModelDeps<H extends HLike<H>> { }
 
 	export interface TaskDeps<H extends HLike<H>> {
-		makeOpenOrder: MakeOpenOrderLike<H>;
-		cancelOpenOrder: CancelOpenOrderLike<H>;
-		validateOrder: ValidateOrderLike<H>;
+		makeOpenOrder: TaskMakeOpenOrder<H>;
+		cancelOpenOrder: TaskCancelOpenOrder<H>;
+		validateOrder: TaskValidateOrder<H>;
 	}
 }

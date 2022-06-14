@@ -8,7 +8,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { Assets } from '../models.d/assets';
-import { GetClosableLike } from '../tasks.d/get-closable/get-closable-like';
+import { TaskGetClosable } from '../tasks.d/get-closable';
 
 export class UseCaseGetPositions<H extends HLike<H>> {
 	public constructor(
@@ -37,6 +37,6 @@ export namespace UseCaseGetPositions {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> {
-		getClosable: GetClosableLike<H>;
+		getClosable: TaskGetClosable<H>;
 	}
 }

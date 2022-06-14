@@ -9,10 +9,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetOpenOrders = void 0;
+exports.UseCaseGetOpenOrders = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let GetOpenOrders = class GetOpenOrders {
+let UseCaseGetOpenOrders = class UseCaseGetOpenOrders {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
@@ -23,11 +23,11 @@ let GetOpenOrders = class GetOpenOrders {
         return [...this.models.makers];
     }
 };
-GetOpenOrders = __decorate([
+UseCaseGetOpenOrders = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
-], GetOpenOrders);
-exports.GetOpenOrders = GetOpenOrders;
+], UseCaseGetOpenOrders);
+exports.UseCaseGetOpenOrders = UseCaseGetOpenOrders;
 //# sourceMappingURL=get-open-orders.js.map

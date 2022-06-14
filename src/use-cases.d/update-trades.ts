@@ -6,8 +6,8 @@ import { DatabaseTrade } from '../interfaces/database-trade';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { TradeTakesOpenMakersLike } from '../tasks.d/trade-takes-open-makers/trade-takes-open-makers-like';
-import { SettleLike } from '../tasks.d/settle/settle-like';
+import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
+import { TaskSettle } from '../tasks.d/settle/settle';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 
@@ -49,7 +49,7 @@ export namespace UseCaseUpdateTrades {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> {
-		tradeTakesOpenMakers: TradeTakesOpenMakersLike<H>;
-		settle: SettleLike;
+		tradeTakesOpenMakers: TaskTradeTakesOpenMakers<H>;
+		settle: TaskSettle<H>;
 	}
 }

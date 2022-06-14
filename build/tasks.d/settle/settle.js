@@ -6,11 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Settle = void 0;
+exports.TaskSettle = void 0;
 const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
-class Settle {
+class TaskSettle {
     settle() {
         const { spec: config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
@@ -27,6 +27,6 @@ class Settle {
 }
 __decorate([
     (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
-], Settle.prototype, "tasks", void 0);
-exports.Settle = Settle;
+], TaskSettle.prototype, "tasks", void 0);
+exports.TaskSettle = TaskSettle;
 //# sourceMappingURL=settle.js.map

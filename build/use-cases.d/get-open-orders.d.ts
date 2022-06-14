@@ -2,15 +2,15 @@ import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike, OpenOrder } from 'secretary-like';
 import { Makers } from '../models.d/makers/makers';
-export declare class GetOpenOrders<H extends HLike<H>> {
+export declare class UseCaseGetOpenOrders<H extends HLike<H>> {
     protected context: Context<H>;
-    protected models: GetOpenOrders.ModelDeps<H>;
+    protected models: UseCaseGetOpenOrders.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    protected tasks: GetOpenOrders.TaskDeps<H>;
-    constructor(context: Context<H>, models: GetOpenOrders.ModelDeps<H>, broadcast: Broadcast<H>, tasks: GetOpenOrders.TaskDeps<H>);
+    protected tasks: UseCaseGetOpenOrders.TaskDeps<H>;
+    constructor(context: Context<H>, models: UseCaseGetOpenOrders.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseGetOpenOrders.TaskDeps<H>);
     getOpenOrders(): OpenOrder<H>[];
 }
-export declare namespace GetOpenOrders {
+export declare namespace UseCaseGetOpenOrders {
     interface ModelDeps<H extends HLike<H>> {
         makers: Makers<H>;
     }

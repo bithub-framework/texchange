@@ -7,7 +7,7 @@ import { Broadcast } from '../broadcast';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { CancelOpenOrderLike } from '../tasks.d/cancel-open-order/cancel-open-order-like';
+import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
 
 
 export class UseCaseCancelOrder<H extends HLike<H>> {
@@ -32,6 +32,6 @@ export namespace UseCaseCancelOrder {
 	export interface ModelDeps<H extends HLike<H>> { }
 
 	export interface TaskDeps<H extends HLike<H>> {
-		cancelOpenOrder: CancelOpenOrderLike<H>;
+		cancelOpenOrder: TaskCancelOpenOrder<H>;
 	}
 }

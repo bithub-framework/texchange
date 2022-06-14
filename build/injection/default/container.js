@@ -17,9 +17,9 @@ class Container extends container_1.Container {
         this[_a] = this.rcs(default_1.DefaultMarketCalc);
         this[_b] = this.rcs(default_2.DefaultMakers);
         this[_c] = this.rcs(default_3.DefaultPricing);
-        this[_d] = this.rcs(default_4.DefaultGetAvailable);
-        this[_e] = this.rcs(default_5.DefaultMarginAccumulation);
-        this[_f] = this.rcs(default_6.DefaultSettle);
+        this[_d] = this.rcs(default_4.DefaultTaskGetAvailable);
+        this[_e] = this.rcs(default_5.DefaultTaskMarginAccumulation);
+        this[_f] = this.rcs(default_6.DefaultTaskSettle);
         this[_g] = this.rcs(default_7.DefaultMtm);
         this[_h] = this.rv(true);
         this[types_1.TYPES.spec] = this.rv(spec);

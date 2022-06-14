@@ -44,21 +44,21 @@ export class UseCases<H extends HLike<H>> {
 		@inject(TYPES.USE_CASES.MakeOrder)
 		public makeOrder: UseCaseMakeOrder<H>,
 		@inject(TYPES.USE_CASES.CancelOrder)
-		public cancelOrder: CancelOrder<H>,
+		public cancelOrder: UseCaseCancelOrder<H>,
 		@inject(TYPES.USE_CASES.AmendOrder)
-		public amendOrder: AmendOrder<H>,
+		public amendOrder: UseCaseAmendOrder<H>,
 		@inject(TYPES.USE_CASES.GetOpenOrders)
 		public getOpenOrders: UseCaseGetOpenOrders<H>,
 		@inject(TYPES.USE_CASES.GetPositions)
 		public getPositions: UseCaseGetPositions<H>,
 		@inject(TYPES.USE_CASES.GetBalances)
-		public getBalances: GetBalances<H>,
+		public getBalances: UseCaseGetBalances<H>,
 		@inject(TYPES.USE_CASES.UpdateOrderbook)
-		public updateOrderbook: UpdateOrderbook<H>,
+		public updateOrderbook: UseCaseUpdateOrderbook<H>,
 		@inject(TYPES.USE_CASES.Subscription)
 		public subscription: UseCaseSubscription<H>,
 		@inject(TYPES.USE_CASES.GetProgress)
-		public getProgress: GetProgress<H>,
+		public getProgress: UseCaseGetProgress<H>,
 		@inject(TYPES.USE_CASES.UpdateTrades)
 		public updateTrades: UseCaseUpdateTrades<H>,
 	) {

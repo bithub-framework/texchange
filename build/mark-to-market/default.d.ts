@@ -1,4 +1,3 @@
-import { Startable } from 'startable';
 import { Context } from '../context';
 import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
@@ -9,7 +8,7 @@ import { HLike } from 'secretary-like';
 export declare class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
     protected models: DefaultMtm.ModelDeps<H>;
     protected tasks: DefaultMtm.TaskDeps<H>;
-    startable: Startable;
+    startable: import("startable/build/constructor").constructor;
     constructor(context: Context<H>, models: DefaultMtm.ModelDeps<H>, broadcast: Broadcast<H>, tasks: DefaultMtm.TaskDeps<H>);
     private start;
     private stop;

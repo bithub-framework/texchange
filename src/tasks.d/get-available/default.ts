@@ -4,7 +4,7 @@ import {
 } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
-import { GetAvailable } from './get-available';
+import { TaskGetAvailable } from './get-available';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
@@ -12,8 +12,8 @@ import { Margins } from '../../models.d/margins';
 import { Makers } from '../../models.d/makers/makers';
 
 
-export class DefaultGetAvailable<H extends HLike<H>>
-	extends GetAvailable<H> {
+export class DefaultTaskGetAvailable<H extends HLike<H>>
+	extends TaskGetAvailable<H> {
 
 	public constructor(
 		@inject(TYPES.Context)
@@ -55,11 +55,11 @@ export class DefaultGetAvailable<H extends HLike<H>>
 
 export namespace DefaultGetAvailable {
 	export interface ModelDeps<H extends HLike<H>>
-		extends GetAvailable.ModelDeps<H> {
+		extends TaskGetAvailable.ModelDeps<H> {
 		margins: Margins<H>;
 		makers: Makers<H>;
 	}
 
 	export interface TaskDeps<H extends HLike<H>>
-		extends GetAvailable.TaskDeps<H> { }
+		extends TaskGetAvailable.TaskDeps<H> { }
 }

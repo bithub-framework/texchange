@@ -9,11 +9,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultMarginAccumulation = void 0;
+exports.DefaultTaskMarginAccumulation = void 0;
 const margin_accumulation_1 = require("./margin-accumulation");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
-let DefaultMarginAccumulation = class DefaultMarginAccumulation extends margin_accumulation_1.MarginAccumulation {
+let DefaultTaskMarginAccumulation = class DefaultTaskMarginAccumulation extends margin_accumulation_1.TaskMarginAccumulation {
     constructor(context, models, broadcast) {
         super();
         this.context = context;
@@ -34,10 +34,10 @@ let DefaultMarginAccumulation = class DefaultMarginAccumulation extends margin_a
         return margin.minus(decrement);
     }
 };
-DefaultMarginAccumulation = __decorate([
+DefaultTaskMarginAccumulation = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
-], DefaultMarginAccumulation);
-exports.DefaultMarginAccumulation = DefaultMarginAccumulation;
+], DefaultTaskMarginAccumulation);
+exports.DefaultTaskMarginAccumulation = DefaultTaskMarginAccumulation;
 //# sourceMappingURL=default.js.map

@@ -6,14 +6,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarginAccumulation = void 0;
+exports.TaskMarginAccumulation = void 0;
 ;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
-class MarginAccumulation {
+class TaskMarginAccumulation {
 }
 __decorate([
     (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
-], MarginAccumulation.prototype, "tasks", void 0);
-exports.MarginAccumulation = MarginAccumulation;
+], TaskMarginAccumulation.prototype, "tasks", void 0);
+exports.TaskMarginAccumulation = TaskMarginAccumulation;
 //# sourceMappingURL=margin-accumulation.js.map

@@ -9,10 +9,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AmendOrder = void 0;
+exports.UseCaseAmendOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let AmendOrder = class AmendOrder {
+let UseCaseAmendOrder = class UseCaseAmendOrder {
     constructor(context, models, broadcast, tasks) {
         this.context = context;
         this.models = models;
@@ -31,11 +31,11 @@ let AmendOrder = class AmendOrder {
         return this.tasks.makeOpenOrder.makeOpenOrder(newOrder);
     }
 };
-AmendOrder = __decorate([
+UseCaseAmendOrder = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.Tasks))
-], AmendOrder);
-exports.AmendOrder = AmendOrder;
+], UseCaseAmendOrder);
+exports.UseCaseAmendOrder = UseCaseAmendOrder;
 //# sourceMappingURL=amend-order.js.map

@@ -9,7 +9,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { Progress } from '../models.d/progress';
-import { MakeOpenOrderLike } from '../tasks.d/make-open-order/make-open-order-like';
+import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
 
 
 export class UseCaseMakeOrder<H extends HLike<H>> {
@@ -40,6 +40,6 @@ export namespace UseCaseMakeOrder {
 	}
 
 	export interface TaskDeps<H extends HLike<H>> {
-		makeOpenOrder: MakeOpenOrderLike<H>;
+		makeOpenOrder: TaskMakeOpenOrder<H>;
 	}
 }

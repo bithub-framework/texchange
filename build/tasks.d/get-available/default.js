@@ -9,12 +9,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultGetAvailable = void 0;
+exports.DefaultTaskGetAvailable = void 0;
 const secretary_like_1 = require("secretary-like");
 const get_available_1 = require("./get-available");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
-let DefaultGetAvailable = class DefaultGetAvailable extends get_available_1.GetAvailable {
+let DefaultTaskGetAvailable = class DefaultTaskGetAvailable extends get_available_1.TaskGetAvailable {
     constructor(context, models, broadcast) {
         super();
         this.context = context;
@@ -43,10 +43,10 @@ let DefaultGetAvailable = class DefaultGetAvailable extends get_available_1.GetA
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }
 };
-DefaultGetAvailable = __decorate([
+DefaultTaskGetAvailable = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
-], DefaultGetAvailable);
-exports.DefaultGetAvailable = DefaultGetAvailable;
+], DefaultTaskGetAvailable);
+exports.DefaultTaskGetAvailable = DefaultTaskGetAvailable;
 //# sourceMappingURL=default.js.map

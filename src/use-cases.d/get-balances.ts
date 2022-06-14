@@ -7,7 +7,7 @@ import {
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { GetBalancesLike } from '../tasks.d/get-balances/get-balances-like';
+import { TaskGetBalances } from '../tasks.d/get-balances';
 
 
 export class UseCaseGetBalances<H extends HLike<H>> {
@@ -32,6 +32,6 @@ export namespace UseCaseGetBalances {
 	export interface ModelDeps<H extends HLike<H>> { }
 
 	export interface TaskDeps<H extends HLike<H>> {
-		getBalances: GetBalancesLike<H>;
+		getBalances: TaskGetBalances<H>;
 	}
 }
