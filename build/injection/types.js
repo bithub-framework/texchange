@@ -4,86 +4,66 @@ exports.TYPES = exports.FACADES = void 0;
 class MODELS {
 }
 MODELS.initialBalance = Symbol();
-MODELS.Makers = Symbol();
-MODELS.Assets = Symbol();
-MODELS.Margins = Symbol();
-MODELS.Book = Symbol();
-MODELS.Progress = Symbol();
-MODELS.Pricing = Symbol();
-class USE_CASES {
-}
-USE_CASES.MakeOrder = Symbol();
-USE_CASES.CancelOrder = Symbol();
-USE_CASES.AmendOrder = Symbol();
-USE_CASES.GetOpenOrders = Symbol();
-USE_CASES.GetPositions = Symbol();
-USE_CASES.GetBalances = Symbol();
-USE_CASES.UpdateOrderbook = Symbol();
-USE_CASES.Subscription = Symbol();
-USE_CASES.GetProgress = Symbol();
-USE_CASES.UpdateTrades = Symbol();
-USE_CASES.realTimeSettlement = Symbol();
+MODELS.makers = Symbol();
+MODELS.assets = Symbol();
+MODELS.margins = Symbol();
+MODELS.book = Symbol();
+MODELS.progress = Symbol();
+MODELS.pricing = Symbol();
 class TASKS {
 }
-TASKS.MakeOpenOrder = Symbol();
-TASKS.CancelOpenOrder = Symbol();
-TASKS.GetBalances = Symbol();
-TASKS.GetClosable = Symbol();
-TASKS.GetPositions = Symbol();
-TASKS.OrderMakes = Symbol();
-TASKS.OrderTakes = Symbol();
-TASKS.TradeTakesOpenMakers = Symbol();
-TASKS.ValidateOrder = Symbol();
-TASKS.OrderVolumes = Symbol();
-TASKS.GetAvailable = Symbol();
-TASKS.MarginAccumulation = Symbol();
-TASKS.Settle = Symbol();
+TASKS.makeOpenOrder = Symbol();
+TASKS.cancelOpenOrder = Symbol();
+TASKS.getBalances = Symbol();
+TASKS.getClosable = Symbol();
+TASKS.getPositions = Symbol();
+TASKS.orderMakes = Symbol();
+TASKS.orderTakes = Symbol();
+TASKS.tradeTakesOpenMakers = Symbol();
+TASKS.validateOrder = Symbol();
+TASKS.orderVolumes = Symbol();
+TASKS.getAvailable = Symbol();
+TASKS.marginAccumulation = Symbol();
+TASKS.settle = Symbol();
+class USE_CASES {
+}
+USE_CASES.makeOrder = Symbol();
+USE_CASES.cancelOrder = Symbol();
+USE_CASES.amendOrder = Symbol();
+USE_CASES.getOpenOrders = Symbol();
+USE_CASES.getPositions = Symbol();
+USE_CASES.getBalances = Symbol();
+USE_CASES.updateOrderbook = Symbol();
+USE_CASES.subscription = Symbol();
+USE_CASES.getProgress = Symbol();
+USE_CASES.updateTrades = Symbol();
+USE_CASES.realTimeSettlement = Symbol();
 class FACADES {
 }
 exports.FACADES = FACADES;
-FACADES.Admin = Symbol();
-FACADES.UserMarket = Symbol();
-FACADES.Instant = Symbol();
-FACADES.Config = Symbol();
-FACADES.UserAccount = Symbol();
+FACADES.admin = Symbol();
+FACADES.userMarket = Symbol();
+FACADES.instant = Symbol();
+FACADES.config = Symbol();
+FACADES.userAccount = Symbol();
 class TYPES {
 }
 exports.TYPES = TYPES;
 TYPES.spec = Symbol();
-TYPES.HStatic = Symbol();
-TYPES.TimelineLike = Symbol();
-TYPES.MarketCalc = Symbol();
-TYPES.DataStatic = Symbol();
-TYPES.Context = Symbol();
-TYPES.Models = Symbol();
+TYPES.hStatic = Symbol();
+TYPES.timeline = Symbol();
+TYPES.marketCalc = Symbol();
+TYPES.dataStatic = Symbol();
+TYPES.context = Symbol();
+TYPES.models = Symbol();
 TYPES.MODELS = MODELS;
-TYPES.Broadcast = Symbol();
-TYPES.Tasks = Symbol();
-TYPES.Mtm = Symbol();
-TYPES.UseCases = Symbol();
+TYPES.broadcast = Symbol();
+TYPES.tasks = Symbol();
+TYPES.mtm = Symbol();
+TYPES.useCases = Symbol();
 TYPES.USE_CASES = USE_CASES;
 TYPES.TASKS = TASKS;
-TYPES.Facades = Symbol();
+TYPES.facades = Symbol();
 TYPES.FACADES = FACADES;
-TYPES.Texchange = Symbol();
-// export namespace TYPES {
-// 	export const Config = Symbol();
-// 	export const HStatic = Symbol();
-// 	export const TimelineLike = Symbol();
-// 	export const MarketCalc = Symbol();
-// 	export const DataStatic = Symbol();
-// 	export const Context = Symbol();
-// 	export const Makers = Symbol();
-// 	export const Pricing = Symbol();
-// 	export const Models = Symbol();
-// 	export const Broadcast = Symbol();
-// 	export const UpdateTrades = Symbol();
-// 	export const Tasks = Symbol();
-// 	export const Mtm = Symbol();
-// 	export const UseCases = Symbol();
-// 	export const Facades = Symbol();
-// 	export const UserTex = Symbol();
-// 	export const AdminTex = Symbol();
-// 	export const Texchange = Symbol();
-// }
+TYPES.texchange = Symbol();
 //# sourceMappingURL=types.js.map

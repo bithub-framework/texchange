@@ -26,7 +26,7 @@ class TaskSettle {
     }
 }
 __decorate([
-    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+    (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskSettle.prototype, "tasks", void 0);
 exports.TaskSettle = TaskSettle;
 //# sourceMappingURL=settle.js.map

@@ -16,7 +16,7 @@ export class DefaultPricing<H extends HLike<H>>
 	extends Pricing<H, DefaultPricing.Snapshot> {
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
 		@inject(TYPES.initialSettlementPrice)
 		private settlementPrice: H,

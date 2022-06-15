@@ -18,25 +18,25 @@ import { TYPES } from '../injection/types';
 
 export class UseCases<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.USE_CASES.MakeOrder)
+		@inject(TYPES.USE_CASES.makeOrder)
 		public makeOrder: UseCaseMakeOrder<H>,
-		@inject(TYPES.USE_CASES.CancelOrder)
+		@inject(TYPES.USE_CASES.cancelOrder)
 		public cancelOrder: UseCaseCancelOrder<H>,
-		@inject(TYPES.USE_CASES.AmendOrder)
+		@inject(TYPES.USE_CASES.amendOrder)
 		public amendOrder: UseCaseAmendOrder<H>,
-		@inject(TYPES.USE_CASES.GetOpenOrders)
+		@inject(TYPES.USE_CASES.getOpenOrders)
 		public getOpenOrders: UseCaseGetOpenOrders<H>,
-		@inject(TYPES.USE_CASES.GetPositions)
+		@inject(TYPES.USE_CASES.getPositions)
 		public getPositions: UseCaseGetPositions<H>,
-		@inject(TYPES.USE_CASES.GetBalances)
+		@inject(TYPES.USE_CASES.getBalances)
 		public getBalances: UseCaseGetBalances<H>,
-		@inject(TYPES.USE_CASES.UpdateOrderbook)
+		@inject(TYPES.USE_CASES.updateOrderbook)
 		public updateOrderbook: UseCaseUpdateOrderbook<H>,
-		@inject(TYPES.USE_CASES.Subscription)
+		@inject(TYPES.USE_CASES.subscription)
 		public subscription: UseCaseSubscription<H>,
-		@inject(TYPES.USE_CASES.GetProgress)
+		@inject(TYPES.USE_CASES.getProgress)
 		public getProgress: UseCaseGetProgress<H>,
-		@inject(TYPES.USE_CASES.UpdateTrades)
+		@inject(TYPES.USE_CASES.updateTrades)
 		public updateTrades: UseCaseUpdateTrades<H>,
 	) { }
 }

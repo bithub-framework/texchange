@@ -64,12 +64,12 @@ let TaskOrderTakes = class TaskOrderTakes {
     }
 };
 __decorate([
-    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+    (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskOrderTakes.prototype, "tasks", void 0);
 TaskOrderTakes = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskOrderTakes);
 exports.TaskOrderTakes = TaskOrderTakes;
 //# sourceMappingURL=order-takes.js.map

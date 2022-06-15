@@ -13,17 +13,17 @@ import { TYPES } from '../injection/types';
 
 export class Models<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.MODELS.Makers)
+		@inject(TYPES.MODELS.makers)
 		public makers: Makers<H>,
-		@inject(TYPES.MODELS.Pricing)
+		@inject(TYPES.MODELS.pricing)
 		public pricing: Pricing<H, any>,
-		@inject(TYPES.MODELS.Assets)
+		@inject(TYPES.MODELS.assets)
 		public assets: Assets<H>,
-		@inject(TYPES.MODELS.Margins)
+		@inject(TYPES.MODELS.margins)
 		public margins: Margins<H>,
-		@inject(TYPES.MODELS.Book)
+		@inject(TYPES.MODELS.book)
 		public book: Book<H>,
-		@inject(TYPES.MODELS.Progress)
+		@inject(TYPES.MODELS.progress)
 		public progress: Progress<H>,
 	) { }
 }

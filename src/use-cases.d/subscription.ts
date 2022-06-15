@@ -16,13 +16,13 @@ export class UseCaseSubscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: UseCaseSubscription.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		protected broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: UseCaseSubscription.TaskDeps<H>,
 	) {
 		super();

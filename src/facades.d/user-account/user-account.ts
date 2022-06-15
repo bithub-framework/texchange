@@ -25,13 +25,13 @@ export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> 
 	public events = <AccountEventEmitterLike<H>>new EventEmitter();
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.UseCases)
+		@inject(TYPES.useCases)
 		private useCases: AccountLatency.UseCaseDeps<H>,
-		@inject(TYPES.FACADES.Instant)
+		@inject(TYPES.FACADES.instant)
 		private instant: Instant<H>,
-		@inject(TYPES.FACADES.Config)
+		@inject(TYPES.FACADES.config)
 		private config: Config,
 	) {
 		this.spec = this.context.spec.account;

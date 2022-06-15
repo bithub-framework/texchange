@@ -22,9 +22,9 @@ import { TYPES } from '../../injection/types';
 
 export class Instant<H extends HLike<H>> {
     public constructor(
-        @inject(TYPES.Context)
+        @inject(TYPES.context)
         private context: Context<H>,
-        @inject(TYPES.UseCases)
+        @inject(TYPES.useCases)
         private useCases: Instant.UseCaseDeps<H>,
     ) { }
 

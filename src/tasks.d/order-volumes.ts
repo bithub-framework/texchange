@@ -10,15 +10,15 @@ import { Margins } from '../models.d/margins';
 
 
 export class TaskOrderVolumes<H extends HLike<H>> {
-	@instantInject(TYPES.Tasks)
+	@instantInject(TYPES.tasks)
 	private tasks!: TaskOrderVolumes.TaskDeps<H>;
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		private models: TaskOrderVolumes.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		private broadcast: Broadcast<H>,
 	) { }
 

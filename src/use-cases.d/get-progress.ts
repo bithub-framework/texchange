@@ -11,13 +11,13 @@ import { Progress } from '../models.d/progress';
 
 export class UseCaseGetProgress<H extends HLike<H>>{
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: UseCaseGetProgress.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		protected broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: UseCaseGetProgress.TaskDeps<H>,
 	) { }
 

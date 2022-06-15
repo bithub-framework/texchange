@@ -15,7 +15,7 @@ export class Margins<H extends HLike<H>>
 	private $margin: Margins.Margin<H>;
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
 	) {
 		this.$margin = {

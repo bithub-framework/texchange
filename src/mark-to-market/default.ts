@@ -19,13 +19,13 @@ export class DefaultMtm<H extends HLike<H>>
 	);
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: DefaultMtm.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: DefaultMtm.TaskDeps<H>,
 	) {
 		super(

@@ -19,11 +19,11 @@ export class UserMarketFacade<H extends HLike<H>> implements MarketApiLike<H> {
 	public events = <MarketEventEmitterLike<H>>new EventEmitter();
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.UseCases)
+		@inject(TYPES.useCases)
 		private useCases: MarketLatency.UseCaseDeps<H>,
-		@inject(TYPES.FACADES.Config)
+		@inject(TYPES.FACADES.config)
 		private config: Config,
 	) {
 		this.spec = this.context.spec.market;

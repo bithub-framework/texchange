@@ -12,13 +12,13 @@ import { TaskGetClosable } from '../tasks.d/get-closable';
 
 export class UseCaseGetPositions<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: UseCaseGetPositions.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		protected broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: UseCaseGetPositions.TaskDeps<H>,
 	) { }
 

@@ -36,7 +36,7 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
     }
 };
 DefaultPricing = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.initialSettlementPrice))
 ], DefaultPricing);
 exports.DefaultPricing = DefaultPricing;

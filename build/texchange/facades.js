@@ -20,9 +20,9 @@ let Facades = class Facades {
     }
 };
 Facades = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.FACADES.Admin)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.FACADES.UserMarket)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.UserAccount))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.FACADES.admin)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.FACADES.userMarket)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.userAccount))
 ], Facades);
 exports.Facades = Facades;
 //# sourceMappingURL=facades.js.map

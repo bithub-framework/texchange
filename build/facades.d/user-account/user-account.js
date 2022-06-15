@@ -118,10 +118,10 @@ let UserAccountFacade = class UserAccountFacade {
     }
 };
 UserAccountFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.UseCases)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.Instant)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.Config))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.useCases)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserAccountFacade);
 exports.UserAccountFacade = UserAccountFacade;
 //# sourceMappingURL=user-account.js.map

@@ -21,10 +21,10 @@ let Context = class Context {
     }
 };
 Context = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.MarketCalc)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.marketCalc)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.spec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.TimelineLike)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.DataStatic))
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.timeline)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.dataStatic))
 ], Context);
 exports.Context = Context;
 //# sourceMappingURL=context.js.map

@@ -36,7 +36,7 @@ let Margins = class Margins {
     }
 };
 Margins = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
 ], Margins);
 exports.Margins = Margins;
 (function (Margins) {

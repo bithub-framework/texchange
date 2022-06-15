@@ -11,17 +11,17 @@ import { TaskSettle } from '../../tasks.d/settle/settle';
 import { Mtm } from '../../mark-to-market/mtm';
 import { Config as DelayConfig } from '../../facades.d/config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
-    [TYPES.HStatic]: () => HStatic<H>;
+    [TYPES.hStatic]: () => HStatic<H>;
     [TYPES.spec]: () => Spec<H>;
-    [TYPES.TimelineLike]: () => TimelineLike;
-    [TYPES.MarketCalc]: () => MarketCalc<H>;
-    [TYPES.MODELS.Makers]: () => Makers<H>;
-    [TYPES.MODELS.Pricing]: () => Pricing<H, any>;
-    [TYPES.TASKS.GetAvailable]: () => TaskGetAvailable<H>;
-    [TYPES.TASKS.MarginAccumulation]: () => TaskMarginAccumulation<H>;
-    [TYPES.TASKS.Settle]: () => TaskSettle<H>;
-    [TYPES.Mtm]: () => Mtm<H>;
+    [TYPES.timeline]: () => TimelineLike;
+    [TYPES.marketCalc]: () => MarketCalc<H>;
+    [TYPES.MODELS.makers]: () => Makers<H>;
+    [TYPES.MODELS.pricing]: () => Pricing<H, any>;
+    [TYPES.TASKS.getAvailable]: () => TaskGetAvailable<H>;
+    [TYPES.TASKS.marginAccumulation]: () => TaskMarginAccumulation<H>;
+    [TYPES.TASKS.settle]: () => TaskSettle<H>;
+    [TYPES.mtm]: () => Mtm<H>;
     [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
-    [TYPES.FACADES.Config]: () => DelayConfig;
+    [TYPES.FACADES.config]: () => DelayConfig;
     constructor(timeline: TimelineLike, H: HStatic<H>, spec: Spec<H>);
 }

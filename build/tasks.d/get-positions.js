@@ -27,12 +27,12 @@ let TaskGetPositions = class TaskGetPositions {
     }
 };
 __decorate([
-    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+    (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskGetPositions.prototype, "tasks", void 0);
 TaskGetPositions = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskGetPositions);
 exports.TaskGetPositions = TaskGetPositions;
 //# sourceMappingURL=get-positions.js.map

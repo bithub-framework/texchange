@@ -39,7 +39,7 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     }
 };
 DefaultMakers = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
 ], DefaultMakers);
 exports.DefaultMakers = DefaultMakers;
 //# sourceMappingURL=default.js.map

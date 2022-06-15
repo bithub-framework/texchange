@@ -17,15 +17,15 @@ import { TYPES } from '../injection/types';
 
 
 export class TaskMakeOpenOrder<H extends HLike<H>> {
-    @instantInject(TYPES.Tasks)
+    @instantInject(TYPES.tasks)
     private tasks!: TaskMakeOpenOrder.TaskDeps<H>;
 
     public constructor(
-        @inject(TYPES.Context)
+        @inject(TYPES.context)
         private context: Context<H>,
-        @inject(TYPES.Models)
+        @inject(TYPES.models)
         private models: TaskMakeOpenOrder.ModelDeps<H>,
-        @inject(TYPES.Broadcast)
+        @inject(TYPES.broadcast)
         private broadcast: Broadcast<H>,
     ) { }
 

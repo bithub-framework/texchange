@@ -70,10 +70,10 @@ let AdminFacade = class AdminFacade {
     }
 };
 AdminFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Mtm)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.UseCases))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.mtm)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.useCases))
 ], AdminFacade);
 exports.AdminFacade = AdminFacade;
 //# sourceMappingURL=admin.js.map

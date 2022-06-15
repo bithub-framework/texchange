@@ -13,13 +13,13 @@ import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
 export class UseCaseCancelOrder<H extends HLike<H>> {
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: UseCaseCancelOrder.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		protected broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: UseCaseCancelOrder.TaskDeps<H>,
 	) { }
 

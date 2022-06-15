@@ -24,13 +24,13 @@ export class AdminFacade<H extends HLike<H>>
 	public config: Spec<H>;
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		private models: Models<H>,
-		@inject(TYPES.Mtm)
+		@inject(TYPES.mtm)
 		private mtm: Mtm<H> | null,
-		@inject(TYPES.UseCases)
+		@inject(TYPES.useCases)
 		private useCases: Joystick.UseCaseDeps<H>,
 	) {
 		this.startable = Startable.create(

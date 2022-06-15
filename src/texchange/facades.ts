@@ -9,11 +9,11 @@ import { TYPES } from '../injection/types';
 
 export class Facades<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.FACADES.Admin)
+		@inject(TYPES.FACADES.admin)
 		public admin: AdminFacade<H>,
-		@inject(TYPES.FACADES.UserMarket)
+		@inject(TYPES.FACADES.userMarket)
 		public userMarket: UserMarketFacade<H>,
-		@inject(TYPES.FACADES.UserAccount)
+		@inject(TYPES.FACADES.userAccount)
 		public userAccount: UserAccountFacade<H>,
 	) { }
 }

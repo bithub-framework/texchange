@@ -13,15 +13,15 @@ import { TaskGetAvailable } from './get-available/get-available';
 
 
 export class TaskGetBalances<H extends HLike<H>> {
-	@instantInject(TYPES.Tasks)
+	@instantInject(TYPES.tasks)
 	private tasks!: TaskGetBalances.TaskDeps<H>;
 
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		private models: TaskGetBalances.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		private broadcast: Broadcast<H>,
 	) { }
 

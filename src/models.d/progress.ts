@@ -16,7 +16,7 @@ export class Progress<H extends HLike<H>>
     private latestDatabaseOrderbookId: DatabaseOrderbookId | null = null;
 
     public constructor(
-        @inject(TYPES.Context)
+        @inject(TYPES.context)
         private context: Context<H>,
     ) { }
 

@@ -30,19 +30,19 @@ let Tasks = class Tasks {
     }
 };
 Tasks = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.TASKS.GetBalances)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.TASKS.GetPositions)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.TASKS.GetAvailable)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.TASKS.GetClosable)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.TASKS.Settle)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.TASKS.OrderMakes)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.TASKS.TradeTakesOpenMakers)),
-    __param(7, (0, injektor_1.inject)(types_1.TYPES.TASKS.OrderTakes)),
-    __param(8, (0, injektor_1.inject)(types_1.TYPES.TASKS.ValidateOrder)),
-    __param(9, (0, injektor_1.inject)(types_1.TYPES.TASKS.MakeOpenOrder)),
-    __param(10, (0, injektor_1.inject)(types_1.TYPES.TASKS.CancelOpenOrder)),
-    __param(11, (0, injektor_1.inject)(types_1.TYPES.TASKS.MarginAccumulation)),
-    __param(12, (0, injektor_1.inject)(types_1.TYPES.TASKS.OrderVolumes))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.TASKS.getBalances)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.TASKS.getPositions)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.TASKS.getAvailable)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.TASKS.getClosable)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.TASKS.settle)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.TASKS.orderMakes)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.TASKS.tradeTakesOpenMakers)),
+    __param(7, (0, injektor_1.inject)(types_1.TYPES.TASKS.orderTakes)),
+    __param(8, (0, injektor_1.inject)(types_1.TYPES.TASKS.validateOrder)),
+    __param(9, (0, injektor_1.inject)(types_1.TYPES.TASKS.makeOpenOrder)),
+    __param(10, (0, injektor_1.inject)(types_1.TYPES.TASKS.cancelOpenOrder)),
+    __param(11, (0, injektor_1.inject)(types_1.TYPES.TASKS.marginAccumulation)),
+    __param(12, (0, injektor_1.inject)(types_1.TYPES.TASKS.orderVolumes))
 ], Tasks);
 exports.Tasks = Tasks;
 //# sourceMappingURL=tasks.js.map

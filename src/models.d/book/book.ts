@@ -29,7 +29,7 @@ export class Book<H extends HLike<H>>
     private finalbookCache: Orderbook<H> | null = null;
 
     public constructor(
-        @inject(TYPES.Context)
+        @inject(TYPES.context)
         private context: Context<H>,
     ) { }
 

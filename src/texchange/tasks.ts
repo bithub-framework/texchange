@@ -20,31 +20,31 @@ import { inject } from '@zimtsui/injektor';
 
 export class Tasks<H extends HLike<H>>  {
 	public constructor(
-		@inject(TYPES.TASKS.GetBalances)
+		@inject(TYPES.TASKS.getBalances)
 		public getBalances: TaskGetBalances<H>,
-		@inject(TYPES.TASKS.GetPositions)
+		@inject(TYPES.TASKS.getPositions)
 		public getPositions: TaskGetPositions<H>,
-		@inject(TYPES.TASKS.GetAvailable)
+		@inject(TYPES.TASKS.getAvailable)
 		public getAvailable: TaskGetAvailable<H>,
-		@inject(TYPES.TASKS.GetClosable)
+		@inject(TYPES.TASKS.getClosable)
 		public getClosable: TaskGetClosable<H>,
-		@inject(TYPES.TASKS.Settle)
+		@inject(TYPES.TASKS.settle)
 		public settle: TaskSettle<H>,
-		@inject(TYPES.TASKS.OrderMakes)
+		@inject(TYPES.TASKS.orderMakes)
 		public orderMakes: TaskOrderMakes<H>,
-		@inject(TYPES.TASKS.TradeTakesOpenMakers)
+		@inject(TYPES.TASKS.tradeTakesOpenMakers)
 		public tradeTakesOpenMakers: TaskTradeTakesOpenMakers<H>,
-		@inject(TYPES.TASKS.OrderTakes)
+		@inject(TYPES.TASKS.orderTakes)
 		public orderTakes: TaskOrderTakes<H>,
-		@inject(TYPES.TASKS.ValidateOrder)
+		@inject(TYPES.TASKS.validateOrder)
 		public validateOrder: TaskValidateOrder<H>,
-		@inject(TYPES.TASKS.MakeOpenOrder)
+		@inject(TYPES.TASKS.makeOpenOrder)
 		public makeOpenOrder: TaskMakeOpenOrder<H>,
-		@inject(TYPES.TASKS.CancelOpenOrder)
+		@inject(TYPES.TASKS.cancelOpenOrder)
 		public cancelOpenOrder: TaskCancelOpenOrder<H>,
-		@inject(TYPES.TASKS.MarginAccumulation)
+		@inject(TYPES.TASKS.marginAccumulation)
 		public marginAccumulation: TaskMarginAccumulation<H>,
-		@inject(TYPES.TASKS.OrderVolumes)
+		@inject(TYPES.TASKS.orderVolumes)
 		public orderVolumes: TaskOrderVolumes<H>,
 	) { }
 }

@@ -13,7 +13,7 @@ const types_1 = require("../../injection/types");
 class TaskMarginAccumulation {
 }
 __decorate([
-    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+    (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskMarginAccumulation.prototype, "tasks", void 0);
 exports.TaskMarginAccumulation = TaskMarginAccumulation;
 //# sourceMappingURL=margin-accumulation.js.map

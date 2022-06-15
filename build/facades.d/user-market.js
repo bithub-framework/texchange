@@ -46,9 +46,9 @@ let UserMarketFacade = class UserMarketFacade {
     }
 };
 UserMarketFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.UseCases)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.Config))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.useCases)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserMarketFacade);
 exports.UserMarketFacade = UserMarketFacade;
 //# sourceMappingURL=user-market.js.map

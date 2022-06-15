@@ -18,7 +18,7 @@ export class Assets<H extends HLike<H>>
     private $cost: Assets.Cost<H>;
 
     public constructor(
-        @inject(TYPES.Context)
+        @inject(TYPES.context)
         private context: Context<H>,
         @inject(TYPES.MODELS.initialBalance)
         private balance: H,

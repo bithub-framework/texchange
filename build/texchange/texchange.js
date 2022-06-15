@@ -27,7 +27,7 @@ let Texchange = class Texchange {
     }
 };
 Texchange = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Facades))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.facades))
 ], Texchange);
 exports.Texchange = Texchange;
 //# sourceMappingURL=texchange.js.map

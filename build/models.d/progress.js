@@ -48,7 +48,7 @@ let Progress = class Progress {
     }
 };
 Progress = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
 ], Progress);
 exports.Progress = Progress;
 //# sourceMappingURL=progress.js.map

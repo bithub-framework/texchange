@@ -6,7 +6,7 @@ import { TYPES } from '../../injection/types';
 
 
 export abstract class TaskMarginAccumulation<H extends HLike<H>> {
-	@instantInject(TYPES.Tasks)
+	@instantInject(TYPES.tasks)
 	protected tasks!: TaskMarginAccumulation.TaskDeps<H>;
 	protected abstract context: Context<H>;
 	protected abstract models: TaskMarginAccumulation.ModelDeps<H>;

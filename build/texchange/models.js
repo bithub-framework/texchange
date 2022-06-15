@@ -23,12 +23,12 @@ let Models = class Models {
     }
 };
 Models = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.MODELS.Makers)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.Pricing)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.Assets)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.Margins)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.Book)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.Progress))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.margins)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress))
 ], Models);
 exports.Models = Models;
 //# sourceMappingURL=models.js.map

@@ -33,24 +33,24 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.HStatic]: () => HStatic<H>;
+	public [TYPES.hStatic]: () => HStatic<H>;
 	public [TYPES.spec]: () => Spec<H>;
-	public [TYPES.TimelineLike]: () => TimelineLike;
+	public [TYPES.timeline]: () => TimelineLike;
 
-	public [TYPES.MarketCalc] = this.rcs<MarketCalc<H>>(DefaultMarketCalc);
+	public [TYPES.marketCalc] = this.rcs<MarketCalc<H>>(DefaultMarketCalc);
 
-	public [TYPES.MODELS.Makers] = this.rcs<Makers<H>>(DefaultMakers);
-	public [TYPES.MODELS.Pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
+	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
+	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
 
-	public [TYPES.TASKS.GetAvailable] = this.rcs<TaskGetAvailable<H>>(DefaultTaskGetAvailable);
-	public [TYPES.TASKS.MarginAccumulation] = this.rcs<TaskMarginAccumulation<H>>(DefaultTaskMarginAccumulation);
-	public [TYPES.TASKS.Settle] = this.rcs<TaskSettle<H>>(DefaultTaskSettle);
+	public [TYPES.TASKS.getAvailable] = this.rcs<TaskGetAvailable<H>>(DefaultTaskGetAvailable);
+	public [TYPES.TASKS.marginAccumulation] = this.rcs<TaskMarginAccumulation<H>>(DefaultTaskMarginAccumulation);
+	public [TYPES.TASKS.settle] = this.rcs<TaskSettle<H>>(DefaultTaskSettle);
 
-	public [TYPES.Mtm] = this.rcs<Mtm<H>>(DefaultMtm);
+	public [TYPES.mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 
 	public [TYPES.USE_CASES.realTimeSettlement] = this.rv(true);
 
-	public [TYPES.FACADES.Config] = this.rv<DelayConfig>({
+	public [TYPES.FACADES.config] = this.rv<DelayConfig>({
 		ping: 20,
 		processing: 20,
 	});
@@ -63,7 +63,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		super();
 
 		this[TYPES.spec] = this.rv(spec);
-		this[TYPES.TimelineLike] = this.rv(timeline);
-		this[TYPES.HStatic] = this.rv(H);
+		this[TYPES.timeline] = this.rv(timeline);
+		this[TYPES.hStatic] = this.rv(H);
 	}
 }

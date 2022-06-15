@@ -13,7 +13,7 @@ import { Pricing } from '../../models.d/pricing/pricing';
 
 
 export abstract class TaskSettle<H extends HLike<H>> {
-    @instantInject(TYPES.Tasks)
+    @instantInject(TYPES.tasks)
     protected tasks!: TaskSettle.TaskDeps<H>;
 
     protected abstract context: Context<H>;

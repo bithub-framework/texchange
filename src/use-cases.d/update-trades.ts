@@ -14,13 +14,13 @@ import { Pricing } from '../models.d/pricing/pricing';
 
 export class UseCaseUpdateTrades<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		protected context: Context<H>,
-		@inject(TYPES.Models)
+		@inject(TYPES.models)
 		protected models: UseCaseUpdateTrades.ModelDeps<H>,
-		@inject(TYPES.Broadcast)
+		@inject(TYPES.broadcast)
 		protected broadcast: Broadcast<H>,
-		@inject(TYPES.Tasks)
+		@inject(TYPES.tasks)
 		protected tasks: UseCaseUpdateTrades.TaskDeps<H>,
 		@inject(TYPES.USE_CASES.realTimeSettlement)
 		private realTimeSettlement: boolean,

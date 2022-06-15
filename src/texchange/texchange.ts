@@ -12,7 +12,7 @@ import { AdminFacade } from '../facades.d/admin';
 
 export class Texchange<H extends HLike<H>>  {
 	public constructor(
-		@inject(TYPES.Facades)
+		@inject(TYPES.facades)
 		private facades: Facades<H>,
 	) { }
 

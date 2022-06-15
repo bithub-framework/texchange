@@ -18,7 +18,7 @@ class TaskGetAvailable {
     }
 }
 __decorate([
-    (0, injektor_1.instantInject)(types_1.TYPES.Tasks)
+    (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskGetAvailable.prototype, "tasks", void 0);
 exports.TaskGetAvailable = TaskGetAvailable;
 //# sourceMappingURL=get-available.js.map

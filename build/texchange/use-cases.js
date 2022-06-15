@@ -27,16 +27,16 @@ let UseCases = class UseCases {
     }
 };
 UseCases = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.MakeOrder)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.CancelOrder)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.AmendOrder)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.GetOpenOrders)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.GetPositions)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.GetBalances)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.UpdateOrderbook)),
-    __param(7, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.Subscription)),
-    __param(8, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.GetProgress)),
-    __param(9, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.UpdateTrades))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.makeOrder)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.cancelOrder)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.amendOrder)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getOpenOrders)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getPositions)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getBalances)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateOrderbook)),
+    __param(7, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
+    __param(8, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getProgress)),
+    __param(9, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateTrades))
 ], UseCases);
 exports.UseCases = UseCases;
 //# sourceMappingURL=use-cases.js.map

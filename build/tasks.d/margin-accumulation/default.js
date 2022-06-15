@@ -35,9 +35,9 @@ let DefaultTaskMarginAccumulation = class DefaultTaskMarginAccumulation extends 
     }
 };
 DefaultTaskMarginAccumulation = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.Models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.Broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], DefaultTaskMarginAccumulation);
 exports.DefaultTaskMarginAccumulation = DefaultTaskMarginAccumulation;
 //# sourceMappingURL=default.js.map

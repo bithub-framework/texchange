@@ -27,10 +27,10 @@ class Container extends container_1.Container {
             processing: 20,
         });
         this[types_1.TYPES.spec] = this.rv(spec);
-        this[types_1.TYPES.TimelineLike] = this.rv(timeline);
-        this[types_1.TYPES.HStatic] = this.rv(H);
+        this[types_1.TYPES.timeline] = this.rv(timeline);
+        this[types_1.TYPES.hStatic] = this.rv(H);
     }
 }
 exports.Container = Container;
-types_1.TYPES.HStatic, types_1.TYPES.spec, types_1.TYPES.TimelineLike, _a = types_1.TYPES.MarketCalc, _b = types_1.TYPES.MODELS.Makers, _c = types_1.TYPES.MODELS.Pricing, _d = types_1.TYPES.TASKS.GetAvailable, _e = types_1.TYPES.TASKS.MarginAccumulation, _f = types_1.TYPES.TASKS.Settle, _g = types_1.TYPES.Mtm, _h = types_1.TYPES.USE_CASES.realTimeSettlement, _j = types_1.TYPES.FACADES.Config;
+types_1.TYPES.hStatic, types_1.TYPES.spec, types_1.TYPES.timeline, _a = types_1.TYPES.marketCalc, _b = types_1.TYPES.MODELS.makers, _c = types_1.TYPES.MODELS.pricing, _d = types_1.TYPES.TASKS.getAvailable, _e = types_1.TYPES.TASKS.marginAccumulation, _f = types_1.TYPES.TASKS.settle, _g = types_1.TYPES.mtm, _h = types_1.TYPES.USE_CASES.realTimeSettlement, _j = types_1.TYPES.FACADES.config;
 //# sourceMappingURL=container.js.map

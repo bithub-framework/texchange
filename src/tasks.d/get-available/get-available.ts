@@ -8,7 +8,7 @@ import { Assets } from '../../models.d/assets';
 
 
 export abstract class TaskGetAvailable<H extends HLike<H>> {
-	@instantInject(TYPES.Tasks)
+	@instantInject(TYPES.tasks)
 	protected tasks!: TaskGetAvailable.TaskDeps<H>;
 	protected abstract context: Context<H>;
 	protected abstract models: TaskGetAvailable.ModelDeps<H>;

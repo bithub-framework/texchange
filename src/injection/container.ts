@@ -68,62 +68,62 @@ import { Texchange } from '../texchange/texchange';
 
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
-	public abstract [TYPES.HStatic]: () => HStatic<H>;
+	public abstract [TYPES.hStatic]: () => HStatic<H>;
 	public abstract [TYPES.spec]: () => Spec<H>;
-	public abstract [TYPES.TimelineLike]: () => TimelineLike;
-	public abstract [TYPES.MarketCalc]: () => MarketCalc<H>;
+	public abstract [TYPES.timeline]: () => TimelineLike;
+	public abstract [TYPES.marketCalc]: () => MarketCalc<H>;
 
-	public [TYPES.DataStatic] = this.rcs<DataStatic<H>>(DataStatic);
-	public [TYPES.Context] = this.rcs<Context<H>>(Context);
+	public [TYPES.dataStatic] = this.rcs<DataStatic<H>>(DataStatic);
+	public [TYPES.context] = this.rcs<Context<H>>(Context);
 
-	public abstract [TYPES.MODELS.Makers]: () => Makers<H>;
-	public abstract [TYPES.MODELS.Pricing]: () => Pricing<H, any>;
-	public [TYPES.MODELS.Assets] = this.rcs<Assets<H>>(Assets);
-	public [TYPES.MODELS.Margins] = this.rcs<Margins<H>>(Margins);
-	public [TYPES.MODELS.Book] = this.rcs<Book<H>>(Book);
-	public [TYPES.MODELS.Progress] = this.rcs<Progress<H>>(Progress);
-	public [TYPES.Models] = this.rcs<Models<H>>(Models);
+	public abstract [TYPES.MODELS.makers]: () => Makers<H>;
+	public abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
+	public [TYPES.MODELS.assets] = this.rcs<Assets<H>>(Assets);
+	public [TYPES.MODELS.margins] = this.rcs<Margins<H>>(Margins);
+	public [TYPES.MODELS.book] = this.rcs<Book<H>>(Book);
+	public [TYPES.MODELS.progress] = this.rcs<Progress<H>>(Progress);
+	public [TYPES.models] = this.rcs<Models<H>>(Models);
 
-	public abstract [TYPES.Mtm]: () => Mtm<H> | null;
+	public abstract [TYPES.mtm]: () => Mtm<H> | null;
 
-	public [TYPES.Broadcast] = this.rcs<Broadcast<H>>(Broadcast);
+	public [TYPES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
 
-	public [TYPES.Tasks] = this.rcs<Tasks<H>>(Tasks);
-	public [TYPES.TASKS.MakeOpenOrder] = this.rcs<TaskMakeOpenOrder<H>>(TaskMakeOpenOrder);
-	public [TYPES.TASKS.CancelOpenOrder] = this.rcs<TaskCancelOpenOrder<H>>(TaskCancelOpenOrder);
-	public [TYPES.TASKS.GetBalances] = this.rcs<TaskGetBalances<H>>(TaskGetBalances);
-	public [TYPES.TASKS.GetClosable] = this.rcs<TaskGetClosable<H>>(TaskGetClosable);
-	public [TYPES.TASKS.GetPositions] = this.rcs<TaskGetPositions<H>>(TaskGetPositions);
-	public [TYPES.TASKS.OrderMakes] = this.rcs<TaskOrderMakes<H>>(TaskOrderMakes);
-	public [TYPES.TASKS.OrderTakes] = this.rcs<TaskOrderTakes<H>>(TaskOrderTakes);
-	public [TYPES.TASKS.TradeTakesOpenMakers] = this.rcs<TaskTradeTakesOpenMakers<H>>(TaskTradeTakesOpenMakers);
-	public [TYPES.TASKS.ValidateOrder] = this.rcs<TaskValidateOrder<H>>(TaskValidateOrder);
-	public [TYPES.TASKS.OrderVolumes] = this.rcs<TaskOrderVolumes<H>>(TaskOrderVolumes);
-	public abstract [TYPES.TASKS.GetAvailable]: () => TaskGetAvailable<H>;
-	public abstract [TYPES.TASKS.MarginAccumulation]: () => TaskMarginAccumulation<H>;
-	public abstract [TYPES.TASKS.Settle]: () => TaskSettle<H>;
+	public [TYPES.tasks] = this.rcs<Tasks<H>>(Tasks);
+	public [TYPES.TASKS.makeOpenOrder] = this.rcs<TaskMakeOpenOrder<H>>(TaskMakeOpenOrder);
+	public [TYPES.TASKS.cancelOpenOrder] = this.rcs<TaskCancelOpenOrder<H>>(TaskCancelOpenOrder);
+	public [TYPES.TASKS.getBalances] = this.rcs<TaskGetBalances<H>>(TaskGetBalances);
+	public [TYPES.TASKS.getClosable] = this.rcs<TaskGetClosable<H>>(TaskGetClosable);
+	public [TYPES.TASKS.getPositions] = this.rcs<TaskGetPositions<H>>(TaskGetPositions);
+	public [TYPES.TASKS.orderMakes] = this.rcs<TaskOrderMakes<H>>(TaskOrderMakes);
+	public [TYPES.TASKS.orderTakes] = this.rcs<TaskOrderTakes<H>>(TaskOrderTakes);
+	public [TYPES.TASKS.tradeTakesOpenMakers] = this.rcs<TaskTradeTakesOpenMakers<H>>(TaskTradeTakesOpenMakers);
+	public [TYPES.TASKS.validateOrder] = this.rcs<TaskValidateOrder<H>>(TaskValidateOrder);
+	public [TYPES.TASKS.orderVolumes] = this.rcs<TaskOrderVolumes<H>>(TaskOrderVolumes);
+	public abstract [TYPES.TASKS.getAvailable]: () => TaskGetAvailable<H>;
+	public abstract [TYPES.TASKS.marginAccumulation]: () => TaskMarginAccumulation<H>;
+	public abstract [TYPES.TASKS.settle]: () => TaskSettle<H>;
 
 
-	public [TYPES.UseCases] = this.rcs<UseCases<H>>(UseCases);
-	public [TYPES.USE_CASES.MakeOrder] = this.rcs<UseCaseMakeOrder<H>>(UseCaseMakeOrder);
-	public [TYPES.USE_CASES.CancelOrder] = this.rcs<UseCaseCancelOrder<H>>(UseCaseCancelOrder);
-	public [TYPES.USE_CASES.AmendOrder] = this.rcs<UseCaseAmendOrder<H>>(UseCaseAmendOrder);
-	public [TYPES.USE_CASES.GetOpenOrders] = this.rcs<UseCaseGetOpenOrders<H>>(UseCaseGetOpenOrders);
-	public [TYPES.USE_CASES.GetPositions] = this.rcs<UseCaseGetPositions<H>>(UseCaseGetPositions);
-	public [TYPES.USE_CASES.GetBalances] = this.rcs<UseCaseGetBalances<H>>(UseCaseGetBalances);
-	public [TYPES.USE_CASES.UpdateOrderbook] = this.rcs<UseCaseUpdateOrderbook<H>>(UseCaseUpdateOrderbook);
-	public [TYPES.USE_CASES.UpdateTrades] = this.rcs<UseCaseUpdateTrades<H>>(UseCaseUpdateTrades);
+	public [TYPES.useCases] = this.rcs<UseCases<H>>(UseCases);
+	public [TYPES.USE_CASES.makeOrder] = this.rcs<UseCaseMakeOrder<H>>(UseCaseMakeOrder);
+	public [TYPES.USE_CASES.cancelOrder] = this.rcs<UseCaseCancelOrder<H>>(UseCaseCancelOrder);
+	public [TYPES.USE_CASES.amendOrder] = this.rcs<UseCaseAmendOrder<H>>(UseCaseAmendOrder);
+	public [TYPES.USE_CASES.getOpenOrders] = this.rcs<UseCaseGetOpenOrders<H>>(UseCaseGetOpenOrders);
+	public [TYPES.USE_CASES.getPositions] = this.rcs<UseCaseGetPositions<H>>(UseCaseGetPositions);
+	public [TYPES.USE_CASES.getBalances] = this.rcs<UseCaseGetBalances<H>>(UseCaseGetBalances);
+	public [TYPES.USE_CASES.updateOrderbook] = this.rcs<UseCaseUpdateOrderbook<H>>(UseCaseUpdateOrderbook);
+	public [TYPES.USE_CASES.updateTrades] = this.rcs<UseCaseUpdateTrades<H>>(UseCaseUpdateTrades);
 	public abstract [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
-	public [TYPES.USE_CASES.Subscription] = this.rcs<UseCaseSubscription<H>>(UseCaseSubscription);
-	public [TYPES.USE_CASES.GetProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
+	public [TYPES.USE_CASES.subscription] = this.rcs<UseCaseSubscription<H>>(UseCaseSubscription);
+	public [TYPES.USE_CASES.getProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
 
 
-	public [TYPES.Facades] = this.rcs<Facades<H>>(Facades);
-	public abstract [TYPES.FACADES.Config]: () => DelayConfig;
-	public [TYPES.FACADES.Instant] = this.rcs<Instant<H>>(Instant);
-	public [TYPES.FACADES.UserMarket] = this.rcs<UserMarketFacade<H>>(UserMarketFacade);
-	public [TYPES.FACADES.UserAccount] = this.rcs<UserAccountFacade<H>>(UserAccountFacade);
-	public [TYPES.FACADES.Admin] = this.rcs<AdminFacade<H>>(AdminFacade);
+	public [TYPES.facades] = this.rcs<Facades<H>>(Facades);
+	public abstract [TYPES.FACADES.config]: () => DelayConfig;
+	public [TYPES.FACADES.instant] = this.rcs<Instant<H>>(Instant);
+	public [TYPES.FACADES.userMarket] = this.rcs<UserMarketFacade<H>>(UserMarketFacade);
+	public [TYPES.FACADES.userAccount] = this.rcs<UserAccountFacade<H>>(UserAccountFacade);
+	public [TYPES.FACADES.admin] = this.rcs<AdminFacade<H>>(AdminFacade);
 
-	public [TYPES.Texchange] = this.rcs<Texchange<H>>(Texchange);
+	public [TYPES.texchange] = this.rcs<Texchange<H>>(Texchange);
 }

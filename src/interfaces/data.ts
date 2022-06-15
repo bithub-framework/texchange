@@ -12,7 +12,7 @@ import { TYPES } from '../injection/types';
 
 export class DataStatic<H extends HLike<H>> extends SecretaryDataStatic<H> {
 	public constructor(
-		@inject(TYPES.HStatic)
+		@inject(TYPES.hStatic)
 		H: HStatic<H>,
 	) {
 		super(H);

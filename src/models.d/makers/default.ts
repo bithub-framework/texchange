@@ -13,7 +13,7 @@ import { TYPES } from '../../injection/default/types';
 
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	public constructor(
-		@inject(TYPES.Context)
+		@inject(TYPES.context)
 		context: Context<H>,
 	) { super(context); }
 

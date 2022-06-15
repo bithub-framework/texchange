@@ -27,7 +27,7 @@ let DataStatic = class DataStatic extends secretary_like_1.DataStatic {
     }
 };
 DataStatic = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.HStatic))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.hStatic))
 ], DataStatic);
 exports.DataStatic = DataStatic;
 //# sourceMappingURL=data.js.map

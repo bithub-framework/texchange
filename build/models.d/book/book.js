@@ -102,7 +102,7 @@ let Book = class Book {
     }
 };
 Book = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.Context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
 ], Book);
 exports.Book = Book;
 //# sourceMappingURL=book.js.map
