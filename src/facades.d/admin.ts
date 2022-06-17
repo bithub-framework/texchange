@@ -1,7 +1,7 @@
 import { Context } from '../context';
 import { Spec } from '../context.d/spec';
 import { HLike } from 'secretary-like';
-import { Startable } from 'startable';
+import { Startable, StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 
 import { Models } from '../texchange/models';
@@ -19,9 +19,20 @@ import { TYPES } from '../injection/types';
 
 
 export class AdminFacade<H extends HLike<H>>
-	implements StatefulLike<Models.Snapshot>{
-	private startable: Startable;
-	public config: Spec<H>;
+	implements StatefulLike<Models.Snapshot>, StartableLike {
+
+	private startable = Startable.create(
+		() => this.rawStart(),
+		() => this.rawStop(),
+	);
+	public start = this.startable.start;
+	public stop = this.startable.stop;
+	public assart = this.startable.assart;
+	public starp = this.startable.starp;
+	public getReadyState = this.startable.getReadyState;
+	public skipStart = this.startable.skipStart;
+
+	private spec: Spec<H>;
 
 	public constructor(
 		@inject(TYPES.context)
@@ -33,15 +44,12 @@ export class AdminFacade<H extends HLike<H>>
 		@inject(TYPES.useCases)
 		private useCases: Joystick.UseCaseDeps<H>,
 	) {
-		this.startable = Startable.create(
-			() => this.start(),
-			() => this.stop(),
-		);
-
-		this.config = this.context.spec;
+		this.spec = this.context.spec;
 	}
 
-	public Data = this.context.Data;
+	public getSpec(): Spec<H> {
+		return this.spec;
+	}
 
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCases.updateTrades.updateTrades(
@@ -73,14 +81,14 @@ export class AdminFacade<H extends HLike<H>>
 		return this.context.calc.dollarVolume(price, quantity);
 	}
 
-	private async start() {
+	private async rawStart() {
 		if (this.mtm)
-			await this.mtm.startable.start(this.startable.stop);
+			await this.mtm.start(this.stop);
 	}
 
-	private async stop() {
+	private async rawStop() {
 		if (this.mtm)
-			await this.mtm.startable.stop();
+			await this.mtm.stop();
 	}
 
 	public capture(): Models.Snapshot {

@@ -19,9 +19,17 @@ let AdminFacade = class AdminFacade {
         this.models = models;
         this.mtm = mtm;
         this.useCases = useCases;
-        this.Data = this.context.Data;
-        this.startable = startable_1.Startable.create(() => this.start(), () => this.stop());
-        this.config = this.context.spec;
+        this.startable = startable_1.Startable.create(() => this.rawStart(), () => this.rawStop());
+        this.start = this.startable.start;
+        this.stop = this.startable.stop;
+        this.assart = this.startable.assart;
+        this.starp = this.startable.starp;
+        this.getReadyState = this.startable.getReadyState;
+        this.skipStart = this.startable.skipStart;
+        this.spec = this.context.spec;
+    }
+    getSpec() {
+        return this.spec;
     }
     updateTrades($trades) {
         this.useCases.updateTrades.updateTrades($trades.map(trade => this.context.Data.DatabaseTrade.copy(trade)));
@@ -42,13 +50,13 @@ let AdminFacade = class AdminFacade {
     dollarVolume(price, quantity) {
         return this.context.calc.dollarVolume(price, quantity);
     }
-    async start() {
+    async rawStart() {
         if (this.mtm)
-            await this.mtm.startable.start(this.startable.stop);
+            await this.mtm.start(this.stop);
     }
-    async stop() {
+    async rawStop() {
         if (this.mtm)
-            await this.mtm.startable.stop();
+            await this.mtm.stop();
     }
     capture() {
         return {

@@ -13,10 +13,6 @@ import { TYPES } from '../injection/types';
  */
 export class DefaultMtm<H extends HLike<H>>
 	extends Mtm<H> {
-	public startable = Startable.create(
-		() => this.start(),
-		() => this.stop(),
-	);
 
 	public constructor(
 		@inject(TYPES.context)
@@ -36,8 +32,8 @@ export class DefaultMtm<H extends HLike<H>>
 		);
 	}
 
-	private async start(): Promise<void> { }
-	private async stop(): Promise<void> { }
+	protected async rawStart(): Promise<void> { }
+	protected async rawStop(): Promise<void> { }
 }
 
 export namespace DefaultMtm {

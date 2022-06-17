@@ -8,10 +8,9 @@ import { HLike } from 'secretary-like';
 export declare class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
     protected models: DefaultMtm.ModelDeps<H>;
     protected tasks: DefaultMtm.TaskDeps<H>;
-    startable: import("startable/build/startable").Startable;
     constructor(context: Context<H>, models: DefaultMtm.ModelDeps<H>, broadcast: Broadcast<H>, tasks: DefaultMtm.TaskDeps<H>);
-    private start;
-    private stop;
+    protected rawStart(): Promise<void>;
+    protected rawStop(): Promise<void>;
 }
 export declare namespace DefaultMtm {
     interface ModelDeps<H extends HLike<H>> extends Mtm.ModelDeps<H> {
