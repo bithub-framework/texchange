@@ -1,15 +1,16 @@
-import { Side, HLike, HStatic, OpenOrder, OrderId } from 'secretary-like';
+import { Side, HLike, HStatic, OpenOrder, OrderId, MarketSpec } from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
 import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
-    protected context: Context<H>;
+    protected abstract context: Context<H>;
+    protected abstract marketSpec: MarketSpec<H>;
     private $orders;
     private $totalUnfilled;
     protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
     private totalFrozen;
-    constructor(context: Context<H>);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>);
     getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<OpenMaker<H>>;

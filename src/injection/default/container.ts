@@ -1,14 +1,15 @@
-import { HLike, HStatic } from 'secretary-like';
 import { Container as BaseContainer } from '../container';
 import { TYPES } from '../types';
-
-// Context
-import { Spec } from '../../context.d/spec';
 import {
+	HLike, HStatic,
 	TimelineLike,
-	MarketCalc,
+	MarketSpec,
+	AccountSpec,
 } from 'secretary-like';
-import { DefaultMarketCalc } from '../../context.d/market-calc/default';
+
+// Spec
+import { DefaultMarketSpec } from '../../spec/default-market-spec';
+import { DefaultAccountSpec } from '../../spec/default-account-spec';
 
 // Models
 import { Makers } from '../../models.d/makers/makers';
@@ -34,10 +35,9 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.hStatic]: () => HStatic<H>;
-	public [TYPES.spec]: () => Spec<H>;
+	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
+	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
-
-	public [TYPES.marketCalc] = this.rcs<MarketCalc<H>>(DefaultMarketCalc);
 
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
@@ -58,11 +58,9 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public constructor(
 		timeline: TimelineLike,
 		H: HStatic<H>,
-		spec: Spec<H>,
 	) {
 		super();
 
-		this[TYPES.spec] = this.rv(spec);
 		this[TYPES.timeline] = this.rv(timeline);
 		this[TYPES.hStatic] = this.rv(H);
 	}

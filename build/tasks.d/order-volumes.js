@@ -13,8 +13,9 @@ exports.TaskOrderVolumes = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskOrderVolumes = class TaskOrderVolumes {
-    constructor(context, models, broadcast) {
+    constructor(context, marketSpec, models, broadcast) {
         this.context = context;
+        this.marketSpec = marketSpec;
         this.models = models;
         this.broadcast = broadcast;
     }
@@ -23,7 +24,7 @@ let TaskOrderVolumes = class TaskOrderVolumes {
             length,
             volume,
             dollarVolume,
-        }).round(this.context.spec.market.CURRENCY_DP);
+        }).round(this.marketSpec.CURRENCY_DP);
         this.models.assets.open(length, volume, dollarVolume);
         this.models.margins.setMargin(length, newMargin);
     }
@@ -34,7 +35,7 @@ let TaskOrderVolumes = class TaskOrderVolumes {
             const openDollarVolume = dollarVolume
                 .times(openVolume)
                 .div(volume)
-                .round(this.context.spec.market.CURRENCY_DP);
+                .round(this.marketSpec.CURRENCY_DP);
             const closeDollarVolume = dollarVolume
                 .minus(openDollarVolume);
             this.close({
@@ -53,7 +54,7 @@ let TaskOrderVolumes = class TaskOrderVolumes {
                 length,
                 volume,
                 dollarVolume,
-            }).round(this.context.spec.market.CURRENCY_DP);
+            }).round(this.marketSpec.CURRENCY_DP);
             this.models.assets.close(length, volume, dollarVolume);
             this.models.margins.setMargin(length, newMargin);
         }
@@ -64,8 +65,9 @@ __decorate([
 ], TaskOrderVolumes.prototype, "tasks", void 0);
 TaskOrderVolumes = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskOrderVolumes);
 exports.TaskOrderVolumes = TaskOrderVolumes;
 //# sourceMappingURL=order-volumes.js.map

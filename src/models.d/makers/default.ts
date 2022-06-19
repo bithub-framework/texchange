@@ -2,6 +2,7 @@ import {
 	Operation,
 	HLike,
 	OpenOrder,
+	MarketSpec,
 } from 'secretary-like';
 import { Frozen } from '../../interfaces/frozen';
 import { Context } from '../../context';
@@ -14,8 +15,15 @@ import { TYPES } from '../../injection/default/types';
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	public constructor(
 		@inject(TYPES.context)
-		context: Context<H>,
-	) { super(context); }
+		protected context: Context<H>,
+		@inject(TYPES.marketSpec)
+		protected marketSpec: MarketSpec<H>,
+	) {
+		super(
+			context,
+			marketSpec,
+		);
+	}
 
 	/**
 	 * 默认单向持仓模式
@@ -24,7 +32,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 		if (order.operation === Operation.OPEN)
 			return {
 				balance: {
-					[order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),
+					[order.length]: this.marketSpec.dollarVolume(order.price, order.unfilled),
 					[-order.length]: new this.context.Data.H(0),
 				},
 				position: this.context.Data.Frozen.ZERO.position,

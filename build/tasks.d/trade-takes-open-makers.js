@@ -14,8 +14,10 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskTradeTakesOpenMakers = class TaskTradeTakesOpenMakers {
-    constructor(context, models, broadcast) {
+    constructor(context, marketSpec, accountSpec, models, broadcast) {
         this.context = context;
+        this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.models = models;
         this.broadcast = broadcast;
     }
@@ -49,14 +51,14 @@ let TaskTradeTakesOpenMakers = class TaskTradeTakesOpenMakers {
     tradeTakesOpenMaker($trade, maker) {
         const { assets, makers } = this.models;
         const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.calc
+        const dollarVolume = this.marketSpec
             .dollarVolume(maker.price, volume)
-            .round(this.context.spec.market.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP);
         $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
         assets.pay(dollarVolume
-            .times(this.context.spec.account.MAKER_FEE_RATE)
-            .round(this.context.spec.market.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
+            .times(this.accountSpec.MAKER_FEE_RATE)
+            .round(this.marketSpec.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if (maker.operation === secretary_like_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: maker.length,
@@ -76,8 +78,10 @@ __decorate([
 ], TaskTradeTakesOpenMakers.prototype, "tasks", void 0);
 TaskTradeTakesOpenMakers = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskTradeTakesOpenMakers);
 exports.TaskTradeTakesOpenMakers = TaskTradeTakesOpenMakers;
 //# sourceMappingURL=trade-takes-open-makers.js.map

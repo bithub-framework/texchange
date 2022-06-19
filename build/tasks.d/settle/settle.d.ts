@@ -1,4 +1,4 @@
-import { Length, HLike } from 'secretary-like';
+import { Length, HLike, MarketSpec } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { Assets } from '../../models.d/assets';
@@ -7,6 +7,7 @@ import { Pricing } from '../../models.d/pricing/pricing';
 export declare abstract class TaskSettle<H extends HLike<H>> {
     protected tasks: TaskSettle.TaskDeps<H>;
     protected abstract context: Context<H>;
+    protected abstract marketSpec: MarketSpec<H>;
     protected abstract models: TaskSettle.ModelDeps<H>;
     protected abstract broadcast: Broadcast<H>;
     settle(): void;

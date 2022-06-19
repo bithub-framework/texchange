@@ -1,13 +1,15 @@
-import { HLike, HStatic } from 'secretary-like';
+import {
+	HLike, HStatic,
+	MarketSpec,
+	AccountSpec,
+} from 'secretary-like';
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 
 // Context
 import { Context } from '../context';
-import { Spec } from '../context.d/spec';
 import { TimelineLike } from 'secretary-like';
 import { DataStatic } from '../interfaces/data';
-import { MarketCalc } from 'secretary-like';
 
 // Models
 import { Models } from '../texchange/models';
@@ -69,9 +71,9 @@ import { Texchange } from '../texchange/texchange';
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.hStatic]: () => HStatic<H>;
-	public abstract [TYPES.spec]: () => Spec<H>;
+	public abstract [TYPES.marketSpec]: () => MarketSpec<H>;
+	public abstract [TYPES.accountSpec]: () => AccountSpec;
 	public abstract [TYPES.timeline]: () => TimelineLike;
-	public abstract [TYPES.marketCalc]: () => MarketCalc<H>;
 
 	public [TYPES.dataStatic] = this.rcs<DataStatic<H>>(DataStatic);
 	public [TYPES.context] = this.rcs<Context<H>>(Context);

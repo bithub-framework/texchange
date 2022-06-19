@@ -14,7 +14,7 @@ class TaskGetAvailable {
         return this.models.assets.getBalance()
             .minus(this.finalMargin())
             .minus(this.finalFrozenBalance())
-            .round(this.context.spec.market.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP);
     }
 }
 __decorate([

@@ -2,6 +2,7 @@ import {
     Length,
     Position,
     HLike, H, HStatic,
+    MarketSpec,
 } from 'secretary-like';
 import { Context } from '../context';
 import assert = require('assert');
@@ -20,6 +21,8 @@ export class Assets<H extends HLike<H>>
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
+        @inject(TYPES.marketSpec)
+        private marketSpec: MarketSpec<H>,
         @inject(TYPES.MODELS.initialBalance)
         private balance: H,
     ) {
@@ -84,7 +87,7 @@ export class Assets<H extends HLike<H>>
         const cost = this.$cost[length]
             .times(volume)
             .div(this.$position[length])
-            .round(this.context.spec.market.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);

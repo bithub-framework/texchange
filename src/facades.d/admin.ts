@@ -1,6 +1,9 @@
 import { Context } from '../context';
-import { Spec } from '../context.d/spec';
-import { HLike } from 'secretary-like';
+import {
+	HLike,
+	MarketSpec,
+	AccountSpec,
+} from 'secretary-like';
 import { Startable, StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 
@@ -32,23 +35,27 @@ export class AdminFacade<H extends HLike<H>>
 	public getReadyState = this.startable.getReadyState;
 	public skipStart = this.startable.skipStart;
 
-	private spec: Spec<H>;
-
 	public constructor(
 		@inject(TYPES.context)
 		private context: Context<H>,
+		@inject(TYPES.marketSpec)
+		private marketSpec: MarketSpec<H>,
+		@inject(TYPES.accountSpec)
+		private accountSpec: AccountSpec,
 		@inject(TYPES.models)
 		private models: Models<H>,
 		@inject(TYPES.mtm)
 		private mtm: Mtm<H> | null,
 		@inject(TYPES.useCases)
 		private useCases: Joystick.UseCaseDeps<H>,
-	) {
-		this.spec = this.context.spec;
+	) { }
+
+	public getMarketSpec(): MarketSpec<H> {
+		return this.marketSpec;
 	}
 
-	public getSpec(): Spec<H> {
-		return this.spec;
+	public getAccountSpec(): AccountSpec {
+		return this.accountSpec;
 	}
 
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
@@ -74,11 +81,11 @@ export class AdminFacade<H extends HLike<H>>
 	}
 
 	public quantity(price: H, dollarVolume: H): H {
-		return this.context.calc.quantity(price, dollarVolume);
+		return this.marketSpec.quantity(price, dollarVolume);
 	};
 
 	public dollarVolume(price: H, quantity: H): H {
-		return this.context.calc.dollarVolume(price, quantity);
+		return this.marketSpec.dollarVolume(price, quantity);
 	}
 
 	private async rawStart() {

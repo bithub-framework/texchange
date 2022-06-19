@@ -15,8 +15,9 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let Assets = class Assets {
-    constructor(context, balance) {
+    constructor(context, marketSpec, balance) {
         this.context = context;
+        this.marketSpec = marketSpec;
         this.balance = balance;
         this.Cost = new Assets.CostStatic(this.context.Data.H);
         this.$position = {
@@ -64,7 +65,7 @@ let Assets = class Assets {
         const cost = this.$cost[length]
             .times(volume)
             .div(this.$position[length])
-            .round(this.context.spec.market.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);
@@ -74,7 +75,8 @@ let Assets = class Assets {
 };
 Assets = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
 ], Assets);
 exports.Assets = Assets;
 (function (Assets) {

@@ -12,12 +12,11 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 class TaskSettle {
     settle() {
-        const { spec: config, calc } = this.context;
         const { assets, margins, pricing } = this.models;
         const position = assets.getPosition();
         const settlementPrice = pricing.getSettlementPrice();
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
-            const dollarVolume = calc.dollarVolume(settlementPrice, position[length]).round(config.market.CURRENCY_DP);
+            const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, position[length]).round(this.marketSpec.CURRENCY_DP);
             const profit = assets.close(length, position[length], dollarVolume);
             assets.open(length, position[length], dollarVolume);
             margins.setMargin(length, this.clearingMargin(length, profit));

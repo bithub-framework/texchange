@@ -4,6 +4,8 @@ import {
     HLike, H,
     OpenOrder,
     Trade,
+    MarketSpec,
+    AccountSpec,
 } from 'secretary-like';
 import { OpenMaker } from '../interfaces/open-maker';
 
@@ -25,6 +27,10 @@ export class TaskTradeTakesOpenMakers<H extends HLike<H>> {
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
+        @inject(TYPES.marketSpec)
+        private marketSpec: MarketSpec<H>,
+        @inject(TYPES.accountSpec)
+        private accountSpec: AccountSpec,
         @inject(TYPES.models)
         private models: TaskTradeTakesOpenMakers.ModelDeps<H>,
         @inject(TYPES.broadcast)
@@ -73,16 +79,16 @@ export class TaskTradeTakesOpenMakers<H extends HLike<H>> {
         const { assets, makers } = this.models;
 
         const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
-        const dollarVolume = this.context.calc
+        const dollarVolume = this.marketSpec
             .dollarVolume(maker.price, volume)
-            .round(this.context.spec.market.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP);
         $trade.quantity = $trade.quantity.minus(volume);
         makers.takeOrder(maker.id, volume);
 
         assets.pay(
             dollarVolume
-                .times(this.context.spec.account.MAKER_FEE_RATE)
-                .round(this.context.spec.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
+                .times(this.accountSpec.MAKER_FEE_RATE)
+                .round(this.marketSpec.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
         );
         if (maker.operation === Operation.OPEN)
             this.tasks.orderVolumes.open({

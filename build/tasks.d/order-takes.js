@@ -14,14 +14,15 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskOrderTakes = class TaskOrderTakes {
-    constructor(context, models, broadcast) {
+    constructor(context, marketSpec, accountSpec, models, broadcast) {
         this.context = context;
+        this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.models = models;
         this.broadcast = broadcast;
     }
     $orderTakes($taker) {
         const { assets, progress, book } = this.models;
-        const { spec: config, timeline, calc } = this.context;
         const orderbook = book.getBook();
         const trades = [];
         let volume = new this.context.Data.H(0);
@@ -35,19 +36,19 @@ let TaskOrderTakes = class TaskOrderTakes {
                 $taker.unfilled = $taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(calc.dollarVolume(maker.price, quantity))
-                    .round(config.market.CURRENCY_DP);
+                    .plus(this.marketSpec.dollarVolume(maker.price, quantity))
+                    .round(this.marketSpec.CURRENCY_DP);
                 trades.push({
                     side: $taker.side,
                     price: maker.price,
                     quantity,
-                    time: timeline.now(),
+                    time: this.context.timeline.now(),
                     id: ++progress.userTradeCount,
                 });
             }
         assets.pay(dollarVolume
-            .times(config.account.TAKER_FEE_RATE)
-            .round(config.market.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
+            .times(this.accountSpec.TAKER_FEE_RATE)
+            .round(this.marketSpec.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if ($taker.operation === secretary_like_1.Operation.OPEN)
             this.tasks.orderVolumes.open({
                 length: $taker.length,
@@ -68,8 +69,10 @@ __decorate([
 ], TaskOrderTakes.prototype, "tasks", void 0);
 TaskOrderTakes = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskOrderTakes);
 exports.TaskOrderTakes = TaskOrderTakes;
 //# sourceMappingURL=order-takes.js.map

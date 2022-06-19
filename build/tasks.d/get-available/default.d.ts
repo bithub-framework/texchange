@@ -1,4 +1,4 @@
-import { HLike } from 'secretary-like';
+import { HLike, MarketSpec } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { TaskGetAvailable } from './get-available';
@@ -6,9 +6,10 @@ import { Margins } from '../../models.d/margins';
 import { Makers } from '../../models.d/makers/makers';
 export declare class DefaultTaskGetAvailable<H extends HLike<H>> extends TaskGetAvailable<H> {
     protected context: Context<H>;
+    protected marketSpec: MarketSpec<H>;
     protected models: DefaultGetAvailable.ModelDeps<H>;
     protected broadcast: Broadcast<H>;
-    constructor(context: Context<H>, models: DefaultGetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, models: DefaultGetAvailable.ModelDeps<H>, broadcast: Broadcast<H>);
     protected finalMargin(): H;
     protected finalFrozenBalance(): H;
 }

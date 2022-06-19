@@ -49,10 +49,10 @@ FACADES.userAccount = Symbol();
 class TYPES {
 }
 exports.TYPES = TYPES;
-TYPES.spec = Symbol();
+TYPES.marketSpec = Symbol();
+TYPES.accountSpec = Symbol();
 TYPES.hStatic = Symbol();
 TYPES.timeline = Symbol();
-TYPES.marketCalc = Symbol();
 TYPES.dataStatic = Symbol();
 TYPES.context = Symbol();
 TYPES.models = Symbol();

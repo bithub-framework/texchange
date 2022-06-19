@@ -15,8 +15,10 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskValidateOrder = class TaskValidateOrder {
-    constructor(context, models, broadcast) {
+    constructor(context, marketSpec, accountSpec, models, broadcast) {
         this.context = context;
+        this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.models = models;
         this.broadcast = broadcast;
     }
@@ -33,7 +35,7 @@ let TaskValidateOrder = class TaskValidateOrder {
                 closable[secretary_like_1.Length.SHORT].gte(0);
             assert(enoughPosition);
             const enoughBalance = this.tasks.getAvailable.getAvailable()
-                .gte(this.context.calc.dollarVolume(order.price, order.unfilled).times(Math.max(this.context.spec.account.TAKER_FEE_RATE, 0)).round(this.context.spec.market.CURRENCY_DP));
+                .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_DP));
             assert(enoughBalance);
         }
         finally {
@@ -41,10 +43,10 @@ let TaskValidateOrder = class TaskValidateOrder {
         }
     }
     validateFormat(order) {
-        assert(order.price.eq(order.price.round(this.context.spec.market.PRICE_DP)));
-        assert(order.price.mod(this.context.spec.market.TICK_SIZE).eq(0));
+        assert(order.price.eq(order.price.round(this.marketSpec.PRICE_DP)));
+        assert(order.price.mod(this.marketSpec.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
-        assert(order.unfilled.eq(order.unfilled.round(this.context.spec.market.QUANTITY_DP)));
+        assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
         assert(order.length === secretary_like_1.Length.LONG || order.length === secretary_like_1.Length.SHORT);
         assert(order.operation === secretary_like_1.Operation.OPEN || order.operation === secretary_like_1.Operation.CLOSE);
         assert(order.operation * order.length === order.side);
@@ -55,8 +57,10 @@ __decorate([
 ], TaskValidateOrder.prototype, "tasks", void 0);
 TaskValidateOrder = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], TaskValidateOrder);
 exports.TaskValidateOrder = TaskValidateOrder;
 //# sourceMappingURL=validate-order.js.map

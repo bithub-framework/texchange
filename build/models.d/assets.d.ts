@@ -1,13 +1,14 @@
-import { Length, Position, HLike, H, HStatic } from 'secretary-like';
+import { Length, Position, HLike, H, HStatic, MarketSpec } from 'secretary-like';
 import { Context } from '../context';
 import { StatefulLike } from '../stateful-like';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private context;
+    private marketSpec;
     private balance;
     private Cost;
     private $position;
     private $cost;
-    constructor(context: Context<H>, balance: H);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, balance: H);
     getBalance(): H;
     getPosition(): Position<H>;
     getCost(): Assets.Cost<H>;

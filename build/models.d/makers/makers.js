@@ -4,15 +4,14 @@ exports.Makers = void 0;
 const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 class Makers {
-    constructor(context) {
-        this.context = context;
+    constructor(context, marketSpec) {
         this.$orders = new Map();
         this.$totalUnfilled = {
-            [secretary_like_1.Side.ASK]: new this.context.Data.H(0),
-            [secretary_like_1.Side.BID]: new this.context.Data.H(0),
+            [secretary_like_1.Side.ASK]: new context.Data.H(0),
+            [secretary_like_1.Side.BID]: new context.Data.H(0),
         };
-        this.TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.Data.H);
-        this.totalFrozen = this.context.Data.Frozen.ZERO;
+        this.TotalUnfilled = new Makers.TotalUnfilledStatic(context.Data.H);
+        this.totalFrozen = context.Data.Frozen.ZERO;
     }
     getTotalUnfilled() {
         return this.TotalUnfilled.copy(this.$totalUnfilled);
@@ -51,12 +50,12 @@ class Makers {
     normalizeFrozen(frozen) {
         return {
             balance: {
-                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.context.spec.market.CURRENCY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.context.spec.market.CURRENCY_DP),
+                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.marketSpec.CURRENCY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.marketSpec.CURRENCY_DP),
             },
             position: {
-                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.context.spec.market.QUANTITY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.context.spec.market.QUANTITY_DP),
+                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.marketSpec.QUANTITY_DP),
+                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.marketSpec.QUANTITY_DP),
             },
         };
     }

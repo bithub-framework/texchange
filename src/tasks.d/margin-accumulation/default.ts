@@ -1,4 +1,7 @@
-import { HLike } from 'secretary-like';
+import {
+	HLike,
+	AccountSpec,
+} from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { TaskMarginAccumulation } from './margin-accumulation';
@@ -15,6 +18,8 @@ export class DefaultTaskMarginAccumulation<H extends HLike<H>>
 	public constructor(
 		@inject(TYPES.context)
 		protected context: Context<H>,
+		@inject(TYPES.accountSpec)
+		private accountSpec: AccountSpec,
 		@inject(TYPES.models)
 		protected models: DefaultTaskMarginAccumulation.ModelDeps<H>,
 		@inject(TYPES.broadcast)
@@ -28,7 +33,7 @@ export class DefaultTaskMarginAccumulation<H extends HLike<H>>
 		volume,
 		dollarVolume,
 	}: TaskMarginAccumulation.Volumes<H>): H {
-		const increment = dollarVolume.div(this.context.spec.account.LEVERAGE);
+		const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
 		return this.models.margins.getMargin()[length].plus(increment);
 	}
 

@@ -1,6 +1,5 @@
 import { Context } from '../context';
-import { Spec } from '../context.d/spec';
-import { HLike } from 'secretary-like';
+import { HLike, MarketSpec, AccountSpec } from 'secretary-like';
 import { StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { Models } from '../texchange/models';
@@ -12,6 +11,8 @@ import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Models.Snapshot>, StartableLike {
     private context;
+    private marketSpec;
+    private accountSpec;
     private models;
     private mtm;
     private useCases;
@@ -22,9 +23,9 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Mod
     starp: (err?: Error | undefined) => Promise<void>;
     getReadyState: () => import("startable").ReadyState;
     skipStart: (onStopping?: import("startable").OnStopping | undefined) => void;
-    private spec;
-    constructor(context: Context<H>, models: Models<H>, mtm: Mtm<H> | null, useCases: Joystick.UseCaseDeps<H>);
-    getSpec(): Spec<H>;
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, models: Models<H>, mtm: Mtm<H> | null, useCases: Joystick.UseCaseDeps<H>);
+    getMarketSpec(): MarketSpec<H>;
+    getAccountSpec(): AccountSpec;
     updateTrades($trades: DatabaseTrade<H>[]): void;
     updateOrderbook($orderbook: DatabaseOrderbook<H>): void;
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;

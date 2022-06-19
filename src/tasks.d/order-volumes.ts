@@ -1,6 +1,9 @@
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
-import { HLike, Length } from 'secretary-like';
+import {
+	HLike, Length,
+	MarketSpec,
+} from 'secretary-like';
 import { inject, instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
@@ -16,6 +19,8 @@ export class TaskOrderVolumes<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.context)
 		private context: Context<H>,
+		@inject(TYPES.marketSpec)
+		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.models)
 		private models: TaskOrderVolumes.ModelDeps<H>,
 		@inject(TYPES.broadcast)
@@ -29,7 +34,7 @@ export class TaskOrderVolumes<H extends HLike<H>> {
 			length,
 			volume,
 			dollarVolume,
-		}).round(this.context.spec.market.CURRENCY_DP);
+		}).round(this.marketSpec.CURRENCY_DP);
 		this.models.assets.open(
 			length,
 			volume,
@@ -47,7 +52,7 @@ export class TaskOrderVolumes<H extends HLike<H>> {
 			const openDollarVolume = dollarVolume
 				.times(openVolume)
 				.div(volume)
-				.round(this.context.spec.market.CURRENCY_DP);
+				.round(this.marketSpec.CURRENCY_DP);
 			const closeDollarVolume = dollarVolume
 				.minus(openDollarVolume);
 			this.close({
@@ -65,7 +70,7 @@ export class TaskOrderVolumes<H extends HLike<H>> {
 				length,
 				volume,
 				dollarVolume,
-			}).round(this.context.spec.market.CURRENCY_DP);
+			}).round(this.marketSpec.CURRENCY_DP);
 			this.models.assets.close(
 				length,
 				volume,

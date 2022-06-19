@@ -1,4 +1,3 @@
-import { Startable } from 'startable';
 import { Context } from '../context';
 import { Mtm } from './mtm';
 import { Broadcast } from '../broadcast';
@@ -11,18 +10,16 @@ import { TYPES } from '../injection/types';
 /**
  * 默认永不结算
  */
-export class DefaultMtm<H extends HLike<H>>
-	extends Mtm<H> {
-
+export class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
 	public constructor(
 		@inject(TYPES.context)
 		context: Context<H>,
 		@inject(TYPES.models)
-		protected models: DefaultMtm.ModelDeps<H>,
+		models: DefaultMtm.ModelDeps<H>,
 		@inject(TYPES.broadcast)
 		broadcast: Broadcast<H>,
 		@inject(TYPES.tasks)
-		protected tasks: DefaultMtm.TaskDeps<H>,
+		tasks: DefaultMtm.TaskDeps<H>,
 	) {
 		super(
 			context,

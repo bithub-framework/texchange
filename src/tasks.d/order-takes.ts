@@ -4,6 +4,8 @@ import {
     HLike, H,
     OpenOrder,
     Trade,
+    MarketSpec,
+    AccountSpec,
 } from 'secretary-like';
 
 import { Context } from '../context';
@@ -25,6 +27,10 @@ export class TaskOrderTakes<H extends HLike<H>> {
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
+        @inject(TYPES.marketSpec)
+        private marketSpec: MarketSpec<H>,
+        @inject(TYPES.accountSpec)
+        private accountSpec: AccountSpec,
         @inject(TYPES.models)
         private models: TaskOrderTakes.ModelDeps<H>,
         @inject(TYPES.broadcast)
@@ -33,7 +39,6 @@ export class TaskOrderTakes<H extends HLike<H>> {
 
     public $orderTakes($taker: OpenOrder<H>): Trade<H>[] {
         const { assets, progress, book } = this.models;
-        const { spec: config, timeline, calc } = this.context;
         const orderbook = book.getBook();
 
         const trades: Trade<H>[] = [];
@@ -52,21 +57,24 @@ export class TaskOrderTakes<H extends HLike<H>> {
                 $taker.unfilled = $taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
-                    .plus(calc.dollarVolume(maker.price, quantity))
-                    .round(config.market.CURRENCY_DP);
+                    .plus(this.marketSpec.dollarVolume(maker.price, quantity))
+                    .round(this.marketSpec.CURRENCY_DP);
                 trades.push({
                     side: $taker.side,
                     price: maker.price,
                     quantity,
-                    time: timeline.now(),
+                    time: this.context.timeline.now(),
                     id: ++progress.userTradeCount,
                 });
             }
 
         assets.pay(
             dollarVolume
-                .times(config.account.TAKER_FEE_RATE)
-                .round(config.market.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
+                .times(this.accountSpec.TAKER_FEE_RATE)
+                .round(
+                    this.marketSpec.CURRENCY_DP,
+                    H.RoundingMode.HALF_AWAY_FROM_ZERO,
+                ),
         );
         if ($taker.operation === Operation.OPEN)
             this.tasks.orderVolumes.open({

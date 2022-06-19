@@ -1,6 +1,7 @@
 import {
 	Length,
 	HLike,
+	MarketSpec,
 } from 'secretary-like';
 import { Context } from '../../context';
 import assert = require('assert');
@@ -13,12 +14,13 @@ import { TYPES } from '../../injection/default/types';
 /**
 * 默认逐仓
 */
-export class DefaultTaskSettle<H extends HLike<H>>
-	extends TaskSettle<H> {
+export class DefaultTaskSettle<H extends HLike<H>> extends TaskSettle<H> {
 
 	public constructor(
 		@inject(TYPES.context)
 		protected context: Context<H>,
+		@inject(TYPES.marketSpec)
+		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.models)
 		protected models: DefaultTaskSettle.ModelDeps<H>,
 		@inject(TYPES.broadcast)

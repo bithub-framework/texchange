@@ -13,18 +13,23 @@ exports.UserMarketFacade = void 0;
 const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let UserMarketFacade = class UserMarketFacade {
-    constructor(context, useCases, config) {
+let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
+    constructor(context, marketSpec, useCases, config) {
+        super();
         this.context = context;
+        this.marketSpec = marketSpec;
         this.useCases = useCases;
         this.config = config;
-        this.events = new events_1.EventEmitter();
-        this.spec = this.context.spec.market;
+        this.PRICE_DP = this.marketSpec.PRICE_DP;
+        this.QUANTITY_DP = this.marketSpec.QUANTITY_DP;
+        this.CURRENCY_DP = this.marketSpec.CURRENCY_DP;
+        this.TICK_SIZE = this.marketSpec.TICK_SIZE;
+        this.MARKET_NAME = this.marketSpec.MARKET_NAME;
         this.useCases.subscription.on('orderbook', async (orderbook) => {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.events.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
+                this.emit('orderbook', this.context.Data.Orderbook.copy(orderbook));
             }
             catch (err) { }
         });
@@ -32,23 +37,24 @@ let UserMarketFacade = class UserMarketFacade {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.events.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
+                this.emit('trades', trades.map(trade => this.context.Data.Trade.copy(trade)));
             }
             catch (err) { }
         });
     }
     quantity(price, dollarVolume) {
-        return this.context.calc.quantity(price, dollarVolume);
+        return this.marketSpec.quantity(price, dollarVolume);
     }
     ;
     dollarVolume(price, quantity) {
-        return this.context.calc.dollarVolume(price, quantity);
+        return this.marketSpec.dollarVolume(price, quantity);
     }
 };
 UserMarketFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.useCases)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.useCases)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserMarketFacade);
 exports.UserMarketFacade = UserMarketFacade;
 //# sourceMappingURL=user-market.js.map

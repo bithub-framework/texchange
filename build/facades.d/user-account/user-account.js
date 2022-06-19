@@ -13,19 +13,23 @@ exports.UserAccountFacade = void 0;
 const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
-let UserAccountFacade = class UserAccountFacade {
-    constructor(context, useCases, instant, config) {
+let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
+    constructor(context, marketSpec, accountSpec, useCases, instant, config) {
+        super();
         this.context = context;
+        this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.useCases = useCases;
         this.instant = instant;
         this.config = config;
-        this.events = new events_1.EventEmitter();
-        this.spec = this.context.spec.account;
+        this.LEVERAGE = this.accountSpec.LEVERAGE;
+        this.TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
+        this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
         this.useCases.subscription.on('positions', async (positions) => {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.events.emit('positions', this.context.Data.Positions.copy(positions));
+                this.emit('positions', this.context.Data.Positions.copy(positions));
             }
             catch (err) { }
         });
@@ -33,7 +37,7 @@ let UserAccountFacade = class UserAccountFacade {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.events.emit('balances', this.context.Data.Balances.copy(balances));
+                this.emit('balances', this.context.Data.Balances.copy(balances));
             }
             catch (err) { }
         });
@@ -110,18 +114,20 @@ let UserAccountFacade = class UserAccountFacade {
         }
     }
     quantity(price, dollarVolume) {
-        return this.context.calc.quantity(price, dollarVolume);
+        return this.marketSpec.quantity(price, dollarVolume);
     }
     ;
     dollarVolume(price, quantity) {
-        return this.context.calc.dollarVolume(price, quantity);
+        return this.marketSpec.dollarVolume(price, quantity);
     }
 };
 UserAccountFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.useCases)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.useCases)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserAccountFacade);
 exports.UserAccountFacade = UserAccountFacade;
 //# sourceMappingURL=user-account.js.map

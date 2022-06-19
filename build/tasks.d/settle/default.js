@@ -19,9 +19,10 @@ const types_1 = require("../../injection/default/types");
 * 默认逐仓
 */
 let DefaultTaskSettle = class DefaultTaskSettle extends settle_1.TaskSettle {
-    constructor(context, models, broadcast) {
+    constructor(context, marketSpec, models, broadcast) {
         super();
         this.context = context;
+        this.marketSpec = marketSpec;
         this.models = models;
         this.broadcast = broadcast;
     }
@@ -36,8 +37,9 @@ let DefaultTaskSettle = class DefaultTaskSettle extends settle_1.TaskSettle {
 };
 DefaultTaskSettle = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], DefaultTaskSettle);
 exports.DefaultTaskSettle = DefaultTaskSettle;
 //# sourceMappingURL=default.js.map

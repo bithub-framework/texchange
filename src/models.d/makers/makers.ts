@@ -3,6 +3,7 @@ import {
 	HLike, HStatic,
 	OpenOrder,
 	OrderId,
+	MarketSpec,
 } from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
 import { Frozen } from '../../interfaces/frozen';
@@ -16,19 +17,26 @@ export abstract class Makers<H extends HLike<H>> implements
 	StatefulLike<Makers.Snapshot>,
 	Iterable<OpenMaker<H>> {
 
+	protected abstract context: Context<H>;
+	protected abstract marketSpec: MarketSpec<H>;
+
 	private $orders = new Map<OrderId, OpenMaker<H>>();
-	private $totalUnfilled: Makers.TotalUnfilled<H> = {
-		[Side.ASK]: new this.context.Data.H(0),
-		[Side.BID]: new this.context.Data.H(0),
-	};
+	private $totalUnfilled: Makers.TotalUnfilled<H>;
 
-	protected TotalUnfilled = new Makers.TotalUnfilledStatic(this.context.Data.H);
-
-	private totalFrozen: Frozen<H> = this.context.Data.Frozen.ZERO;
+	protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
+	private totalFrozen: Frozen<H>;
 
 	public constructor(
-		protected context: Context<H>,
-	) { }
+		context: Context<H>,
+		marketSpec: MarketSpec<H>,
+	) {
+		this.$totalUnfilled = {
+			[Side.ASK]: new context.Data.H(0),
+			[Side.BID]: new context.Data.H(0),
+		};
+		this.TotalUnfilled = new Makers.TotalUnfilledStatic(context.Data.H);
+		this.totalFrozen = context.Data.Frozen.ZERO;
+	}
 
 	public getTotalUnfilled(): Makers.TotalUnfilled.Functional<H> {
 		return this.TotalUnfilled.copy(this.$totalUnfilled);
@@ -82,12 +90,12 @@ export abstract class Makers<H extends HLike<H>> implements
 	private normalizeFrozen(frozen: Frozen<H>): Frozen<H> {
 		return {
 			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.context.spec.market.CURRENCY_DP),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.context.spec.market.CURRENCY_DP),
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_DP),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_DP),
 			},
 			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.context.spec.market.QUANTITY_DP),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.context.spec.market.QUANTITY_DP),
+				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_DP),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_DP),
 			},
 		};
 	}

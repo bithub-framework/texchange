@@ -14,8 +14,10 @@ const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let AdminFacade = class AdminFacade {
-    constructor(context, models, mtm, useCases) {
+    constructor(context, marketSpec, accountSpec, models, mtm, useCases) {
         this.context = context;
+        this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.models = models;
         this.mtm = mtm;
         this.useCases = useCases;
@@ -26,10 +28,12 @@ let AdminFacade = class AdminFacade {
         this.starp = this.startable.starp;
         this.getReadyState = this.startable.getReadyState;
         this.skipStart = this.startable.skipStart;
-        this.spec = this.context.spec;
     }
-    getSpec() {
-        return this.spec;
+    getMarketSpec() {
+        return this.marketSpec;
+    }
+    getAccountSpec() {
+        return this.accountSpec;
     }
     updateTrades($trades) {
         this.useCases.updateTrades.updateTrades($trades.map(trade => this.context.Data.DatabaseTrade.copy(trade)));
@@ -44,11 +48,11 @@ let AdminFacade = class AdminFacade {
         return this.useCases.getProgress.getLatestDatabaseTradeId();
     }
     quantity(price, dollarVolume) {
-        return this.context.calc.quantity(price, dollarVolume);
+        return this.marketSpec.quantity(price, dollarVolume);
     }
     ;
     dollarVolume(price, quantity) {
-        return this.context.calc.dollarVolume(price, quantity);
+        return this.marketSpec.dollarVolume(price, quantity);
     }
     async rawStart() {
         if (this.mtm)
@@ -79,9 +83,11 @@ let AdminFacade = class AdminFacade {
 };
 AdminFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.mtm)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.useCases))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.mtm)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.useCases))
 ], AdminFacade);
 exports.AdminFacade = AdminFacade;
 //# sourceMappingURL=admin.js.map

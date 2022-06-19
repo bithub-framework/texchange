@@ -4,10 +4,11 @@ import {
 	Positions,
 	AccountApiLike,
 	AccountSpec,
+	MarketSpec,
 	HLike,
 	OpenOrder,
 	Amendment,
-	AccountEventEmitterLike,
+	AccountEvents,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
 import { Context } from '../../context';
@@ -20,13 +21,23 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
 
 
-export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> {
-	public spec: AccountSpec;
-	public events = <AccountEventEmitterLike<H>>new EventEmitter();
+export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implements AccountApiLike<H> {
+	public on!: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
+	public once!: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
+	public off!: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
+	public emit!: <Event extends keyof AccountEvents<H>>(event: Event, ...args: AccountEvents<H>[Event]) => boolean;
+
+	public LEVERAGE = this.accountSpec.LEVERAGE;
+	public TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
+	public MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
 
 	public constructor(
 		@inject(TYPES.context)
 		private context: Context<H>,
+		@inject(TYPES.marketSpec)
+		private marketSpec: MarketSpec<H>,
+		@inject(TYPES.accountSpec)
+		private accountSpec: AccountSpec,
 		@inject(TYPES.useCases)
 		private useCases: AccountLatency.UseCaseDeps<H>,
 		@inject(TYPES.FACADES.instant)
@@ -34,13 +45,13 @@ export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> 
 		@inject(TYPES.FACADES.config)
 		private config: Config,
 	) {
-		this.spec = this.context.spec.account;
+		super();
 
 		this.useCases.subscription.on('positions', async positions => {
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
-				this.events.emit('positions', this.context.Data.Positions.copy(positions));
+				this.emit('positions', this.context.Data.Positions.copy(positions));
 			} catch (err) { }
 		});
 
@@ -48,7 +59,7 @@ export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> 
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
-				this.events.emit('balances', this.context.Data.Balances.copy(balances));
+				this.emit('balances', this.context.Data.Balances.copy(balances));
 			} catch (err) { }
 		});
 	}
@@ -133,11 +144,11 @@ export class UserAccountFacade<H extends HLike<H>> implements AccountApiLike<H> 
 	}
 
 	public quantity(price: H, dollarVolume: H): H {
-		return this.context.calc.quantity(price, dollarVolume);
+		return this.marketSpec.quantity(price, dollarVolume);
 	};
 
 	public dollarVolume(price: H, quantity: H): H {
-		return this.context.calc.dollarVolume(price, quantity);
+		return this.marketSpec.dollarVolume(price, quantity);
 	}
 }
 

@@ -2,6 +2,8 @@ import {
     Operation, Length,
     HLike,
     OpenOrder,
+    MarketSpec,
+    AccountSpec,
 } from 'secretary-like';
 
 import assert = require('assert');
@@ -22,6 +24,10 @@ export class TaskValidateOrder<H extends HLike<H>> {
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
+        @inject(TYPES.marketSpec)
+        private marketSpec: MarketSpec<H>,
+        @inject(TYPES.accountSpec)
+        private accountSpec: AccountSpec,
         @inject(TYPES.models)
         private models: TaskValidateOrder.ModelDeps<H>,
         @inject(TYPES.broadcast)
@@ -48,11 +54,11 @@ export class TaskValidateOrder<H extends HLike<H>> {
 
             const enoughBalance = this.tasks.getAvailable.getAvailable()
                 .gte(
-                    this.context.calc.dollarVolume(
+                    this.marketSpec.dollarVolume(
                         order.price, order.unfilled,
                     ).times(
-                        Math.max(this.context.spec.account.TAKER_FEE_RATE, 0)
-                    ).round(this.context.spec.market.CURRENCY_DP)
+                        Math.max(this.accountSpec.TAKER_FEE_RATE, 0)
+                    ).round(this.marketSpec.CURRENCY_DP)
                 );
             assert(enoughBalance);
         } finally {
@@ -61,10 +67,10 @@ export class TaskValidateOrder<H extends HLike<H>> {
     }
 
     private validateFormat(order: OpenOrder<H>) {
-        assert(order.price.eq(order.price.round(this.context.spec.market.PRICE_DP)));
-        assert(order.price.mod(this.context.spec.market.TICK_SIZE).eq(0));
+        assert(order.price.eq(order.price.round(this.marketSpec.PRICE_DP)));
+        assert(order.price.mod(this.marketSpec.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
-        assert(order.unfilled.eq(order.unfilled.round(this.context.spec.market.QUANTITY_DP)));
+        assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
         assert(order.length === Length.LONG || order.length === Length.SHORT);
         assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
         assert(order.operation * order.length === order.side);

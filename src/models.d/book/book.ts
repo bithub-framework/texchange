@@ -2,6 +2,7 @@ import {
     Orderbook,
     Side,
     HLike,
+    MarketSpec,
 } from 'secretary-like';
 import assert = require('assert');
 import { Context } from '../../context';
@@ -31,6 +32,8 @@ export class Book<H extends HLike<H>>
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
+        @inject(TYPES.marketSpec)
+        private marketSpec: MarketSpec<H>,
     ) { }
 
     public setBasebook(basebook: Orderbook<H>): void {
@@ -46,7 +49,7 @@ export class Book<H extends HLike<H>>
         decrement: H,
     ): void {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.spec.market.PRICE_DP);
+        const priceString = price.toFixed(this.marketSpec.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
             || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -66,7 +69,7 @@ export class Book<H extends HLike<H>>
         for (const side of [Side.BID, Side.ASK]) {
             for (const order of this.basebook[side])
                 total[side].set(
-                    order.price.toFixed(this.context.spec.market.PRICE_DP),
+                    order.price.toFixed(this.marketSpec.PRICE_DP),
                     order.quantity,
                 );
             for (const [priceString, decrement] of this.decrements[side]) {

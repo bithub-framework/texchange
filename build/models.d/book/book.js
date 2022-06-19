@@ -16,8 +16,9 @@ const decrements_1 = require("./decrements");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Book = class Book {
-    constructor(context) {
+    constructor(context, marketSpec) {
         this.context = context;
+        this.marketSpec = marketSpec;
         this.Decrements = new decrements_1.DecrementsStatic(this.context.Data.H);
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = {
@@ -39,7 +40,7 @@ let Book = class Book {
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.context.spec.market.PRICE_DP);
+        const priceString = price.toFixed(this.marketSpec.PRICE_DP);
         const oldTotalDecrement = this.decrements[side].get(priceString)
             || new this.context.Data.H(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -57,7 +58,7 @@ let Book = class Book {
         };
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.context.spec.market.PRICE_DP), order.quantity);
+                total[side].set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = total[side].get(priceString);
                 if (typeof quantity !== 'undefined') {
@@ -102,7 +103,8 @@ let Book = class Book {
     }
 };
 Book = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
 ], Book);
 exports.Book = Book;
 //# sourceMappingURL=book.js.map

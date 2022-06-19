@@ -19,8 +19,6 @@ const types_1 = require("../injection/types");
 let DefaultMtm = class DefaultMtm extends mtm_1.Mtm {
     constructor(context, models, broadcast, tasks) {
         super(context, models, broadcast, tasks);
-        this.models = models;
-        this.tasks = tasks;
     }
     async rawStart() { }
     async rawStop() { }

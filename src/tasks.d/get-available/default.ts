@@ -1,6 +1,7 @@
 import {
 	Side, Length, Operation,
 	HLike,
+	MarketSpec,
 } from 'secretary-like';
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
@@ -18,6 +19,8 @@ export class DefaultTaskGetAvailable<H extends HLike<H>>
 	public constructor(
 		@inject(TYPES.context)
 		protected context: Context<H>,
+		@inject(TYPES.marketSpec)
+		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.models)
 		protected models: DefaultGetAvailable.ModelDeps<H>,
 		@inject(TYPES.broadcast)

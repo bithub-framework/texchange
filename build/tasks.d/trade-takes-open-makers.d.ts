@@ -1,4 +1,4 @@
-import { HLike, Trade } from 'secretary-like';
+import { HLike, Trade, MarketSpec, AccountSpec } from 'secretary-like';
 import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { Makers } from '../models.d/makers/makers';
@@ -7,10 +7,12 @@ import { Assets } from '../models.d/assets';
 import { TaskOrderVolumes } from './order-volumes';
 export declare class TaskTradeTakesOpenMakers<H extends HLike<H>> {
     private context;
+    private marketSpec;
+    private accountSpec;
     private models;
     private broadcast;
     private tasks;
-    constructor(context: Context<H>, models: TaskTradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, models: TaskTradeTakesOpenMakers.ModelDeps<H>, broadcast: Broadcast<H>);
     tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;

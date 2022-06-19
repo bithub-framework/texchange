@@ -15,7 +15,11 @@ const makers_1 = require("./makers");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
-    constructor(context) { super(context); }
+    constructor(context, marketSpec) {
+        super(context, marketSpec);
+        this.context = context;
+        this.marketSpec = marketSpec;
+    }
     /**
      * 默认单向持仓模式
      */
@@ -23,7 +27,7 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
         if (order.operation === secretary_like_1.Operation.OPEN)
             return {
                 balance: {
-                    [order.length]: this.context.calc.dollarVolume(order.price, order.unfilled),
+                    [order.length]: this.marketSpec.dollarVolume(order.price, order.unfilled),
                     [-order.length]: new this.context.Data.H(0),
                 },
                 position: this.context.Data.Frozen.ZERO.position,
@@ -39,7 +43,8 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     }
 };
 DefaultMakers = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
 ], DefaultMakers);
 exports.DefaultMakers = DefaultMakers;
 //# sourceMappingURL=default.js.map

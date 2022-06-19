@@ -52,10 +52,10 @@ export class FACADES {
 
 
 export class TYPES {
-	public static readonly spec = Symbol();
+	public static readonly marketSpec = Symbol();
+	public static readonly accountSpec = Symbol();
 	public static readonly hStatic = Symbol();
 	public static readonly timeline = Symbol();
-	public static readonly marketCalc = Symbol();
 	public static readonly dataStatic = Symbol();
 	public static readonly context = Symbol();
 
