@@ -22,8 +22,6 @@ export class DefaultTaskMarginAccumulation<H extends HLike<H>>
 		private accountSpec: AccountSpec,
 		@inject(TYPES.models)
 		protected models: DefaultTaskMarginAccumulation.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		protected broadcast: Broadcast<H>,
 	) {
 		super();
 	}

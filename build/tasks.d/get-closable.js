@@ -14,10 +14,8 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskGetClosable = class TaskGetClosable {
-    constructor(context, models, broadcast) {
-        this.context = context;
+    constructor(models) {
         this.models = models;
-        this.broadcast = broadcast;
     }
     getClosable() {
         const { assets, makers } = this.models;
@@ -35,9 +33,7 @@ __decorate([
     (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskGetClosable.prototype, "tasks", void 0);
 TaskGetClosable = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.models))
 ], TaskGetClosable);
 exports.TaskGetClosable = TaskGetClosable;
 //# sourceMappingURL=get-closable.js.map

@@ -1,14 +1,12 @@
 import { HLike, OpenOrder } from 'secretary-like';
 import { Context } from '../context';
-import { Broadcast } from '../broadcast';
 import { Book } from '../models.d/book';
 import { Makers } from '../models.d/makers/makers';
 export declare class TaskOrderMakes<H extends HLike<H>> {
     private context;
     private models;
-    private broadcast;
     private tasks;
-    constructor(context: Context<H>, models: TaskOrderMakes.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: TaskOrderMakes.ModelDeps<H>);
     orderMakes(order: OpenOrder<H>): void;
 }
 export declare namespace TaskOrderMakes {

@@ -17,12 +17,8 @@ export class TaskGetClosable<H extends HLike<H>> {
 	private tasks!: TaskGetClosable.TaskDeps<H>;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
 		@inject(TYPES.models)
 		private models: TaskGetClosable.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		private broadcast: Broadcast<H>,
 	) { }
 
 	public getClosable(): Closable<H> {

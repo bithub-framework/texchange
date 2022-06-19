@@ -16,7 +16,7 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     constructor(context, marketSpec) {
-        super(context, marketSpec);
+        super(context);
         this.context = context;
         this.marketSpec = marketSpec;
     }

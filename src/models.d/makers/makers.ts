@@ -28,7 +28,6 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public constructor(
 		context: Context<H>,
-		marketSpec: MarketSpec<H>,
 	) {
 		this.$totalUnfilled = {
 			[Side.ASK]: new context.Data.H(0),

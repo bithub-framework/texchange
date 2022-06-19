@@ -10,7 +10,7 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     private $totalUnfilled;
     protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
     private totalFrozen;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>);
+    constructor(context: Context<H>);
     getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<OpenMaker<H>>;

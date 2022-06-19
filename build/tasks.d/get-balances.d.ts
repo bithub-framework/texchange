@@ -1,14 +1,12 @@
 import { Context } from '../context';
 import { Balances, HLike } from 'secretary-like';
-import { Broadcast } from '../broadcast';
 import { Assets } from '../models.d/assets';
 import { TaskGetAvailable } from './get-available/get-available';
 export declare class TaskGetBalances<H extends HLike<H>> {
     private context;
     private models;
-    private broadcast;
     private tasks;
-    constructor(context: Context<H>, models: TaskGetBalances.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: TaskGetBalances.ModelDeps<H>);
     getBalances(): Balances<H>;
 }
 export declare namespace TaskGetBalances {

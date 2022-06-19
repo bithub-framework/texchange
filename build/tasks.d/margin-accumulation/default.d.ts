@@ -1,6 +1,5 @@
 import { HLike, AccountSpec } from 'secretary-like';
 import { Context } from '../../context';
-import { Broadcast } from '../../broadcast';
 import { TaskMarginAccumulation } from './margin-accumulation';
 import { Margins } from '../../models.d/margins';
 import { Assets } from '../../models.d/assets';
@@ -8,8 +7,7 @@ export declare class DefaultTaskMarginAccumulation<H extends HLike<H>> extends T
     protected context: Context<H>;
     private accountSpec;
     protected models: DefaultTaskMarginAccumulation.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    constructor(context: Context<H>, accountSpec: AccountSpec, models: DefaultTaskMarginAccumulation.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, accountSpec: AccountSpec, models: DefaultTaskMarginAccumulation.ModelDeps<H>);
     newMarginAfterOpening({ length, volume, dollarVolume, }: TaskMarginAccumulation.Volumes<H>): H;
     newMarginAfterClosing({ length, volume, dollarVolume, }: TaskMarginAccumulation.Volumes<H>): H;
 }

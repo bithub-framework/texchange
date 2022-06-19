@@ -13,11 +13,9 @@ exports.TaskOrderVolumes = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskOrderVolumes = class TaskOrderVolumes {
-    constructor(context, marketSpec, models, broadcast) {
-        this.context = context;
+    constructor(marketSpec, models) {
         this.marketSpec = marketSpec;
         this.models = models;
-        this.broadcast = broadcast;
     }
     open({ length, volume, dollarVolume, }) {
         const newMargin = this.tasks.marginAccumulation.newMarginAfterOpening({
@@ -64,10 +62,8 @@ __decorate([
     (0, injektor_1.instantInject)(types_1.TYPES.tasks)
 ], TaskOrderVolumes.prototype, "tasks", void 0);
 TaskOrderVolumes = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models))
 ], TaskOrderVolumes);
 exports.TaskOrderVolumes = TaskOrderVolumes;
 //# sourceMappingURL=order-volumes.js.map

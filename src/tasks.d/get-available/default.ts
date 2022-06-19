@@ -23,8 +23,6 @@ export class DefaultTaskGetAvailable<H extends HLike<H>>
 		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.models)
 		protected models: DefaultGetAvailable.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		protected broadcast: Broadcast<H>,
 	) {
 		super();
 	}

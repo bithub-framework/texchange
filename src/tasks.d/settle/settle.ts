@@ -17,10 +17,8 @@ export abstract class TaskSettle<H extends HLike<H>> {
     @instantInject(TYPES.tasks)
     protected tasks!: TaskSettle.TaskDeps<H>;
 
-    protected abstract context: Context<H>;
     protected abstract marketSpec: MarketSpec<H>;
     protected abstract models: TaskSettle.ModelDeps<H>;
-    protected abstract broadcast: Broadcast<H>;
 
 
     public settle(): void {

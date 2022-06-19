@@ -13,10 +13,9 @@ exports.TaskGetPositions = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskGetPositions = class TaskGetPositions {
-    constructor(context, models, broadcast) {
+    constructor(context, models) {
         this.context = context;
         this.models = models;
-        this.broadcast = broadcast;
     }
     getPositions() {
         return {
@@ -31,8 +30,7 @@ __decorate([
 ], TaskGetPositions.prototype, "tasks", void 0);
 TaskGetPositions = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.models))
 ], TaskGetPositions);
 exports.TaskGetPositions = TaskGetPositions;
 //# sourceMappingURL=get-positions.js.map

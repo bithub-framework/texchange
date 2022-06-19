@@ -14,12 +14,11 @@ const margin_accumulation_1 = require("./margin-accumulation");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let DefaultTaskMarginAccumulation = class DefaultTaskMarginAccumulation extends margin_accumulation_1.TaskMarginAccumulation {
-    constructor(context, accountSpec, models, broadcast) {
+    constructor(context, accountSpec, models) {
         super();
         this.context = context;
         this.accountSpec = accountSpec;
         this.models = models;
-        this.broadcast = broadcast;
     }
     newMarginAfterOpening({ length, volume, dollarVolume, }) {
         const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
@@ -38,8 +37,7 @@ let DefaultTaskMarginAccumulation = class DefaultTaskMarginAccumulation extends 
 DefaultTaskMarginAccumulation = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.models))
 ], DefaultTaskMarginAccumulation);
 exports.DefaultTaskMarginAccumulation = DefaultTaskMarginAccumulation;
 //# sourceMappingURL=default.js.map

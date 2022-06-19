@@ -17,14 +17,10 @@ export class TaskOrderVolumes<H extends HLike<H>> {
 	private tasks!: TaskOrderVolumes.TaskDeps<H>;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.models)
 		private models: TaskOrderVolumes.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		private broadcast: Broadcast<H>,
 	) { }
 
 	public open({

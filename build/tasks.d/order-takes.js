@@ -14,12 +14,11 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskOrderTakes = class TaskOrderTakes {
-    constructor(context, marketSpec, accountSpec, models, broadcast) {
+    constructor(context, marketSpec, accountSpec, models) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.models = models;
-        this.broadcast = broadcast;
     }
     $orderTakes($taker) {
         const { assets, progress, book } = this.models;
@@ -71,8 +70,7 @@ TaskOrderTakes = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models))
 ], TaskOrderTakes);
 exports.TaskOrderTakes = TaskOrderTakes;
 //# sourceMappingURL=order-takes.js.map

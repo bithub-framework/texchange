@@ -33,8 +33,6 @@ export class TaskOrderTakes<H extends HLike<H>> {
         private accountSpec: AccountSpec,
         @inject(TYPES.models)
         private models: TaskOrderTakes.ModelDeps<H>,
-        @inject(TYPES.broadcast)
-        private broadcast: Broadcast<H>,
     ) { }
 
     public $orderTakes($taker: OpenOrder<H>): Trade<H>[] {

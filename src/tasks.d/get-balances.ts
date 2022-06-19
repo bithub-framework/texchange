@@ -21,8 +21,6 @@ export class TaskGetBalances<H extends HLike<H>> {
 		private context: Context<H>,
 		@inject(TYPES.models)
 		private models: TaskGetBalances.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		private broadcast: Broadcast<H>,
 	) { }
 
 	public getBalances(): Balances<H> {

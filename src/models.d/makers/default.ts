@@ -21,7 +21,6 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	) {
 		super(
 			context,
-			marketSpec,
 		);
 	}
 

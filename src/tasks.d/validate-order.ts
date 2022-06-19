@@ -30,8 +30,6 @@ export class TaskValidateOrder<H extends HLike<H>> {
         private accountSpec: AccountSpec,
         @inject(TYPES.models)
         private models: TaskValidateOrder.ModelDeps<H>,
-        @inject(TYPES.broadcast)
-        private broadcast: Broadcast<H>,
     ) { }
 
     public validateOrder(order: OpenOrder<H>): void {

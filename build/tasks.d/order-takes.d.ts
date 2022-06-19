@@ -1,6 +1,5 @@
 import { HLike, OpenOrder, Trade, MarketSpec, AccountSpec } from 'secretary-like';
 import { Context } from '../context';
-import { Broadcast } from '../broadcast';
 import { Margins } from '../models.d/margins';
 import { Assets } from '../models.d/assets';
 import { Progress } from '../models.d/progress';
@@ -11,9 +10,8 @@ export declare class TaskOrderTakes<H extends HLike<H>> {
     private marketSpec;
     private accountSpec;
     private models;
-    private broadcast;
     private tasks;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, models: TaskOrderTakes.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, models: TaskOrderTakes.ModelDeps<H>);
     $orderTakes($taker: OpenOrder<H>): Trade<H>[];
 }
 export declare namespace TaskOrderTakes {

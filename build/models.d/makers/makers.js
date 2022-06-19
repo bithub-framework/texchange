@@ -4,7 +4,7 @@ exports.Makers = void 0;
 const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 class Makers {
-    constructor(context, marketSpec) {
+    constructor(context) {
         this.$orders = new Map();
         this.$totalUnfilled = {
             [secretary_like_1.Side.ASK]: new context.Data.H(0),

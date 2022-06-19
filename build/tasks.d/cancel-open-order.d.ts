@@ -1,13 +1,11 @@
 import { Context } from '../context';
-import { Broadcast } from '../broadcast';
 import { HLike, OpenOrder } from 'secretary-like';
 import { Makers } from '../models.d/makers/makers';
 export declare class TaskCancelOpenOrder<H extends HLike<H>> {
     private context;
     private models;
-    private broadcast;
     private tasks;
-    constructor(context: Context<H>, models: TaskCancelOpenOrder.ModelDeps<H>, broadcast: Broadcast<H>);
+    constructor(context: Context<H>, models: TaskCancelOpenOrder.ModelDeps<H>);
     cancelOpenOrder(order: OpenOrder<H>): OpenOrder<H>;
 }
 export declare namespace TaskCancelOpenOrder {

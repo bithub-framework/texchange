@@ -15,12 +15,11 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let TaskValidateOrder = class TaskValidateOrder {
-    constructor(context, marketSpec, accountSpec, models, broadcast) {
+    constructor(context, marketSpec, accountSpec, models) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.models = models;
-        this.broadcast = broadcast;
     }
     validateOrder(order) {
         this.validateFormat(order);
@@ -59,8 +58,7 @@ TaskValidateOrder = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.models))
 ], TaskValidateOrder);
 exports.TaskValidateOrder = TaskValidateOrder;
 //# sourceMappingURL=validate-order.js.map

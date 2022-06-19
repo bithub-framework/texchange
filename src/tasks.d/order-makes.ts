@@ -21,8 +21,6 @@ export class TaskOrderMakes<H extends HLike<H>> {
         private context: Context<H>,
         @inject(TYPES.models)
         private models: TaskOrderMakes.ModelDeps<H>,
-        @inject(TYPES.broadcast)
-        private broadcast: Broadcast<H>,
     ) { }
 
     public orderMakes(

@@ -7,10 +7,10 @@ import { TaskSettle } from '../tasks.d/settle/settle';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 export declare class UseCaseUpdateTrades<H extends HLike<H>> {
-    protected context: Context<H>;
-    protected models: UseCaseUpdateTrades.ModelDeps<H>;
-    protected broadcast: Broadcast<H>;
-    protected tasks: UseCaseUpdateTrades.TaskDeps<H>;
+    private context;
+    private models;
+    private broadcast;
+    private tasks;
     private realTimeSettlement;
     constructor(context: Context<H>, models: UseCaseUpdateTrades.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseUpdateTrades.TaskDeps<H>, realTimeSettlement: boolean);
     updateTrades(trades: DatabaseTrade<H>[]): void;

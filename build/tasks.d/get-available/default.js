@@ -15,12 +15,11 @@ const get_available_1 = require("./get-available");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let DefaultTaskGetAvailable = class DefaultTaskGetAvailable extends get_available_1.TaskGetAvailable {
-    constructor(context, marketSpec, models, broadcast) {
+    constructor(context, marketSpec, models) {
         super();
         this.context = context;
         this.marketSpec = marketSpec;
         this.models = models;
-        this.broadcast = broadcast;
     }
     finalMargin() {
         // 默认无锁仓优惠
@@ -47,8 +46,7 @@ let DefaultTaskGetAvailable = class DefaultTaskGetAvailable extends get_availabl
 DefaultTaskGetAvailable = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.models))
 ], DefaultTaskGetAvailable);
 exports.DefaultTaskGetAvailable = DefaultTaskGetAvailable;
 //# sourceMappingURL=default.js.map
