@@ -13,14 +13,19 @@ exports.Instant = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Instant = class Instant {
-    constructor(context, useCases) {
+    constructor(context, useCaseMakeOrder, useCaseCancelOrder, useCaseAmendOrder, useCaseGetOpenOrders, useCaseGetBalances, useCaseGetPositions) {
         this.context = context;
-        this.useCases = useCases;
+        this.useCaseMakeOrder = useCaseMakeOrder;
+        this.useCaseCancelOrder = useCaseCancelOrder;
+        this.useCaseAmendOrder = useCaseAmendOrder;
+        this.useCaseGetOpenOrders = useCaseGetOpenOrders;
+        this.useCaseGetBalances = useCaseGetBalances;
+        this.useCaseGetPositions = useCaseGetPositions;
     }
     makeOrders(orders) {
         return orders.map(order => {
             try {
-                return this.useCases.makeOrder.makeOrder(order);
+                return this.useCaseMakeOrder.makeOrder(order);
             }
             catch (err) {
                 return err;
@@ -28,12 +33,12 @@ let Instant = class Instant {
         });
     }
     cancelOrders(orders) {
-        return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
+        return orders.map(order => this.useCaseCancelOrder.cancelOrder(order));
     }
     amendOrders(amendments) {
         return amendments.map(amendment => {
             try {
-                return this.useCases.amendOrder.amendOrder(amendment);
+                return this.useCaseAmendOrder.amendOrder(amendment);
             }
             catch (err) {
                 return err;
@@ -41,18 +46,23 @@ let Instant = class Instant {
         });
     }
     getOpenOrders() {
-        return this.useCases.getOpenOrders.getOpenOrders();
+        return this.useCaseGetOpenOrders.getOpenOrders();
     }
     getPositions() {
-        return this.useCases.getPositions.getPositions();
+        return this.useCaseGetPositions.getPositions();
     }
     getBalances() {
-        return this.useCases.getBalances.getBalances();
+        return this.useCaseGetBalances.getBalances();
     }
 };
 Instant = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.useCases))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.makeOrder)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.cancelOrder)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.amendOrder)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getOpenOrders)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getBalances)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getPositions))
 ], Instant);
 exports.Instant = Instant;
 //# sourceMappingURL=instant.js.map

@@ -6,7 +6,7 @@ import { UseCaseSubscription } from '../use-cases.d/subscription';
 export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter implements MarketApiLike<H> {
     private context;
     private marketSpec;
-    private useCases;
+    private useCaseSubscription;
     private config;
     on: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
     once: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
@@ -17,12 +17,7 @@ export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter i
     CURRENCY_DP: number;
     TICK_SIZE: H;
     MARKET_NAME: string;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>, useCases: UserMarketFacade.UseCaseDeps<H>, config: Config);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, useCaseSubscription: UseCaseSubscription<H>, config: Config);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
-}
-export declare namespace UserMarketFacade {
-    interface UseCaseDeps<H extends HLike<H>> {
-        subscription: UseCaseSubscription<H>;
-    }
 }

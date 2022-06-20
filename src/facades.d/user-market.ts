@@ -2,7 +2,6 @@ import {
 	MarketApiLike,
 	MarketSpec,
 	HLike,
-	MarketEventEmitterLike,
 	MarketEvents,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
@@ -32,14 +31,14 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
-		@inject(TYPES.useCases)
-		private useCases: UserMarketFacade.UseCaseDeps<H>,
+		@inject(TYPES.USE_CASES.subscription)
+		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.config)
 		private config: Config,
 	) {
 		super();
 
-		this.useCases.subscription.on('orderbook', async orderbook => {
+		this.useCaseSubscription.on('orderbook', async orderbook => {
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
@@ -47,7 +46,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 			} catch (err) { }
 		});
 
-		this.useCases.subscription.on('trades', async trades => {
+		this.useCaseSubscription.on('trades', async trades => {
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
@@ -62,12 +61,5 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 
 	public dollarVolume(price: H, quantity: H): H {
 		return this.marketSpec.dollarVolume(price, quantity);
-	}
-}
-
-
-export namespace UserMarketFacade {
-	export interface UseCaseDeps<H extends HLike<H>> {
-		subscription: UseCaseSubscription<H>;
 	}
 }

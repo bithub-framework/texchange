@@ -14,24 +14,24 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
-    constructor(context, models, broadcast, tasks) {
+    constructor(context, book, progress, broadcast) {
         this.context = context;
-        this.models = models;
+        this.book = book;
+        this.progress = progress;
         this.broadcast = broadcast;
-        this.tasks = tasks;
     }
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.context.timeline.now());
-        this.models.book.setBasebook(orderbook);
-        this.models.progress.updateDatabaseOrderbook(orderbook);
-        this.broadcast.emit('orderbook', this.models.book.getBook());
+        this.book.setBasebook(orderbook);
+        this.progress.updateDatabaseOrderbook(orderbook);
+        this.broadcast.emit('orderbook', this.book.getBook());
     }
 };
 UseCaseUpdateOrderbook = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.tasks))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], UseCaseUpdateOrderbook);
 exports.UseCaseUpdateOrderbook = UseCaseUpdateOrderbook;
 //# sourceMappingURL=update-orderbook.js.map

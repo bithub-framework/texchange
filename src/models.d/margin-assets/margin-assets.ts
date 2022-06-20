@@ -3,11 +3,16 @@ import {
 	H, HLike, HStatic,
 	MarketSpec,
 	AccountSpec,
+	Position,
 } from 'secretary-like';
 import { Executed } from '../../interfaces/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets';
+
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/default/types';
+
 
 
 export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
@@ -15,10 +20,15 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	protected $accumulation: MarginAssets.Margin<H>;
 
 	public constructor(
+		@inject(TYPES.context)
 		protected context: Context<H>,
+		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpec<H>,
+		@inject(TYPES.accountSpec)
 		protected accountSpec: AccountSpec,
+		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
+		@inject(TYPES.MODELS.initialBalance)
 		balance: H,
 	) {
 		this.Margin = new MarginAssets.MarginStatic<H>(context.Data.H);
@@ -77,6 +87,22 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		this.assets.restore(snapshot.assets);
 		this.$accumulation = this.Margin.restore(snapshot.margin);
 	}
+
+	public getPosition(): Position<H> {
+		return this.assets.getPosition();
+	}
+
+	public getBalance(): H {
+		return this.assets.getBalance();
+	}
+
+	public getCost(): Assets.Cost<H> {
+		return this.assets.getCost();
+	}
+
+	public pay(fee: H): void {
+		this.assets.pay(fee);
+	}
 }
 
 
@@ -117,6 +143,8 @@ export namespace MarginAssets {
 			};
 		}
 	}
+
+	export type Cost<H extends HLike<H>> = Assets.Cost<H>;
 
 	export interface Snapshot {
 		assets: Assets.Snapshot;

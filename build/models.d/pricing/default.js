@@ -13,9 +13,7 @@ exports.DefaultPricing = void 0;
 const pricing_1 = require("./pricing");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
-/**
- * 默认以最新价格作为结算价。
- */
+// 默认以最新价格作为结算价。
 let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
     constructor(context, settlementPrice) {
         super();

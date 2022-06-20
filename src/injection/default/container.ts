@@ -16,14 +16,12 @@ import { Makers } from '../../models.d/makers/makers';
 import { DefaultMakers } from '../../models.d/makers/default';
 import { Pricing } from '../../models.d/pricing/pricing';
 import { DefaultPricing } from '../../models.d/pricing/default';
+import { MarginAssets } from '../../models.d/margin-assets';
+import { DefaultMarginAssets } from '../../models.d/margin-assets/default';
 
-// Tasks
-import { TaskGetAvailable } from '../../tasks.d/get-available/get-available';
-import { TaskMarginAccumulation } from '../../tasks.d/margin-accumulation/margin-accumulation';
-import { Clearinghouse } from '../../tasks.d/settle/settle';
-import { DefaultTaskGetAvailable } from '../../tasks.d/get-available/default';
-import { DefaultTaskMarginAccumulation } from '../../tasks.d/margin-accumulation/default';
-import { DefaultTaskSettle } from '../../tasks.d/settle/default';
+// Middlewares
+import { AvailableAssetsCalculator } from '../../middlewares/available-assets-calculator/available-assets-calculator';
+import { DefaultAvailableAssetsCalculator } from '../../middlewares/available-assets-calculator/default';
 
 // Mark to market
 import { Mtm } from '../../mark-to-market/mtm';
@@ -41,10 +39,9 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
+	public [TYPES.MODELS.marginAssets] = this.rcs<MarginAssets<H>>(DefaultMarginAssets);
 
-	public [TYPES.TASKS.getAvailable] = this.rcs<TaskGetAvailable<H>>(DefaultTaskGetAvailable);
-	public [TYPES.TASKS.marginAccumulation] = this.rcs<TaskMarginAccumulation<H>>(DefaultTaskMarginAccumulation);
-	public [TYPES.TASKS.settle] = this.rcs<Clearinghouse<H>>(DefaultTaskSettle);
+	public [TYPES.MIDDLEWARES.availableAssetsCalculator] = this.rcs<AvailableAssetsCalculator<H>>(DefaultAvailableAssetsCalculator);
 
 	public [TYPES.mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 

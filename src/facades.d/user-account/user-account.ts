@@ -38,8 +38,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
 		private accountSpec: AccountSpec,
-		@inject(TYPES.useCases)
-		private useCases: AccountLatency.UseCaseDeps<H>,
+		@inject(TYPES.USE_CASES.subscription)
+		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.instant)
 		private instant: Instant<H>,
 		@inject(TYPES.FACADES.config)
@@ -47,7 +47,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	) {
 		super();
 
-		this.useCases.subscription.on('positions', async positions => {
+		this.useCaseSubscription.on('positions', async positions => {
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
@@ -55,7 +55,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			} catch (err) { }
 		});
 
-		this.useCases.subscription.on('balances', async balances => {
+		this.useCaseSubscription.on('balances', async balances => {
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
@@ -149,11 +149,5 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 	public dollarVolume(price: H, quantity: H): H {
 		return this.marketSpec.dollarVolume(price, quantity);
-	}
-}
-
-export namespace AccountLatency {
-	export interface UseCaseDeps<H extends HLike<H>> {
-		subscription: UseCaseSubscription<H>;
 	}
 }

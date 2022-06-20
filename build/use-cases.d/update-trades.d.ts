@@ -2,26 +2,18 @@ import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseTrade } from '../interfaces/database-trade';
-import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
-import { TaskSettle } from '../tasks.d/settle/settle';
+import { MarginAssets } from '../models.d/margin-assets';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
+import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
 export declare class UseCaseUpdateTrades<H extends HLike<H>> {
     private context;
-    private models;
+    private marginAssets;
+    private progress;
+    private pricing;
     private broadcast;
-    private tasks;
+    private databaseTradeHandler;
     private realTimeSettlement;
-    constructor(context: Context<H>, models: UseCaseUpdateTrades.ModelDeps<H>, broadcast: Broadcast<H>, tasks: UseCaseUpdateTrades.TaskDeps<H>, realTimeSettlement: boolean);
+    constructor(context: Context<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, realTimeSettlement: boolean);
     updateTrades(trades: DatabaseTrade<H>[]): void;
-}
-export declare namespace UseCaseUpdateTrades {
-    interface ModelDeps<H extends HLike<H>> {
-        progress: Progress<H>;
-        pricing: Pricing<H, unknown>;
-    }
-    interface TaskDeps<H extends HLike<H>> {
-        tradeTakesOpenMakers: TaskTradeTakesOpenMakers<H>;
-        settle: TaskSettle<H>;
-    }
 }

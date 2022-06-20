@@ -3,39 +3,13 @@ import {
 	HLike,
 	Length,
 } from 'secretary-like';
-import { Context } from '../../context';
-import { Assets } from './assets';
-import { MarketSpec } from 'secretary-like';
-import { AccountSpec } from 'secretary-like';
 import assert = require('assert');
 
-import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/default/types';
+import { injextends } from '@zimtsui/injektor';
 
 
-
+@injextends()
 export class DefaultMarginAssets<H extends HLike<H>> extends MarginAssets<H> {
-	public constructor(
-		@inject(TYPES.context)
-		context: Context<H>,
-		@inject(TYPES.marketSpec)
-		marketSpec: MarketSpec<H>,
-		@inject(TYPES.accountSpec)
-		accountSpec: AccountSpec,
-		@inject(TYPES.assets)
-		assets: Assets<H>,
-		@inject(TYPES.MODELS.initialBalance)
-		balance: H,
-	) {
-		super(
-			context,
-			marketSpec,
-			accountSpec,
-			assets,
-			balance,
-		);
-	}
-
 	public settle(
 		length: Length,
 		settlementPrice: H,

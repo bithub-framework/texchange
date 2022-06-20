@@ -3,11 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mtm = void 0;
 const startable_1 = require("startable");
 class Mtm {
-    constructor(context, models, broadcast, tasks) {
-        this.context = context;
-        this.models = models;
-        this.broadcast = broadcast;
-        this.tasks = tasks;
+    constructor() {
         this.startable = startable_1.Startable.create(() => this.rawStart(), () => this.rawStop());
         this.start = this.startable.start;
         this.stop = this.startable.stop;

@@ -1,4 +1,3 @@
-import { Context } from '../context';
 import { Broadcast } from '../broadcast';
 import {
 	HLike,
@@ -16,14 +15,8 @@ export class UseCaseSubscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
-		@inject(TYPES.context)
-		protected context: Context<H>,
-		@inject(TYPES.models)
-		protected models: UseCaseSubscription.ModelDeps<H>,
 		@inject(TYPES.broadcast)
-		protected broadcast: Broadcast<H>,
-		@inject(TYPES.tasks)
-		protected tasks: UseCaseSubscription.TaskDeps<H>,
+		private broadcast: Broadcast<H>,
 	) {
 		super();
 
@@ -33,19 +26,6 @@ export class UseCaseSubscription<H extends HLike<H>>
 		this.broadcast.on('orderbook', orderbook => this.emit('orderbook', orderbook));
 	}
 
-}
-
-export namespace UseCaseSubscription {
-	export interface ModelDeps<H extends HLike<H>> { }
-
-	export interface TaskDeps<H extends HLike<H>> { }
-
-	export interface Events<H extends HLike<H>> {
-		trades: [readonly Trade<H>[]];
-		orderbook: [Orderbook<H>];
-		positions: [Positions<H>];
-		balances: [Balances<H>];
-	}
 }
 
 export namespace UseCaseSubscription {

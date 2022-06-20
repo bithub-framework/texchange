@@ -13,21 +13,15 @@ exports.UseCaseGetBalances = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseGetBalances = class UseCaseGetBalances {
-    constructor(context, models, broadcast, tasks) {
-        this.context = context;
-        this.models = models;
-        this.broadcast = broadcast;
-        this.tasks = tasks;
+    constructor(calculator) {
+        this.calculator = calculator;
     }
     getBalances() {
-        return this.tasks.getBalances.getBalances();
+        return this.calculator.getBalances();
     }
 };
 UseCaseGetBalances = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.tasks))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator))
 ], UseCaseGetBalances);
 exports.UseCaseGetBalances = UseCaseGetBalances;
 //# sourceMappingURL=get-balances.js.map

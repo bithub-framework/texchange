@@ -14,12 +14,9 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 const events_1 = require("events");
 let UseCaseSubscription = class UseCaseSubscription extends events_1.EventEmitter {
-    constructor(context, models, broadcast, tasks) {
+    constructor(broadcast) {
         super();
-        this.context = context;
-        this.models = models;
         this.broadcast = broadcast;
-        this.tasks = tasks;
         this.broadcast.on('balances', balances => this.emit('balances', balances));
         this.broadcast.on('positions', positions => this.emit('positions', positions));
         this.broadcast.on('trades', trades => this.emit('trades', trades));
@@ -27,10 +24,7 @@ let UseCaseSubscription = class UseCaseSubscription extends events_1.EventEmitte
     }
 };
 UseCaseSubscription = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.broadcast)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.tasks))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.broadcast))
 ], UseCaseSubscription);
 exports.UseCaseSubscription = UseCaseSubscription;
 //# sourceMappingURL=subscription.js.map

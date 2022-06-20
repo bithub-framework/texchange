@@ -4,27 +4,18 @@ exports.TYPES = exports.FACADES = void 0;
 class MODELS {
 }
 MODELS.initialBalance = Symbol();
-MODELS.makers = Symbol();
 MODELS.assets = Symbol();
-MODELS.margins = Symbol();
+MODELS.marginAssets = Symbol();
 MODELS.book = Symbol();
 MODELS.progress = Symbol();
 MODELS.pricing = Symbol();
-class TASKS {
+MODELS.makers = Symbol();
+class MIDDLEWARES {
 }
-TASKS.makeOpenOrder = Symbol();
-TASKS.cancelOpenOrder = Symbol();
-TASKS.getBalances = Symbol();
-TASKS.getClosable = Symbol();
-TASKS.getPositions = Symbol();
-TASKS.orderMakes = Symbol();
-TASKS.orderTakes = Symbol();
-TASKS.tradeTakesOpenMakers = Symbol();
-TASKS.validateOrder = Symbol();
-TASKS.orderVolumes = Symbol();
-TASKS.getAvailable = Symbol();
-TASKS.marginAccumulation = Symbol();
-TASKS.settle = Symbol();
+MIDDLEWARES.availableAssetsCalculator = Symbol();
+MIDDLEWARES.databaseTradeHandler = Symbol();
+MIDDLEWARES.userOrderHandler = Symbol();
+MIDDLEWARES.orderValidator = Symbol();
 class USE_CASES {
 }
 USE_CASES.makeOrder = Symbol();
@@ -58,11 +49,10 @@ TYPES.context = Symbol();
 TYPES.models = Symbol();
 TYPES.MODELS = MODELS;
 TYPES.broadcast = Symbol();
-TYPES.tasks = Symbol();
+TYPES.MIDDLEWARES = MIDDLEWARES;
 TYPES.mtm = Symbol();
 TYPES.useCases = Symbol();
 TYPES.USE_CASES = USE_CASES;
-TYPES.TASKS = TASKS;
 TYPES.facades = Symbol();
 TYPES.FACADES = FACADES;
 TYPES.texchange = Symbol();

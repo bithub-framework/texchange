@@ -24,8 +24,18 @@ export class Instant<H extends HLike<H>> {
     public constructor(
         @inject(TYPES.context)
         private context: Context<H>,
-        @inject(TYPES.useCases)
-        private useCases: Instant.UseCaseDeps<H>,
+        @inject(TYPES.USE_CASES.makeOrder)
+        private useCaseMakeOrder: UseCaseMakeOrder<H>,
+        @inject(TYPES.USE_CASES.cancelOrder)
+        private useCaseCancelOrder: UseCaseCancelOrder<H>,
+        @inject(TYPES.USE_CASES.amendOrder)
+        private useCaseAmendOrder: UseCaseAmendOrder<H>,
+        @inject(TYPES.USE_CASES.getOpenOrders)
+        private useCaseGetOpenOrders: UseCaseGetOpenOrders<H>,
+        @inject(TYPES.USE_CASES.getBalances)
+        private useCaseGetBalances: UseCaseGetBalances<H>,
+        @inject(TYPES.USE_CASES.getPositions)
+        private useCaseGetPositions: UseCaseGetPositions<H>,
     ) { }
 
     public makeOrders(
@@ -33,7 +43,7 @@ export class Instant<H extends HLike<H>> {
     ): (OpenOrder<H> | Error)[] {
         return orders.map(order => {
             try {
-                return this.useCases.makeOrder.makeOrder(order);
+                return this.useCaseMakeOrder.makeOrder(order);
             } catch (err) {
                 return <Error>err;
             }
@@ -43,7 +53,7 @@ export class Instant<H extends HLike<H>> {
     public cancelOrders(
         orders: OpenOrder<H>[],
     ): OpenOrder<H>[] {
-        return orders.map(order => this.useCases.cancelOrder.cancelOrder(order));
+        return orders.map(order => this.useCaseCancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
@@ -51,7 +61,7 @@ export class Instant<H extends HLike<H>> {
     ): (OpenOrder<H> | Error)[] {
         return amendments.map(amendment => {
             try {
-                return this.useCases.amendOrder.amendOrder(amendment);
+                return this.useCaseAmendOrder.amendOrder(amendment);
             } catch (err) {
                 return <Error>err;
             }
@@ -59,25 +69,14 @@ export class Instant<H extends HLike<H>> {
     }
 
     public getOpenOrders(): OpenOrder<H>[] {
-        return this.useCases.getOpenOrders.getOpenOrders();
+        return this.useCaseGetOpenOrders.getOpenOrders();
     }
 
     public getPositions(): Positions<H> {
-        return this.useCases.getPositions.getPositions();
+        return this.useCaseGetPositions.getPositions();
     }
 
     public getBalances(): Balances<H> {
-        return this.useCases.getBalances.getBalances();
-    }
-}
-
-export namespace Instant {
-    export interface UseCaseDeps<H extends HLike<H>> {
-        makeOrder: UseCaseMakeOrder<H>;
-        cancelOrder: UseCaseCancelOrder<H>;
-        amendOrder: UseCaseAmendOrder<H>;
-        getOpenOrders: UseCaseGetOpenOrders<H>;
-        getBalances: UseCaseGetBalances<H>;
-        getPositions: UseCaseGetPositions<H>;
+        return this.useCaseGetBalances.getBalances();
     }
 }

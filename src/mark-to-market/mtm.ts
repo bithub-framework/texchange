@@ -17,14 +17,6 @@ export abstract class Mtm<H extends HLike<H>> implements StartableLike {
     public starp = this.startable.starp;
     public getReadyState = this.startable.getReadyState;
     public skipStart = this.startable.skipStart;
-
-
-    public constructor(
-        protected context: Context<H>,
-        protected models: Mtm.ModelDeps<H>,
-        protected broadcast: Broadcast<H>,
-        protected tasks: Mtm.TaskDeps<H>,
-    ) { }
 }
 
 export namespace Mtm {

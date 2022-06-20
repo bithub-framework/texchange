@@ -1,28 +1,19 @@
 class MODELS {
 	public static readonly initialBalance = Symbol();
-	public static readonly makers = Symbol();
 	public static readonly assets = Symbol();
-	public static readonly margins = Symbol();
+	public static readonly marginAssets = Symbol();
 	public static readonly book = Symbol();
 	public static readonly progress = Symbol();
 	public static readonly pricing = Symbol();
+	public static readonly makers = Symbol();
 }
 
 
-class TASKS {
-	public static readonly makeOpenOrder = Symbol();
-	public static readonly cancelOpenOrder = Symbol();
-	public static readonly getBalances = Symbol();
-	public static readonly getClosable = Symbol();
-	public static readonly getPositions = Symbol();
-	public static readonly orderMakes = Symbol();
-	public static readonly orderTakes = Symbol();
-	public static readonly tradeTakesOpenMakers = Symbol();
-	public static readonly validateOrder = Symbol();
-	public static readonly orderVolumes = Symbol();
-	public static readonly getAvailable = Symbol();
-	public static readonly marginAccumulation = Symbol();
-	public static readonly settle = Symbol();
+class MIDDLEWARES {
+	public static readonly availableAssetsCalculator = Symbol();
+	public static readonly databaseTradeHandler = Symbol();
+	public static readonly userOrderHandler = Symbol();
+	public static readonly orderValidator = Symbol();
 }
 
 
@@ -59,35 +50,20 @@ export class TYPES {
 	public static readonly dataStatic = Symbol();
 	public static readonly context = Symbol();
 
-
 	public static readonly models = Symbol();
 	public static readonly MODELS = MODELS;
 
 	public static readonly broadcast = Symbol();
 
-	public static readonly tasks = Symbol();
+	public static readonly MIDDLEWARES = MIDDLEWARES;
 
 	public static readonly mtm = Symbol();
 
 	public static readonly useCases = Symbol();
 	public static readonly USE_CASES = USE_CASES;
 
-	public static readonly TASKS = TASKS;
-
 	public static readonly facades = Symbol();
 	public static readonly FACADES = FACADES;
 
 	public static readonly texchange = Symbol();
-
-
-
-
-
-	// new
-	public static readonly assets = Symbol();
-	public static readonly margins = Symbol();
-	public static readonly book = Symbol();
-	public static readonly progress = Symbol();
-	public static readonly pricing = Symbol();
-	public static readonly makers = Symbol();
 }

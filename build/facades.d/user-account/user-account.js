@@ -14,18 +14,18 @@ const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
-    constructor(context, marketSpec, accountSpec, useCases, instant, config) {
+    constructor(context, marketSpec, accountSpec, useCaseSubscription, instant, config) {
         super();
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
-        this.useCases = useCases;
+        this.useCaseSubscription = useCaseSubscription;
         this.instant = instant;
         this.config = config;
         this.LEVERAGE = this.accountSpec.LEVERAGE;
         this.TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
         this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
-        this.useCases.subscription.on('positions', async (positions) => {
+        this.useCaseSubscription.on('positions', async (positions) => {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
@@ -33,7 +33,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             }
             catch (err) { }
         });
-        this.useCases.subscription.on('balances', async (balances) => {
+        this.useCaseSubscription.on('balances', async (balances) => {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
@@ -125,7 +125,7 @@ UserAccountFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.useCases)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
     __param(5, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserAccountFacade);

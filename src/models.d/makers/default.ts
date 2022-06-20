@@ -2,28 +2,16 @@ import {
 	Operation,
 	HLike,
 	OpenOrder,
-	MarketSpec,
 } from 'secretary-like';
 import { Frozen } from '../../interfaces/frozen';
-import { Context } from '../../context';
 import { Makers } from './makers';
 
-import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/default/types';
+import { injextends } from '@zimtsui/injektor';
 
 
+
+@injextends()
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
-	public constructor(
-		@inject(TYPES.context)
-		protected context: Context<H>,
-		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpec<H>,
-	) {
-		super(
-			context,
-		);
-	}
-
 	/**
 	 * 默认单向持仓模式
 	 */

@@ -13,15 +13,15 @@ exports.UseCaseGetPositions = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseGetPositions = class UseCaseGetPositions {
-    constructor(tasks) {
-        this.tasks = tasks;
+    constructor(calculator) {
+        this.calculator = calculator;
     }
     getPositions() {
-        return this.tasks.getPositions.getPositions();
+        return this.calculator.getPositions();
     }
 };
 UseCaseGetPositions = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.tasks))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator))
 ], UseCaseGetPositions);
 exports.UseCaseGetPositions = UseCaseGetPositions;
 //# sourceMappingURL=get-positions.js.map

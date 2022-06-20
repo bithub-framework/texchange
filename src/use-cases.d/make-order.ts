@@ -1,5 +1,4 @@
 import { Context } from '../context';
-import { Broadcast } from '../broadcast';
 import {
 	LimitOrder,
 	HLike,
@@ -9,37 +8,25 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { Progress } from '../models.d/progress';
-import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
+import { UserOrderHandler } from '../middlewares/user-order-handler';
 
 
 export class UseCaseMakeOrder<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.context)
-		protected context: Context<H>,
-		@inject(TYPES.models)
-		protected models: UseCaseMakeOrder.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		protected broadcast: Broadcast<H>,
-		@inject(TYPES.tasks)
-		protected tasks: UseCaseMakeOrder.TaskDeps<H>,
+		private context: Context<H>,
+		@inject(TYPES.MODELS.progress)
+		private progress: Progress<H>,
+		@inject(TYPES.MIDDLEWARES.userOrderHandler)
+		private userOrderhandler: UserOrderHandler<H>,
 	) { }
 
 	public makeOrder(order: LimitOrder<H>): OpenOrder<H> {
-		return this.tasks.makeOpenOrder.makeOpenOrder({
+		return this.userOrderhandler.makeOpenOrder({
 			...order,
-			id: ++this.models.progress.userOrderCount,
+			id: ++this.progress.userOrderCount,
 			filled: new this.context.Data.H(0),
 			unfilled: order.quantity,
 		});
-	}
-}
-
-export namespace UseCaseMakeOrder {
-	export interface ModelDeps<H extends HLike<H>> {
-		progress: Progress<H>;
-	}
-
-	export interface TaskDeps<H extends HLike<H>> {
-		makeOpenOrder: TaskMakeOpenOrder<H>;
 	}
 }

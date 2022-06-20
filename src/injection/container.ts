@@ -12,7 +12,6 @@ import { TimelineLike } from 'secretary-like';
 import { DataStatic } from '../interfaces/data';
 
 // Models
-import { Models } from '../texchange/models';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Assets } from '../models.d/margin-assets/assets';
@@ -26,25 +25,14 @@ import { Broadcast } from '../broadcast';
 // Mtm
 import { Mtm } from '../mark-to-market/mtm';
 
-// Tasks
-import { Tasks } from '../texchange/tasks';
-import { TaskMakeOpenOrder } from '../tasks.d/make-open-order';
-import { TaskCancelOpenOrder } from '../tasks.d/cancel-open-order';
-import { TaskGetBalances } from '../tasks.d/get-balances';
-import { TaskGetClosable } from '../tasks.d/get-closable';
-import { TaskGetPositions } from '../tasks.d/get-positions';
-import { TaskOrderMakes } from '../tasks.d/order-makes';
-import { TaskOrderTakes } from '../tasks.d/order-takes';
-import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
-import { TaskValidateOrder } from '../tasks.d/validate-order';
-import { TaskOrderVolumes } from '../tasks.d/order-volumes';
-import { TaskGetAvailable } from '../tasks.d/get-available/get-available';
-import { TaskMarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumulation';
-import { Clearinghouse } from '../tasks.d/settle/settle';
+// Middlewares
+import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
+import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
+import { UserOrderHandler } from '../middlewares/user-order-handler';
+import { OrderValidator } from '../middlewares/order-validator';
 
 
 // UseCases
-import { UseCases } from '../texchange/use-cases';
 import { UseCaseMakeOrder } from '../use-cases.d/make-order';
 import { UseCaseCancelOrder } from '../use-cases.d/cancel-order';
 import { UseCaseAmendOrder } from '../use-cases.d/amend-order';
@@ -58,7 +46,6 @@ import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
 
 // Facades
-import { Facades } from '../texchange/facades';
 import { Config as DelayConfig } from '../facades.d/config';
 import { Instant } from '../facades.d/user-account/instant';
 import { AdminFacade } from '../facades.d/admin';
@@ -66,7 +53,7 @@ import { UserMarketFacade } from '../facades.d/user-market';
 import { UserAccountFacade } from '../facades.d/user-account';
 
 // Texchange
-import { Texchange } from '../texchange/texchange';
+import { Texchange } from '../texchange';
 
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
@@ -81,32 +68,19 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.MODELS.makers]: () => Makers<H>;
 	public abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
 	public [TYPES.MODELS.assets] = this.rcs<Assets<H>>(Assets);
-	public [TYPES.MODELS.margins] = this.rcs<MarginAssets<H>>(MarginAssets);
+	public abstract [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
 	public [TYPES.MODELS.book] = this.rcs<Book<H>>(Book);
 	public [TYPES.MODELS.progress] = this.rcs<Progress<H>>(Progress);
-	public [TYPES.models] = this.rcs<Models<H>>(Models);
 
 	public abstract [TYPES.mtm]: () => Mtm<H> | null;
 
 	public [TYPES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
 
-	public [TYPES.tasks] = this.rcs<Tasks<H>>(Tasks);
-	public [TYPES.TASKS.makeOpenOrder] = this.rcs<TaskMakeOpenOrder<H>>(TaskMakeOpenOrder);
-	public [TYPES.TASKS.cancelOpenOrder] = this.rcs<TaskCancelOpenOrder<H>>(TaskCancelOpenOrder);
-	public [TYPES.TASKS.getBalances] = this.rcs<TaskGetBalances<H>>(TaskGetBalances);
-	public [TYPES.TASKS.getClosable] = this.rcs<TaskGetClosable<H>>(TaskGetClosable);
-	public [TYPES.TASKS.getPositions] = this.rcs<TaskGetPositions<H>>(TaskGetPositions);
-	public [TYPES.TASKS.orderMakes] = this.rcs<TaskOrderMakes<H>>(TaskOrderMakes);
-	public [TYPES.TASKS.orderTakes] = this.rcs<TaskOrderTakes<H>>(TaskOrderTakes);
-	public [TYPES.TASKS.tradeTakesOpenMakers] = this.rcs<TaskTradeTakesOpenMakers<H>>(TaskTradeTakesOpenMakers);
-	public [TYPES.TASKS.validateOrder] = this.rcs<TaskValidateOrder<H>>(TaskValidateOrder);
-	public [TYPES.TASKS.orderVolumes] = this.rcs<TaskOrderVolumes<H>>(TaskOrderVolumes);
-	public abstract [TYPES.TASKS.getAvailable]: () => TaskGetAvailable<H>;
-	public abstract [TYPES.TASKS.marginAccumulation]: () => TaskMarginAccumulation<H>;
-	public abstract [TYPES.TASKS.settle]: () => Clearinghouse<H>;
+	public abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
+	public [TYPES.MIDDLEWARES.databaseTradeHandler] = this.rcs<DatabaseTradeHandler<H>>(DatabaseTradeHandler);
+	public [TYPES.MIDDLEWARES.userOrderHandler] = this.rcs<UserOrderHandler<H>>(UserOrderHandler);
+	public [TYPES.MIDDLEWARES.orderValidator] = this.rcs<OrderValidator<H>>(OrderValidator);
 
-
-	public [TYPES.useCases] = this.rcs<UseCases<H>>(UseCases);
 	public [TYPES.USE_CASES.makeOrder] = this.rcs<UseCaseMakeOrder<H>>(UseCaseMakeOrder);
 	public [TYPES.USE_CASES.cancelOrder] = this.rcs<UseCaseCancelOrder<H>>(UseCaseCancelOrder);
 	public [TYPES.USE_CASES.amendOrder] = this.rcs<UseCaseAmendOrder<H>>(UseCaseAmendOrder);
@@ -120,7 +94,6 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.USE_CASES.getProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
 
 
-	public [TYPES.facades] = this.rcs<Facades<H>>(Facades);
 	public abstract [TYPES.FACADES.config]: () => DelayConfig;
 	public [TYPES.FACADES.instant] = this.rcs<Instant<H>>(Instant);
 	public [TYPES.FACADES.userMarket] = this.rcs<UserMarketFacade<H>>(UserMarketFacade);

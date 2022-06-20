@@ -1,11 +1,8 @@
 import { HLike, H, Trade } from 'secretary-like';
 import { Pricing } from './pricing';
 import { Context } from '../../context';
-/**
- * 默认以最新价格作为结算价。
- */
 export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, DefaultPricing.Snapshot> {
-    protected context: Context<H>;
+    private context;
     private settlementPrice;
     constructor(context: Context<H>, settlementPrice: H);
     updateTrades(trades: Trade<H>[]): void;

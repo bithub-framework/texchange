@@ -1,34 +1,13 @@
-import { Context } from '../context';
 import { Mtm } from './mtm';
-import { Broadcast } from '../broadcast';
 import { HLike } from 'secretary-like';
 
-import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../injection/types';
+import { injextends } from '@zimtsui/injektor';
 
 
-/**
- * 默认永不结算
- */
+
+// 默认永不结算
+@injextends()
 export class DefaultMtm<H extends HLike<H>> extends Mtm<H> {
-	public constructor(
-		@inject(TYPES.context)
-		context: Context<H>,
-		@inject(TYPES.models)
-		models: DefaultMtm.ModelDeps<H>,
-		@inject(TYPES.broadcast)
-		broadcast: Broadcast<H>,
-		@inject(TYPES.tasks)
-		tasks: DefaultMtm.TaskDeps<H>,
-	) {
-		super(
-			context,
-			models,
-			broadcast,
-			tasks,
-		);
-	}
-
 	protected async rawStart(): Promise<void> { }
 	protected async rawStop(): Promise<void> { }
 }

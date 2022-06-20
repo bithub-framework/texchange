@@ -14,13 +14,19 @@ const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let AdminFacade = class AdminFacade {
-    constructor(context, marketSpec, accountSpec, models, mtm, useCases) {
+    constructor(context, marketSpec, accountSpec, marginAssets, book, makers, pricing, progress, mtm, useCaseUpdateTrades, useCaseUpdateOrderbook, useCaseGetProgress) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
-        this.models = models;
+        this.marginAssets = marginAssets;
+        this.book = book;
+        this.makers = makers;
+        this.pricing = pricing;
+        this.progress = progress;
         this.mtm = mtm;
-        this.useCases = useCases;
+        this.useCaseUpdateTrades = useCaseUpdateTrades;
+        this.useCaseUpdateOrderbook = useCaseUpdateOrderbook;
+        this.useCaseGetProgress = useCaseGetProgress;
         this.startable = startable_1.Startable.create(() => this.rawStart(), () => this.rawStop());
         this.start = this.startable.start;
         this.stop = this.startable.stop;
@@ -36,16 +42,16 @@ let AdminFacade = class AdminFacade {
         return this.accountSpec;
     }
     updateTrades($trades) {
-        this.useCases.updateTrades.updateTrades($trades.map(trade => this.context.Data.DatabaseTrade.copy(trade)));
+        this.useCaseUpdateTrades.updateTrades($trades.map(trade => this.context.Data.DatabaseTrade.copy(trade)));
     }
     updateOrderbook($orderbook) {
-        this.useCases.updateOrderbook.updateOrderbook(this.context.Data.DatabaseOrderbook.copy($orderbook));
+        this.useCaseUpdateOrderbook.updateOrderbook(this.context.Data.DatabaseOrderbook.copy($orderbook));
     }
     getLatestDatabaseOrderbookId() {
-        return this.useCases.getProgress.getLatestDatabaseOrderbookId();
+        return this.useCaseGetProgress.getLatestDatabaseOrderbookId();
     }
     getLatestDatabaseTradeId() {
-        return this.useCases.getProgress.getLatestDatabaseTradeId();
+        return this.useCaseGetProgress.getLatestDatabaseTradeId();
     }
     quantity(price, dollarVolume) {
         return this.marketSpec.quantity(price, dollarVolume);
@@ -64,30 +70,34 @@ let AdminFacade = class AdminFacade {
     }
     capture() {
         return {
-            assets: this.models.assets.capture(),
-            margins: this.models.margins.capture(),
-            makers: this.models.makers.capture(),
-            book: this.models.book.capture(),
-            pricing: this.models.pricing.capture(),
-            progress: this.models.progress.capture(),
+            marginAssets: this.marginAssets.capture(),
+            makers: this.makers.capture(),
+            book: this.book.capture(),
+            pricing: this.pricing.capture(),
+            progress: this.progress.capture(),
         };
     }
     restore(snapshot) {
-        this.models.assets.restore(snapshot.assets);
-        this.models.margins.restore(snapshot.margins);
-        this.models.makers.restore(snapshot.makers);
-        this.models.book.restore(snapshot.book);
-        this.models.pricing.restore(snapshot.pricing);
-        this.models.progress.restore(snapshot.progress);
+        this.marginAssets.restore(snapshot.marginAssets);
+        this.makers.restore(snapshot.makers);
+        this.book.restore(snapshot.book);
+        this.pricing.restore(snapshot.pricing);
+        this.progress.restore(snapshot.progress);
     }
 };
 AdminFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.models)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.mtm)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.useCases))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),
+    __param(7, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
+    __param(8, (0, injektor_1.inject)(types_1.TYPES.mtm)),
+    __param(9, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateTrades)),
+    __param(10, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateOrderbook)),
+    __param(11, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getProgress))
 ], AdminFacade);
 exports.AdminFacade = AdminFacade;
 //# sourceMappingURL=admin.js.map

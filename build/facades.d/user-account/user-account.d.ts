@@ -8,7 +8,7 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     private context;
     private marketSpec;
     private accountSpec;
-    private useCases;
+    private useCaseSubscription;
     private instant;
     private config;
     on: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
@@ -18,7 +18,7 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     LEVERAGE: number;
     TAKER_FEE_RATE: number;
     MAKER_FEE_RATE: number;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, useCases: AccountLatency.UseCaseDeps<H>, instant: Instant<H>, config: Config);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, config: Config);
     makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]>;
@@ -27,9 +27,4 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     getOpenOrders(): Promise<OpenOrder<H>[]>;
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
-}
-export declare namespace AccountLatency {
-    interface UseCaseDeps<H extends HLike<H>> {
-        subscription: UseCaseSubscription<H>;
-    }
 }

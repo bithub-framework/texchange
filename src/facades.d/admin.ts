@@ -6,11 +6,12 @@ import {
 } from 'secretary-like';
 import { Startable, StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
-
-import { Models } from '../texchange/models';
-
+import { MarginAssets } from '../models.d/margin-assets';
+import { Makers } from '../models.d/makers/makers';
+import { Book } from '../models.d/book';
+import { Pricing } from '../models.d/pricing/pricing';
+import { Progress } from '../models.d/progress';
 import { Mtm } from '../mark-to-market/mtm';
-
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
@@ -22,7 +23,7 @@ import { TYPES } from '../injection/types';
 
 
 export class AdminFacade<H extends HLike<H>>
-	implements StatefulLike<Models.Snapshot>, StartableLike {
+	implements StatefulLike<Snapshot>, StartableLike {
 
 	private startable = Startable.create(
 		() => this.rawStart(),
@@ -42,12 +43,24 @@ export class AdminFacade<H extends HLike<H>>
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
 		private accountSpec: AccountSpec,
-		@inject(TYPES.models)
-		private models: Models<H>,
+		@inject(TYPES.MODELS.marginAssets)
+		private marginAssets: MarginAssets<H>,
+		@inject(TYPES.MODELS.book)
+		private book: Book<H>,
+		@inject(TYPES.MODELS.makers)
+		private makers: Makers<H>,
+		@inject(TYPES.MODELS.pricing)
+		private pricing: Pricing<H, unknown>,
+		@inject(TYPES.MODELS.progress)
+		private progress: Progress<H>,
 		@inject(TYPES.mtm)
 		private mtm: Mtm<H> | null,
-		@inject(TYPES.useCases)
-		private useCases: Joystick.UseCaseDeps<H>,
+		@inject(TYPES.USE_CASES.updateTrades)
+		private useCaseUpdateTrades: UseCaseUpdateTrades<H>,
+		@inject(TYPES.USE_CASES.updateOrderbook)
+		private useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>,
+		@inject(TYPES.USE_CASES.getProgress)
+		private useCaseGetProgress: UseCaseGetProgress<H>,
 	) { }
 
 	public getMarketSpec(): MarketSpec<H> {
@@ -59,7 +72,7 @@ export class AdminFacade<H extends HLike<H>>
 	}
 
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
-		this.useCases.updateTrades.updateTrades(
+		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
 				trade => this.context.Data.DatabaseTrade.copy(trade),
 			),
@@ -67,17 +80,17 @@ export class AdminFacade<H extends HLike<H>>
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
-		this.useCases.updateOrderbook.updateOrderbook(
+		this.useCaseUpdateOrderbook.updateOrderbook(
 			this.context.Data.DatabaseOrderbook.copy($orderbook),
 		);
 	}
 
 	public getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null {
-		return this.useCases.getProgress.getLatestDatabaseOrderbookId();
+		return this.useCaseGetProgress.getLatestDatabaseOrderbookId();
 	}
 
 	public getLatestDatabaseTradeId(): DatabaseTradeId | null {
-		return this.useCases.getProgress.getLatestDatabaseTradeId();
+		return this.useCaseGetProgress.getLatestDatabaseTradeId();
 	}
 
 	public quantity(price: H, dollarVolume: H): H {
@@ -98,31 +111,29 @@ export class AdminFacade<H extends HLike<H>>
 			await this.mtm.stop();
 	}
 
-	public capture(): Models.Snapshot {
+	public capture(): Snapshot {
 		return {
-			assets: this.models.assets.capture(),
-			margins: this.models.margins.capture(),
-			makers: this.models.makers.capture(),
-			book: this.models.book.capture(),
-			pricing: this.models.pricing.capture(),
-			progress: this.models.progress.capture(),
+			marginAssets: this.marginAssets.capture(),
+			makers: this.makers.capture(),
+			book: this.book.capture(),
+			pricing: this.pricing.capture(),
+			progress: this.progress.capture(),
 		}
 	}
 
-	public restore(snapshot: Models.Snapshot): void {
-		this.models.assets.restore(snapshot.assets);
-		this.models.margins.restore(snapshot.margins);
-		this.models.makers.restore(snapshot.makers);
-		this.models.book.restore(snapshot.book);
-		this.models.pricing.restore(snapshot.pricing);
-		this.models.progress.restore(snapshot.progress);
+	public restore(snapshot: Snapshot): void {
+		this.marginAssets.restore(snapshot.marginAssets);
+		this.makers.restore(snapshot.makers);
+		this.book.restore(snapshot.book);
+		this.pricing.restore(snapshot.pricing);
+		this.progress.restore(snapshot.progress);
 	}
 }
 
-export namespace Joystick {
-	export interface UseCaseDeps<H extends HLike<H>> {
-		updateTrades: UseCaseUpdateTrades<H>;
-		updateOrderbook: UseCaseUpdateOrderbook<H>;
-		getProgress: UseCaseGetProgress<H>;
-	}
+export interface Snapshot {
+	marginAssets: any;
+	makers: any;
+	book: any;
+	pricing: any;
+	progress: any;
 }

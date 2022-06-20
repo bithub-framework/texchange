@@ -9,20 +9,17 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
 
-/**
- * 默认以最新价格作为结算价。
- */
+
+// 默认以最新价格作为结算价。
 export class DefaultPricing<H extends HLike<H>>
 	extends Pricing<H, DefaultPricing.Snapshot> {
 
 	public constructor(
 		@inject(TYPES.context)
-		protected context: Context<H>,
+		private context: Context<H>,
 		@inject(TYPES.initialSettlementPrice)
 		private settlementPrice: H,
-	) {
-		super();
-	}
+	) { super(); }
 
 	public updateTrades(trades: Trade<H>[]): void {
 		this.settlementPrice = trades[trades.length - 1].price;

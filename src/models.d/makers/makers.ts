@@ -11,14 +11,14 @@ import { Context } from '../../context';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';
 
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../../injection/types';
+
 
 
 export abstract class Makers<H extends HLike<H>> implements
 	StatefulLike<Makers.Snapshot>,
 	Iterable<OpenMaker<H>> {
-
-	protected abstract context: Context<H>;
-	protected abstract marketSpec: MarketSpec<H>;
 
 	private $orders = new Map<OrderId, OpenMaker<H>>();
 	private $totalUnfilled: Makers.TotalUnfilled<H>;
@@ -27,7 +27,10 @@ export abstract class Makers<H extends HLike<H>> implements
 	private totalFrozen: Frozen<H>;
 
 	public constructor(
-		context: Context<H>,
+		@inject(TYPES.context)
+		protected context: Context<H>,
+		@inject(TYPES.marketSpec)
+		protected marketSpec: MarketSpec<H>,
 	) {
 		this.$totalUnfilled = {
 			[Side.ASK]: new context.Data.H(0),
