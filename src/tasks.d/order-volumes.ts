@@ -8,8 +8,8 @@ import { inject, instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { TaskMarginAccumulation } from './margin-accumulation/margin-accumulation';
-import { Assets } from '../models.d/assets';
-import { Margins } from '../models.d/margins';
+import { Assets } from '../models.d/margin-assets/assets';
+import { MarginAssets } from '../models.d/margin-assets/margin-assets';
 
 
 export class TaskOrderVolumes<H extends HLike<H>> {
@@ -86,7 +86,7 @@ export namespace TaskOrderVolumes {
 
 	export interface ModelDeps<H extends HLike<H>> {
 		assets: Assets<H>;
-		margins: Margins<H>;
+		margins: MarginAssets<H>;
 	}
 
 	export interface TaskDeps<H extends HLike<H>> {

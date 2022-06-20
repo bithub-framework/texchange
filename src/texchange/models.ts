@@ -1,5 +1,5 @@
-import { Assets } from '../models.d/assets';
-import { Margins } from '../models.d/margins';
+import { Assets } from '../models.d/margin-assets/assets';
+import { MarginAssets } from '../models.d/margin-assets/margin-assets';
 import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -20,7 +20,7 @@ export class Models<H extends HLike<H>> {
 		@inject(TYPES.MODELS.assets)
 		public assets: Assets<H>,
 		@inject(TYPES.MODELS.margins)
-		public margins: Margins<H>,
+		public margins: MarginAssets<H>,
 		@inject(TYPES.MODELS.book)
 		public book: Book<H>,
 		@inject(TYPES.MODELS.progress)

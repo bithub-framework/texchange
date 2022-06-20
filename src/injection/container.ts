@@ -15,10 +15,10 @@ import { DataStatic } from '../interfaces/data';
 import { Models } from '../texchange/models';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
-import { Assets } from '../models.d/assets';
+import { Assets } from '../models.d/margin-assets/assets';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
-import { Margins } from '../models.d/margins';
+import { MarginAssets } from '../models.d/margin-assets/margin-assets';
 
 // Broadcast
 import { Broadcast } from '../broadcast';
@@ -40,7 +40,7 @@ import { TaskValidateOrder } from '../tasks.d/validate-order';
 import { TaskOrderVolumes } from '../tasks.d/order-volumes';
 import { TaskGetAvailable } from '../tasks.d/get-available/get-available';
 import { TaskMarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumulation';
-import { TaskSettle } from '../tasks.d/settle/settle';
+import { Clearinghouse } from '../tasks.d/settle/settle';
 
 
 // UseCases
@@ -81,7 +81,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.MODELS.makers]: () => Makers<H>;
 	public abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
 	public [TYPES.MODELS.assets] = this.rcs<Assets<H>>(Assets);
-	public [TYPES.MODELS.margins] = this.rcs<Margins<H>>(Margins);
+	public [TYPES.MODELS.margins] = this.rcs<MarginAssets<H>>(MarginAssets);
 	public [TYPES.MODELS.book] = this.rcs<Book<H>>(Book);
 	public [TYPES.MODELS.progress] = this.rcs<Progress<H>>(Progress);
 	public [TYPES.models] = this.rcs<Models<H>>(Models);
@@ -103,7 +103,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.TASKS.orderVolumes] = this.rcs<TaskOrderVolumes<H>>(TaskOrderVolumes);
 	public abstract [TYPES.TASKS.getAvailable]: () => TaskGetAvailable<H>;
 	public abstract [TYPES.TASKS.marginAccumulation]: () => TaskMarginAccumulation<H>;
-	public abstract [TYPES.TASKS.settle]: () => TaskSettle<H>;
+	public abstract [TYPES.TASKS.settle]: () => Clearinghouse<H>;
 
 
 	public [TYPES.useCases] = this.rcs<UseCases<H>>(UseCases);

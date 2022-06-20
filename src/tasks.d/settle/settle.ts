@@ -8,39 +8,34 @@ import { Broadcast } from '../../broadcast';
 import { instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
 
-import { Assets } from '../../models.d/assets';
-import { Margins } from '../../models.d/margins';
+import { Assets } from '../../models.d/margin-assets/assets';
+import { MarginAssets } from '../../models.d/margin-assets/margin-assets';
 import { Pricing } from '../../models.d/pricing/pricing';
 
 
-export abstract class TaskSettle<H extends HLike<H>> {
-    @instantInject(TYPES.tasks)
-    protected tasks!: TaskSettle.TaskDeps<H>;
-
+export abstract class Clearinghouse<H extends HLike<H>> {
     protected abstract marketSpec: MarketSpec<H>;
     protected abstract models: TaskSettle.ModelDeps<H>;
-
+    protected abstract assets: MarginAssets<H>;
+    protected abstract pricing: Pricing<H, unknown>;
 
     public settle(): void {
-        const { assets, margins, pricing } = this.models;
-
-        const position = assets.getPosition();
-        const settlementPrice = pricing.getSettlementPrice();
+        const position = this.assets.getPosition();
+        const settlementPrice = this.pricing.getSettlementPrice();
         for (const length of [Length.LONG, Length.SHORT]) {
             const dollarVolume = this.marketSpec.dollarVolume(
                 settlementPrice, position[length],
             ).round(this.marketSpec.CURRENCY_DP);
-            const profit = assets.close(
+            this.assets.clearingClose({
                 length,
-                position[length],
+                volume: position[length],
                 dollarVolume,
-            );
-            assets.open(
+            });
+            this.assets.clearingOpen({
                 length,
-                position[length],
+                volume: position[length],
                 dollarVolume,
-            );
-            margins.setMargin(length, this.clearingMargin(length, profit));
+            });
         }
         this.assertEnoughBalance();
     }
@@ -55,7 +50,7 @@ export abstract class TaskSettle<H extends HLike<H>> {
 export namespace TaskSettle {
     export interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
-        margins: Margins<H>;
+        margins: MarginAssets<H>;
         pricing: Pricing<H, unknown>;
     }
 

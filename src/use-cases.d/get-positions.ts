@@ -7,7 +7,7 @@ import {
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { Assets } from '../models.d/assets';
+import { Assets } from '../models.d/margin-assets/assets';
 import { TaskGetPositions } from '../tasks.d/get-positions';
 
 export class UseCaseGetPositions<H extends HLike<H>> {

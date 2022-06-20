@@ -7,7 +7,7 @@ import {
 import { instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
 
-import { Assets } from '../../models.d/assets';
+import { Assets } from '../../models.d/margin-assets/assets';
 
 
 export abstract class TaskGetAvailable<H extends HLike<H>> {

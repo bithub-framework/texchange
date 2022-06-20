@@ -4,15 +4,16 @@ import {
     HLike, H, HStatic,
     MarketSpec,
 } from 'secretary-like';
-import { Context } from '../context';
+import { Context } from '../../context';
 import assert = require('assert');
-import { StatefulLike } from '../stateful-like';
+import { StatefulLike } from '../../stateful-like';
+import { Executed } from '../../interfaces/executed';
+
 import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../injection/types';
+import { TYPES } from '../../injection/types';
 
 
-export class Assets<H extends HLike<H>>
-    implements StatefulLike<Assets.Snapshot> {
+export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private Cost = new Assets.CostStatic(this.context.Data.H);
 
     private $position: Position<H>;
@@ -20,11 +21,11 @@ export class Assets<H extends HLike<H>>
 
     public constructor(
         @inject(TYPES.context)
-        private context: Context<H>,
+        protected context: Context<H>,
         @inject(TYPES.marketSpec)
-        private marketSpec: MarketSpec<H>,
+        protected marketSpec: MarketSpec<H>,
         @inject(TYPES.MODELS.initialBalance)
-        private balance: H,
+        protected balance: H,
     ) {
         this.$position = {
             [Length.LONG]: new this.context.Data.H(0),
@@ -66,23 +67,24 @@ export class Assets<H extends HLike<H>>
         this.balance = this.balance.minus(fee);
     }
 
-    public open(
-        length: Length,
-        volume: H,
-        dollarVolume: H,
-    ): void {
+    public open({
+        length,
+        volume,
+        dollarVolume,
+    }: Executed<H>): void {
         this.$position[length] = this.$position[length].plus(volume);
         this.$cost[length] = this.$cost[length].plus(dollarVolume);
     }
 
     /**
-     * @returns Profit.
+     *
+     * @returns Profit
      */
-    public close(
-        length: Length,
-        volume: H,
-        dollarVolume: H,
-    ): H {
+    public close({
+        length,
+        volume,
+        dollarVolume,
+    }: Executed<H>): H {
         assert(volume.lte(this.$position[length]));
         const cost = this.$cost[length]
             .times(volume)
@@ -92,6 +94,26 @@ export class Assets<H extends HLike<H>>
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
+        return profit;
+    }
+
+    /**
+     * @returns Profit
+     */
+    public settle(
+        length: Length,
+        settlementPrice: H,
+    ): H {
+        const dollarVolume = this.marketSpec.dollarVolume(
+            settlementPrice, this.$position[length],
+        ).round(this.marketSpec.CURRENCY_DP);
+        const executed: Executed<H> = {
+            length,
+            volume: this.$position[length],
+            dollarVolume,
+        };
+        const profit = this.close(executed);
+        this.open(executed);
         return profit;
     }
 }

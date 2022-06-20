@@ -7,7 +7,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
-import { TaskSettle } from '../tasks.d/settle/settle';
+import { Clearinghouse } from '../tasks.d/settle/settle';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 
@@ -50,6 +50,6 @@ export namespace UseCaseUpdateTrades {
 
 	export interface TaskDeps<H extends HLike<H>> {
 		tradeTakesOpenMakers: TaskTradeTakesOpenMakers<H>;
-		settle: TaskSettle<H>;
+		settle: Clearinghouse<H>;
 	}
 }

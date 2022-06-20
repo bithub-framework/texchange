@@ -9,7 +9,7 @@ import { TaskTradeTakesOpenMakers } from '../tasks.d/trade-takes-open-makers';
 import { TaskValidateOrder } from '../tasks.d/validate-order';
 import { TaskOrderVolumes } from '../tasks.d/order-volumes';
 import { TaskGetAvailable } from '../tasks.d/get-available/get-available';
-import { TaskSettle } from '../tasks.d/settle/settle';
+import { Clearinghouse } from '../tasks.d/settle/settle';
 import { TaskMarginAccumulation } from '../tasks.d/margin-accumulation/margin-accumulation';
 
 import { HLike } from 'secretary-like';
@@ -29,7 +29,7 @@ export class Tasks<H extends HLike<H>>  {
 		@inject(TYPES.TASKS.getClosable)
 		public getClosable: TaskGetClosable<H>,
 		@inject(TYPES.TASKS.settle)
-		public settle: TaskSettle<H>,
+		public settle: Clearinghouse<H>,
 		@inject(TYPES.TASKS.orderMakes)
 		public orderMakes: TaskOrderMakes<H>,
 		@inject(TYPES.TASKS.tradeTakesOpenMakers)

@@ -13,8 +13,8 @@ import { Broadcast } from '../broadcast';
 import { inject, instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { Margins } from '../models.d/margins';
-import { Assets } from '../models.d/assets';
+import { MarginAssets } from '../models.d/margin-assets/margin-assets';
+import { Assets } from '../models.d/margin-assets/assets';
 import { Progress } from '../models.d/progress';
 import { Book } from '../models.d/book';
 import { TaskOrderVolumes } from './order-volumes';
@@ -93,7 +93,7 @@ export class TaskOrderTakes<H extends HLike<H>> {
 
 export namespace TaskOrderTakes {
     export interface ModelDeps<H extends HLike<H>> {
-        margins: Margins<H>;
+        margins: MarginAssets<H>;
         assets: Assets<H>;
         progress: Progress<H>;
         book: Book<H>;

@@ -78,4 +78,16 @@ export class TYPES {
 	public static readonly FACADES = FACADES;
 
 	public static readonly texchange = Symbol();
+
+
+
+
+
+	// new
+	public static readonly assets = Symbol();
+	public static readonly margins = Symbol();
+	public static readonly book = Symbol();
+	public static readonly progress = Symbol();
+	public static readonly pricing = Symbol();
+	public static readonly makers = Symbol();
 }

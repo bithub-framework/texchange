@@ -20,7 +20,7 @@ import { DefaultPricing } from '../../models.d/pricing/default';
 // Tasks
 import { TaskGetAvailable } from '../../tasks.d/get-available/get-available';
 import { TaskMarginAccumulation } from '../../tasks.d/margin-accumulation/margin-accumulation';
-import { TaskSettle } from '../../tasks.d/settle/settle';
+import { Clearinghouse } from '../../tasks.d/settle/settle';
 import { DefaultTaskGetAvailable } from '../../tasks.d/get-available/default';
 import { DefaultTaskMarginAccumulation } from '../../tasks.d/margin-accumulation/default';
 import { DefaultTaskSettle } from '../../tasks.d/settle/default';
@@ -44,7 +44,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 
 	public [TYPES.TASKS.getAvailable] = this.rcs<TaskGetAvailable<H>>(DefaultTaskGetAvailable);
 	public [TYPES.TASKS.marginAccumulation] = this.rcs<TaskMarginAccumulation<H>>(DefaultTaskMarginAccumulation);
-	public [TYPES.TASKS.settle] = this.rcs<TaskSettle<H>>(DefaultTaskSettle);
+	public [TYPES.TASKS.settle] = this.rcs<Clearinghouse<H>>(DefaultTaskSettle);
 
 	public [TYPES.mtm] = this.rcs<Mtm<H>>(DefaultMtm);
 

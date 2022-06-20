@@ -9,7 +9,7 @@ import { TaskGetAvailable } from './get-available';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
-import { Margins } from '../../models.d/margins';
+import { MarginAssets } from '../../models.d/margin-assets/margin-assets';
 import { Makers } from '../../models.d/makers/makers';
 
 
@@ -57,7 +57,7 @@ export class DefaultTaskGetAvailable<H extends HLike<H>>
 export namespace DefaultGetAvailable {
 	export interface ModelDeps<H extends HLike<H>>
 		extends TaskGetAvailable.ModelDeps<H> {
-		margins: Margins<H>;
+		margins: MarginAssets<H>;
 		makers: Makers<H>;
 	}
 

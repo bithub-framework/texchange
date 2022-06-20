@@ -7,7 +7,7 @@ import { Broadcast } from '../broadcast';
 import { inject, instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
-import { Assets } from '../models.d/assets';
+import { Assets } from '../models.d/margin-assets/assets';
 import { TaskGetClosable } from './get-closable';
 
 

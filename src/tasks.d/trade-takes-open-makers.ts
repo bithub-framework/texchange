@@ -15,8 +15,8 @@ import { inject, instantInject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 import { Makers } from '../models.d/makers/makers';
-import { Margins } from '../models.d/margins';
-import { Assets } from '../models.d/assets';
+import { MarginAssets } from '../models.d/margin-assets/margin-assets';
+import { Assets } from '../models.d/margin-assets/assets';
 import { TaskOrderVolumes } from './order-volumes';
 
 
@@ -106,7 +106,7 @@ export class TaskTradeTakesOpenMakers<H extends HLike<H>> {
 export namespace TaskTradeTakesOpenMakers {
     export interface ModelDeps<H extends HLike<H>> {
         assets: Assets<H>;
-        margins: Margins<H>;
+        margins: MarginAssets<H>;
         makers: Makers<H>;
     }
 

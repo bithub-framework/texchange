@@ -5,8 +5,8 @@ import {
 import { Context } from '../../context';
 import { Broadcast } from '../../broadcast';
 import { TaskMarginAccumulation } from './margin-accumulation';
-import { Margins } from '../../models.d/margins';
-import { Assets } from '../../models.d/assets';
+import { MarginAssets } from '../../models.d/margin-assets/margin-assets';
+import { Assets } from '../../models.d/margin-assets/assets';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
@@ -56,7 +56,7 @@ export namespace DefaultTaskMarginAccumulation {
 
 	export interface ModelDeps<H extends HLike<H>>
 		extends TaskMarginAccumulation.ModelDeps<H> {
-		margins: Margins<H>;
+		margins: MarginAssets<H>;
 		assets: Assets<H>;
 	}
 

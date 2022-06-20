@@ -6,7 +6,7 @@ import {
 import { Context } from '../../context';
 import assert = require('assert');
 import { Broadcast } from '../../broadcast';
-import { TaskSettle } from './settle';
+import { Clearinghouse } from './settle';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
@@ -14,7 +14,7 @@ import { TYPES } from '../../injection/default/types';
 /**
 * 默认逐仓
 */
-export class DefaultTaskSettle<H extends HLike<H>> extends TaskSettle<H> {
+export class DefaultTaskSettle<H extends HLike<H>> extends Clearinghouse<H> {
 
 	public constructor(
 		@inject(TYPES.marketSpec)
