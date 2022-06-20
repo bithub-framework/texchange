@@ -24,7 +24,7 @@ let UseCaseSubscription = class UseCaseSubscription extends events_1.EventEmitte
     }
 };
 UseCaseSubscription = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast))
 ], UseCaseSubscription);
 exports.UseCaseSubscription = UseCaseSubscription;
 //# sourceMappingURL=subscription.js.map

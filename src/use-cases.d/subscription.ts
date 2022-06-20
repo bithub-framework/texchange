@@ -1,4 +1,4 @@
-import { Broadcast } from '../broadcast';
+import { Broadcast } from '../middlewares/broadcast';
 import {
 	HLike,
 	Trade,
@@ -15,7 +15,7 @@ export class UseCaseSubscription<H extends HLike<H>>
 	extends EventEmitter {
 
 	public constructor(
-		@inject(TYPES.broadcast)
+		@inject(TYPES.MIDDLEWARES.broadcast)
 		private broadcast: Broadcast<H>,
 	) {
 		super();

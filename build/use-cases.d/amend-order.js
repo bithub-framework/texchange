@@ -13,22 +13,51 @@ exports.UseCaseAmendOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseAmendOrder = class UseCaseAmendOrder {
-    constructor(userOrderHandler) {
+    constructor(context, book, makers, userOrderHandler, validator, broadcast, calculator) {
+        this.context = context;
+        this.book = book;
+        this.makers = makers;
         this.userOrderHandler = userOrderHandler;
+        this.validator = validator;
+        this.broadcast = broadcast;
+        this.calculator = calculator;
     }
     amendOrder(amendment) {
-        const oldOrder = this.userOrderHandler.cancelOpenOrder(amendment);
-        const newOrder = {
-            ...oldOrder,
+        let filled;
+        try {
+            filled = this.makers.getOrder(amendment.id).filled;
+            this.makers.forcedlyRemoveOrder(amendment.id);
+        }
+        catch (err) {
+            filled = amendment.quantity;
+        }
+        const order = {
+            ...amendment,
+            filled,
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
-            quantity: amendment.newUnfilled.plus(oldOrder.filled),
+            quantity: amendment.newUnfilled.plus(filled),
         };
-        return this.userOrderHandler.makeOpenOrder(newOrder);
+        this.validator.validateOrder(order);
+        const $order = this.context.Data.OpenOrder.copy(order);
+        const trades = this.userOrderHandler.$makeOpenOrder($order);
+        if (trades.length) {
+            this.broadcast.emit('trades', trades);
+            this.broadcast.emit('orderbook', this.book.getBook());
+            this.broadcast.emit('balances', this.calculator.getBalances());
+            this.broadcast.emit('positions', this.calculator.getPositions());
+        }
+        return this.context.Data.OpenOrder.copy($order);
     }
 };
 UseCaseAmendOrder = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.userOrderHandler))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.userOrderHandler)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.orderValidator)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator))
 ], UseCaseAmendOrder);
 exports.UseCaseAmendOrder = UseCaseAmendOrder;
 //# sourceMappingURL=amend-order.js.map

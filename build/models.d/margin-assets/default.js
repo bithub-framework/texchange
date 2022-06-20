@@ -12,6 +12,7 @@ const secretary_like_1 = require("secretary-like");
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultMarginAssets = class DefaultMarginAssets extends margin_assets_1.MarginAssets {
+    // 默认逐仓
     settle(length, settlementPrice) {
         const profit = this.assets.settle(length, settlementPrice);
         this.$accumulation[length] = this.$accumulation[length]

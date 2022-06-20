@@ -1,6 +1,6 @@
 import { Context } from '../context';
 import assert = require('assert');
-import { Broadcast } from '../broadcast';
+import { Broadcast } from '../middlewares/broadcast';
 import {
 	HLike,
 	Length,
@@ -25,7 +25,7 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 		private progress: Progress<H>,
 		@inject(TYPES.MODELS.pricing)
 		private pricing: Pricing<H, unknown>,
-		@inject(TYPES.broadcast)
+		@inject(TYPES.MIDDLEWARES.broadcast)
 		private broadcast: Broadcast<H>,
 		@inject(TYPES.MIDDLEWARES.availableAssetsCalculator)
 		private databaseTradeHandler: DatabaseTradeHandler<H>,

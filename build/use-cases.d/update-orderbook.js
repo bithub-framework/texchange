@@ -14,16 +14,33 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
-    constructor(context, book, progress, broadcast) {
+    constructor(context, book, progress, makers, userOrderHandler, broadcast, calculator) {
         this.context = context;
         this.book = book;
         this.progress = progress;
+        this.makers = makers;
+        this.userOrderHandler = userOrderHandler;
         this.broadcast = broadcast;
+        this.calculator = calculator;
     }
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.context.timeline.now());
-        this.book.setBasebook(orderbook);
         this.progress.updateDatabaseOrderbook(orderbook);
+        this.book.setBasebook(orderbook);
+        const makers = [...this.makers];
+        for (const maker of makers)
+            this.makers.removeOrder(maker.id);
+        const allTrades = [];
+        for (const maker of makers) {
+            const $maker = this.context.Data.OpenOrder.copy(maker);
+            const trades = this.userOrderHandler.$makeOpenOrder($maker);
+            allTrades.push(...trades);
+        }
+        if (allTrades.length) {
+            this.broadcast.emit('trades', allTrades);
+            this.broadcast.emit('balances', this.calculator.getBalances());
+            this.broadcast.emit('positions', this.calculator.getPositions());
+        }
         this.broadcast.emit('orderbook', this.book.getBook());
     }
 };
@@ -31,7 +48,10 @@ UseCaseUpdateOrderbook = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.broadcast))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.userOrderHandler)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator))
 ], UseCaseUpdateOrderbook);
 exports.UseCaseUpdateOrderbook = UseCaseUpdateOrderbook;
 //# sourceMappingURL=update-orderbook.js.map

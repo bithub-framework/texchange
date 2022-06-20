@@ -10,6 +10,7 @@ import { injextends } from '@zimtsui/injektor';
 
 @injextends()
 export class DefaultMarginAssets<H extends HLike<H>> extends MarginAssets<H> {
+	// 默认逐仓
 	public settle(
 		length: Length,
 		settlementPrice: H,

@@ -13,15 +13,27 @@ exports.UseCaseCancelOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseCancelOrder = class UseCaseCancelOrder {
-    constructor(userOrderHandler) {
-        this.userOrderHandler = userOrderHandler;
+    constructor(makers) {
+        this.makers = makers;
     }
     cancelOrder(order) {
-        return this.userOrderHandler.cancelOpenOrder(order);
+        let filled;
+        try {
+            filled = this.makers.getOrder(order.id).filled;
+            this.makers.forcedlyRemoveOrder(order.id);
+        }
+        catch (err) {
+            filled = order.quantity;
+        }
+        return {
+            ...order,
+            filled,
+            unfilled: order.quantity.minus(filled),
+        };
     }
 };
 UseCaseCancelOrder = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.userOrderHandler))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers))
 ], UseCaseCancelOrder);
 exports.UseCaseCancelOrder = UseCaseCancelOrder;
 //# sourceMappingURL=cancel-order.js.map

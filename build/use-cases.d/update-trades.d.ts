@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { Broadcast } from '../broadcast';
+import { Broadcast } from '../middlewares/broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseTrade } from '../interfaces/database-trade';
 import { MarginAssets } from '../models.d/margin-assets';

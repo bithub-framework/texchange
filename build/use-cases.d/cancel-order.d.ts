@@ -1,7 +1,7 @@
 import { HLike, OpenOrder } from 'secretary-like';
-import { UserOrderHandler } from '../middlewares/user-order-handler';
+import { Makers } from '../models.d/makers/makers';
 export declare class UseCaseCancelOrder<H extends HLike<H>> {
-    private userOrderHandler;
-    constructor(userOrderHandler: UserOrderHandler<H>);
+    private makers;
+    constructor(makers: Makers<H>);
     cancelOrder(order: OpenOrder<H>): OpenOrder<H>;
 }

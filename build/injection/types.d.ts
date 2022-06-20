@@ -8,6 +8,7 @@ declare class MODELS {
     static readonly makers: unique symbol;
 }
 declare class MIDDLEWARES {
+    static readonly broadcast: unique symbol;
     static readonly availableAssetsCalculator: unique symbol;
     static readonly databaseTradeHandler: unique symbol;
     static readonly userOrderHandler: unique symbol;
@@ -42,7 +43,6 @@ export declare class TYPES {
     static readonly context: unique symbol;
     static readonly models: unique symbol;
     static readonly MODELS: typeof MODELS;
-    static readonly broadcast: unique symbol;
     static readonly MIDDLEWARES: typeof MIDDLEWARES;
     static readonly mtm: unique symbol;
     static readonly useCases: unique symbol;

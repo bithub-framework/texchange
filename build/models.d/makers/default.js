@@ -11,9 +11,7 @@ const secretary_like_1 = require("secretary-like");
 const makers_1 = require("./makers");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
-    /**
-     * 默认单向持仓模式
-     */
+    // 默认单向持仓模式
     toFreeze(order) {
         if (order.operation === secretary_like_1.Operation.OPEN)
             return {

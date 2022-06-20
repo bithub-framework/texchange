@@ -12,9 +12,7 @@ import { injextends } from '@zimtsui/injektor';
 
 @injextends()
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
-	/**
-	 * 默认单向持仓模式
-	 */
+	// 默认单向持仓模式
 	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.operation === Operation.OPEN)
 			return {

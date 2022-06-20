@@ -14,7 +14,7 @@ const secretary_like_1 = require("secretary-like");
 const types_1 = require("../injection/types");
 const injektor_1 = require("@zimtsui/injektor");
 let UserOrderHandler = class UserOrderHandler {
-    constructor(context, marketSpec, accountSpec, book, marginAssets, progress, makers, broadcast, calculator, validator) {
+    constructor(context, marketSpec, accountSpec, book, marginAssets, progress, makers) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
@@ -22,22 +22,11 @@ let UserOrderHandler = class UserOrderHandler {
         this.marginAssets = marginAssets;
         this.progress = progress;
         this.makers = makers;
-        this.broadcast = broadcast;
-        this.calculator = calculator;
-        this.validator = validator;
     }
-    makeOpenOrder(order) {
-        this.validator.validateOrder(order);
-        const $order = this.context.Data.OpenOrder.copy(order);
+    $makeOpenOrder($order) {
         const trades = this.$orderTakes($order);
         this.orderMakes($order);
-        if (trades.length) {
-            this.broadcast.emit('trades', trades);
-            this.broadcast.emit('orderbook', this.book.getBook());
-            this.broadcast.emit('balances', this.calculator.getBalances());
-            this.broadcast.emit('positions', this.calculator.getPositions());
-        }
-        return $order;
+        return trades;
     }
     $orderTakes($taker) {
         const orderbook = this.book.getBook();
@@ -88,21 +77,6 @@ let UserOrderHandler = class UserOrderHandler {
                 behind = behind.plus(maker.quantity);
         this.makers.appendOrder(order, behind);
     }
-    cancelOpenOrder(order) {
-        let filled;
-        try {
-            filled = this.makers.getOrder(order.id).filled;
-            this.makers.forcedlyRemoveOrder(order.id);
-        }
-        catch (err) {
-            filled = order.quantity;
-        }
-        return {
-            ...order,
-            filled,
-            unfilled: order.quantity.minus(filled),
-        };
-    }
 };
 UserOrderHandler = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
@@ -111,10 +85,7 @@ UserOrderHandler = __decorate([
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),
     __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
-    __param(7, (0, injektor_1.inject)(types_1.TYPES.broadcast)),
-    __param(8, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator)),
-    __param(9, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.orderValidator))
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers))
 ], UserOrderHandler);
 exports.UserOrderHandler = UserOrderHandler;
 //# sourceMappingURL=user-order-handler.js.map

@@ -20,7 +20,7 @@ import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets/margin-assets';
 
 // Broadcast
-import { Broadcast } from '../broadcast';
+import { Broadcast } from '../middlewares/broadcast';
 
 // Mtm
 import { Mtm } from '../mark-to-market/mtm';
@@ -74,7 +74,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 
 	public abstract [TYPES.mtm]: () => Mtm<H> | null;
 
-	public [TYPES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
+	public [TYPES.MIDDLEWARES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
 
 	public abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
 	public [TYPES.MIDDLEWARES.databaseTradeHandler] = this.rcs<DatabaseTradeHandler<H>>(DatabaseTradeHandler);

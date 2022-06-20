@@ -10,7 +10,7 @@ import { Assets } from '../models.d/margin-assets/assets';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets/margin-assets';
-import { Broadcast } from '../broadcast';
+import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
@@ -46,7 +46,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.MODELS.book]: () => Book<H>;
     [TYPES.MODELS.progress]: () => Progress<H>;
     abstract [TYPES.mtm]: () => Mtm<H> | null;
-    [TYPES.broadcast]: () => Broadcast<H>;
+    [TYPES.MIDDLEWARES.broadcast]: () => Broadcast<H>;
     abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
     [TYPES.MIDDLEWARES.databaseTradeHandler]: () => DatabaseTradeHandler<H>;
     [TYPES.MIDDLEWARES.userOrderHandler]: () => UserOrderHandler<H>;

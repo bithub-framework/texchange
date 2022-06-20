@@ -12,6 +12,7 @@ MODELS.pricing = Symbol();
 MODELS.makers = Symbol();
 class MIDDLEWARES {
 }
+MIDDLEWARES.broadcast = Symbol();
 MIDDLEWARES.availableAssetsCalculator = Symbol();
 MIDDLEWARES.databaseTradeHandler = Symbol();
 MIDDLEWARES.userOrderHandler = Symbol();
@@ -48,7 +49,6 @@ TYPES.dataStatic = Symbol();
 TYPES.context = Symbol();
 TYPES.models = Symbol();
 TYPES.MODELS = MODELS;
-TYPES.broadcast = Symbol();
 TYPES.MIDDLEWARES = MIDDLEWARES;
 TYPES.mtm = Symbol();
 TYPES.useCases = Symbol();

@@ -10,6 +10,7 @@ class MODELS {
 
 
 class MIDDLEWARES {
+	public static readonly broadcast = Symbol();
 	public static readonly availableAssetsCalculator = Symbol();
 	public static readonly databaseTradeHandler = Symbol();
 	public static readonly userOrderHandler = Symbol();
@@ -52,8 +53,6 @@ export class TYPES {
 
 	public static readonly models = Symbol();
 	public static readonly MODELS = MODELS;
-
-	public static readonly broadcast = Symbol();
 
 	public static readonly MIDDLEWARES = MIDDLEWARES;
 
