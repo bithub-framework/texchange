@@ -5,16 +5,16 @@ import { DatabaseOrderbook } from '../interfaces/database-orderbook';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Makers } from '../models.d/makers/makers';
-import { UserOrderHandler } from '../middlewares/user-order-handler';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
+import { Matcher } from '../middlewares/matcher';
 export declare class UseCaseUpdateOrderbook<H extends HLike<H>> {
-    protected context: Context<H>;
-    protected book: Book<H>;
-    protected progress: Progress<H>;
-    protected makers: Makers<H>;
-    protected userOrderHandler: UserOrderHandler<H>;
-    protected broadcast: Broadcast<H>;
+    private context;
+    private book;
+    private progress;
+    private makers;
+    private broadcast;
     private calculator;
-    constructor(context: Context<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, userOrderHandler: UserOrderHandler<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>);
+    private matcher;
+    constructor(context: Context<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     updateOrderbook(orderbook: DatabaseOrderbook<H>): void;
 }

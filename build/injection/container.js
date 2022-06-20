@@ -13,7 +13,7 @@ const progress_1 = require("../models.d/progress");
 // Broadcast
 const broadcast_1 = require("../middlewares/broadcast");
 const database_trade_handler_1 = require("../middlewares/database-trade-handler");
-const user_order_handler_1 = require("../middlewares/user-order-handler");
+const matcher_1 = require("../middlewares/matcher");
 const order_validator_1 = require("../middlewares/order-validator");
 // UseCases
 const make_order_1 = require("../use-cases.d/make-order");
@@ -42,7 +42,7 @@ class Container extends injektor_1.BaseContainer {
         this[_e] = this.rcs(progress_1.Progress);
         this[_f] = this.rcs(broadcast_1.Broadcast);
         this[_g] = this.rcs(database_trade_handler_1.DatabaseTradeHandler);
-        this[_h] = this.rcs(user_order_handler_1.UserOrderHandler);
+        this[_h] = this.rcs(matcher_1.Matcher);
         this[_j] = this.rcs(order_validator_1.OrderValidator);
         this[_k] = this.rcs(make_order_1.UseCaseMakeOrder);
         this[_l] = this.rcs(cancel_order_1.UseCaseCancelOrder);
@@ -62,5 +62,5 @@ class Container extends injektor_1.BaseContainer {
     }
 }
 exports.Container = Container;
-_a = types_1.TYPES.dataStatic, _b = types_1.TYPES.context, _c = types_1.TYPES.MODELS.assets, _d = types_1.TYPES.MODELS.book, _e = types_1.TYPES.MODELS.progress, _f = types_1.TYPES.MIDDLEWARES.broadcast, _g = types_1.TYPES.MIDDLEWARES.databaseTradeHandler, _h = types_1.TYPES.MIDDLEWARES.userOrderHandler, _j = types_1.TYPES.MIDDLEWARES.orderValidator, _k = types_1.TYPES.USE_CASES.makeOrder, _l = types_1.TYPES.USE_CASES.cancelOrder, _m = types_1.TYPES.USE_CASES.amendOrder, _o = types_1.TYPES.USE_CASES.getOpenOrders, _p = types_1.TYPES.USE_CASES.getPositions, _q = types_1.TYPES.USE_CASES.getBalances, _r = types_1.TYPES.USE_CASES.updateOrderbook, _s = types_1.TYPES.USE_CASES.updateTrades, _t = types_1.TYPES.USE_CASES.subscription, _u = types_1.TYPES.USE_CASES.getProgress, _v = types_1.TYPES.FACADES.instant, _w = types_1.TYPES.FACADES.userMarket, _x = types_1.TYPES.FACADES.userAccount, _y = types_1.TYPES.FACADES.admin, _z = types_1.TYPES.texchange;
+_a = types_1.TYPES.dataStatic, _b = types_1.TYPES.context, _c = types_1.TYPES.MODELS.assets, _d = types_1.TYPES.MODELS.book, _e = types_1.TYPES.MODELS.progress, _f = types_1.TYPES.MIDDLEWARES.broadcast, _g = types_1.TYPES.MIDDLEWARES.databaseTradeHandler, _h = types_1.TYPES.MIDDLEWARES.matcher, _j = types_1.TYPES.MIDDLEWARES.orderValidator, _k = types_1.TYPES.USE_CASES.makeOrder, _l = types_1.TYPES.USE_CASES.cancelOrder, _m = types_1.TYPES.USE_CASES.amendOrder, _o = types_1.TYPES.USE_CASES.getOpenOrders, _p = types_1.TYPES.USE_CASES.getPositions, _q = types_1.TYPES.USE_CASES.getBalances, _r = types_1.TYPES.USE_CASES.updateOrderbook, _s = types_1.TYPES.USE_CASES.updateTrades, _t = types_1.TYPES.USE_CASES.subscription, _u = types_1.TYPES.USE_CASES.getProgress, _v = types_1.TYPES.FACADES.instant, _w = types_1.TYPES.FACADES.userMarket, _x = types_1.TYPES.FACADES.userAccount, _y = types_1.TYPES.FACADES.admin, _z = types_1.TYPES.texchange;
 //# sourceMappingURL=container.js.map

@@ -9,26 +9,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserOrderHandler = void 0;
+exports.Matcher = void 0;
 const secretary_like_1 = require("secretary-like");
 const types_1 = require("../injection/types");
 const injektor_1 = require("@zimtsui/injektor");
-let UserOrderHandler = class UserOrderHandler {
-    constructor(context, marketSpec, accountSpec, book, marginAssets, progress, makers) {
+let Matcher = class Matcher {
+    constructor(context, marketSpec, accountSpec, book, marginAssets, progress) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.book = book;
         this.marginAssets = marginAssets;
         this.progress = progress;
-        this.makers = makers;
     }
-    $makeOpenOrder($order) {
-        const trades = this.$orderTakes($order);
-        this.orderMakes($order);
-        return trades;
-    }
-    $orderTakes($taker) {
+    $match($taker) {
         const orderbook = this.book.getBook();
         const trades = [];
         let volume = new this.context.Data.H(0);
@@ -69,23 +63,14 @@ let UserOrderHandler = class UserOrderHandler {
             });
         return trades;
     }
-    orderMakes(order) {
-        const makers = this.book.getBook()[order.side];
-        let behind = new this.context.Data.H(0);
-        for (const maker of makers)
-            if (maker.price.eq(order.price))
-                behind = behind.plus(maker.quantity);
-        this.makers.appendOrder(order, behind);
-    }
 };
-UserOrderHandler = __decorate([
+Matcher = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers))
-], UserOrderHandler);
-exports.UserOrderHandler = UserOrderHandler;
-//# sourceMappingURL=user-order-handler.js.map
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress))
+], Matcher);
+exports.Matcher = Matcher;
+//# sourceMappingURL=matcher.js.map

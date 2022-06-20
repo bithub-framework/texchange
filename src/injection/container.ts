@@ -28,7 +28,7 @@ import { Mtm } from '../mark-to-market/mtm';
 // Middlewares
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
-import { UserOrderHandler } from '../middlewares/user-order-handler';
+import { Matcher } from '../middlewares/matcher';
 import { OrderValidator } from '../middlewares/order-validator';
 
 
@@ -78,7 +78,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 
 	public abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
 	public [TYPES.MIDDLEWARES.databaseTradeHandler] = this.rcs<DatabaseTradeHandler<H>>(DatabaseTradeHandler);
-	public [TYPES.MIDDLEWARES.userOrderHandler] = this.rcs<UserOrderHandler<H>>(UserOrderHandler);
+	public [TYPES.MIDDLEWARES.matcher] = this.rcs<Matcher<H>>(Matcher);
 	public [TYPES.MIDDLEWARES.orderValidator] = this.rcs<OrderValidator<H>>(OrderValidator);
 
 	public [TYPES.USE_CASES.makeOrder] = this.rcs<UseCaseMakeOrder<H>>(UseCaseMakeOrder);

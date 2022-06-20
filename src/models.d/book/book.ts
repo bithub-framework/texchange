@@ -3,6 +3,7 @@ import {
     Side,
     HLike,
     MarketSpec,
+    OpenOrder,
 } from 'secretary-like';
 import assert = require('assert');
 import { Context } from '../../context';
@@ -93,6 +94,15 @@ export class Book<H extends HLike<H>>
 
     public getBook(): Orderbook<H> {
         return this.tryApply();
+    }
+
+    public lineUp(order: OpenOrder<H>): H {
+        const makers = this.getBook()[order.side];
+        let behind = new this.context.Data.H(0);
+        for (const maker of makers)
+            if (maker.price.eq(order.price))
+                behind = behind.plus(maker.quantity);
+        return behind;
     }
 
     public capture(): Book.Snapshot {

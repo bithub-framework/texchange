@@ -14,26 +14,29 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
-    constructor(context, book, progress, makers, userOrderHandler, broadcast, calculator) {
+    constructor(context, book, progress, makers, broadcast, calculator, matcher) {
         this.context = context;
         this.book = book;
         this.progress = progress;
         this.makers = makers;
-        this.userOrderHandler = userOrderHandler;
         this.broadcast = broadcast;
         this.calculator = calculator;
+        this.matcher = matcher;
     }
     updateOrderbook(orderbook) {
         assert(orderbook.time === this.context.timeline.now());
         this.progress.updateDatabaseOrderbook(orderbook);
         this.book.setBasebook(orderbook);
-        const makers = [...this.makers];
-        for (const maker of makers)
-            this.makers.removeOrder(maker.id);
+        const orders = [...this.makers];
+        for (const order of orders)
+            this.makers.removeOrder(order.id);
         const allTrades = [];
-        for (const maker of makers) {
-            const $maker = this.context.Data.OpenOrder.copy(maker);
-            const trades = this.userOrderHandler.$makeOpenOrder($maker);
+        for (const order of orders) {
+            const $order = this.context.Data.OpenOrder.copy(order);
+            const trades = this.matcher.$match($order);
+            const maker = this.context.Data.OpenOrder.copy($order);
+            const behind = this.book.lineUp(maker);
+            this.makers.appendOrder(maker, behind);
             allTrades.push(...trades);
         }
         if (allTrades.length) {
@@ -49,9 +52,9 @@ UseCaseUpdateOrderbook = __decorate([
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.userOrderHandler)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator))
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator)),
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.matcher))
 ], UseCaseUpdateOrderbook);
 exports.UseCaseUpdateOrderbook = UseCaseUpdateOrderbook;
 //# sourceMappingURL=update-orderbook.js.map

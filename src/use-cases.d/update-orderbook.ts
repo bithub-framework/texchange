@@ -9,8 +9,8 @@ import assert = require('assert');
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Makers } from '../models.d/makers/makers';
-import { UserOrderHandler } from '../middlewares/user-order-handler';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
+import { Matcher } from '../middlewares/matcher';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -20,19 +20,19 @@ import { TYPES } from '../injection/types';
 export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 	public constructor(
 		@inject(TYPES.context)
-		protected context: Context<H>,
+		private context: Context<H>,
 		@inject(TYPES.MODELS.book)
-		protected book: Book<H>,
+		private book: Book<H>,
 		@inject(TYPES.MODELS.progress)
-		protected progress: Progress<H>,
+		private progress: Progress<H>,
 		@inject(TYPES.MODELS.makers)
-		protected makers: Makers<H>,
-		@inject(TYPES.MIDDLEWARES.userOrderHandler)
-		protected userOrderHandler: UserOrderHandler<H>,
+		private makers: Makers<H>,
 		@inject(TYPES.MIDDLEWARES.broadcast)
-		protected broadcast: Broadcast<H>,
+		private broadcast: Broadcast<H>,
 		@inject(TYPES.MIDDLEWARES.availableAssetsCalculator)
 		private calculator: AvailableAssetsCalculator<H>,
+		@inject(TYPES.MIDDLEWARES.matcher)
+		private matcher: Matcher<H>,
 	) { }
 
 	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
@@ -40,13 +40,17 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 		this.progress.updateDatabaseOrderbook(orderbook);
 		this.book.setBasebook(orderbook);
 
-		const makers = [...this.makers];
-		for (const maker of makers)
-			this.makers.removeOrder(maker.id);
+		const orders = [...this.makers];
+		for (const order of orders)
+			this.makers.removeOrder(order.id);
 		const allTrades: Trade<H>[] = [];
-		for (const maker of makers) {
-			const $maker = this.context.Data.OpenOrder.copy(maker);
-			const trades = this.userOrderHandler.$makeOpenOrder($maker);
+		for (const order of orders) {
+			const $order = this.context.Data.OpenOrder.copy(order);
+			const trades = this.matcher.$match($order);
+			const maker = this.context.Data.OpenOrder.copy($order);
+			const behind = this.book.lineUp(maker);
+			this.makers.appendOrder(maker, behind);
+
 			allTrades.push(...trades);
 		}
 		if (allTrades.length) {

@@ -14,7 +14,7 @@ import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
-import { UserOrderHandler } from '../middlewares/user-order-handler';
+import { Matcher } from '../middlewares/matcher';
 import { OrderValidator } from '../middlewares/order-validator';
 import { UseCaseMakeOrder } from '../use-cases.d/make-order';
 import { UseCaseCancelOrder } from '../use-cases.d/cancel-order';
@@ -49,7 +49,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.MIDDLEWARES.broadcast]: () => Broadcast<H>;
     abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
     [TYPES.MIDDLEWARES.databaseTradeHandler]: () => DatabaseTradeHandler<H>;
-    [TYPES.MIDDLEWARES.userOrderHandler]: () => UserOrderHandler<H>;
+    [TYPES.MIDDLEWARES.matcher]: () => Matcher<H>;
     [TYPES.MIDDLEWARES.orderValidator]: () => OrderValidator<H>;
     [TYPES.USE_CASES.makeOrder]: () => UseCaseMakeOrder<H>;
     [TYPES.USE_CASES.cancelOrder]: () => UseCaseCancelOrder<H>;

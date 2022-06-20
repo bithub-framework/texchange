@@ -11,7 +11,7 @@ declare class MIDDLEWARES {
     static readonly broadcast: unique symbol;
     static readonly availableAssetsCalculator: unique symbol;
     static readonly databaseTradeHandler: unique symbol;
-    static readonly userOrderHandler: unique symbol;
+    static readonly matcher: unique symbol;
     static readonly orderValidator: unique symbol;
 }
 declare class USE_CASES {

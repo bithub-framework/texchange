@@ -84,6 +84,14 @@ let Book = class Book {
     getBook() {
         return this.tryApply();
     }
+    lineUp(order) {
+        const makers = this.getBook()[order.side];
+        let behind = new this.context.Data.H(0);
+        for (const maker of makers)
+            if (maker.price.eq(order.price))
+                behind = behind.plus(maker.quantity);
+        return behind;
+    }
     capture() {
         return {
             basebook: this.context.Data.Orderbook.capture(this.basebook),

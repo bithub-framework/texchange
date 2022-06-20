@@ -15,7 +15,7 @@ class MIDDLEWARES {
 MIDDLEWARES.broadcast = Symbol();
 MIDDLEWARES.availableAssetsCalculator = Symbol();
 MIDDLEWARES.databaseTradeHandler = Symbol();
-MIDDLEWARES.userOrderHandler = Symbol();
+MIDDLEWARES.matcher = Symbol();
 MIDDLEWARES.orderValidator = Symbol();
 class USE_CASES {
 }

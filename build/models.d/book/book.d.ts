@@ -1,4 +1,4 @@
-import { Orderbook, Side, HLike, MarketSpec } from 'secretary-like';
+import { Orderbook, Side, HLike, MarketSpec, OpenOrder } from 'secretary-like';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';
@@ -15,6 +15,7 @@ export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snaps
     decQuantity(side: Side, price: H, decrement: H): void;
     private tryApply;
     getBook(): Orderbook<H>;
+    lineUp(order: OpenOrder<H>): H;
     capture(): Book.Snapshot;
     restore(snapshot: Book.Snapshot): void;
 }
