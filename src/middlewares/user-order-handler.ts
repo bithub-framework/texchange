@@ -1,18 +1,16 @@
 import {
-	HLike, H,
+	HLike,
 	OpenOrder,
 	Trade,
-	Side, Operation,
 } from 'secretary-like';
 import { Context } from '../context';
-import { Broadcast } from './broadcast';
 import { MarketSpec } from 'secretary-like';
 import { AccountSpec } from 'secretary-like';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
-import { AvailableAssetsCalculator } from './available-assets-calculator/available-assets-calculator';
+import { Matcher } from './matcher';
 
 import { TYPES } from '../injection/types';
 import { inject } from '@zimtsui/injektor';
@@ -34,65 +32,13 @@ export class UserOrderHandler<H extends HLike<H>> {
 		private progress: Progress<H>,
 		@inject(TYPES.MODELS.makers)
 		private makers: Makers<H>,
+		@inject(TYPES.MIDDLEWARES.matcher)
+		private matcher: Matcher<H>,
 	) { }
 
 	public $makeOpenOrder($order: OpenOrder<H>): Trade<H>[] {
-		const trades = this.$orderTakes($order);
+		const trades = this.matcher.$match($order);
 		this.orderMakes($order);
-		return trades;
-	}
-
-	private $orderTakes($taker: OpenOrder<H>): Trade<H>[] {
-		const orderbook = this.book.getBook();
-
-		const trades: Trade<H>[] = [];
-		let volume = new this.context.Data.H(0);
-		let dollarVolume = new this.context.Data.H(0);
-		for (const maker of orderbook[-$taker.side])
-			if (
-				(
-					$taker.side === Side.BID && $taker.price.gte(maker.price) ||
-					$taker.side === Side.ASK && $taker.price.lte(maker.price)
-				) && $taker.unfilled.gt(0)
-			) {
-				const quantity = this.context.Data.H.min($taker.unfilled, maker.quantity);
-				this.book.decQuantity(maker.side, maker.price, quantity);
-				$taker.filled = $taker.filled.plus(quantity);
-				$taker.unfilled = $taker.unfilled.minus(quantity);
-				volume = volume.plus(quantity);
-				dollarVolume = dollarVolume
-					.plus(this.marketSpec.dollarVolume(maker.price, quantity))
-					.round(this.marketSpec.CURRENCY_DP);
-				trades.push({
-					side: $taker.side,
-					price: maker.price,
-					quantity,
-					time: this.context.timeline.now(),
-					id: ++this.progress.userTradeCount,
-				});
-			}
-
-		this.marginAssets.pay(
-			dollarVolume
-				.times(this.accountSpec.TAKER_FEE_RATE)
-				.round(
-					this.marketSpec.CURRENCY_DP,
-					H.RoundingMode.HALF_AWAY_FROM_ZERO,
-				),
-		);
-		if ($taker.operation === Operation.OPEN)
-			this.marginAssets.open({
-				length: $taker.length,
-				volume,
-				dollarVolume,
-			});
-		else
-			this.marginAssets.close({
-				length: $taker.length,
-				volume,
-				dollarVolume,
-			});
-
 		return trades;
 	}
 
