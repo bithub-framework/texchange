@@ -14,7 +14,7 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let MarginAssets = class MarginAssets {
-    constructor(context, marketSpec, accountSpec, assets, balance) {
+    constructor(context, marketSpec, accountSpec, assets) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
@@ -71,8 +71,7 @@ MarginAssets = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets))
 ], MarginAssets);
 exports.MarginAssets = MarginAssets;
 (function (MarginAssets) {

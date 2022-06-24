@@ -10,7 +10,7 @@ export declare abstract class MarginAssets<H extends HLike<H>> implements Statef
     protected assets: Assets<H>;
     protected Margin: MarginAssets.MarginStatic<H>;
     protected $accumulation: MarginAssets.Margin<H>;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, assets: Assets<H>, balance: H);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, assets: Assets<H>);
     open({ length, volume, dollarVolume, }: Executed<H>): void;
     close({ length, volume, dollarVolume, }: Executed<H>): void;
     abstract getFinalMargin(): H;

@@ -28,8 +28,6 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		protected accountSpec: AccountSpec,
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
-		@inject(TYPES.MODELS.initialBalance)
-		balance: H,
 	) {
 		this.Margin = new MarginAssets.MarginStatic<H>(context.Data.H);
 		this.$accumulation = {
