@@ -12,5 +12,5 @@ export declare class DatabaseTradeHandler<H extends HLike<H>> {
     tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;
-    private tradeTakesOpenMaker;
+    private $tradeTakesOpenMaker;
 }

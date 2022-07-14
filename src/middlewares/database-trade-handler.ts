@@ -35,7 +35,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);
-				this.tradeTakesOpenMaker($trade, order);
+				this.$tradeTakesOpenMaker($trade, order);
 			}
 	}
 
@@ -64,7 +64,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		} else this.makers.takeOrderQueue(maker.id);
 	}
 
-	private tradeTakesOpenMaker(
+	private $tradeTakesOpenMaker(
 		$trade: Trade<H>,
 		maker: OpenMaker<H>,
 	): void {

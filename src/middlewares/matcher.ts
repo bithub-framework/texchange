@@ -32,7 +32,7 @@ export class Matcher<H extends HLike<H>> {
 	) { }
 
 	public $match($taker: OpenOrder<H>): Trade<H>[] {
-		const orderbook = this.book.getBook();
+		const orderbook = this.book.getOrderbook();
 
 		const trades: Trade<H>[] = [];
 		let volume = new this.context.Data.H(0);

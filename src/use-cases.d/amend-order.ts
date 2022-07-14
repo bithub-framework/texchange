@@ -59,7 +59,7 @@ export class UseCaseAmendOrder<H extends HLike<H>> {
 
 		if (trades.length) {
 			this.broadcast.emit('trades', trades);
-			this.broadcast.emit('orderbook', this.book.getBook());
+			this.broadcast.emit('orderbook', this.book.getOrderbook());
 			this.broadcast.emit('balances', this.calculator.getBalances());
 			this.broadcast.emit('positions', this.calculator.getPositions());
 		}

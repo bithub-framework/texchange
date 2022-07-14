@@ -14,7 +14,7 @@ export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snaps
     setBasebook(basebook: Orderbook<H>): void;
     decQuantity(side: Side, price: H, decrement: H): void;
     private tryApply;
-    getBook(): Orderbook<H>;
+    getOrderbook(): Orderbook<H>;
     lineUp(order: OpenOrder<H>): H;
     capture(): Book.Snapshot;
     restore(snapshot: Book.Snapshot): void;

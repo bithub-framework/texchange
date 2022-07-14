@@ -92,12 +92,12 @@ export class Book<H extends HLike<H>>
         return this.finalbookCache = $final;
     }
 
-    public getBook(): Orderbook<H> {
+    public getOrderbook(): Orderbook<H> {
         return this.tryApply();
     }
 
     public lineUp(order: OpenOrder<H>): H {
-        const makers = this.getBook()[order.side];
+        const makers = this.getOrderbook()[order.side];
         let behind = new this.context.Data.H(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))

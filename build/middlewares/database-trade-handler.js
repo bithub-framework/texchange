@@ -26,7 +26,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
         for (const order of [...this.makers])
             if (this.$tradeShouldTakeOpenOrder($trade, order)) {
                 this.$tradeTakesOrderQueue($trade, order);
-                this.tradeTakesOpenMaker($trade, order);
+                this.$tradeTakesOpenMaker($trade, order);
             }
     }
     $tradeShouldTakeOpenOrder($trade, maker) {
@@ -47,7 +47,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
         else
             this.makers.takeOrderQueue(maker.id);
     }
-    tradeTakesOpenMaker($trade, maker) {
+    $tradeTakesOpenMaker($trade, maker) {
         const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.marketSpec
             .dollarVolume(maker.price, volume)

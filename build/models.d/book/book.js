@@ -81,11 +81,11 @@ let Book = class Book {
         }
         return this.finalbookCache = $final;
     }
-    getBook() {
+    getOrderbook() {
         return this.tryApply();
     }
     lineUp(order) {
-        const makers = this.getBook()[order.side];
+        const makers = this.getOrderbook()[order.side];
         let behind = new this.context.Data.H(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))

@@ -10,7 +10,7 @@ import { Context } from '../context';
 import { Makers } from '../models.d/makers/makers';
 import { AvailableAssetsCalculator } from './available-assets-calculator/available-assets-calculator';
 
-import { inject, instantInject } from '@zimtsui/injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 

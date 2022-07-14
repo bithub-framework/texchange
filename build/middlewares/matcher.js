@@ -23,7 +23,7 @@ let Matcher = class Matcher {
         this.progress = progress;
     }
     $match($taker) {
-        const orderbook = this.book.getBook();
+        const orderbook = this.book.getOrderbook();
         const trades = [];
         let volume = new this.context.Data.H(0);
         let dollarVolume = new this.context.Data.H(0);

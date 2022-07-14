@@ -44,7 +44,7 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
             this.broadcast.emit('balances', this.calculator.getBalances());
             this.broadcast.emit('positions', this.calculator.getPositions());
         }
-        this.broadcast.emit('orderbook', this.book.getBook());
+        this.broadcast.emit('orderbook', this.book.getOrderbook());
     }
 };
 UseCaseUpdateOrderbook = __decorate([
