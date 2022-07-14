@@ -5,5 +5,5 @@ const types_1 = require("../types");
 class TYPES extends types_1.TYPES {
 }
 exports.TYPES = TYPES;
-TYPES.initialSettlementPrice = Symbol();
+TYPES.initialSettlementPrice = Symbol('initialSettlementPrice');
 //# sourceMappingURL=types.js.map
