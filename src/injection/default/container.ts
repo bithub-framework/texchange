@@ -1,5 +1,5 @@
 import { Container as BaseContainer } from '../container';
-import { TYPES } from '../types';
+import { TYPES } from './types';
 import {
 	HLike, HStatic,
 	TimelineLike,
@@ -37,6 +37,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
 
+
 	public [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
@@ -57,11 +58,13 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		timeline: TimelineLike,
 		H: HStatic<H>,
 		initialBalance: H,
+		initialSettlementPrice: H,
 	) {
 		super();
 
 		this[TYPES.timeline] = this.rv(timeline);
 		this[TYPES.hStatic] = this.rv(H);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
+		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}
 }

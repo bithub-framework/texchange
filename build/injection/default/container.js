@@ -3,7 +3,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Container = void 0;
 const container_1 = require("../container");
-const types_1 = require("../types");
+const types_1 = require("./types");
 // Spec
 const default_market_spec_1 = require("../../spec/default-market-spec");
 const default_account_spec_1 = require("../../spec/default-account-spec");
@@ -13,7 +13,7 @@ const default_3 = require("../../models.d/margin-assets/default");
 const default_4 = require("../../middlewares/available-assets-calculator/default");
 const default_5 = require("../../mark-to-market/default");
 class Container extends container_1.Container {
-    constructor(timeline, H, initialBalance) {
+    constructor(timeline, H, initialBalance, initialSettlementPrice) {
         super();
         this[_a] = this.rcs(default_market_spec_1.DefaultMarketSpec);
         this[_b] = this.rcs(default_account_spec_1.DefaultAccountSpec);
@@ -30,6 +30,7 @@ class Container extends container_1.Container {
         this[types_1.TYPES.timeline] = this.rv(timeline);
         this[types_1.TYPES.hStatic] = this.rv(H);
         this[types_1.TYPES.MODELS.initialBalance] = this.rv(initialBalance);
+        this[types_1.TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
     }
 }
 exports.Container = Container;

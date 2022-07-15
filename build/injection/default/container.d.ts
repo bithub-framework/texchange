@@ -1,5 +1,5 @@
 import { Container as BaseContainer } from '../container';
-import { TYPES } from '../types';
+import { TYPES } from './types';
 import { HLike, HStatic, TimelineLike, MarketSpec, AccountSpec } from 'secretary-like';
 import { Makers } from '../../models.d/makers/makers';
 import { Pricing } from '../../models.d/pricing/pricing';
@@ -20,5 +20,5 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.mtm]: () => Mtm<H>;
     [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
     [TYPES.FACADES.config]: () => DelayConfig;
-    constructor(timeline: TimelineLike, H: HStatic<H>, initialBalance: H);
+    constructor(timeline: TimelineLike, H: HStatic<H>, initialBalance: H, initialSettlementPrice: H);
 }
