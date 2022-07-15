@@ -41,13 +41,10 @@ export declare class TYPES {
     static readonly timeline: unique symbol;
     static readonly dataStatic: unique symbol;
     static readonly context: unique symbol;
-    static readonly models: unique symbol;
     static readonly MODELS: typeof MODELS;
     static readonly MIDDLEWARES: typeof MIDDLEWARES;
     static readonly mtm: unique symbol;
-    static readonly useCases: unique symbol;
     static readonly USE_CASES: typeof USE_CASES;
-    static readonly facades: unique symbol;
     static readonly FACADES: typeof FACADES;
     static readonly texchange: unique symbol;
 }

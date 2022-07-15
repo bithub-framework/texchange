@@ -65,6 +65,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.dataStatic] = this.rcs<DataStatic<H>>(DataStatic);
 	public [TYPES.context] = this.rcs<Context<H>>(Context);
 
+	public abstract [TYPES.MODELS.initialBalance]: () => H;
 	public abstract [TYPES.MODELS.makers]: () => Makers<H>;
 	public abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
 	public [TYPES.MODELS.assets] = this.rcs<Assets<H>>(Assets);
@@ -72,14 +73,13 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.MODELS.book] = this.rcs<Book<H>>(Book);
 	public [TYPES.MODELS.progress] = this.rcs<Progress<H>>(Progress);
 
-	public abstract [TYPES.mtm]: () => Mtm<H> | null;
-
-	public [TYPES.MIDDLEWARES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
-
 	public abstract [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
 	public [TYPES.MIDDLEWARES.databaseTradeHandler] = this.rcs<DatabaseTradeHandler<H>>(DatabaseTradeHandler);
 	public [TYPES.MIDDLEWARES.matcher] = this.rcs<Matcher<H>>(Matcher);
 	public [TYPES.MIDDLEWARES.orderValidator] = this.rcs<OrderValidator<H>>(OrderValidator);
+	public [TYPES.MIDDLEWARES.broadcast] = this.rcs<Broadcast<H>>(Broadcast);
+
+	public abstract [TYPES.mtm]: () => Mtm<H> | null;
 
 	public [TYPES.USE_CASES.makeOrder] = this.rcs<UseCaseMakeOrder<H>>(UseCaseMakeOrder);
 	public [TYPES.USE_CASES.cancelOrder] = this.rcs<UseCaseCancelOrder<H>>(UseCaseCancelOrder);
@@ -92,7 +92,6 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
 	public [TYPES.USE_CASES.subscription] = this.rcs<UseCaseSubscription<H>>(UseCaseSubscription);
 	public [TYPES.USE_CASES.getProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
-
 
 	public abstract [TYPES.FACADES.config]: () => DelayConfig;
 	public [TYPES.FACADES.instant] = this.rcs<Instant<H>>(Instant);

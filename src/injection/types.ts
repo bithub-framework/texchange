@@ -29,7 +29,6 @@ class USE_CASES {
 	public static readonly subscription = Symbol('subscription');
 	public static readonly getProgress = Symbol('getProgress');
 	public static readonly updateTrades = Symbol('updateTrades');
-
 	public static readonly realTimeSettlement = Symbol('realTimeSettlement');
 }
 
@@ -48,20 +47,18 @@ export class TYPES {
 	public static readonly accountSpec = Symbol('accountSpec');
 	public static readonly hStatic = Symbol('hStatic');
 	public static readonly timeline = Symbol('timeline');
+
 	public static readonly dataStatic = Symbol('dataStatic');
 	public static readonly context = Symbol('context');
 
-	public static readonly models = Symbol('models');
 	public static readonly MODELS = MODELS;
 
 	public static readonly MIDDLEWARES = MIDDLEWARES;
 
 	public static readonly mtm = Symbol('mtm');
 
-	public static readonly useCases = Symbol('useCases');
 	public static readonly USE_CASES = USE_CASES;
 
-	public static readonly facades = Symbol('facades');
 	public static readonly FACADES = FACADES;
 
 	public static readonly texchange = Symbol('texchange');

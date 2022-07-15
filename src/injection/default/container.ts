@@ -37,6 +37,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
 
+	public [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
 	public [TYPES.MODELS.marginAssets] = this.rcs<MarginAssets<H>>(DefaultMarginAssets);
@@ -55,10 +56,12 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public constructor(
 		timeline: TimelineLike,
 		H: HStatic<H>,
+		initialBalance: H,
 	) {
 		super();
 
 		this[TYPES.timeline] = this.rv(timeline);
 		this[TYPES.hStatic] = this.rv(H);
+		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 	}
 }

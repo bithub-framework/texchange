@@ -12,6 +12,7 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.marketSpec]: () => MarketSpec<H>;
     [TYPES.accountSpec]: () => AccountSpec;
     [TYPES.timeline]: () => TimelineLike;
+    [TYPES.MODELS.initialBalance]: () => H;
     [TYPES.MODELS.makers]: () => Makers<H>;
     [TYPES.MODELS.pricing]: () => Pricing<H, any>;
     [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
@@ -19,5 +20,5 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.mtm]: () => Mtm<H>;
     [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
     [TYPES.FACADES.config]: () => DelayConfig;
-    constructor(timeline: TimelineLike, H: HStatic<H>);
+    constructor(timeline: TimelineLike, H: HStatic<H>, initialBalance: H);
 }
