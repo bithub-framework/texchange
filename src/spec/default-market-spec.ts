@@ -1,5 +1,7 @@
 import { MarketSpec, HLike } from 'secretary-like';
 import { Context } from '../context';
+import { inject } from '@zimtsui/injektor';
+import { TYPES } from '../injection/default/types';
 import assert = require('assert');
 
 
@@ -14,6 +16,7 @@ export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 	public MARKET_NAME = 'test';
 
 	public constructor(
+		@inject(TYPES.context)
 		context: Context<H>,
 	) {
 		this.TICK_SIZE = new context.Data.H('.5');
