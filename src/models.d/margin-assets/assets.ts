@@ -86,10 +86,12 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         dollarVolume,
     }: Executed<H>): H {
         assert(volume.lte(this.$position[length]));
-        const cost = this.$cost[length]
-            .times(volume)
-            .div(this.$position[length])
-            .round(this.marketSpec.CURRENCY_DP);
+        const cost = this.$position[length].neq(0)
+            ? this.$cost[length]
+                .times(volume)
+                .div(this.$position[length])
+                .round(this.marketSpec.CURRENCY_DP)
+            : new this.context.Data.H(0);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position[length] = this.$position[length].minus(volume);
         this.$cost[length] = this.$cost[length].minus(cost);
