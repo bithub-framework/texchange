@@ -27,7 +27,7 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 		private pricing: Pricing<H, unknown>,
 		@inject(TYPES.MIDDLEWARES.broadcast)
 		private broadcast: Broadcast<H>,
-		@inject(TYPES.MIDDLEWARES.availableAssetsCalculator)
+		@inject(TYPES.MIDDLEWARES.databaseTradeHandler)
 		private databaseTradeHandler: DatabaseTradeHandler<H>,
 		@inject(TYPES.USE_CASES.realTimeSettlement)
 		private realTimeSettlement: boolean,

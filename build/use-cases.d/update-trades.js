@@ -46,7 +46,7 @@ UseCaseUpdateTrades = __decorate([
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.availableAssetsCalculator)),
+    __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.databaseTradeHandler)),
     __param(6, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.realTimeSettlement))
 ], UseCaseUpdateTrades);
 exports.UseCaseUpdateTrades = UseCaseUpdateTrades;
