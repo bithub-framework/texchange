@@ -41,7 +41,7 @@ export class Book<H extends HLike<H>>
         assert(basebook.time === this.context.timeline.now());
         this.basebook = basebook;
         this.time = basebook.time;
-        this.tryApply();
+        this.finalbookCache = null;
     }
 
     public decQuantity(

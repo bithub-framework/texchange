@@ -36,7 +36,7 @@ let Book = class Book {
         assert(basebook.time === this.context.timeline.now());
         this.basebook = basebook;
         this.time = basebook.time;
-        this.tryApply();
+        this.finalbookCache = null;
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
