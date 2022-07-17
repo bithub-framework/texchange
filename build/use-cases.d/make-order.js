@@ -34,8 +34,10 @@ let UseCaseMakeOrder = class UseCaseMakeOrder {
         const $order = this.context.Data.OpenOrder.copy(order);
         const trades = this.matcher.$match($order);
         const maker = this.context.Data.OpenOrder.copy($order);
-        const behind = this.book.lineUp(maker);
-        this.makers.appendOrder(maker, behind);
+        if ($order.unfilled.gt(0)) {
+            const behind = this.book.lineUp(maker);
+            this.makers.appendOrder(maker, behind);
+        }
         if (trades.length) {
             this.broadcast.emit('trades', trades);
             this.broadcast.emit('orderbook', this.book.getOrderbook());
