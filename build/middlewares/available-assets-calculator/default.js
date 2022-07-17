@@ -20,9 +20,11 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const side = length * secretary_like_1.Operation.OPEN;
             const afterDeduction = this.context.Data.H.max(totalUnfilled[side].minus(position[-length]), new this.context.Data.H(0));
-            $final[length] = totalFrozen.balance[length]
-                .times(afterDeduction)
-                .div(totalUnfilled[side]);
+            $final[length] = totalUnfilled[side].neq(0)
+                ? totalFrozen.balance[length]
+                    .times(afterDeduction)
+                    .div(totalUnfilled[side])
+                : new this.context.Data.H(0);
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }

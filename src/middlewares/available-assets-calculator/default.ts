@@ -21,9 +21,11 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 				totalUnfilled[side].minus(position[-length]),
 				new this.context.Data.H(0),
 			);
-			$final[length] = totalFrozen.balance[length]
-				.times(afterDeduction)
-				.div(totalUnfilled[side]);
+			$final[length] = totalUnfilled[side].neq(0)
+				? totalFrozen.balance[length]
+					.times(afterDeduction)
+					.div(totalUnfilled[side])
+				: new this.context.Data.H(0);
 		}
 		return $final[Length.LONG].plus($final[Length.SHORT]);
 	}
