@@ -45,9 +45,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 
 	public [TYPES.MIDDLEWARES.availableAssetsCalculator] = this.rcs<AvailableAssetsCalculator<H>>(DefaultAvailableAssetsCalculator);
 
-	public [TYPES.mtm] = this.rcs<Mtm<H>>(DefaultMtm);
-
-	public [TYPES.USE_CASES.realTimeSettlement] = this.rv(true);
+	public [TYPES.mtm] = this.rv<Mtm<H> | null>(null);
 
 	public [TYPES.FACADES.config] = this.rv<DelayConfig>({
 		ping: 20,

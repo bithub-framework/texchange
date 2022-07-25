@@ -15,14 +15,14 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateTrades = class UseCaseUpdateTrades {
-    constructor(context, marginAssets, progress, pricing, broadcast, databaseTradeHandler, realTimeSettlement) {
+    constructor(context, marginAssets, progress, pricing, broadcast, databaseTradeHandler, mtm) {
         this.context = context;
         this.marginAssets = marginAssets;
         this.progress = progress;
         this.pricing = pricing;
         this.broadcast = broadcast;
         this.databaseTradeHandler = databaseTradeHandler;
-        this.realTimeSettlement = realTimeSettlement;
+        this.mtm = mtm;
     }
     updateTrades(trades) {
         assert(trades.length);
@@ -34,7 +34,7 @@ let UseCaseUpdateTrades = class UseCaseUpdateTrades {
         for (const trade of trades)
             this.databaseTradeHandler.tradeTakesOpenMakers(trade);
         this.pricing.updateTrades(trades);
-        if (this.realTimeSettlement) {
+        if (this.mtm === null) {
             this.marginAssets.settle(secretary_like_1.Length.LONG, this.pricing.getSettlementPrice());
             this.marginAssets.settle(secretary_like_1.Length.SHORT, this.pricing.getSettlementPrice());
         }
@@ -47,7 +47,7 @@ UseCaseUpdateTrades = __decorate([
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),
     __param(4, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
     __param(5, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.databaseTradeHandler)),
-    __param(6, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.realTimeSettlement))
+    __param(6, (0, injektor_1.inject)(types_1.TYPES.mtm))
 ], UseCaseUpdateTrades);
 exports.UseCaseUpdateTrades = UseCaseUpdateTrades;
 //# sourceMappingURL=update-trades.js.map

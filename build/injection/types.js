@@ -29,7 +29,6 @@ USE_CASES.updateOrderbook = Symbol('updateOrderbook');
 USE_CASES.subscription = Symbol('subscription');
 USE_CASES.getProgress = Symbol('getProgress');
 USE_CASES.updateTrades = Symbol('updateTrades');
-USE_CASES.realTimeSettlement = Symbol('realTimeSettlement');
 class FACADES {
 }
 exports.FACADES = FACADES;

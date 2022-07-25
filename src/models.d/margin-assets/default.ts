@@ -19,7 +19,7 @@ export class DefaultMarginAssets<H extends HLike<H>> extends MarginAssets<H> {
 			length,
 			settlementPrice,
 		);
-		this.$accumulation[length] = this.$accumulation[length]
+		this.$margin[length] = this.$margin[length]
 			.plus(profit);
 	}
 
@@ -41,12 +41,12 @@ export class DefaultMarginAssets<H extends HLike<H>> extends MarginAssets<H> {
 
 	// 默认无锁仓优惠
 	public getFinalMargin(): H {
-		return this.$accumulation[Length.LONG]
-			.plus(this.$accumulation[Length.SHORT]);
+		return this.$margin[Length.LONG]
+			.plus(this.$margin[Length.SHORT]);
 	}
 
 	public assertEnoughBalance(): void {
-		assert(this.$accumulation[Length.LONG].gte(0));
-		assert(this.$accumulation[Length.SHORT].gte(0));
+		assert(this.$margin[Length.LONG].gte(0));
+		assert(this.$margin[Length.SHORT].gte(0));
 	}
 }

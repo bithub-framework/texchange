@@ -10,6 +10,7 @@ import { MarginAssets } from '../models.d/margin-assets';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
+import { Mtm } from '../mark-to-market/mtm';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -29,8 +30,8 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 		private broadcast: Broadcast<H>,
 		@inject(TYPES.MIDDLEWARES.databaseTradeHandler)
 		private databaseTradeHandler: DatabaseTradeHandler<H>,
-		@inject(TYPES.USE_CASES.realTimeSettlement)
-		private realTimeSettlement: boolean,
+		@inject(TYPES.mtm)
+		private mtm: Mtm<H> | null,
 	) { }
 
 	public updateTrades(trades: DatabaseTrade<H>[]): void {
@@ -44,7 +45,7 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 		for (const trade of trades)
 			this.databaseTradeHandler.tradeTakesOpenMakers(trade);
 		this.pricing.updateTrades(trades);
-		if (this.realTimeSettlement) {
+		if (this.mtm === null) {
 			this.marginAssets.settle(
 				Length.LONG,
 				this.pricing.getSettlementPrice(),

@@ -6,6 +6,7 @@ import { MarginAssets } from '../models.d/margin-assets';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
+import { Mtm } from '../mark-to-market/mtm';
 export declare class UseCaseUpdateTrades<H extends HLike<H>> {
     private context;
     private marginAssets;
@@ -13,7 +14,7 @@ export declare class UseCaseUpdateTrades<H extends HLike<H>> {
     private pricing;
     private broadcast;
     private databaseTradeHandler;
-    private realTimeSettlement;
-    constructor(context: Context<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, realTimeSettlement: boolean);
+    private mtm;
+    constructor(context: Context<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, mtm: Mtm<H> | null);
     updateTrades(trades: DatabaseTrade<H>[]): void;
 }

@@ -17,7 +17,7 @@ import { TYPES } from '../../injection/default/types';
 
 export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
 	protected Margin: MarginAssets.MarginStatic<H>;
-	protected $accumulation: MarginAssets.Margin<H>;
+	protected $margin: MarginAssets.Margin<H>;
 
 	public constructor(
 		@inject(TYPES.context)
@@ -30,7 +30,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		protected assets: Assets<H>,
 	) {
 		this.Margin = new MarginAssets.MarginStatic<H>(context.Data.H);
-		this.$accumulation = {
+		this.$margin = {
 			[Length.LONG]: new context.Data.H(0),
 			[Length.SHORT]: new context.Data.H(0),
 		};
@@ -42,7 +42,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
-		this.$accumulation[length] = this.$accumulation[length]
+		this.$margin[length] = this.$margin[length]
 			.plus(increment)
 			.round(this.marketSpec.CURRENCY_DP);
 		this.assets.open({ length, volume, dollarVolume })
@@ -54,12 +54,12 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		if (volume.eq(this.assets.getPosition()[length])) {
-			this.$accumulation[length] = new this.context.Data.H(0);
+			this.$margin[length] = new this.context.Data.H(0);
 		}
-		const decrement = this.$accumulation[length]
+		const decrement = this.$margin[length]
 			.times(volume)
 			.div(this.assets.getPosition()[length]);
-		this.$accumulation[length] = this.$accumulation[length]
+		this.$margin[length] = this.$margin[length]
 			.minus(decrement)
 			.round(this.marketSpec.CURRENCY_DP);
 		this.assets.close({ length, volume, dollarVolume });
@@ -77,13 +77,13 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	public capture(): MarginAssets.Snapshot {
 		return {
 			assets: this.assets.capture(),
-			margin: this.Margin.capture(this.$accumulation),
+			margin: this.Margin.capture(this.$margin),
 		};
 	}
 
 	public restore(snapshot: MarginAssets.Snapshot): void {
 		this.assets.restore(snapshot.assets);
-		this.$accumulation = this.Margin.restore(snapshot.margin);
+		this.$margin = this.Margin.restore(snapshot.margin);
 	}
 
 	public getPosition(): Position<H> {

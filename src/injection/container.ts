@@ -89,7 +89,6 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.USE_CASES.getBalances] = this.rcs<UseCaseGetBalances<H>>(UseCaseGetBalances);
 	public [TYPES.USE_CASES.updateOrderbook] = this.rcs<UseCaseUpdateOrderbook<H>>(UseCaseUpdateOrderbook);
 	public [TYPES.USE_CASES.updateTrades] = this.rcs<UseCaseUpdateTrades<H>>(UseCaseUpdateTrades);
-	public abstract [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
 	public [TYPES.USE_CASES.subscription] = this.rcs<UseCaseSubscription<H>>(UseCaseSubscription);
 	public [TYPES.USE_CASES.getProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
 

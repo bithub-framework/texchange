@@ -60,7 +60,6 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.USE_CASES.getBalances]: () => UseCaseGetBalances<H>;
     [TYPES.USE_CASES.updateOrderbook]: () => UseCaseUpdateOrderbook<H>;
     [TYPES.USE_CASES.updateTrades]: () => UseCaseUpdateTrades<H>;
-    abstract [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
     [TYPES.USE_CASES.subscription]: () => UseCaseSubscription<H>;
     [TYPES.USE_CASES.getProgress]: () => UseCaseGetProgress<H>;
     abstract [TYPES.FACADES.config]: () => DelayConfig;

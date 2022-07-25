@@ -29,7 +29,6 @@ class USE_CASES {
 	public static readonly subscription = Symbol('subscription');
 	public static readonly getProgress = Symbol('getProgress');
 	public static readonly updateTrades = Symbol('updateTrades');
-	public static readonly realTimeSettlement = Symbol('realTimeSettlement');
 }
 
 

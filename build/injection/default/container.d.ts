@@ -17,8 +17,7 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.MODELS.pricing]: () => Pricing<H, any>;
     [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
     [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
-    [TYPES.mtm]: () => Mtm<H>;
-    [TYPES.USE_CASES.realTimeSettlement]: () => boolean;
+    [TYPES.mtm]: () => Mtm<H> | null;
     [TYPES.FACADES.config]: () => DelayConfig;
     constructor(timeline: TimelineLike, H: HStatic<H>, initialBalance: H, initialSettlementPrice: H);
 }

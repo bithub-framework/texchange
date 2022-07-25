@@ -25,7 +25,6 @@ declare class USE_CASES {
     static readonly subscription: unique symbol;
     static readonly getProgress: unique symbol;
     static readonly updateTrades: unique symbol;
-    static readonly realTimeSettlement: unique symbol;
 }
 export declare class FACADES {
     static readonly admin: unique symbol;
