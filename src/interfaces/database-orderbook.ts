@@ -1,5 +1,5 @@
 import {
-	HLike, HStatic,
+	HLike,
 	Orderbook, OrderbookStatic,
 	BookOrder,
 	Side,
@@ -23,17 +23,11 @@ export class DatabaseOrderbook<H extends HLike<H>> extends Orderbook<H> {
 	}
 }
 
-export class DatabaseOrderbookStatic<H extends HLike<H>> {
-	private Orderbook = new OrderbookStatic(this.H);
-
-	public constructor(
-		private H: HStatic<H>,
-	) { }
-
-	public copy(
+export class DatabaseOrderbookStatic<H extends HLike<H>> extends OrderbookStatic<H> {
+	public copyDatabaseOrderbook(
 		databaseOrderbook: DatabaseOrderbook<H>,
 	): DatabaseOrderbook<H> {
-		const orderbook = this.Orderbook.copy(databaseOrderbook);
+		const orderbook = this.copyOrderbook(databaseOrderbook);
 		return new DatabaseOrderbook<H>(
 			orderbook.get(Side.BID),
 			orderbook.get(Side.ASK),

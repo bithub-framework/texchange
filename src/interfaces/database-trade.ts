@@ -17,11 +17,11 @@ export class DatabaseTradeStatic<H extends HLike<H>> {
 		private H: HStatic<H>,
 	) { }
 
-	public copy(
+	public copyDatabaseTrade(
 		trade: DatabaseTrade<H>,
 	): DatabaseTrade<H> {
 		return {
-			...this.Trade.copy(trade),
+			...this.Trade.copyTrade(trade),
 			id: trade.id,
 		}
 	}

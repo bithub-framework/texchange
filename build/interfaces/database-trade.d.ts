@@ -7,5 +7,5 @@ export declare class DatabaseTradeStatic<H extends HLike<H>> {
     private H;
     private Trade;
     constructor(H: HStatic<H>);
-    copy(trade: DatabaseTrade<H>): DatabaseTrade<H>;
+    copyDatabaseTrade(trade: DatabaseTrade<H>): DatabaseTrade<H>;
 }

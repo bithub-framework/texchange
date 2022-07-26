@@ -31,7 +31,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 	) { }
 
 	public tradeTakesOpenMakers(trade: Trade<H>): void {
-		const $trade = this.context.Data.Trade.copy(trade);
+		const $trade = this.context.Data.Trade.copyTrade(trade);
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);

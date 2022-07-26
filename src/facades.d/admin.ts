@@ -74,14 +74,14 @@ export class AdminFacade<H extends HLike<H>>
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
-				trade => this.context.Data.DatabaseTrade.copy(trade),
+				trade => this.context.Data.DatabaseTrade.copyDatabaseTrade(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
-			this.context.Data.DatabaseOrderbook.copy($orderbook),
+			this.context.Data.DatabaseOrderbook.copyDatabaseOrderbook($orderbook),
 		);
 	}
 

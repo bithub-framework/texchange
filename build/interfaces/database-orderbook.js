@@ -9,13 +9,9 @@ class DatabaseOrderbook extends secretary_like_1.Orderbook {
     }
 }
 exports.DatabaseOrderbook = DatabaseOrderbook;
-class DatabaseOrderbookStatic {
-    constructor(H) {
-        this.H = H;
-        this.Orderbook = new secretary_like_1.OrderbookStatic(this.H);
-    }
-    copy(databaseOrderbook) {
-        const orderbook = this.Orderbook.copy(databaseOrderbook);
+class DatabaseOrderbookStatic extends secretary_like_1.OrderbookStatic {
+    copyDatabaseOrderbook(databaseOrderbook) {
+        const orderbook = this.copyOrderbook(databaseOrderbook);
         return new DatabaseOrderbook(orderbook.get(secretary_like_1.Side.BID), orderbook.get(secretary_like_1.Side.ASK), orderbook.time, databaseOrderbook.id);
     }
 }

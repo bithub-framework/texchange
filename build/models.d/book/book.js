@@ -83,7 +83,7 @@ let Book = class Book {
     }
     capture() {
         return {
-            basebook: this.context.Data.Orderbook.capture(this.basebook),
+            basebook: this.context.Data.Orderbook.captureOrderbook(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -91,7 +91,7 @@ let Book = class Book {
         };
     }
     restore(snapshot) {
-        this.basebook = this.context.Data.Orderbook.restore(snapshot.basebook);
+        this.basebook = this.context.Data.Orderbook.restoreOrderbook(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY

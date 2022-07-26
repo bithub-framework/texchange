@@ -7,9 +7,9 @@ class DatabaseTradeStatic {
         this.H = H;
         this.Trade = new secretary_like_1.TradeStatic(this.H);
     }
-    copy(trade) {
+    copyDatabaseTrade(trade) {
         return {
-            ...this.Trade.copy(trade),
+            ...this.Trade.copyTrade(trade),
             id: trade.id,
         };
     }
