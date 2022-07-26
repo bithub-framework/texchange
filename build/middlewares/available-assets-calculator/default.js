@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultAvailableAssetsCalculator = void 0;
 const available_assets_calculator_1 = require("./available-assets-calculator");
 const secretary_like_1 = require("secretary-like");
+const frozen_balance_1 = require("../../interfaces/frozen/frozen-balance");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator extends available_assets_calculator_1.AvailableAssetsCalculator {
     // 默认单向持仓模式
@@ -16,17 +17,17 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         const position = this.marginAssets.getPosition();
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();
-        const $final = {};
+        const $final = new frozen_balance_1.FrozenBalance(this.context.Data.H.from(0), this.context.Data.H.from(0));
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
-            const side = length * secretary_like_1.Operation.OPEN;
-            const afterDeduction = this.context.Data.H.max(totalUnfilled[side].minus(position[-length]), new this.context.Data.H(0));
-            $final[length] = totalUnfilled[side].neq(0)
-                ? totalFrozen.balance[length]
+            const side = secretary_like_1.Side.from(length, secretary_like_1.Action.OPEN);
+            const afterDeduction = this.context.Data.H.max(totalUnfilled.get(side).minus(position.get(secretary_like_1.Length.invert(length))), this.context.Data.H.from(0));
+            $final.set(length, totalUnfilled.get(side).neq(0)
+                ? totalFrozen.balance.get(length)
                     .times(afterDeduction)
-                    .div(totalUnfilled[side])
-                : new this.context.Data.H(0);
+                    .div(totalUnfilled.get(side))
+                : this.context.Data.H.from(0));
         }
-        return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
+        return $final.get(secretary_like_1.Length.LONG).plus($final.get(secretary_like_1.Length.SHORT));
     }
 };
 DefaultAvailableAssetsCalculator = __decorate([

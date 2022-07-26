@@ -1,6 +1,6 @@
 import {
 	Length,
-	H, HLike, HStatic,
+	HLike,
 	MarketSpec,
 	AccountSpec,
 	Position,
@@ -8,16 +8,18 @@ import {
 import { Executed } from '../../interfaces/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
-import { Assets } from './assets';
+import { Assets } from './assets/assets';
+import { Margin, MarginStatic } from './margin';
+import { Cost } from './assets/cost';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
 
 
-export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
-	protected Margin: MarginAssets.MarginStatic<H>;
-	protected $margin: MarginAssets.Margin<H>;
+export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<Snapshot> {
+	protected Margin: MarginStatic<H>;
+	protected $margin: Margin<H>;
 
 	public constructor(
 		@inject(TYPES.context)
@@ -29,11 +31,11 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
 	) {
-		this.Margin = new MarginAssets.MarginStatic<H>(context.Data.H);
-		this.$margin = {
-			[Length.LONG]: new context.Data.H(0),
-			[Length.SHORT]: new context.Data.H(0),
-		};
+		this.Margin = new MarginStatic<H>(context.Data.H);
+		this.$margin = new Margin<H>(
+			context.Data.H.from(0),
+			context.Data.H.from(0),
+		);
 	}
 
 	public open({
@@ -42,9 +44,12 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
-		this.$margin[length] = this.$margin[length]
-			.plus(increment)
-			.round(this.marketSpec.CURRENCY_DP);
+		this.$margin.set(
+			length,
+			this.$margin.get(length)
+				.plus(increment)
+				.round(this.marketSpec.CURRENCY_DP),
+		);
 		this.assets.open({ length, volume, dollarVolume })
 	}
 
@@ -53,15 +58,18 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		volume,
 		dollarVolume,
 	}: Executed<H>): void {
-		if (volume.eq(this.assets.getPosition()[length])) {
-			this.$margin[length] = new this.context.Data.H(0);
+		if (volume.eq(this.assets.getPosition().get(length))) {
+			this.$margin.set(length, this.context.Data.H.from(0));
 		}
-		const decrement = this.$margin[length]
+		const decrement = this.$margin.get(length)
 			.times(volume)
-			.div(this.assets.getPosition()[length]);
-		this.$margin[length] = this.$margin[length]
-			.minus(decrement)
-			.round(this.marketSpec.CURRENCY_DP);
+			.div(this.assets.getPosition().get(length));
+		this.$margin.set(
+			length,
+			this.$margin.get(length)
+				.minus(decrement)
+				.round(this.marketSpec.CURRENCY_DP),
+		);
 		this.assets.close({ length, volume, dollarVolume });
 	}
 
@@ -74,14 +82,14 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 
 	public abstract assertEnoughBalance(): void;
 
-	public capture(): MarginAssets.Snapshot {
+	public capture(): Snapshot {
 		return {
 			assets: this.assets.capture(),
 			margin: this.Margin.capture(this.$margin),
 		};
 	}
 
-	public restore(snapshot: MarginAssets.Snapshot): void {
+	public restore(snapshot: Snapshot): void {
 		this.assets.restore(snapshot.assets);
 		this.$margin = this.Margin.restore(snapshot.margin);
 	}
@@ -94,7 +102,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		return this.assets.getBalance();
 	}
 
-	public getCost(): Assets.Cost<H> {
+	public getCost(): Cost<H> {
 		return this.assets.getCost();
 	}
 
@@ -103,49 +111,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	}
 }
 
-
-export namespace MarginAssets {
-	export interface Margin<H extends HLike<H>> {
-		[length: Length]: H;
-	}
-
-	export namespace Margin {
-		export interface Snapshot {
-			[length: Length]: H.Snapshot;
-		}
-	}
-
-	export class MarginStatic<H extends HLike<H>>{
-		public constructor(
-			private H: HStatic<H>,
-		) { }
-
-		public capture(margin: Margin<H>): Margin.Snapshot {
-			return {
-				[Length.LONG]: this.H.capture(margin[Length.LONG]),
-				[Length.SHORT]: this.H.capture(margin[Length.SHORT]),
-			};
-		}
-
-		public restore(snapshot: Margin.Snapshot): Margin<H> {
-			return {
-				[Length.LONG]: this.H.restore(snapshot[Length.LONG]),
-				[Length.SHORT]: this.H.restore(snapshot[Length.SHORT]),
-			};
-		}
-
-		public copy(margin: Margin<H>): Margin<H> {
-			return {
-				[Length.LONG]: margin[Length.LONG],
-				[Length.SHORT]: margin[Length.SHORT],
-			};
-		}
-	}
-
-	export type Cost<H extends HLike<H>> = Assets.Cost<H>;
-
-	export interface Snapshot {
-		assets: Assets.Snapshot;
-		margin: Margin.Snapshot;
-	}
+export interface Snapshot {
+	assets: Assets.Snapshot;
+	margin: Margin.Snapshot;
 }

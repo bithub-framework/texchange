@@ -39,9 +39,9 @@ let UseCaseAmendOrder = class UseCaseAmendOrder {
             quantity: amendment.newUnfilled.plus(filled),
         };
         this.validator.validateOrder(order);
-        const $order = this.context.Data.OpenOrder.copy(order);
+        const $order = this.context.Data.OpenOrder.copyOpenOrder(order);
         const trades = this.matcher.$match($order);
-        const maker = this.context.Data.OpenOrder.copy($order);
+        const maker = this.context.Data.OpenOrder.copyOpenOrder($order);
         const behind = this.book.lineUp(maker);
         this.makers.appendOrder(maker, behind);
         if (trades.length) {

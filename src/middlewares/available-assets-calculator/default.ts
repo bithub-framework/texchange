@@ -1,8 +1,9 @@
 import { AvailableAssetsCalculator } from './available-assets-calculator';
 import {
 	HLike,
-	Length, Side, Operation,
+	Length, Side, Action,
 } from 'secretary-like';
+import { FrozenBalance } from '../../interfaces/frozen/frozen-balance';
 
 import { injextends } from '@zimtsui/injektor';
 
@@ -14,19 +15,25 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 		const position = this.marginAssets.getPosition();
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();
-		const $final: { [length: number]: H; } = {};
+		const $final = new FrozenBalance<H>(
+			this.context.Data.H.from(0),
+			this.context.Data.H.from(0),
+		);
 		for (const length of [Length.LONG, Length.SHORT]) {
-			const side: Side = length * Operation.OPEN;
+			const side = Side.from(length, Action.OPEN);
 			const afterDeduction = this.context.Data.H.max(
-				totalUnfilled[side].minus(position[-length]),
-				new this.context.Data.H(0),
+				totalUnfilled.get(side).minus(position.get(Length.invert(length))),
+				this.context.Data.H.from(0),
 			);
-			$final[length] = totalUnfilled[side].neq(0)
-				? totalFrozen.balance[length]
-					.times(afterDeduction)
-					.div(totalUnfilled[side])
-				: new this.context.Data.H(0);
+			$final.set(
+				length,
+				totalUnfilled.get(side).neq(0)
+					? totalFrozen.balance.get(length)
+						.times(afterDeduction)
+						.div(totalUnfilled.get(side))
+					: this.context.Data.H.from(0),
+			);
 		}
-		return $final[Length.LONG].plus($final[Length.SHORT]);
+		return $final.get(Length.LONG).plus($final.get(Length.SHORT));
 	}
 }

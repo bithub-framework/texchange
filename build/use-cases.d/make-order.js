@@ -27,13 +27,13 @@ let UseCaseMakeOrder = class UseCaseMakeOrder {
         const order = {
             ...limitOrder,
             id: ++this.progress.userOrderCount,
-            filled: new this.context.Data.H(0),
+            filled: this.context.Data.H.from(0),
             unfilled: limitOrder.quantity,
         };
         this.validator.validateOrder(order);
-        const $order = this.context.Data.OpenOrder.copy(order);
+        const $order = this.context.Data.OpenOrder.copyOpenOrder(order);
         const trades = this.matcher.$match($order);
-        const maker = this.context.Data.OpenOrder.copy($order);
+        const maker = this.context.Data.OpenOrder.copyOpenOrder($order);
         if ($order.unfilled.gt(0)) {
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);

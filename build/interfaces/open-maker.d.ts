@@ -1,5 +1,5 @@
-import { HLike, H, HStatic, OpenOrder } from 'secretary-like';
-import { Frozen, FrozenStatic } from './frozen';
+import { HLike, H, HStatic, OpenOrder, OpenOrderStatic } from 'secretary-like';
+import { Frozen, FrozenStatic } from './frozen/frozen';
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H> {
     behind: H;
     frozen: Frozen<H>;
@@ -10,10 +10,8 @@ export declare namespace OpenMaker {
         readonly frozen: Frozen.Snapshot;
     }
 }
-export declare class OpenMakerStatic<H extends HLike<H>> {
-    private H;
+export declare class OpenMakerStatic<H extends HLike<H>> extends OpenOrderStatic<H> {
     private Frozen;
-    private readonly OpenOrder;
     constructor(H: HStatic<H>, Frozen: FrozenStatic<H>);
     capture(order: OpenMaker<H>): OpenMaker.Snapshot;
     restore(snapshot: OpenMaker.Snapshot): OpenMaker<H>;

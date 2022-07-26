@@ -11,23 +11,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Assets = void 0;
 const secretary_like_1 = require("secretary-like");
+const cost_1 = require("./cost");
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
-const types_1 = require("../../injection/types");
+const types_1 = require("../../../injection/types");
 let Assets = class Assets {
     constructor(context, marketSpec, balance) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.balance = balance;
-        this.Cost = new Assets.CostStatic(this.context.Data.H);
-        this.$position = {
-            [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
-            [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
-        };
-        this.$cost = {
-            [secretary_like_1.Length.LONG]: new this.context.Data.H(0),
-            [secretary_like_1.Length.SHORT]: new this.context.Data.H(0),
-        };
+        this.Cost = new cost_1.CostStatic(this.context.Data.H);
+        this.$position = new secretary_like_1.Position(this.context.Data.H.from(0), this.context.Data.H.from(0));
+        this.$cost = new cost_1.Cost(this.context.Data.H.from(0), this.context.Data.H.from(0));
     }
     getBalance() {
         return this.balance;
@@ -54,24 +49,24 @@ let Assets = class Assets {
         this.balance = this.balance.minus(fee);
     }
     open({ length, volume, dollarVolume, }) {
-        this.$position[length] = this.$position[length].plus(volume);
-        this.$cost[length] = this.$cost[length].plus(dollarVolume);
+        this.$position.set(length, this.$position.get(length).plus(volume));
+        this.$cost.set(length, this.$cost.get(length).plus(dollarVolume));
     }
     /**
      *
      * @returns Profit
      */
     close({ length, volume, dollarVolume, }) {
-        assert(volume.lte(this.$position[length]));
-        const cost = this.$position[length].neq(0)
-            ? this.$cost[length]
+        assert(volume.lte(this.$position.get(length)));
+        const cost = this.$position.get(length).neq(0)
+            ? this.$cost.get(length)
                 .times(volume)
-                .div(this.$position[length])
+                .div(this.$position.get(length))
                 .round(this.marketSpec.CURRENCY_DP)
-            : new this.context.Data.H(0);
+            : this.context.Data.H.from(0);
         const profit = dollarVolume.minus(cost).times(length);
-        this.$position[length] = this.$position[length].minus(volume);
-        this.$cost[length] = this.$cost[length].minus(cost);
+        this.$position.set(length, this.$position.get(length).minus(volume));
+        this.$cost.set(length, this.$cost.get(length).minus(cost));
         this.balance = this.balance.plus(profit);
         return profit;
     }
@@ -79,10 +74,10 @@ let Assets = class Assets {
      * @returns Profit
      */
     settle(length, settlementPrice) {
-        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position[length]).round(this.marketSpec.CURRENCY_DP);
+        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position.get(length)).round(this.marketSpec.CURRENCY_DP);
         const executed = {
             length,
-            volume: this.$position[length],
+            volume: this.$position.get(length),
             dollarVolume,
         };
         const profit = this.close(executed);
@@ -95,32 +90,5 @@ Assets = __decorate([
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
 ], Assets);
-exports.Assets = Assets;
-(function (Assets) {
-    class CostStatic {
-        constructor(H) {
-            this.H = H;
-        }
-        capture(cost) {
-            return {
-                [secretary_like_1.Length.LONG]: this.H.capture(cost[secretary_like_1.Length.LONG]),
-                [secretary_like_1.Length.SHORT]: this.H.capture(cost[secretary_like_1.Length.SHORT]),
-            };
-        }
-        restore(snapshot) {
-            return {
-                [secretary_like_1.Length.LONG]: this.H.restore(snapshot[secretary_like_1.Length.LONG]),
-                [secretary_like_1.Length.SHORT]: this.H.restore(snapshot[secretary_like_1.Length.SHORT]),
-            };
-        }
-        copy(cost) {
-            return {
-                [secretary_like_1.Length.LONG]: cost[secretary_like_1.Length.LONG],
-                [secretary_like_1.Length.SHORT]: cost[secretary_like_1.Length.SHORT],
-            };
-        }
-    }
-    Assets.CostStatic = CostStatic;
-})(Assets = exports.Assets || (exports.Assets = {}));
 exports.Assets = Assets;
 //# sourceMappingURL=assets.js.map

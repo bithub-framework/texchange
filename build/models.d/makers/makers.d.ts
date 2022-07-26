@@ -1,6 +1,7 @@
-import { Side, HLike, HStatic, OpenOrder, OrderId, MarketSpec } from 'secretary-like';
+import { HLike, OpenOrder, OrderId, MarketSpec } from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
-import { Frozen } from '../../interfaces/frozen';
+import { Frozen } from '../../interfaces/frozen/frozen';
+import { TotalUnfilled, TotalUnfilledStatic } from './total-unfilled';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
@@ -8,10 +9,10 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     protected marketSpec: MarketSpec<H>;
     private $orders;
     private $totalUnfilled;
-    protected TotalUnfilled: Makers.TotalUnfilledStatic<H>;
+    protected TotalUnfilled: TotalUnfilledStatic<H>;
     private totalFrozen;
     constructor(context: Context<H>, marketSpec: MarketSpec<H>);
-    getTotalUnfilled(): Makers.TotalUnfilled.Functional<H>;
+    getTotalUnfilled(): TotalUnfilled<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<OpenMaker<H>>;
     getOrder(oid: OrderId): OpenMaker<H>;
@@ -27,18 +28,5 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     forcedlyRemoveOrder(oid: OrderId): void;
 }
 export declare namespace Makers {
-    interface TotalUnfilled<H> {
-        [side: Side]: H;
-    }
-    namespace TotalUnfilled {
-        interface Functional<H> {
-            readonly [side: Side]: H;
-        }
-    }
-    class TotalUnfilledStatic<H extends HLike<H>> {
-        private H;
-        constructor(H: HStatic<H>);
-        copy(totalUnfilled: TotalUnfilled<H> | TotalUnfilled.Functional<H>): TotalUnfilled<H> | TotalUnfilled.Functional<H>;
-    }
     type Snapshot = readonly OpenMaker.Snapshot[];
 }

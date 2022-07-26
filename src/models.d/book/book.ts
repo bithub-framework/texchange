@@ -14,20 +14,18 @@ import { TYPES } from '../../injection/types';
 
 
 
-export class Book<H extends HLike<H>>
-    implements StatefulLike<Book.Snapshot> {
+export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
     private Decrements = new DecrementsStatic<H>(this.context.Data.H);
 
     private time = Number.NEGATIVE_INFINITY;
-    private basebook: Orderbook<H> = {
-        [Side.ASK]: [],
-        [Side.BID]: [],
-        time: Number.NEGATIVE_INFINITY,
-    };
-    private decrements: Decrements<H> = {
-        [Side.ASK]: new Map<string, H>(),
-        [Side.BID]: new Map<string, H>(),
-    };
+    private basebook = new Orderbook<H>(
+        [], [],
+        Number.NEGATIVE_INFINITY,
+    );
+    private decrements = new Decrements<H>(
+        new Map<string, H>(),
+        new Map<string, H>(),
+    );
     private finalbookCache: Orderbook<H> | null = null;
 
     public constructor(
@@ -51,10 +49,10 @@ export class Book<H extends HLike<H>>
     ): void {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_DP);
-        const oldTotalDecrement = this.decrements[side].get(priceString)
-            || new this.context.Data.H(0);
+        const oldTotalDecrement = this.decrements.get(side).get(priceString)
+            || this.context.Data.H.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
-        this.decrements[side].set(priceString, newTotalDecrement);
+        this.decrements.get(side).set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
         this.finalbookCache = null;
     }
@@ -62,32 +60,34 @@ export class Book<H extends HLike<H>>
     private tryApply(): Orderbook<H> {
         if (this.finalbookCache) return this.finalbookCache;
 
-        const $final: Orderbook<H> = { time: this.time };
-        const total: Decrements<H> = {
-            [Side.ASK]: new Map<string, H>(),
-            [Side.BID]: new Map<string, H>(),
-        };
+        const $final = new Orderbook<H>([], [], this.time);
+        const $total = new Decrements<H>(
+            new Map<string, H>(),
+            new Map<string, H>(),
+        );
         for (const side of [Side.BID, Side.ASK]) {
-            for (const order of this.basebook[side])
-                total[side].set(
+            for (const order of this.basebook.get(side))
+                $total.get(side).set(
                     order.price.toFixed(this.marketSpec.PRICE_DP),
                     order.quantity,
                 );
-            for (const [priceString, decrement] of this.decrements[side]) {
-                let quantity = total[side].get(priceString);
+            for (const [priceString, decrement] of this.decrements.get(side)) {
+                let quantity = $total.get(side).get(priceString);
                 if (typeof quantity !== 'undefined') {
                     quantity = quantity.minus(decrement);
-                    if (quantity.lte(0)) total[side].delete(priceString);
-                    else total[side].set(priceString, quantity);
-                } else this.decrements[side].delete(priceString);
+                    if (quantity.lte(0)) $total.get(side).delete(priceString);
+                    else $total.get(side).set(priceString, quantity);
+                } else this.decrements.get(side).delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final[side] = [...total[side]]
-                .map(([priceString, quantity]) => ({
-                    price: new this.context.Data.H(priceString),
+            $final.set(
+                side,
+                [...$total.get(side)].map(([priceString, quantity]) => ({
+                    price: this.context.Data.H.from(priceString),
                     quantity,
                     side,
-                }));
+                })),
+            );
         }
         return this.finalbookCache = $final;
     }
@@ -97,8 +97,8 @@ export class Book<H extends HLike<H>>
     }
 
     public lineUp(order: OpenOrder<H>): H {
-        const makers = this.getOrderbook()[order.side];
-        let behind = new this.context.Data.H(0);
+        const makers = this.getOrderbook().get(order.side);
+        let behind = this.context.Data.H.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);

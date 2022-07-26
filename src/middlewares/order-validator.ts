@@ -1,5 +1,5 @@
 import {
-	Operation, Length,
+	Action, Length, Side,
 	HLike,
 	OpenOrder,
 	MarketSpec,
@@ -38,12 +38,12 @@ export class OrderValidator<H extends HLike<H>> {
 		const closable = this.calculator.getClosable();
 		this.makers.appendOrder(
 			order,
-			new this.context.Data.H(0),
+			this.context.Data.H.from(0),
 		);
 		try {
 			const enoughPosition =
-				closable[Length.LONG].gte(0) &&
-				closable[Length.SHORT].gte(0);
+				closable.get(Length.LONG).gte(0) &&
+				closable.get(Length.SHORT).gte(0);
 			assert(enoughPosition);
 
 			const enoughBalance = this.calculator.getAvailable()
@@ -66,7 +66,7 @@ export class OrderValidator<H extends HLike<H>> {
 		assert(order.unfilled.gt(0));
 		assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
 		assert(order.length === Length.LONG || order.length === Length.SHORT);
-		assert(order.operation === Operation.OPEN || order.operation === Operation.CLOSE);
-		assert(order.operation * order.length === order.side);
+		assert(order.action === Action.OPEN || order.action === Action.CLOSE);
+		assert(Side.from(order.length, order.action) === order.side);
 	}
 }

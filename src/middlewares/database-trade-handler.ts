@@ -1,6 +1,6 @@
 import {
 	Side,
-	Operation,
+	Action,
 	HLike, H,
 	OpenOrder,
 	Trade,
@@ -80,7 +80,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 				.times(this.accountSpec.MAKER_FEE_RATE)
 				.round(this.marketSpec.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
 		);
-		if (maker.operation === Operation.OPEN)
+		if (maker.action === Action.OPEN)
 			this.marginAssets.open({
 				length: maker.length,
 				volume,

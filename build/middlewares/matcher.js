@@ -25,9 +25,9 @@ let Matcher = class Matcher {
     $match($taker) {
         const orderbook = this.book.getOrderbook();
         const trades = [];
-        let volume = new this.context.Data.H(0);
-        let dollarVolume = new this.context.Data.H(0);
-        for (const maker of orderbook[-$taker.side])
+        let volume = this.context.Data.H.from(0);
+        let dollarVolume = this.context.Data.H.from(0);
+        for (const maker of orderbook.get(secretary_like_1.Side.invert($taker.side)))
             if (($taker.side === secretary_like_1.Side.BID && $taker.price.gte(maker.price) ||
                 $taker.side === secretary_like_1.Side.ASK && $taker.price.lte(maker.price)) && $taker.unfilled.gt(0)) {
                 const quantity = this.context.Data.H.min($taker.unfilled, maker.quantity);
@@ -49,7 +49,7 @@ let Matcher = class Matcher {
         this.marginAssets.pay(dollarVolume
             .times(this.accountSpec.TAKER_FEE_RATE)
             .round(this.marketSpec.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
-        if ($taker.operation === secretary_like_1.Operation.OPEN)
+        if ($taker.action === secretary_like_1.Action.OPEN)
             this.marginAssets.open({
                 length: $taker.length,
                 volume,

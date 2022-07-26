@@ -10,7 +10,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginAssets = void 0;
-const secretary_like_1 = require("secretary-like");
+const margin_1 = require("./margin");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let MarginAssets = class MarginAssets {
@@ -19,40 +19,37 @@ let MarginAssets = class MarginAssets {
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.assets = assets;
-        this.Margin = new MarginAssets.MarginStatic(context.Data.H);
-        this.$accumulation = {
-            [secretary_like_1.Length.LONG]: new context.Data.H(0),
-            [secretary_like_1.Length.SHORT]: new context.Data.H(0),
-        };
+        this.Margin = new margin_1.MarginStatic(context.Data.H);
+        this.$margin = new margin_1.Margin(context.Data.H.from(0), context.Data.H.from(0));
     }
     open({ length, volume, dollarVolume, }) {
         const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
-        this.$accumulation[length] = this.$accumulation[length]
+        this.$margin.set(length, this.$margin.get(length)
             .plus(increment)
-            .round(this.marketSpec.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP));
         this.assets.open({ length, volume, dollarVolume });
     }
     close({ length, volume, dollarVolume, }) {
-        if (volume.eq(this.assets.getPosition()[length])) {
-            this.$accumulation[length] = new this.context.Data.H(0);
+        if (volume.eq(this.assets.getPosition().get(length))) {
+            this.$margin.set(length, this.context.Data.H.from(0));
         }
-        const decrement = this.$accumulation[length]
+        const decrement = this.$margin.get(length)
             .times(volume)
-            .div(this.assets.getPosition()[length]);
-        this.$accumulation[length] = this.$accumulation[length]
+            .div(this.assets.getPosition().get(length));
+        this.$margin.set(length, this.$margin.get(length)
             .minus(decrement)
-            .round(this.marketSpec.CURRENCY_DP);
+            .round(this.marketSpec.CURRENCY_DP));
         this.assets.close({ length, volume, dollarVolume });
     }
     capture() {
         return {
             assets: this.assets.capture(),
-            margin: this.Margin.capture(this.$accumulation),
+            margin: this.Margin.capture(this.$margin),
         };
     }
     restore(snapshot) {
         this.assets.restore(snapshot.assets);
-        this.$accumulation = this.Margin.restore(snapshot.margin);
+        this.$margin = this.Margin.restore(snapshot.margin);
     }
     getPosition() {
         return this.assets.getPosition();
@@ -73,32 +70,5 @@ MarginAssets = __decorate([
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets))
 ], MarginAssets);
-exports.MarginAssets = MarginAssets;
-(function (MarginAssets) {
-    class MarginStatic {
-        constructor(H) {
-            this.H = H;
-        }
-        capture(margin) {
-            return {
-                [secretary_like_1.Length.LONG]: this.H.capture(margin[secretary_like_1.Length.LONG]),
-                [secretary_like_1.Length.SHORT]: this.H.capture(margin[secretary_like_1.Length.SHORT]),
-            };
-        }
-        restore(snapshot) {
-            return {
-                [secretary_like_1.Length.LONG]: this.H.restore(snapshot[secretary_like_1.Length.LONG]),
-                [secretary_like_1.Length.SHORT]: this.H.restore(snapshot[secretary_like_1.Length.SHORT]),
-            };
-        }
-        copy(margin) {
-            return {
-                [secretary_like_1.Length.LONG]: margin[secretary_like_1.Length.LONG],
-                [secretary_like_1.Length.SHORT]: margin[secretary_like_1.Length.SHORT],
-            };
-        }
-    }
-    MarginAssets.MarginStatic = MarginStatic;
-})(MarginAssets = exports.MarginAssets || (exports.MarginAssets = {}));
 exports.MarginAssets = MarginAssets;
 //# sourceMappingURL=margin-assets.js.map

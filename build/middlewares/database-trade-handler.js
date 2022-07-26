@@ -57,7 +57,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
         this.marginAssets.pay(dollarVolume
             .times(this.accountSpec.MAKER_FEE_RATE)
             .round(this.marketSpec.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
-        if (maker.operation === secretary_like_1.Operation.OPEN)
+        if (maker.action === secretary_like_1.Action.OPEN)
             this.marginAssets.open({
                 length: maker.length,
                 volume,

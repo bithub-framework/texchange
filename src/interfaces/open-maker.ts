@@ -2,7 +2,7 @@ import {
 	HLike, H, HStatic,
 	OpenOrder, OpenOrderStatic,
 } from 'secretary-like';
-import { Frozen, FrozenStatic } from './frozen';
+import { Frozen, FrozenStatic } from './frozen/frozen';
 
 
 export interface OpenMaker<H extends HLike<H>>
@@ -19,17 +19,17 @@ export namespace OpenMaker {
 	}
 }
 
-export class OpenMakerStatic<H extends HLike<H>> {
-	private readonly OpenOrder = new OpenOrderStatic(this.H);
-
+export class OpenMakerStatic<H extends HLike<H>> extends OpenOrderStatic<H>{
 	public constructor(
-		private H: HStatic<H>,
+		H: HStatic<H>,
 		private Frozen: FrozenStatic<H>,
-	) { }
+	) {
+		super(H);
+	}
 
 	public capture(order: OpenMaker<H>): OpenMaker.Snapshot {
 		return {
-			...this.OpenOrder.capture(order),
+			...this.captureOpenOrder(order),
 			behind: this.H.capture(order.behind),
 			frozen: this.Frozen.capture(order.frozen),
 		}
@@ -37,7 +37,7 @@ export class OpenMakerStatic<H extends HLike<H>> {
 
 	public restore(snapshot: OpenMaker.Snapshot): OpenMaker<H> {
 		return {
-			...this.OpenOrder.restore(snapshot),
+			...this.restoreOpenOrder(snapshot),
 			behind: this.H.restore(snapshot.behind),
 			frozen: this.Frozen.restore(snapshot.frozen),
 		}
@@ -45,7 +45,7 @@ export class OpenMakerStatic<H extends HLike<H>> {
 
 	public copy(order: OpenMaker<H>): OpenMaker<H> {
 		return {
-			...this.OpenOrder.copy(order),
+			...this.copyOpenOrder(order),
 			behind: order.behind,
 			frozen: order.frozen,
 		};

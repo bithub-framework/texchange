@@ -1,16 +1,29 @@
 import {
 	Side,
-	HStatic, HLike, H,
+	HLike, H, HStatic,
 } from 'secretary-like';
 
 
-export interface Decrements<H extends HLike<H>> {
-	[side: Side]: Map<string, H>;
+export class Decrements<H extends HLike<H>> {
+	public constructor(
+		private bids: Map<string, H>,
+		private asks: Map<string, H>,
+	) { }
+
+	public get(side: Side): Map<string, H> {
+		if (side === Side.BID) return this.bids;
+		else return this.asks;
+	}
+	public set(side: Side, map: Map<string, H>): void {
+		if (side === Side.BID) this.bids = map;
+		else this.asks = map;
+	}
 }
 
 export namespace Decrements {
 	export interface Snapshot {
-		[side: Side]: [string, H.Snapshot][],
+		bids: [string, H.Snapshot][];
+		asks: [string, H.Snapshot][];
 	}
 }
 
@@ -21,11 +34,11 @@ export class DecrementsStatic<H extends HLike<H>> {
 
 	public capture(decrements: Decrements<H>): Decrements.Snapshot {
 		return {
-			[Side.ASK]: [...decrements[Side.ASK]].map(
+			bids: [...decrements.get(Side.BID)].map(
 				([priceString, decrement]) =>
 					[priceString, this.H.capture(decrement)],
 			),
-			[Side.BID]: [...decrements[Side.BID]].map(
+			asks: [...decrements.get(Side.ASK)].map(
 				([priceString, decrement]) =>
 					[priceString, this.H.capture(decrement)],
 			),
@@ -33,14 +46,19 @@ export class DecrementsStatic<H extends HLike<H>> {
 	}
 
 	public restore(snapshot: Decrements.Snapshot): Decrements<H> {
-		const decrements: Decrements<H> = {};
-		for (const side of [Side.ASK, Side.BID]) {
-			decrements[side] = new Map<string, H>(
-				snapshot[side].map(
+		return new Decrements<H>(
+			new Map<string, H>(
+				snapshot.bids.map(
 					([priceString, decrement]) =>
 						[priceString, this.H.restore(decrement)]
-				));
-		}
-		return decrements;
+				),
+			),
+			new Map<string, H>(
+				snapshot.asks.map(
+					([priceString, decrement]) =>
+						[priceString, this.H.restore(decrement)]
+				),
+			),
+		);
 	}
 }

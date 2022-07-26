@@ -11,6 +11,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const secretary_like_1 = require("secretary-like");
+const frozen_balance_1 = require("../../interfaces/frozen/frozen-balance");
+const total_unfilled_1 = require("./total-unfilled");
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
@@ -19,11 +21,8 @@ let Makers = class Makers {
         this.context = context;
         this.marketSpec = marketSpec;
         this.$orders = new Map();
-        this.$totalUnfilled = {
-            [secretary_like_1.Side.ASK]: new context.Data.H(0),
-            [secretary_like_1.Side.BID]: new context.Data.H(0),
-        };
-        this.TotalUnfilled = new Makers.TotalUnfilledStatic(context.Data.H);
+        this.$totalUnfilled = new total_unfilled_1.TotalUnfilled(context.Data.H.from(0), context.Data.H.from(0));
+        this.TotalUnfilled = new total_unfilled_1.TotalUnfilledStatic(context.Data.H);
         this.totalFrozen = context.Data.Frozen.ZERO;
     }
     getTotalUnfilled() {
@@ -53,37 +52,31 @@ let Makers = class Makers {
             this.$orders.set(order.id, order);
         }
         for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
-            this.$totalUnfilled[side] = [...this.$orders.values()]
+            this.$totalUnfilled.set(side, [...this.$orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), new this.context.Data.H(0));
+                .reduce((total, order) => total.plus(order.unfilled), this.context.Data.H.from(0)));
         }
         this.totalFrozen = [...this.$orders.values()]
             .reduce((total, order) => this.context.Data.Frozen.plus(total, order.frozen), this.context.Data.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
-            balance: {
-                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.marketSpec.CURRENCY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.marketSpec.CURRENCY_DP),
-            },
-            position: {
-                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.marketSpec.QUANTITY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.marketSpec.QUANTITY_DP),
-            },
+            balance: new frozen_balance_1.FrozenBalance(frozen.balance.get(secretary_like_1.Length.LONG).round(this.marketSpec.CURRENCY_DP), frozen.balance.get(secretary_like_1.Length.SHORT).round(this.marketSpec.CURRENCY_DP)),
+            position: new secretary_like_1.Position(frozen.position.get(secretary_like_1.Length.LONG).round(this.marketSpec.QUANTITY_DP), frozen.position.get(secretary_like_1.Length.SHORT).round(this.marketSpec.QUANTITY_DP)),
         };
     }
     appendOrder(order, behind) {
         assert(order.unfilled.gt(0));
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         const $order = {
-            ...this.context.Data.OpenOrder.copy(order),
+            ...this.context.Data.OpenOrder.copyOpenOrder(order),
             behind,
             frozen: toFreeze,
         };
         this.$orders.set(order.id, $order);
         this.totalFrozen = this.context.Data.Frozen.plus(this.totalFrozen, toFreeze);
-        this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
-            .plus(order.unfilled);
+        this.$totalUnfilled.set(order.side, this.$totalUnfilled.get(order.side)
+            .plus(order.unfilled));
     }
     takeOrder(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -91,12 +84,12 @@ let Makers = class Makers {
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...this.context.Data.OpenOrder.copy($order),
+            ...this.context.Data.OpenOrder.copyOpenOrder($order),
             filled: $order.filled.plus(volume),
             unfilled: $order.unfilled.minus(volume),
         };
         if (newOrder.unfilled.gt(0))
-            this.appendOrder(newOrder, new this.context.Data.H(0));
+            this.appendOrder(newOrder, this.context.Data.H.from(0));
     }
     takeOrderQueue(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -104,14 +97,14 @@ let Makers = class Makers {
             assert(volume.lte($order.behind));
         $order.behind = typeof volume !== 'undefined'
             ? $order.behind.minus(volume)
-            : new this.context.Data.H(0);
+            : this.context.Data.H.from(0);
         this.$orders.set(oid, $order);
     }
     removeOrder(oid) {
         const $order = this.$getOrder(oid);
         this.$orders.delete(oid);
-        this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
-            .minus($order.unfilled);
+        this.$totalUnfilled.set($order.side, this.$totalUnfilled.get($order.side)
+            .minus($order.unfilled));
         this.totalFrozen = this.context.Data.Frozen.minus(this.totalFrozen, $order.frozen);
     }
     forcedlyRemoveOrder(oid) {
@@ -125,20 +118,5 @@ Makers = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
 ], Makers);
-exports.Makers = Makers;
-(function (Makers) {
-    class TotalUnfilledStatic {
-        constructor(H) {
-            this.H = H;
-        }
-        copy(totalUnfilled) {
-            return {
-                [secretary_like_1.Side.ASK]: totalUnfilled[secretary_like_1.Side.ASK],
-                [secretary_like_1.Side.BID]: totalUnfilled[secretary_like_1.Side.BID],
-            };
-        }
-    }
-    Makers.TotalUnfilledStatic = TotalUnfilledStatic;
-})(Makers = exports.Makers || (exports.Makers = {}));
 exports.Makers = Makers;
 //# sourceMappingURL=makers.js.map

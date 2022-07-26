@@ -2,7 +2,7 @@ import {
 	HLike, H,
 	OpenOrder,
 	Trade,
-	Side, Operation,
+	Side, Action,
 } from 'secretary-like';
 import { Context } from '../context';
 import { MarketSpec } from 'secretary-like';
@@ -35,9 +35,9 @@ export class Matcher<H extends HLike<H>> {
 		const orderbook = this.book.getOrderbook();
 
 		const trades: Trade<H>[] = [];
-		let volume = new this.context.Data.H(0);
-		let dollarVolume = new this.context.Data.H(0);
-		for (const maker of orderbook[-$taker.side])
+		let volume = this.context.Data.H.from(0);
+		let dollarVolume = this.context.Data.H.from(0);
+		for (const maker of orderbook.get(Side.invert($taker.side)))
 			if (
 				(
 					$taker.side === Side.BID && $taker.price.gte(maker.price) ||
@@ -69,7 +69,7 @@ export class Matcher<H extends HLike<H>> {
 					H.RoundingMode.HALF_AWAY_FROM_ZERO,
 				),
 		);
-		if ($taker.operation === Operation.OPEN)
+		if ($taker.action === Action.OPEN)
 			this.marginAssets.open({
 				length: $taker.length,
 				volume,

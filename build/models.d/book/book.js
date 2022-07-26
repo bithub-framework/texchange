@@ -21,15 +21,8 @@ let Book = class Book {
         this.marketSpec = marketSpec;
         this.Decrements = new decrements_1.DecrementsStatic(this.context.Data.H);
         this.time = Number.NEGATIVE_INFINITY;
-        this.basebook = {
-            [secretary_like_1.Side.ASK]: [],
-            [secretary_like_1.Side.BID]: [],
-            time: Number.NEGATIVE_INFINITY,
-        };
-        this.decrements = {
-            [secretary_like_1.Side.ASK]: new Map(),
-            [secretary_like_1.Side.BID]: new Map(),
-        };
+        this.basebook = new secretary_like_1.Orderbook([], [], Number.NEGATIVE_INFINITY);
+        this.decrements = new decrements_1.Decrements(new Map(), new Map());
         this.finalbookCache = null;
     }
     setBasebook(basebook) {
@@ -41,43 +34,39 @@ let Book = class Book {
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_DP);
-        const oldTotalDecrement = this.decrements[side].get(priceString)
-            || new this.context.Data.H(0);
+        const oldTotalDecrement = this.decrements.get(side).get(priceString)
+            || this.context.Data.H.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
-        this.decrements[side].set(priceString, newTotalDecrement);
+        this.decrements.get(side).set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
         this.finalbookCache = null;
     }
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
-        const $final = { time: this.time };
-        const total = {
-            [secretary_like_1.Side.ASK]: new Map(),
-            [secretary_like_1.Side.BID]: new Map(),
-        };
+        const $final = new secretary_like_1.Orderbook([], [], this.time);
+        const $total = new decrements_1.Decrements(new Map(), new Map());
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
-            for (const order of this.basebook[side])
-                total[side].set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
-            for (const [priceString, decrement] of this.decrements[side]) {
-                let quantity = total[side].get(priceString);
+            for (const order of this.basebook.get(side))
+                $total.get(side).set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
+            for (const [priceString, decrement] of this.decrements.get(side)) {
+                let quantity = $total.get(side).get(priceString);
                 if (typeof quantity !== 'undefined') {
                     quantity = quantity.minus(decrement);
                     if (quantity.lte(0))
-                        total[side].delete(priceString);
+                        $total.get(side).delete(priceString);
                     else
-                        total[side].set(priceString, quantity);
+                        $total.get(side).set(priceString, quantity);
                 }
                 else
-                    this.decrements[side].delete(priceString);
+                    this.decrements.get(side).delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final[side] = [...total[side]]
-                .map(([priceString, quantity]) => ({
-                price: new this.context.Data.H(priceString),
+            $final.set(side, [...$total.get(side)].map(([priceString, quantity]) => ({
+                price: this.context.Data.H.from(priceString),
                 quantity,
                 side,
-            }));
+            })));
         }
         return this.finalbookCache = $final;
     }
@@ -85,8 +74,8 @@ let Book = class Book {
         return this.tryApply();
     }
     lineUp(order) {
-        const makers = this.getOrderbook()[order.side];
-        let behind = new this.context.Data.H(0);
+        const makers = this.getOrderbook().get(order.side);
+        let behind = this.context.Data.H.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);

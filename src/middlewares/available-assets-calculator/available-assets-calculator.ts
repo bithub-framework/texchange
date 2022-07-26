@@ -1,9 +1,9 @@
 import {
 	HLike,
 	Length,
-	Closable,
 	Balances,
 	Positions,
+	Position,
 } from 'secretary-like';
 import { Context } from '../../context';
 import { MarginAssets } from '../../models.d/margin-assets';
@@ -35,15 +35,15 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 
 	protected abstract getFinalFrozenBalance(): H;
 
-	public getClosable(): Closable<H> {
+	public getClosable(): Position<H> {
 		const totalFrozen = this.makers.getTotalFrozen();
 		const position = this.marginAssets.getPosition();
-		return {
-			[Length.LONG]: position[Length.LONG]
-				.minus(totalFrozen.position[Length.LONG]),
-			[Length.SHORT]: position[Length.SHORT]
-				.minus(totalFrozen.position[Length.SHORT]),
-		};
+		return new Position(
+			position.get(Length.LONG)
+				.minus(totalFrozen.position.get(Length.LONG)),
+			position.get(Length.SHORT)
+				.minus(totalFrozen.position.get(Length.SHORT)),
+		);
 	}
 
 	public getBalances(): Balances<H> {

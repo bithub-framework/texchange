@@ -6,7 +6,7 @@ import { TimelineLike } from 'secretary-like';
 import { DataStatic } from '../interfaces/data';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
-import { Assets } from '../models.d/margin-assets/assets';
+import { Assets } from '../models.d/margin-assets/assets/assets';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets/margin-assets';

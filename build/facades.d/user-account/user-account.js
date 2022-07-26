@@ -44,12 +44,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async makeOrders($orders) {
         try {
-            const orders = $orders.map(order => this.context.Data.LimitOrder.copy(order));
+            const orders = $orders.map(order => this.context.Data.LimitOrder.copyLimitOrder(order));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.context.Data.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copyOpenOrder(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -57,12 +57,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async amendOrders($amendments) {
         try {
-            const amendments = $amendments.map(amendment => this.context.Data.Amendment.copy(amendment));
+            const amendments = $amendments.map(amendment => this.context.Data.Amendment.copyAmendment(amendment));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
-                : this.context.Data.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copyOpenOrder(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -70,12 +70,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async cancelOrders($orders) {
         try {
-            const orders = $orders.map(order => this.context.Data.OpenOrder.copy(order));
+            const orders = $orders.map(order => this.context.Data.OpenOrder.copyOpenOrder(order));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.context.Data.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copyOpenOrder(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -107,7 +107,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
-                : this.context.Data.OpenOrder.copy(order));
+                : this.context.Data.OpenOrder.copyOpenOrder(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);

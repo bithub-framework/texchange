@@ -1,4 +1,4 @@
-import { HLike, Closable, Balances, Positions } from 'secretary-like';
+import { HLike, Balances, Positions, Position } from 'secretary-like';
 import { Context } from '../../context';
 import { MarginAssets } from '../../models.d/margin-assets';
 import { Makers } from '../../models.d/makers/makers';
@@ -11,7 +11,7 @@ export declare abstract class AvailableAssetsCalculator<H extends HLike<H>> {
     constructor(context: Context<H>, marketSpec: MarketSpec<H>, marginAssets: MarginAssets<H>, makers: Makers<H>);
     getAvailable(): H;
     protected abstract getFinalFrozenBalance(): H;
-    getClosable(): Closable<H>;
+    getClosable(): Position<H>;
     getBalances(): Balances<H>;
     getPositions(): Positions<H>;
 }

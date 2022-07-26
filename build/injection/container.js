@@ -7,7 +7,7 @@ const types_1 = require("./types");
 // Context
 const context_1 = require("../context");
 const data_1 = require("../interfaces/data");
-const assets_1 = require("../models.d/margin-assets/assets");
+const assets_1 = require("../models.d/margin-assets/assets/assets");
 const book_1 = require("../models.d/book");
 const progress_1 = require("../models.d/progress");
 // Broadcast

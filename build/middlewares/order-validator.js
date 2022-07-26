@@ -28,10 +28,10 @@ let OrderValidator = class OrderValidator {
     }
     validateQuantity(order) {
         const closable = this.calculator.getClosable();
-        this.makers.appendOrder(order, new this.context.Data.H(0));
+        this.makers.appendOrder(order, this.context.Data.H.from(0));
         try {
-            const enoughPosition = closable[secretary_like_1.Length.LONG].gte(0) &&
-                closable[secretary_like_1.Length.SHORT].gte(0);
+            const enoughPosition = closable.get(secretary_like_1.Length.LONG).gte(0) &&
+                closable.get(secretary_like_1.Length.SHORT).gte(0);
             assert(enoughPosition);
             const enoughBalance = this.calculator.getAvailable()
                 .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_DP));
@@ -47,8 +47,8 @@ let OrderValidator = class OrderValidator {
         assert(order.unfilled.gt(0));
         assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
         assert(order.length === secretary_like_1.Length.LONG || order.length === secretary_like_1.Length.SHORT);
-        assert(order.operation === secretary_like_1.Operation.OPEN || order.operation === secretary_like_1.Operation.CLOSE);
-        assert(order.operation * order.length === order.side);
+        assert(order.action === secretary_like_1.Action.OPEN || order.action === secretary_like_1.Action.CLOSE);
+        assert(secretary_like_1.Side.from(order.length, order.action) === order.side);
     }
 };
 OrderValidator = __decorate([

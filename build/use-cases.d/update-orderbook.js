@@ -32,9 +32,9 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
             this.makers.removeOrder(order.id);
         const allTrades = [];
         for (const order of orders) {
-            const $order = this.context.Data.OpenOrder.copy(order);
+            const $order = this.context.Data.OpenOrder.copyOpenOrder(order);
             const trades = this.matcher.$match($order);
-            const maker = this.context.Data.OpenOrder.copy($order);
+            const maker = this.context.Data.OpenOrder.copyOpenOrder($order);
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);
             allTrades.push(...trades);

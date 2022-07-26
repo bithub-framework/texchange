@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DataStatic = void 0;
 const secretary_like_1 = require("secretary-like");
 const open_maker_1 = require("./open-maker");
-const frozen_1 = require("./frozen");
+const frozen_1 = require("./frozen/frozen");
 const database_trade_1 = require("./database-trade");
 const database_orderbook_1 = require("./database-orderbook");
 const injektor_1 = require("@zimtsui/injektor");

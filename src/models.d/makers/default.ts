@@ -1,9 +1,11 @@
 import {
-	Operation,
+	Action, Length,
 	HLike,
 	OpenOrder,
+	Position,
 } from 'secretary-like';
-import { Frozen } from '../../interfaces/frozen';
+import { Frozen } from '../../interfaces/frozen/frozen';
+import { FrozenBalance } from '../../interfaces/frozen/frozen-balance';
 import { Makers } from './makers';
 
 import { injextends } from '@zimtsui/injektor';
@@ -14,21 +16,40 @@ import { injextends } from '@zimtsui/injektor';
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
 	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
-		if (order.operation === Operation.OPEN)
+		if (order.action === Action.OPEN) {
+			const balance = new FrozenBalance<H>(
+				this.context.Data.H.from(0),
+				this.context.Data.H.from(0),
+			);
+			balance.set(
+				order.length,
+				this.marketSpec.dollarVolume(order.price, order.unfilled),
+			);
+			balance.set(
+				Length.invert(order.length),
+				this.context.Data.H.from(0),
+			);
 			return {
-				balance: {
-					[order.length]: this.marketSpec.dollarVolume(order.price, order.unfilled),
-					[-order.length]: new this.context.Data.H(0),
-				},
+				balance,
 				position: this.context.Data.Frozen.ZERO.position,
 			};
-		else
+		} else {
+			const position = new Position<H>(
+				this.context.Data.H.from(0),
+				this.context.Data.H.from(0),
+			);
+			position.set(
+				order.length,
+				order.unfilled,
+			);
+			position.set(
+				Length.invert(order.length),
+				this.context.Data.H.from(0),
+			);
 			return {
 				balance: this.context.Data.Frozen.ZERO.balance,
-				position: {
-					[order.length]: order.unfilled,
-					[-order.length]: new this.context.Data.H(0),
-				},
+				position: position,
 			};
+		}
 	}
 }

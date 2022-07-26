@@ -1,23 +1,24 @@
 import {
     Length,
     Position,
-    HLike, H, HStatic,
+    HLike, H,
     MarketSpec,
 } from 'secretary-like';
-import { Context } from '../../context';
+import { Cost, CostStatic } from './cost';
+import { Context } from '../../../context';
 import assert = require('assert');
-import { StatefulLike } from '../../stateful-like';
-import { Executed } from '../../interfaces/executed';
+import { StatefulLike } from '../../../stateful-like';
+import { Executed } from '../../../interfaces/executed';
 
 import { inject } from '@zimtsui/injektor';
-import { TYPES } from '../../injection/types';
+import { TYPES } from '../../../injection/types';
 
 
 export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
-    private Cost = new Assets.CostStatic(this.context.Data.H);
+    private Cost = new CostStatic<H>(this.context.Data.H);
 
     private $position: Position<H>;
-    private $cost: Assets.Cost<H>;
+    private $cost: Cost<H>;
 
     public constructor(
         @inject(TYPES.context)
@@ -27,14 +28,14 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         @inject(TYPES.MODELS.initialBalance)
         protected balance: H,
     ) {
-        this.$position = {
-            [Length.LONG]: new this.context.Data.H(0),
-            [Length.SHORT]: new this.context.Data.H(0),
-        };
-        this.$cost = {
-            [Length.LONG]: new this.context.Data.H(0),
-            [Length.SHORT]: new this.context.Data.H(0),
-        };
+        this.$position = new Position<H>(
+            this.context.Data.H.from(0),
+            this.context.Data.H.from(0),
+        );
+        this.$cost = new Cost<H>(
+            this.context.Data.H.from(0),
+            this.context.Data.H.from(0)
+        );
     }
 
     public getBalance(): H {
@@ -45,7 +46,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         return this.context.Data.Position.copy(this.$position);
     }
 
-    public getCost(): Assets.Cost<H> {
+    public getCost(): Cost<H> {
         return this.Cost.copy(this.$cost);
     }
 
@@ -72,8 +73,8 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         volume,
         dollarVolume,
     }: Executed<H>): void {
-        this.$position[length] = this.$position[length].plus(volume);
-        this.$cost[length] = this.$cost[length].plus(dollarVolume);
+        this.$position.set(length, this.$position.get(length).plus(volume));
+        this.$cost.set(length, this.$cost.get(length).plus(dollarVolume));
     }
 
     /**
@@ -85,16 +86,16 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         volume,
         dollarVolume,
     }: Executed<H>): H {
-        assert(volume.lte(this.$position[length]));
-        const cost = this.$position[length].neq(0)
-            ? this.$cost[length]
+        assert(volume.lte(this.$position.get(length)));
+        const cost = this.$position.get(length).neq(0)
+            ? this.$cost.get(length)
                 .times(volume)
-                .div(this.$position[length])
+                .div(this.$position.get(length))
                 .round(this.marketSpec.CURRENCY_DP)
-            : new this.context.Data.H(0);
+            : this.context.Data.H.from(0);
         const profit = dollarVolume.minus(cost).times(length);
-        this.$position[length] = this.$position[length].minus(volume);
-        this.$cost[length] = this.$cost[length].minus(cost);
+        this.$position.set(length, this.$position.get(length).minus(volume));
+        this.$cost.set(length, this.$cost.get(length).minus(cost));
         this.balance = this.balance.plus(profit);
         return profit;
     }
@@ -107,11 +108,11 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         settlementPrice: H,
     ): H {
         const dollarVolume = this.marketSpec.dollarVolume(
-            settlementPrice, this.$position[length],
+            settlementPrice, this.$position.get(length),
         ).round(this.marketSpec.CURRENCY_DP);
         const executed: Executed<H> = {
             length,
-            volume: this.$position[length],
+            volume: this.$position.get(length),
             dollarVolume,
         };
         const profit = this.close(executed);
@@ -120,48 +121,10 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
     }
 }
 
-
 export namespace Assets {
     export interface Snapshot {
         position: Position.Snapshot;
         balance: H.Snapshot;
         cost: Cost.Snapshot;
-    }
-
-    export interface Cost<H extends HLike<H>> {
-        [length: Length]: H;
-    }
-
-    export namespace Cost {
-        export interface Snapshot {
-            readonly [length: Length]: H.Snapshot;
-        }
-    }
-
-    export class CostStatic<H extends HLike<H>> {
-        public constructor(
-            private H: HStatic<H>,
-        ) { }
-
-        public capture(cost: Cost<H>): Cost.Snapshot {
-            return {
-                [Length.LONG]: this.H.capture(cost[Length.LONG]),
-                [Length.SHORT]: this.H.capture(cost[Length.SHORT]),
-            };
-        }
-
-        public restore(snapshot: Cost.Snapshot): Cost<H> {
-            return {
-                [Length.LONG]: this.H.restore(snapshot[Length.LONG]),
-                [Length.SHORT]: this.H.restore(snapshot[Length.SHORT]),
-            };
-        }
-
-        public copy(cost: Cost<H>): Cost<H> {
-            return {
-                [Length.LONG]: cost[Length.LONG],
-                [Length.SHORT]: cost[Length.SHORT],
-            };
-        }
     }
 }
