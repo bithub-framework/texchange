@@ -9,7 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultAvailableAssetsCalculator = void 0;
 const available_assets_calculator_1 = require("./available-assets-calculator");
 const secretary_like_1 = require("secretary-like");
-const frozen_balance_1 = require("../../interfaces/frozen/frozen-balance");
+const balance_1 = require("../../interfaces/balance");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator extends available_assets_calculator_1.AvailableAssetsCalculator {
     // 默认单向持仓模式
@@ -17,15 +17,15 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         const position = this.marginAssets.getPosition();
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();
-        const $final = new frozen_balance_1.FrozenBalance(this.context.Data.H.from(0), this.context.Data.H.from(0));
+        const $final = new balance_1.Balance(this.context.Data.hFactory.from(0), this.context.Data.hFactory.from(0));
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const side = secretary_like_1.Side.from(length, secretary_like_1.Action.OPEN);
-            const afterDeduction = this.context.Data.H.max(totalUnfilled.get(side).minus(position.get(secretary_like_1.Length.invert(length))), this.context.Data.H.from(0));
+            const afterDeduction = this.context.Data.H.max(totalUnfilled.get(side).minus(position.get(secretary_like_1.Length.invert(length))), this.context.Data.hFactory.from(0));
             $final.set(length, totalUnfilled.get(side).neq(0)
                 ? totalFrozen.balance.get(length)
                     .times(afterDeduction)
                     .div(totalUnfilled.get(side))
-                : this.context.Data.H.from(0));
+                : this.context.Data.hFactory.from(0));
         }
         return $final.get(secretary_like_1.Length.LONG).plus($final.get(secretary_like_1.Length.SHORT));
     }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TotalUnfilledStatic = exports.TotalUnfilled = void 0;
+exports.TotalUnfilledFactory = exports.TotalUnfilled = void 0;
 const secretary_like_1 = require("secretary-like");
 class TotalUnfilled {
     constructor(bid, ask) {
@@ -21,13 +21,10 @@ class TotalUnfilled {
     }
 }
 exports.TotalUnfilled = TotalUnfilled;
-class TotalUnfilledStatic {
-    constructor(H) {
-        this.H = H;
-    }
+class TotalUnfilledFactory {
     copy(totalUnfilled) {
         return new TotalUnfilled(totalUnfilled.get(secretary_like_1.Side.BID), totalUnfilled.get(secretary_like_1.Side.ASK));
     }
 }
-exports.TotalUnfilledStatic = TotalUnfilledStatic;
+exports.TotalUnfilledFactory = TotalUnfilledFactory;
 //# sourceMappingURL=total-unfilled.js.map

@@ -9,7 +9,7 @@ import { Executed } from '../../interfaces/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
-import { Margin, MarginStatic } from './margin';
+import { Margin, MarginFactory } from './margin';
 import { Cost } from './assets/cost';
 
 import { inject } from '@zimtsui/injektor';
@@ -18,7 +18,7 @@ import { TYPES } from '../../injection/default/types';
 
 
 export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
-	protected Margin: MarginStatic<H>;
+	protected marginFactory: MarginFactory<H>;
 	protected $margin: Margin<H>;
 
 	public constructor(
@@ -31,10 +31,10 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
 	) {
-		this.Margin = new MarginStatic<H>(context.Data.H);
+		this.marginFactory = new MarginFactory<H>(context.Data.hFactory);
 		this.$margin = new Margin<H>(
-			context.Data.H.from(0),
-			context.Data.H.from(0),
+			context.Data.hFactory.from(0),
+			context.Data.hFactory.from(0),
 		);
 	}
 
@@ -59,7 +59,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		if (volume.eq(this.assets.getPosition().get(length))) {
-			this.$margin.set(length, this.context.Data.H.from(0));
+			this.$margin.set(length, this.context.Data.hFactory.from(0));
 		}
 		const decrement = this.$margin.get(length)
 			.times(volume)
@@ -85,13 +85,13 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	public capture(): MarginAssets.Snapshot {
 		return {
 			assets: this.assets.capture(),
-			margin: this.Margin.capture(this.$margin),
+			margin: this.marginFactory.capture(this.$margin),
 		};
 	}
 
 	public restore(snapshot: MarginAssets.Snapshot): void {
 		this.assets.restore(snapshot.assets);
-		this.$margin = this.Margin.restore(snapshot.margin);
+		this.$margin = this.marginFactory.restore(snapshot.margin);
 	}
 
 	public getPosition(): Position<H> {

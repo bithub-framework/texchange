@@ -35,7 +35,7 @@ const texchange_1 = require("../texchange");
 class Container extends injektor_1.BaseContainer {
     constructor() {
         super(...arguments);
-        this[_a] = this.rcs(data_1.DataStatic);
+        this[_a] = this.rcs(data_1.DataNamespace);
         this[_b] = this.rcs(context_1.Context);
         this[_c] = this.rcs(assets_1.Assets);
         this[_d] = this.rcs(book_1.Book);

@@ -1,5 +1,5 @@
 import {
-	HLike, HStatic,
+	HLike,
 	Side,
 } from 'secretary-like';
 
@@ -21,11 +21,7 @@ export class TotalUnfilled<H extends HLike<H>> {
 	}
 }
 
-export class TotalUnfilledStatic<H extends HLike<H>>{
-	public constructor(
-		private H: HStatic<H>,
-	) { }
-
+export class TotalUnfilledFactory<H extends HLike<H>> {
 	public copy(
 		totalUnfilled: TotalUnfilled<H>,
 	): TotalUnfilled<H> {

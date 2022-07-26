@@ -1,4 +1,4 @@
-import { HLike, H, HStatic, Length } from 'secretary-like';
+import { HLike, H, HFactory, Length } from 'secretary-like';
 export declare class Cost<H extends HLike<H>> {
     private long;
     private short;
@@ -12,9 +12,9 @@ export declare namespace Cost {
         readonly short: H.Snapshot;
     }
 }
-export declare class CostStatic<H extends HLike<H>> {
-    private H;
-    constructor(H: HStatic<H>);
+export declare class CostFactory<H extends HLike<H>> {
+    private hFactory;
+    constructor(hFactory: HFactory<H>);
     capture(cost: Cost<H>): Cost.Snapshot;
     restore(snapshot: Cost.Snapshot): Cost<H>;
     copy(cost: Cost<H>): Cost<H>;

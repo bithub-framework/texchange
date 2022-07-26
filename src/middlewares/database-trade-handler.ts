@@ -12,7 +12,7 @@ import { Context } from '../context';
 import { Makers } from '../models.d/makers/makers';
 import { MarginAssets } from '../models.d/margin-assets';
 
-import { inject, instantInject } from '@zimtsui/injektor';
+import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
@@ -31,7 +31,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 	) { }
 
 	public tradeTakesOpenMakers(trade: Trade<H>): void {
-		const $trade = this.context.Data.Trade.copyTrade(trade);
+		const $trade = this.context.Data.tradeFactory.copy(trade);
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);

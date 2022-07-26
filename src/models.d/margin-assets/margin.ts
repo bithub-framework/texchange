@@ -1,5 +1,5 @@
 import {
-	HLike, H, HStatic,
+	HLike, H, HFactory,
 	Length,
 } from 'secretary-like';
 
@@ -27,22 +27,22 @@ export namespace Margin {
 	}
 }
 
-export class MarginStatic<H extends HLike<H>>{
+export class MarginFactory<H extends HLike<H>>{
 	public constructor(
-		private H: HStatic<H>,
+		private hFactory: HFactory<H>,
 	) { }
 
 	public capture(margin: Margin<H>): Margin.Snapshot {
 		return {
-			long: this.H.capture(margin.get(Length.LONG)),
-			short: this.H.capture(margin.get(Length.SHORT)),
+			long: this.hFactory.capture(margin.get(Length.LONG)),
+			short: this.hFactory.capture(margin.get(Length.SHORT)),
 		};
 	}
 
 	public restore(snapshot: Margin.Snapshot): Margin<H> {
 		return new Margin(
-			this.H.restore(snapshot.long),
-			this.H.restore(snapshot.short),
+			this.hFactory.restore(snapshot.long),
+			this.hFactory.restore(snapshot.short),
 		);
 	}
 

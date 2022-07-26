@@ -19,8 +19,8 @@ let MarginAssets = class MarginAssets {
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.assets = assets;
-        this.Margin = new margin_1.MarginStatic(context.Data.H);
-        this.$margin = new margin_1.Margin(context.Data.H.from(0), context.Data.H.from(0));
+        this.marginFactory = new margin_1.MarginFactory(context.Data.hFactory);
+        this.$margin = new margin_1.Margin(context.Data.hFactory.from(0), context.Data.hFactory.from(0));
     }
     open({ length, volume, dollarVolume, }) {
         const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
@@ -31,7 +31,7 @@ let MarginAssets = class MarginAssets {
     }
     close({ length, volume, dollarVolume, }) {
         if (volume.eq(this.assets.getPosition().get(length))) {
-            this.$margin.set(length, this.context.Data.H.from(0));
+            this.$margin.set(length, this.context.Data.hFactory.from(0));
         }
         const decrement = this.$margin.get(length)
             .times(volume)
@@ -44,12 +44,12 @@ let MarginAssets = class MarginAssets {
     capture() {
         return {
             assets: this.assets.capture(),
-            margin: this.Margin.capture(this.$margin),
+            margin: this.marginFactory.capture(this.$margin),
         };
     }
     restore(snapshot) {
         this.assets.restore(snapshot.assets);
-        this.$margin = this.Margin.restore(snapshot.margin);
+        this.$margin = this.marginFactory.restore(snapshot.margin);
     }
     getPosition() {
         return this.assets.getPosition();

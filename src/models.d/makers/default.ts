@@ -4,8 +4,8 @@ import {
 	OpenOrder,
 	Position,
 } from 'secretary-like';
-import { Frozen } from '../../interfaces/frozen/frozen';
-import { FrozenBalance } from '../../interfaces/frozen/frozen-balance';
+import { Frozen } from '../../interfaces/frozen';
+import { Balance } from '../../interfaces/balance';
 import { Makers } from './makers';
 
 import { injextends } from '@zimtsui/injektor';
@@ -17,9 +17,9 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
 	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
-			const balance = new FrozenBalance<H>(
-				this.context.Data.H.from(0),
-				this.context.Data.H.from(0),
+			const balance = new Balance<H>(
+				this.context.Data.hFactory.from(0),
+				this.context.Data.hFactory.from(0),
 			);
 			balance.set(
 				order.length,
@@ -27,7 +27,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			);
 			balance.set(
 				Length.invert(order.length),
-				this.context.Data.H.from(0),
+				this.context.Data.hFactory.from(0),
 			);
 			return {
 				balance,
@@ -35,8 +35,8 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			};
 		} else {
 			const position = new Position<H>(
-				this.context.Data.H.from(0),
-				this.context.Data.H.from(0),
+				this.context.Data.hFactory.from(0),
+				this.context.Data.hFactory.from(0),
 			);
 			position.set(
 				order.length,
@@ -44,7 +44,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			);
 			position.set(
 				Length.invert(order.length),
-				this.context.Data.H.from(0),
+				this.context.Data.hFactory.from(0),
 			);
 			return {
 				balance: this.context.Data.Frozen.ZERO.balance,

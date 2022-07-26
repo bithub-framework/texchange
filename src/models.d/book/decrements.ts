@@ -1,6 +1,6 @@
 import {
 	Side,
-	HLike, H, HStatic,
+	HLike, H, HFactory,
 } from 'secretary-like';
 
 
@@ -27,20 +27,20 @@ export namespace Decrements {
 	}
 }
 
-export class DecrementsStatic<H extends HLike<H>> {
+export class DecrementsFactory<H extends HLike<H>> {
 	public constructor(
-		private H: HStatic<H>,
+		private hFactory: HFactory<H>,
 	) { }
 
 	public capture(decrements: Decrements<H>): Decrements.Snapshot {
 		return {
 			bids: [...decrements.get(Side.BID)].map(
 				([priceString, decrement]) =>
-					[priceString, this.H.capture(decrement)],
+					[priceString, this.hFactory.capture(decrement)],
 			),
 			asks: [...decrements.get(Side.ASK)].map(
 				([priceString, decrement]) =>
-					[priceString, this.H.capture(decrement)],
+					[priceString, this.hFactory.capture(decrement)],
 			),
 		};
 	}
@@ -50,13 +50,13 @@ export class DecrementsStatic<H extends HLike<H>> {
 			new Map<string, H>(
 				snapshot.bids.map(
 					([priceString, decrement]) =>
-						[priceString, this.H.restore(decrement)]
+						[priceString, this.hFactory.restore(decrement)]
 				),
 			),
 			new Map<string, H>(
 				snapshot.asks.map(
 					([priceString, decrement]) =>
-						[priceString, this.H.restore(decrement)]
+						[priceString, this.hFactory.restore(decrement)]
 				),
 			),
 		);

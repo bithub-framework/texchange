@@ -22,7 +22,7 @@ let DefaultMarketSpec = class DefaultMarketSpec {
         this.QUANTITY_DP = 3;
         this.CURRENCY_DP = 2;
         this.MARKET_NAME = 'test';
-        this.TICK_SIZE = context.Data.H.from('.01');
+        this.TICK_SIZE = context.Data.hFactory.from('.01');
     }
     quantity(price, dollarVolume) {
         assert(price.neq(0));

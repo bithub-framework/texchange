@@ -3,7 +3,7 @@ import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataStatic } from '../interfaces/data';
+import { DataNamespace } from '../interfaces/data';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Assets } from '../models.d/margin-assets/assets/assets';
@@ -37,7 +37,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     abstract [TYPES.marketSpec]: () => MarketSpec<H>;
     abstract [TYPES.accountSpec]: () => AccountSpec;
     abstract [TYPES.timeline]: () => TimelineLike;
-    [TYPES.dataStatic]: () => DataStatic<H>;
+    [TYPES.dataStatic]: () => DataNamespace<H>;
     [TYPES.context]: () => Context<H>;
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;

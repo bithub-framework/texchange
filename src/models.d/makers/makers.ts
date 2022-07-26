@@ -7,9 +7,9 @@ import {
 	MarketSpec,
 } from 'secretary-like';
 import { OpenMaker } from '../../interfaces/open-maker';
-import { Frozen } from '../../interfaces/frozen/frozen';
-import { FrozenBalance } from '../../interfaces/frozen/frozen-balance';
-import { TotalUnfilled, TotalUnfilledStatic } from './total-unfilled';
+import { Frozen } from '../../interfaces/frozen';
+import { Balance } from '../../interfaces/balance';
+import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { Context } from '../../context';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';
@@ -26,7 +26,7 @@ export abstract class Makers<H extends HLike<H>> implements
 	private $orders = new Map<OrderId, OpenMaker<H>>();
 	private $totalUnfilled: TotalUnfilled<H>;
 
-	protected TotalUnfilled: TotalUnfilledStatic<H>;
+	protected totalUnfilledFactory: TotalUnfilledFactory<H>;
 	private totalFrozen: Frozen<H>;
 
 	public constructor(
@@ -36,15 +36,15 @@ export abstract class Makers<H extends HLike<H>> implements
 		protected marketSpec: MarketSpec<H>,
 	) {
 		this.$totalUnfilled = new TotalUnfilled<H>(
-			context.Data.H.from(0),
-			context.Data.H.from(0),
+			context.Data.hFactory.from(0),
+			context.Data.hFactory.from(0),
 		);
-		this.TotalUnfilled = new TotalUnfilledStatic(context.Data.H);
+		this.totalUnfilledFactory = new TotalUnfilledFactory();
 		this.totalFrozen = context.Data.Frozen.ZERO;
 	}
 
 	public getTotalUnfilled(): TotalUnfilled<H> {
-		return this.TotalUnfilled.copy(this.$totalUnfilled);
+		return this.totalUnfilledFactory.copy(this.$totalUnfilled);
 	}
 
 	public getTotalFrozen(): Frozen<H> {
@@ -84,7 +84,7 @@ export abstract class Makers<H extends HLike<H>> implements
 					.filter(order => order.side === side)
 					.reduce(
 						(total, order) => total.plus(order.unfilled),
-						this.context.Data.H.from(0),
+						this.context.Data.hFactory.from(0),
 					),
 			);
 		}
@@ -97,7 +97,7 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	private normalizeFrozen(frozen: Frozen<H>): Frozen<H> {
 		return {
-			balance: new FrozenBalance<H>(
+			balance: new Balance<H>(
 				frozen.balance.get(Length.LONG).round(this.marketSpec.CURRENCY_DP),
 				frozen.balance.get(Length.SHORT).round(this.marketSpec.CURRENCY_DP),
 			),
@@ -117,7 +117,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.normalizeFrozen(this.toFreeze(order));
 		const $order: OpenMaker<H> = {
-			...this.context.Data.OpenOrder.copyOpenOrder(order),
+			...this.context.Data.openOrderFactory.copy(order),
 			behind,
 			frozen: toFreeze,
 		};
@@ -136,12 +136,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert($order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
 		const newOrder: OpenOrder<H> = {
-			...this.context.Data.OpenOrder.copyOpenOrder($order),
+			...this.context.Data.openOrderFactory.copy($order),
 			filled: $order.filled.plus(volume),
 			unfilled: $order.unfilled.minus(volume),
 		};
 		if (newOrder.unfilled.gt(0))
-			this.appendOrder(newOrder, this.context.Data.H.from(0));
+			this.appendOrder(newOrder, this.context.Data.hFactory.from(0));
 	}
 
 	public takeOrderQueue(oid: OrderId, volume?: H): void {
@@ -150,7 +150,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			assert(volume.lte($order.behind));
 		$order.behind = typeof volume !== 'undefined'
 			? $order.behind.minus(volume)
-			: this.context.Data.H.from(0);
+			: this.context.Data.hFactory.from(0);
 		this.$orders.set(oid, $order);
 	}
 
@@ -173,7 +173,5 @@ export abstract class Makers<H extends HLike<H>> implements
 }
 
 export namespace Makers {
-
-
 	export type Snapshot = readonly OpenMaker.Snapshot[];
 }

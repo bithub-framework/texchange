@@ -1,5 +1,5 @@
 import {
-	HLike, H, HStatic,
+	HLike, H, HFactory,
 	Length,
 } from 'secretary-like';
 
@@ -28,22 +28,22 @@ export namespace Cost {
 	}
 }
 
-export class CostStatic<H extends HLike<H>> {
+export class CostFactory<H extends HLike<H>> {
 	public constructor(
-		private H: HStatic<H>,
+		private hFactory: HFactory<H>,
 	) { }
 
 	public capture(cost: Cost<H>): Cost.Snapshot {
 		return {
-			long: this.H.capture(cost.get(Length.LONG)),
-			short: this.H.capture(cost.get(Length.SHORT)),
+			long: this.hFactory.capture(cost.get(Length.LONG)),
+			short: this.hFactory.capture(cost.get(Length.SHORT)),
 		};
 	}
 
 	public restore(snapshot: Cost.Snapshot): Cost<H> {
 		return new Cost<H>(
-			this.H.restore(snapshot.long),
-			this.H.restore(snapshot.short),
+			this.hFactory.restore(snapshot.long),
+			this.hFactory.restore(snapshot.short),
 		);
 	}
 

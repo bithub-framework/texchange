@@ -11,7 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Makers = void 0;
 const secretary_like_1 = require("secretary-like");
-const frozen_balance_1 = require("../../interfaces/frozen/frozen-balance");
+const balance_1 = require("../../interfaces/balance");
 const total_unfilled_1 = require("./total-unfilled");
 const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
@@ -21,12 +21,12 @@ let Makers = class Makers {
         this.context = context;
         this.marketSpec = marketSpec;
         this.$orders = new Map();
-        this.$totalUnfilled = new total_unfilled_1.TotalUnfilled(context.Data.H.from(0), context.Data.H.from(0));
-        this.TotalUnfilled = new total_unfilled_1.TotalUnfilledStatic(context.Data.H);
+        this.$totalUnfilled = new total_unfilled_1.TotalUnfilled(context.Data.hFactory.from(0), context.Data.hFactory.from(0));
+        this.totalUnfilledFactory = new total_unfilled_1.TotalUnfilledFactory();
         this.totalFrozen = context.Data.Frozen.ZERO;
     }
     getTotalUnfilled() {
-        return this.TotalUnfilled.copy(this.$totalUnfilled);
+        return this.totalUnfilledFactory.copy(this.$totalUnfilled);
     }
     getTotalFrozen() {
         return this.totalFrozen;
@@ -54,14 +54,14 @@ let Makers = class Makers {
         for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
             this.$totalUnfilled.set(side, [...this.$orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), this.context.Data.H.from(0)));
+                .reduce((total, order) => total.plus(order.unfilled), this.context.Data.hFactory.from(0)));
         }
         this.totalFrozen = [...this.$orders.values()]
             .reduce((total, order) => this.context.Data.Frozen.plus(total, order.frozen), this.context.Data.Frozen.ZERO);
     }
     normalizeFrozen(frozen) {
         return {
-            balance: new frozen_balance_1.FrozenBalance(frozen.balance.get(secretary_like_1.Length.LONG).round(this.marketSpec.CURRENCY_DP), frozen.balance.get(secretary_like_1.Length.SHORT).round(this.marketSpec.CURRENCY_DP)),
+            balance: new balance_1.Balance(frozen.balance.get(secretary_like_1.Length.LONG).round(this.marketSpec.CURRENCY_DP), frozen.balance.get(secretary_like_1.Length.SHORT).round(this.marketSpec.CURRENCY_DP)),
             position: new secretary_like_1.Position(frozen.position.get(secretary_like_1.Length.LONG).round(this.marketSpec.QUANTITY_DP), frozen.position.get(secretary_like_1.Length.SHORT).round(this.marketSpec.QUANTITY_DP)),
         };
     }
@@ -69,7 +69,7 @@ let Makers = class Makers {
         assert(order.unfilled.gt(0));
         const toFreeze = this.normalizeFrozen(this.toFreeze(order));
         const $order = {
-            ...this.context.Data.OpenOrder.copyOpenOrder(order),
+            ...this.context.Data.openOrderFactory.copy(order),
             behind,
             frozen: toFreeze,
         };
@@ -84,12 +84,12 @@ let Makers = class Makers {
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...this.context.Data.OpenOrder.copyOpenOrder($order),
+            ...this.context.Data.openOrderFactory.copy($order),
             filled: $order.filled.plus(volume),
             unfilled: $order.unfilled.minus(volume),
         };
         if (newOrder.unfilled.gt(0))
-            this.appendOrder(newOrder, this.context.Data.H.from(0));
+            this.appendOrder(newOrder, this.context.Data.hFactory.from(0));
     }
     takeOrderQueue(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -97,7 +97,7 @@ let Makers = class Makers {
             assert(volume.lte($order.behind));
         $order.behind = typeof volume !== 'undefined'
             ? $order.behind.minus(volume)
-            : this.context.Data.H.from(0);
+            : this.context.Data.hFactory.from(0);
         this.$orders.set(oid, $order);
     }
     removeOrder(oid) {

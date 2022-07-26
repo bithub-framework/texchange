@@ -1,8 +1,8 @@
 import {
-	HLike, H, HStatic,
-	OpenOrder, OpenOrderStatic,
+	HLike, H, HFactory,
+	OpenOrder, OpenOrderFactory,
 } from 'secretary-like';
-import { Frozen, FrozenStatic } from './frozen/frozen';
+import { Frozen, FrozenFactory } from './frozen';
 
 
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H> {
@@ -17,33 +17,32 @@ export namespace OpenMaker {
 	}
 }
 
-export class OpenMakerStatic<H extends HLike<H>> extends OpenOrderStatic<H>{
+export class OpenMakerFactory<H extends HLike<H>>{
 	public constructor(
-		H: HStatic<H>,
-		private Frozen: FrozenStatic<H>,
-	) {
-		super(H);
-	}
+		private hFactory: HFactory<H>,
+		private frozenFactory: FrozenFactory<H>,
+		private openOrderFactory: OpenOrderFactory<H>,
+	) { }
 
 	public capture(order: OpenMaker<H>): OpenMaker.Snapshot {
 		return {
-			...this.captureOpenOrder(order),
-			behind: this.H.capture(order.behind),
-			frozen: this.Frozen.capture(order.frozen),
+			...this.openOrderFactory.capture(order),
+			behind: this.hFactory.capture(order.behind),
+			frozen: this.frozenFactory.capture(order.frozen),
 		}
 	}
 
 	public restore(snapshot: OpenMaker.Snapshot): OpenMaker<H> {
 		return {
-			...this.restoreOpenOrder(snapshot),
-			behind: this.H.restore(snapshot.behind),
-			frozen: this.Frozen.restore(snapshot.frozen),
+			...this.openOrderFactory.restore(snapshot),
+			behind: this.hFactory.restore(snapshot.behind),
+			frozen: this.frozenFactory.restore(snapshot.frozen),
 		}
 	}
 
 	public copy(order: OpenMaker<H>): OpenMaker<H> {
 		return {
-			...this.copyOpenOrder(order),
+			...this.openOrderFactory.copy(order),
 			behind: order.behind,
 			frozen: order.frozen,
 		};

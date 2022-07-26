@@ -35,8 +35,8 @@ export class Matcher<H extends HLike<H>> {
 		const orderbook = this.book.getOrderbook();
 
 		const trades: Trade<H>[] = [];
-		let volume = this.context.Data.H.from(0);
-		let dollarVolume = this.context.Data.H.from(0);
+		let volume = this.context.Data.hFactory.from(0);
+		let dollarVolume = this.context.Data.hFactory.from(0);
 		for (const maker of orderbook.get(Side.invert($taker.side)))
 			if (
 				(

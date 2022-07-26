@@ -13,7 +13,7 @@
     "license": "SEE LICENSE IN ./LICENSE",
     "peerDependencies": {
         "@zimtsui/injektor": "^0.0.8",
-        "secretary-like": "github:bithub-framework/secretary-like",
+        "secretary-like": "file:../secretary-like",
         "startable": "github:zimtsui/startable"
     },
     "dependencies": {

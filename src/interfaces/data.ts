@@ -1,24 +1,28 @@
 import {
-	DataStatic as SecretaryDataStatic,
-	HLike, HStatic,
+	DataNamespace as SecretaryDataNamespace,
+	HLike, HFactory, HStatic,
 } from 'secretary-like';
-import { OpenMakerStatic } from './open-maker';
-import { FrozenStatic } from './frozen/frozen';
-import { DatabaseTradeStatic } from './database-trade';
-import { DatabaseOrderbookStatic } from './database-orderbook';
+import { OpenMakerFactory } from './open-maker';
+import { FrozenFactory, FrozenStatic } from './frozen';
+import { DatabaseTradeFactory } from './database-trade';
+import { DatabaseOrderbookFactory } from './database-orderbook';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class DataStatic<H extends HLike<H>> extends SecretaryDataStatic<H> {
+export class DataNamespace<H extends HLike<H>> extends SecretaryDataNamespace<H> {
 	public constructor(
+		@inject(TYPES.hFactory)
+		hFactory: HFactory<H>,
 		@inject(TYPES.hStatic)
 		H: HStatic<H>,
 	) {
-		super(H);
+		super(hFactory, H);
 	}
-	public Frozen = new FrozenStatic(this.H);
-	public OpenMaker = new OpenMakerStatic(this.H, this.Frozen);
-	public DatabaseOrderbook = new DatabaseOrderbookStatic(this.H);
-	public DatabaseTrade = new DatabaseTradeStatic(this.H);
+
+	public frozenFactory = new FrozenFactory<H>(this.hFactory);
+	public Frozen = new FrozenStatic<H>(this.hFactory);
+	public OpenMaker = new OpenMakerFactory<H>(this.hFactory, this.frozenFactory, this.openOrderFactory);
+	public DatabaseOrderbook = new DatabaseOrderbookFactory<H>(this.orderbookFactory);
+	public DatabaseTrade = new DatabaseTradeFactory<H>(this.tradeFactory);
 }

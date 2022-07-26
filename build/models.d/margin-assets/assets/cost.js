@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CostStatic = exports.Cost = void 0;
+exports.CostFactory = exports.Cost = void 0;
 const secretary_like_1 = require("secretary-like");
 class Cost {
     constructor(long, short) {
@@ -21,22 +21,22 @@ class Cost {
     }
 }
 exports.Cost = Cost;
-class CostStatic {
-    constructor(H) {
-        this.H = H;
+class CostFactory {
+    constructor(hFactory) {
+        this.hFactory = hFactory;
     }
     capture(cost) {
         return {
-            long: this.H.capture(cost.get(secretary_like_1.Length.LONG)),
-            short: this.H.capture(cost.get(secretary_like_1.Length.SHORT)),
+            long: this.hFactory.capture(cost.get(secretary_like_1.Length.LONG)),
+            short: this.hFactory.capture(cost.get(secretary_like_1.Length.SHORT)),
         };
     }
     restore(snapshot) {
-        return new Cost(this.H.restore(snapshot.long), this.H.restore(snapshot.short));
+        return new Cost(this.hFactory.restore(snapshot.long), this.hFactory.restore(snapshot.short));
     }
     copy(cost) {
         return new Cost(cost.get(secretary_like_1.Length.LONG), cost.get(secretary_like_1.Length.SHORT));
     }
 }
-exports.CostStatic = CostStatic;
+exports.CostFactory = CostFactory;
 //# sourceMappingURL=cost.js.map

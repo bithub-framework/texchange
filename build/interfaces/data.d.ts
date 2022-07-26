@@ -1,12 +1,13 @@
-import { DataStatic as SecretaryDataStatic, HLike, HStatic } from 'secretary-like';
-import { OpenMakerStatic } from './open-maker';
-import { FrozenStatic } from './frozen/frozen';
-import { DatabaseTradeStatic } from './database-trade';
-import { DatabaseOrderbookStatic } from './database-orderbook';
-export declare class DataStatic<H extends HLike<H>> extends SecretaryDataStatic<H> {
-    constructor(H: HStatic<H>);
+import { DataNamespace as SecretaryDataNamespace, HLike, HFactory, HStatic } from 'secretary-like';
+import { OpenMakerFactory } from './open-maker';
+import { FrozenFactory, FrozenStatic } from './frozen';
+import { DatabaseTradeFactory } from './database-trade';
+import { DatabaseOrderbookFactory } from './database-orderbook';
+export declare class DataNamespace<H extends HLike<H>> extends SecretaryDataNamespace<H> {
+    constructor(hFactory: HFactory<H>, H: HStatic<H>);
+    frozenFactory: FrozenFactory<H>;
     Frozen: FrozenStatic<H>;
-    OpenMaker: OpenMakerStatic<H>;
-    DatabaseOrderbook: DatabaseOrderbookStatic<H>;
-    DatabaseTrade: DatabaseTradeStatic<H>;
+    OpenMaker: OpenMakerFactory<H>;
+    DatabaseOrderbook: DatabaseOrderbookFactory<H>;
+    DatabaseTrade: DatabaseTradeFactory<H>;
 }

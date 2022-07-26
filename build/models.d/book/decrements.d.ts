@@ -1,4 +1,4 @@
-import { Side, HLike, H, HStatic } from 'secretary-like';
+import { Side, HLike, H, HFactory } from 'secretary-like';
 export declare class Decrements<H extends HLike<H>> {
     private bids;
     private asks;
@@ -12,9 +12,9 @@ export declare namespace Decrements {
         asks: [string, H.Snapshot][];
     }
 }
-export declare class DecrementsStatic<H extends HLike<H>> {
-    private H;
-    constructor(H: HStatic<H>);
+export declare class DecrementsFactory<H extends HLike<H>> {
+    private hFactory;
+    constructor(hFactory: HFactory<H>);
     capture(decrements: Decrements<H>): Decrements.Snapshot;
     restore(snapshot: Decrements.Snapshot): Decrements<H>;
 }

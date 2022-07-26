@@ -51,7 +51,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
-				this.emit('positions', this.context.Data.Positions.copy(positions));
+				this.emit('positions', this.context.Data.positionsFactory.copy(positions));
 			} catch (err) { }
 		});
 
@@ -59,20 +59,20 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			try {
 				await this.context.timeline.sleep(this.config.processing);
 				await this.context.timeline.sleep(this.config.ping);
-				this.emit('balances', this.context.Data.Balances.copy(balances));
+				this.emit('balances', this.context.Data.balancesFactory.copy(balances));
 			} catch (err) { }
 		});
 	}
 
 	public async makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const orders = $orders.map(order => this.context.Data.LimitOrder.copyLimitOrder(order));
+			const orders = $orders.map(order => this.context.Data.limitOrderFactory.copy(order));
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
 			return this.instant.makeOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.context.Data.OpenOrder.copyOpenOrder(order),
+					: this.context.Data.openOrderFactory.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
@@ -81,13 +81,13 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 	public async amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const amendments = $amendments.map(amendment => this.context.Data.Amendment.copyAmendment(amendment));
+			const amendments = $amendments.map(amendment => this.context.Data.amendmentFactory.copy(amendment));
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
 			return this.instant.amendOrders(amendments).map(order =>
 				order instanceof Error
 					? order
-					: this.context.Data.OpenOrder.copyOpenOrder(order),
+					: this.context.Data.openOrderFactory.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
@@ -96,13 +96,13 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 	public async cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]> {
 		try {
-			const orders = $orders.map(order => this.context.Data.OpenOrder.copyOpenOrder(order));
+			const orders = $orders.map(order => this.context.Data.openOrderFactory.copy(order));
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
 			return this.instant.cancelOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.context.Data.OpenOrder.copyOpenOrder(order),
+					: this.context.Data.openOrderFactory.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
@@ -113,7 +113,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		try {
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
-			return this.context.Data.Balances.copy(this.instant.getBalances());
+			return this.context.Data.balancesFactory.copy(this.instant.getBalances());
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
 		}
@@ -123,7 +123,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		try {
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
-			return this.context.Data.Positions.copy(this.instant.getPositions());
+			return this.context.Data.positionsFactory.copy(this.instant.getPositions());
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
 		}
@@ -136,7 +136,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			return this.instant.getOpenOrders().map(order =>
 				order instanceof Error
 					? order
-					: this.context.Data.OpenOrder.copyOpenOrder(order),
+					: this.context.Data.openOrderFactory.copy(order),
 			);
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);

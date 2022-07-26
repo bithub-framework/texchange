@@ -3,14 +3,14 @@ import { Executed } from '../../interfaces/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
-import { Margin, MarginStatic } from './margin';
+import { Margin, MarginFactory } from './margin';
 import { Cost } from './assets/cost';
 export declare abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
     protected context: Context<H>;
     protected marketSpec: MarketSpec<H>;
     protected accountSpec: AccountSpec;
     protected assets: Assets<H>;
-    protected Margin: MarginStatic<H>;
+    protected marginFactory: MarginFactory<H>;
     protected $margin: Margin<H>;
     constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, assets: Assets<H>);
     open({ length, volume, dollarVolume, }: Executed<H>): void;

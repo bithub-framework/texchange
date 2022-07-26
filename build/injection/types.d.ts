@@ -36,6 +36,7 @@ export declare class FACADES {
 export declare class TYPES {
     static readonly marketSpec: unique symbol;
     static readonly accountSpec: unique symbol;
+    static readonly hFactory: unique symbol;
     static readonly hStatic: unique symbol;
     static readonly timeline: unique symbol;
     static readonly dataStatic: unique symbol;

@@ -41,14 +41,14 @@ export class UseCaseMakeOrder<H extends HLike<H>> {
 		const order: OpenOrder<H> = {
 			...limitOrder,
 			id: ++this.progress.userOrderCount,
-			filled: this.context.Data.H.from(0),
+			filled: this.context.Data.hFactory.from(0),
 			unfilled: limitOrder.quantity,
 		}
 		this.validator.validateOrder(order);
 
-		const $order = this.context.Data.OpenOrder.copyOpenOrder(order);
+		const $order = this.context.Data.openOrderFactory.copy(order);
 		const trades = this.matcher.$match($order);
-		const maker = this.context.Data.OpenOrder.copyOpenOrder($order);
+		const maker = this.context.Data.openOrderFactory.copy($order);
 		if ($order.unfilled.gt(0)) {
 			const behind = this.book.lineUp(maker);
 			this.makers.appendOrder(maker, behind);

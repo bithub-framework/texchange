@@ -38,7 +38,7 @@ export class OrderValidator<H extends HLike<H>> {
 		const closable = this.calculator.getClosable();
 		this.makers.appendOrder(
 			order,
-			this.context.Data.H.from(0),
+			this.context.Data.hFactory.from(0),
 		);
 		try {
 			const enoughPosition =

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarginStatic = exports.Margin = void 0;
+exports.MarginFactory = exports.Margin = void 0;
 const secretary_like_1 = require("secretary-like");
 class Margin {
     constructor(long, short) {
@@ -21,22 +21,22 @@ class Margin {
     }
 }
 exports.Margin = Margin;
-class MarginStatic {
-    constructor(H) {
-        this.H = H;
+class MarginFactory {
+    constructor(hFactory) {
+        this.hFactory = hFactory;
     }
     capture(margin) {
         return {
-            long: this.H.capture(margin.get(secretary_like_1.Length.LONG)),
-            short: this.H.capture(margin.get(secretary_like_1.Length.SHORT)),
+            long: this.hFactory.capture(margin.get(secretary_like_1.Length.LONG)),
+            short: this.hFactory.capture(margin.get(secretary_like_1.Length.SHORT)),
         };
     }
     restore(snapshot) {
-        return new Margin(this.H.restore(snapshot.long), this.H.restore(snapshot.short));
+        return new Margin(this.hFactory.restore(snapshot.long), this.hFactory.restore(snapshot.short));
     }
     copy(margin) {
         return new Margin(margin.get(secretary_like_1.Length.LONG), margin.get(secretary_like_1.Length.SHORT));
     }
 }
-exports.MarginStatic = MarginStatic;
+exports.MarginFactory = MarginFactory;
 //# sourceMappingURL=margin.js.map
