@@ -5,9 +5,7 @@ import {
 import { Frozen, FrozenStatic } from './frozen/frozen';
 
 
-export interface OpenMaker<H extends HLike<H>>
-	extends OpenOrder<H> {
-
+export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H> {
 	behind: H;
 	frozen: Frozen<H>;
 }

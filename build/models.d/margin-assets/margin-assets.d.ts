@@ -5,7 +5,7 @@ import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
 import { Margin, MarginStatic } from './margin';
 import { Cost } from './assets/cost';
-export declare abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<Snapshot> {
+export declare abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
     protected context: Context<H>;
     protected marketSpec: MarketSpec<H>;
     protected accountSpec: AccountSpec;
@@ -18,14 +18,16 @@ export declare abstract class MarginAssets<H extends HLike<H>> implements Statef
     abstract getFinalMargin(): H;
     abstract settle(length: Length, settlementPrice: H): void;
     abstract assertEnoughBalance(): void;
-    capture(): Snapshot;
-    restore(snapshot: Snapshot): void;
+    capture(): MarginAssets.Snapshot;
+    restore(snapshot: MarginAssets.Snapshot): void;
     getPosition(): Position<H>;
     getBalance(): H;
     getCost(): Cost<H>;
     pay(fee: H): void;
 }
-export interface Snapshot {
-    assets: Assets.Snapshot;
-    margin: Margin.Snapshot;
+export declare namespace MarginAssets {
+    interface Snapshot {
+        assets: Assets.Snapshot;
+        margin: Margin.Snapshot;
+    }
 }

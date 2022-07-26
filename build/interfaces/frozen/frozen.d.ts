@@ -1,8 +1,8 @@
 import { HLike, HStatic, Position } from 'secretary-like';
 import { FrozenBalance } from './frozen-balance';
 export interface Frozen<H extends HLike<H>> {
-    readonly balance: FrozenBalance<H>;
-    readonly position: Position<H>;
+    balance: FrozenBalance<H>;
+    position: Position<H>;
 }
 export declare namespace Frozen {
     interface Snapshot {

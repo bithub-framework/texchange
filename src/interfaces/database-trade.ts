@@ -6,9 +6,7 @@ import {
 export type DatabaseTradeId = string;
 
 
-export interface DatabaseTrade<H extends HLike<H>>
-	extends Trade<H> {
-
+export interface DatabaseTrade<H extends HLike<H>> extends Trade<H> {
 	id: DatabaseTradeId;
 }
 

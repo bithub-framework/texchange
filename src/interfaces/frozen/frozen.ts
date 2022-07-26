@@ -7,8 +7,8 @@ import { FrozenBalance, FrozenBalanceStatic } from './frozen-balance';
 
 
 export interface Frozen<H extends HLike<H>> {
-	readonly balance: FrozenBalance<H>;
-	readonly position: Position<H>;
+	balance: FrozenBalance<H>;
+	position: Position<H>;
 }
 
 export namespace Frozen {

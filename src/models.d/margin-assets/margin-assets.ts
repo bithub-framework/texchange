@@ -17,7 +17,7 @@ import { TYPES } from '../../injection/default/types';
 
 
 
-export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<Snapshot> {
+export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
 	protected Margin: MarginStatic<H>;
 	protected $margin: Margin<H>;
 
@@ -82,14 +82,14 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<S
 
 	public abstract assertEnoughBalance(): void;
 
-	public capture(): Snapshot {
+	public capture(): MarginAssets.Snapshot {
 		return {
 			assets: this.assets.capture(),
 			margin: this.Margin.capture(this.$margin),
 		};
 	}
 
-	public restore(snapshot: Snapshot): void {
+	public restore(snapshot: MarginAssets.Snapshot): void {
 		this.assets.restore(snapshot.assets);
 		this.$margin = this.Margin.restore(snapshot.margin);
 	}
@@ -111,7 +111,9 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<S
 	}
 }
 
-export interface Snapshot {
-	assets: Assets.Snapshot;
-	margin: Margin.Snapshot;
+export namespace MarginAssets {
+	export interface Snapshot {
+		assets: Assets.Snapshot;
+		margin: Margin.Snapshot;
+	}
 }
