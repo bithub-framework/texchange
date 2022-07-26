@@ -1,5 +1,5 @@
 import {
-	HLike, HStatic,
+	HLike, HStatic, HFactory,
 	MarketSpec,
 	AccountSpec,
 } from 'secretary-like';
@@ -58,6 +58,7 @@ import { Texchange } from '../texchange';
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.hStatic]: () => HStatic<H>;
+	public abstract [TYPES.hFactory]: () => HFactory<H>;
 	public abstract [TYPES.marketSpec]: () => MarketSpec<H>;
 	public abstract [TYPES.accountSpec]: () => AccountSpec;
 	public abstract [TYPES.timeline]: () => TimelineLike;

@@ -1,7 +1,7 @@
 import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
 import {
-	HLike, HStatic,
+	HLike, HStatic, HFactory,
 	TimelineLike,
 	MarketSpec,
 	AccountSpec,
@@ -33,6 +33,7 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.hStatic]: () => HStatic<H>;
+	public [TYPES.hFactory]: () => HFactory<H>;
 	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
@@ -54,6 +55,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 
 	public constructor(
 		timeline: TimelineLike,
+		hFactory: HFactory<H>,
 		H: HStatic<H>,
 		initialBalance: H,
 		initialSettlementPrice: H,
@@ -61,6 +63,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		super();
 
 		this[TYPES.timeline] = this.rv(timeline);
+		this[TYPES.hFactory] = this.rv(hFactory);
 		this[TYPES.hStatic] = this.rv(H);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);

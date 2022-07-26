@@ -1,4 +1,4 @@
-import { HLike, HStatic, MarketSpec, AccountSpec } from 'secretary-like';
+import { HLike, HStatic, HFactory, MarketSpec, AccountSpec } from 'secretary-like';
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 import { Context } from '../context';
@@ -34,6 +34,7 @@ import { UserAccountFacade } from '../facades.d/user-account';
 import { Texchange } from '../texchange';
 export declare abstract class Container<H extends HLike<H>> extends BaseContainer {
     abstract [TYPES.hStatic]: () => HStatic<H>;
+    abstract [TYPES.hFactory]: () => HFactory<H>;
     abstract [TYPES.marketSpec]: () => MarketSpec<H>;
     abstract [TYPES.accountSpec]: () => AccountSpec;
     abstract [TYPES.timeline]: () => TimelineLike;
