@@ -28,7 +28,7 @@ let AdminFacade = class AdminFacade {
         this.useCaseUpdateTrades = useCaseUpdateTrades;
         this.useCaseUpdateOrderbook = useCaseUpdateOrderbook;
         this.useCaseGetProgress = useCaseGetProgress;
-        this.startable = startable_1.Startable.create(() => this.rawStart(), () => this.rawStop());
+        this.startable = startable_1.Startable.create(() => this.rawStart(), (err) => this.rawStop(err));
         this.start = this.startable.start;
         this.stop = this.startable.stop;
         this.assart = this.startable.assart;
@@ -65,8 +65,9 @@ let AdminFacade = class AdminFacade {
         if (this.mtm)
             await this.mtm.start(this.stop);
     }
-    async rawStop() {
-        this.broadcast.emit('disconnection');
+    async rawStop(err) {
+        if (err)
+            this.broadcast.emit('error', err);
         if (this.mtm)
             await this.mtm.stop();
     }

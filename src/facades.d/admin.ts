@@ -28,7 +28,7 @@ export class AdminFacade<H extends HLike<H>>
 
 	private startable = Startable.create(
 		() => this.rawStart(),
-		() => this.rawStop(),
+		(err?: Error) => this.rawStop(err),
 	);
 	public start = this.startable.start;
 	public stop = this.startable.stop;
@@ -109,8 +109,8 @@ export class AdminFacade<H extends HLike<H>>
 			await this.mtm.start(this.stop);
 	}
 
-	private async rawStop() {
-		this.broadcast.emit('disconnection');
+	private async rawStop(err?: Error) {
+		if (err) this.broadcast.emit('error', err);
 		if (this.mtm)
 			await this.mtm.stop();
 	}
