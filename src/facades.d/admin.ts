@@ -11,6 +11,7 @@ import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
+import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
@@ -53,6 +54,8 @@ export class AdminFacade<H extends HLike<H>>
 		private pricing: Pricing<H, unknown>,
 		@inject(TYPES.MODELS.progress)
 		private progress: Progress<H>,
+		@inject(TYPES.MIDDLEWARES.broadcast)
+		private broadcast: Broadcast<H>,
 		@inject(TYPES.mtm)
 		private mtm: Mtm<H> | null,
 		@inject(TYPES.USE_CASES.updateTrades)
@@ -107,6 +110,7 @@ export class AdminFacade<H extends HLike<H>>
 	}
 
 	private async rawStop() {
+		this.broadcast.emit('disconnection');
 		if (this.mtm)
 			await this.mtm.stop();
 	}

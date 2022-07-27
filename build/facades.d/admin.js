@@ -14,7 +14,7 @@ const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let AdminFacade = class AdminFacade {
-    constructor(context, marketSpec, accountSpec, marginAssets, book, makers, pricing, progress, mtm, useCaseUpdateTrades, useCaseUpdateOrderbook, useCaseGetProgress) {
+    constructor(context, marketSpec, accountSpec, marginAssets, book, makers, pricing, progress, broadcast, mtm, useCaseUpdateTrades, useCaseUpdateOrderbook, useCaseGetProgress) {
         this.context = context;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
@@ -23,6 +23,7 @@ let AdminFacade = class AdminFacade {
         this.makers = makers;
         this.pricing = pricing;
         this.progress = progress;
+        this.broadcast = broadcast;
         this.mtm = mtm;
         this.useCaseUpdateTrades = useCaseUpdateTrades;
         this.useCaseUpdateOrderbook = useCaseUpdateOrderbook;
@@ -65,6 +66,7 @@ let AdminFacade = class AdminFacade {
             await this.mtm.start(this.stop);
     }
     async rawStop() {
+        this.broadcast.emit('disconnection');
         if (this.mtm)
             await this.mtm.stop();
     }
@@ -94,10 +96,11 @@ AdminFacade = __decorate([
     __param(5, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
     __param(6, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),
     __param(7, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
-    __param(8, (0, injektor_1.inject)(types_1.TYPES.mtm)),
-    __param(9, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateTrades)),
-    __param(10, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateOrderbook)),
-    __param(11, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getProgress))
+    __param(8, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.broadcast)),
+    __param(9, (0, injektor_1.inject)(types_1.TYPES.mtm)),
+    __param(10, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateTrades)),
+    __param(11, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.updateOrderbook)),
+    __param(12, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.getProgress))
 ], AdminFacade);
 exports.AdminFacade = AdminFacade;
 //# sourceMappingURL=admin.js.map

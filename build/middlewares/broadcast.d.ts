@@ -8,6 +8,7 @@ export declare namespace Broadcast {
         orderbook: [Orderbook<H>];
         positions: [Positions<H>];
         balances: [Balances<H>];
+        disconnection: [];
     }
 }
 import Events = Broadcast.Events;

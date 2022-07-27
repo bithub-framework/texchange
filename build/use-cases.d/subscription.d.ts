@@ -11,6 +11,7 @@ export declare namespace UseCaseSubscription {
         orderbook: [Orderbook<H>];
         positions: [Positions<H>];
         balances: [Balances<H>];
+        disconnection: [];
     }
 }
 import Events = UseCaseSubscription.Events;

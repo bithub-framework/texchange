@@ -7,6 +7,7 @@ import { Makers } from '../models.d/makers/makers';
 import { Book } from '../models.d/book';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
+import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
 import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
@@ -22,6 +23,7 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     private makers;
     private pricing;
     private progress;
+    private broadcast;
     private mtm;
     private useCaseUpdateTrades;
     private useCaseUpdateOrderbook;
@@ -33,7 +35,7 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     starp: (err?: Error | undefined) => Promise<void>;
     getReadyState: () => import("startable").ReadyState;
     skipStart: (onStopping?: import("startable").OnStopping | undefined) => void;
-    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
+    constructor(context: Context<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
     getMarketSpec(): MarketSpec<H>;
     getAccountSpec(): AccountSpec;
     updateTrades($trades: DatabaseTrade<H>[]): void;
