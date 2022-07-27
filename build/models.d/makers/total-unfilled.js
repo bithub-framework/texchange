@@ -2,23 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TotalUnfilledFactory = exports.TotalUnfilled = void 0;
 const secretary_like_1 = require("secretary-like");
-class TotalUnfilled {
-    constructor(bid, ask) {
-        this.bid = bid;
-        this.ask = ask;
-    }
-    get(side) {
-        if (side === secretary_like_1.Side.BID)
-            return this.bid;
-        else
-            return this.ask;
-    }
-    set(side, unfilled) {
-        if (side === secretary_like_1.Side.BID)
-            this.bid = unfilled;
-        else
-            this.ask = unfilled;
-    }
+class TotalUnfilled extends secretary_like_1.SidePair {
 }
 exports.TotalUnfilled = TotalUnfilled;
 class TotalUnfilledFactory {

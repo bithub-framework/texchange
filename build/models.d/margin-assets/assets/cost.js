@@ -2,23 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CostFactory = exports.Cost = void 0;
 const secretary_like_1 = require("secretary-like");
-class Cost {
-    constructor(long, short) {
-        this.long = long;
-        this.short = short;
-    }
-    get(length) {
-        if (length === secretary_like_1.Length.LONG)
-            return this.long;
-        else
-            return this.short;
-    }
-    set(length, cost) {
-        if (length === secretary_like_1.Length.LONG)
-            this.long = cost;
-        else
-            this.short = cost;
-    }
+class Cost extends secretary_like_1.LengthPair {
 }
 exports.Cost = Cost;
 class CostFactory {

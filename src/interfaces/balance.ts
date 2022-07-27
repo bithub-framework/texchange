@@ -1,24 +1,11 @@
 import {
 	HLike, H, HFactory,
 	Length,
+	LengthPair,
 } from 'secretary-like';
 
 
-export class Balance<H extends HLike<H>> {
-	public constructor(
-		private long: H,
-		private short: H,
-	) { }
-
-	public get(length: Length): H {
-		if (length === Length.LONG) return this.long;
-		else return this.short;
-	}
-	public set(length: Length, balance: H): void {
-		if (length === Length.LONG) this.long = balance;
-		else this.short = balance;
-	}
-}
+export class Balance<H extends HLike<H>> extends LengthPair<H> { }
 
 export namespace Balance {
 	export interface Snapshot {

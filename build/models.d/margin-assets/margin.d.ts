@@ -1,10 +1,5 @@
-import { HLike, H, HFactory, Length } from 'secretary-like';
-export declare class Margin<H extends HLike<H>> {
-    private long;
-    private short;
-    constructor(long: H, short: H);
-    get(length: Length): H;
-    set(length: Length, margin: H): void;
+import { HLike, H, HFactory, LengthPair } from 'secretary-like';
+export declare class Margin<H extends HLike<H>> extends LengthPair<H> {
 }
 export declare namespace Margin {
     interface Snapshot {

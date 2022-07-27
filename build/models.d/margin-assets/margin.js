@@ -2,23 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginFactory = exports.Margin = void 0;
 const secretary_like_1 = require("secretary-like");
-class Margin {
-    constructor(long, short) {
-        this.long = long;
-        this.short = short;
-    }
-    get(length) {
-        if (length === secretary_like_1.Length.LONG)
-            return this.long;
-        else
-            return this.short;
-    }
-    set(length, margin) {
-        if (length === secretary_like_1.Length.LONG)
-            this.long = margin;
-        else
-            this.short = margin;
-    }
+class Margin extends secretary_like_1.LengthPair {
 }
 exports.Margin = Margin;
 class MarginFactory {

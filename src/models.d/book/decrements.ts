@@ -1,24 +1,11 @@
 import {
 	Side,
 	HLike, H, HFactory,
+	SidePair,
 } from 'secretary-like';
 
 
-export class Decrements<H extends HLike<H>> {
-	public constructor(
-		private bids: Map<string, H>,
-		private asks: Map<string, H>,
-	) { }
-
-	public get(side: Side): Map<string, H> {
-		if (side === Side.BID) return this.bids;
-		else return this.asks;
-	}
-	public set(side: Side, map: Map<string, H>): void {
-		if (side === Side.BID) this.bids = map;
-		else this.asks = map;
-	}
-}
+export class Decrements<H extends HLike<H>> extends SidePair<Map<string, H>> { }
 
 export namespace Decrements {
 	export interface Snapshot {

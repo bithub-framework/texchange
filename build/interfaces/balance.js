@@ -2,23 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BalanceFactory = exports.Balance = void 0;
 const secretary_like_1 = require("secretary-like");
-class Balance {
-    constructor(long, short) {
-        this.long = long;
-        this.short = short;
-    }
-    get(length) {
-        if (length === secretary_like_1.Length.LONG)
-            return this.long;
-        else
-            return this.short;
-    }
-    set(length, balance) {
-        if (length === secretary_like_1.Length.LONG)
-            this.long = balance;
-        else
-            this.short = balance;
-    }
+class Balance extends secretary_like_1.LengthPair {
 }
 exports.Balance = Balance;
 class BalanceFactory {

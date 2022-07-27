@@ -2,23 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DecrementsFactory = exports.Decrements = void 0;
 const secretary_like_1 = require("secretary-like");
-class Decrements {
-    constructor(bids, asks) {
-        this.bids = bids;
-        this.asks = asks;
-    }
-    get(side) {
-        if (side === secretary_like_1.Side.BID)
-            return this.bids;
-        else
-            return this.asks;
-    }
-    set(side, map) {
-        if (side === secretary_like_1.Side.BID)
-            this.bids = map;
-        else
-            this.asks = map;
-    }
+class Decrements extends secretary_like_1.SidePair {
 }
 exports.Decrements = Decrements;
 class DecrementsFactory {
