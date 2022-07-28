@@ -1,12 +1,13 @@
 import {
 	HLike, H, HFactory,
 	Length,
-	LengthPair,
 } from 'secretary-like';
 
 
 
-export class Cost<H extends HLike<H>> extends LengthPair<H> { }
+export class Cost<H extends HLike<H>> {
+	[length: Length]: H;
+}
 
 export namespace Cost {
 	export interface Snapshot {
@@ -22,22 +23,22 @@ export class CostFactory<H extends HLike<H>> {
 
 	public capture(cost: Cost<H>): Cost.Snapshot {
 		return {
-			long: this.hFactory.capture(cost.get(Length.LONG)),
-			short: this.hFactory.capture(cost.get(Length.SHORT)),
+			long: this.hFactory.capture(cost[Length.LONG]),
+			short: this.hFactory.capture(cost[Length.SHORT]),
 		};
 	}
 
 	public restore(snapshot: Cost.Snapshot): Cost<H> {
-		return new Cost<H>(
-			this.hFactory.restore(snapshot.long),
-			this.hFactory.restore(snapshot.short),
-		);
+		return {
+			[Length.LONG]: this.hFactory.restore(snapshot.long),
+			[Length.SHORT]: this.hFactory.restore(snapshot.short),
+		};
 	}
 
 	public copy(cost: Cost<H>): Cost<H> {
-		return new Cost<H>(
-			cost.get(Length.LONG),
-			cost.get(Length.SHORT),
-		);
+		return {
+			[Length.LONG]: cost[Length.LONG],
+			[Length.SHORT]: cost[Length.SHORT],
+		};
 	}
 }

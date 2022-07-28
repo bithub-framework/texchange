@@ -2,12 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TotalUnfilledFactory = exports.TotalUnfilled = void 0;
 const secretary_like_1 = require("secretary-like");
-class TotalUnfilled extends secretary_like_1.SidePair {
+class TotalUnfilled {
 }
 exports.TotalUnfilled = TotalUnfilled;
 class TotalUnfilledFactory {
     copy(totalUnfilled) {
-        return new TotalUnfilled(totalUnfilled.get(secretary_like_1.Side.BID), totalUnfilled.get(secretary_like_1.Side.ASK));
+        return {
+            [secretary_like_1.Side.BID]: totalUnfilled[secretary_like_1.Side.BID],
+            [secretary_like_1.Side.ASK]: totalUnfilled[secretary_like_1.Side.ASK],
+        };
     }
 }
 exports.TotalUnfilledFactory = TotalUnfilledFactory;

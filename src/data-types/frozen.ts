@@ -48,26 +48,26 @@ export class FrozenStatic<H extends HLike<H>> {
 
 	public plus(x: Frozen<H>, y: Frozen<H>): Frozen<H> {
 		return {
-			balance: new Balance(
-				x.balance.get(Length.LONG).plus(y.balance.get(Length.LONG)),
-				x.balance.get(Length.SHORT).plus(y.balance.get(Length.SHORT)),
-			),
-			position: new Position(
-				x.position.get(Length.LONG).plus(y.position.get(Length.LONG)),
-				x.position.get(Length.SHORT).plus(y.position.get(Length.SHORT)),
-			),
+			balance: {
+				[Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
+				[Length.SHORT]: x.balance[Length.SHORT].plus(y.balance[Length.SHORT]),
+			},
+			position: {
+				[Length.LONG]: x.position[Length.LONG].plus(y.position[Length.LONG]),
+				[Length.SHORT]: x.position[Length.SHORT].plus(y.position[Length.SHORT]),
+			},
 		}
 	}
 
 	public readonly ZERO: Frozen<H> = {
-		balance: new Balance(
-			this.hFactory.from(0),
-			this.hFactory.from(0),
-		),
-		position: new Position(
-			this.hFactory.from(0),
-			this.hFactory.from(0),
-		),
+		balance: {
+			[Length.LONG]: this.hFactory.from(0),
+			[Length.SHORT]: this.hFactory.from(0),
+		},
+		position: {
+			[Length.LONG]: this.hFactory.from(0),
+			[Length.SHORT]: this.hFactory.from(0),
+		},
 	};
 
 	public minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H> {
@@ -76,14 +76,14 @@ export class FrozenStatic<H extends HLike<H>> {
 			x = this.ZERO;
 		}
 		return {
-			balance: new Balance(
-				x.balance.get(Length.LONG).minus(y.balance.get(Length.LONG)),
-				x.balance.get(Length.SHORT).minus(y.balance.get(Length.SHORT)),
-			),
-			position: new Position(
-				x.position.get(Length.LONG).minus(y.position.get(Length.LONG)),
-				x.position.get(Length.SHORT).minus(y.position.get(Length.SHORT)),
-			),
+			balance: {
+				[Length.LONG]: x.balance[Length.LONG].minus(y.balance[Length.LONG]),
+				[Length.SHORT]: x.balance[Length.SHORT].minus(y.balance[Length.SHORT]),
+			},
+			position: {
+				[Length.LONG]: x.position[Length.LONG].minus(y.position[Length.LONG]),
+				[Length.SHORT]: x.position[Length.SHORT].minus(y.position[Length.SHORT]),
+			},
 		}
 	}
 }

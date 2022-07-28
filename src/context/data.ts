@@ -1,5 +1,5 @@
 import {
-	DataNamespace as SecretaryDataNamespace,
+	DataTypesNamespace as SecretaryDataTypesNamespace,
 	HLike, HFactory, HStatic,
 } from 'secretary-like';
 import { OpenMakerFactory } from '../data-types/open-maker';
@@ -10,7 +10,7 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class DataTypesNamespace<H extends HLike<H>> extends SecretaryDataNamespace<H> {
+export class DataTypesNamespace<H extends HLike<H>> extends SecretaryDataTypesNamespace<H> {
 	public constructor(
 		@inject(TYPES.hFactory)
 		hFactory: HFactory<H>,

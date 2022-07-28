@@ -1,5 +1,6 @@
-import { HLike, H, HFactory, SidePair } from 'secretary-like';
-export declare class Decrements<H extends HLike<H>> extends SidePair<Map<string, H>> {
+import { Side, HLike, H, HFactory } from 'secretary-like';
+export declare class Decrements<H extends HLike<H>> {
+    [side: Side]: Map<string, H>;
 }
 export declare namespace Decrements {
     interface Snapshot {

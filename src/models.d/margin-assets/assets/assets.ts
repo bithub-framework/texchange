@@ -28,14 +28,14 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         @inject(TYPES.MODELS.initialBalance)
         protected balance: H,
     ) {
-        this.$position = new Position<H>(
-            this.context.dataTypes.hFactory.from(0),
-            this.context.dataTypes.hFactory.from(0),
-        );
-        this.$cost = new Cost<H>(
-            this.context.dataTypes.hFactory.from(0),
-            this.context.dataTypes.hFactory.from(0)
-        );
+        this.$position = {
+            [Length.LONG]: this.context.dataTypes.hFactory.from(0),
+            [Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+        };
+        this.$cost = {
+            [Length.LONG]: this.context.dataTypes.hFactory.from(0),
+            [Length.SHORT]: this.context.dataTypes.hFactory.from(0)
+        };
     }
 
     public getBalance(): H {
@@ -73,8 +73,8 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         volume,
         dollarVolume,
     }: Executed<H>): void {
-        this.$position.set(length, this.$position.get(length).plus(volume));
-        this.$cost.set(length, this.$cost.get(length).plus(dollarVolume));
+        this.$position[length] = this.$position[length].plus(volume);
+        this.$cost[length] = this.$cost[length].plus(dollarVolume);
     }
 
     /**
@@ -86,18 +86,17 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         volume,
         dollarVolume,
     }: Executed<H>): H {
-        assert(volume.lte(this.$position.get(length)));
-        const cost = this.$position.get(length).neq(0)
-            ? this.$cost.get(length)
+        assert(volume.lte(this.$position[length]));
+        const cost = this.$position[length].neq(0)
+            ? this.$cost[length]
                 .times(volume)
-                .div(this.$position.get(length))
+                .div(this.$position[length])
                 .round(this.marketSpec.CURRENCY_DP)
             : this.context.dataTypes.hFactory.from(0);
-        const profit = length === Length.LONG
-            ? dollarVolume.minus(cost)
-            : dollarVolume.minus(cost).neg();
-        this.$position.set(length, this.$position.get(length).minus(volume));
-        this.$cost.set(length, this.$cost.get(length).minus(cost));
+        const profit = dollarVolume.minus(cost)
+            .times(length === Length.LONG ? 1 : -1);
+        this.$position[length] = this.$position[length].minus(volume);
+        this.$cost[length] = this.$cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
         return profit;
     }
@@ -110,11 +109,11 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         settlementPrice: H,
     ): H {
         const dollarVolume = this.marketSpec.dollarVolume(
-            settlementPrice, this.$position.get(length),
+            settlementPrice, this.$position[length],
         ).round(this.marketSpec.CURRENCY_DP);
         const executed: Executed<H> = {
             length,
-            volume: this.$position.get(length),
+            volume: this.$position[length],
             dollarVolume,
         };
         const profit = this.close(executed);

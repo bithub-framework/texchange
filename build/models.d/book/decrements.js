@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DecrementsFactory = exports.Decrements = void 0;
 const secretary_like_1 = require("secretary-like");
-class Decrements extends secretary_like_1.SidePair {
+class Decrements {
 }
 exports.Decrements = Decrements;
 class DecrementsFactory {
@@ -11,12 +11,15 @@ class DecrementsFactory {
     }
     capture(decrements) {
         return {
-            bids: [...decrements.get(secretary_like_1.Side.BID)].map(([priceString, decrement]) => [priceString, this.hFactory.capture(decrement)]),
-            asks: [...decrements.get(secretary_like_1.Side.ASK)].map(([priceString, decrement]) => [priceString, this.hFactory.capture(decrement)]),
+            bids: [...decrements[secretary_like_1.Side.BID]].map(([priceString, decrement]) => [priceString, this.hFactory.capture(decrement)]),
+            asks: [...decrements[secretary_like_1.Side.ASK]].map(([priceString, decrement]) => [priceString, this.hFactory.capture(decrement)]),
         };
     }
     restore(snapshot) {
-        return new Decrements(new Map(snapshot.bids.map(([priceString, decrement]) => [priceString, this.hFactory.restore(decrement)])), new Map(snapshot.asks.map(([priceString, decrement]) => [priceString, this.hFactory.restore(decrement)])));
+        return {
+            [secretary_like_1.Side.BID]: new Map(snapshot.bids.map(([priceString, decrement]) => [priceString, this.hFactory.restore(decrement)])),
+            [secretary_like_1.Side.ASK]: new Map(snapshot.asks.map(([priceString, decrement]) => [priceString, this.hFactory.restore(decrement)])),
+        };
     }
 }
 exports.DecrementsFactory = DecrementsFactory;

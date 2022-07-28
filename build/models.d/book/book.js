@@ -21,8 +21,15 @@ let Book = class Book {
         this.marketSpec = marketSpec;
         this.Decrements = new decrements_1.DecrementsFactory(this.context.dataTypes.hFactory);
         this.time = Number.NEGATIVE_INFINITY;
-        this.basebook = new secretary_like_1.Orderbook([], [], Number.NEGATIVE_INFINITY);
-        this.decrements = new decrements_1.Decrements(new Map(), new Map());
+        this.basebook = {
+            [secretary_like_1.Side.BID]: [],
+            [secretary_like_1.Side.ASK]: [],
+            time: Number.NEGATIVE_INFINITY,
+        };
+        this.decrements = {
+            [secretary_like_1.Side.BID]: new Map(),
+            [secretary_like_1.Side.ASK]: new Map(),
+        };
         this.finalbookCache = null;
     }
     setBasebook(basebook) {
@@ -34,39 +41,46 @@ let Book = class Book {
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_DP);
-        const oldTotalDecrement = this.decrements.get(side).get(priceString)
+        const oldTotalDecrement = this.decrements[side].get(priceString)
             || this.context.dataTypes.hFactory.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
-        this.decrements.get(side).set(priceString, newTotalDecrement);
+        this.decrements[side].set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
         this.finalbookCache = null;
     }
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
-        const $final = new secretary_like_1.Orderbook([], [], this.time);
-        const $total = new decrements_1.Decrements(new Map(), new Map());
+        const $final = {
+            [secretary_like_1.Side.BID]: [],
+            [secretary_like_1.Side.ASK]: [],
+            time: this.time,
+        };
+        const $total = {
+            [secretary_like_1.Side.BID]: new Map(),
+            [secretary_like_1.Side.ASK]: new Map(),
+        };
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
-            for (const order of this.basebook.get(side))
-                $total.get(side).set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
-            for (const [priceString, decrement] of this.decrements.get(side)) {
-                let quantity = $total.get(side).get(priceString);
+            for (const order of this.basebook[side])
+                $total[side].set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
+            for (const [priceString, decrement] of this.decrements[side]) {
+                let quantity = $total[side].get(priceString);
                 if (typeof quantity !== 'undefined') {
                     quantity = quantity.minus(decrement);
                     if (quantity.lte(0))
-                        $total.get(side).delete(priceString);
+                        $total[side].delete(priceString);
                     else
-                        $total.get(side).set(priceString, quantity);
+                        $total[side].set(priceString, quantity);
                 }
                 else
-                    this.decrements.get(side).delete(priceString);
+                    this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final.set(side, [...$total.get(side)].map(([priceString, quantity]) => ({
+            $final[side] = [...$total[side]].map(([priceString, quantity]) => ({
                 price: this.context.dataTypes.hFactory.from(priceString),
                 quantity,
                 side,
-            })));
+            }));
         }
         return this.finalbookCache = $final;
     }
@@ -74,7 +88,7 @@ let Book = class Book {
         return this.tryApply();
     }
     lineUp(order) {
-        const makers = this.getOrderbook().get(order.side);
+        const makers = this.getOrderbook()[order.side];
         let behind = this.context.dataTypes.hFactory.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))

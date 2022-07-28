@@ -10,6 +10,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarginAssets = void 0;
+const secretary_like_1 = require("secretary-like");
 const margin_1 = require("./margin");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
@@ -20,25 +21,28 @@ let MarginAssets = class MarginAssets {
         this.accountSpec = accountSpec;
         this.assets = assets;
         this.marginFactory = new margin_1.MarginFactory(context.dataTypes.hFactory);
-        this.$margin = new margin_1.Margin(context.dataTypes.hFactory.from(0), context.dataTypes.hFactory.from(0));
+        this.$margin = {
+            [secretary_like_1.Length.LONG]: context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: context.dataTypes.hFactory.from(0),
+        };
     }
     open({ length, volume, dollarVolume, }) {
         const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
-        this.$margin.set(length, this.$margin.get(length)
+        this.$margin[length] = this.$margin[length]
             .plus(increment)
-            .round(this.marketSpec.CURRENCY_DP));
+            .round(this.marketSpec.CURRENCY_DP);
         this.assets.open({ length, volume, dollarVolume });
     }
     close({ length, volume, dollarVolume, }) {
-        if (volume.eq(this.assets.getPosition().get(length))) {
-            this.$margin.set(length, this.context.dataTypes.hFactory.from(0));
+        if (volume.eq(this.assets.getPosition()[length])) {
+            this.$margin[length] = this.context.dataTypes.hFactory.from(0);
         }
-        const decrement = this.$margin.get(length)
+        const decrement = this.$margin[length]
             .times(volume)
-            .div(this.assets.getPosition().get(length));
-        this.$margin.set(length, this.$margin.get(length)
+            .div(this.assets.getPosition()[length]);
+        this.$margin[length] = this.$margin[length]
             .minus(decrement)
-            .round(this.marketSpec.CURRENCY_DP));
+            .round(this.marketSpec.CURRENCY_DP);
         this.assets.close({ length, volume, dollarVolume });
     }
     capture() {

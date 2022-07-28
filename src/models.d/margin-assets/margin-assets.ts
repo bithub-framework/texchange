@@ -32,10 +32,10 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		protected assets: Assets<H>,
 	) {
 		this.marginFactory = new MarginFactory<H>(context.dataTypes.hFactory);
-		this.$margin = new Margin<H>(
-			context.dataTypes.hFactory.from(0),
-			context.dataTypes.hFactory.from(0),
-		);
+		this.$margin = {
+			[Length.LONG]: context.dataTypes.hFactory.from(0),
+			[Length.SHORT]: context.dataTypes.hFactory.from(0),
+		};
 	}
 
 	public open({
@@ -44,12 +44,9 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
-		this.$margin.set(
-			length,
-			this.$margin.get(length)
-				.plus(increment)
-				.round(this.marketSpec.CURRENCY_DP),
-		);
+		this.$margin[length] = this.$margin[length]
+			.plus(increment)
+			.round(this.marketSpec.CURRENCY_DP);
 		this.assets.open({ length, volume, dollarVolume })
 	}
 
@@ -58,18 +55,15 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		volume,
 		dollarVolume,
 	}: Executed<H>): void {
-		if (volume.eq(this.assets.getPosition().get(length))) {
-			this.$margin.set(length, this.context.dataTypes.hFactory.from(0));
+		if (volume.eq(this.assets.getPosition()[length])) {
+			this.$margin[length] = this.context.dataTypes.hFactory.from(0);
 		}
-		const decrement = this.$margin.get(length)
+		const decrement = this.$margin[length]
 			.times(volume)
-			.div(this.assets.getPosition().get(length));
-		this.$margin.set(
-			length,
-			this.$margin.get(length)
-				.minus(decrement)
-				.round(this.marketSpec.CURRENCY_DP),
-		);
+			.div(this.assets.getPosition()[length]);
+		this.$margin[length] = this.$margin[length]
+			.minus(decrement)
+			.round(this.marketSpec.CURRENCY_DP);
 		this.assets.close({ length, volume, dollarVolume });
 	}
 

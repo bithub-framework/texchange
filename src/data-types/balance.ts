@@ -1,11 +1,12 @@
 import {
 	HLike, H, HFactory,
 	Length,
-	LengthPair,
 } from 'secretary-like';
 
 
-export class Balance<H extends HLike<H>> extends LengthPair<H> { }
+export class Balance<H extends HLike<H>>  {
+	[length: Length]: H;
+}
 
 export namespace Balance {
 	export interface Snapshot {
@@ -21,22 +22,22 @@ export class BalanceFactory<H extends HLike<H>> {
 
 	public capture(balance: Balance<H>): Balance.Snapshot {
 		return {
-			long: this.hFactory.capture(balance.get(Length.LONG)),
-			short: this.hFactory.capture(balance.get(Length.SHORT)),
+			long: this.hFactory.capture(balance[Length.LONG]),
+			short: this.hFactory.capture(balance[Length.SHORT]),
 		};
 	}
 
 	public restore(snapshot: Balance.Snapshot): Balance<H> {
-		return new Balance(
-			this.hFactory.restore(snapshot.long),
-			this.hFactory.restore(snapshot.short),
-		);
+		return {
+			[Length.LONG]: this.hFactory.restore(snapshot.long),
+			[Length.SHORT]: this.hFactory.restore(snapshot.short),
+		};
 	}
 
 	public copy(balance: Balance<H>): Balance<H> {
-		return new Balance(
-			balance.get(Length.LONG),
-			balance.get(Length.SHORT),
-		);
+		return {
+			[Length.LONG]: balance[Length.LONG],
+			[Length.SHORT]: balance[Length.SHORT],
+		};
 	}
 }

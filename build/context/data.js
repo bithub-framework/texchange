@@ -17,7 +17,7 @@ const database_trade_1 = require("../data-types/database-trade");
 const database_orderbook_1 = require("../data-types/database-orderbook");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let DataTypesNamespace = class DataTypesNamespace extends secretary_like_1.DataNamespace {
+let DataTypesNamespace = class DataTypesNamespace extends secretary_like_1.DataTypesNamespace {
     constructor(hFactory, H) {
         super(hFactory, H);
         this.frozenFactory = new frozen_1.FrozenFactory(this.hFactory);

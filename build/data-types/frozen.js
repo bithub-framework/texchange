@@ -27,14 +27,26 @@ class FrozenStatic {
     constructor(hFactory) {
         this.hFactory = hFactory;
         this.ZERO = {
-            balance: new balance_1.Balance(this.hFactory.from(0), this.hFactory.from(0)),
-            position: new secretary_like_1.Position(this.hFactory.from(0), this.hFactory.from(0)),
+            balance: {
+                [secretary_like_1.Length.LONG]: this.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.hFactory.from(0),
+            },
+            position: {
+                [secretary_like_1.Length.LONG]: this.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.hFactory.from(0),
+            },
         };
     }
     plus(x, y) {
         return {
-            balance: new balance_1.Balance(x.balance.get(secretary_like_1.Length.LONG).plus(y.balance.get(secretary_like_1.Length.LONG)), x.balance.get(secretary_like_1.Length.SHORT).plus(y.balance.get(secretary_like_1.Length.SHORT))),
-            position: new secretary_like_1.Position(x.position.get(secretary_like_1.Length.LONG).plus(y.position.get(secretary_like_1.Length.LONG)), x.position.get(secretary_like_1.Length.SHORT).plus(y.position.get(secretary_like_1.Length.SHORT))),
+            balance: {
+                [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].plus(y.balance[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].plus(y.balance[secretary_like_1.Length.SHORT]),
+            },
+            position: {
+                [secretary_like_1.Length.LONG]: x.position[secretary_like_1.Length.LONG].plus(y.position[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: x.position[secretary_like_1.Length.SHORT].plus(y.position[secretary_like_1.Length.SHORT]),
+            },
         };
     }
     minus(x, y) {
@@ -43,8 +55,14 @@ class FrozenStatic {
             x = this.ZERO;
         }
         return {
-            balance: new balance_1.Balance(x.balance.get(secretary_like_1.Length.LONG).minus(y.balance.get(secretary_like_1.Length.LONG)), x.balance.get(secretary_like_1.Length.SHORT).minus(y.balance.get(secretary_like_1.Length.SHORT))),
-            position: new secretary_like_1.Position(x.position.get(secretary_like_1.Length.LONG).minus(y.position.get(secretary_like_1.Length.LONG)), x.position.get(secretary_like_1.Length.SHORT).minus(y.position.get(secretary_like_1.Length.SHORT))),
+            balance: {
+                [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].minus(y.balance[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].minus(y.balance[secretary_like_1.Length.SHORT]),
+            },
+            position: {
+                [secretary_like_1.Length.LONG]: x.position[secretary_like_1.Length.LONG].minus(y.position[secretary_like_1.Length.LONG]),
+                [secretary_like_1.Length.SHORT]: x.position[secretary_like_1.Length.SHORT].minus(y.position[secretary_like_1.Length.SHORT]),
+            },
         };
     }
 }

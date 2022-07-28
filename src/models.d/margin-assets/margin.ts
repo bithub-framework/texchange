@@ -1,11 +1,12 @@
 import {
 	HLike, H, HFactory,
 	Length,
-	LengthPair,
 } from 'secretary-like';
 
 
-export class Margin<H extends HLike<H>> extends LengthPair<H> { }
+export class Margin<H extends HLike<H>>  {
+	[length: Length]: H;
+}
 
 export namespace Margin {
 	export interface Snapshot {
@@ -21,22 +22,22 @@ export class MarginFactory<H extends HLike<H>>{
 
 	public capture(margin: Margin<H>): Margin.Snapshot {
 		return {
-			long: this.hFactory.capture(margin.get(Length.LONG)),
-			short: this.hFactory.capture(margin.get(Length.SHORT)),
+			long: this.hFactory.capture(margin[Length.LONG]),
+			short: this.hFactory.capture(margin[Length.SHORT]),
 		};
 	}
 
 	public restore(snapshot: Margin.Snapshot): Margin<H> {
-		return new Margin(
-			this.hFactory.restore(snapshot.long),
-			this.hFactory.restore(snapshot.short),
-		);
+		return {
+			[Length.LONG]: this.hFactory.restore(snapshot.long),
+			[Length.SHORT]: this.hFactory.restore(snapshot.short),
+		};
 	}
 
 	public copy(margin: Margin<H>): Margin<H> {
-		return new Margin(
-			margin.get(Length.LONG),
-			margin.get(Length.SHORT),
-		);
+		return {
+			[Length.LONG]: margin[Length.LONG],
+			[Length.SHORT]: margin[Length.SHORT],
+		};
 	}
 }

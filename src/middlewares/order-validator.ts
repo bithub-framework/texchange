@@ -42,8 +42,8 @@ export class OrderValidator<H extends HLike<H>> {
 		);
 		try {
 			const enoughPosition =
-				closable.get(Length.LONG).gte(0) &&
-				closable.get(Length.SHORT).gte(0);
+				closable[Length.LONG].gte(0) &&
+				closable[Length.SHORT].gte(0);
 			assert(enoughPosition);
 
 			const enoughBalance = this.calculator.getAvailable()

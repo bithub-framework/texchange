@@ -8,25 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DefaultMakers = void 0;
 const secretary_like_1 = require("secretary-like");
-const balance_1 = require("../../data-types/balance");
 const makers_1 = require("./makers");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     // 默认单向持仓模式
     toFreeze(order) {
         if (order.action === secretary_like_1.Action.OPEN) {
-            const balance = new balance_1.Balance(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
-            balance.set(order.length, this.marketSpec.dollarVolume(order.price, order.unfilled));
-            balance.set(secretary_like_1.Length.invert(order.length), this.context.dataTypes.hFactory.from(0));
+            const balance = {
+                [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+            };
+            balance[order.length] = this.marketSpec.dollarVolume(order.price, order.unfilled);
+            balance[secretary_like_1.Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
             return {
                 balance,
                 position: this.context.dataTypes.Frozen.ZERO.position,
             };
         }
         else {
-            const position = new secretary_like_1.Position(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
-            position.set(order.length, order.unfilled);
-            position.set(secretary_like_1.Length.invert(order.length), this.context.dataTypes.hFactory.from(0));
+            const position = {
+                [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+            };
+            position[order.length] = order.unfilled;
+            position[secretary_like_1.Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
             return {
                 balance: this.context.dataTypes.Frozen.ZERO.balance,
                 position: position,

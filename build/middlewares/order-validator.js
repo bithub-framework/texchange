@@ -30,8 +30,8 @@ let OrderValidator = class OrderValidator {
         const closable = this.calculator.getClosable();
         this.makers.appendOrder(order, this.context.dataTypes.hFactory.from(0));
         try {
-            const enoughPosition = closable.get(secretary_like_1.Length.LONG).gte(0) &&
-                closable.get(secretary_like_1.Length.SHORT).gte(0);
+            const enoughPosition = closable[secretary_like_1.Length.LONG].gte(0) &&
+                closable[secretary_like_1.Length.SHORT].gte(0);
             assert(enoughPosition);
             const enoughBalance = this.calculator.getAvailable()
                 .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_DP));

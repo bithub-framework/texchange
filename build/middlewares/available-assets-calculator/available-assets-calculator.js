@@ -29,9 +29,12 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();
         const position = this.marginAssets.getPosition();
-        return new secretary_like_1.Position(position.get(secretary_like_1.Length.LONG)
-            .minus(totalFrozen.position.get(secretary_like_1.Length.LONG)), position.get(secretary_like_1.Length.SHORT)
-            .minus(totalFrozen.position.get(secretary_like_1.Length.SHORT)));
+        return {
+            [secretary_like_1.Length.LONG]: position[secretary_like_1.Length.LONG]
+                .minus(totalFrozen.position[secretary_like_1.Length.LONG]),
+            [secretary_like_1.Length.SHORT]: position[secretary_like_1.Length.SHORT]
+                .minus(totalFrozen.position[secretary_like_1.Length.SHORT]),
+        };
     }
     getBalances() {
         return {

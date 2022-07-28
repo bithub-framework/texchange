@@ -15,7 +15,7 @@ let DefaultMarginAssets = class DefaultMarginAssets extends margin_assets_1.Marg
     // 默认逐仓
     settle(length, settlementPrice) {
         const profit = this.assets.settle(length, settlementPrice);
-        this.$margin.set(length, this.$margin.get(length).plus(profit));
+        this.$margin[length] = this.$margin[length].plus(profit);
     }
     // public settle(
     // 	length: Length,
@@ -34,12 +34,12 @@ let DefaultMarginAssets = class DefaultMarginAssets extends margin_assets_1.Marg
     // }
     // 默认无锁仓优惠
     getFinalMargin() {
-        return this.$margin.get(secretary_like_1.Length.LONG)
-            .plus(this.$margin.get(secretary_like_1.Length.SHORT));
+        return this.$margin[secretary_like_1.Length.LONG]
+            .plus(this.$margin[secretary_like_1.Length.SHORT]);
     }
     assertEnoughBalance() {
-        assert(this.$margin.get(secretary_like_1.Length.LONG).gte(0));
-        assert(this.$margin.get(secretary_like_1.Length.SHORT).gte(0));
+        assert(this.$margin[secretary_like_1.Length.LONG].gte(0));
+        assert(this.$margin[secretary_like_1.Length.SHORT].gte(0));
     }
 };
 DefaultMarginAssets = __decorate([

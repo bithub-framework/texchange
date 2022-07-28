@@ -1,11 +1,12 @@
 import {
 	Side,
 	HLike, H, HFactory,
-	SidePair,
 } from 'secretary-like';
 
 
-export class Decrements<H extends HLike<H>> extends SidePair<Map<string, H>> { }
+export class Decrements<H extends HLike<H>> {
+	[side: Side]: Map<string, H>;
+}
 
 export namespace Decrements {
 	export interface Snapshot {
@@ -21,11 +22,11 @@ export class DecrementsFactory<H extends HLike<H>> {
 
 	public capture(decrements: Decrements<H>): Decrements.Snapshot {
 		return {
-			bids: [...decrements.get(Side.BID)].map(
+			bids: [...decrements[Side.BID]].map(
 				([priceString, decrement]) =>
 					[priceString, this.hFactory.capture(decrement)],
 			),
-			asks: [...decrements.get(Side.ASK)].map(
+			asks: [...decrements[Side.ASK]].map(
 				([priceString, decrement]) =>
 					[priceString, this.hFactory.capture(decrement)],
 			),
@@ -33,19 +34,19 @@ export class DecrementsFactory<H extends HLike<H>> {
 	}
 
 	public restore(snapshot: Decrements.Snapshot): Decrements<H> {
-		return new Decrements<H>(
-			new Map<string, H>(
+		return {
+			[Side.BID]: new Map<string, H>(
 				snapshot.bids.map(
 					([priceString, decrement]) =>
 						[priceString, this.hFactory.restore(decrement)]
 				),
 			),
-			new Map<string, H>(
+			[Side.ASK]: new Map<string, H>(
 				snapshot.asks.map(
 					([priceString, decrement]) =>
 						[priceString, this.hFactory.restore(decrement)]
 				),
 			),
-		);
+		};
 	}
 }

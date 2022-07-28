@@ -1,8 +1,7 @@
-import { HLike, Orderbook, OrderbookFactory, BookOrder } from 'secretary-like';
+import { HLike, Orderbook, OrderbookFactory } from 'secretary-like';
 export declare type DatabaseOrderbookId = string;
-export declare class DatabaseOrderbook<H extends HLike<H>> extends Orderbook<H> {
+export interface DatabaseOrderbook<H extends HLike<H>> extends Orderbook<H> {
     id: DatabaseOrderbookId;
-    constructor(bids: BookOrder<H>[], asks: BookOrder<H>[], time: number, id: DatabaseOrderbookId);
 }
 export declare class DatabaseOrderbookFactory<H extends HLike<H>> {
     private orderbookFactory;

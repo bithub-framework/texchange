@@ -21,8 +21,14 @@ let Assets = class Assets {
         this.marketSpec = marketSpec;
         this.balance = balance;
         this.Cost = new cost_1.CostFactory(this.context.dataTypes.hFactory);
-        this.$position = new secretary_like_1.Position(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
-        this.$cost = new cost_1.Cost(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
+        this.$position = {
+            [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+        };
+        this.$cost = {
+            [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0)
+        };
     }
     getBalance() {
         return this.balance;
@@ -49,26 +55,25 @@ let Assets = class Assets {
         this.balance = this.balance.minus(fee);
     }
     open({ length, volume, dollarVolume, }) {
-        this.$position.set(length, this.$position.get(length).plus(volume));
-        this.$cost.set(length, this.$cost.get(length).plus(dollarVolume));
+        this.$position[length] = this.$position[length].plus(volume);
+        this.$cost[length] = this.$cost[length].plus(dollarVolume);
     }
     /**
      *
      * @returns Profit
      */
     close({ length, volume, dollarVolume, }) {
-        assert(volume.lte(this.$position.get(length)));
-        const cost = this.$position.get(length).neq(0)
-            ? this.$cost.get(length)
+        assert(volume.lte(this.$position[length]));
+        const cost = this.$position[length].neq(0)
+            ? this.$cost[length]
                 .times(volume)
-                .div(this.$position.get(length))
+                .div(this.$position[length])
                 .round(this.marketSpec.CURRENCY_DP)
             : this.context.dataTypes.hFactory.from(0);
-        const profit = length === secretary_like_1.Length.LONG
-            ? dollarVolume.minus(cost)
-            : dollarVolume.minus(cost).neg();
-        this.$position.set(length, this.$position.get(length).minus(volume));
-        this.$cost.set(length, this.$cost.get(length).minus(cost));
+        const profit = dollarVolume.minus(cost)
+            .times(length === secretary_like_1.Length.LONG ? 1 : -1);
+        this.$position[length] = this.$position[length].minus(volume);
+        this.$cost[length] = this.$cost[length].minus(cost);
         this.balance = this.balance.plus(profit);
         return profit;
     }
@@ -76,10 +81,10 @@ let Assets = class Assets {
      * @returns Profit
      */
     settle(length, settlementPrice) {
-        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position.get(length)).round(this.marketSpec.CURRENCY_DP);
+        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position[length]).round(this.marketSpec.CURRENCY_DP);
         const executed = {
             length,
-            volume: this.$position.get(length),
+            volume: this.$position[length],
             dollarVolume,
         };
         const profit = this.close(executed);

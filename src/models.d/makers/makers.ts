@@ -35,10 +35,10 @@ export abstract class Makers<H extends HLike<H>> implements
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpec<H>,
 	) {
-		this.$totalUnfilled = new TotalUnfilled<H>(
-			context.dataTypes.hFactory.from(0),
-			context.dataTypes.hFactory.from(0),
-		);
+		this.$totalUnfilled = {
+			[Side.BID]: context.dataTypes.hFactory.from(0),
+			[Side.ASK]: context.dataTypes.hFactory.from(0),
+		};
 		this.totalUnfilledFactory = new TotalUnfilledFactory();
 		this.totalFrozen = context.dataTypes.Frozen.ZERO;
 	}
@@ -78,15 +78,12 @@ export abstract class Makers<H extends HLike<H>> implements
 			this.$orders.set(order.id, order);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
-			this.$totalUnfilled.set(
-				side,
-				[...this.$orders.values()]
-					.filter(order => order.side === side)
-					.reduce(
-						(total, order) => total.plus(order.unfilled),
-						this.context.dataTypes.hFactory.from(0),
-					),
-			);
+			this.$totalUnfilled[side] = [...this.$orders.values()]
+				.filter(order => order.side === side)
+				.reduce(
+					(total, order) => total.plus(order.unfilled),
+					this.context.dataTypes.hFactory.from(0),
+				);
 		}
 		this.totalFrozen = [...this.$orders.values()]
 			.reduce(
@@ -97,14 +94,14 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	private normalizeFrozen(frozen: Frozen<H>): Frozen<H> {
 		return {
-			balance: new Balance<H>(
-				frozen.balance.get(Length.LONG).round(this.marketSpec.CURRENCY_DP),
-				frozen.balance.get(Length.SHORT).round(this.marketSpec.CURRENCY_DP),
-			),
-			position: new Position<H>(
-				frozen.position.get(Length.LONG).round(this.marketSpec.QUANTITY_DP),
-				frozen.position.get(Length.SHORT).round(this.marketSpec.QUANTITY_DP),
-			),
+			balance: {
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_DP),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_DP),
+			},
+			position: {
+				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_DP),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_DP),
+			},
 		};
 	}
 
@@ -123,11 +120,8 @@ export abstract class Makers<H extends HLike<H>> implements
 		};
 		this.$orders.set(order.id, $order);
 		this.totalFrozen = this.context.dataTypes.Frozen.plus(this.totalFrozen, toFreeze);
-		this.$totalUnfilled.set(
-			order.side,
-			this.$totalUnfilled.get(order.side)
-				.plus(order.unfilled),
-		);
+		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
+			.plus(order.unfilled);
 	}
 
 	public takeOrder(oid: OrderId, volume: H): void {
@@ -157,11 +151,8 @@ export abstract class Makers<H extends HLike<H>> implements
 	public removeOrder(oid: OrderId): void {
 		const $order = this.$getOrder(oid);
 		this.$orders.delete(oid);
-		this.$totalUnfilled.set(
-			$order.side,
-			this.$totalUnfilled.get($order.side)
-				.minus($order.unfilled),
-		);
+		this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
+			.minus($order.unfilled);
 		this.totalFrozen = this.context.dataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
 	}
 
