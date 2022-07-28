@@ -19,7 +19,7 @@ export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 		@inject(TYPES.context)
 		context: Context<H>,
 	) {
-		this.TICK_SIZE = context.Data.hFactory.from('.01');
+		this.TICK_SIZE = context.dataTypes.hFactory.from('.01');
 	}
 
 	public quantity(price: H, dollarVolume: H): H {

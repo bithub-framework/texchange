@@ -19,7 +19,7 @@ let Book = class Book {
     constructor(context, marketSpec) {
         this.context = context;
         this.marketSpec = marketSpec;
-        this.Decrements = new decrements_1.DecrementsFactory(this.context.Data.hFactory);
+        this.Decrements = new decrements_1.DecrementsFactory(this.context.dataTypes.hFactory);
         this.time = Number.NEGATIVE_INFINITY;
         this.basebook = new secretary_like_1.Orderbook([], [], Number.NEGATIVE_INFINITY);
         this.decrements = new decrements_1.Decrements(new Map(), new Map());
@@ -35,7 +35,7 @@ let Book = class Book {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_DP);
         const oldTotalDecrement = this.decrements.get(side).get(priceString)
-            || this.context.Data.hFactory.from(0);
+            || this.context.dataTypes.hFactory.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements.get(side).set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
@@ -63,7 +63,7 @@ let Book = class Book {
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
             $final.set(side, [...$total.get(side)].map(([priceString, quantity]) => ({
-                price: this.context.Data.hFactory.from(priceString),
+                price: this.context.dataTypes.hFactory.from(priceString),
                 quantity,
                 side,
             })));
@@ -75,7 +75,7 @@ let Book = class Book {
     }
     lineUp(order) {
         const makers = this.getOrderbook().get(order.side);
-        let behind = this.context.Data.hFactory.from(0);
+        let behind = this.context.dataTypes.hFactory.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);
@@ -83,7 +83,7 @@ let Book = class Book {
     }
     capture() {
         return {
-            basebook: this.context.Data.orderbookFactory.capture(this.basebook),
+            basebook: this.context.dataTypes.orderbookFactory.capture(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -91,7 +91,7 @@ let Book = class Book {
         };
     }
     restore(snapshot) {
-        this.basebook = this.context.Data.orderbookFactory.restore(snapshot.basebook);
+        this.basebook = this.context.dataTypes.orderbookFactory.restore(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY

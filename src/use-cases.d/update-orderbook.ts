@@ -4,7 +4,7 @@ import {
 	HLike,
 	Trade,
 } from 'secretary-like';
-import { DatabaseOrderbook } from '../interfaces/database-orderbook';
+import { DatabaseOrderbook } from '../data-types/database-orderbook';
 import assert = require('assert');
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -45,9 +45,9 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 			this.makers.removeOrder(order.id);
 		const allTrades: Trade<H>[] = [];
 		for (const order of orders) {
-			const $order = this.context.Data.openOrderFactory.copy(order);
+			const $order = this.context.dataTypes.openOrderFactory.copy(order);
 			const trades = this.matcher.$match($order);
-			const maker = this.context.Data.openOrderFactory.copy($order);
+			const maker = this.context.dataTypes.openOrderFactory.copy($order);
 			const behind = this.book.lineUp(maker);
 			this.makers.appendOrder(maker, behind);
 

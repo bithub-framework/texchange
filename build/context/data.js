@@ -9,15 +9,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataNamespace = void 0;
+exports.DataTypesNamespace = void 0;
 const secretary_like_1 = require("secretary-like");
-const open_maker_1 = require("./open-maker");
-const frozen_1 = require("./frozen");
-const database_trade_1 = require("./database-trade");
-const database_orderbook_1 = require("./database-orderbook");
+const open_maker_1 = require("../data-types/open-maker");
+const frozen_1 = require("../data-types/frozen");
+const database_trade_1 = require("../data-types/database-trade");
+const database_orderbook_1 = require("../data-types/database-orderbook");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
-let DataNamespace = class DataNamespace extends secretary_like_1.DataNamespace {
+let DataTypesNamespace = class DataTypesNamespace extends secretary_like_1.DataNamespace {
     constructor(hFactory, H) {
         super(hFactory, H);
         this.frozenFactory = new frozen_1.FrozenFactory(this.hFactory);
@@ -27,9 +27,9 @@ let DataNamespace = class DataNamespace extends secretary_like_1.DataNamespace {
         this.DatabaseTrade = new database_trade_1.DatabaseTradeFactory(this.tradeFactory);
     }
 };
-DataNamespace = __decorate([
+DataTypesNamespace = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.hFactory)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.hStatic))
-], DataNamespace);
-exports.DataNamespace = DataNamespace;
+], DataTypesNamespace);
+exports.DataTypesNamespace = DataTypesNamespace;
 //# sourceMappingURL=data.js.map

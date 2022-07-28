@@ -1,6 +1,6 @@
 import { HLike, OpenOrder, OrderId, MarketSpec } from 'secretary-like';
-import { OpenMaker } from '../../interfaces/open-maker';
-import { Frozen } from '../../interfaces/frozen';
+import { OpenMaker } from '../../data-types/open-maker';
+import { Frozen } from '../../data-types/frozen';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';

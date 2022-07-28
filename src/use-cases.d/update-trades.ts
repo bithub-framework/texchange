@@ -5,7 +5,7 @@ import {
 	HLike,
 	Length,
 } from 'secretary-like';
-import { DatabaseTrade } from '../interfaces/database-trade';
+import { DatabaseTrade } from '../data-types/database-trade';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';

@@ -15,7 +15,7 @@ import { TYPES } from '../../injection/types';
 
 
 export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
-    private Decrements = new DecrementsFactory<H>(this.context.Data.hFactory);
+    private Decrements = new DecrementsFactory<H>(this.context.dataTypes.hFactory);
 
     private time = Number.NEGATIVE_INFINITY;
     private basebook = new Orderbook<H>(
@@ -50,7 +50,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_DP);
         const oldTotalDecrement = this.decrements.get(side).get(priceString)
-            || this.context.Data.hFactory.from(0);
+            || this.context.dataTypes.hFactory.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements.get(side).set(priceString, newTotalDecrement);
         this.time = this.context.timeline.now();
@@ -83,7 +83,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
             $final.set(
                 side,
                 [...$total.get(side)].map(([priceString, quantity]) => ({
-                    price: this.context.Data.hFactory.from(priceString),
+                    price: this.context.dataTypes.hFactory.from(priceString),
                     quantity,
                     side,
                 })),
@@ -98,7 +98,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 
     public lineUp(order: OpenOrder<H>): H {
         const makers = this.getOrderbook().get(order.side);
-        let behind = this.context.Data.hFactory.from(0);
+        let behind = this.context.dataTypes.hFactory.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);
@@ -107,7 +107,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 
     public capture(): Book.Snapshot {
         return {
-            basebook: this.context.Data.orderbookFactory.capture(this.basebook),
+            basebook: this.context.dataTypes.orderbookFactory.capture(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -116,7 +116,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
     }
 
     public restore(snapshot: Book.Snapshot): void {
-        this.basebook = this.context.Data.orderbookFactory.restore(snapshot.basebook);
+        this.basebook = this.context.dataTypes.orderbookFactory.restore(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY

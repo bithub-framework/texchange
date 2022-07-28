@@ -3,7 +3,7 @@ import {
 	HLike,
 	Length, Side, Action,
 } from 'secretary-like';
-import { Balance } from '../../interfaces/balance';
+import { Balance } from '../../data-types/balance';
 
 import { injextends } from '@zimtsui/injektor';
 
@@ -16,14 +16,14 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();
 		const $final = new Balance<H>(
-			this.context.Data.hFactory.from(0),
-			this.context.Data.hFactory.from(0),
+			this.context.dataTypes.hFactory.from(0),
+			this.context.dataTypes.hFactory.from(0),
 		);
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side = Side.from(length, Action.OPEN);
-			const afterDeduction = this.context.Data.H.max(
+			const afterDeduction = this.context.dataTypes.H.max(
 				totalUnfilled.get(side).minus(position.get(Length.invert(length))),
-				this.context.Data.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
 			);
 			$final.set(
 				length,
@@ -31,7 +31,7 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 					? totalFrozen.balance.get(length)
 						.times(afterDeduction)
 						.div(totalUnfilled.get(side))
-					: this.context.Data.hFactory.from(0),
+					: this.context.dataTypes.hFactory.from(0),
 			);
 		}
 		return $final.get(Length.LONG).plus($final.get(Length.SHORT));

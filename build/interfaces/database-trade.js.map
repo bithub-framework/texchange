@@ -1,1 +1,0 @@
-{"version":3,"file":"database-trade.js","sourceRoot":"","sources":["../../src/interfaces/database-trade.ts"],"names":[],"mappings":";;;AAYA,MAAa,oBAAoB;IAChC,YACS,YAA6B;QAA7B,iBAAY,GAAZ,YAAY,CAAiB;IAClC,CAAC;IAEE,IAAI,CACV,KAAuB;QAEvB,OAAO;YACN,GAAG,IAAI,CAAC,YAAY,CAAC,IAAI,CAAC,KAAK,CAAC;YAChC,EAAE,EAAE,KAAK,CAAC,EAAE;SACZ,CAAA;IACF,CAAC;CACD;AAbD,oDAaC"}

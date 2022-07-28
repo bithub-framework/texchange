@@ -4,8 +4,8 @@ import {
 	OpenOrder,
 	Position,
 } from 'secretary-like';
-import { Frozen } from '../../interfaces/frozen';
-import { Balance } from '../../interfaces/balance';
+import { Frozen } from '../../data-types/frozen';
+import { Balance } from '../../data-types/balance';
 import { Makers } from './makers';
 
 import { injextends } from '@zimtsui/injektor';
@@ -18,8 +18,8 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
 			const balance = new Balance<H>(
-				this.context.Data.hFactory.from(0),
-				this.context.Data.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
 			);
 			balance.set(
 				order.length,
@@ -27,16 +27,16 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			);
 			balance.set(
 				Length.invert(order.length),
-				this.context.Data.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
 			);
 			return {
 				balance,
-				position: this.context.Data.Frozen.ZERO.position,
+				position: this.context.dataTypes.Frozen.ZERO.position,
 			};
 		} else {
 			const position = new Position<H>(
-				this.context.Data.hFactory.from(0),
-				this.context.Data.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
 			);
 			position.set(
 				order.length,
@@ -44,10 +44,10 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 			);
 			position.set(
 				Length.invert(order.length),
-				this.context.Data.hFactory.from(0),
+				this.context.dataTypes.hFactory.from(0),
 			);
 			return {
-				balance: this.context.Data.Frozen.ZERO.balance,
+				balance: this.context.dataTypes.Frozen.ZERO.balance,
 				position: position,
 			};
 		}

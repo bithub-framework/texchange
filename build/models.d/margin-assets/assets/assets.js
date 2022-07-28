@@ -20,29 +20,29 @@ let Assets = class Assets {
         this.context = context;
         this.marketSpec = marketSpec;
         this.balance = balance;
-        this.Cost = new cost_1.CostFactory(this.context.Data.hFactory);
-        this.$position = new secretary_like_1.Position(this.context.Data.hFactory.from(0), this.context.Data.hFactory.from(0));
-        this.$cost = new cost_1.Cost(this.context.Data.hFactory.from(0), this.context.Data.hFactory.from(0));
+        this.Cost = new cost_1.CostFactory(this.context.dataTypes.hFactory);
+        this.$position = new secretary_like_1.Position(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
+        this.$cost = new cost_1.Cost(this.context.dataTypes.hFactory.from(0), this.context.dataTypes.hFactory.from(0));
     }
     getBalance() {
         return this.balance;
     }
     getPosition() {
-        return this.context.Data.positionFactory.copy(this.$position);
+        return this.context.dataTypes.positionFactory.copy(this.$position);
     }
     getCost() {
         return this.Cost.copy(this.$cost);
     }
     capture() {
         return {
-            position: this.context.Data.positionFactory.capture(this.$position),
+            position: this.context.dataTypes.positionFactory.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
-            balance: this.context.Data.hFactory.capture(this.balance),
+            balance: this.context.dataTypes.hFactory.capture(this.balance),
         };
     }
     restore(snapshot) {
-        this.balance = this.context.Data.hFactory.restore(snapshot.balance);
-        this.$position = this.context.Data.positionFactory.restore(snapshot.position);
+        this.balance = this.context.dataTypes.hFactory.restore(snapshot.balance);
+        this.$position = this.context.dataTypes.positionFactory.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
     pay(fee) {
@@ -63,7 +63,7 @@ let Assets = class Assets {
                 .times(volume)
                 .div(this.$position.get(length))
                 .round(this.marketSpec.CURRENCY_DP)
-            : this.context.Data.hFactory.from(0);
+            : this.context.dataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost).times(length);
         this.$position.set(length, this.$position.get(length).minus(volume));
         this.$cost.set(length, this.$cost.get(length).minus(cost));

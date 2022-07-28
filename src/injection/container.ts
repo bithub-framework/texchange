@@ -9,7 +9,7 @@ import { TYPES } from './types';
 // Context
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataNamespace } from '../interfaces/data';
+import { DataTypesNamespace } from '../context/data';
 
 // Models
 import { Makers } from '../models.d/makers/makers';
@@ -63,7 +63,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.accountSpec]: () => AccountSpec;
 	public abstract [TYPES.timeline]: () => TimelineLike;
 
-	public [TYPES.dataStatic] = this.rcs<DataNamespace<H>>(DataNamespace);
+	public [TYPES.dataStatic] = this.rcs<DataTypesNamespace<H>>(DataTypesNamespace);
 	public [TYPES.context] = this.rcs<Context<H>>(Context);
 
 	public abstract [TYPES.MODELS.initialBalance]: () => H;

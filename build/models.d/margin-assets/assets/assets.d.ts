@@ -2,7 +2,7 @@ import { Length, Position, HLike, H, MarketSpec } from 'secretary-like';
 import { Cost } from './cost';
 import { Context } from '../../../context';
 import { StatefulLike } from '../../../stateful-like';
-import { Executed } from '../../../interfaces/executed';
+import { Executed } from '../../../data-types/executed';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     protected context: Context<H>;
     protected marketSpec: MarketSpec<H>;

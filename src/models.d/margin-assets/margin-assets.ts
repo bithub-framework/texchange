@@ -5,7 +5,7 @@ import {
 	AccountSpec,
 	Position,
 } from 'secretary-like';
-import { Executed } from '../../interfaces/executed';
+import { Executed } from '../../data-types/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
@@ -31,10 +31,10 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
 	) {
-		this.marginFactory = new MarginFactory<H>(context.Data.hFactory);
+		this.marginFactory = new MarginFactory<H>(context.dataTypes.hFactory);
 		this.$margin = new Margin<H>(
-			context.Data.hFactory.from(0),
-			context.Data.hFactory.from(0),
+			context.dataTypes.hFactory.from(0),
+			context.dataTypes.hFactory.from(0),
 		);
 	}
 
@@ -59,7 +59,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		if (volume.eq(this.assets.getPosition().get(length))) {
-			this.$margin.set(length, this.context.Data.hFactory.from(0));
+			this.$margin.set(length, this.context.dataTypes.hFactory.from(0));
 		}
 		const decrement = this.$margin.get(length)
 			.times(volume)

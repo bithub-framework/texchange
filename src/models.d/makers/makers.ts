@@ -6,9 +6,9 @@ import {
 	OrderId,
 	MarketSpec,
 } from 'secretary-like';
-import { OpenMaker } from '../../interfaces/open-maker';
-import { Frozen } from '../../interfaces/frozen';
-import { Balance } from '../../interfaces/balance';
+import { OpenMaker } from '../../data-types/open-maker';
+import { Frozen } from '../../data-types/frozen';
+import { Balance } from '../../data-types/balance';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { Context } from '../../context';
 import assert = require('assert');
@@ -36,11 +36,11 @@ export abstract class Makers<H extends HLike<H>> implements
 		protected marketSpec: MarketSpec<H>,
 	) {
 		this.$totalUnfilled = new TotalUnfilled<H>(
-			context.Data.hFactory.from(0),
-			context.Data.hFactory.from(0),
+			context.dataTypes.hFactory.from(0),
+			context.dataTypes.hFactory.from(0),
 		);
 		this.totalUnfilledFactory = new TotalUnfilledFactory();
-		this.totalFrozen = context.Data.Frozen.ZERO;
+		this.totalFrozen = context.dataTypes.Frozen.ZERO;
 	}
 
 	public getTotalUnfilled(): TotalUnfilled<H> {
@@ -57,7 +57,7 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public getOrder(oid: OrderId): OpenMaker<H> {
 		const $order = this.$getOrder(oid);
-		return this.context.Data.OpenMaker.copy($order);
+		return this.context.dataTypes.OpenMaker.copy($order);
 	}
 
 	protected $getOrder(oid: OrderId): OpenMaker<H> {
@@ -68,13 +68,13 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public capture(): Makers.Snapshot {
 		return [...this.$orders.keys()].map(
-			oid => this.context.Data.OpenMaker.capture(this.$orders.get(oid)!),
+			oid => this.context.dataTypes.OpenMaker.capture(this.$orders.get(oid)!),
 		);
 	}
 
 	public restore(snapshot: Makers.Snapshot): void {
 		for (const orderSnapshot of snapshot) {
-			const order = this.context.Data.OpenMaker.restore(orderSnapshot);
+			const order = this.context.dataTypes.OpenMaker.restore(orderSnapshot);
 			this.$orders.set(order.id, order);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
@@ -84,14 +84,14 @@ export abstract class Makers<H extends HLike<H>> implements
 					.filter(order => order.side === side)
 					.reduce(
 						(total, order) => total.plus(order.unfilled),
-						this.context.Data.hFactory.from(0),
+						this.context.dataTypes.hFactory.from(0),
 					),
 			);
 		}
 		this.totalFrozen = [...this.$orders.values()]
 			.reduce(
-				(total, order) => this.context.Data.Frozen.plus(total, order.frozen),
-				this.context.Data.Frozen.ZERO,
+				(total, order) => this.context.dataTypes.Frozen.plus(total, order.frozen),
+				this.context.dataTypes.Frozen.ZERO,
 			);
 	}
 
@@ -117,12 +117,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.normalizeFrozen(this.toFreeze(order));
 		const $order: OpenMaker<H> = {
-			...this.context.Data.openOrderFactory.copy(order),
+			...this.context.dataTypes.openOrderFactory.copy(order),
 			behind,
 			frozen: toFreeze,
 		};
 		this.$orders.set(order.id, $order);
-		this.totalFrozen = this.context.Data.Frozen.plus(this.totalFrozen, toFreeze);
+		this.totalFrozen = this.context.dataTypes.Frozen.plus(this.totalFrozen, toFreeze);
 		this.$totalUnfilled.set(
 			order.side,
 			this.$totalUnfilled.get(order.side)
@@ -136,12 +136,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert($order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
 		const newOrder: OpenOrder<H> = {
-			...this.context.Data.openOrderFactory.copy($order),
+			...this.context.dataTypes.openOrderFactory.copy($order),
 			filled: $order.filled.plus(volume),
 			unfilled: $order.unfilled.minus(volume),
 		};
 		if (newOrder.unfilled.gt(0))
-			this.appendOrder(newOrder, this.context.Data.hFactory.from(0));
+			this.appendOrder(newOrder, this.context.dataTypes.hFactory.from(0));
 	}
 
 	public takeOrderQueue(oid: OrderId, volume?: H): void {
@@ -150,7 +150,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			assert(volume.lte($order.behind));
 		$order.behind = typeof volume !== 'undefined'
 			? $order.behind.minus(volume)
-			: this.context.Data.hFactory.from(0);
+			: this.context.dataTypes.hFactory.from(0);
 		this.$orders.set(oid, $order);
 	}
 
@@ -162,7 +162,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			this.$totalUnfilled.get($order.side)
 				.minus($order.unfilled),
 		);
-		this.totalFrozen = this.context.Data.Frozen.minus(this.totalFrozen, $order.frozen);
+		this.totalFrozen = this.context.dataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
 	}
 
 	public forcedlyRemoveOrder(oid: OrderId): void {

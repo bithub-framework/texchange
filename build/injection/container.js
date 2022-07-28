@@ -6,7 +6,7 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("./types");
 // Context
 const context_1 = require("../context");
-const data_1 = require("../interfaces/data");
+const data_1 = require("../context/data");
 const assets_1 = require("../models.d/margin-assets/assets/assets");
 const book_1 = require("../models.d/book");
 const progress_1 = require("../models.d/progress");
@@ -35,7 +35,7 @@ const texchange_1 = require("../texchange");
 class Container extends injektor_1.BaseContainer {
     constructor() {
         super(...arguments);
-        this[_a] = this.rcs(data_1.DataNamespace);
+        this[_a] = this.rcs(data_1.DataTypesNamespace);
         this[_b] = this.rcs(context_1.Context);
         this[_c] = this.rcs(assets_1.Assets);
         this[_d] = this.rcs(book_1.Book);

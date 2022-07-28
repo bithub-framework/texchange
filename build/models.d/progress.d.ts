@@ -1,8 +1,8 @@
 import { Context } from '../context';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
-import { DatabaseOrderbookId, DatabaseOrderbook } from '../interfaces/database-orderbook';
-import { DatabaseTradeId, DatabaseTrade } from '../interfaces/database-trade';
+import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
+import { DatabaseTradeId, DatabaseTrade } from '../data-types/database-trade';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
     private context;
     userTradeCount: number;

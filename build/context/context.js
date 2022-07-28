@@ -11,11 +11,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Context = void 0;
 const injektor_1 = require("@zimtsui/injektor");
-const types_1 = require("./injection/types");
+const types_1 = require("../injection/types");
 let Context = class Context {
-    constructor(timeline, Data) {
+    constructor(timeline, dataTypes) {
         this.timeline = timeline;
-        this.Data = Data;
+        this.dataTypes = dataTypes;
     }
 };
 Context = __decorate([

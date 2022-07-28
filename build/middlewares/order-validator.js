@@ -28,7 +28,7 @@ let OrderValidator = class OrderValidator {
     }
     validateQuantity(order) {
         const closable = this.calculator.getClosable();
-        this.makers.appendOrder(order, this.context.Data.hFactory.from(0));
+        this.makers.appendOrder(order, this.context.dataTypes.hFactory.from(0));
         try {
             const enoughPosition = closable.get(secretary_like_1.Length.LONG).gte(0) &&
                 closable.get(secretary_like_1.Length.SHORT).gte(0);

@@ -25,12 +25,12 @@ let Matcher = class Matcher {
     $match($taker) {
         const orderbook = this.book.getOrderbook();
         const trades = [];
-        let volume = this.context.Data.hFactory.from(0);
-        let dollarVolume = this.context.Data.hFactory.from(0);
+        let volume = this.context.dataTypes.hFactory.from(0);
+        let dollarVolume = this.context.dataTypes.hFactory.from(0);
         for (const maker of orderbook.get(secretary_like_1.Side.invert($taker.side)))
             if (($taker.side === secretary_like_1.Side.BID && $taker.price.gte(maker.price) ||
                 $taker.side === secretary_like_1.Side.ASK && $taker.price.lte(maker.price)) && $taker.unfilled.gt(0)) {
-                const quantity = this.context.Data.H.min($taker.unfilled, maker.quantity);
+                const quantity = this.context.dataTypes.H.min($taker.unfilled, maker.quantity);
                 this.book.decQuantity(maker.side, maker.price, quantity);
                 $taker.filled = $taker.filled.plus(quantity);
                 $taker.unfilled = $taker.unfilled.minus(quantity);

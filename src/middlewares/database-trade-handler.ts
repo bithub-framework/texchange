@@ -7,7 +7,7 @@ import {
 	MarketSpec,
 	AccountSpec,
 } from 'secretary-like';
-import { OpenMaker } from '../interfaces/open-maker';
+import { OpenMaker } from '../data-types/open-maker';
 import { Context } from '../context';
 import { Makers } from '../models.d/makers/makers';
 import { MarginAssets } from '../models.d/margin-assets';
@@ -31,7 +31,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 	) { }
 
 	public tradeTakesOpenMakers(trade: Trade<H>): void {
-		const $trade = this.context.Data.tradeFactory.copy(trade);
+		const $trade = this.context.dataTypes.tradeFactory.copy(trade);
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);
@@ -58,7 +58,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		maker: OpenMaker<H>,
 	): void {
 		if ($trade.price.eq(maker.price)) {
-			const volume = this.context.Data.H.min($trade.quantity, maker.behind);
+			const volume = this.context.dataTypes.H.min($trade.quantity, maker.behind);
 			$trade.quantity = $trade.quantity.minus(volume);
 			this.makers.takeOrderQueue(maker.id, volume);
 		} else this.makers.takeOrderQueue(maker.id);
@@ -68,7 +68,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		$trade: Trade<H>,
 		maker: OpenMaker<H>,
 	): void {
-		const volume = this.context.Data.H.min($trade.quantity, maker.unfilled);
+		const volume = this.context.dataTypes.H.min($trade.quantity, maker.unfilled);
 		const dollarVolume = this.marketSpec
 			.dollarVolume(maker.price, volume)
 			.round(this.marketSpec.CURRENCY_DP);

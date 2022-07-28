@@ -35,8 +35,8 @@ export class Matcher<H extends HLike<H>> {
 		const orderbook = this.book.getOrderbook();
 
 		const trades: Trade<H>[] = [];
-		let volume = this.context.Data.hFactory.from(0);
-		let dollarVolume = this.context.Data.hFactory.from(0);
+		let volume = this.context.dataTypes.hFactory.from(0);
+		let dollarVolume = this.context.dataTypes.hFactory.from(0);
 		for (const maker of orderbook.get(Side.invert($taker.side)))
 			if (
 				(
@@ -44,7 +44,7 @@ export class Matcher<H extends HLike<H>> {
 					$taker.side === Side.ASK && $taker.price.lte(maker.price)
 				) && $taker.unfilled.gt(0)
 			) {
-				const quantity = this.context.Data.H.min($taker.unfilled, maker.quantity);
+				const quantity = this.context.dataTypes.H.min($taker.unfilled, maker.quantity);
 				this.book.decQuantity(maker.side, maker.price, quantity);
 				$taker.filled = $taker.filled.plus(quantity);
 				$taker.unfilled = $taker.unfilled.minus(quantity);

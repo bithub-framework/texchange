@@ -1,7 +1,7 @@
 import { Context } from '../context';
 import { Broadcast } from '../middlewares/broadcast';
 import { HLike } from 'secretary-like';
-import { DatabaseOrderbook } from '../interfaces/database-orderbook';
+import { DatabaseOrderbook } from '../data-types/database-orderbook';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { Makers } from '../models.d/makers/makers';

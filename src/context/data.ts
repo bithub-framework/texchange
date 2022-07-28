@@ -2,15 +2,15 @@ import {
 	DataNamespace as SecretaryDataNamespace,
 	HLike, HFactory, HStatic,
 } from 'secretary-like';
-import { OpenMakerFactory } from './open-maker';
-import { FrozenFactory, FrozenStatic } from './frozen';
-import { DatabaseTradeFactory } from './database-trade';
-import { DatabaseOrderbookFactory } from './database-orderbook';
+import { OpenMakerFactory } from '../data-types/open-maker';
+import { FrozenFactory, FrozenStatic } from '../data-types/frozen';
+import { DatabaseTradeFactory } from '../data-types/database-trade';
+import { DatabaseOrderbookFactory } from '../data-types/database-orderbook';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class DataNamespace<H extends HLike<H>> extends SecretaryDataNamespace<H> {
+export class DataTypesNamespace<H extends HLike<H>> extends SecretaryDataNamespace<H> {
 	public constructor(
 		@inject(TYPES.hFactory)
 		hFactory: HFactory<H>,

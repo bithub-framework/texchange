@@ -9,9 +9,9 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
 import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
-import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
+import { DatabaseOrderbook, DatabaseOrderbookId } from '../data-types/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
+import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot>, StartableLike {

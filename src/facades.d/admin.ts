@@ -13,9 +13,9 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
 import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
-import { DatabaseOrderbook, DatabaseOrderbookId } from '../interfaces/database-orderbook';
+import { DatabaseOrderbook, DatabaseOrderbookId } from '../data-types/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { DatabaseTrade, DatabaseTradeId } from '../interfaces/database-trade';
+import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
@@ -77,14 +77,14 @@ export class AdminFacade<H extends HLike<H>>
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
-				trade => this.context.Data.DatabaseTrade.copy(trade),
+				trade => this.context.dataTypes.DatabaseTrade.copy(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
-			this.context.Data.DatabaseOrderbook.copy($orderbook),
+			this.context.dataTypes.DatabaseOrderbook.copy($orderbook),
 		);
 	}
 

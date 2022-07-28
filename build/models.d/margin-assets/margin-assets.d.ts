@@ -1,5 +1,5 @@
 import { Length, HLike, MarketSpec, AccountSpec, Position } from 'secretary-like';
-import { Executed } from '../../interfaces/executed';
+import { Executed } from '../../data-types/executed';
 import { Context } from '../../context';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';

@@ -1,6 +1,6 @@
 import { HLike } from 'secretary-like';
-import { DatabaseOrderbookId } from '../interfaces/database-orderbook';
-import { DatabaseTradeId } from '../interfaces/database-trade';
+import { DatabaseOrderbookId } from '../data-types/database-orderbook';
+import { DatabaseTradeId } from '../data-types/database-trade';
 import { Progress } from '../models.d/progress';
 
 import { inject } from '@zimtsui/injektor';

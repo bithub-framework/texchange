@@ -19,8 +19,8 @@ let MarginAssets = class MarginAssets {
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.assets = assets;
-        this.marginFactory = new margin_1.MarginFactory(context.Data.hFactory);
-        this.$margin = new margin_1.Margin(context.Data.hFactory.from(0), context.Data.hFactory.from(0));
+        this.marginFactory = new margin_1.MarginFactory(context.dataTypes.hFactory);
+        this.$margin = new margin_1.Margin(context.dataTypes.hFactory.from(0), context.dataTypes.hFactory.from(0));
     }
     open({ length, volume, dollarVolume, }) {
         const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
@@ -31,7 +31,7 @@ let MarginAssets = class MarginAssets {
     }
     close({ length, volume, dollarVolume, }) {
         if (volume.eq(this.assets.getPosition().get(length))) {
-            this.$margin.set(length, this.context.Data.hFactory.from(0));
+            this.$margin.set(length, this.context.dataTypes.hFactory.from(0));
         }
         const decrement = this.$margin.get(length)
             .times(volume)
