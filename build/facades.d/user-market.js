@@ -41,6 +41,14 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
             }
             catch (err) { }
         });
+        this.useCaseSubscription.on('error', async (err) => {
+            try {
+                await this.context.timeline.sleep(this.config.processing);
+                await this.context.timeline.sleep(this.config.ping);
+                this.emit('error', err);
+            }
+            catch (err) { }
+        });
     }
     quantity(price, dollarVolume) {
         return this.marketSpec.quantity(price, dollarVolume);

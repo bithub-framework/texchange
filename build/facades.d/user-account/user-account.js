@@ -41,14 +41,6 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             }
             catch (err) { }
         });
-        this.useCaseSubscription.on('error', async (error) => {
-            try {
-                await this.context.timeline.sleep(this.config.processing);
-                await this.context.timeline.sleep(this.config.ping);
-                this.emit('error', error);
-            }
-            catch (err) { }
-        });
     }
     async makeOrders($orders) {
         try {
