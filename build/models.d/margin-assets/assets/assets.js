@@ -64,7 +64,9 @@ let Assets = class Assets {
                 .div(this.$position.get(length))
                 .round(this.marketSpec.CURRENCY_DP)
             : this.context.dataTypes.hFactory.from(0);
-        const profit = dollarVolume.minus(cost).times(length);
+        const profit = length === secretary_like_1.Length.LONG
+            ? dollarVolume.minus(cost)
+            : dollarVolume.minus(cost).neg();
         this.$position.set(length, this.$position.get(length).minus(volume));
         this.$cost.set(length, this.$cost.get(length).minus(cost));
         this.balance = this.balance.plus(profit);
