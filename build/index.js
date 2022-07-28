@@ -10,11 +10,15 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DefaultContainer = exports.BaseContainer = void 0;
+exports.DEFAULT_TYPES = exports.DefaultContainer = exports.BASE_TYPES = exports.BaseContainer = void 0;
 var container_1 = require("./injection/container");
 Object.defineProperty(exports, "BaseContainer", { enumerable: true, get: function () { return container_1.Container; } });
+var types_1 = require("./injection/types");
+Object.defineProperty(exports, "BASE_TYPES", { enumerable: true, get: function () { return types_1.TYPES; } });
 var container_2 = require("./injection/default/container");
 Object.defineProperty(exports, "DefaultContainer", { enumerable: true, get: function () { return container_2.Container; } });
+var types_2 = require("./injection/default/types");
+Object.defineProperty(exports, "DEFAULT_TYPES", { enumerable: true, get: function () { return types_2.TYPES; } });
 __exportStar(require("./interfaces/database-orderbook"), exports);
 __exportStar(require("./interfaces/database-trade"), exports);
 __exportStar(require("./facades.d/admin"), exports);
