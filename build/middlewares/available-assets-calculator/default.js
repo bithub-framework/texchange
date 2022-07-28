@@ -23,12 +23,11 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const side = secretary_like_1.Side.from(length, secretary_like_1.Action.OPEN);
             const afterDeduction = this.context.dataTypes.H.max(totalUnfilled[side].minus(position[secretary_like_1.Length.invert(length)]), this.context.dataTypes.hFactory.from(0));
-            $final[length] =
-                totalUnfilled[side].neq(0)
-                    ? totalFrozen.balance[length]
-                        .times(afterDeduction)
-                        .div(totalUnfilled[side])
-                    : this.context.dataTypes.hFactory.from(0);
+            $final[length] = totalUnfilled[side].neq(0)
+                ? totalFrozen.balance[length]
+                    .times(afterDeduction)
+                    .div(totalUnfilled[side], this.marketSpec.CURRENCY_DP)
+                : this.context.dataTypes.hFactory.from(0);
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }

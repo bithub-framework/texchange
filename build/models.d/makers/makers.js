@@ -61,21 +61,9 @@ let Makers = class Makers {
         this.totalFrozen = [...this.$orders.values()]
             .reduce((total, order) => this.context.dataTypes.Frozen.plus(total, order.frozen), this.context.dataTypes.Frozen.ZERO);
     }
-    normalizeFrozen(frozen) {
-        return {
-            balance: {
-                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.marketSpec.CURRENCY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.marketSpec.CURRENCY_DP),
-            },
-            position: {
-                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.marketSpec.QUANTITY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.marketSpec.QUANTITY_DP),
-            },
-        };
-    }
     appendOrder(order, behind) {
         assert(order.unfilled.gt(0));
-        const toFreeze = this.normalizeFrozen(this.toFreeze(order));
+        const toFreeze = this.toFreeze(order);
         const $order = {
             ...this.context.dataTypes.openOrderFactory.copy(order),
             behind,

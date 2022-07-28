@@ -27,10 +27,10 @@ let MarginAssets = class MarginAssets {
         };
     }
     open({ length, volume, dollarVolume, }) {
-        const increment = dollarVolume.div(this.accountSpec.LEVERAGE);
+        const increment = dollarVolume
+            .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_DP);
         this.$margin[length] = this.$margin[length]
-            .plus(increment)
-            .round(this.marketSpec.CURRENCY_DP);
+            .plus(increment);
         this.assets.open({ length, volume, dollarVolume });
     }
     close({ length, volume, dollarVolume, }) {
@@ -39,10 +39,9 @@ let MarginAssets = class MarginAssets {
         }
         const decrement = this.$margin[length]
             .times(volume)
-            .div(this.assets.getPosition()[length]);
+            .div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_DP);
         this.$margin[length] = this.$margin[length]
-            .minus(decrement)
-            .round(this.marketSpec.CURRENCY_DP);
+            .minus(decrement);
         this.assets.close({ length, volume, dollarVolume });
     }
     capture() {

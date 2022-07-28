@@ -24,7 +24,7 @@ export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 
 	public quantity(price: H, dollarVolume: H): H {
 		assert(price.neq(0));
-		return dollarVolume.div(price);
+		return dollarVolume.div(price, this.QUANTITY_DP);
 	}
 
 	public dollarVolume(price: H, quantity: H): H {

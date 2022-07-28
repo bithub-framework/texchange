@@ -67,8 +67,7 @@ let Assets = class Assets {
         const cost = this.$position[length].neq(0)
             ? this.$cost[length]
                 .times(volume)
-                .div(this.$position[length])
-                .round(this.marketSpec.CURRENCY_DP)
+                .div(this.$position[length], this.marketSpec.CURRENCY_DP)
             : this.context.dataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost)
             .times(length === secretary_like_1.Length.LONG ? 1 : -1);
@@ -81,7 +80,7 @@ let Assets = class Assets {
      * @returns Profit
      */
     settle(length, settlementPrice) {
-        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position[length]).round(this.marketSpec.CURRENCY_DP);
+        const dollarVolume = this.marketSpec.dollarVolume(settlementPrice, this.$position[length]);
         const executed = {
             length,
             volume: this.$position[length],

@@ -92,19 +92,6 @@ export abstract class Makers<H extends HLike<H>> implements
 			);
 	}
 
-	private normalizeFrozen(frozen: Frozen<H>): Frozen<H> {
-		return {
-			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_DP),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_DP),
-			},
-			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_DP),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_DP),
-			},
-		};
-	}
-
 	protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
 
 	public appendOrder(
@@ -112,7 +99,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		behind: H,
 	): void {
 		assert(order.unfilled.gt(0));
-		const toFreeze = this.normalizeFrozen(this.toFreeze(order));
+		const toFreeze = this.toFreeze(order);
 		const $order: OpenMaker<H> = {
 			...this.context.dataTypes.openOrderFactory.copy(order),
 			behind,

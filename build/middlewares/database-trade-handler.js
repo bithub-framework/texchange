@@ -50,8 +50,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
     $tradeTakesOpenMaker($trade, maker) {
         const volume = this.context.dataTypes.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.marketSpec
-            .dollarVolume(maker.price, volume)
-            .round(this.marketSpec.CURRENCY_DP);
+            .dollarVolume(maker.price, volume);
         $trade.quantity = $trade.quantity.minus(volume);
         this.makers.takeOrder(maker.id, volume);
         this.marginAssets.pay(dollarVolume

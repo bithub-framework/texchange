@@ -25,13 +25,11 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 				totalUnfilled[side].minus(position[Length.invert(length)]),
 				this.context.dataTypes.hFactory.from(0),
 			);
-			$final[
-				length] =
-				totalUnfilled[side].neq(0)
-					? totalFrozen.balance[length]
-						.times(afterDeduction)
-						.div(totalUnfilled[side])
-					: this.context.dataTypes.hFactory.from(0);
+			$final[length] = totalUnfilled[side].neq(0)
+				? totalFrozen.balance[length]
+					.times(afterDeduction)
+					.div(totalUnfilled[side], this.marketSpec.CURRENCY_DP)
+				: this.context.dataTypes.hFactory.from(0);
 		}
 		return $final[Length.LONG].plus($final[Length.SHORT]);
 	}

@@ -19,7 +19,6 @@ export declare abstract class Makers<H extends HLike<H>> implements StatefulLike
     protected $getOrder(oid: OrderId): OpenMaker<H>;
     capture(): Makers.Snapshot;
     restore(snapshot: Makers.Snapshot): void;
-    private normalizeFrozen;
     protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
     appendOrder(order: OpenOrder<H>, behind: H): void;
     takeOrder(oid: OrderId, volume: H): void;

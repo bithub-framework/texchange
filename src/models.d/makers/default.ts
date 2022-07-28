@@ -17,7 +17,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
 	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
-			const balance = {
+			const balance: Balance<H> = {
 				[Length.LONG]: this.context.dataTypes.hFactory.from(0),
 				[Length.SHORT]: this.context.dataTypes.hFactory.from(0),
 			};
@@ -28,7 +28,7 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 				position: this.context.dataTypes.Frozen.ZERO.position,
 			};
 		} else {
-			const position = {
+			const position: Position<H> = {
 				[Length.LONG]: this.context.dataTypes.hFactory.from(0),
 				[Length.SHORT]: this.context.dataTypes.hFactory.from(0),
 			};

@@ -26,7 +26,7 @@ let DefaultMarketSpec = class DefaultMarketSpec {
     }
     quantity(price, dollarVolume) {
         assert(price.neq(0));
-        return dollarVolume.div(price);
+        return dollarVolume.div(price, this.QUANTITY_DP);
     }
     dollarVolume(price, quantity) {
         return price.times(quantity);

@@ -50,8 +50,7 @@ export class Matcher<H extends HLike<H>> {
 				$taker.unfilled = $taker.unfilled.minus(quantity);
 				volume = volume.plus(quantity);
 				dollarVolume = dollarVolume
-					.plus(this.marketSpec.dollarVolume(maker.price, quantity))
-					.round(this.marketSpec.CURRENCY_DP);
+					.plus(this.marketSpec.dollarVolume(maker.price, quantity));
 				trades.push({
 					side: $taker.side,
 					price: maker.price,

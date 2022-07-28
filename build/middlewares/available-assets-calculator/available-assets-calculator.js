@@ -23,8 +23,7 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
     getAvailable() {
         return this.marginAssets.getBalance()
             .minus(this.marginAssets.getFinalMargin())
-            .minus(this.getFinalFrozenBalance())
-            .round(this.marketSpec.CURRENCY_DP);
+            .minus(this.getFinalFrozenBalance());
     }
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();

@@ -29,8 +29,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	public getAvailable(): H {
 		return this.marginAssets.getBalance()
 			.minus(this.marginAssets.getFinalMargin())
-			.minus(this.getFinalFrozenBalance())
-			.round(this.marketSpec.CURRENCY_DP);
+			.minus(this.getFinalFrozenBalance());
 	}
 
 	protected abstract getFinalFrozenBalance(): H;
