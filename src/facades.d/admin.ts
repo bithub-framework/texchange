@@ -3,6 +3,7 @@ import {
 	HLike,
 	MarketSpec,
 	AccountSpec,
+	ConnectionClosed,
 } from 'secretary-like';
 import { Startable, StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
@@ -28,7 +29,7 @@ export class AdminFacade<H extends HLike<H>>
 
 	private startable = Startable.create(
 		() => this.rawStart(),
-		(err?: Error) => this.rawStop(err),
+		() => this.rawStop(),
 	);
 	public start = this.startable.start;
 	public stop = this.startable.stop;
@@ -109,8 +110,8 @@ export class AdminFacade<H extends HLike<H>>
 			await this.mtm.start(this.stop);
 	}
 
-	private async rawStop(err?: Error) {
-		if (err) this.broadcast.emit('error', err);
+	private async rawStop() {
+		this.broadcast.emit('error', new ConnectionClosed('Texchange closed.'));
 		if (this.mtm)
 			await this.mtm.stop();
 	}

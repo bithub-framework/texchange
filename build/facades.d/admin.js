@@ -10,6 +10,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminFacade = void 0;
+const secretary_like_1 = require("secretary-like");
 const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
@@ -28,7 +29,7 @@ let AdminFacade = class AdminFacade {
         this.useCaseUpdateTrades = useCaseUpdateTrades;
         this.useCaseUpdateOrderbook = useCaseUpdateOrderbook;
         this.useCaseGetProgress = useCaseGetProgress;
-        this.startable = startable_1.Startable.create(() => this.rawStart(), (err) => this.rawStop(err));
+        this.startable = startable_1.Startable.create(() => this.rawStart(), () => this.rawStop());
         this.start = this.startable.start;
         this.stop = this.startable.stop;
         this.assart = this.startable.assart;
@@ -65,9 +66,8 @@ let AdminFacade = class AdminFacade {
         if (this.mtm)
             await this.mtm.start(this.stop);
     }
-    async rawStop(err) {
-        if (err)
-            this.broadcast.emit('error', err);
+    async rawStop() {
+        this.broadcast.emit('error', new secretary_like_1.ConnectionClosed('Texchange closed.'));
         if (this.mtm)
             await this.mtm.stop();
     }
