@@ -21,6 +21,8 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
         this.makers = makers;
     }
     getAvailable() {
+        // // @ts-ignore
+        // console.log(this.getFinalFrozenBalance().toJSON());
         return this.marginAssets.getBalance()
             .minus(this.marginAssets.getFinalMargin())
             .minus(this.getFinalFrozenBalance());

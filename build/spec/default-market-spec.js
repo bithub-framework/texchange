@@ -29,7 +29,8 @@ let DefaultMarketSpec = class DefaultMarketSpec {
         return dollarVolume.div(price, this.QUANTITY_DP);
     }
     dollarVolume(price, quantity) {
-        return price.times(quantity);
+        return price.times(quantity)
+            .round(this.CURRENCY_DP);
     }
 };
 DefaultMarketSpec = __decorate([

@@ -28,6 +28,7 @@ export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 	}
 
 	public dollarVolume(price: H, quantity: H): H {
-		return price.times(quantity);
+		return price.times(quantity)
+			.round(this.CURRENCY_DP);
 	}
 }

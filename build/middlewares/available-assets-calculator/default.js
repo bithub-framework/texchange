@@ -28,6 +28,8 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
                     .times(afterDeduction)
                     .div(totalUnfilled[side], this.marketSpec.CURRENCY_DP)
                 : this.context.dataTypes.hFactory.from(0);
+            // // @ts-ignore
+            // console.log(totalFrozen.balance[length].toJSON());
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }

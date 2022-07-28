@@ -35,7 +35,14 @@ let OrderValidator = class OrderValidator {
             assert(enoughPosition);
             const enoughBalance = this.calculator.getAvailable()
                 .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_DP));
-            assert(enoughBalance);
+            try {
+                assert(enoughBalance);
+            }
+            catch (err) {
+                // // @ts-ignore
+                // console.log(this.calculator.getAvailable().toJSON());
+                throw err;
+            }
         }
         finally {
             this.makers.removeOrder(order.id);

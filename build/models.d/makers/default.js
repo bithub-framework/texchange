@@ -13,6 +13,10 @@ const injektor_1 = require("@zimtsui/injektor");
 let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     // 默认单向持仓模式
     toFreeze(order) {
+        // @ts-ignore
+        console.log(order.price.toJSON());
+        // @ts-ignore
+        console.log(order.unfilled.toJSON());
         if (order.action === secretary_like_1.Action.OPEN) {
             const balance = {
                 [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
