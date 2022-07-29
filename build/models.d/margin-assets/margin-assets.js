@@ -28,7 +28,7 @@ let MarginAssets = class MarginAssets {
     }
     open({ length, volume, dollarVolume, }) {
         const increment = dollarVolume
-            .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_DP);
+            .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);
         this.$margin[length] = this.$margin[length]
             .plus(increment);
         this.assets.open({ length, volume, dollarVolume });
@@ -39,7 +39,7 @@ let MarginAssets = class MarginAssets {
         }
         const decrement = this.$margin[length]
             .times(volume)
-            .div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_DP);
+            .div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
         this.$margin[length] = this.$margin[length]
             .minus(decrement);
         this.assets.close({ length, volume, dollarVolume });

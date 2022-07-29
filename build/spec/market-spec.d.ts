@@ -1,9 +1,9 @@
 import { MarketSpecLike, HLike } from 'secretary-like';
 import { Context } from '../context';
 export declare abstract class MarketSpec<H extends HLike<H>> implements MarketSpecLike<H> {
-    abstract PRICE_DP: number;
-    abstract QUANTITY_DP: number;
-    abstract CURRENCY_DP: number;
+    abstract PRICE_SCALE: number;
+    abstract QUANTITY_SCALE: number;
+    abstract CURRENCY_SCALE: number;
     TICK_SIZE: H;
     abstract MARKET_NAME: string;
     constructor(context: Context<H>);

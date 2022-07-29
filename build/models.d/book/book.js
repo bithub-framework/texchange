@@ -40,7 +40,7 @@ let Book = class Book {
     }
     decQuantity(side, price, decrement) {
         assert(decrement.gt(0));
-        const priceString = price.toFixed(this.marketSpec.PRICE_DP);
+        const priceString = price.toFixed(this.marketSpec.PRICE_SCALE);
         const oldTotalDecrement = this.decrements[side].get(priceString)
             || this.context.dataTypes.hFactory.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -62,7 +62,7 @@ let Book = class Book {
         };
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK]) {
             for (const order of this.basebook[side])
-                $total[side].set(order.price.toFixed(this.marketSpec.PRICE_DP), order.quantity);
+                $total[side].set(order.price.toFixed(this.marketSpec.PRICE_SCALE), order.quantity);
             for (const [priceString, decrement] of this.decrements[side]) {
                 let quantity = $total[side].get(priceString);
                 if (typeof quantity !== 'undefined') {

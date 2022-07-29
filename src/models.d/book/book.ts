@@ -49,7 +49,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		decrement: H,
 	): void {
 		assert(decrement.gt(0));
-		const priceString = price.toFixed(this.marketSpec.PRICE_DP);
+		const priceString = price.toFixed(this.marketSpec.PRICE_SCALE);
 		const oldTotalDecrement = this.decrements[side].get(priceString)
 			|| this.context.dataTypes.hFactory.from(0);
 		const newTotalDecrement = oldTotalDecrement.plus(decrement);
@@ -73,7 +73,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		for (const side of [Side.BID, Side.ASK]) {
 			for (const order of this.basebook[side])
 				$total[side].set(
-					order.price.toFixed(this.marketSpec.PRICE_DP),
+					order.price.toFixed(this.marketSpec.PRICE_SCALE),
 					order.quantity,
 				);
 			for (const [priceString, decrement] of this.decrements[side]) {

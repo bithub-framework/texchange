@@ -12,9 +12,9 @@ export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter i
     once: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
     off: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
     emit: <Event extends keyof MarketEvents<H>>(event: Event, ...args: MarketEvents<H>[Event]) => boolean;
-    PRICE_DP: number;
-    QUANTITY_DP: number;
-    CURRENCY_DP: number;
+    PRICE_SCALE: number;
+    QUANTITY_SCALE: number;
+    CURRENCY_SCALE: number;
     TICK_SIZE: H;
     MARKET_NAME: string;
     constructor(context: Context<H>, marketSpec: MarketSpecLike<H>, useCaseSubscription: UseCaseSubscription<H>, config: Config);

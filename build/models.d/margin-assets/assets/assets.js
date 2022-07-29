@@ -67,7 +67,7 @@ let Assets = class Assets {
         const cost = this.$position[length].neq(0)
             ? this.$cost[length]
                 .times(volume)
-                .div(this.$position[length], this.marketSpec.CURRENCY_DP)
+                .div(this.$position[length], this.marketSpec.CURRENCY_SCALE)
             : this.context.dataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost)
             .times(length === secretary_like_1.Length.LONG ? 1 : -1);

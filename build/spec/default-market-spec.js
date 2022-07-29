@@ -16,18 +16,18 @@ const market_spec_1 = require("./market-spec");
 let DefaultMarketSpec = class DefaultMarketSpec extends market_spec_1.MarketSpec {
     constructor() {
         super(...arguments);
-        this.PRICE_DP = 2;
-        this.QUANTITY_DP = 3;
-        this.CURRENCY_DP = 2;
+        this.PRICE_SCALE = 2;
+        this.QUANTITY_SCALE = 3;
+        this.CURRENCY_SCALE = 2;
         this.MARKET_NAME = 'test';
     }
     unroundedQuantity(price, dollarVolume) {
         assert(price.neq(0));
-        return dollarVolume.div(price, this.QUANTITY_DP);
+        return dollarVolume.div(price, this.QUANTITY_SCALE);
     }
     unroundedDollarVolume(price, quantity) {
         return price.times(quantity)
-            .round(this.CURRENCY_DP);
+            .round(this.CURRENCY_SCALE);
     }
 };
 DefaultMarketSpec = __decorate([

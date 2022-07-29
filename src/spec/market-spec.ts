@@ -10,9 +10,9 @@ import { TYPES } from '../injection/types';
 
 
 export abstract class MarketSpec<H extends HLike<H>> implements MarketSpecLike<H> {
-	public abstract PRICE_DP: number;
-	public abstract QUANTITY_DP: number;
-	public abstract CURRENCY_DP: number;
+	public abstract PRICE_SCALE: number;
+	public abstract QUANTITY_SCALE: number;
+	public abstract CURRENCY_SCALE: number;
 	public TICK_SIZE: H;
 	public abstract MARKET_NAME: string;
 
@@ -28,13 +28,13 @@ export abstract class MarketSpec<H extends HLike<H>> implements MarketSpecLike<H
 	public quantity(price: H, dollarVolume: H): H {
 		assert(price.neq(0));
 		return this.unroundedQuantity(price, dollarVolume)
-			.round(this.QUANTITY_DP);
+			.round(this.QUANTITY_SCALE);
 	}
 
 	protected abstract unroundedDollarVolume(price: H, quantity: H): H;
 
 	public dollarVolume(price: H, quantity: H): H {
 		return this.unroundedDollarVolume(price, quantity)
-			.round(this.CURRENCY_DP);
+			.round(this.CURRENCY_SCALE);
 	}
 }

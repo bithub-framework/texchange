@@ -96,12 +96,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		const frozen = this.unroundedToFreeze(order);
 		return {
 			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_DP),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_DP),
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_SCALE),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_SCALE),
 			},
 			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_DP),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_DP),
+				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_SCALE),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_SCALE),
 			},
 		};
 	}

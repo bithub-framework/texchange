@@ -44,7 +44,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		const increment = dollarVolume
-			.div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_DP);
+			.div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);
 		this.$margin[length] = this.$margin[length]
 			.plus(increment);
 		this.assets.open({ length, volume, dollarVolume })
@@ -60,7 +60,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		}
 		const decrement = this.$margin[length]
 			.times(volume)
-			.div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_DP);
+			.div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
 		this.$margin[length] = this.$margin[length]
 			.minus(decrement);
 		this.assets.close({ length, volume, dollarVolume });

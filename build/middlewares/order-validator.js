@@ -34,7 +34,7 @@ let OrderValidator = class OrderValidator {
                 closable[secretary_like_1.Length.SHORT].gte(0);
             assert(enoughPosition);
             const enoughBalance = this.calculator.getAvailable()
-                .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_DP));
+                .gte(this.marketSpec.dollarVolume(order.price, order.unfilled).times(Math.max(this.accountSpec.TAKER_FEE_RATE, 0)).round(this.marketSpec.CURRENCY_SCALE));
             assert(enoughBalance);
         }
         finally {
@@ -42,10 +42,10 @@ let OrderValidator = class OrderValidator {
         }
     }
     validateFormat(order) {
-        assert(order.price.eq(order.price.round(this.marketSpec.PRICE_DP)));
+        assert(order.price.eq(order.price.round(this.marketSpec.PRICE_SCALE)));
         assert(order.price.mod(this.marketSpec.TICK_SIZE).eq(0));
         assert(order.unfilled.gt(0));
-        assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
+        assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_SCALE)));
         assert(order.length === secretary_like_1.Length.LONG || order.length === secretary_like_1.Length.SHORT);
         assert(order.action === secretary_like_1.Action.OPEN || order.action === secretary_like_1.Action.CLOSE);
         assert(secretary_like_1.Side.from(order.length, order.action) === order.side);

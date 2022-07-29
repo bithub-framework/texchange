@@ -26,7 +26,7 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
             $final[length] = totalUnfilled[side].neq(0)
                 ? totalFrozen.balance[length]
                     .times(afterDeduction)
-                    .div(totalUnfilled[side], this.marketSpec.CURRENCY_DP)
+                    .div(totalUnfilled[side], this.marketSpec.CURRENCY_SCALE)
                 : this.context.dataTypes.hFactory.from(0);
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);

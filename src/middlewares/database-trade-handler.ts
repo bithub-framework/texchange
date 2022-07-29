@@ -77,7 +77,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		this.marginAssets.pay(
 			dollarVolume
 				.times(this.accountSpec.MAKER_FEE_RATE)
-				.round(this.marketSpec.CURRENCY_DP, H.RoundingMode.HALF_AWAY_FROM_ZERO)
+				.round(this.marketSpec.CURRENCY_SCALE, H.RoundingMode.HALF_AWAY_FROM_ZERO)
 		);
 		if (maker.action === Action.OPEN)
 			this.marginAssets.open({

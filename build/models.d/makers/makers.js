@@ -65,12 +65,12 @@ let Makers = class Makers {
         const frozen = this.unroundedToFreeze(order);
         return {
             balance: {
-                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.marketSpec.CURRENCY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.marketSpec.CURRENCY_DP),
+                [secretary_like_1.Length.LONG]: frozen.balance[secretary_like_1.Length.LONG].round(this.marketSpec.CURRENCY_SCALE),
+                [secretary_like_1.Length.SHORT]: frozen.balance[secretary_like_1.Length.SHORT].round(this.marketSpec.CURRENCY_SCALE),
             },
             position: {
-                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.marketSpec.QUANTITY_DP),
-                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.marketSpec.QUANTITY_DP),
+                [secretary_like_1.Length.LONG]: frozen.position[secretary_like_1.Length.LONG].round(this.marketSpec.QUANTITY_SCALE),
+                [secretary_like_1.Length.SHORT]: frozen.position[secretary_like_1.Length.SHORT].round(this.marketSpec.QUANTITY_SCALE),
             },
         };
     }

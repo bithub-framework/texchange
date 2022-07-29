@@ -64,7 +64,7 @@ export class Matcher<H extends HLike<H>> {
 			dollarVolume
 				.times(this.accountSpec.TAKER_FEE_RATE)
 				.round(
-					this.marketSpec.CURRENCY_DP,
+					this.marketSpec.CURRENCY_SCALE,
 					H.RoundingMode.HALF_AWAY_FROM_ZERO,
 				),
 		);

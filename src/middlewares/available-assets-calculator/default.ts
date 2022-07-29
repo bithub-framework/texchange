@@ -28,7 +28,7 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 			$final[length] = totalUnfilled[side].neq(0)
 				? totalFrozen.balance[length]
 					.times(afterDeduction)
-					.div(totalUnfilled[side], this.marketSpec.CURRENCY_DP)
+					.div(totalUnfilled[side], this.marketSpec.CURRENCY_SCALE)
 				: this.context.dataTypes.hFactory.from(0);
 		}
 		return $final[Length.LONG].plus($final[Length.SHORT]);

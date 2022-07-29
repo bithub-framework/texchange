@@ -47,7 +47,7 @@ let Matcher = class Matcher {
             }
         this.marginAssets.pay(dollarVolume
             .times(this.accountSpec.TAKER_FEE_RATE)
-            .round(this.marketSpec.CURRENCY_DP, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
+            .round(this.marketSpec.CURRENCY_SCALE, secretary_like_1.H.RoundingMode.HALF_AWAY_FROM_ZERO));
         if ($taker.action === secretary_like_1.Action.OPEN)
             this.marginAssets.open({
                 length: $taker.length,

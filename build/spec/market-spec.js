@@ -20,11 +20,11 @@ let MarketSpec = class MarketSpec {
     quantity(price, dollarVolume) {
         assert(price.neq(0));
         return this.unroundedQuantity(price, dollarVolume)
-            .round(this.QUANTITY_DP);
+            .round(this.QUANTITY_SCALE);
     }
     dollarVolume(price, quantity) {
         return this.unroundedDollarVolume(price, quantity)
-            .round(this.CURRENCY_DP);
+            .round(this.CURRENCY_SCALE);
     }
 };
 MarketSpec = __decorate([

@@ -90,7 +90,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         const cost = this.$position[length].neq(0)
             ? this.$cost[length]
                 .times(volume)
-                .div(this.$position[length], this.marketSpec.CURRENCY_DP)
+                .div(this.$position[length], this.marketSpec.CURRENCY_SCALE)
             : this.context.dataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost)
             .times(length === Length.LONG ? 1 : -1);

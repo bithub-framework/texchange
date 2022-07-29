@@ -52,7 +52,7 @@ export class OrderValidator<H extends HLike<H>> {
 						order.price, order.unfilled,
 					).times(
 						Math.max(this.accountSpec.TAKER_FEE_RATE, 0)
-					).round(this.marketSpec.CURRENCY_DP)
+					).round(this.marketSpec.CURRENCY_SCALE)
 				);
 			assert(enoughBalance);
 		} finally {
@@ -61,10 +61,10 @@ export class OrderValidator<H extends HLike<H>> {
 	}
 
 	private validateFormat(order: OpenOrder<H>) {
-		assert(order.price.eq(order.price.round(this.marketSpec.PRICE_DP)));
+		assert(order.price.eq(order.price.round(this.marketSpec.PRICE_SCALE)));
 		assert(order.price.mod(this.marketSpec.TICK_SIZE).eq(0));
 		assert(order.unfilled.gt(0));
-		assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_DP)));
+		assert(order.unfilled.eq(order.unfilled.round(this.marketSpec.QUANTITY_SCALE)));
 		assert(order.length === Length.LONG || order.length === Length.SHORT);
 		assert(order.action === Action.OPEN || order.action === Action.CLOSE);
 		assert(Side.from(order.length, order.action) === order.side);

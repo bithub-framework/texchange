@@ -20,9 +20,9 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 	public off!: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
 	public emit!: <Event extends keyof MarketEvents<H>>(event: Event, ...args: MarketEvents<H>[Event]) => boolean;
 
-	public PRICE_DP = this.marketSpec.PRICE_DP;
-	public QUANTITY_DP = this.marketSpec.QUANTITY_DP;
-	public CURRENCY_DP = this.marketSpec.CURRENCY_DP;
+	public PRICE_SCALE = this.marketSpec.PRICE_SCALE;
+	public QUANTITY_SCALE = this.marketSpec.QUANTITY_SCALE;
+	public CURRENCY_SCALE = this.marketSpec.CURRENCY_SCALE;
 	public TICK_SIZE = this.marketSpec.TICK_SIZE;
 	public MARKET_NAME = this.marketSpec.MARKET_NAME;
 
