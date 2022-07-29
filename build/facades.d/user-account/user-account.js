@@ -14,10 +14,9 @@ const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
-    constructor(context, marketSpec, accountSpec, useCaseSubscription, instant, config) {
+    constructor(context, accountSpec, useCaseSubscription, instant, config) {
         super();
         this.context = context;
-        this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.useCaseSubscription = useCaseSubscription;
         this.instant = instant;
@@ -113,21 +112,13 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             await this.context.timeline.sleep(this.config.ping);
         }
     }
-    quantity(price, dollarVolume) {
-        return this.marketSpec.quantity(price, dollarVolume);
-    }
-    ;
-    dollarVolume(price, quantity) {
-        return this.marketSpec.dollarVolume(price, quantity);
-    }
 };
 UserAccountFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
-    __param(5, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),
+    __param(4, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserAccountFacade);
 exports.UserAccountFacade = UserAccountFacade;
 //# sourceMappingURL=user-account.js.map

@@ -1,6 +1,6 @@
 import {
 	MarketApiLike,
-	MarketSpec,
+	MarketSpecLike,
 	HLike,
 	MarketEvents,
 } from 'secretary-like';
@@ -30,7 +30,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.USE_CASES.subscription)
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.config)

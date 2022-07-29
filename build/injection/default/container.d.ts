@@ -1,6 +1,6 @@
 import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
-import { HLike, HStatic, HFactory, TimelineLike, MarketSpec, AccountSpec } from 'secretary-like';
+import { HLike, HStatic, HFactory, TimelineLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { Makers } from '../../models.d/makers/makers';
 import { Pricing } from '../../models.d/pricing/pricing';
 import { MarginAssets } from '../../models.d/margin-assets';
@@ -10,8 +10,8 @@ import { Config as DelayConfig } from '../../facades.d/config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.hStatic]: () => HStatic<H>;
     [TYPES.hFactory]: () => HFactory<H>;
-    [TYPES.marketSpec]: () => MarketSpec<H>;
-    [TYPES.accountSpec]: () => AccountSpec;
+    [TYPES.marketSpec]: () => MarketSpecLike<H>;
+    [TYPES.accountSpec]: () => AccountSpecLike;
     [TYPES.timeline]: () => TimelineLike;
     [TYPES.MODELS.initialBalance]: () => H;
     [TYPES.MODELS.makers]: () => Makers<H>;

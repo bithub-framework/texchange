@@ -1,8 +1,8 @@
 import { Context } from '../context';
 import {
 	HLike,
-	MarketSpec,
-	AccountSpec,
+	MarketSpecLike,
+	AccountSpecLike,
 	ConnectionClosed,
 } from 'secretary-like';
 import { Startable, StartableLike } from 'startable';
@@ -42,9 +42,9 @@ export class AdminFacade<H extends HLike<H>>
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpec,
+		private accountSpec: AccountSpecLike,
 		@inject(TYPES.MODELS.marginAssets)
 		private marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.book)
@@ -67,11 +67,11 @@ export class AdminFacade<H extends HLike<H>>
 		private useCaseGetProgress: UseCaseGetProgress<H>,
 	) { }
 
-	public getMarketSpec(): MarketSpec<H> {
+	public getMarketSpec(): MarketSpecLike<H> {
 		return this.marketSpec;
 	}
 
-	public getAccountSpec(): AccountSpec {
+	public getAccountSpec(): AccountSpecLike {
 		return this.accountSpec;
 	}
 

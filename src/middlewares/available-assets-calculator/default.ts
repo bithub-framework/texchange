@@ -11,7 +11,7 @@ import { injextends } from '@zimtsui/injektor';
 @injextends()
 export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends AvailableAssetsCalculator<H> {
 	// 默认单向持仓模式
-	protected getFinalFrozenBalance(): H {
+	protected getUnroundedFinalFrozenBalance(): H {
 		const position = this.marginAssets.getPosition();
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();

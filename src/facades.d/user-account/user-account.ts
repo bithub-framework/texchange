@@ -3,8 +3,7 @@ import {
 	Balances,
 	Positions,
 	AccountApiLike,
-	AccountSpec,
-	MarketSpec,
+	AccountSpecLike,
 	HLike,
 	OpenOrder,
 	Amendment,
@@ -34,10 +33,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	public constructor(
 		@inject(TYPES.context)
 		private context: Context<H>,
-		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpec,
+		private accountSpec: AccountSpecLike,
 		@inject(TYPES.USE_CASES.subscription)
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.instant)
@@ -141,13 +138,5 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		} finally {
 			await this.context.timeline.sleep(this.config.ping);
 		}
-	}
-
-	public quantity(price: H, dollarVolume: H): H {
-		return this.marketSpec.quantity(price, dollarVolume);
-	};
-
-	public dollarVolume(price: H, quantity: H): H {
-		return this.marketSpec.dollarVolume(price, quantity);
 	}
 }

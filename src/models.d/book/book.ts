@@ -2,7 +2,7 @@ import {
 	Orderbook,
 	Side,
 	HLike,
-	MarketSpec,
+	MarketSpecLike,
 	OpenOrder,
 } from 'secretary-like';
 import assert = require('assert');
@@ -33,7 +33,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 	) { }
 
 	public setBasebook(basebook: Orderbook<H>): void {

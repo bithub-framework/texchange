@@ -4,7 +4,7 @@ import {
 	Position,
 	OpenOrder,
 	OrderId,
-	MarketSpec,
+	MarketSpecLike,
 } from 'secretary-like';
 import { OpenMaker } from '../../data-types/open-maker';
 import { Frozen } from '../../data-types/frozen';
@@ -33,7 +33,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		@inject(TYPES.context)
 		protected context: Context<H>,
 		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpec<H>,
+		protected marketSpec: MarketSpecLike<H>,
 	) {
 		this.$totalUnfilled = {
 			[Side.BID]: context.dataTypes.hFactory.from(0),
@@ -92,7 +92,21 @@ export abstract class Makers<H extends HLike<H>> implements
 			);
 	}
 
-	protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
+	private toFreeze(order: OpenOrder<H>): Frozen<H> {
+		const frozen = this.unroundedToFreeze(order);
+		return {
+			balance: {
+				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_DP),
+				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_DP),
+			},
+			position: {
+				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_DP),
+				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_DP),
+			},
+		};
+	}
+
+	protected abstract unroundedToFreeze(order: OpenOrder<H>): Frozen<H>;
 
 	public appendOrder(
 		order: OpenOrder<H>,

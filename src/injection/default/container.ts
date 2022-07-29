@@ -3,8 +3,8 @@ import { TYPES } from './types';
 import {
 	HLike, HStatic, HFactory,
 	TimelineLike,
-	MarketSpec,
-	AccountSpec,
+	MarketSpecLike,
+	AccountSpecLike,
 } from 'secretary-like';
 
 // Spec
@@ -34,8 +34,8 @@ import { Config as DelayConfig } from '../../facades.d/config';
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.hStatic]: () => HStatic<H>;
 	public [TYPES.hFactory]: () => HFactory<H>;
-	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
-	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
+	public [TYPES.marketSpec] = this.rcs<MarketSpecLike<H>>(DefaultMarketSpec);
+	public [TYPES.accountSpec] = this.rcs<AccountSpecLike>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
 
 

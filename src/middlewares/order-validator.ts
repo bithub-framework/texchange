@@ -2,8 +2,8 @@ import {
 	Action, Length, Side,
 	HLike,
 	OpenOrder,
-	MarketSpec,
-	AccountSpec,
+	MarketSpecLike,
+	AccountSpecLike,
 } from 'secretary-like';
 import assert = require('assert');
 import { Context } from '../context';
@@ -20,9 +20,9 @@ export class OrderValidator<H extends HLike<H>> {
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpec,
+		private accountSpec: AccountSpecLike,
 		@inject(TYPES.MODELS.makers)
 		private makers: Makers<H>,
 		@inject(TYPES.MIDDLEWARES.availableAssetsCalculator)

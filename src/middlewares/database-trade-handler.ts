@@ -4,8 +4,8 @@ import {
 	HLike, H,
 	OpenOrder,
 	Trade,
-	MarketSpec,
-	AccountSpec,
+	MarketSpecLike,
+	AccountSpecLike,
 } from 'secretary-like';
 import { OpenMaker } from '../data-types/open-maker';
 import { Context } from '../context';
@@ -21,9 +21,9 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpec,
+		private accountSpec: AccountSpecLike,
 		@inject(TYPES.MODELS.marginAssets)
 		private marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.makers)

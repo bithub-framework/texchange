@@ -2,7 +2,7 @@ import {
     Length,
     Position,
     HLike, H,
-    MarketSpec,
+    MarketSpecLike,
 } from 'secretary-like';
 import { Cost, CostFactory } from './cost';
 import { Context } from '../../../context';
@@ -24,7 +24,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         @inject(TYPES.context)
         protected context: Context<H>,
         @inject(TYPES.marketSpec)
-        protected marketSpec: MarketSpec<H>,
+        protected marketSpec: MarketSpecLike<H>,
         @inject(TYPES.MODELS.initialBalance)
         protected balance: H,
     ) {

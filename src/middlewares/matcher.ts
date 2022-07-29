@@ -3,10 +3,10 @@ import {
 	OpenOrder,
 	Trade,
 	Side, Action,
+	MarketSpecLike,
+	AccountSpecLike,
 } from 'secretary-like';
 import { Context } from '../context';
-import { MarketSpec } from 'secretary-like';
-import { AccountSpec } from 'secretary-like';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets';
@@ -20,9 +20,9 @@ export class Matcher<H extends HLike<H>> {
 		@inject(TYPES.context)
 		private context: Context<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpec<H>,
+		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpec,
+		private accountSpec: AccountSpecLike,
 		@inject(TYPES.MODELS.book)
 		private book: Book<H>,
 		@inject(TYPES.MODELS.marginAssets)

@@ -4,11 +4,11 @@ import {
 	Balances,
 	Positions,
 	Position,
+	MarketSpecLike,
 } from 'secretary-like';
 import { Context } from '../../context';
 import { MarginAssets } from '../../models.d/margin-assets';
 import { Makers } from '../../models.d/makers/makers';
-import { MarketSpec } from 'secretary-like';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/types';
@@ -19,7 +19,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 		@inject(TYPES.context)
 		protected context: Context<H>,
 		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpec<H>,
+		protected marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.MODELS.marginAssets)
 		protected marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.makers)
@@ -32,7 +32,12 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 			.minus(this.getFinalFrozenBalance());
 	}
 
-	protected abstract getFinalFrozenBalance(): H;
+	private getFinalFrozenBalance(): H {
+		return this.getUnroundedFinalFrozenBalance()
+			.round(this.marketSpec.CURRENCY_DP);
+	}
+
+	protected abstract getUnroundedFinalFrozenBalance(): H;
 
 	public getClosable(): Position<H> {
 		const totalFrozen = this.makers.getTotalFrozen();

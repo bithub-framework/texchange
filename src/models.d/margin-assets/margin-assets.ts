@@ -1,8 +1,8 @@
 import {
 	Length,
 	HLike,
-	MarketSpec,
-	AccountSpec,
+	MarketSpecLike,
+	AccountSpecLike,
 	Position,
 } from 'secretary-like';
 import { Executed } from '../../data-types/executed';
@@ -25,9 +25,9 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		@inject(TYPES.context)
 		protected context: Context<H>,
 		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpec<H>,
+		protected marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
-		protected accountSpec: AccountSpec,
+		protected accountSpec: AccountSpecLike,
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
 	) {
