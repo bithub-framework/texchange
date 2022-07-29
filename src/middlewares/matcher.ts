@@ -6,7 +6,7 @@ import {
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets';
@@ -17,8 +17,8 @@ import { inject } from '@zimtsui/injektor';
 
 export class Matcher<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)

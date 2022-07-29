@@ -124,7 +124,7 @@ let Makers = class Makers {
     }
 };
 Makers = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
 ], Makers);
 exports.Makers = Makers;

@@ -6,7 +6,7 @@ import {
 	AccountSpecLike,
 } from 'secretary-like';
 import assert = require('assert');
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { AvailableAssetsCalculator } from './available-assets-calculator/available-assets-calculator';
 
@@ -17,8 +17,8 @@ import { TYPES } from '../injection/types';
 
 export class OrderValidator<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)

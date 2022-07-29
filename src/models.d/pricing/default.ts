@@ -3,7 +3,7 @@ import {
 	Trade,
 } from 'secretary-like';
 import { Pricing } from './pricing';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
@@ -15,8 +15,8 @@ export class DefaultPricing<H extends HLike<H>>
 	extends Pricing<H, DefaultPricing.Snapshot> {
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.initialSettlementPrice)
 		private settlementPrice: H,
 	) { super(); }

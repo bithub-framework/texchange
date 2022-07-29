@@ -6,7 +6,7 @@ import {
 	OpenOrder,
 } from 'secretary-like';
 import assert = require('assert');
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements, DecrementsFactory } from './decrements';
 import { inject } from '@zimtsui/injektor';
@@ -30,8 +30,8 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private finalbookCache: Orderbook<H> | null = null;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 	) { }

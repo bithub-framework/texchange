@@ -5,7 +5,7 @@ import {
     MarketSpecLike,
 } from 'secretary-like';
 import { Cost, CostFactory } from './cost';
-import { Context } from '../../../context';
+import { VirtualMachineContextLike } from '../../../vmctx';
 import assert = require('assert');
 import { StatefulLike } from '../../../stateful-like';
 import { Executed } from '../../../data-types/executed';
@@ -21,8 +21,8 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
     private $cost: Cost<H>;
 
     public constructor(
-        @inject(TYPES.context)
-        protected context: Context<H>,
+        @inject(TYPES.vmctx)
+        protected context: VirtualMachineContextLike<H>,
         @inject(TYPES.marketSpec)
         protected marketSpec: MarketSpecLike<H>,
         @inject(TYPES.MODELS.initialBalance)

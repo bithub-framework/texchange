@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Broadcast } from '../middlewares/broadcast';
 import {
 	HLike,
@@ -19,8 +19,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.MODELS.book)
 		private book: Book<H>,
 		@inject(TYPES.MODELS.progress)

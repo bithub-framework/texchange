@@ -42,9 +42,7 @@ class TYPES {
 exports.TYPES = TYPES;
 TYPES.marketSpec = Symbol('marketSpec');
 TYPES.accountSpec = Symbol('accountSpec');
-TYPES.timeline = Symbol('timeline');
-TYPES.DataTypes = Symbol('DataTypes');
-TYPES.context = Symbol('context');
+TYPES.vmctx = Symbol('virtualMachineContext');
 TYPES.MODELS = MODELS;
 TYPES.MIDDLEWARES = MIDDLEWARES;
 TYPES.mtm = Symbol('mtm');

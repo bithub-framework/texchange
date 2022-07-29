@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Broadcast } from '../middlewares/broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseOrderbook } from '../data-types/database-orderbook';
@@ -15,6 +15,6 @@ export declare class UseCaseUpdateOrderbook<H extends HLike<H>> {
     private broadcast;
     private calculator;
     private matcher;
-    constructor(context: Context<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
+    constructor(context: VirtualMachineContextLike<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     updateOrderbook(orderbook: DatabaseOrderbook<H>): void;
 }

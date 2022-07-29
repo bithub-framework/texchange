@@ -6,7 +6,7 @@ import {
 	Position,
 	MarketSpecLike,
 } from 'secretary-like';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import { MarginAssets } from '../../models.d/margin-assets';
 import { Makers } from '../../models.d/makers/makers';
 
@@ -16,8 +16,8 @@ import { TYPES } from '../../injection/types';
 
 export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.context)
-		protected context: Context<H>,
+		@inject(TYPES.vmctx)
+		protected context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.MODELS.marginAssets)

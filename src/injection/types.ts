@@ -44,10 +44,8 @@ export class FACADES {
 export class TYPES {
 	public static readonly marketSpec = Symbol('marketSpec');
 	public static readonly accountSpec = Symbol('accountSpec');
-	public static readonly timeline = Symbol('timeline');
 
-	public static readonly DataTypes = Symbol('DataTypes');
-	public static readonly context = Symbol('context');
+	public static readonly vmctx = Symbol('virtualMachineContext');
 
 	public static readonly MODELS = MODELS;
 

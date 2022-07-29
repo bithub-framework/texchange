@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
 import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
@@ -16,8 +16,8 @@ export class Progress<H extends HLike<H>>
     private latestDatabaseOrderbookId: DatabaseOrderbookId | null = null;
 
     public constructor(
-        @inject(TYPES.context)
-        private context: Context<H>,
+        @inject(TYPES.vmctx)
+        private context: VirtualMachineContextLike<H>,
     ) { }
 
     public updateDatabaseTrades(trades: DatabaseTrade<H>[]): void {

@@ -1,4 +1,4 @@
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import {
     LimitOrder,
     Positions,
@@ -22,8 +22,8 @@ import { TYPES } from '../../injection/types';
 
 export class Instant<H extends HLike<H>> {
     public constructor(
-        @inject(TYPES.context)
-        private context: Context<H>,
+        @inject(TYPES.vmctx)
+        private context: VirtualMachineContextLike<H>,
         @inject(TYPES.USE_CASES.makeOrder)
         private useCaseMakeOrder: UseCaseMakeOrder<H>,
         @inject(TYPES.USE_CASES.cancelOrder)

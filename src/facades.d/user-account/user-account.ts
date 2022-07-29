@@ -10,7 +10,7 @@ import {
 	AccountEvents,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import { Instant } from './instant';
 import { Config } from '../config';
 
@@ -31,8 +31,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	public MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.accountSpec)
 		private accountSpec: AccountSpecLike,
 		@inject(TYPES.USE_CASES.subscription)

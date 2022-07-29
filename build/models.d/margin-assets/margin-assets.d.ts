@@ -1,18 +1,18 @@
 import { Length, HLike, MarketSpecLike, AccountSpecLike, Position } from 'secretary-like';
 import { Executed } from '../../data-types/executed';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
 import { Margin, MarginFactory } from './margin';
 import { Cost } from './assets/cost';
 export declare abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
-    protected context: Context<H>;
+    protected context: VirtualMachineContextLike<H>;
     protected marketSpec: MarketSpecLike<H>;
     protected accountSpec: AccountSpecLike;
     protected assets: Assets<H>;
     protected marginFactory: MarginFactory<H>;
     protected $margin: Margin<H>;
-    constructor(context: Context<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, assets: Assets<H>);
+    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, assets: Assets<H>);
     open({ length, volume, dollarVolume, }: Executed<H>): void;
     close({ length, volume, dollarVolume, }: Executed<H>): void;
     abstract getFinalMargin(): H;

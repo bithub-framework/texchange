@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { LimitOrder, HLike, OpenOrder } from 'secretary-like';
 import { Progress } from '../models.d/progress';
 import { Book } from '../models.d/book';
@@ -16,6 +16,6 @@ export declare class UseCaseMakeOrder<H extends HLike<H>> {
     private broadcast;
     private calculator;
     private matcher;
-    constructor(context: Context<H>, progress: Progress<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
+    constructor(context: VirtualMachineContextLike<H>, progress: Progress<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     makeOrder(limitOrder: LimitOrder<H>): OpenOrder<H>;
 }

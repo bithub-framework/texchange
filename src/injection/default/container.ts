@@ -6,7 +6,9 @@ import {
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
-import { DataTypesNamespace } from '../../context/data-types-namespace';
+
+// Vmctx
+import { VirtualMachineContextLike } from '../../vmctx';
 
 // Spec
 import { DefaultMarketSpec } from '../../spec/default-market-spec';
@@ -33,11 +35,10 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.DataTypes]: () => DataTypesNamespace<H>;
+	public [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
+
 	public [TYPES.marketSpec] = this.rcs<MarketSpecLike<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpecLike>(DefaultAccountSpec);
-	public [TYPES.timeline]: () => TimelineLike;
-
 
 	public [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
@@ -54,15 +55,12 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	});
 
 	public constructor(
-		timeline: TimelineLike,
-		dataTypes: DataTypesNamespace<H>,
+		vmctx: VirtualMachineContextLike<H>,
 		initialBalance: H,
 		initialSettlementPrice: H,
 	) {
 		super();
-
-		this[TYPES.timeline] = this.rv(timeline);
-		this[TYPES.DataTypes] = this.rv(dataTypes);
+		this[TYPES.vmctx] = this.rv(vmctx);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}

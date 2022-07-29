@@ -10,7 +10,7 @@ import { OpenMaker } from '../../data-types/open-maker';
 import { Frozen } from '../../data-types/frozen';
 import { Balance } from '../../data-types/balance';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import assert = require('assert');
 import { StatefulLike } from '../../stateful-like';
 
@@ -30,8 +30,8 @@ export abstract class Makers<H extends HLike<H>> implements
 	private totalFrozen: Frozen<H>;
 
 	public constructor(
-		@inject(TYPES.context)
-		protected context: Context<H>,
+		@inject(TYPES.vmctx)
+		protected context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpecLike<H>,
 	) {

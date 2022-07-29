@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import assert = require('assert');
 import { Broadcast } from '../middlewares/broadcast';
 import {
@@ -18,8 +18,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseUpdateTrades<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.MODELS.marginAssets)
 		private marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.progress)

@@ -3,7 +3,7 @@ import {
 	HLike,
 } from 'secretary-like';
 import assert = require('assert');
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -17,8 +17,8 @@ export abstract class MarketSpec<H extends HLike<H>> implements MarketSpecLike<H
 	public abstract MARKET_NAME: string;
 
 	public constructor(
-		@inject(TYPES.context)
-		context: Context<H>,
+		@inject(TYPES.vmctx)
+		context: VirtualMachineContextLike<H>,
 	) {
 		this.TICK_SIZE = context.DataTypes.hFactory.from('.01');
 	}

@@ -6,7 +6,7 @@ import {
 	Position,
 } from 'secretary-like';
 import { Executed } from '../../data-types/executed';
-import { Context } from '../../context';
+import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 import { Assets } from './assets/assets';
 import { Margin, MarginFactory } from './margin';
@@ -22,8 +22,8 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	protected $margin: Margin<H>;
 
 	public constructor(
-		@inject(TYPES.context)
-		protected context: Context<H>,
+		@inject(TYPES.vmctx)
+		protected context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)

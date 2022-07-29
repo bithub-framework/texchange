@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Broadcast } from '../middlewares/broadcast';
 import { HLike } from 'secretary-like';
 import { DatabaseTrade } from '../data-types/database-trade';
@@ -15,6 +15,6 @@ export declare class UseCaseUpdateTrades<H extends HLike<H>> {
     private broadcast;
     private databaseTradeHandler;
     private mtm;
-    constructor(context: Context<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, mtm: Mtm<H> | null);
+    constructor(context: VirtualMachineContextLike<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, mtm: Mtm<H> | null);
     updateTrades(trades: DatabaseTrade<H>[]): void;
 }

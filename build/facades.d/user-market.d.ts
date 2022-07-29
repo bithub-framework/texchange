@@ -1,6 +1,6 @@
 import { MarketApiLike, MarketSpecLike, HLike, MarketEvents } from 'secretary-like';
 import { EventEmitter } from 'events';
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Config } from './config';
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter implements MarketApiLike<H> {
@@ -17,7 +17,7 @@ export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter i
     CURRENCY_SCALE: number;
     TICK_SIZE: H;
     MARKET_NAME: string;
-    constructor(context: Context<H>, marketSpec: MarketSpecLike<H>, useCaseSubscription: UseCaseSubscription<H>, config: Config);
+    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, useCaseSubscription: UseCaseSubscription<H>, config: Config);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }

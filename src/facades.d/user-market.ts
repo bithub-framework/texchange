@@ -5,7 +5,7 @@ import {
 	MarketEvents,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Config } from './config';
 
 import { UseCaseSubscription } from '../use-cases.d/subscription';
@@ -27,8 +27,8 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 	public MARKET_NAME = this.marketSpec.MARKET_NAME;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.USE_CASES.subscription)

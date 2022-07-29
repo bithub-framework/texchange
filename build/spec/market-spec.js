@@ -28,7 +28,7 @@ let MarketSpec = class MarketSpec {
     }
 };
 MarketSpec = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.context))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx))
 ], MarketSpec);
 exports.MarketSpec = MarketSpec;
 //# sourceMappingURL=market-spec.js.map

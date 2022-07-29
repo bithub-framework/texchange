@@ -1,9 +1,7 @@
 import { HLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
-import { Context } from '../context';
-import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../context/data-types-namespace';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Assets } from '../models.d/margin-assets/assets/assets';
@@ -35,9 +33,7 @@ import { Texchange } from '../texchange';
 export declare abstract class Container<H extends HLike<H>> extends BaseContainer {
     abstract [TYPES.marketSpec]: () => MarketSpecLike<H>;
     abstract [TYPES.accountSpec]: () => AccountSpecLike;
-    abstract [TYPES.timeline]: () => TimelineLike;
-    abstract [TYPES.DataTypes]: () => DataTypesNamespace<H>;
-    [TYPES.context]: () => Context<H>;
+    abstract [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;
     abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;

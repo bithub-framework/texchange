@@ -8,7 +8,7 @@ import {
 	AccountSpecLike,
 } from 'secretary-like';
 import { OpenMaker } from '../data-types/open-maker';
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { MarginAssets } from '../models.d/margin-assets';
 
@@ -18,8 +18,8 @@ import { TYPES } from '../injection/types';
 
 export class DatabaseTradeHandler<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)

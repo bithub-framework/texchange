@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
 import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
@@ -9,7 +9,7 @@ export declare class Progress<H extends HLike<H>> implements StatefulLike<Progre
     userOrderCount: number;
     private latestDatabaseTradeId;
     private latestDatabaseOrderbookId;
-    constructor(context: Context<H>);
+    constructor(context: VirtualMachineContextLike<H>);
     updateDatabaseTrades(trades: DatabaseTrade<H>[]): void;
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;
     updateDatabaseOrderbook(orderbook: DatabaseOrderbook<H>): void;

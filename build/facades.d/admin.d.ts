@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import { HLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
@@ -35,7 +35,7 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     starp: (err?: Error | undefined) => Promise<void>;
     getReadyState: () => import("startable").ReadyState;
     skipStart: (onStopping?: import("startable").OnStopping | undefined) => void;
-    constructor(context: Context<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
+    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
     getMarketSpec(): MarketSpecLike<H>;
     getAccountSpec(): AccountSpecLike;
     updateTrades($trades: DatabaseTrade<H>[]): void;

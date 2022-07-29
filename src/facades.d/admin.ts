@@ -1,4 +1,4 @@
-import { Context } from '../context';
+import { VirtualMachineContextLike } from '../vmctx';
 import {
 	HLike,
 	MarketSpecLike,
@@ -39,8 +39,8 @@ export class AdminFacade<H extends HLike<H>>
 	public skipStart = this.startable.skipStart;
 
 	public constructor(
-		@inject(TYPES.context)
-		private context: Context<H>,
+		@inject(TYPES.vmctx)
+		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
 		@inject(TYPES.accountSpec)
