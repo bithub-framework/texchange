@@ -9,7 +9,7 @@ import { TYPES } from './types';
 // Context
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../context/data-types';
+import { DataTypesNamespace } from '../context/data-types-namespace';
 
 // Models
 import { Makers } from '../models.d/makers/makers';

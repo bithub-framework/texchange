@@ -21,11 +21,11 @@ let Makers = class Makers {
         this.marketSpec = marketSpec;
         this.$orders = new Map();
         this.$totalUnfilled = {
-            [secretary_like_1.Side.BID]: context.dataTypes.hFactory.from(0),
-            [secretary_like_1.Side.ASK]: context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Side.BID]: context.DataTypes.hFactory.from(0),
+            [secretary_like_1.Side.ASK]: context.DataTypes.hFactory.from(0),
         };
         this.totalUnfilledFactory = new total_unfilled_1.TotalUnfilledFactory();
-        this.totalFrozen = context.dataTypes.Frozen.ZERO;
+        this.totalFrozen = context.DataTypes.Frozen.ZERO;
     }
     getTotalUnfilled() {
         return this.totalUnfilledFactory.copy(this.$totalUnfilled);
@@ -38,7 +38,7 @@ let Makers = class Makers {
     }
     getOrder(oid) {
         const $order = this.$getOrder(oid);
-        return this.context.dataTypes.OpenMaker.copy($order);
+        return this.context.DataTypes.OpenMaker.copy($order);
     }
     $getOrder(oid) {
         const order = this.$orders.get(oid);
@@ -46,20 +46,20 @@ let Makers = class Makers {
         return order;
     }
     capture() {
-        return [...this.$orders.keys()].map(oid => this.context.dataTypes.OpenMaker.capture(this.$orders.get(oid)));
+        return [...this.$orders.keys()].map(oid => this.context.DataTypes.OpenMaker.capture(this.$orders.get(oid)));
     }
     restore(snapshot) {
         for (const orderSnapshot of snapshot) {
-            const order = this.context.dataTypes.OpenMaker.restore(orderSnapshot);
+            const order = this.context.DataTypes.OpenMaker.restore(orderSnapshot);
             this.$orders.set(order.id, order);
         }
         for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
             this.$totalUnfilled[side] = [...this.$orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), this.context.dataTypes.hFactory.from(0));
+                .reduce((total, order) => total.plus(order.unfilled), this.context.DataTypes.hFactory.from(0));
         }
         this.totalFrozen = [...this.$orders.values()]
-            .reduce((total, order) => this.context.dataTypes.Frozen.plus(total, order.frozen), this.context.dataTypes.Frozen.ZERO);
+            .reduce((total, order) => this.context.DataTypes.Frozen.plus(total, order.frozen), this.context.DataTypes.Frozen.ZERO);
     }
     toFreeze(order) {
         const frozen = this.unroundedToFreeze(order);
@@ -78,12 +78,12 @@ let Makers = class Makers {
         assert(order.unfilled.gt(0));
         const toFreeze = this.toFreeze(order);
         const $order = {
-            ...this.context.dataTypes.openOrderFactory.copy(order),
+            ...this.context.DataTypes.openOrderFactory.copy(order),
             behind,
             frozen: toFreeze,
         };
         this.$orders.set(order.id, $order);
-        this.totalFrozen = this.context.dataTypes.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalFrozen = this.context.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
         this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
             .plus(order.unfilled);
     }
@@ -93,12 +93,12 @@ let Makers = class Makers {
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
         const newOrder = {
-            ...this.context.dataTypes.openOrderFactory.copy($order),
+            ...this.context.DataTypes.openOrderFactory.copy($order),
             filled: $order.filled.plus(volume),
             unfilled: $order.unfilled.minus(volume),
         };
         if (newOrder.unfilled.gt(0))
-            this.appendOrder(newOrder, this.context.dataTypes.hFactory.from(0));
+            this.appendOrder(newOrder, this.context.DataTypes.hFactory.from(0));
     }
     takeOrderQueue(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -106,7 +106,7 @@ let Makers = class Makers {
             assert(volume.lte($order.behind));
         $order.behind = typeof volume !== 'undefined'
             ? $order.behind.minus(volume)
-            : this.context.dataTypes.hFactory.from(0);
+            : this.context.DataTypes.hFactory.from(0);
         this.$orders.set(oid, $order);
     }
     removeOrder(oid) {
@@ -114,7 +114,7 @@ let Makers = class Makers {
         this.$orders.delete(oid);
         this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
             .minus($order.unfilled);
-        this.totalFrozen = this.context.dataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
+        this.totalFrozen = this.context.DataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
     }
     forcedlyRemoveOrder(oid) {
         try {

@@ -18,24 +18,24 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	protected unroundedToFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
 			const balance: Balance<H> = {
-				[Length.LONG]: this.context.dataTypes.hFactory.from(0),
-				[Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+				[Length.LONG]: this.context.DataTypes.hFactory.from(0),
+				[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
 			};
 			balance[order.length] = this.marketSpec.dollarVolume(order.price, order.unfilled);
-			balance[Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
+			balance[Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
 			return {
 				balance,
-				position: this.context.dataTypes.Frozen.ZERO.position,
+				position: this.context.DataTypes.Frozen.ZERO.position,
 			};
 		} else {
 			const position: Position<H> = {
-				[Length.LONG]: this.context.dataTypes.hFactory.from(0),
-				[Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+				[Length.LONG]: this.context.DataTypes.hFactory.from(0),
+				[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
 			};
 			position[order.length] = order.unfilled;
-			position[Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
+			position[Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
 			return {
-				balance: this.context.dataTypes.Frozen.ZERO.balance,
+				balance: this.context.DataTypes.Frozen.ZERO.balance,
 				position: position,
 			};
 		}

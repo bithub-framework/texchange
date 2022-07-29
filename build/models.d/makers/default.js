@@ -15,25 +15,25 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     unroundedToFreeze(order) {
         if (order.action === secretary_like_1.Action.OPEN) {
             const balance = {
-                [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
-                [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+                [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
             };
             balance[order.length] = this.marketSpec.dollarVolume(order.price, order.unfilled);
-            balance[secretary_like_1.Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
+            balance[secretary_like_1.Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
             return {
                 balance,
-                position: this.context.dataTypes.Frozen.ZERO.position,
+                position: this.context.DataTypes.Frozen.ZERO.position,
             };
         }
         else {
             const position = {
-                [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
-                [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+                [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
+                [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
             };
             position[order.length] = order.unfilled;
-            position[secretary_like_1.Length.invert(order.length)] = this.context.dataTypes.hFactory.from(0);
+            position[secretary_like_1.Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
             return {
-                balance: this.context.dataTypes.Frozen.ZERO.balance,
+                balance: this.context.DataTypes.Frozen.ZERO.balance,
                 position: position,
             };
         }

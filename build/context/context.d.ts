@@ -1,7 +1,7 @@
 import { HLike, TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from './data-types';
+import { DataTypesNamespace } from './data-types-namespace';
 export declare class Context<H extends HLike<H>> {
     timeline: TimelineLike;
-    dataTypes: DataTypesNamespace<H>;
-    constructor(timeline: TimelineLike, dataTypes: DataTypesNamespace<H>);
+    DataTypes: DataTypesNamespace<H>;
+    constructor(timeline: TimelineLike, DataTypes: DataTypesNamespace<H>);
 }

@@ -20,7 +20,7 @@ export abstract class MarketSpec<H extends HLike<H>> implements MarketSpecLike<H
 		@inject(TYPES.context)
 		context: Context<H>,
 	) {
-		this.TICK_SIZE = context.dataTypes.hFactory.from('.01');
+		this.TICK_SIZE = context.DataTypes.hFactory.from('.01');
 	}
 
 	protected abstract unroundedQuantity(price: H, dollarVolume: H): H;

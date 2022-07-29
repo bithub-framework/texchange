@@ -27,10 +27,10 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
         return this.settlementPrice;
     }
     capture() {
-        return this.context.dataTypes.hFactory.capture(this.settlementPrice);
+        return this.context.DataTypes.hFactory.capture(this.settlementPrice);
     }
     restore(snapshot) {
-        this.settlementPrice = this.context.dataTypes.hFactory.restore(snapshot);
+        this.settlementPrice = this.context.DataTypes.hFactory.restore(snapshot);
     }
 };
 DefaultPricing = __decorate([

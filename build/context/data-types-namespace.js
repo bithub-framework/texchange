@@ -17,4 +17,4 @@ class DataTypesNamespace extends secretary_like_1.DataTypesNamespace {
     }
 }
 exports.DataTypesNamespace = DataTypesNamespace;
-//# sourceMappingURL=data-types.js.map
+//# sourceMappingURL=data-types-namespace.js.map

@@ -1,7 +1,7 @@
 import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
 import { HLike, TimelineLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
-import { DataTypesNamespace } from '../../context/data-types';
+import { DataTypesNamespace } from '../../context/data-types-namespace';
 import { Makers } from '../../models.d/makers/makers';
 import { Pricing } from '../../models.d/pricing/pricing';
 import { MarginAssets } from '../../models.d/margin-assets';

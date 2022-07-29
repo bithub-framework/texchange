@@ -17,17 +17,17 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();
         const $final = {
-            [secretary_like_1.Length.LONG]: this.context.dataTypes.hFactory.from(0),
-            [secretary_like_1.Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
         };
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const side = secretary_like_1.Side.from(length, secretary_like_1.Action.OPEN);
-            const afterDeduction = this.context.dataTypes.H.max(totalUnfilled[side].minus(position[secretary_like_1.Length.invert(length)]), this.context.dataTypes.hFactory.from(0));
+            const afterDeduction = this.context.DataTypes.H.max(totalUnfilled[side].minus(position[secretary_like_1.Length.invert(length)]), this.context.DataTypes.hFactory.from(0));
             $final[length] = totalUnfilled[side].neq(0)
                 ? totalFrozen.balance[length]
                     .times(afterDeduction)
                     .div(totalUnfilled[side], this.marketSpec.CURRENCY_SCALE)
-                : this.context.dataTypes.hFactory.from(0);
+                : this.context.DataTypes.hFactory.from(0);
         }
         return $final[secretary_like_1.Length.LONG].plus($final[secretary_like_1.Length.SHORT]);
     }

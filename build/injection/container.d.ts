@@ -3,7 +3,7 @@ import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../context/data-types';
+import { DataTypesNamespace } from '../context/data-types-namespace';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Assets } from '../models.d/margin-assets/assets/assets';

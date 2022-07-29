@@ -30,11 +30,11 @@ export class DefaultPricing<H extends HLike<H>>
 	}
 
 	public capture(): DefaultPricing.Snapshot {
-		return this.context.dataTypes.hFactory.capture(this.settlementPrice);
+		return this.context.DataTypes.hFactory.capture(this.settlementPrice);
 	}
 
 	public restore(snapshot: DefaultPricing.Snapshot): void {
-		this.settlementPrice = this.context.dataTypes.hFactory.restore(snapshot);
+		this.settlementPrice = this.context.DataTypes.hFactory.restore(snapshot);
 	}
 }
 

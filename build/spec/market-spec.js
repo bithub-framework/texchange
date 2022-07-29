@@ -15,7 +15,7 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let MarketSpec = class MarketSpec {
     constructor(context) {
-        this.TICK_SIZE = context.dataTypes.hFactory.from('.01');
+        this.TICK_SIZE = context.DataTypes.hFactory.from('.01');
     }
     quantity(price, dollarVolume) {
         assert(price.neq(0));

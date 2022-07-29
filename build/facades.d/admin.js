@@ -44,10 +44,10 @@ let AdminFacade = class AdminFacade {
         return this.accountSpec;
     }
     updateTrades($trades) {
-        this.useCaseUpdateTrades.updateTrades($trades.map(trade => this.context.dataTypes.DatabaseTrade.copy(trade)));
+        this.useCaseUpdateTrades.updateTrades($trades.map(trade => this.context.DataTypes.DatabaseTrade.copy(trade)));
     }
     updateOrderbook($orderbook) {
-        this.useCaseUpdateOrderbook.updateOrderbook(this.context.dataTypes.DatabaseOrderbook.copy($orderbook));
+        this.useCaseUpdateOrderbook.updateOrderbook(this.context.DataTypes.DatabaseOrderbook.copy($orderbook));
     }
     getLatestDatabaseOrderbookId() {
         return this.useCaseGetProgress.getLatestDatabaseOrderbookId();

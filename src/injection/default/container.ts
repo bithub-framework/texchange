@@ -6,7 +6,7 @@ import {
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
-import { DataTypesNamespace } from '../../context/data-types';
+import { DataTypesNamespace } from '../../context/data-types-namespace';
 
 // Spec
 import { DefaultMarketSpec } from '../../spec/default-market-spec';

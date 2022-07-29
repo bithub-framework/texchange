@@ -13,9 +13,9 @@ exports.Context = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let Context = class Context {
-    constructor(timeline, dataTypes) {
+    constructor(timeline, DataTypes) {
         this.timeline = timeline;
-        this.dataTypes = dataTypes;
+        this.DataTypes = DataTypes;
     }
 };
 Context = __decorate([

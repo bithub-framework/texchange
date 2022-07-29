@@ -16,20 +16,20 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();
 		const $final: Balance<H> = {
-			[Length.LONG]: this.context.dataTypes.hFactory.from(0),
-			[Length.SHORT]: this.context.dataTypes.hFactory.from(0),
+			[Length.LONG]: this.context.DataTypes.hFactory.from(0),
+			[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
 		};
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side = Side.from(length, Action.OPEN);
-			const afterDeduction = this.context.dataTypes.H.max(
+			const afterDeduction = this.context.DataTypes.H.max(
 				totalUnfilled[side].minus(position[Length.invert(length)]),
-				this.context.dataTypes.hFactory.from(0),
+				this.context.DataTypes.hFactory.from(0),
 			);
 			$final[length] = totalUnfilled[side].neq(0)
 				? totalFrozen.balance[length]
 					.times(afterDeduction)
 					.div(totalUnfilled[side], this.marketSpec.CURRENCY_SCALE)
-				: this.context.dataTypes.hFactory.from(0);
+				: this.context.DataTypes.hFactory.from(0);
 		}
 		return $final[Length.LONG].plus($final[Length.SHORT]);
 	}

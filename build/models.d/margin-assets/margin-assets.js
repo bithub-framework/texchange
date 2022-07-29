@@ -20,10 +20,10 @@ let MarginAssets = class MarginAssets {
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.assets = assets;
-        this.marginFactory = new margin_1.MarginFactory(context.dataTypes.hFactory);
+        this.marginFactory = new margin_1.MarginFactory(context.DataTypes.hFactory);
         this.$margin = {
-            [secretary_like_1.Length.LONG]: context.dataTypes.hFactory.from(0),
-            [secretary_like_1.Length.SHORT]: context.dataTypes.hFactory.from(0),
+            [secretary_like_1.Length.LONG]: context.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: context.DataTypes.hFactory.from(0),
         };
     }
     open({ length, volume, dollarVolume, }) {
@@ -35,7 +35,7 @@ let MarginAssets = class MarginAssets {
     }
     close({ length, volume, dollarVolume, }) {
         if (volume.eq(this.assets.getPosition()[length])) {
-            this.$margin[length] = this.context.dataTypes.hFactory.from(0);
+            this.$margin[length] = this.context.DataTypes.hFactory.from(0);
         }
         const decrement = this.$margin[length]
             .times(volume)

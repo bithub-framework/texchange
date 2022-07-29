@@ -29,7 +29,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.emit('orderbook', this.context.dataTypes.orderbookFactory.copy(orderbook));
+                this.emit('orderbook', this.context.DataTypes.orderbookFactory.copy(orderbook));
             }
             catch (err) { }
         });
@@ -37,7 +37,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.emit('trades', trades.map(trade => this.context.dataTypes.tradeFactory.copy(trade)));
+                this.emit('trades', trades.map(trade => this.context.DataTypes.tradeFactory.copy(trade)));
             }
             catch (err) { }
         });

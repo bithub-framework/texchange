@@ -31,10 +31,10 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		@inject(TYPES.MODELS.assets)
 		protected assets: Assets<H>,
 	) {
-		this.marginFactory = new MarginFactory<H>(context.dataTypes.hFactory);
+		this.marginFactory = new MarginFactory<H>(context.DataTypes.hFactory);
 		this.$margin = {
-			[Length.LONG]: context.dataTypes.hFactory.from(0),
-			[Length.SHORT]: context.dataTypes.hFactory.from(0),
+			[Length.LONG]: context.DataTypes.hFactory.from(0),
+			[Length.SHORT]: context.DataTypes.hFactory.from(0),
 		};
 	}
 
@@ -56,7 +56,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		dollarVolume,
 	}: Executed<H>): void {
 		if (volume.eq(this.assets.getPosition()[length])) {
-			this.$margin[length] = this.context.dataTypes.hFactory.from(0);
+			this.$margin[length] = this.context.DataTypes.hFactory.from(0);
 		}
 		const decrement = this.$margin[length]
 			.times(volume)
