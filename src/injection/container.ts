@@ -9,7 +9,7 @@ import { TYPES } from './types';
 // Context
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../context/data';
+import { DataTypesNamespace } from '../context/data-types';
 
 // Models
 import { Makers } from '../models.d/makers/makers';
@@ -57,13 +57,11 @@ import { Texchange } from '../texchange';
 
 
 export abstract class Container<H extends HLike<H>> extends BaseContainer {
-	public abstract [TYPES.hStatic]: () => HStatic<H>;
-	public abstract [TYPES.hFactory]: () => HFactory<H>;
 	public abstract [TYPES.marketSpec]: () => MarketSpecLike<H>;
 	public abstract [TYPES.accountSpec]: () => AccountSpecLike;
 	public abstract [TYPES.timeline]: () => TimelineLike;
 
-	public [TYPES.dataStatic] = this.rcs<DataTypesNamespace<H>>(DataTypesNamespace);
+	public abstract [TYPES.dataTypes]: () => DataTypesNamespace<H>;
 	public [TYPES.context] = this.rcs<Context<H>>(Context);
 
 	public abstract [TYPES.MODELS.initialBalance]: () => H;

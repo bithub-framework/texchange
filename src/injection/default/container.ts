@@ -1,11 +1,12 @@
 import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
 import {
-	HLike, HStatic, HFactory,
+	HLike,
 	TimelineLike,
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
+import { DataTypesNamespace } from '../../context/data-types';
 
 // Spec
 import { DefaultMarketSpec } from '../../spec/default-market-spec';
@@ -32,8 +33,7 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.hStatic]: () => HStatic<H>;
-	public [TYPES.hFactory]: () => HFactory<H>;
+	public [TYPES.dataTypes]: () => DataTypesNamespace<H>;
 	public [TYPES.marketSpec] = this.rcs<MarketSpecLike<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpecLike>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
@@ -55,16 +55,14 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 
 	public constructor(
 		timeline: TimelineLike,
-		hFactory: HFactory<H>,
-		H: HStatic<H>,
+		dataTypes: DataTypesNamespace<H>,
 		initialBalance: H,
 		initialSettlementPrice: H,
 	) {
 		super();
 
 		this[TYPES.timeline] = this.rv(timeline);
-		this[TYPES.hFactory] = this.rv(hFactory);
-		this[TYPES.hStatic] = this.rv(H);
+		this[TYPES.dataTypes] = this.rv(dataTypes);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}

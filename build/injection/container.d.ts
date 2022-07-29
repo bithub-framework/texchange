@@ -1,9 +1,9 @@
-import { HLike, HStatic, HFactory, MarketSpecLike, AccountSpecLike } from 'secretary-like';
+import { HLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 import { Context } from '../context';
 import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../context/data';
+import { DataTypesNamespace } from '../context/data-types';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
 import { Assets } from '../models.d/margin-assets/assets/assets';
@@ -33,12 +33,10 @@ import { UserMarketFacade } from '../facades.d/user-market';
 import { UserAccountFacade } from '../facades.d/user-account';
 import { Texchange } from '../texchange';
 export declare abstract class Container<H extends HLike<H>> extends BaseContainer {
-    abstract [TYPES.hStatic]: () => HStatic<H>;
-    abstract [TYPES.hFactory]: () => HFactory<H>;
     abstract [TYPES.marketSpec]: () => MarketSpecLike<H>;
     abstract [TYPES.accountSpec]: () => AccountSpecLike;
     abstract [TYPES.timeline]: () => TimelineLike;
-    [TYPES.dataStatic]: () => DataTypesNamespace<H>;
+    abstract [TYPES.dataTypes]: () => DataTypesNamespace<H>;
     [TYPES.context]: () => Context<H>;
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;

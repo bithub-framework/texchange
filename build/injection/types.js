@@ -42,10 +42,8 @@ class TYPES {
 exports.TYPES = TYPES;
 TYPES.marketSpec = Symbol('marketSpec');
 TYPES.accountSpec = Symbol('accountSpec');
-TYPES.hFactory = Symbol('hFactory');
-TYPES.hStatic = Symbol('hStatic');
 TYPES.timeline = Symbol('timeline');
-TYPES.dataStatic = Symbol('dataStatic');
+TYPES.dataTypes = Symbol('dataTypes');
 TYPES.context = Symbol('context');
 TYPES.MODELS = MODELS;
 TYPES.MIDDLEWARES = MIDDLEWARES;

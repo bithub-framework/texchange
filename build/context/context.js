@@ -20,7 +20,7 @@ let Context = class Context {
 };
 Context = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.timeline)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.dataStatic))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.dataTypes))
 ], Context);
 exports.Context = Context;
 //# sourceMappingURL=context.js.map
