@@ -61,7 +61,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.accountSpec]: () => AccountSpecLike;
 	public abstract [TYPES.timeline]: () => TimelineLike;
 
-	public abstract [TYPES.dataTypes]: () => DataTypesNamespace<H>;
+	public abstract [TYPES.DataTypes]: () => DataTypesNamespace<H>;
 	public [TYPES.context] = this.rcs<Context<H>>(Context);
 
 	public abstract [TYPES.MODELS.initialBalance]: () => H;

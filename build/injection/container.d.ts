@@ -36,7 +36,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     abstract [TYPES.marketSpec]: () => MarketSpecLike<H>;
     abstract [TYPES.accountSpec]: () => AccountSpecLike;
     abstract [TYPES.timeline]: () => TimelineLike;
-    abstract [TYPES.dataTypes]: () => DataTypesNamespace<H>;
+    abstract [TYPES.DataTypes]: () => DataTypesNamespace<H>;
     [TYPES.context]: () => Context<H>;
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;

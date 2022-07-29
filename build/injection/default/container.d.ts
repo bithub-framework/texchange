@@ -9,7 +9,7 @@ import { AvailableAssetsCalculator } from '../../middlewares/available-assets-ca
 import { Mtm } from '../../mark-to-market/mtm';
 import { Config as DelayConfig } from '../../facades.d/config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
-    [TYPES.dataTypes]: () => DataTypesNamespace<H>;
+    [TYPES.DataTypes]: () => DataTypesNamespace<H>;
     [TYPES.marketSpec]: () => MarketSpecLike<H>;
     [TYPES.accountSpec]: () => AccountSpecLike;
     [TYPES.timeline]: () => TimelineLike;

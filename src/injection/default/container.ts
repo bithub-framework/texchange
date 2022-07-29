@@ -33,7 +33,7 @@ import { Config as DelayConfig } from '../../facades.d/config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.dataTypes]: () => DataTypesNamespace<H>;
+	public [TYPES.DataTypes]: () => DataTypesNamespace<H>;
 	public [TYPES.marketSpec] = this.rcs<MarketSpecLike<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpecLike>(DefaultAccountSpec);
 	public [TYPES.timeline]: () => TimelineLike;
@@ -62,7 +62,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		super();
 
 		this[TYPES.timeline] = this.rv(timeline);
-		this[TYPES.dataTypes] = this.rv(dataTypes);
+		this[TYPES.DataTypes] = this.rv(dataTypes);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}

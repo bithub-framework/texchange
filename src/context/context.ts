@@ -11,7 +11,7 @@ export class Context<H extends HLike<H>> {
 	public constructor(
 		@inject(TYPES.timeline)
 		public timeline: TimelineLike,
-		@inject(TYPES.dataTypes)
+		@inject(TYPES.DataTypes)
 		public DataTypes: DataTypesNamespace<H>,
 	) { }
 }
