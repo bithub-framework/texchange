@@ -1,8 +1,8 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import {
 	HLike,
-	MarketSpecLike,
-	AccountSpecLike,
+	MarketSpec,
+	AccountSpec,
 	ConnectionClosed,
 } from 'secretary-like';
 import { Startable, StartableLike } from 'startable';
@@ -42,9 +42,9 @@ export class AdminFacade<H extends HLike<H>>
 		@inject(TYPES.vmctx)
 		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpecLike<H>,
+		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpecLike,
+		private accountSpec: AccountSpec,
 		@inject(TYPES.MODELS.marginAssets)
 		private marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.book)
@@ -67,11 +67,11 @@ export class AdminFacade<H extends HLike<H>>
 		private useCaseGetProgress: UseCaseGetProgress<H>,
 	) { }
 
-	public getMarketSpec(): MarketSpecLike<H> {
+	public getMarketSpec(): MarketSpec<H> {
 		return this.marketSpec;
 	}
 
-	public getAccountSpec(): AccountSpecLike {
+	public getAccountSpec(): AccountSpec {
 		return this.accountSpec;
 	}
 

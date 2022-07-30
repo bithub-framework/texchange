@@ -4,7 +4,7 @@ import {
 	Balances,
 	Positions,
 	Position,
-	MarketSpecLike,
+	MarketSpec,
 } from 'secretary-like';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { MarginAssets } from '../../models.d/margin-assets';
@@ -19,7 +19,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 		@inject(TYPES.vmctx)
 		protected context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpecLike<H>,
+		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.MODELS.marginAssets)
 		protected marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.makers)

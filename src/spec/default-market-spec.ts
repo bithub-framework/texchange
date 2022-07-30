@@ -1,6 +1,6 @@
 import {
 	HLike,
-	MarketSpecLike,
+	MarketSpec,
 } from 'secretary-like';
 import assert = require('assert');
 import { VirtualMachineContextLike } from '../vmctx';
@@ -12,7 +12,7 @@ import { TYPES } from '../injection/types';
 /**
  * 默认正向合约
  */
-export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpecLike<H> {
+export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 	public PRICE_SCALE = 2;
 	public QUANTITY_SCALE = 3;
 	public CURRENCY_SCALE = 2;

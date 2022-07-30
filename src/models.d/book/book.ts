@@ -3,7 +3,7 @@ import {
 	OpenOrder,
 	Side,
 	HLike,
-	MarketSpecLike,
+	MarketSpec,
 } from 'secretary-like';
 import assert = require('assert');
 import { VirtualMachineContextLike } from '../../vmctx';
@@ -33,7 +33,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		@inject(TYPES.vmctx)
 		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpecLike<H>,
+		private marketSpec: MarketSpec<H>,
 	) {
 	}
 

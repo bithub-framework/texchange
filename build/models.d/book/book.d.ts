@@ -1,4 +1,4 @@
-import { Orderbook, OpenOrder, Side, HLike, MarketSpecLike } from 'secretary-like';
+import { Orderbook, OpenOrder, Side, HLike, MarketSpec } from 'secretary-like';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';
@@ -10,7 +10,7 @@ export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snaps
     private basebook;
     private decrements;
     private finalbookCache;
-    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>);
+    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>);
     setBasebook(basebook: Orderbook<H>): void;
     decQuantity(side: Side, price: H, decrement: H): void;
     private tryApply;

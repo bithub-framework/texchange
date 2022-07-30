@@ -1,6 +1,6 @@
 import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
-import { HLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
+import { HLike, MarketSpec, AccountSpec } from 'secretary-like';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { Makers } from '../../models.d/makers/makers';
 import { Pricing } from '../../models.d/pricing/pricing';
@@ -10,8 +10,8 @@ import { Mtm } from '../../mark-to-market/mtm';
 import { Config as DelayConfig } from '../../facades.d/config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
-    [TYPES.marketSpec]: () => MarketSpecLike<H>;
-    [TYPES.accountSpec]: () => AccountSpecLike;
+    [TYPES.marketSpec]: () => MarketSpec<H>;
+    [TYPES.accountSpec]: () => AccountSpec;
     [TYPES.MODELS.initialBalance]: () => H;
     [TYPES.MODELS.makers]: () => Makers<H>;
     [TYPES.MODELS.pricing]: () => Pricing<H, any>;

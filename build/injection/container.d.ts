@@ -1,4 +1,4 @@
-import { HLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
+import { HLike, MarketSpec, AccountSpec } from 'secretary-like';
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 import { VirtualMachineContextLike } from '../vmctx';
@@ -31,8 +31,8 @@ import { UserMarketFacade } from '../facades.d/user-market';
 import { UserAccountFacade } from '../facades.d/user-account';
 import { Texchange } from '../texchange';
 export declare abstract class Container<H extends HLike<H>> extends BaseContainer {
-    abstract [TYPES.marketSpec]: () => MarketSpecLike<H>;
-    abstract [TYPES.accountSpec]: () => AccountSpecLike;
+    abstract [TYPES.marketSpec]: () => MarketSpec<H>;
+    abstract [TYPES.accountSpec]: () => AccountSpec;
     abstract [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;

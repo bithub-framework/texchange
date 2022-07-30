@@ -3,8 +3,8 @@ import { TYPES } from './types';
 import {
 	HLike,
 	TimelineLike,
-	MarketSpecLike,
-	AccountSpecLike,
+	MarketSpec,
+	AccountSpec,
 } from 'secretary-like';
 
 // Vmctx
@@ -37,8 +37,8 @@ import { Config as DelayConfig } from '../../facades.d/config';
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
 
-	public [TYPES.marketSpec] = this.rcs<MarketSpecLike<H>>(DefaultMarketSpec);
-	public [TYPES.accountSpec] = this.rcs<AccountSpecLike>(DefaultAccountSpec);
+	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
+	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 
 	public [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);

@@ -3,8 +3,8 @@ import {
 	HLike,
 	OpenOrder,
 	OrderId,
-	MarketSpecLike,
-	AccountSpecLike,
+	MarketSpec,
+	AccountSpec,
 } from 'secretary-like';
 import { OpenMaker } from '../../data-types/open-maker';
 import { Frozen } from '../../data-types/frozen';
@@ -32,9 +32,9 @@ export abstract class Makers<H extends HLike<H>> implements
 		@inject(TYPES.vmctx)
 		protected context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
-		protected marketSpec: MarketSpecLike<H>,
+		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
-		protected accountSpec: AccountSpecLike,
+		protected accountSpec: AccountSpec,
 	) {
 		this.$totalUnfilled = {
 			[Side.BID]: context.DataTypes.hFactory.from(0),

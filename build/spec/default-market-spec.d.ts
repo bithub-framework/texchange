@@ -1,9 +1,9 @@
-import { HLike, MarketSpecLike } from 'secretary-like';
+import { HLike, MarketSpec } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 /**
  * 默认正向合约
  */
-export declare class DefaultMarketSpec<H extends HLike<H>> implements MarketSpecLike<H> {
+export declare class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
     PRICE_SCALE: number;
     QUANTITY_SCALE: number;
     CURRENCY_SCALE: number;

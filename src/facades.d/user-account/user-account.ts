@@ -3,7 +3,7 @@ import {
 	Balances,
 	Positions,
 	AccountApiLike,
-	AccountSpecLike,
+	AccountSpec,
 	HLike,
 	OpenOrder,
 	Amendment,
@@ -34,7 +34,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		@inject(TYPES.vmctx)
 		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpecLike,
+		private accountSpec: AccountSpec,
 		@inject(TYPES.USE_CASES.subscription)
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.instant)

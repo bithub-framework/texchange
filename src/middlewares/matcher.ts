@@ -3,8 +3,8 @@ import {
 	OpenOrder,
 	Trade,
 	Side, Action,
-	MarketSpecLike,
-	AccountSpecLike,
+	MarketSpec,
+	AccountSpec,
 } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Book } from '../models.d/book';
@@ -20,9 +20,9 @@ export class Matcher<H extends HLike<H>> {
 		@inject(TYPES.vmctx)
 		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
-		private marketSpec: MarketSpecLike<H>,
+		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
-		private accountSpec: AccountSpecLike,
+		private accountSpec: AccountSpec,
 		@inject(TYPES.MODELS.book)
 		private book: Book<H>,
 		@inject(TYPES.MODELS.marginAssets)
