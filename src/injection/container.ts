@@ -6,10 +6,8 @@ import {
 import { BaseContainer } from '@zimtsui/injektor';
 import { TYPES } from './types';
 
-// Context
+// VMCTX
 import { VirtualMachineContextLike } from '../vmctx';
-import { TimelineLike } from 'secretary-like';
-import { DataTypesNamespace } from '../vmctx/data-types-namespace';
 
 // Models
 import { Makers } from '../models.d/makers/makers';
