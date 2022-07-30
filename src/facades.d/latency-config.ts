@@ -1,4 +1,4 @@
-export interface Config {
+export interface LatencyConfig {
 	processing: number;
 	ping: number;
 }

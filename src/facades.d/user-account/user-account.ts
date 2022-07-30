@@ -12,7 +12,7 @@ import {
 import { EventEmitter } from 'events';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { Instant } from './instant';
-import { Config } from '../config';
+import { LatencyConfig } from '../latency-config';
 
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
 
@@ -40,7 +40,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		@inject(TYPES.FACADES.instant)
 		private instant: Instant<H>,
 		@inject(TYPES.FACADES.config)
-		private config: Config,
+		private config: LatencyConfig,
 	) {
 		super();
 

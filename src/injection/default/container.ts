@@ -31,7 +31,7 @@ import { Mtm } from '../../mark-to-market/mtm';
 import { DefaultMtm } from '../../mark-to-market/default';
 
 // Facades
-import { Config as DelayConfig } from '../../facades.d/config';
+import { LatencyConfig as DelayConfig } from '../../facades.d/latency-config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {

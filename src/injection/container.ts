@@ -1,5 +1,5 @@
 import {
-	HLike, HStatic, HFactory,
+	HLike,
 	MarketSpec,
 	AccountSpec,
 } from 'secretary-like';
@@ -44,7 +44,7 @@ import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
 
 // Facades
-import { Config as DelayConfig } from '../facades.d/config';
+import { LatencyConfig } from '../facades.d/latency-config';
 import { Instant } from '../facades.d/user-account/instant';
 import { AdminFacade } from '../facades.d/admin';
 import { UserMarketFacade } from '../facades.d/user-market';
@@ -87,7 +87,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.USE_CASES.subscription] = this.rcs<UseCaseSubscription<H>>(UseCaseSubscription);
 	public [TYPES.USE_CASES.getProgress] = this.rcs<UseCaseGetProgress<H>>(UseCaseGetProgress);
 
-	public abstract [TYPES.FACADES.config]: () => DelayConfig;
+	public abstract [TYPES.FACADES.config]: () => LatencyConfig;
 	public [TYPES.FACADES.instant] = this.rcs<Instant<H>>(Instant);
 	public [TYPES.FACADES.userMarket] = this.rcs<UserMarketFacade<H>>(UserMarketFacade);
 	public [TYPES.FACADES.userAccount] = this.rcs<UserAccountFacade<H>>(UserAccountFacade);

@@ -24,7 +24,7 @@ import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
-import { Config as DelayConfig } from '../facades.d/config';
+import { LatencyConfig } from '../facades.d/latency-config';
 import { Instant } from '../facades.d/user-account/instant';
 import { AdminFacade } from '../facades.d/admin';
 import { UserMarketFacade } from '../facades.d/user-market';
@@ -57,7 +57,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.USE_CASES.updateTrades]: () => UseCaseUpdateTrades<H>;
     [TYPES.USE_CASES.subscription]: () => UseCaseSubscription<H>;
     [TYPES.USE_CASES.getProgress]: () => UseCaseGetProgress<H>;
-    abstract [TYPES.FACADES.config]: () => DelayConfig;
+    abstract [TYPES.FACADES.config]: () => LatencyConfig;
     [TYPES.FACADES.instant]: () => Instant<H>;
     [TYPES.FACADES.userMarket]: () => UserMarketFacade<H>;
     [TYPES.FACADES.userAccount]: () => UserAccountFacade<H>;

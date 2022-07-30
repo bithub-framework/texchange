@@ -6,7 +6,7 @@ import {
 } from 'secretary-like';
 import { EventEmitter } from 'events';
 import { VirtualMachineContextLike } from '../vmctx';
-import { Config } from './config';
+import { LatencyConfig } from './latency-config';
 
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 
@@ -34,7 +34,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 		@inject(TYPES.USE_CASES.subscription)
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.config)
-		private config: Config,
+		private config: LatencyConfig,
 	) {
 		super();
 
