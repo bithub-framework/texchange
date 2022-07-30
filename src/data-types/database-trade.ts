@@ -67,7 +67,7 @@ export class DatabaseTradeFactory<H extends HLike<H>> implements
 		private tradeFactory: TradeFactory<H>,
 	) { }
 
-	public new(source: DatabaseTrade.Source<H>): ConcreteDatabaseTrade<H> {
+	public new(source: DatabaseTrade.Source<H>): DatabaseTrade<H> {
 		return new ConcreteDatabaseTrade(source, this);
 	}
 

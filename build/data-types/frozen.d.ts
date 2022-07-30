@@ -4,14 +4,6 @@ export interface Frozen<H extends HLike<H>> extends Frozen.Source<H>, CompositeD
     balance: Balance<H>;
     position: Position<H>;
 }
-declare class ConcreteFrozen<H extends HLike<H>> implements Frozen<H> {
-    private factory;
-    balance: Balance<H>;
-    position: Position<H>;
-    constructor(source: Frozen.Source<H>, factory: FrozenFactory<H>, balanceFactory: BalanceFactory<H>, positionFactory: PositionFactory<H>);
-    toJSON(): unknown;
-    toString(): string;
-}
 export declare namespace Frozen {
     interface Source<H extends HLike<H>> {
         balance: Balance.Source<H>;
@@ -26,9 +18,9 @@ export declare class FrozenFactory<H extends HLike<H>> implements CompositeDataF
     private balanceFactory;
     private positionFactory;
     constructor(balanceFactory: BalanceFactory<H>, positionFactory: PositionFactory<H>);
-    new(source: Frozen.Source<H>): ConcreteFrozen<H>;
+    new(source: Frozen.Source<H>): Frozen<H>;
     capture(frozen: Frozen<H>): Frozen.Snapshot;
-    restore(snapshot: Frozen.Snapshot): ConcreteFrozen<H>;
+    restore(snapshot: Frozen.Snapshot): Frozen<H>;
 }
 export declare class FrozenStatic<H extends HLike<H>> {
     private frozenFactory;
@@ -38,4 +30,3 @@ export declare class FrozenStatic<H extends HLike<H>> {
     readonly ZERO: Frozen<H>;
     minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H>;
 }
-export {};

@@ -1,24 +1,8 @@
-import { HLike, H, HFactory, OpenOrder, OpenOrderFactory, Length, Side, Action, OrderId, CompositeDataFactoryLike, CompositeDataLike } from 'secretary-like';
+import { HLike, H, HFactory, OpenOrder, OpenOrderFactory, CompositeDataFactoryLike, CompositeDataLike } from 'secretary-like';
 import { FrozenFactory, Frozen } from './frozen';
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H>, OpenMaker.Source<H>, CompositeDataLike {
     behind: H;
     frozen: Frozen<H>;
-}
-declare class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
-    private factory;
-    price: H;
-    quantity: H;
-    side: Side;
-    length: Length;
-    action: Action;
-    filled: H;
-    unfilled: H;
-    id: OrderId;
-    behind: H;
-    frozen: Frozen<H>;
-    constructor(source: OpenMaker.Source<H>, factory: OpenMakerFactory<H>, frozenFactory: FrozenFactory<H>);
-    toJSON(): unknown;
-    toString(): string;
 }
 export declare namespace OpenMaker {
     interface Source<H extends HLike<H>> extends OpenOrder.Source<H> {
@@ -35,8 +19,7 @@ export declare class OpenMakerFactory<H extends HLike<H>> implements CompositeDa
     private frozenFactory;
     private openOrderFactory;
     constructor(hFactory: HFactory<H>, frozenFactory: FrozenFactory<H>, openOrderFactory: OpenOrderFactory<H>);
-    new(source: OpenMaker.Source<H>): ConcreteOpenMaker<H>;
+    new(source: OpenMaker.Source<H>): OpenMaker<H>;
     capture(order: OpenMaker<H>): OpenMaker.Snapshot;
-    restore(snapshot: OpenMaker.Snapshot): ConcreteOpenMaker<H>;
+    restore(snapshot: OpenMaker.Snapshot): OpenMaker<H>;
 }
-export {};

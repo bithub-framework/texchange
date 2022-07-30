@@ -64,7 +64,7 @@ export class FrozenFactory<H extends HLike<H>> implements
 		private positionFactory: PositionFactory<H>,
 	) { }
 
-	public new(source: Frozen.Source<H>): ConcreteFrozen<H> {
+	public new(source: Frozen.Source<H>): Frozen<H> {
 		return new ConcreteFrozen(
 			source,
 			this,
@@ -80,7 +80,7 @@ export class FrozenFactory<H extends HLike<H>> implements
 		}
 	}
 
-	public restore(snapshot: Frozen.Snapshot): ConcreteFrozen<H> {
+	public restore(snapshot: Frozen.Snapshot): Frozen<H> {
 		return this.new({
 			balance: this.balanceFactory.restore(snapshot.balance),
 			position: this.positionFactory.restore(snapshot.position),

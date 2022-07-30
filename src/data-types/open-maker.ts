@@ -84,7 +84,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		private openOrderFactory: OpenOrderFactory<H>,
 	) { }
 
-	public new(source: OpenMaker.Source<H>): ConcreteOpenMaker<H> {
+	public new(source: OpenMaker.Source<H>): OpenMaker<H> {
 		return new ConcreteOpenMaker(
 			source,
 			this,
@@ -100,7 +100,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		}
 	}
 
-	public restore(snapshot: OpenMaker.Snapshot): ConcreteOpenMaker<H> {
+	public restore(snapshot: OpenMaker.Snapshot): OpenMaker<H> {
 		return this.new({
 			...this.openOrderFactory.restore(snapshot),
 			behind: this.hFactory.restore(snapshot.behind),
