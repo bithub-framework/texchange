@@ -1,7 +1,7 @@
 import {
 	HLike, H,
-	OpenOrderLike,
-	TradeLike,
+	OpenOrder,
+	Trade,
 	Side, Action,
 	MarketSpecLike,
 	AccountSpecLike,
@@ -31,10 +31,10 @@ export class Matcher<H extends HLike<H>> {
 		private progress: Progress<H>,
 	) { }
 
-	public $match($taker: OpenOrderLike<H>): TradeLike<H>[] {
+	public $match($taker: OpenOrder<H>): Trade<H>[] {
 		const orderbook = this.book.getOrderbook();
 
-		const trades: TradeLike<H>[] = [];
+		const trades: Trade<H>[] = [];
 		let volume = this.context.DataTypes.hFactory.from(0);
 		let dollarVolume = this.context.DataTypes.hFactory.from(0);
 		for (const maker of orderbook[Side.invert($taker.side)])

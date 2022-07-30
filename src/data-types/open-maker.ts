@@ -1,27 +1,26 @@
 import {
 	HLike, H, HFactory,
-	OpenOrder, OpenOrderFactory, OpenOrderLike,
+	OpenOrder, OpenOrderFactory,
 	Length, Side, Action,
 	OrderId,
 	CompositeDataFactoryLike,
 	CompositeDataLike,
 } from 'secretary-like';
 import {
-	Frozen,
 	FrozenFactory,
-	FrozenLike,
+	Frozen,
 } from './frozen';
 
 
-export interface OpenMakerLike<H extends HLike<H>> extends
-	OpenOrderLike<H>,
+export interface OpenMaker<H extends HLike<H>> extends
+	OpenOrder<H>,
 	OpenMaker.Source<H>,
 	CompositeDataLike {
 	behind: H;
-	frozen: FrozenLike<H>;
+	frozen: Frozen<H>;
 }
 
-class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
+class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
 	public price: H;
 	public quantity: H;
 	public side: Side;
@@ -31,7 +30,7 @@ class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
 	public unfilled: H;
 	public id: OrderId;
 	public behind: H;
-	public frozen: FrozenLike<H>;
+	public frozen: Frozen<H>;
 
 	public constructor(
 		source: OpenMaker.Source<H>,
@@ -76,7 +75,7 @@ export namespace OpenMaker {
 export class OpenMakerFactory<H extends HLike<H>> implements
 	CompositeDataFactoryLike<
 	OpenMaker.Source<H>,
-	OpenMakerLike<H>,
+	OpenMaker<H>,
 	OpenMaker.Snapshot>
 {
 	public constructor(
@@ -85,15 +84,15 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		private openOrderFactory: OpenOrderFactory<H>,
 	) { }
 
-	public new(source: OpenMaker.Source<H>): OpenMaker<H> {
-		return new OpenMaker(
+	public new(source: OpenMaker.Source<H>): ConcreteOpenMaker<H> {
+		return new ConcreteOpenMaker(
 			source,
 			this,
 			this.frozenFactory,
 		);
 	}
 
-	public capture(order: OpenMakerLike<H>): OpenMaker.Snapshot {
+	public capture(order: OpenMaker<H>): OpenMaker.Snapshot {
 		return {
 			...this.openOrderFactory.capture(order),
 			behind: this.hFactory.capture(order.behind),
@@ -101,7 +100,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		}
 	}
 
-	public restore(snapshot: OpenMaker.Snapshot): OpenMaker<H> {
+	public restore(snapshot: OpenMaker.Snapshot): ConcreteOpenMaker<H> {
 		return this.new({
 			...this.openOrderFactory.restore(snapshot),
 			behind: this.hFactory.restore(snapshot.behind),

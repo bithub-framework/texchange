@@ -3,7 +3,7 @@ import {
 	HLike,
 	MarketSpecLike,
 	AccountSpecLike,
-	PositionLike,
+	Position,
 } from 'secretary-like';
 import { Executed } from '../../data-types/executed';
 import { VirtualMachineContextLike } from '../../vmctx';
@@ -87,7 +87,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		this.$margin = this.marginFactory.restore(snapshot.margin);
 	}
 
-	public getPosition(): PositionLike<H> {
+	public getPosition(): Position<H> {
 		return this.assets.getPosition();
 	}
 

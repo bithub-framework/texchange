@@ -14,9 +14,9 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
 import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
-import { DatabaseOrderbookLike, DatabaseOrderbookId } from '../data-types/database-orderbook';
+import { DatabaseOrderbook, DatabaseOrderbookId } from '../data-types/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { DatabaseTradeLike, DatabaseTradeId } from '../data-types/database-trade';
+import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 
@@ -75,7 +75,7 @@ export class AdminFacade<H extends HLike<H>>
 		return this.accountSpec;
 	}
 
-	public updateTrades($trades: DatabaseTradeLike<H>[]): void {
+	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
 				trade => this.context.DataTypes.databaseTradeFactory.new(trade),
@@ -83,7 +83,7 @@ export class AdminFacade<H extends HLike<H>>
 		);
 	}
 
-	public updateOrderbook($orderbook: DatabaseOrderbookLike<H>): void {
+	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
 			this.context.DataTypes.databaseOrderbookFactory.new($orderbook),
 		);

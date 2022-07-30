@@ -1,6 +1,5 @@
 import {
     Length,
-    PositionLike,
     Position,
     HLike, H,
     MarketSpecLike,
@@ -18,7 +17,7 @@ import { TYPES } from '../../../injection/types';
 export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
     private Cost = new CostFactory<H>(this.context.DataTypes.hFactory);
 
-    private $position: PositionLike<H>;
+    private $position: Position<H>;
     private $cost: Cost<H>;
 
     public constructor(
@@ -43,7 +42,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         return this.balance;
     }
 
-    public getPosition(): PositionLike<H> {
+    public getPosition(): Position<H> {
         return this.context.DataTypes.positionFactory.new(this.$position);
     }
 

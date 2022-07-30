@@ -1,12 +1,12 @@
 import {
-	LimitOrderLike,
-	BalancesLike,
-	PositionsLike,
+	LimitOrder,
+	Balances,
+	Positions,
 	AccountApiLike,
 	AccountSpecLike,
 	HLike,
-	OpenOrderLike,
-	AmendmentLike,
+	OpenOrder,
+	Amendment,
 	AccountEvents,
 } from 'secretary-like';
 import { EventEmitter } from 'events';
@@ -61,7 +61,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		});
 	}
 
-	public async makeOrders($orders: LimitOrderLike<H>[]): Promise<(OpenOrderLike<H> | Error)[]> {
+	public async makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
 			const orders = $orders.map(order => this.context.DataTypes.limitOrderFactory.new(order));
 			await this.context.timeline.sleep(this.config.ping);
@@ -76,7 +76,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async amendOrders($amendments: AmendmentLike<H>[]): Promise<(OpenOrderLike<H> | Error)[]> {
+	public async amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
 			const amendments = $amendments.map(amendment => this.context.DataTypes.amendmentFactory.new(amendment));
 			await this.context.timeline.sleep(this.config.ping);
@@ -91,7 +91,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async cancelOrders($orders: OpenOrderLike<H>[]): Promise<OpenOrderLike<H>[]> {
+	public async cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]> {
 		try {
 			const orders = $orders.map(order => this.context.DataTypes.openOrderFactory.new(order));
 			await this.context.timeline.sleep(this.config.ping);
@@ -106,7 +106,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async getBalances(): Promise<BalancesLike<H>> {
+	public async getBalances(): Promise<Balances<H>> {
 		try {
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
@@ -116,7 +116,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async getPositions(): Promise<PositionsLike<H>> {
+	public async getPositions(): Promise<Positions<H>> {
 		try {
 			await this.context.timeline.sleep(this.config.ping);
 			await this.context.timeline.sleep(this.config.processing);
@@ -126,7 +126,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async getOpenOrders(): Promise<OpenOrderLike<H>[]> {
+	public async getOpenOrders(): Promise<OpenOrder<H>[]> {
 		try {
 
 			await this.context.timeline.sleep(this.config.ping);

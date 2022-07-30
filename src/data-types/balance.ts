@@ -6,12 +6,12 @@ import {
 } from 'secretary-like';
 
 
-export interface BalanceLike<H extends HLike<H>>
+export interface Balance<H extends HLike<H>>
 	extends Balance.Source<H>, CompositeDataLike {
 	[length: Length]: H;
 }
 
-class Balance<H extends HLike<H>> implements BalanceLike<H> {
+class ConcreteBalance<H extends HLike<H>> implements Balance<H> {
 	[length: Length]: H;
 
 	public constructor(
@@ -47,25 +47,25 @@ export namespace Balance {
 export class BalanceFactory<H extends HLike<H>> implements
 	CompositeDataFactoryLike<
 	Balance.Source<H>,
-	BalanceLike<H>,
+	Balance<H>,
 	Balance.Snapshot>
 {
 	public constructor(
 		private hFactory: HFactory<H>,
 	) { }
 
-	public new(source: Balance.Source<H>): Balance<H> {
-		return new Balance(source, this);
+	public new(source: Balance.Source<H>): ConcreteBalance<H> {
+		return new ConcreteBalance(source, this);
 	}
 
-	public capture(balance: BalanceLike<H>): Balance.Snapshot {
+	public capture(balance: Balance<H>): Balance.Snapshot {
 		return {
 			long: this.hFactory.capture(balance[Length.LONG]),
 			short: this.hFactory.capture(balance[Length.SHORT]),
 		};
 	}
 
-	public restore(snapshot: Balance.Snapshot): Balance<H> {
+	public restore(snapshot: Balance.Snapshot): ConcreteBalance<H> {
 		return this.new({
 			[Length.LONG]: this.hFactory.restore(snapshot.long),
 			[Length.SHORT]: this.hFactory.restore(snapshot.short),

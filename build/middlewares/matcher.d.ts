@@ -1,4 +1,4 @@
-import { HLike, OpenOrderLike, TradeLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
+import { HLike, OpenOrder, Trade, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -11,5 +11,5 @@ export declare class Matcher<H extends HLike<H>> {
     private marginAssets;
     private progress;
     constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, book: Book<H>, marginAssets: MarginAssets<H>, progress: Progress<H>);
-    $match($taker: OpenOrderLike<H>): TradeLike<H>[];
+    $match($taker: OpenOrder<H>): Trade<H>[];
 }

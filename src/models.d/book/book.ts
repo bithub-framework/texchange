@@ -1,7 +1,6 @@
 import {
-	OrderbookLike,
 	Orderbook,
-	OpenOrderLike,
+	OpenOrder,
 	Side,
 	HLike,
 	MarketSpecLike,
@@ -19,7 +18,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private Decrements = new DecrementsFactory<H>(this.context.DataTypes.hFactory);
 
 	private time = Number.NEGATIVE_INFINITY;
-	private basebook: OrderbookLike<H> = this.context.DataTypes.orderbookFactory.new({
+	private basebook: Orderbook<H> = this.context.DataTypes.orderbookFactory.new({
 		[Side.BID]: [],
 		[Side.ASK]: [],
 		time: Number.NEGATIVE_INFINITY,
@@ -28,7 +27,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		[Side.BID]: new Map<string, H>(),
 		[Side.ASK]: new Map<string, H>(),
 	};
-	private finalbookCache: OrderbookLike<H> | null = null;
+	private finalbookCache: Orderbook<H> | null = null;
 
 	public constructor(
 		@inject(TYPES.vmctx)
@@ -38,7 +37,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	) {
 	}
 
-	public setBasebook(basebook: OrderbookLike<H>): void {
+	public setBasebook(basebook: Orderbook<H>): void {
 		assert(basebook.time === this.context.timeline.now());
 		this.basebook = basebook;
 		this.time = basebook.time;
@@ -60,7 +59,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		this.finalbookCache = null;
 	}
 
-	private tryApply(): OrderbookLike<H> {
+	private tryApply(): Orderbook<H> {
 		if (this.finalbookCache) return this.finalbookCache;
 
 		const $final = this.context.DataTypes.orderbookFactory.new({
@@ -98,11 +97,11 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		return this.finalbookCache = $final;
 	}
 
-	public getOrderbook(): OrderbookLike<H> {
+	public getOrderbook(): Orderbook<H> {
 		return this.tryApply();
 	}
 
-	public lineUp(order: OpenOrderLike<H>): H {
+	public lineUp(order: OpenOrder<H>): H {
 		const makers = this.getOrderbook()[order.side];
 		let behind = this.context.DataTypes.hFactory.from(0);
 		for (const maker of makers)

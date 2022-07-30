@@ -2,7 +2,6 @@ import {
 	HLike, HFactory,
 	Trade,
 	TradeFactory,
-	TradeLike,
 	Side,
 	CompositeDataFactoryLike,
 	CompositeDataLike,
@@ -11,14 +10,14 @@ import {
 export type DatabaseTradeId = string;
 
 
-export interface DatabaseTradeLike<H extends HLike<H>> extends
-	TradeLike<H>,
+export interface DatabaseTrade<H extends HLike<H>> extends
+	Trade<H>,
 	DatabaseTrade.Source<H>,
 	CompositeDataLike {
 	id: DatabaseTradeId;
 }
 
-class DatabaseTrade<H extends HLike<H>> implements DatabaseTradeLike<H> {
+class ConcreteDatabaseTrade<H extends HLike<H>> implements DatabaseTrade<H> {
 	public side: Side;
 	public price: H;
 	public quantity: H;
@@ -60,7 +59,7 @@ export namespace DatabaseTrade {
 export class DatabaseTradeFactory<H extends HLike<H>> implements
 	CompositeDataFactoryLike<
 	DatabaseTrade.Source<H>,
-	DatabaseTradeLike<H>,
+	DatabaseTrade<H>,
 	DatabaseTrade.Snapshot>
 {
 	public constructor(
@@ -68,18 +67,18 @@ export class DatabaseTradeFactory<H extends HLike<H>> implements
 		private tradeFactory: TradeFactory<H>,
 	) { }
 
-	public new(source: DatabaseTrade.Source<H>): DatabaseTrade<H> {
-		return new DatabaseTrade(source, this);
+	public new(source: DatabaseTrade.Source<H>): ConcreteDatabaseTrade<H> {
+		return new ConcreteDatabaseTrade(source, this);
 	}
 
-	public capture(trade: DatabaseTradeLike<H>): DatabaseTrade.Snapshot {
+	public capture(trade: DatabaseTrade<H>): DatabaseTrade.Snapshot {
 		return {
 			...this.tradeFactory.capture(trade),
 			id: trade.id,
 		}
 	}
 
-	public restore(snapshot: DatabaseTrade.Snapshot): DatabaseTradeLike<H> {
+	public restore(snapshot: DatabaseTrade.Snapshot): DatabaseTrade<H> {
 		return this.new({
 			...this.tradeFactory.restore(snapshot),
 			id: snapshot.id,

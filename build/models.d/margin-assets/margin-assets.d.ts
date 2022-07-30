@@ -1,4 +1,4 @@
-import { Length, HLike, MarketSpecLike, AccountSpecLike, PositionLike } from 'secretary-like';
+import { Length, HLike, MarketSpecLike, AccountSpecLike, Position } from 'secretary-like';
 import { Executed } from '../../data-types/executed';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
@@ -20,7 +20,7 @@ export declare abstract class MarginAssets<H extends HLike<H>> implements Statef
     abstract assertEnoughBalance(): void;
     capture(): MarginAssets.Snapshot;
     restore(snapshot: MarginAssets.Snapshot): void;
-    getPosition(): PositionLike<H>;
+    getPosition(): Position<H>;
     getBalance(): H;
     getCost(): Cost<H>;
     pay(fee: H): void;

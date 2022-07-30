@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseOrderbookFactory = void 0;
 const secretary_like_1 = require("secretary-like");
-class DatabaseOrderbook {
+class ConcreteDatabaseOrderbook {
     constructor(source, factory, bookOrderFactory) {
         this.factory = factory;
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK])
@@ -23,7 +23,7 @@ class DatabaseOrderbookFactory {
         this.orderbookFactory = orderbookFactory;
     }
     new(source) {
-        return new DatabaseOrderbook(source, this, this.bookOrderFactory);
+        return new ConcreteDatabaseOrderbook(source, this, this.bookOrderFactory);
     }
     capture(databaseOrderbook) {
         return {

@@ -1,10 +1,10 @@
 import { VirtualMachineContextLike } from '../../vmctx';
 import {
-    LimitOrderLike,
-    PositionsLike,
-    BalancesLike,
-    OpenOrderLike,
-    AmendmentLike,
+    LimitOrder,
+    Positions,
+    Balances,
+    OpenOrder,
+    Amendment,
     HLike,
 } from 'secretary-like';
 
@@ -39,8 +39,8 @@ export class Instant<H extends HLike<H>> {
     ) { }
 
     public makeOrders(
-        orders: LimitOrderLike<H>[],
-    ): (OpenOrderLike<H> | Error)[] {
+        orders: LimitOrder<H>[],
+    ): (OpenOrder<H> | Error)[] {
         return orders.map(order => {
             try {
                 return this.useCaseMakeOrder.makeOrder(order);
@@ -51,14 +51,14 @@ export class Instant<H extends HLike<H>> {
     }
 
     public cancelOrders(
-        orders: OpenOrderLike<H>[],
-    ): OpenOrderLike<H>[] {
+        orders: OpenOrder<H>[],
+    ): OpenOrder<H>[] {
         return orders.map(order => this.useCaseCancelOrder.cancelOrder(order));
     }
 
     public amendOrders(
-        amendments: AmendmentLike<H>[],
-    ): (OpenOrderLike<H> | Error)[] {
+        amendments: Amendment<H>[],
+    ): (OpenOrder<H> | Error)[] {
         return amendments.map(amendment => {
             try {
                 return this.useCaseAmendOrder.amendOrder(amendment);
@@ -68,15 +68,15 @@ export class Instant<H extends HLike<H>> {
         });
     }
 
-    public getOpenOrders(): OpenOrderLike<H>[] {
+    public getOpenOrders(): OpenOrder<H>[] {
         return this.useCaseGetOpenOrders.getOpenOrders();
     }
 
-    public getPositions(): PositionsLike<H> {
+    public getPositions(): Positions<H> {
         return this.useCaseGetPositions.getPositions();
     }
 
-    public getBalances(): BalancesLike<H> {
+    public getBalances(): Balances<H> {
         return this.useCaseGetBalances.getBalances();
     }
 }

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenMakerFactory = void 0;
-class OpenMaker {
+class ConcreteOpenMaker {
     constructor(source, factory, frozenFactory) {
         this.factory = factory;
         ({
@@ -31,7 +31,7 @@ class OpenMakerFactory {
         this.openOrderFactory = openOrderFactory;
     }
     new(source) {
-        return new OpenMaker(source, this, this.frozenFactory);
+        return new ConcreteOpenMaker(source, this, this.frozenFactory);
     }
     capture(order) {
         return {

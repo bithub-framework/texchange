@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BalanceFactory = void 0;
 const secretary_like_1 = require("secretary-like");
-class Balance {
+class ConcreteBalance {
     constructor(source, factory) {
         this.factory = factory;
         ({
@@ -22,7 +22,7 @@ class BalanceFactory {
         this.hFactory = hFactory;
     }
     new(source) {
-        return new Balance(source, this);
+        return new ConcreteBalance(source, this);
     }
     capture(balance) {
         return {

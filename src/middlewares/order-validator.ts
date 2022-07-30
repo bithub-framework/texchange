@@ -1,7 +1,7 @@
 import {
 	Action, Length, Side,
 	HLike,
-	OpenOrderLike,
+	OpenOrder,
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
@@ -29,12 +29,12 @@ export class OrderValidator<H extends HLike<H>> {
 		private calculator: AvailableAssetsCalculator<H>,
 	) { }
 
-	public validateOrder(order: OpenOrderLike<H>): void {
+	public validateOrder(order: OpenOrder<H>): void {
 		this.validateFormat(order);
 		this.validateQuantity(order);
 	}
 
-	private validateQuantity(order: OpenOrderLike<H>): void {
+	private validateQuantity(order: OpenOrder<H>): void {
 		const closable = this.calculator.getClosable();
 		this.makers.appendOrder(
 			order,
@@ -60,7 +60,7 @@ export class OrderValidator<H extends HLike<H>> {
 		}
 	}
 
-	private validateFormat(order: OpenOrderLike<H>) {
+	private validateFormat(order: OpenOrder<H>) {
 		assert(order.price.eq(order.price.round(this.marketSpec.PRICE_SCALE)));
 		assert(order.price.mod(this.marketSpec.TICK_SIZE).eq(0));
 		assert(order.unfilled.gt(0));

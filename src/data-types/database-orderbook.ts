@@ -1,10 +1,9 @@
 import {
 	HLike,
-	OrderbookLike,
 	Orderbook,
 	OrderbookFactory,
 	Side,
-	BookOrderLike,
+	BookOrder,
 	BookOrderFactory,
 	CompositeDataFactoryLike,
 	CompositeDataLike,
@@ -13,15 +12,15 @@ import {
 
 export type DatabaseOrderbookId = string;
 
-export interface DatabaseOrderbookLike<H extends HLike<H>> extends
-	OrderbookLike<H>,
+export interface DatabaseOrderbook<H extends HLike<H>> extends
+	Orderbook<H>,
 	DatabaseOrderbook.Source<H>,
 	CompositeDataLike {
 	id: DatabaseOrderbookId;
 }
 
-class DatabaseOrderbook<H extends HLike<H>> implements DatabaseOrderbookLike<H> {
-	[side: Side]: BookOrderLike<H>[];
+class ConcreteDatabaseOrderbook<H extends HLike<H>> implements DatabaseOrderbook<H> {
+	[side: Side]: BookOrder<H>[];
 	public time: number;
 	public id: DatabaseOrderbookId;
 
@@ -60,7 +59,7 @@ export namespace DatabaseOrderbook {
 export class DatabaseOrderbookFactory<H extends HLike<H>> implements
 	CompositeDataFactoryLike<
 	DatabaseOrderbook.Source<H>,
-	DatabaseOrderbookLike<H>,
+	DatabaseOrderbook<H>,
 	DatabaseOrderbook.Snapshot>
 {
 	public constructor(
@@ -68,22 +67,22 @@ export class DatabaseOrderbookFactory<H extends HLike<H>> implements
 		private orderbookFactory: OrderbookFactory<H>,
 	) { }
 
-	public new(source: DatabaseOrderbook.Source<H>): DatabaseOrderbookLike<H> {
-		return new DatabaseOrderbook(
+	public new(source: DatabaseOrderbook.Source<H>): DatabaseOrderbook<H> {
+		return new ConcreteDatabaseOrderbook(
 			source,
 			this,
 			this.bookOrderFactory,
 		);
 	}
 
-	public capture(databaseOrderbook: DatabaseOrderbookLike<H>): DatabaseOrderbook.Snapshot {
+	public capture(databaseOrderbook: DatabaseOrderbook<H>): DatabaseOrderbook.Snapshot {
 		return {
 			...this.orderbookFactory.capture(databaseOrderbook),
 			id: databaseOrderbook.id,
 		};
 	}
 
-	public restore(snapshot: DatabaseOrderbook.Snapshot): DatabaseOrderbookLike<H> {
+	public restore(snapshot: DatabaseOrderbook.Snapshot): DatabaseOrderbook<H> {
 		return this.new({
 			...this.orderbookFactory.restore(snapshot),
 			id: snapshot.id,

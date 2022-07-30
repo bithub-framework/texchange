@@ -1,8 +1,8 @@
 import { HLike, H, HFactory, Length, CompositeDataLike, CompositeDataFactoryLike } from 'secretary-like';
-export interface BalanceLike<H extends HLike<H>> extends Balance.Source<H>, CompositeDataLike {
+export interface Balance<H extends HLike<H>> extends Balance.Source<H>, CompositeDataLike {
     [length: Length]: H;
 }
-declare class Balance<H extends HLike<H>> implements BalanceLike<H> {
+declare class ConcreteBalance<H extends HLike<H>> implements Balance<H> {
     private factory;
     [length: Length]: H;
     constructor(source: Balance.Source<H>, factory: BalanceFactory<H>);
@@ -18,11 +18,11 @@ export declare namespace Balance {
         readonly short: H.Snapshot;
     }
 }
-export declare class BalanceFactory<H extends HLike<H>> implements CompositeDataFactoryLike<Balance.Source<H>, BalanceLike<H>, Balance.Snapshot> {
+export declare class BalanceFactory<H extends HLike<H>> implements CompositeDataFactoryLike<Balance.Source<H>, Balance<H>, Balance.Snapshot> {
     private hFactory;
     constructor(hFactory: HFactory<H>);
-    new(source: Balance.Source<H>): Balance<H>;
-    capture(balance: BalanceLike<H>): Balance.Snapshot;
-    restore(snapshot: Balance.Snapshot): Balance<H>;
+    new(source: Balance.Source<H>): ConcreteBalance<H>;
+    capture(balance: Balance<H>): Balance.Snapshot;
+    restore(snapshot: Balance.Snapshot): ConcreteBalance<H>;
 }
 export {};

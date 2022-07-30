@@ -1,5 +1,5 @@
 import { Broadcast } from '../middlewares/broadcast';
-import { HLike, TradeLike, OrderbookLike, PositionsLike, BalancesLike } from 'secretary-like';
+import { HLike, Trade, Orderbook, Positions, Balances } from 'secretary-like';
 import { EventEmitter } from 'events';
 export declare class UseCaseSubscription<H extends HLike<H>> extends EventEmitter {
     private broadcast;
@@ -7,10 +7,10 @@ export declare class UseCaseSubscription<H extends HLike<H>> extends EventEmitte
 }
 export declare namespace UseCaseSubscription {
     interface Events<H extends HLike<H>> {
-        trades: [readonly TradeLike<H>[]];
-        orderbook: [OrderbookLike<H>];
-        positions: [PositionsLike<H>];
-        balances: [BalancesLike<H>];
+        trades: [readonly Trade<H>[]];
+        orderbook: [Orderbook<H>];
+        positions: [Positions<H>];
+        balances: [Balances<H>];
         error: [Error];
     }
 }

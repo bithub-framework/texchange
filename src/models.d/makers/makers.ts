@@ -1,13 +1,13 @@
 import {
 	Side,
 	HLike,
-	OpenOrderLike,
+	OpenOrder,
 	OrderId,
 	MarketSpecLike,
 	AccountSpecLike,
 } from 'secretary-like';
-import { OpenMakerLike, OpenMaker } from '../../data-types/open-maker';
-import { FrozenLike } from '../../data-types/frozen';
+import { OpenMaker } from '../../data-types/open-maker';
+import { Frozen } from '../../data-types/frozen';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { VirtualMachineContextLike } from '../../vmctx';
 import assert = require('assert');
@@ -20,13 +20,13 @@ import { TYPES } from '../../injection/types';
 
 export abstract class Makers<H extends HLike<H>> implements
 	StatefulLike<Makers.Snapshot>,
-	Iterable<OpenMakerLike<H>> {
+	Iterable<OpenMaker<H>> {
 
-	private $orders = new Map<OrderId, OpenMakerLike<H>>();
+	private $orders = new Map<OrderId, OpenMaker<H>>();
 	private $totalUnfilled: TotalUnfilled<H>;
 
 	protected totalUnfilledFactory: TotalUnfilledFactory<H>;
-	private totalFrozen: FrozenLike<H>;
+	private totalFrozen: Frozen<H>;
 
 	public constructor(
 		@inject(TYPES.vmctx)
@@ -48,7 +48,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		return this.totalUnfilledFactory.copy(this.$totalUnfilled);
 	}
 
-	public getTotalFrozen(): FrozenLike<H> {
+	public getTotalFrozen(): Frozen<H> {
 		return this.totalFrozen;
 	}
 
@@ -56,12 +56,12 @@ export abstract class Makers<H extends HLike<H>> implements
 		return [...this.$orders.values()][Symbol.iterator]();
 	}
 
-	public getOrder(oid: OrderId): OpenMakerLike<H> {
+	public getOrder(oid: OrderId): OpenMaker<H> {
 		const $order = this.$getOrder(oid);
 		return this.context.DataTypes.openMakerFactory.new($order);
 	}
 
-	protected $getOrder(oid: OrderId): OpenMakerLike<H> {
+	protected $getOrder(oid: OrderId): OpenMaker<H> {
 		const order = this.$orders.get(oid);
 		assert(typeof order !== 'undefined');
 		return order;
@@ -93,10 +93,10 @@ export abstract class Makers<H extends HLike<H>> implements
 			);
 	}
 
-	protected abstract toFreeze(order: OpenOrderLike<H>): FrozenLike<H>;
+	protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
 
 	public appendOrder(
-		order: OpenOrderLike<H>,
+		order: OpenOrder<H>,
 		behind: H,
 	): void {
 		assert(order.unfilled.gt(0));

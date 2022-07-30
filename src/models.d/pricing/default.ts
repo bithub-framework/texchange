@@ -1,6 +1,6 @@
 import {
 	HLike, H,
-	TradeLike,
+	Trade,
 } from 'secretary-like';
 import { Pricing } from './pricing';
 import { VirtualMachineContextLike } from '../../vmctx';
@@ -21,7 +21,7 @@ export class DefaultPricing<H extends HLike<H>>
 		private settlementPrice: H,
 	) { super(); }
 
-	public updateTrades(trades: TradeLike<H>[]): void {
+	public updateTrades(trades: Trade<H>[]): void {
 		this.settlementPrice = trades[trades.length - 1].price;
 	}
 

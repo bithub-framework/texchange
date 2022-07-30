@@ -1,5 +1,5 @@
 import {
-	PositionsLike,
+	Positions,
 	HLike,
 } from 'secretary-like';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
@@ -14,7 +14,7 @@ export class UseCaseGetPositions<H extends HLike<H>> {
 		private calculator: AvailableAssetsCalculator<H>,
 	) { }
 
-	public getPositions(): PositionsLike<H> {
+	public getPositions(): Positions<H> {
 		return this.calculator.getPositions();
 	}
 }

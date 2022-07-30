@@ -1,7 +1,7 @@
 import {
 	HLike,
-	AmendmentLike,
-	OpenOrderLike,
+	Amendment,
+	OpenOrder,
 } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Book } from '../models.d/book';
@@ -34,7 +34,7 @@ export class UseCaseAmendOrder<H extends HLike<H>> {
 		private matcher: Matcher<H>,
 	) { }
 
-	public amendOrder(amendment: AmendmentLike<H>): OpenOrderLike<H> {
+	public amendOrder(amendment: Amendment<H>): OpenOrder<H> {
 		let filled: H;
 		try {
 			filled = this.makers.getOrder(amendment.id).filled;
@@ -42,7 +42,7 @@ export class UseCaseAmendOrder<H extends HLike<H>> {
 		} catch (err) {
 			filled = amendment.quantity;
 		}
-		const order: OpenOrderLike<H> = this.context.DataTypes.openOrderFactory.new({
+		const order: OpenOrder<H> = this.context.DataTypes.openOrderFactory.new({
 			...amendment,
 			filled,
 			price: amendment.newPrice,

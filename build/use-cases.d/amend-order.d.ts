@@ -1,4 +1,4 @@
-import { HLike, AmendmentLike, OpenOrderLike } from 'secretary-like';
+import { HLike, Amendment, OpenOrder } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Book } from '../models.d/book';
 import { Makers } from '../models.d/makers/makers';
@@ -15,5 +15,5 @@ export declare class UseCaseAmendOrder<H extends HLike<H>> {
     private calculator;
     private matcher;
     constructor(context: VirtualMachineContextLike<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
-    amendOrder(amendment: AmendmentLike<H>): OpenOrderLike<H>;
+    amendOrder(amendment: Amendment<H>): OpenOrder<H>;
 }

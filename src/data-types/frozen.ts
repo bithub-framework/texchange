@@ -2,27 +2,25 @@ import {
 	Length,
 	HLike, HFactory,
 	Position,
-	PositionLike,
 	PositionFactory,
 	CompositeDataFactoryLike,
 	CompositeDataLike,
 } from 'secretary-like';
 import {
 	Balance,
-	BalanceLike,
 	BalanceFactory,
 } from './balance';
 
 
-export interface FrozenLike<H extends HLike<H>>
+export interface Frozen<H extends HLike<H>>
 	extends Frozen.Source<H>, CompositeDataLike {
-	balance: BalanceLike<H>;
-	position: PositionLike<H>;
+	balance: Balance<H>;
+	position: Position<H>;
 }
 
-class Frozen<H extends HLike<H>> implements FrozenLike<H> {
-	public balance: BalanceLike<H>;
-	public position: PositionLike<H>;
+class ConcreteFrozen<H extends HLike<H>> implements Frozen<H> {
+	public balance: Balance<H>;
+	public position: Position<H>;
 
 	public constructor(
 		source: Frozen.Source<H>,
@@ -58,7 +56,7 @@ export namespace Frozen {
 export class FrozenFactory<H extends HLike<H>> implements
 	CompositeDataFactoryLike<
 	Frozen.Source<H>,
-	FrozenLike<H>,
+	Frozen<H>,
 	Frozen.Snapshot>
 {
 	public constructor(
@@ -66,8 +64,8 @@ export class FrozenFactory<H extends HLike<H>> implements
 		private positionFactory: PositionFactory<H>,
 	) { }
 
-	public new(source: Frozen.Source<H>): Frozen<H> {
-		return new Frozen(
+	public new(source: Frozen.Source<H>): ConcreteFrozen<H> {
+		return new ConcreteFrozen(
 			source,
 			this,
 			this.balanceFactory,
@@ -75,14 +73,14 @@ export class FrozenFactory<H extends HLike<H>> implements
 		);
 	}
 
-	public capture(frozen: FrozenLike<H>): Frozen.Snapshot {
+	public capture(frozen: Frozen<H>): Frozen.Snapshot {
 		return {
 			balance: this.balanceFactory.capture(frozen.balance),
 			position: this.positionFactory.capture(frozen.position),
 		}
 	}
 
-	public restore(snapshot: Frozen.Snapshot): Frozen<H> {
+	public restore(snapshot: Frozen.Snapshot): ConcreteFrozen<H> {
 		return this.new({
 			balance: this.balanceFactory.restore(snapshot.balance),
 			position: this.positionFactory.restore(snapshot.position),
@@ -97,9 +95,9 @@ export class FrozenStatic<H extends HLike<H>> {
 	) { }
 
 	public plus(
-		x: FrozenLike<H>,
-		y: FrozenLike<H>,
-	): FrozenLike<H> {
+		x: Frozen<H>,
+		y: Frozen<H>,
+	): Frozen<H> {
 		return this.frozenFactory.new({
 			balance: {
 				[Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
@@ -112,7 +110,7 @@ export class FrozenStatic<H extends HLike<H>> {
 		});
 	}
 
-	public readonly ZERO: FrozenLike<H> = this.frozenFactory.new({
+	public readonly ZERO: Frozen<H> = this.frozenFactory.new({
 		balance: {
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
@@ -124,9 +122,9 @@ export class FrozenStatic<H extends HLike<H>> {
 	});
 
 	public minus(
-		x: FrozenLike<H>,
-		y?: FrozenLike<H>,
-	): FrozenLike<H> {
+		x: Frozen<H>,
+		y?: Frozen<H>,
+	): Frozen<H> {
 		if (typeof y === 'undefined') {
 			y = x;
 			x = this.ZERO;

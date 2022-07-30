@@ -1,9 +1,9 @@
 import {
 	Action, Length,
 	HLike,
-	OpenOrderLike,
+	OpenOrder,
 } from 'secretary-like';
-import { FrozenLike } from '../../data-types/frozen';
+import { Frozen } from '../../data-types/frozen';
 import { Makers } from './makers';
 
 import { injextends } from '@zimtsui/injektor';
@@ -12,7 +12,7 @@ import { injextends } from '@zimtsui/injektor';
 @injextends()
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
-	protected toFreeze(order: OpenOrderLike<H>): FrozenLike<H> {
+	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
 			const balance = this.context.DataTypes.balanceFactory.new({
 				[Length.LONG]: this.context.DataTypes.hFactory.from(0),

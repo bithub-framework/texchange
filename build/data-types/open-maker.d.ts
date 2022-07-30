@@ -1,10 +1,10 @@
-import { HLike, H, HFactory, OpenOrder, OpenOrderFactory, OpenOrderLike, Length, Side, Action, OrderId, CompositeDataFactoryLike, CompositeDataLike } from 'secretary-like';
-import { Frozen, FrozenFactory, FrozenLike } from './frozen';
-export interface OpenMakerLike<H extends HLike<H>> extends OpenOrderLike<H>, OpenMaker.Source<H>, CompositeDataLike {
+import { HLike, H, HFactory, OpenOrder, OpenOrderFactory, Length, Side, Action, OrderId, CompositeDataFactoryLike, CompositeDataLike } from 'secretary-like';
+import { FrozenFactory, Frozen } from './frozen';
+export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H>, OpenMaker.Source<H>, CompositeDataLike {
     behind: H;
-    frozen: FrozenLike<H>;
+    frozen: Frozen<H>;
 }
-declare class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
+declare class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
     private factory;
     price: H;
     quantity: H;
@@ -15,7 +15,7 @@ declare class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
     unfilled: H;
     id: OrderId;
     behind: H;
-    frozen: FrozenLike<H>;
+    frozen: Frozen<H>;
     constructor(source: OpenMaker.Source<H>, factory: OpenMakerFactory<H>, frozenFactory: FrozenFactory<H>);
     toJSON(): unknown;
     toString(): string;
@@ -30,13 +30,13 @@ export declare namespace OpenMaker {
         readonly frozen: Frozen.Snapshot;
     }
 }
-export declare class OpenMakerFactory<H extends HLike<H>> implements CompositeDataFactoryLike<OpenMaker.Source<H>, OpenMakerLike<H>, OpenMaker.Snapshot> {
+export declare class OpenMakerFactory<H extends HLike<H>> implements CompositeDataFactoryLike<OpenMaker.Source<H>, OpenMaker<H>, OpenMaker.Snapshot> {
     private hFactory;
     private frozenFactory;
     private openOrderFactory;
     constructor(hFactory: HFactory<H>, frozenFactory: FrozenFactory<H>, openOrderFactory: OpenOrderFactory<H>);
-    new(source: OpenMaker.Source<H>): OpenMaker<H>;
-    capture(order: OpenMakerLike<H>): OpenMaker.Snapshot;
-    restore(snapshot: OpenMaker.Snapshot): OpenMaker<H>;
+    new(source: OpenMaker.Source<H>): ConcreteOpenMaker<H>;
+    capture(order: OpenMaker<H>): OpenMaker.Snapshot;
+    restore(snapshot: OpenMaker.Snapshot): ConcreteOpenMaker<H>;
 }
 export {};

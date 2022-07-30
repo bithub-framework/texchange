@@ -2,9 +2,9 @@ import { VirtualMachineContextLike } from '../vmctx';
 import { Broadcast } from '../middlewares/broadcast';
 import {
 	HLike,
-	TradeLike,
+	Trade,
 } from 'secretary-like';
-import { DatabaseOrderbookLike } from '../data-types/database-orderbook';
+import { DatabaseOrderbook } from '../data-types/database-orderbook';
 import assert = require('assert');
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
@@ -35,7 +35,7 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 		private matcher: Matcher<H>,
 	) { }
 
-	public updateOrderbook(orderbook: DatabaseOrderbookLike<H>): void {
+	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
 		assert(orderbook.time === this.context.timeline.now());
 		this.progress.updateDatabaseOrderbook(orderbook);
 		this.book.setBasebook(orderbook);
@@ -43,7 +43,7 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 		const orders = [...this.makers];
 		for (const order of orders)
 			this.makers.removeOrder(order.id);
-		const allTrades: TradeLike<H>[] = [];
+		const allTrades: Trade<H>[] = [];
 		for (const order of orders) {
 			const $order = this.context.DataTypes.openOrderFactory.new(order);
 			const trades = this.matcher.$match($order);

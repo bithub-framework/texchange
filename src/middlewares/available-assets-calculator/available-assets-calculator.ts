@@ -1,9 +1,9 @@
 import {
 	HLike,
 	Length,
-	BalancesLike,
-	PositionsLike,
-	PositionLike,
+	Balances,
+	Positions,
+	Position,
 	MarketSpecLike,
 } from 'secretary-like';
 import { VirtualMachineContextLike } from '../../vmctx';
@@ -34,7 +34,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 
 	protected abstract getFinalFrozenBalance(): H;
 
-	public getClosable(): PositionLike<H> {
+	public getClosable(): Position<H> {
 		const totalFrozen = this.makers.getTotalFrozen();
 		const position = this.marginAssets.getPosition();
 		return this.context.DataTypes.positionFactory.new({
@@ -45,7 +45,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 		});
 	}
 
-	public getBalances(): BalancesLike<H> {
+	public getBalances(): Balances<H> {
 		return this.context.DataTypes.balancesFactory.new({
 			balance: this.marginAssets.getBalance(),
 			available: this.getAvailable(),
@@ -53,7 +53,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 		});
 	}
 
-	public getPositions(): PositionsLike<H> {
+	public getPositions(): Positions<H> {
 		return this.context.DataTypes.positionsFactory.new({
 			position: this.marginAssets.getPosition(),
 			closable: this.getClosable(),

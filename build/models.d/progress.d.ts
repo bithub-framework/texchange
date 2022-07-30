@@ -1,8 +1,8 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
-import { DatabaseOrderbookId, DatabaseOrderbookLike } from '../data-types/database-orderbook';
-import { DatabaseTradeId, DatabaseTradeLike } from '../data-types/database-trade';
+import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
+import { DatabaseTradeId, DatabaseTrade } from '../data-types/database-trade';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
     private context;
     userTradeCount: number;
@@ -10,9 +10,9 @@ export declare class Progress<H extends HLike<H>> implements StatefulLike<Progre
     private latestDatabaseTradeId;
     private latestDatabaseOrderbookId;
     constructor(context: VirtualMachineContextLike<H>);
-    updateDatabaseTrades(trades: DatabaseTradeLike<H>[]): void;
+    updateDatabaseTrades(trades: DatabaseTrade<H>[]): void;
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;
-    updateDatabaseOrderbook(orderbook: DatabaseOrderbookLike<H>): void;
+    updateDatabaseOrderbook(orderbook: DatabaseOrderbook<H>): void;
     getLatestDatabaseTradeId(): DatabaseTradeId | null;
     capture(): Progress.Snapshot;
     restore(snapshot: Progress.Snapshot): void;

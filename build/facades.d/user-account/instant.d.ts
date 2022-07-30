@@ -1,5 +1,5 @@
 import { VirtualMachineContextLike } from '../../vmctx';
-import { LimitOrderLike, PositionsLike, BalancesLike, OpenOrderLike, AmendmentLike, HLike } from 'secretary-like';
+import { LimitOrder, Positions, Balances, OpenOrder, Amendment, HLike } from 'secretary-like';
 import { UseCaseMakeOrder } from '../../use-cases.d/make-order';
 import { UseCaseCancelOrder } from '../../use-cases.d/cancel-order';
 import { UseCaseAmendOrder } from '../../use-cases.d/amend-order';
@@ -15,10 +15,10 @@ export declare class Instant<H extends HLike<H>> {
     private useCaseGetBalances;
     private useCaseGetPositions;
     constructor(context: VirtualMachineContextLike<H>, useCaseMakeOrder: UseCaseMakeOrder<H>, useCaseCancelOrder: UseCaseCancelOrder<H>, useCaseAmendOrder: UseCaseAmendOrder<H>, useCaseGetOpenOrders: UseCaseGetOpenOrders<H>, useCaseGetBalances: UseCaseGetBalances<H>, useCaseGetPositions: UseCaseGetPositions<H>);
-    makeOrders(orders: LimitOrderLike<H>[]): (OpenOrderLike<H> | Error)[];
-    cancelOrders(orders: OpenOrderLike<H>[]): OpenOrderLike<H>[];
-    amendOrders(amendments: AmendmentLike<H>[]): (OpenOrderLike<H> | Error)[];
-    getOpenOrders(): OpenOrderLike<H>[];
-    getPositions(): PositionsLike<H>;
-    getBalances(): BalancesLike<H>;
+    makeOrders(orders: LimitOrder<H>[]): (OpenOrder<H> | Error)[];
+    cancelOrders(orders: OpenOrder<H>[]): OpenOrder<H>[];
+    amendOrders(amendments: Amendment<H>[]): (OpenOrder<H> | Error)[];
+    getOpenOrders(): OpenOrder<H>[];
+    getPositions(): Positions<H>;
+    getBalances(): Balances<H>;
 }

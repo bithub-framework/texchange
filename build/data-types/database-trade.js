@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseTradeFactory = void 0;
-class DatabaseTrade {
+class ConcreteDatabaseTrade {
     constructor(source, factory) {
         this.factory = factory;
         ({
@@ -25,7 +25,7 @@ class DatabaseTradeFactory {
         this.tradeFactory = tradeFactory;
     }
     new(source) {
-        return new DatabaseTrade(source, this);
+        return new ConcreteDatabaseTrade(source, this);
     }
     capture(trade) {
         return {

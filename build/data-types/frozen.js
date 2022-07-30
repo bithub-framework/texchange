@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FrozenStatic = exports.FrozenFactory = void 0;
 const secretary_like_1 = require("secretary-like");
-class Frozen {
+class ConcreteFrozen {
     constructor(source, factory, balanceFactory, positionFactory) {
         this.factory = factory;
         this.balance = balanceFactory.new(source.balance);
@@ -21,7 +21,7 @@ class FrozenFactory {
         this.positionFactory = positionFactory;
     }
     new(source) {
-        return new Frozen(source, this, this.balanceFactory, this.positionFactory);
+        return new ConcreteFrozen(source, this, this.balanceFactory, this.positionFactory);
     }
     capture(frozen) {
         return {

@@ -1,8 +1,8 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import { HLike } from 'secretary-like';
 import { StatefulLike } from '../stateful-like';
-import { DatabaseOrderbookId, DatabaseOrderbookLike } from '../data-types/database-orderbook';
-import { DatabaseTradeId, DatabaseTradeLike } from '../data-types/database-trade';
+import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
+import { DatabaseTradeId, DatabaseTrade } from '../data-types/database-trade';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
@@ -20,7 +20,7 @@ export class Progress<H extends HLike<H>>
         private context: VirtualMachineContextLike<H>,
     ) { }
 
-    public updateDatabaseTrades(trades: DatabaseTradeLike<H>[]): void {
+    public updateDatabaseTrades(trades: DatabaseTrade<H>[]): void {
         this.latestDatabaseTradeId = trades[trades.length - 1].id;
     }
 
@@ -28,7 +28,7 @@ export class Progress<H extends HLike<H>>
         return this.latestDatabaseOrderbookId;
     }
 
-    public updateDatabaseOrderbook(orderbook: DatabaseOrderbookLike<H>): void {
+    public updateDatabaseOrderbook(orderbook: DatabaseOrderbook<H>): void {
         this.latestDatabaseOrderbookId = orderbook.id;
     }
 

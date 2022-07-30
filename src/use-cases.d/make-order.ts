@@ -1,8 +1,8 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import {
-	LimitOrderLike,
+	LimitOrder,
 	HLike,
-	OpenOrderLike,
+	OpenOrder,
 } from 'secretary-like';
 import { Progress } from '../models.d/progress';
 import { Book } from '../models.d/book';
@@ -37,8 +37,8 @@ export class UseCaseMakeOrder<H extends HLike<H>> {
 		private matcher: Matcher<H>,
 	) { }
 
-	public makeOrder(limitOrder: LimitOrderLike<H>): OpenOrderLike<H> {
-		const order: OpenOrderLike<H> = this.context.DataTypes.openOrderFactory.new({
+	public makeOrder(limitOrder: LimitOrder<H>): OpenOrder<H> {
+		const order: OpenOrder<H> = this.context.DataTypes.openOrderFactory.new({
 			...limitOrder,
 			id: ++this.progress.userOrderCount,
 			filled: this.context.DataTypes.hFactory.from(0),

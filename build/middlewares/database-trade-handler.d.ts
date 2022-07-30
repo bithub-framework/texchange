@@ -1,4 +1,4 @@
-import { HLike, TradeLike, MarketSpecLike, AccountSpecLike } from 'secretary-like';
+import { HLike, Trade, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { MarginAssets } from '../models.d/margin-assets';
@@ -9,7 +9,7 @@ export declare class DatabaseTradeHandler<H extends HLike<H>> {
     private marginAssets;
     private makers;
     constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, marginAssets: MarginAssets<H>, makers: Makers<H>);
-    tradeTakesOpenMakers(trade: TradeLike<H>): void;
+    tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;
     private $tradeTakesOpenMaker;

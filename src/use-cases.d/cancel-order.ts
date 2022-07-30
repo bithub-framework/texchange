@@ -1,6 +1,6 @@
 import {
 	HLike,
-	OpenOrderLike,
+	OpenOrder,
 } from 'secretary-like';
 import { Makers } from '../models.d/makers/makers';
 import { ContextLike } from 'secretary-like';
@@ -18,7 +18,7 @@ export class UseCaseCancelOrder<H extends HLike<H>> {
 		private makers: Makers<H>,
 	) { }
 
-	public cancelOrder(order: OpenOrderLike<H>): OpenOrderLike<H> {
+	public cancelOrder(order: OpenOrder<H>): OpenOrder<H> {
 		let filled: H;
 		try {
 			filled = this.makers.getOrder(order.id).filled;
