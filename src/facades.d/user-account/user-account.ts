@@ -61,7 +61,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		});
 	}
 
-	public async makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]> {
+	public async makeOrders($orders: LimitOrder.Source<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
 			const orders = $orders.map(order => this.vMCTX.DataTypes.limitOrderFactory.new(order));
 			await this.vMCTX.timeline.sleep(this.config.ping);
@@ -76,7 +76,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]> {
+	public async amendOrders($amendments: Amendment.Source<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
 			const amendments = $amendments.map(amendment => this.vMCTX.DataTypes.amendmentFactory.new(amendment));
 			await this.vMCTX.timeline.sleep(this.config.ping);
@@ -91,7 +91,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		}
 	}
 
-	public async cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]> {
+	public async cancelOrders($orders: OpenOrder.Source<H>[]): Promise<OpenOrder<H>[]> {
 		try {
 			const orders = $orders.map(order => this.vMCTX.DataTypes.openOrderFactory.new(order));
 			await this.vMCTX.timeline.sleep(this.config.ping);
