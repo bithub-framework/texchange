@@ -1,4 +1,4 @@
-import { HLike, OpenOrder, OrderId, MarketSpecLike } from 'secretary-like';
+import { HLike, OpenOrder, OrderId, MarketSpecLike, AccountSpecLike } from 'secretary-like';
 import { OpenMaker } from '../../data-types/open-maker';
 import { Frozen } from '../../data-types/frozen';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
@@ -7,11 +7,12 @@ import { StatefulLike } from '../../stateful-like';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
     protected context: VirtualMachineContextLike<H>;
     protected marketSpec: MarketSpecLike<H>;
+    protected accountSpec: AccountSpecLike;
     private $orders;
     private $totalUnfilled;
     protected totalUnfilledFactory: TotalUnfilledFactory<H>;
     private totalFrozen;
-    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>);
+    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike);
     getTotalUnfilled(): TotalUnfilled<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<OpenMaker<H>>;

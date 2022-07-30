@@ -16,9 +16,10 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Makers = class Makers {
-    constructor(context, marketSpec) {
+    constructor(context, marketSpec, accountSpec) {
         this.context = context;
         this.marketSpec = marketSpec;
+        this.accountSpec = accountSpec;
         this.$orders = new Map();
         this.$totalUnfilled = {
             [secretary_like_1.Side.BID]: context.DataTypes.hFactory.from(0),
@@ -112,7 +113,8 @@ let Makers = class Makers {
 };
 Makers = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec))
 ], Makers);
 exports.Makers = Makers;
 //# sourceMappingURL=makers.js.map
