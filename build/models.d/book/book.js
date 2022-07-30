@@ -16,12 +16,12 @@ const decrements_1 = require("./decrements");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Book = class Book {
-    constructor(context, marketSpec) {
-        this.context = context;
+    constructor(vMCTX, marketSpec) {
+        this.vMCTX = vMCTX;
         this.marketSpec = marketSpec;
-        this.Decrements = new decrements_1.DecrementsFactory(this.context.DataTypes.hFactory);
+        this.Decrements = new decrements_1.DecrementsFactory(this.vMCTX.DataTypes.hFactory);
         this.time = Number.NEGATIVE_INFINITY;
-        this.basebook = this.context.DataTypes.orderbookFactory.new({
+        this.basebook = this.vMCTX.DataTypes.orderbookFactory.new({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: Number.NEGATIVE_INFINITY,
@@ -33,7 +33,7 @@ let Book = class Book {
         this.finalbookCache = null;
     }
     setBasebook(basebook) {
-        assert(basebook.time === this.context.timeline.now());
+        assert(basebook.time === this.vMCTX.timeline.now());
         this.basebook = basebook;
         this.time = basebook.time;
         this.finalbookCache = null;
@@ -42,16 +42,16 @@ let Book = class Book {
         assert(decrement.gt(0));
         const priceString = price.toFixed(this.marketSpec.PRICE_SCALE);
         const oldTotalDecrement = this.decrements[side].get(priceString)
-            || this.context.DataTypes.hFactory.from(0);
+            || this.vMCTX.DataTypes.hFactory.from(0);
         const newTotalDecrement = oldTotalDecrement.plus(decrement);
         this.decrements[side].set(priceString, newTotalDecrement);
-        this.time = this.context.timeline.now();
+        this.time = this.vMCTX.timeline.now();
         this.finalbookCache = null;
     }
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
-        const $final = this.context.DataTypes.orderbookFactory.new({
+        const $final = this.vMCTX.DataTypes.orderbookFactory.new({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: this.time,
@@ -76,8 +76,8 @@ let Book = class Book {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final[side] = [...$total[side]].map(([priceString, quantity]) => this.context.DataTypes.bookOrderFactory.new({
-                price: this.context.DataTypes.hFactory.from(priceString),
+            $final[side] = [...$total[side]].map(([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.new({
+                price: this.vMCTX.DataTypes.hFactory.from(priceString),
                 quantity,
                 side,
             }));
@@ -89,7 +89,7 @@ let Book = class Book {
     }
     lineUp(order) {
         const makers = this.getOrderbook()[order.side];
-        let behind = this.context.DataTypes.hFactory.from(0);
+        let behind = this.vMCTX.DataTypes.hFactory.from(0);
         for (const maker of makers)
             if (maker.price.eq(order.price))
                 behind = behind.plus(maker.quantity);
@@ -97,7 +97,7 @@ let Book = class Book {
     }
     capture() {
         return {
-            basebook: this.context.DataTypes.orderbookFactory.capture(this.basebook),
+            basebook: this.vMCTX.DataTypes.orderbookFactory.capture(this.basebook),
             decrements: this.Decrements.capture(this.decrements),
             time: Number.isFinite(this.time)
                 ? this.time
@@ -105,7 +105,7 @@ let Book = class Book {
         };
     }
     restore(snapshot) {
-        this.basebook = this.context.DataTypes.orderbookFactory.restore(snapshot.basebook);
+        this.basebook = this.vMCTX.DataTypes.orderbookFactory.restore(snapshot.basebook);
         this.decrements = this.Decrements.restore(snapshot.decrements);
         this.time = snapshot.time === null
             ? Number.NEGATIVE_INFINITY
@@ -114,7 +114,7 @@ let Book = class Book {
     }
 };
 Book = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec))
 ], Book);
 exports.Book = Book;

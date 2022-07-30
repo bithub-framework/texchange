@@ -15,8 +15,8 @@ const startable_1 = require("startable");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let AdminFacade = class AdminFacade {
-    constructor(context, marketSpec, accountSpec, marginAssets, book, makers, pricing, progress, broadcast, mtm, useCaseUpdateTrades, useCaseUpdateOrderbook, useCaseGetProgress) {
-        this.context = context;
+    constructor(vMCTX, marketSpec, accountSpec, marginAssets, book, makers, pricing, progress, broadcast, mtm, useCaseUpdateTrades, useCaseUpdateOrderbook, useCaseGetProgress) {
+        this.vMCTX = vMCTX;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.marginAssets = marginAssets;
@@ -44,10 +44,10 @@ let AdminFacade = class AdminFacade {
         return this.accountSpec;
     }
     updateTrades($trades) {
-        this.useCaseUpdateTrades.updateTrades($trades.map(trade => this.context.DataTypes.databaseTradeFactory.new(trade)));
+        this.useCaseUpdateTrades.updateTrades($trades.map(trade => this.vMCTX.DataTypes.databaseTradeFactory.new(trade)));
     }
     updateOrderbook($orderbook) {
-        this.useCaseUpdateOrderbook.updateOrderbook(this.context.DataTypes.databaseOrderbookFactory.new($orderbook));
+        this.useCaseUpdateOrderbook.updateOrderbook(this.vMCTX.DataTypes.databaseOrderbookFactory.new($orderbook));
     }
     getLatestDatabaseOrderbookId() {
         return this.useCaseGetProgress.getLatestDatabaseOrderbookId();
@@ -89,7 +89,7 @@ let AdminFacade = class AdminFacade {
     }
 };
 AdminFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),

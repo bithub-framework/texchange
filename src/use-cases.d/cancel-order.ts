@@ -12,8 +12,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseCancelOrder<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: ContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: ContextLike<H>,
 		@inject(TYPES.MODELS.makers)
 		private makers: Makers<H>,
 	) { }
@@ -27,7 +27,7 @@ export class UseCaseCancelOrder<H extends HLike<H>> {
 			filled = order.quantity;
 		}
 
-		return this.context.DataTypes.openOrderFactory.new({
+		return this.vMCTX.DataTypes.openOrderFactory.new({
 			...order,
 			filled,
 			unfilled: order.quantity.minus(filled),

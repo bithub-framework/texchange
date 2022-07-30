@@ -2,9 +2,9 @@ import { HLike, H, Trade } from 'secretary-like';
 import { Pricing } from './pricing';
 import { VirtualMachineContextLike } from '../../vmctx';
 export declare class DefaultPricing<H extends HLike<H>> extends Pricing<H, DefaultPricing.Snapshot> {
-    private context;
+    private vMCTX;
     private settlementPrice;
-    constructor(context: VirtualMachineContextLike<H>, settlementPrice: H);
+    constructor(vMCTX: VirtualMachineContextLike<H>, settlementPrice: H);
     updateTrades(trades: Trade<H>[]): void;
     getSettlementPrice(): H;
     capture(): DefaultPricing.Snapshot;

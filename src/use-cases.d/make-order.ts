@@ -19,8 +19,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseMakeOrder<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.MODELS.progress)
 		private progress: Progress<H>,
 		@inject(TYPES.MODELS.book)
@@ -38,17 +38,17 @@ export class UseCaseMakeOrder<H extends HLike<H>> {
 	) { }
 
 	public makeOrder(limitOrder: LimitOrder<H>): OpenOrder<H> {
-		const order: OpenOrder<H> = this.context.DataTypes.openOrderFactory.new({
+		const order: OpenOrder<H> = this.vMCTX.DataTypes.openOrderFactory.new({
 			...limitOrder,
 			id: ++this.progress.userOrderCount,
-			filled: this.context.DataTypes.hFactory.from(0),
+			filled: this.vMCTX.DataTypes.hFactory.from(0),
 			unfilled: limitOrder.quantity,
 		});
 		this.validator.validateOrder(order);
 
-		const $order = this.context.DataTypes.openOrderFactory.new(order);
+		const $order = this.vMCTX.DataTypes.openOrderFactory.new(order);
 		const trades = this.matcher.$match($order);
-		const maker = this.context.DataTypes.openOrderFactory.new($order);
+		const maker = this.vMCTX.DataTypes.openOrderFactory.new($order);
 		if ($order.unfilled.gt(0)) {
 			const behind = this.book.lineUp(maker);
 			this.makers.appendOrder(maker, behind);

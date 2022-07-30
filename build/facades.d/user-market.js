@@ -14,9 +14,9 @@ const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
-    constructor(context, marketSpec, useCaseSubscription, config) {
+    constructor(vMCTX, marketSpec, useCaseSubscription, config) {
         super();
-        this.context = context;
+        this.vMCTX = vMCTX;
         this.marketSpec = marketSpec;
         this.useCaseSubscription = useCaseSubscription;
         this.config = config;
@@ -27,24 +27,24 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
         this.MARKET_NAME = this.marketSpec.MARKET_NAME;
         this.useCaseSubscription.on('orderbook', async (orderbook) => {
             try {
-                await this.context.timeline.sleep(this.config.processing);
-                await this.context.timeline.sleep(this.config.ping);
-                this.emit('orderbook', this.context.DataTypes.orderbookFactory.new(orderbook));
+                await this.vMCTX.timeline.sleep(this.config.processing);
+                await this.vMCTX.timeline.sleep(this.config.ping);
+                this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.new(orderbook));
             }
             catch (err) { }
         });
         this.useCaseSubscription.on('trades', async (trades) => {
             try {
-                await this.context.timeline.sleep(this.config.processing);
-                await this.context.timeline.sleep(this.config.ping);
-                this.emit('trades', trades.map(trade => this.context.DataTypes.tradeFactory.new(trade)));
+                await this.vMCTX.timeline.sleep(this.config.processing);
+                await this.vMCTX.timeline.sleep(this.config.ping);
+                this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.new(trade)));
             }
             catch (err) { }
         });
         this.useCaseSubscription.on('error', async (err) => {
             try {
-                await this.context.timeline.sleep(this.config.processing);
-                await this.context.timeline.sleep(this.config.ping);
+                await this.vMCTX.timeline.sleep(this.config.processing);
+                await this.vMCTX.timeline.sleep(this.config.ping);
                 this.emit('error', err);
             }
             catch (err) { }
@@ -59,7 +59,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
     }
 };
 UserMarketFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))

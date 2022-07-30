@@ -13,8 +13,8 @@ exports.UseCaseMakeOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseMakeOrder = class UseCaseMakeOrder {
-    constructor(context, progress, book, makers, validator, broadcast, calculator, matcher) {
-        this.context = context;
+    constructor(vMCTX, progress, book, makers, validator, broadcast, calculator, matcher) {
+        this.vMCTX = vMCTX;
         this.progress = progress;
         this.book = book;
         this.makers = makers;
@@ -24,16 +24,16 @@ let UseCaseMakeOrder = class UseCaseMakeOrder {
         this.matcher = matcher;
     }
     makeOrder(limitOrder) {
-        const order = this.context.DataTypes.openOrderFactory.new({
+        const order = this.vMCTX.DataTypes.openOrderFactory.new({
             ...limitOrder,
             id: ++this.progress.userOrderCount,
-            filled: this.context.DataTypes.hFactory.from(0),
+            filled: this.vMCTX.DataTypes.hFactory.from(0),
             unfilled: limitOrder.quantity,
         });
         this.validator.validateOrder(order);
-        const $order = this.context.DataTypes.openOrderFactory.new(order);
+        const $order = this.vMCTX.DataTypes.openOrderFactory.new(order);
         const trades = this.matcher.$match($order);
-        const maker = this.context.DataTypes.openOrderFactory.new($order);
+        const maker = this.vMCTX.DataTypes.openOrderFactory.new($order);
         if ($order.unfilled.gt(0)) {
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);
@@ -48,7 +48,7 @@ let UseCaseMakeOrder = class UseCaseMakeOrder {
     }
 };
 UseCaseMakeOrder = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),

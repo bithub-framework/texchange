@@ -13,8 +13,8 @@ exports.Progress = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let Progress = class Progress {
-    constructor(context) {
-        this.context = context;
+    constructor(vMCTX) {
+        this.vMCTX = vMCTX;
         this.userTradeCount = 0;
         this.userOrderCount = 0;
         this.latestDatabaseTradeId = null;
@@ -48,7 +48,7 @@ let Progress = class Progress {
     }
 };
 Progress = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX))
 ], Progress);
 exports.Progress = Progress;
 //# sourceMappingURL=progress.js.map

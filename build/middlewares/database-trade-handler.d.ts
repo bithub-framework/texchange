@@ -3,12 +3,12 @@ import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { MarginAssets } from '../models.d/margin-assets';
 export declare class DatabaseTradeHandler<H extends HLike<H>> {
-    private context;
+    private vMCTX;
     private marketSpec;
     private accountSpec;
     private marginAssets;
     private makers;
-    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, makers: Makers<H>);
+    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, makers: Makers<H>);
     tradeTakesOpenMakers(trade: Trade<H>): void;
     private $tradeShouldTakeOpenOrder;
     private $tradeTakesOrderQueue;

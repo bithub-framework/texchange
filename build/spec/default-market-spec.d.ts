@@ -9,7 +9,7 @@ export declare class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec
     CURRENCY_SCALE: number;
     MARKET_NAME: string;
     TICK_SIZE: H;
-    constructor(context: VirtualMachineContextLike<H>);
+    constructor(vMCTX: VirtualMachineContextLike<H>);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }

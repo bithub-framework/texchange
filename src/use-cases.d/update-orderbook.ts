@@ -19,8 +19,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.MODELS.book)
 		private book: Book<H>,
 		@inject(TYPES.MODELS.progress)
@@ -36,7 +36,7 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 	) { }
 
 	public updateOrderbook(orderbook: DatabaseOrderbook<H>): void {
-		assert(orderbook.time === this.context.timeline.now());
+		assert(orderbook.time === this.vMCTX.timeline.now());
 		this.progress.updateDatabaseOrderbook(orderbook);
 		this.book.setBasebook(orderbook);
 
@@ -45,9 +45,9 @@ export class UseCaseUpdateOrderbook<H extends HLike<H>>{
 			this.makers.removeOrder(order.id);
 		const allTrades: Trade<H>[] = [];
 		for (const order of orders) {
-			const $order = this.context.DataTypes.openOrderFactory.new(order);
+			const $order = this.vMCTX.DataTypes.openOrderFactory.new(order);
 			const trades = this.matcher.$match($order);
-			const maker = this.context.DataTypes.openOrderFactory.new($order);
+			const maker = this.vMCTX.DataTypes.openOrderFactory.new($order);
 			const behind = this.book.lineUp(maker);
 			this.makers.appendOrder(maker, behind);
 

@@ -17,8 +17,8 @@ import { inject } from '@zimtsui/injektor';
 
 export class Matcher<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
@@ -35,8 +35,8 @@ export class Matcher<H extends HLike<H>> {
 		const orderbook = this.book.getOrderbook();
 
 		const trades: Trade<H>[] = [];
-		let volume = this.context.DataTypes.hFactory.from(0);
-		let dollarVolume = this.context.DataTypes.hFactory.from(0);
+		let volume = this.vMCTX.DataTypes.hFactory.from(0);
+		let dollarVolume = this.vMCTX.DataTypes.hFactory.from(0);
 		for (const maker of orderbook[Side.invert($taker.side)])
 			if (
 				(
@@ -44,18 +44,18 @@ export class Matcher<H extends HLike<H>> {
 					$taker.side === Side.ASK && $taker.price.lte(maker.price)
 				) && $taker.unfilled.gt(0)
 			) {
-				const quantity = this.context.DataTypes.H.min($taker.unfilled, maker.quantity);
+				const quantity = this.vMCTX.DataTypes.H.min($taker.unfilled, maker.quantity);
 				this.book.decQuantity(maker.side, maker.price, quantity);
 				$taker.filled = $taker.filled.plus(quantity);
 				$taker.unfilled = $taker.unfilled.minus(quantity);
 				volume = volume.plus(quantity);
 				dollarVolume = dollarVolume
 					.plus(this.marketSpec.dollarVolume(maker.price, quantity));
-				trades.push(this.context.DataTypes.tradeFactory.new({
+				trades.push(this.vMCTX.DataTypes.tradeFactory.new({
 					side: $taker.side,
 					price: maker.price,
 					quantity,
-					time: this.context.timeline.now(),
+					time: this.vMCTX.timeline.now(),
 					id: ++this.progress.userTradeCount,
 				}));
 			}

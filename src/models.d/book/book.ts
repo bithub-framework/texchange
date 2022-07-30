@@ -15,10 +15,10 @@ import { TYPES } from '../../injection/types';
 
 
 export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
-	private Decrements = new DecrementsFactory<H>(this.context.DataTypes.hFactory);
+	private Decrements = new DecrementsFactory<H>(this.vMCTX.DataTypes.hFactory);
 
 	private time = Number.NEGATIVE_INFINITY;
-	private basebook: Orderbook<H> = this.context.DataTypes.orderbookFactory.new({
+	private basebook: Orderbook<H> = this.vMCTX.DataTypes.orderbookFactory.new({
 		[Side.BID]: [],
 		[Side.ASK]: [],
 		time: Number.NEGATIVE_INFINITY,
@@ -30,15 +30,15 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private finalbookCache: Orderbook<H> | null = null;
 
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 	) {
 	}
 
 	public setBasebook(basebook: Orderbook<H>): void {
-		assert(basebook.time === this.context.timeline.now());
+		assert(basebook.time === this.vMCTX.timeline.now());
 		this.basebook = basebook;
 		this.time = basebook.time;
 		this.finalbookCache = null;
@@ -52,17 +52,17 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		assert(decrement.gt(0));
 		const priceString = price.toFixed(this.marketSpec.PRICE_SCALE);
 		const oldTotalDecrement = this.decrements[side].get(priceString)
-			|| this.context.DataTypes.hFactory.from(0);
+			|| this.vMCTX.DataTypes.hFactory.from(0);
 		const newTotalDecrement = oldTotalDecrement.plus(decrement);
 		this.decrements[side].set(priceString, newTotalDecrement);
-		this.time = this.context.timeline.now();
+		this.time = this.vMCTX.timeline.now();
 		this.finalbookCache = null;
 	}
 
 	private tryApply(): Orderbook<H> {
 		if (this.finalbookCache) return this.finalbookCache;
 
-		const $final = this.context.DataTypes.orderbookFactory.new({
+		const $final = this.vMCTX.DataTypes.orderbookFactory.new({
 			[Side.BID]: [],
 			[Side.ASK]: [],
 			time: this.time,
@@ -87,8 +87,8 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 			}
 			// 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
 			$final[side] = [...$total[side]].map(
-				([priceString, quantity]) => this.context.DataTypes.bookOrderFactory.new({
-					price: this.context.DataTypes.hFactory.from(priceString),
+				([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.new({
+					price: this.vMCTX.DataTypes.hFactory.from(priceString),
 					quantity,
 					side,
 				}),
@@ -103,7 +103,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 
 	public lineUp(order: OpenOrder<H>): H {
 		const makers = this.getOrderbook()[order.side];
-		let behind = this.context.DataTypes.hFactory.from(0);
+		let behind = this.vMCTX.DataTypes.hFactory.from(0);
 		for (const maker of makers)
 			if (maker.price.eq(order.price))
 				behind = behind.plus(maker.quantity);
@@ -112,7 +112,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 
 	public capture(): Book.Snapshot {
 		return {
-			basebook: this.context.DataTypes.orderbookFactory.capture(this.basebook),
+			basebook: this.vMCTX.DataTypes.orderbookFactory.capture(this.basebook),
 			decrements: this.Decrements.capture(this.decrements),
 			time: Number.isFinite(this.time)
 				? this.time
@@ -121,7 +121,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	}
 
 	public restore(snapshot: Book.Snapshot): void {
-		this.basebook = this.context.DataTypes.orderbookFactory.restore(snapshot.basebook);
+		this.basebook = this.vMCTX.DataTypes.orderbookFactory.restore(snapshot.basebook);
 		this.decrements = this.Decrements.restore(snapshot.decrements);
 		this.time = snapshot.time === null
 			? Number.NEGATIVE_INFINITY

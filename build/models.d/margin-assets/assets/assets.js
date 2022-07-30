@@ -16,39 +16,39 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../../injection/types");
 let Assets = class Assets {
-    constructor(context, marketSpec, balance) {
-        this.context = context;
+    constructor(vMCTX, marketSpec, balance) {
+        this.vMCTX = vMCTX;
         this.marketSpec = marketSpec;
         this.balance = balance;
-        this.Cost = new cost_1.CostFactory(this.context.DataTypes.hFactory);
-        this.$position = this.context.DataTypes.positionFactory.new({
-            [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
-            [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
+        this.Cost = new cost_1.CostFactory(this.vMCTX.DataTypes.hFactory);
+        this.$position = this.vMCTX.DataTypes.positionFactory.new({
+            [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
         });
         this.$cost = {
-            [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
-            [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0)
+            [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0)
         };
     }
     getBalance() {
         return this.balance;
     }
     getPosition() {
-        return this.context.DataTypes.positionFactory.new(this.$position);
+        return this.vMCTX.DataTypes.positionFactory.new(this.$position);
     }
     getCost() {
         return this.Cost.copy(this.$cost);
     }
     capture() {
         return {
-            position: this.context.DataTypes.positionFactory.capture(this.$position),
+            position: this.vMCTX.DataTypes.positionFactory.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
-            balance: this.context.DataTypes.hFactory.capture(this.balance),
+            balance: this.vMCTX.DataTypes.hFactory.capture(this.balance),
         };
     }
     restore(snapshot) {
-        this.balance = this.context.DataTypes.hFactory.restore(snapshot.balance);
-        this.$position = this.context.DataTypes.positionFactory.restore(snapshot.position);
+        this.balance = this.vMCTX.DataTypes.hFactory.restore(snapshot.balance);
+        this.$position = this.vMCTX.DataTypes.positionFactory.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
     pay(fee) {
@@ -68,7 +68,7 @@ let Assets = class Assets {
             ? this.$cost[length]
                 .times(volume)
                 .div(this.$position[length], this.marketSpec.CURRENCY_SCALE)
-            : this.context.DataTypes.hFactory.from(0);
+            : this.vMCTX.DataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost)
             .times(length === secretary_like_1.Length.LONG ? 1 : -1);
         this.$position[length] = this.$position[length].minus(volume);
@@ -92,7 +92,7 @@ let Assets = class Assets {
     }
 };
 Assets = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialBalance))
 ], Assets);

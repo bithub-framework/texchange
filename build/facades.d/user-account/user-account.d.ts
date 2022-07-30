@@ -5,7 +5,7 @@ import { Instant } from './instant';
 import { Config } from '../config';
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
 export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter implements AccountApiLike<H> {
-    private context;
+    private vMCTX;
     private accountSpec;
     private useCaseSubscription;
     private instant;
@@ -17,7 +17,7 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     LEVERAGE: number;
     TAKER_FEE_RATE: number;
     MAKER_FEE_RATE: number;
-    constructor(context: VirtualMachineContextLike<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, config: Config);
+    constructor(vMCTX: VirtualMachineContextLike<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, config: Config);
     makeOrders($orders: LimitOrder<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     cancelOrders($orders: OpenOrder<H>[]): Promise<OpenOrder<H>[]>;

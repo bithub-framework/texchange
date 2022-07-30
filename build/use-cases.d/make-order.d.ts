@@ -8,7 +8,7 @@ import { Broadcast } from '../middlewares/broadcast';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { Matcher } from '../middlewares/matcher';
 export declare class UseCaseMakeOrder<H extends HLike<H>> {
-    private context;
+    private vMCTX;
     private progress;
     private book;
     private makers;
@@ -16,6 +16,6 @@ export declare class UseCaseMakeOrder<H extends HLike<H>> {
     private broadcast;
     private calculator;
     private matcher;
-    constructor(context: VirtualMachineContextLike<H>, progress: Progress<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
+    constructor(vMCTX: VirtualMachineContextLike<H>, progress: Progress<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     makeOrder(limitOrder: LimitOrder<H>): OpenOrder<H>;
 }

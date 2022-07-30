@@ -4,12 +4,12 @@ import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets';
 export declare class Matcher<H extends HLike<H>> {
-    private context;
+    private vMCTX;
     private marketSpec;
     private accountSpec;
     private book;
     private marginAssets;
     private progress;
-    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, book: Book<H>, marginAssets: MarginAssets<H>, progress: Progress<H>);
+    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, book: Book<H>, marginAssets: MarginAssets<H>, progress: Progress<H>);
     $match($taker: OpenOrder<H>): Trade<H>[];
 }

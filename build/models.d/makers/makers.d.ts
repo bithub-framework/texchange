@@ -5,14 +5,14 @@ import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 export declare abstract class Makers<H extends HLike<H>> implements StatefulLike<Makers.Snapshot>, Iterable<OpenMaker<H>> {
-    protected context: VirtualMachineContextLike<H>;
+    protected vMCTX: VirtualMachineContextLike<H>;
     protected marketSpec: MarketSpec<H>;
     protected accountSpec: AccountSpec;
     private $orders;
     private $totalUnfilled;
     protected totalUnfilledFactory: TotalUnfilledFactory<H>;
     private totalFrozen;
-    constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec);
+    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec);
     getTotalUnfilled(): TotalUnfilled<H>;
     getTotalFrozen(): Frozen<H>;
     [Symbol.iterator](): IterableIterator<OpenMaker<H>>;

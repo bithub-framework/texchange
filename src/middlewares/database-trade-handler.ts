@@ -18,8 +18,8 @@ import { TYPES } from '../injection/types';
 
 export class DatabaseTradeHandler<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
@@ -31,7 +31,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 	) { }
 
 	public tradeTakesOpenMakers(trade: Trade<H>): void {
-		const $trade = this.context.DataTypes.tradeFactory.new(trade);
+		const $trade = this.vMCTX.DataTypes.tradeFactory.new(trade);
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);
@@ -58,7 +58,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		maker: OpenMaker<H>,
 	): void {
 		if ($trade.price.eq(maker.price)) {
-			const volume = this.context.DataTypes.H.min($trade.quantity, maker.behind);
+			const volume = this.vMCTX.DataTypes.H.min($trade.quantity, maker.behind);
 			$trade.quantity = $trade.quantity.minus(volume);
 			this.makers.takeOrderQueue(maker.id, volume);
 		} else this.makers.takeOrderQueue(maker.id);
@@ -68,7 +68,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 		$trade: Trade<H>,
 		maker: OpenMaker<H>,
 	): void {
-		const volume = this.context.DataTypes.H.min($trade.quantity, maker.unfilled);
+		const volume = this.vMCTX.DataTypes.H.min($trade.quantity, maker.unfilled);
 		const dollarVolume = this.marketSpec
 			.dollarVolume(maker.price, volume);
 		$trade.quantity = $trade.quantity.minus(volume);

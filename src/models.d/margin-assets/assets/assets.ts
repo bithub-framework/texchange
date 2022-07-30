@@ -15,26 +15,26 @@ import { TYPES } from '../../../injection/types';
 
 
 export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
-    private Cost = new CostFactory<H>(this.context.DataTypes.hFactory);
+    private Cost = new CostFactory<H>(this.vMCTX.DataTypes.hFactory);
 
     private $position: Position<H>;
     private $cost: Cost<H>;
 
     public constructor(
-        @inject(TYPES.vmctx)
-        protected context: VirtualMachineContextLike<H>,
+        @inject(TYPES.vMCTX)
+        protected vMCTX: VirtualMachineContextLike<H>,
         @inject(TYPES.marketSpec)
         protected marketSpec: MarketSpec<H>,
         @inject(TYPES.MODELS.initialBalance)
         protected balance: H,
     ) {
-        this.$position = this.context.DataTypes.positionFactory.new({
-            [Length.LONG]: this.context.DataTypes.hFactory.from(0),
-            [Length.SHORT]: this.context.DataTypes.hFactory.from(0),
+        this.$position = this.vMCTX.DataTypes.positionFactory.new({
+            [Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
+            [Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
         });
         this.$cost = {
-            [Length.LONG]: this.context.DataTypes.hFactory.from(0),
-            [Length.SHORT]: this.context.DataTypes.hFactory.from(0)
+            [Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
+            [Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0)
         };
     }
 
@@ -43,7 +43,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
     }
 
     public getPosition(): Position<H> {
-        return this.context.DataTypes.positionFactory.new(this.$position);
+        return this.vMCTX.DataTypes.positionFactory.new(this.$position);
     }
 
     public getCost(): Cost<H> {
@@ -52,15 +52,15 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
 
     public capture(): Assets.Snapshot {
         return {
-            position: this.context.DataTypes.positionFactory.capture(this.$position),
+            position: this.vMCTX.DataTypes.positionFactory.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
-            balance: this.context.DataTypes.hFactory.capture(this.balance),
+            balance: this.vMCTX.DataTypes.hFactory.capture(this.balance),
         };
     }
 
     public restore(snapshot: Assets.Snapshot): void {
-        this.balance = this.context.DataTypes.hFactory.restore(snapshot.balance);
-        this.$position = this.context.DataTypes.positionFactory.restore(snapshot.position);
+        this.balance = this.vMCTX.DataTypes.hFactory.restore(snapshot.balance);
+        this.$position = this.vMCTX.DataTypes.positionFactory.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
     }
 
@@ -91,7 +91,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
             ? this.$cost[length]
                 .times(volume)
                 .div(this.$position[length], this.marketSpec.CURRENCY_SCALE)
-            : this.context.DataTypes.hFactory.from(0);
+            : this.vMCTX.DataTypes.hFactory.from(0);
         const profit = dollarVolume.minus(cost)
             .times(length === Length.LONG ? 1 : -1);
         this.$position[length] = this.$position[length].minus(volume);

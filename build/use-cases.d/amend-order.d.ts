@@ -7,13 +7,13 @@ import { Broadcast } from '../middlewares/broadcast';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { Matcher } from '../middlewares/matcher';
 export declare class UseCaseAmendOrder<H extends HLike<H>> {
-    private context;
+    private vMCTX;
     private book;
     private makers;
     private validator;
     private broadcast;
     private calculator;
     private matcher;
-    constructor(context: VirtualMachineContextLike<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
+    constructor(vMCTX: VirtualMachineContextLike<H>, book: Book<H>, makers: Makers<H>, validator: OrderValidator<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     amendOrder(amendment: Amendment<H>): OpenOrder<H>;
 }

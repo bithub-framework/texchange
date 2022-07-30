@@ -13,8 +13,8 @@ exports.Instant = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Instant = class Instant {
-    constructor(context, useCaseMakeOrder, useCaseCancelOrder, useCaseAmendOrder, useCaseGetOpenOrders, useCaseGetBalances, useCaseGetPositions) {
-        this.context = context;
+    constructor(vMCTX, useCaseMakeOrder, useCaseCancelOrder, useCaseAmendOrder, useCaseGetOpenOrders, useCaseGetBalances, useCaseGetPositions) {
+        this.vMCTX = vMCTX;
         this.useCaseMakeOrder = useCaseMakeOrder;
         this.useCaseCancelOrder = useCaseCancelOrder;
         this.useCaseAmendOrder = useCaseAmendOrder;
@@ -56,7 +56,7 @@ let Instant = class Instant {
     }
 };
 Instant = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.makeOrder)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.cancelOrder)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.amendOrder)),

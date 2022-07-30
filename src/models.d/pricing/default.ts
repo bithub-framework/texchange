@@ -15,8 +15,8 @@ export class DefaultPricing<H extends HLike<H>>
 	extends Pricing<H, DefaultPricing.Snapshot> {
 
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.initialSettlementPrice)
 		private settlementPrice: H,
 	) { super(); }
@@ -30,11 +30,11 @@ export class DefaultPricing<H extends HLike<H>>
 	}
 
 	public capture(): DefaultPricing.Snapshot {
-		return this.context.DataTypes.hFactory.capture(this.settlementPrice);
+		return this.vMCTX.DataTypes.hFactory.capture(this.settlementPrice);
 	}
 
 	public restore(snapshot: DefaultPricing.Snapshot): void {
-		this.settlementPrice = this.context.DataTypes.hFactory.restore(snapshot);
+		this.settlementPrice = this.vMCTX.DataTypes.hFactory.restore(snapshot);
 	}
 }
 

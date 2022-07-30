@@ -13,8 +13,8 @@ exports.UseCaseCancelOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseCancelOrder = class UseCaseCancelOrder {
-    constructor(context, makers) {
-        this.context = context;
+    constructor(vMCTX, makers) {
+        this.vMCTX = vMCTX;
         this.makers = makers;
     }
     cancelOrder(order) {
@@ -26,7 +26,7 @@ let UseCaseCancelOrder = class UseCaseCancelOrder {
         catch (err) {
             filled = order.quantity;
         }
-        return this.context.DataTypes.openOrderFactory.new({
+        return this.vMCTX.DataTypes.openOrderFactory.new({
             ...order,
             filled,
             unfilled: order.quantity.minus(filled),
@@ -34,7 +34,7 @@ let UseCaseCancelOrder = class UseCaseCancelOrder {
     }
 };
 UseCaseCancelOrder = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers))
 ], UseCaseCancelOrder);
 exports.UseCaseCancelOrder = UseCaseCancelOrder;

@@ -39,8 +39,8 @@ export class AdminFacade<H extends HLike<H>>
 	public skipStart = this.startable.skipStart;
 
 	public constructor(
-		@inject(TYPES.vmctx)
-		private context: VirtualMachineContextLike<H>,
+		@inject(TYPES.vMCTX)
+		private vMCTX: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
@@ -78,14 +78,14 @@ export class AdminFacade<H extends HLike<H>>
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
-				trade => this.context.DataTypes.databaseTradeFactory.new(trade),
+				trade => this.vMCTX.DataTypes.databaseTradeFactory.new(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
-			this.context.DataTypes.databaseOrderbookFactory.new($orderbook),
+			this.vMCTX.DataTypes.databaseOrderbookFactory.new($orderbook),
 		);
 	}
 

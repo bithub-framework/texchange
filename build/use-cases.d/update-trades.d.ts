@@ -8,13 +8,13 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { DatabaseTradeHandler } from '../middlewares/database-trade-handler';
 import { Mtm } from '../mark-to-market/mtm';
 export declare class UseCaseUpdateTrades<H extends HLike<H>> {
-    private context;
+    private vMCTX;
     private marginAssets;
     private progress;
     private pricing;
     private broadcast;
     private databaseTradeHandler;
     private mtm;
-    constructor(context: VirtualMachineContextLike<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, mtm: Mtm<H> | null);
+    constructor(vMCTX: VirtualMachineContextLike<H>, marginAssets: MarginAssets<H>, progress: Progress<H>, pricing: Pricing<H, unknown>, broadcast: Broadcast<H>, databaseTradeHandler: DatabaseTradeHandler<H>, mtm: Mtm<H> | null);
     updateTrades(trades: DatabaseTrade<H>[]): void;
 }

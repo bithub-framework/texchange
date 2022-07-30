@@ -16,17 +16,17 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let Makers = class Makers {
-    constructor(context, marketSpec, accountSpec) {
-        this.context = context;
+    constructor(vMCTX, marketSpec, accountSpec) {
+        this.vMCTX = vMCTX;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.$orders = new Map();
         this.$totalUnfilled = {
-            [secretary_like_1.Side.BID]: context.DataTypes.hFactory.from(0),
-            [secretary_like_1.Side.ASK]: context.DataTypes.hFactory.from(0),
+            [secretary_like_1.Side.BID]: vMCTX.DataTypes.hFactory.from(0),
+            [secretary_like_1.Side.ASK]: vMCTX.DataTypes.hFactory.from(0),
         };
         this.totalUnfilledFactory = new total_unfilled_1.TotalUnfilledFactory();
-        this.totalFrozen = context.DataTypes.Frozen.ZERO;
+        this.totalFrozen = vMCTX.DataTypes.Frozen.ZERO;
     }
     getTotalUnfilled() {
         return this.totalUnfilledFactory.copy(this.$totalUnfilled);
@@ -39,7 +39,7 @@ let Makers = class Makers {
     }
     getOrder(oid) {
         const $order = this.$getOrder(oid);
-        return this.context.DataTypes.openMakerFactory.new($order);
+        return this.vMCTX.DataTypes.openMakerFactory.new($order);
     }
     $getOrder(oid) {
         const order = this.$orders.get(oid);
@@ -47,25 +47,25 @@ let Makers = class Makers {
         return order;
     }
     capture() {
-        return [...this.$orders.keys()].map(oid => this.context.DataTypes.openMakerFactory.capture(this.$orders.get(oid)));
+        return [...this.$orders.keys()].map(oid => this.vMCTX.DataTypes.openMakerFactory.capture(this.$orders.get(oid)));
     }
     restore(snapshot) {
         for (const orderSnapshot of snapshot) {
-            const order = this.context.DataTypes.openMakerFactory.restore(orderSnapshot);
+            const order = this.vMCTX.DataTypes.openMakerFactory.restore(orderSnapshot);
             this.$orders.set(order.id, order);
         }
         for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
             this.$totalUnfilled[side] = [...this.$orders.values()]
                 .filter(order => order.side === side)
-                .reduce((total, order) => total.plus(order.unfilled), this.context.DataTypes.hFactory.from(0));
+                .reduce((total, order) => total.plus(order.unfilled), this.vMCTX.DataTypes.hFactory.from(0));
         }
         this.totalFrozen = [...this.$orders.values()]
-            .reduce((total, order) => this.context.DataTypes.Frozen.plus(total, order.frozen), this.context.DataTypes.Frozen.ZERO);
+            .reduce((total, order) => this.vMCTX.DataTypes.Frozen.plus(total, order.frozen), this.vMCTX.DataTypes.Frozen.ZERO);
     }
     appendOrder(order, behind) {
         assert(order.unfilled.gt(0));
         const toFreeze = this.toFreeze(order);
-        const $order = this.context.DataTypes.openMakerFactory.new({
+        const $order = this.vMCTX.DataTypes.openMakerFactory.new({
             price: order.price,
             quantity: order.quantity,
             length: order.length,
@@ -78,7 +78,7 @@ let Makers = class Makers {
             frozen: toFreeze,
         });
         this.$orders.set(order.id, $order);
-        this.totalFrozen = this.context.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
+        this.totalFrozen = this.vMCTX.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
         this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
             .plus(order.unfilled);
     }
@@ -87,7 +87,7 @@ let Makers = class Makers {
         assert(volume.lte($order.unfilled));
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
-        const newOrder = this.context.DataTypes.openOrderFactory.new({
+        const newOrder = this.vMCTX.DataTypes.openOrderFactory.new({
             price: $order.price,
             quantity: $order.quantity,
             length: $order.length,
@@ -98,7 +98,7 @@ let Makers = class Makers {
             unfilled: $order.unfilled.minus(volume),
         });
         if (newOrder.unfilled.gt(0))
-            this.appendOrder(newOrder, this.context.DataTypes.hFactory.from(0));
+            this.appendOrder(newOrder, this.vMCTX.DataTypes.hFactory.from(0));
     }
     takeOrderQueue(oid, volume) {
         const $order = this.$getOrder(oid);
@@ -106,7 +106,7 @@ let Makers = class Makers {
             assert(volume.lte($order.behind));
         $order.behind = typeof volume !== 'undefined'
             ? $order.behind.minus(volume)
-            : this.context.DataTypes.hFactory.from(0);
+            : this.vMCTX.DataTypes.hFactory.from(0);
         this.$orders.set(oid, $order);
     }
     removeOrder(oid) {
@@ -114,7 +114,7 @@ let Makers = class Makers {
         this.$orders.delete(oid);
         this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
             .minus($order.unfilled);
-        this.totalFrozen = this.context.DataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
+        this.totalFrozen = this.vMCTX.DataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
     }
     forcedlyRemoveOrder(oid) {
         try {
@@ -124,7 +124,7 @@ let Makers = class Makers {
     }
 };
 Makers = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec))
 ], Makers);
