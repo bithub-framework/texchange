@@ -6,14 +6,18 @@ import {
 	Side,
 	BookOrderLike,
 	BookOrderFactory,
+	CompositeDataFactoryLike,
+	CompositeDataLike,
 } from 'secretary-like';
 
 
 export type DatabaseOrderbookId = string;
 
-export interface DatabaseOrderbookLike<H extends HLike<H>>
-	extends OrderbookLike<H>, DatabaseOrderbook.Source<H> {
-	id: DatabaseOrderbookId,
+export interface DatabaseOrderbookLike<H extends HLike<H>> extends
+	OrderbookLike<H>,
+	DatabaseOrderbook.Source<H>,
+	CompositeDataLike {
+	id: DatabaseOrderbookId;
 }
 
 class DatabaseOrderbook<H extends HLike<H>> implements DatabaseOrderbookLike<H> {
@@ -53,7 +57,12 @@ export namespace DatabaseOrderbook {
 	}
 }
 
-export class DatabaseOrderbookFactory<H extends HLike<H>>   {
+export class DatabaseOrderbookFactory<H extends HLike<H>> implements
+	CompositeDataFactoryLike<
+	DatabaseOrderbook.Source<H>,
+	DatabaseOrderbookLike<H>,
+	DatabaseOrderbook.Snapshot>
+{
 	public constructor(
 		private bookOrderFactory: BookOrderFactory<H>,
 		private orderbookFactory: OrderbookFactory<H>,
@@ -72,5 +81,12 @@ export class DatabaseOrderbookFactory<H extends HLike<H>>   {
 			...this.orderbookFactory.capture(databaseOrderbook),
 			id: databaseOrderbook.id,
 		};
+	}
+
+	public restore(snapshot: DatabaseOrderbook.Snapshot): DatabaseOrderbookLike<H> {
+		return this.new({
+			...this.orderbookFactory.restore(snapshot),
+			id: snapshot.id,
+		});
 	}
 }

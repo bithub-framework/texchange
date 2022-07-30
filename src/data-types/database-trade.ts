@@ -4,13 +4,17 @@ import {
 	TradeFactory,
 	TradeLike,
 	Side,
+	CompositeDataFactoryLike,
+	CompositeDataLike,
 } from 'secretary-like';
 
 export type DatabaseTradeId = string;
 
 
-export interface DatabaseTradeLike<H extends HLike<H>>
-	extends TradeLike<H>, DatabaseTrade.Source<H> {
+export interface DatabaseTradeLike<H extends HLike<H>> extends
+	TradeLike<H>,
+	DatabaseTrade.Source<H>,
+	CompositeDataLike {
 	id: DatabaseTradeId;
 }
 
@@ -53,7 +57,12 @@ export namespace DatabaseTrade {
 	}
 }
 
-export class DatabaseTradeFactory<H extends HLike<H>> {
+export class DatabaseTradeFactory<H extends HLike<H>> implements
+	CompositeDataFactoryLike<
+	DatabaseTrade.Source<H>,
+	DatabaseTradeLike<H>,
+	DatabaseTrade.Snapshot>
+{
 	public constructor(
 		private hFactory: HFactory<H>,
 		private tradeFactory: TradeFactory<H>,
@@ -68,5 +77,12 @@ export class DatabaseTradeFactory<H extends HLike<H>> {
 			...this.tradeFactory.capture(trade),
 			id: trade.id,
 		}
+	}
+
+	public restore(snapshot: DatabaseTrade.Snapshot): DatabaseTradeLike<H> {
+		return this.new({
+			...this.tradeFactory.restore(snapshot),
+			id: snapshot.id,
+		});
 	}
 }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenMakerFactory = void 0;
 class OpenMaker {
-    constructor(source, factory) {
+    constructor(source, factory, frozenFactory) {
         this.factory = factory;
         ({
             price: this.price,
@@ -14,8 +14,8 @@ class OpenMaker {
             unfilled: this.unfilled,
             id: this.id,
             behind: this.behind,
-            frozen: this.frozen,
         } = source);
+        this.frozen = frozenFactory.new(source.frozen);
     }
     toJSON() {
         return this.factory.capture(this);
@@ -31,7 +31,7 @@ class OpenMakerFactory {
         this.openOrderFactory = openOrderFactory;
     }
     new(source) {
-        return new OpenMaker(source, this);
+        return new OpenMaker(source, this, this.frozenFactory);
     }
     capture(order) {
         return {

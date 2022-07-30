@@ -31,6 +31,12 @@ class DatabaseOrderbookFactory {
             id: databaseOrderbook.id,
         };
     }
+    restore(snapshot) {
+        return this.new({
+            ...this.orderbookFactory.restore(snapshot),
+            id: snapshot.id,
+        });
+    }
 }
 exports.DatabaseOrderbookFactory = DatabaseOrderbookFactory;
 //# sourceMappingURL=database-orderbook.js.map

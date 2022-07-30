@@ -22,10 +22,10 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
                 .dollarVolume(order.price, order.unfilled)
                 .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);
             balance[secretary_like_1.Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
-            return {
+            return this.context.DataTypes.frozenFactory.new({
                 balance,
                 position: this.context.DataTypes.Frozen.ZERO.position,
-            };
+            });
         }
         else {
             const position = this.context.DataTypes.positionFactory.new({
@@ -34,10 +34,10 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
             });
             position[order.length] = order.unfilled;
             position[secretary_like_1.Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
-            return {
+            return this.context.DataTypes.frozenFactory.new({
                 balance: this.context.DataTypes.Frozen.ZERO.balance,
                 position: position,
-            };
+            });
         }
     }
 };

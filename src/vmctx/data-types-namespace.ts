@@ -16,9 +16,8 @@ export class DataTypesNamespace<H extends HLike<H>> extends SecretaryDataTypesNa
 		this.positionFactory,
 	);
 	public Frozen = new FrozenStatic<H>(
+		this.frozenFactory,
 		this.hFactory,
-		this.balanceFactory,
-		this.positionFactory,
 	);
 	public openMakerFactory = new OpenMakerFactory<H>(this.hFactory, this.frozenFactory, this.openOrderFactory);
 	public databaseOrderbookFactory = new DatabaseOrderbookFactory<H>(this.bookOrderFactory, this.orderbookFactory);

@@ -7,7 +7,7 @@ import {
 	AccountSpecLike,
 } from 'secretary-like';
 import { OpenMakerLike, OpenMaker } from '../../data-types/open-maker';
-import { Frozen } from '../../data-types/frozen';
+import { FrozenLike } from '../../data-types/frozen';
 import { TotalUnfilled, TotalUnfilledFactory } from './total-unfilled';
 import { VirtualMachineContextLike } from '../../vmctx';
 import assert = require('assert');
@@ -26,7 +26,7 @@ export abstract class Makers<H extends HLike<H>> implements
 	private $totalUnfilled: TotalUnfilled<H>;
 
 	protected totalUnfilledFactory: TotalUnfilledFactory<H>;
-	private totalFrozen: Frozen<H>;
+	private totalFrozen: FrozenLike<H>;
 
 	public constructor(
 		@inject(TYPES.vmctx)
@@ -48,7 +48,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		return this.totalUnfilledFactory.copy(this.$totalUnfilled);
 	}
 
-	public getTotalFrozen(): Frozen<H> {
+	public getTotalFrozen(): FrozenLike<H> {
 		return this.totalFrozen;
 	}
 
@@ -93,7 +93,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			);
 	}
 
-	protected abstract toFreeze(order: OpenOrderLike<H>): Frozen<H>;
+	protected abstract toFreeze(order: OpenOrderLike<H>): FrozenLike<H>;
 
 	public appendOrder(
 		order: OpenOrderLike<H>,

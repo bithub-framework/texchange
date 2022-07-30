@@ -33,6 +33,12 @@ class DatabaseTradeFactory {
             id: trade.id,
         };
     }
+    restore(snapshot) {
+        return this.new({
+            ...this.tradeFactory.restore(snapshot),
+            id: snapshot.id,
+        });
+    }
 }
 exports.DatabaseTradeFactory = DatabaseTradeFactory;
 //# sourceMappingURL=database-trade.js.map

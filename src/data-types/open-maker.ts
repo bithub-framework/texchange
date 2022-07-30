@@ -3,14 +3,22 @@ import {
 	OpenOrder, OpenOrderFactory, OpenOrderLike,
 	Length, Side, Action,
 	OrderId,
+	CompositeDataFactoryLike,
+	CompositeDataLike,
 } from 'secretary-like';
-import { Frozen, FrozenFactory } from './frozen';
+import {
+	Frozen,
+	FrozenFactory,
+	FrozenLike,
+} from './frozen';
 
 
-export interface OpenMakerLike<H extends HLike<H>>
-	extends OpenOrderLike<H>, OpenMaker.Source<H> {
+export interface OpenMakerLike<H extends HLike<H>> extends
+	OpenOrderLike<H>,
+	OpenMaker.Source<H>,
+	CompositeDataLike {
 	behind: H;
-	frozen: Frozen<H>;
+	frozen: FrozenLike<H>;
 }
 
 class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
@@ -23,11 +31,12 @@ class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
 	public unfilled: H;
 	public id: OrderId;
 	public behind: H;
-	public frozen: Frozen<H>;
+	public frozen: FrozenLike<H>;
 
 	public constructor(
 		source: OpenMaker.Source<H>,
 		private factory: OpenMakerFactory<H>,
+		frozenFactory: FrozenFactory<H>,
 	) {
 		({
 			price: this.price,
@@ -39,8 +48,8 @@ class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
 			unfilled: this.unfilled,
 			id: this.id,
 			behind: this.behind,
-			frozen: this.frozen,
 		} = source);
+		this.frozen = frozenFactory.new(source.frozen);
 	}
 
 	public toJSON(): unknown {
@@ -55,7 +64,7 @@ class OpenMaker<H extends HLike<H>> implements OpenMakerLike<H> {
 export namespace OpenMaker {
 	export interface Source<H extends HLike<H>> extends OpenOrder.Source<H> {
 		behind: H;
-		frozen: Frozen<H>;
+		frozen: Frozen.Source<H>;
 	}
 
 	export interface Snapshot extends OpenOrder.Snapshot {
@@ -64,7 +73,12 @@ export namespace OpenMaker {
 	}
 }
 
-export class OpenMakerFactory<H extends HLike<H>>{
+export class OpenMakerFactory<H extends HLike<H>> implements
+	CompositeDataFactoryLike<
+	OpenMaker.Source<H>,
+	OpenMakerLike<H>,
+	OpenMaker.Snapshot>
+{
 	public constructor(
 		private hFactory: HFactory<H>,
 		private frozenFactory: FrozenFactory<H>,
@@ -72,7 +86,11 @@ export class OpenMakerFactory<H extends HLike<H>>{
 	) { }
 
 	public new(source: OpenMaker.Source<H>): OpenMaker<H> {
-		return new OpenMaker(source, this);
+		return new OpenMaker(
+			source,
+			this,
+			this.frozenFactory,
+		);
 	}
 
 	public capture(order: OpenMakerLike<H>): OpenMaker.Snapshot {

@@ -1,8 +1,6 @@
-import { HLike, H, HFactory, Length } from 'secretary-like';
-export interface BalanceLike<H extends HLike<H>> extends Balance.Source<H> {
+import { HLike, H, HFactory, Length, CompositeDataLike, CompositeDataFactoryLike } from 'secretary-like';
+export interface BalanceLike<H extends HLike<H>> extends Balance.Source<H>, CompositeDataLike {
     [length: Length]: H;
-    toJSON(): unknown;
-    toString(): string;
 }
 declare class Balance<H extends HLike<H>> implements BalanceLike<H> {
     private factory;
@@ -20,7 +18,7 @@ export declare namespace Balance {
         readonly short: H.Snapshot;
     }
 }
-export declare class BalanceFactory<H extends HLike<H>> {
+export declare class BalanceFactory<H extends HLike<H>> implements CompositeDataFactoryLike<Balance.Source<H>, BalanceLike<H>, Balance.Snapshot> {
     private hFactory;
     constructor(hFactory: HFactory<H>);
     new(source: Balance.Source<H>): Balance<H>;
