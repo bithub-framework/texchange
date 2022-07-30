@@ -4,7 +4,6 @@ import {
 	OpenOrderLike,
 } from 'secretary-like';
 import { Frozen } from '../../data-types/frozen';
-import { Balance } from '../../data-types/balance';
 import { Makers } from './makers';
 
 import { injextends } from '@zimtsui/injektor';
@@ -15,10 +14,10 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
 	protected toFreeze(order: OpenOrderLike<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
-			const balance: Balance<H> = {
+			const balance = this.context.DataTypes.balanceFactory.new({
 				[Length.LONG]: this.context.DataTypes.hFactory.from(0),
 				[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-			};
+			});
 			balance[order.length] = this.marketSpec
 				.dollarVolume(order.price, order.unfilled)
 				.div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);

@@ -3,7 +3,6 @@ import {
 	HLike,
 	Length, Side, Action,
 } from 'secretary-like';
-import { Balance } from '../../data-types/balance';
 
 import { injextends } from '@zimtsui/injektor';
 
@@ -15,10 +14,10 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 		const position = this.marginAssets.getPosition();
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();
-		const $final: Balance<H> = {
+		const $final = this.context.DataTypes.balanceFactory.new({
 			[Length.LONG]: this.context.DataTypes.hFactory.from(0),
 			[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-		};
+		});
 		for (const length of [Length.LONG, Length.SHORT]) {
 			const side = Side.from(length, Action.OPEN);
 			const afterDeduction = this.context.DataTypes.H.max(

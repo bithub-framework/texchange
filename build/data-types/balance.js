@@ -2,12 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BalanceFactory = void 0;
 const secretary_like_1 = require("secretary-like");
+class Balance {
+    constructor(source, factory) {
+        this.factory = factory;
+        ({
+            [secretary_like_1.Length.LONG]: this[secretary_like_1.Length.LONG],
+            [secretary_like_1.Length.SHORT]: this[secretary_like_1.Length.SHORT],
+        } = source);
+    }
+    toJSON() {
+        return this.factory.capture(this);
+    }
+    toString() {
+        return JSON.stringify(this.toJSON());
+    }
+}
 class BalanceFactory {
     constructor(hFactory) {
         this.hFactory = hFactory;
     }
     new(source) {
-        return source;
+        return new Balance(source, this);
     }
     capture(balance) {
         return {

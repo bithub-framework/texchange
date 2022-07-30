@@ -4,8 +4,32 @@ import {
 } from 'secretary-like';
 
 
-export interface Balance<H extends HLike<H>> extends Balance.Source<H> {
+export interface BalanceLike<H extends HLike<H>> extends Balance.Source<H> {
 	[length: Length]: H;
+	toJSON(): unknown;
+	toString(): string;
+}
+
+class Balance<H extends HLike<H>> implements BalanceLike<H> {
+	[length: Length]: H;
+
+	public constructor(
+		source: Balance.Source<H>,
+		private factory: BalanceFactory<H>,
+	) {
+		({
+			[Length.LONG]: this[Length.LONG],
+			[Length.SHORT]: this[Length.SHORT],
+		} = source);
+	}
+
+	public toJSON(): unknown {
+		return this.factory.capture(this);
+	}
+
+	public toString(): string {
+		return JSON.stringify(this.toJSON());
+	}
 }
 
 export namespace Balance {
@@ -25,10 +49,10 @@ export class BalanceFactory<H extends HLike<H>> {
 	) { }
 
 	public new(source: Balance.Source<H>): Balance<H> {
-		return <Balance<H>>source;
+		return new Balance(source, this);
 	}
 
-	public capture(balance: Balance<H>): Balance.Snapshot {
+	public capture(balance: BalanceLike<H>): Balance.Snapshot {
 		return {
 			long: this.hFactory.capture(balance[Length.LONG]),
 			short: this.hFactory.capture(balance[Length.SHORT]),

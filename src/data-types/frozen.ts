@@ -7,12 +7,13 @@ import {
 } from 'secretary-like';
 import {
 	Balance,
+	BalanceLike,
 	BalanceFactory,
 } from './balance';
 
 
 export interface Frozen<H extends HLike<H>> {
-	balance: Balance<H>;
+	balance: BalanceLike<H>;
 	position: PositionLike<H>;
 }
 
@@ -24,11 +25,9 @@ export namespace Frozen {
 }
 
 export class FrozenFactory<H extends HLike<H>> {
-	private positionFactory = new PositionFactory<H>(this.hFactory);
-	private balanceFactory = new BalanceFactory(this.hFactory);
-
 	public constructor(
-		private hFactory: HFactory<H>,
+		private balanceFactory: BalanceFactory<H>,
+		private positionFactory: PositionFactory<H>,
 	) { }
 
 	public capture(frozen: Frozen<H>): Frozen.Snapshot {
@@ -49,15 +48,16 @@ export class FrozenFactory<H extends HLike<H>> {
 export class FrozenStatic<H extends HLike<H>> {
 	public constructor(
 		private hFactory: HFactory<H>,
+		private balanceFactory: BalanceFactory<H>,
 		private positionFactory: PositionFactory<H>,
 	) { }
 
 	public plus(x: Frozen<H>, y: Frozen<H>): Frozen<H> {
 		return {
-			balance: {
+			balance: this.balanceFactory.new({
 				[Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].plus(y.balance[Length.SHORT]),
-			},
+			}),
 			position: this.positionFactory.new({
 				[Length.LONG]: x.position[Length.LONG].plus(y.position[Length.LONG]),
 				[Length.SHORT]: x.position[Length.SHORT].plus(y.position[Length.SHORT]),
@@ -66,10 +66,10 @@ export class FrozenStatic<H extends HLike<H>> {
 	}
 
 	public readonly ZERO: Frozen<H> = {
-		balance: {
+		balance: this.balanceFactory.new({
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
-		},
+		}),
 		position: this.positionFactory.new({
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
@@ -82,10 +82,10 @@ export class FrozenStatic<H extends HLike<H>> {
 			x = this.ZERO;
 		}
 		return {
-			balance: {
+			balance: this.balanceFactory.new({
 				[Length.LONG]: x.balance[Length.LONG].minus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].minus(y.balance[Length.SHORT]),
-			},
+			}),
 			position: this.positionFactory.new({
 				[Length.LONG]: x.position[Length.LONG].minus(y.position[Length.LONG]),
 				[Length.SHORT]: x.position[Length.SHORT].minus(y.position[Length.SHORT]),

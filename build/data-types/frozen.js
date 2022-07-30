@@ -2,12 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FrozenStatic = exports.FrozenFactory = void 0;
 const secretary_like_1 = require("secretary-like");
-const balance_1 = require("./balance");
 class FrozenFactory {
-    constructor(hFactory) {
-        this.hFactory = hFactory;
-        this.positionFactory = new secretary_like_1.PositionFactory(this.hFactory);
-        this.balanceFactory = new balance_1.BalanceFactory(this.hFactory);
+    constructor(balanceFactory, positionFactory) {
+        this.balanceFactory = balanceFactory;
+        this.positionFactory = positionFactory;
     }
     capture(frozen) {
         return {
@@ -24,14 +22,15 @@ class FrozenFactory {
 }
 exports.FrozenFactory = FrozenFactory;
 class FrozenStatic {
-    constructor(hFactory, positionFactory) {
+    constructor(hFactory, balanceFactory, positionFactory) {
         this.hFactory = hFactory;
+        this.balanceFactory = balanceFactory;
         this.positionFactory = positionFactory;
         this.ZERO = {
-            balance: {
+            balance: this.balanceFactory.new({
                 [secretary_like_1.Length.LONG]: this.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.hFactory.from(0),
-            },
+            }),
             position: this.positionFactory.new({
                 [secretary_like_1.Length.LONG]: this.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.hFactory.from(0),
@@ -40,10 +39,10 @@ class FrozenStatic {
     }
     plus(x, y) {
         return {
-            balance: {
+            balance: this.balanceFactory.new({
                 [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].plus(y.balance[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].plus(y.balance[secretary_like_1.Length.SHORT]),
-            },
+            }),
             position: this.positionFactory.new({
                 [secretary_like_1.Length.LONG]: x.position[secretary_like_1.Length.LONG].plus(y.position[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.position[secretary_like_1.Length.SHORT].plus(y.position[secretary_like_1.Length.SHORT]),
@@ -56,10 +55,10 @@ class FrozenStatic {
             x = this.ZERO;
         }
         return {
-            balance: {
+            balance: this.balanceFactory.new({
                 [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].minus(y.balance[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].minus(y.balance[secretary_like_1.Length.SHORT]),
-            },
+            }),
             position: this.positionFactory.new({
                 [secretary_like_1.Length.LONG]: x.position[secretary_like_1.Length.LONG].minus(y.position[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.position[secretary_like_1.Length.SHORT].minus(y.position[secretary_like_1.Length.SHORT]),

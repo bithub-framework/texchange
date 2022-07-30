@@ -16,10 +16,10 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         const position = this.marginAssets.getPosition();
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();
-        const $final = {
+        const $final = this.context.DataTypes.balanceFactory.new({
             [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
             [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-        };
+        });
         for (const length of [secretary_like_1.Length.LONG, secretary_like_1.Length.SHORT]) {
             const side = secretary_like_1.Side.from(length, secretary_like_1.Action.OPEN);
             const afterDeduction = this.context.DataTypes.H.max(totalUnfilled[side].minus(position[secretary_like_1.Length.invert(length)]), this.context.DataTypes.hFactory.from(0));

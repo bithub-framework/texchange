@@ -14,10 +14,10 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     // 默认单向持仓模式
     toFreeze(order) {
         if (order.action === secretary_like_1.Action.OPEN) {
-            const balance = {
+            const balance = this.context.DataTypes.balanceFactory.new({
                 [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-            };
+            });
             balance[order.length] = this.marketSpec
                 .dollarVolume(order.price, order.unfilled)
                 .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);
