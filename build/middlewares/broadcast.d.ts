@@ -1,13 +1,13 @@
 import { EventEmitter } from 'events';
-import { Orderbook, Positions, Balances, HLike, Trade } from 'secretary-like';
+import { OrderbookLike, PositionsLike, BalancesLike, TradeLike, HLike } from 'secretary-like';
 export declare class Broadcast<H extends HLike<H>> extends EventEmitter {
 }
 export declare namespace Broadcast {
     interface Events<H extends HLike<H>> {
-        trades: [Trade<H>[]];
-        orderbook: [Orderbook<H>];
-        positions: [Positions<H>];
-        balances: [Balances<H>];
+        trades: [TradeLike<H>[]];
+        orderbook: [OrderbookLike<H>];
+        positions: [PositionsLike<H>];
+        balances: [BalancesLike<H>];
         error: [Error];
     }
 }

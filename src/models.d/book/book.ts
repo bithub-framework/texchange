@@ -1,9 +1,10 @@
 import {
+	OrderbookLike,
 	Orderbook,
+	OpenOrderLike,
 	Side,
 	HLike,
 	MarketSpecLike,
-	OpenOrder,
 } from 'secretary-like';
 import assert = require('assert');
 import { VirtualMachineContextLike } from '../../vmctx';
@@ -18,25 +19,26 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private Decrements = new DecrementsFactory<H>(this.context.DataTypes.hFactory);
 
 	private time = Number.NEGATIVE_INFINITY;
-	private basebook: Orderbook<H> = {
+	private basebook: OrderbookLike<H> = this.context.DataTypes.orderbookFactory.new({
 		[Side.BID]: [],
 		[Side.ASK]: [],
 		time: Number.NEGATIVE_INFINITY,
-	};
+	});
 	private decrements: Decrements<H> = {
 		[Side.BID]: new Map<string, H>(),
 		[Side.ASK]: new Map<string, H>(),
 	};
-	private finalbookCache: Orderbook<H> | null = null;
+	private finalbookCache: OrderbookLike<H> | null = null;
 
 	public constructor(
 		@inject(TYPES.vmctx)
 		private context: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpecLike<H>,
-	) { }
+	) {
+	}
 
-	public setBasebook(basebook: Orderbook<H>): void {
+	public setBasebook(basebook: OrderbookLike<H>): void {
 		assert(basebook.time === this.context.timeline.now());
 		this.basebook = basebook;
 		this.time = basebook.time;
@@ -58,14 +60,14 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 		this.finalbookCache = null;
 	}
 
-	private tryApply(): Orderbook<H> {
+	private tryApply(): OrderbookLike<H> {
 		if (this.finalbookCache) return this.finalbookCache;
 
-		const $final: Orderbook<H> = {
+		const $final = this.context.DataTypes.orderbookFactory.new({
 			[Side.BID]: [],
 			[Side.ASK]: [],
 			time: this.time,
-		};
+		});
 		const $total: Decrements<H> = {
 			[Side.BID]: new Map<string, H>(),
 			[Side.ASK]: new Map<string, H>(),
@@ -85,20 +87,22 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 				} else this.decrements[side].delete(priceString);
 			}
 			// 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-			$final[side] = [...$total[side]].map(([priceString, quantity]) => ({
-				price: this.context.DataTypes.hFactory.from(priceString),
-				quantity,
-				side,
-			}));
+			$final[side] = [...$total[side]].map(
+				([priceString, quantity]) => this.context.DataTypes.bookOrderFactory.new({
+					price: this.context.DataTypes.hFactory.from(priceString),
+					quantity,
+					side,
+				}),
+			);
 		}
 		return this.finalbookCache = $final;
 	}
 
-	public getOrderbook(): Orderbook<H> {
+	public getOrderbook(): OrderbookLike<H> {
 		return this.tryApply();
 	}
 
-	public lineUp(order: OpenOrder<H>): H {
+	public lineUp(order: OpenOrderLike<H>): H {
 		const makers = this.getOrderbook()[order.side];
 		let behind = this.context.DataTypes.hFactory.from(0);
 		for (const maker of makers)

@@ -1,14 +1,19 @@
 import {
 	Length,
 	HLike, HFactory,
-	Position, PositionFactory,
+	Position,
+	PositionLike,
+	PositionFactory,
 } from 'secretary-like';
-import { Balance, BalanceFactory } from './balance';
+import {
+	Balance,
+	BalanceFactory,
+} from './balance';
 
 
 export interface Frozen<H extends HLike<H>> {
 	balance: Balance<H>;
-	position: Position<H>;
+	position: PositionLike<H>;
 }
 
 export namespace Frozen {
@@ -44,6 +49,7 @@ export class FrozenFactory<H extends HLike<H>> {
 export class FrozenStatic<H extends HLike<H>> {
 	public constructor(
 		private hFactory: HFactory<H>,
+		private positionFactory: PositionFactory<H>,
 	) { }
 
 	public plus(x: Frozen<H>, y: Frozen<H>): Frozen<H> {
@@ -52,10 +58,10 @@ export class FrozenStatic<H extends HLike<H>> {
 				[Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].plus(y.balance[Length.SHORT]),
 			},
-			position: {
+			position: this.positionFactory.new({
 				[Length.LONG]: x.position[Length.LONG].plus(y.position[Length.LONG]),
 				[Length.SHORT]: x.position[Length.SHORT].plus(y.position[Length.SHORT]),
-			},
+			}),
 		}
 	}
 
@@ -64,10 +70,10 @@ export class FrozenStatic<H extends HLike<H>> {
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
 		},
-		position: {
+		position: this.positionFactory.new({
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
-		},
+		}),
 	};
 
 	public minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H> {
@@ -80,10 +86,10 @@ export class FrozenStatic<H extends HLike<H>> {
 				[Length.LONG]: x.balance[Length.LONG].minus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].minus(y.balance[Length.SHORT]),
 			},
-			position: {
+			position: this.positionFactory.new({
 				[Length.LONG]: x.position[Length.LONG].minus(y.position[Length.LONG]),
 				[Length.SHORT]: x.position[Length.SHORT].minus(y.position[Length.SHORT]),
-			},
+			}),
 		}
 	}
 }

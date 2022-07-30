@@ -39,7 +39,7 @@ let Makers = class Makers {
     }
     getOrder(oid) {
         const $order = this.$getOrder(oid);
-        return this.context.DataTypes.OpenMaker.copy($order);
+        return this.context.DataTypes.openMakerFactory.new($order);
     }
     $getOrder(oid) {
         const order = this.$orders.get(oid);
@@ -47,11 +47,11 @@ let Makers = class Makers {
         return order;
     }
     capture() {
-        return [...this.$orders.keys()].map(oid => this.context.DataTypes.OpenMaker.capture(this.$orders.get(oid)));
+        return [...this.$orders.keys()].map(oid => this.context.DataTypes.openMakerFactory.capture(this.$orders.get(oid)));
     }
     restore(snapshot) {
         for (const orderSnapshot of snapshot) {
-            const order = this.context.DataTypes.OpenMaker.restore(orderSnapshot);
+            const order = this.context.DataTypes.openMakerFactory.restore(orderSnapshot);
             this.$orders.set(order.id, order);
         }
         for (const side of [secretary_like_1.Side.ASK, secretary_like_1.Side.BID]) {
@@ -65,11 +65,18 @@ let Makers = class Makers {
     appendOrder(order, behind) {
         assert(order.unfilled.gt(0));
         const toFreeze = this.toFreeze(order);
-        const $order = {
-            ...this.context.DataTypes.openOrderFactory.copy(order),
+        const $order = this.context.DataTypes.openMakerFactory.new({
+            price: order.price,
+            quantity: order.quantity,
+            length: order.length,
+            side: order.side,
+            action: order.action,
+            filled: order.filled,
+            unfilled: order.unfilled,
+            id: order.id,
             behind,
             frozen: toFreeze,
-        };
+        });
         this.$orders.set(order.id, $order);
         this.totalFrozen = this.context.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
         this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
@@ -80,11 +87,16 @@ let Makers = class Makers {
         assert(volume.lte($order.unfilled));
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
-        const newOrder = {
-            ...this.context.DataTypes.openOrderFactory.copy($order),
+        const newOrder = this.context.DataTypes.openOrderFactory.new({
+            price: $order.price,
+            quantity: $order.quantity,
+            length: $order.length,
+            side: $order.side,
+            action: $order.action,
+            id: $order.id,
             filled: $order.filled.plus(volume),
             unfilled: $order.unfilled.minus(volume),
-        };
+        });
         if (newOrder.unfilled.gt(0))
             this.appendOrder(newOrder, this.context.DataTypes.hFactory.from(0));
     }

@@ -6,7 +6,7 @@ import { DatabaseOrderbookFactory } from '../data-types/database-orderbook';
 export declare class DataTypesNamespace<H extends HLike<H>> extends SecretaryDataTypesNamespace<H> {
     frozenFactory: FrozenFactory<H>;
     Frozen: FrozenStatic<H>;
-    OpenMaker: OpenMakerFactory<H>;
-    DatabaseOrderbook: DatabaseOrderbookFactory<H>;
-    DatabaseTrade: DatabaseTradeFactory<H>;
+    openMakerFactory: OpenMakerFactory<H>;
+    databaseOrderbookFactory: DatabaseOrderbookFactory<H>;
+    databaseTradeFactory: DatabaseTradeFactory<H>;
 }

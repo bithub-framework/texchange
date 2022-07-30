@@ -1,7 +1,7 @@
 import {
 	HLike, H,
-	OpenOrder,
-	Trade,
+	OpenOrderLike,
+	TradeLike,
 	Side, Action,
 	MarketSpecLike,
 	AccountSpecLike,
@@ -31,10 +31,10 @@ export class Matcher<H extends HLike<H>> {
 		private progress: Progress<H>,
 	) { }
 
-	public $match($taker: OpenOrder<H>): Trade<H>[] {
+	public $match($taker: OpenOrderLike<H>): TradeLike<H>[] {
 		const orderbook = this.book.getOrderbook();
 
-		const trades: Trade<H>[] = [];
+		const trades: TradeLike<H>[] = [];
 		let volume = this.context.DataTypes.hFactory.from(0);
 		let dollarVolume = this.context.DataTypes.hFactory.from(0);
 		for (const maker of orderbook[Side.invert($taker.side)])
@@ -51,13 +51,13 @@ export class Matcher<H extends HLike<H>> {
 				volume = volume.plus(quantity);
 				dollarVolume = dollarVolume
 					.plus(this.marketSpec.dollarVolume(maker.price, quantity));
-				trades.push({
+				trades.push(this.context.DataTypes.tradeFactory.new({
 					side: $taker.side,
 					price: maker.price,
 					quantity,
 					time: this.context.timeline.now(),
 					id: ++this.progress.userTradeCount,
-				});
+				}));
 			}
 
 		this.marginAssets.pay(

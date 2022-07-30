@@ -28,26 +28,26 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();
         const position = this.marginAssets.getPosition();
-        return {
+        return this.context.DataTypes.positionFactory.new({
             [secretary_like_1.Length.LONG]: position[secretary_like_1.Length.LONG]
                 .minus(totalFrozen.position[secretary_like_1.Length.LONG]),
             [secretary_like_1.Length.SHORT]: position[secretary_like_1.Length.SHORT]
                 .minus(totalFrozen.position[secretary_like_1.Length.SHORT]),
-        };
+        });
     }
     getBalances() {
-        return {
+        return this.context.DataTypes.balancesFactory.new({
             balance: this.marginAssets.getBalance(),
             available: this.getAvailable(),
             time: this.context.timeline.now(),
-        };
+        });
     }
     getPositions() {
-        return {
+        return this.context.DataTypes.positionsFactory.new({
             position: this.marginAssets.getPosition(),
             closable: this.getClosable(),
             time: this.context.timeline.now(),
-        };
+        });
     }
 };
 AvailableAssetsCalculator = __decorate([

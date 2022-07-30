@@ -5,7 +5,7 @@ import {
 	HLike,
 	Length,
 } from 'secretary-like';
-import { DatabaseTrade } from '../data-types/database-trade';
+import { DatabaseTradeLike } from '../data-types/database-trade';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Progress } from '../models.d/progress';
 import { Pricing } from '../models.d/pricing/pricing';
@@ -34,7 +34,7 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 		private mtm: Mtm<H> | null,
 	) { }
 
-	public updateTrades(trades: DatabaseTrade<H>[]): void {
+	public updateTrades(trades: DatabaseTradeLike<H>[]): void {
 		assert(trades.length);
 		const now = this.context.timeline.now();
 		for (const trade of trades) assert(trade.time === now);

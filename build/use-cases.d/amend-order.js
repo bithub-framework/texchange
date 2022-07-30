@@ -31,17 +31,17 @@ let UseCaseAmendOrder = class UseCaseAmendOrder {
         catch (err) {
             filled = amendment.quantity;
         }
-        const order = {
+        const order = this.context.DataTypes.openOrderFactory.new({
             ...amendment,
             filled,
             price: amendment.newPrice,
             unfilled: amendment.newUnfilled,
             quantity: amendment.newUnfilled.plus(filled),
-        };
+        });
         this.validator.validateOrder(order);
-        const $order = this.context.DataTypes.openOrderFactory.copy(order);
+        const $order = this.context.DataTypes.openOrderFactory.new(order);
         const trades = this.matcher.$match($order);
-        const maker = this.context.DataTypes.openOrderFactory.copy($order);
+        const maker = this.context.DataTypes.openOrderFactory.new($order);
         const behind = this.book.lineUp(maker);
         this.makers.appendOrder(maker, behind);
         if (trades.length) {

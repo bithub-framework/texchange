@@ -22,7 +22,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
         this.makers = makers;
     }
     tradeTakesOpenMakers(trade) {
-        const $trade = this.context.DataTypes.tradeFactory.copy(trade);
+        const $trade = this.context.DataTypes.tradeFactory.new(trade);
         for (const order of [...this.makers])
             if (this.$tradeShouldTakeOpenOrder($trade, order)) {
                 this.$tradeTakesOrderQueue($trade, order);

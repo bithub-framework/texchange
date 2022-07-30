@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DecrementsFactory = exports.Decrements = void 0;
+exports.DecrementsFactory = void 0;
 const secretary_like_1 = require("secretary-like");
-class Decrements {
-}
-exports.Decrements = Decrements;
 class DecrementsFactory {
     constructor(hFactory) {
         this.hFactory = hFactory;

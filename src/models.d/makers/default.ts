@@ -1,8 +1,7 @@
 import {
 	Action, Length,
 	HLike,
-	OpenOrder,
-	Position,
+	OpenOrderLike,
 } from 'secretary-like';
 import { Frozen } from '../../data-types/frozen';
 import { Balance } from '../../data-types/balance';
@@ -14,7 +13,7 @@ import { injextends } from '@zimtsui/injektor';
 @injextends()
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
-	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
+	protected toFreeze(order: OpenOrderLike<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
 			const balance: Balance<H> = {
 				[Length.LONG]: this.context.DataTypes.hFactory.from(0),
@@ -29,10 +28,10 @@ export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 				position: this.context.DataTypes.Frozen.ZERO.position,
 			};
 		} else {
-			const position: Position<H> = {
+			const position = this.context.DataTypes.positionFactory.new({
 				[Length.LONG]: this.context.DataTypes.hFactory.from(0),
 				[Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-			};
+			});
 			position[order.length] = order.unfilled;
 			position[Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
 			return {

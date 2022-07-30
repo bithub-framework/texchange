@@ -21,11 +21,11 @@ let Book = class Book {
         this.marketSpec = marketSpec;
         this.Decrements = new decrements_1.DecrementsFactory(this.context.DataTypes.hFactory);
         this.time = Number.NEGATIVE_INFINITY;
-        this.basebook = {
+        this.basebook = this.context.DataTypes.orderbookFactory.new({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: Number.NEGATIVE_INFINITY,
-        };
+        });
         this.decrements = {
             [secretary_like_1.Side.BID]: new Map(),
             [secretary_like_1.Side.ASK]: new Map(),
@@ -51,11 +51,11 @@ let Book = class Book {
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
-        const $final = {
+        const $final = this.context.DataTypes.orderbookFactory.new({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: this.time,
-        };
+        });
         const $total = {
             [secretary_like_1.Side.BID]: new Map(),
             [secretary_like_1.Side.ASK]: new Map(),
@@ -76,7 +76,7 @@ let Book = class Book {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final[side] = [...$total[side]].map(([priceString, quantity]) => ({
+            $final[side] = [...$total[side]].map(([priceString, quantity]) => this.context.DataTypes.bookOrderFactory.new({
                 price: this.context.DataTypes.hFactory.from(priceString),
                 quantity,
                 side,

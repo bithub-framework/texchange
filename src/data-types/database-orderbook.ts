@@ -1,29 +1,75 @@
 import {
 	HLike,
-	Orderbook, OrderbookFactory,
+	OrderbookLike,
+	Orderbook,
+	OrderbookFactory,
 	Side,
+	BookOrderLike,
+	BookOrderFactory,
 } from 'secretary-like';
 
 
 export type DatabaseOrderbookId = string;
 
-export interface DatabaseOrderbook<H extends HLike<H>> extends Orderbook<H> {
+export interface DatabaseOrderbookLike<H extends HLike<H>>
+	extends OrderbookLike<H>, DatabaseOrderbook.Source<H> {
 	id: DatabaseOrderbookId,
+}
+
+class DatabaseOrderbook<H extends HLike<H>> implements DatabaseOrderbookLike<H> {
+	[side: Side]: BookOrderLike<H>[];
+	public time: number;
+	public id: DatabaseOrderbookId;
+
+	public constructor(
+		source: DatabaseOrderbook.Source<H>,
+		private factory: DatabaseOrderbookFactory<H>,
+		bookOrderFactory: BookOrderFactory<H>,
+	) {
+		for (const side of [Side.BID, Side.ASK])
+			this[side] = source[side].map(
+				order => bookOrderFactory.new(order),
+			);
+		this.time = source.time;
+		this.id = source.id;
+	}
+
+	public toJSON(): unknown {
+		return this.factory.capture(this);
+	}
+
+	public toString(): string {
+		return JSON.stringify(this.toJSON());
+	}
+}
+
+export namespace DatabaseOrderbook {
+	export interface Source<H extends HLike<H>> extends Orderbook.Source<H> {
+		id: DatabaseOrderbookId;
+	}
+
+	export interface Snapshot extends Orderbook.Snapshot {
+		id: DatabaseOrderbookId;
+	}
 }
 
 export class DatabaseOrderbookFactory<H extends HLike<H>>   {
 	public constructor(
+		private bookOrderFactory: BookOrderFactory<H>,
 		private orderbookFactory: OrderbookFactory<H>,
 	) { }
 
-	public copy(
-		databaseOrderbook: DatabaseOrderbook<H>,
-	): DatabaseOrderbook<H> {
-		const orderbook = this.orderbookFactory.copy(databaseOrderbook);
+	public new(source: DatabaseOrderbook.Source<H>): DatabaseOrderbookLike<H> {
+		return new DatabaseOrderbook(
+			source,
+			this,
+			this.bookOrderFactory,
+		);
+	}
+
+	public capture(databaseOrderbook: DatabaseOrderbookLike<H>): DatabaseOrderbook.Snapshot {
 		return {
-			[Side.BID]: orderbook[Side.BID],
-			[Side.ASK]: orderbook[Side.ASK],
-			time: orderbook.time,
+			...this.orderbookFactory.capture(databaseOrderbook),
 			id: databaseOrderbook.id,
 		};
 	}

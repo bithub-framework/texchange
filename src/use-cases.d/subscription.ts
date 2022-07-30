@@ -1,10 +1,10 @@
 import { Broadcast } from '../middlewares/broadcast';
 import {
 	HLike,
-	Trade,
-	Orderbook,
-	Positions,
-	Balances,
+	TradeLike,
+	OrderbookLike,
+	PositionsLike,
+	BalancesLike,
 } from 'secretary-like';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -30,10 +30,10 @@ export class UseCaseSubscription<H extends HLike<H>>
 
 export namespace UseCaseSubscription {
 	export interface Events<H extends HLike<H>> {
-		trades: [readonly Trade<H>[]];
-		orderbook: [Orderbook<H>];
-		positions: [Positions<H>];
-		balances: [Balances<H>];
+		trades: [readonly TradeLike<H>[]];
+		orderbook: [OrderbookLike<H>];
+		positions: [PositionsLike<H>];
+		balances: [BalancesLike<H>];
 		error: [Error];
 	}
 }

@@ -4,11 +4,15 @@ import {
 } from 'secretary-like';
 
 
-export class Balance<H extends HLike<H>>  {
+export interface Balance<H extends HLike<H>> extends Balance.Source<H> {
 	[length: Length]: H;
 }
 
 export namespace Balance {
+	export interface Source<H extends HLike<H>> {
+		[length: Length]: H;
+	}
+
 	export interface Snapshot {
 		readonly long: H.Snapshot;
 		readonly short: H.Snapshot;
@@ -20,6 +24,10 @@ export class BalanceFactory<H extends HLike<H>> {
 		private hFactory: HFactory<H>,
 	) { }
 
+	public new(source: Balance.Source<H>): Balance<H> {
+		return <Balance<H>>source;
+	}
+
 	public capture(balance: Balance<H>): Balance.Snapshot {
 		return {
 			long: this.hFactory.capture(balance[Length.LONG]),
@@ -28,16 +36,9 @@ export class BalanceFactory<H extends HLike<H>> {
 	}
 
 	public restore(snapshot: Balance.Snapshot): Balance<H> {
-		return {
+		return this.new({
 			[Length.LONG]: this.hFactory.restore(snapshot.long),
 			[Length.SHORT]: this.hFactory.restore(snapshot.short),
-		};
-	}
-
-	public copy(balance: Balance<H>): Balance<H> {
-		return {
-			[Length.LONG]: balance[Length.LONG],
-			[Length.SHORT]: balance[Length.SHORT],
-		};
+		});
 	}
 }

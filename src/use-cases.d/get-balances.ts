@@ -1,5 +1,5 @@
 import {
-	Balances,
+	BalancesLike,
 	HLike,
 } from 'secretary-like';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
@@ -15,7 +15,7 @@ export class UseCaseGetBalances<H extends HLike<H>> {
 		private calculator: AvailableAssetsCalculator<H>,
 	) { }
 
-	public getBalances(): Balances<H> {
+	public getBalances(): BalancesLike<H> {
 		return this.calculator.getBalances();
 	}
 }

@@ -1,6 +1,6 @@
 import {
 	HLike,
-	OpenOrder,
+	OpenOrderLike,
 } from 'secretary-like';
 import { Makers } from '../models.d/makers/makers';
 
@@ -15,7 +15,7 @@ export class UseCaseGetOpenOrders<H extends HLike<H>> {
 		private makers: Makers<H>,
 	) { }
 
-	public getOpenOrders(): OpenOrder<H>[] {
+	public getOpenOrders(): OpenOrderLike<H>[] {
 		return [...this.makers];
 	}
 }

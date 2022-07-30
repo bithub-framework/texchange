@@ -21,10 +21,10 @@ let Assets = class Assets {
         this.marketSpec = marketSpec;
         this.balance = balance;
         this.Cost = new cost_1.CostFactory(this.context.DataTypes.hFactory);
-        this.$position = {
+        this.$position = this.context.DataTypes.positionFactory.new({
             [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
             [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-        };
+        });
         this.$cost = {
             [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
             [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0)
@@ -34,7 +34,7 @@ let Assets = class Assets {
         return this.balance;
     }
     getPosition() {
-        return this.context.DataTypes.positionFactory.copy(this.$position);
+        return this.context.DataTypes.positionFactory.new(this.$position);
     }
     getCost() {
         return this.Cost.copy(this.$cost);

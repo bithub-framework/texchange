@@ -1,8 +1,8 @@
-import { HLike, HFactory, Position } from 'secretary-like';
+import { HLike, HFactory, Position, PositionLike, PositionFactory } from 'secretary-like';
 import { Balance } from './balance';
 export interface Frozen<H extends HLike<H>> {
     balance: Balance<H>;
-    position: Position<H>;
+    position: PositionLike<H>;
 }
 export declare namespace Frozen {
     interface Snapshot {
@@ -20,7 +20,8 @@ export declare class FrozenFactory<H extends HLike<H>> {
 }
 export declare class FrozenStatic<H extends HLike<H>> {
     private hFactory;
-    constructor(hFactory: HFactory<H>);
+    private positionFactory;
+    constructor(hFactory: HFactory<H>, positionFactory: PositionFactory<H>);
     plus(x: Frozen<H>, y: Frozen<H>): Frozen<H>;
     readonly ZERO: Frozen<H>;
     minus(x: Frozen<H>, y?: Frozen<H>): Frozen<H>;

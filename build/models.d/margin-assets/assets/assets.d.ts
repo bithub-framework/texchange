@@ -1,4 +1,4 @@
-import { Length, Position, HLike, H, MarketSpecLike } from 'secretary-like';
+import { Length, PositionLike, Position, HLike, H, MarketSpecLike } from 'secretary-like';
 import { Cost } from './cost';
 import { VirtualMachineContextLike } from '../../../vmctx';
 import { StatefulLike } from '../../../stateful-like';
@@ -12,7 +12,7 @@ export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.S
     private $cost;
     constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, balance: H);
     getBalance(): H;
-    getPosition(): Position<H>;
+    getPosition(): PositionLike<H>;
     getCost(): Cost<H>;
     capture(): Assets.Snapshot;
     restore(snapshot: Assets.Snapshot): void;

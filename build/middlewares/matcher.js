@@ -37,13 +37,13 @@ let Matcher = class Matcher {
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.marketSpec.dollarVolume(maker.price, quantity));
-                trades.push({
+                trades.push(this.context.DataTypes.tradeFactory.new({
                     side: $taker.side,
                     price: maker.price,
                     quantity,
                     time: this.context.timeline.now(),
                     id: ++this.progress.userTradeCount,
-                });
+                }));
             }
         this.marginAssets.pay(dollarVolume
             .times(this.accountSpec.TAKER_FEE_RATE)

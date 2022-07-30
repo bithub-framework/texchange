@@ -4,7 +4,7 @@ import {
 } from 'secretary-like';
 
 
-export class Decrements<H extends HLike<H>> {
+export interface Decrements<H extends HLike<H>> {
 	[side: Side]: Map<string, H>;
 }
 

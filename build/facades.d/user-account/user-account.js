@@ -28,7 +28,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.emit('positions', this.context.DataTypes.positionsFactory.copy(positions));
+                this.emit('positions', this.context.DataTypes.positionsFactory.new(positions));
             }
             catch (err) { }
         });
@@ -36,19 +36,19 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             try {
                 await this.context.timeline.sleep(this.config.processing);
                 await this.context.timeline.sleep(this.config.ping);
-                this.emit('balances', this.context.DataTypes.balancesFactory.copy(balances));
+                this.emit('balances', this.context.DataTypes.balancesFactory.new(balances));
             }
             catch (err) { }
         });
     }
     async makeOrders($orders) {
         try {
-            const orders = $orders.map(order => this.context.DataTypes.limitOrderFactory.copy(order));
+            const orders = $orders.map(order => this.context.DataTypes.limitOrderFactory.new(order));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.context.DataTypes.openOrderFactory.copy(order));
+                : this.context.DataTypes.openOrderFactory.new(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -56,12 +56,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async amendOrders($amendments) {
         try {
-            const amendments = $amendments.map(amendment => this.context.DataTypes.amendmentFactory.copy(amendment));
+            const amendments = $amendments.map(amendment => this.context.DataTypes.amendmentFactory.new(amendment));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
-                : this.context.DataTypes.openOrderFactory.copy(order));
+                : this.context.DataTypes.openOrderFactory.new(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -69,12 +69,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async cancelOrders($orders) {
         try {
-            const orders = $orders.map(order => this.context.DataTypes.openOrderFactory.copy(order));
+            const orders = $orders.map(order => this.context.DataTypes.openOrderFactory.new(order));
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.context.DataTypes.openOrderFactory.copy(order));
+                : this.context.DataTypes.openOrderFactory.new(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -84,7 +84,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
-            return this.context.DataTypes.balancesFactory.copy(this.instant.getBalances());
+            return this.context.DataTypes.balancesFactory.new(this.instant.getBalances());
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -94,7 +94,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.context.timeline.sleep(this.config.ping);
             await this.context.timeline.sleep(this.config.processing);
-            return this.context.DataTypes.positionsFactory.copy(this.instant.getPositions());
+            return this.context.DataTypes.positionsFactory.new(this.instant.getPositions());
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);
@@ -106,7 +106,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             await this.context.timeline.sleep(this.config.processing);
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
-                : this.context.DataTypes.openOrderFactory.copy(order));
+                : this.context.DataTypes.openOrderFactory.new(order));
         }
         finally {
             await this.context.timeline.sleep(this.config.ping);

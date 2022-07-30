@@ -9,9 +9,9 @@ import { Pricing } from '../models.d/pricing/pricing';
 import { Progress } from '../models.d/progress';
 import { Broadcast } from '../middlewares/broadcast';
 import { Mtm } from '../mark-to-market/mtm';
-import { DatabaseOrderbook, DatabaseOrderbookId } from '../data-types/database-orderbook';
+import { DatabaseOrderbookLike, DatabaseOrderbookId } from '../data-types/database-orderbook';
 import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
-import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
+import { DatabaseTradeLike, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
 export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot>, StartableLike {
@@ -38,8 +38,8 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, accountSpec: AccountSpecLike, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
     getMarketSpec(): MarketSpecLike<H>;
     getAccountSpec(): AccountSpecLike;
-    updateTrades($trades: DatabaseTrade<H>[]): void;
-    updateOrderbook($orderbook: DatabaseOrderbook<H>): void;
+    updateTrades($trades: DatabaseTradeLike<H>[]): void;
+    updateOrderbook($orderbook: DatabaseOrderbookLike<H>): void;
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;
     getLatestDatabaseTradeId(): DatabaseTradeId | null;
     quantity(price: H, dollarVolume: H): H;

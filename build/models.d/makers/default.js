@@ -28,10 +28,10 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
             };
         }
         else {
-            const position = {
+            const position = this.context.DataTypes.positionFactory.new({
                 [secretary_like_1.Length.LONG]: this.context.DataTypes.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.context.DataTypes.hFactory.from(0),
-            };
+            });
             position[order.length] = order.unfilled;
             position[secretary_like_1.Length.invert(order.length)] = this.context.DataTypes.hFactory.from(0);
             return {

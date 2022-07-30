@@ -1,11 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OpenMakerFactory = void 0;
+class OpenMaker {
+    constructor(source, factory) {
+        this.factory = factory;
+        ({
+            price: this.price,
+            quantity: this.quantity,
+            side: this.side,
+            length: this.length,
+            action: this.action,
+            filled: this.filled,
+            unfilled: this.unfilled,
+            id: this.id,
+            behind: this.behind,
+            frozen: this.frozen,
+        } = source);
+    }
+    toJSON() {
+        return this.factory.capture(this);
+    }
+    toString() {
+        return JSON.stringify(this.toJSON());
+    }
+}
 class OpenMakerFactory {
     constructor(hFactory, frozenFactory, openOrderFactory) {
         this.hFactory = hFactory;
         this.frozenFactory = frozenFactory;
         this.openOrderFactory = openOrderFactory;
+    }
+    new(source) {
+        return new OpenMaker(source, this);
     }
     capture(order) {
         return {
@@ -15,18 +41,11 @@ class OpenMakerFactory {
         };
     }
     restore(snapshot) {
-        return {
+        return this.new({
             ...this.openOrderFactory.restore(snapshot),
             behind: this.hFactory.restore(snapshot.behind),
             frozen: this.frozenFactory.restore(snapshot.frozen),
-        };
-    }
-    copy(order) {
-        return {
-            ...this.openOrderFactory.copy(order),
-            behind: order.behind,
-            frozen: order.frozen,
-        };
+        });
     }
 }
 exports.OpenMakerFactory = OpenMakerFactory;
