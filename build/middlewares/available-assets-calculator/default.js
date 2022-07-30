@@ -12,7 +12,7 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator extends available_assets_calculator_1.AvailableAssetsCalculator {
     // 默认单向持仓模式
-    getUnroundedFinalFrozenBalance() {
+    getFinalFrozenBalance() {
         const position = this.marginAssets.getPosition();
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();

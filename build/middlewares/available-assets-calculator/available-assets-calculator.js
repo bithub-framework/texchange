@@ -25,10 +25,6 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
             .minus(this.marginAssets.getFinalMargin())
             .minus(this.getFinalFrozenBalance());
     }
-    getFinalFrozenBalance() {
-        return this.getUnroundedFinalFrozenBalance()
-            .round(this.marketSpec.CURRENCY_SCALE);
-    }
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();
         const position = this.marginAssets.getPosition();

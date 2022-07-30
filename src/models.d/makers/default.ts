@@ -15,7 +15,7 @@ import { injextends } from '@zimtsui/injektor';
 @injextends()
 export class DefaultMakers<H extends HLike<H>> extends Makers<H> {
 	// 默认单向持仓模式
-	protected unroundedToFreeze(order: OpenOrder<H>): Frozen<H> {
+	protected toFreeze(order: OpenOrder<H>): Frozen<H> {
 		if (order.action === Action.OPEN) {
 			const balance: Balance<H> = {
 				[Length.LONG]: this.context.DataTypes.hFactory.from(0),

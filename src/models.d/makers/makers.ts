@@ -1,7 +1,6 @@
 import {
-	Side, Length,
+	Side,
 	HLike,
-	Position,
 	OpenOrder,
 	OrderId,
 	MarketSpecLike,
@@ -92,21 +91,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			);
 	}
 
-	private toFreeze(order: OpenOrder<H>): Frozen<H> {
-		const frozen = this.unroundedToFreeze(order);
-		return {
-			balance: {
-				[Length.LONG]: frozen.balance[Length.LONG].round(this.marketSpec.CURRENCY_SCALE),
-				[Length.SHORT]: frozen.balance[Length.SHORT].round(this.marketSpec.CURRENCY_SCALE),
-			},
-			position: {
-				[Length.LONG]: frozen.position[Length.LONG].round(this.marketSpec.QUANTITY_SCALE),
-				[Length.SHORT]: frozen.position[Length.SHORT].round(this.marketSpec.QUANTITY_SCALE),
-			},
-		};
-	}
-
-	protected abstract unroundedToFreeze(order: OpenOrder<H>): Frozen<H>;
+	protected abstract toFreeze(order: OpenOrder<H>): Frozen<H>;
 
 	public appendOrder(
 		order: OpenOrder<H>,

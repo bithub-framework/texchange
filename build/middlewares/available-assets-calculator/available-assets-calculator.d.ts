@@ -9,8 +9,7 @@ export declare abstract class AvailableAssetsCalculator<H extends HLike<H>> {
     protected makers: Makers<H>;
     constructor(context: VirtualMachineContextLike<H>, marketSpec: MarketSpecLike<H>, marginAssets: MarginAssets<H>, makers: Makers<H>);
     getAvailable(): H;
-    private getFinalFrozenBalance;
-    protected abstract getUnroundedFinalFrozenBalance(): H;
+    protected abstract getFinalFrozenBalance(): H;
     getClosable(): Position<H>;
     getBalances(): Balances<H>;
     getPositions(): Positions<H>;
