@@ -5,7 +5,7 @@ import {
 	AccountSpec,
 	ConnectionClosed,
 } from 'secretary-like';
-import { Startable, StartableLike } from 'startable';
+import { createStartable, StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
@@ -27,7 +27,7 @@ import { TYPES } from '../injection/types';
 export class AdminFacade<H extends HLike<H>>
 	implements StatefulLike<Snapshot>, StartableLike {
 
-	private startable = Startable.create(
+	private startable = createStartable(
 		() => this.rawStart(),
 		() => this.rawStop(),
 	);
