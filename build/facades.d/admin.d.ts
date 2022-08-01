@@ -1,6 +1,5 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import { HLike, MarketSpec, AccountSpec } from 'secretary-like';
-import { StartableLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
@@ -14,7 +13,7 @@ import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
-export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot>, StartableLike {
+export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
     private vMCTX;
     private marketSpec;
     private accountSpec;
@@ -28,13 +27,7 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     private useCaseUpdateTrades;
     private useCaseUpdateOrderbook;
     private useCaseGetProgress;
-    private startable;
-    start: (onStopping?: import("startable").OnStopping | undefined) => Promise<void>;
-    stop: (err?: Error | undefined) => Promise<void>;
-    assart: (onStopping?: import("startable").OnStopping | undefined) => Promise<void>;
-    starp: (err?: Error | undefined) => Promise<void>;
-    getReadyState: () => import("startable").ReadyState;
-    skipStart: (onStopping?: import("startable").OnStopping | undefined) => void;
+    $s: import("startable").Startable<[]>;
     constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
     getMarketSpec(): MarketSpec<H>;
     getAccountSpec(): AccountSpec;

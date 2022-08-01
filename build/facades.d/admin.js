@@ -29,13 +29,7 @@ let AdminFacade = class AdminFacade {
         this.useCaseUpdateTrades = useCaseUpdateTrades;
         this.useCaseUpdateOrderbook = useCaseUpdateOrderbook;
         this.useCaseGetProgress = useCaseGetProgress;
-        this.startable = (0, startable_1.createStartable)(() => this.rawStart(), () => this.rawStop());
-        this.start = this.startable.start;
-        this.stop = this.startable.stop;
-        this.assart = this.startable.assart;
-        this.starp = this.startable.starp;
-        this.getReadyState = this.startable.getReadyState;
-        this.skipStart = this.startable.skipStart;
+        this.$s = (0, startable_1.createStartable)(() => this.rawStart(), () => this.rawStop());
     }
     getMarketSpec() {
         return this.marketSpec;
@@ -64,12 +58,12 @@ let AdminFacade = class AdminFacade {
     }
     async rawStart() {
         if (this.mtm)
-            await this.mtm.start(this.stop);
+            await this.mtm.$s.start([], this.$s.stop);
     }
     async rawStop() {
         this.broadcast.emit('error', new secretary_like_1.ConnectionClosed('Texchange closed.'));
         if (this.mtm)
-            await this.mtm.stop();
+            await this.mtm.$s.stop();
     }
     capture() {
         return {

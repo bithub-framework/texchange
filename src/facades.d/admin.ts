@@ -24,19 +24,11 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class AdminFacade<H extends HLike<H>>
-	implements StatefulLike<Snapshot>, StartableLike {
-
-	private startable = createStartable(
+export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
+	public $s = createStartable(
 		() => this.rawStart(),
 		() => this.rawStop(),
 	);
-	public start = this.startable.start;
-	public stop = this.startable.stop;
-	public assart = this.startable.assart;
-	public starp = this.startable.starp;
-	public getReadyState = this.startable.getReadyState;
-	public skipStart = this.startable.skipStart;
 
 	public constructor(
 		@inject(TYPES.vMCTX)
@@ -107,13 +99,13 @@ export class AdminFacade<H extends HLike<H>>
 
 	private async rawStart() {
 		if (this.mtm)
-			await this.mtm.start(this.stop);
+			await this.mtm.$s.start([], this.$s.stop);
 	}
 
 	private async rawStop() {
 		this.broadcast.emit('error', new ConnectionClosed('Texchange closed.'));
 		if (this.mtm)
-			await this.mtm.stop();
+			await this.mtm.$s.stop();
 	}
 
 	public capture(): Snapshot {
