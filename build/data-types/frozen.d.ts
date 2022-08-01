@@ -18,7 +18,7 @@ export declare class FrozenFactory<H extends HLike<H>> implements CompositeDataF
     private balanceFactory;
     private positionFactory;
     constructor(balanceFactory: BalanceFactory<H>, positionFactory: PositionFactory<H>);
-    new(source: Frozen.Source<H>): Frozen<H>;
+    create(source: Frozen.Source<H>): Frozen<H>;
     capture(frozen: Frozen<H>): Frozen.Snapshot;
     restore(snapshot: Frozen.Snapshot): Frozen<H>;
 }

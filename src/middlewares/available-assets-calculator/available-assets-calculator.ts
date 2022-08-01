@@ -37,7 +37,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	public getClosable(): Position<H> {
 		const totalFrozen = this.makers.getTotalFrozen();
 		const position = this.marginAssets.getPosition();
-		return this.vMCTX.DataTypes.positionFactory.new({
+		return this.vMCTX.DataTypes.positionFactory.create({
 			[Length.LONG]: position[Length.LONG]
 				.minus(totalFrozen.position[Length.LONG]),
 			[Length.SHORT]: position[Length.SHORT]
@@ -46,7 +46,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	}
 
 	public getBalances(): Balances<H> {
-		return this.vMCTX.DataTypes.balancesFactory.new({
+		return this.vMCTX.DataTypes.balancesFactory.create({
 			balance: this.marginAssets.getBalance(),
 			available: this.getAvailable(),
 			time: this.vMCTX.timeline.now(),
@@ -54,7 +54,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	}
 
 	public getPositions(): Positions<H> {
-		return this.vMCTX.DataTypes.positionsFactory.new({
+		return this.vMCTX.DataTypes.positionsFactory.create({
 			position: this.marginAssets.getPosition(),
 			closable: this.getClosable(),
 			time: this.vMCTX.timeline.now(),

@@ -15,7 +15,7 @@ export declare class DatabaseTradeFactory<H extends HLike<H>> implements Composi
     private hFactory;
     private tradeFactory;
     constructor(hFactory: HFactory<H>, tradeFactory: TradeFactory<H>);
-    new(source: DatabaseTrade.Source<H>): DatabaseTrade<H>;
+    create(source: DatabaseTrade.Source<H>): DatabaseTrade<H>;
     capture(trade: DatabaseTrade<H>): DatabaseTrade.Snapshot;
     restore(snapshot: DatabaseTrade.Snapshot): DatabaseTrade<H>;
 }

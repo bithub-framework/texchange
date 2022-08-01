@@ -6,7 +6,7 @@ class ConcreteDatabaseOrderbook {
     constructor(source, factory, bookOrderFactory) {
         this.factory = factory;
         for (const side of [secretary_like_1.Side.BID, secretary_like_1.Side.ASK])
-            this[side] = source[side].map(order => bookOrderFactory.new(order));
+            this[side] = source[side].map(order => bookOrderFactory.create(order));
         this.time = source.time;
         this.id = source.id;
     }
@@ -22,7 +22,7 @@ class DatabaseOrderbookFactory {
         this.bookOrderFactory = bookOrderFactory;
         this.orderbookFactory = orderbookFactory;
     }
-    new(source) {
+    create(source) {
         return new ConcreteDatabaseOrderbook(source, this, this.bookOrderFactory);
     }
     capture(databaseOrderbook) {
@@ -32,7 +32,7 @@ class DatabaseOrderbookFactory {
         };
     }
     restore(snapshot) {
-        return this.new({
+        return this.create({
             ...this.orderbookFactory.restore(snapshot),
             id: snapshot.id,
         });

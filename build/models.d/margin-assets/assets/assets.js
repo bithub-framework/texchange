@@ -21,7 +21,7 @@ let Assets = class Assets {
         this.marketSpec = marketSpec;
         this.balance = balance;
         this.Cost = new cost_1.CostFactory(this.vMCTX.DataTypes.hFactory);
-        this.$position = this.vMCTX.DataTypes.positionFactory.new({
+        this.$position = this.vMCTX.DataTypes.positionFactory.create({
             [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
             [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
         });
@@ -34,7 +34,7 @@ let Assets = class Assets {
         return this.balance;
     }
     getPosition() {
-        return this.vMCTX.DataTypes.positionFactory.new(this.$position);
+        return this.vMCTX.DataTypes.positionFactory.create(this.$position);
     }
     getCost() {
         return this.Cost.copy(this.$cost);

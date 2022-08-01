@@ -18,7 +18,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private Decrements = new DecrementsFactory<H>(this.vMCTX.DataTypes.hFactory);
 
 	private time = Number.NEGATIVE_INFINITY;
-	private basebook: Orderbook<H> = this.vMCTX.DataTypes.orderbookFactory.new({
+	private basebook: Orderbook<H> = this.vMCTX.DataTypes.orderbookFactory.create({
 		[Side.BID]: [],
 		[Side.ASK]: [],
 		time: Number.NEGATIVE_INFINITY,
@@ -62,7 +62,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 	private tryApply(): Orderbook<H> {
 		if (this.finalbookCache) return this.finalbookCache;
 
-		const $final = this.vMCTX.DataTypes.orderbookFactory.new({
+		const $final = this.vMCTX.DataTypes.orderbookFactory.create({
 			[Side.BID]: [],
 			[Side.ASK]: [],
 			time: this.time,
@@ -87,7 +87,7 @@ export class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
 			}
 			// 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
 			$final[side] = [...$total[side]].map(
-				([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.new({
+				([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.create({
 					price: this.vMCTX.DataTypes.hFactory.from(priceString),
 					quantity,
 					side,

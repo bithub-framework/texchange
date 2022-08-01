@@ -67,7 +67,7 @@ export class DatabaseTradeFactory<H extends HLike<H>> implements
 		private tradeFactory: TradeFactory<H>,
 	) { }
 
-	public new(source: DatabaseTrade.Source<H>): DatabaseTrade<H> {
+	public create(source: DatabaseTrade.Source<H>): DatabaseTrade<H> {
 		return new ConcreteDatabaseTrade(source, this);
 	}
 
@@ -79,7 +79,7 @@ export class DatabaseTradeFactory<H extends HLike<H>> implements
 	}
 
 	public restore(snapshot: DatabaseTrade.Snapshot): DatabaseTrade<H> {
-		return this.new({
+		return this.create({
 			...this.tradeFactory.restore(snapshot),
 			id: snapshot.id,
 		});

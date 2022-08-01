@@ -14,7 +14,7 @@ export declare namespace Balance {
 export declare class BalanceFactory<H extends HLike<H>> implements CompositeDataFactoryLike<Balance.Source<H>, Balance<H>, Balance.Snapshot> {
     private hFactory;
     constructor(hFactory: HFactory<H>);
-    new(source: Balance.Source<H>): Balance<H>;
+    create(source: Balance.Source<H>): Balance<H>;
     capture(balance: Balance<H>): Balance.Snapshot;
     restore(snapshot: Balance.Snapshot): Balance<H>;
 }

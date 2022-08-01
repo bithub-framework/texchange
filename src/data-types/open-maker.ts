@@ -48,7 +48,7 @@ class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
 			id: this.id,
 			behind: this.behind,
 		} = source);
-		this.frozen = frozenFactory.new(source.frozen);
+		this.frozen = frozenFactory.create(source.frozen);
 	}
 
 	public toJSON(): unknown {
@@ -84,7 +84,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		private openOrderFactory: OpenOrderFactory<H>,
 	) { }
 
-	public new(source: OpenMaker.Source<H>): OpenMaker<H> {
+	public create(source: OpenMaker.Source<H>): OpenMaker<H> {
 		return new ConcreteOpenMaker(
 			source,
 			this,
@@ -101,7 +101,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 	}
 
 	public restore(snapshot: OpenMaker.Snapshot): OpenMaker<H> {
-		return this.new({
+		return this.create({
 			...this.openOrderFactory.restore(snapshot),
 			behind: this.hFactory.restore(snapshot.behind),
 			frozen: this.frozenFactory.restore(snapshot.frozen),

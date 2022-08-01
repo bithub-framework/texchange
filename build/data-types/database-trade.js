@@ -24,7 +24,7 @@ class DatabaseTradeFactory {
         this.hFactory = hFactory;
         this.tradeFactory = tradeFactory;
     }
-    new(source) {
+    create(source) {
         return new ConcreteDatabaseTrade(source, this);
     }
     capture(trade) {
@@ -34,7 +34,7 @@ class DatabaseTradeFactory {
         };
     }
     restore(snapshot) {
-        return this.new({
+        return this.create({
             ...this.tradeFactory.restore(snapshot),
             id: snapshot.id,
         });

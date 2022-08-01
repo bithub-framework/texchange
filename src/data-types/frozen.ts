@@ -28,8 +28,8 @@ class ConcreteFrozen<H extends HLike<H>> implements Frozen<H> {
 		balanceFactory: BalanceFactory<H>,
 		positionFactory: PositionFactory<H>,
 	) {
-		this.balance = balanceFactory.new(source.balance);
-		this.position = positionFactory.new(source.position);
+		this.balance = balanceFactory.create(source.balance);
+		this.position = positionFactory.create(source.position);
 	}
 
 	public toJSON(): unknown {
@@ -64,7 +64,7 @@ export class FrozenFactory<H extends HLike<H>> implements
 		private positionFactory: PositionFactory<H>,
 	) { }
 
-	public new(source: Frozen.Source<H>): Frozen<H> {
+	public create(source: Frozen.Source<H>): Frozen<H> {
 		return new ConcreteFrozen(
 			source,
 			this,
@@ -81,7 +81,7 @@ export class FrozenFactory<H extends HLike<H>> implements
 	}
 
 	public restore(snapshot: Frozen.Snapshot): Frozen<H> {
-		return this.new({
+		return this.create({
 			balance: this.balanceFactory.restore(snapshot.balance),
 			position: this.positionFactory.restore(snapshot.position),
 		});
@@ -98,7 +98,7 @@ export class FrozenStatic<H extends HLike<H>> {
 		x: Frozen<H>,
 		y: Frozen<H>,
 	): Frozen<H> {
-		return this.frozenFactory.new({
+		return this.frozenFactory.create({
 			balance: {
 				[Length.LONG]: x.balance[Length.LONG].plus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].plus(y.balance[Length.SHORT]),
@@ -110,7 +110,7 @@ export class FrozenStatic<H extends HLike<H>> {
 		});
 	}
 
-	public readonly ZERO: Frozen<H> = this.frozenFactory.new({
+	public readonly ZERO: Frozen<H> = this.frozenFactory.create({
 		balance: {
 			[Length.LONG]: this.hFactory.from(0),
 			[Length.SHORT]: this.hFactory.from(0),
@@ -129,7 +129,7 @@ export class FrozenStatic<H extends HLike<H>> {
 			y = x;
 			x = this.ZERO;
 		}
-		return this.frozenFactory.new({
+		return this.frozenFactory.create({
 			balance: {
 				[Length.LONG]: x.balance[Length.LONG].minus(y.balance[Length.LONG]),
 				[Length.SHORT]: x.balance[Length.SHORT].minus(y.balance[Length.SHORT]),

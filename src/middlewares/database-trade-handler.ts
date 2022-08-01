@@ -31,7 +31,7 @@ export class DatabaseTradeHandler<H extends HLike<H>> {
 	) { }
 
 	public tradeTakesOpenMakers(trade: Trade<H>): void {
-		const $trade = this.vMCTX.DataTypes.tradeFactory.new(trade);
+		const $trade = this.vMCTX.DataTypes.tradeFactory.create(trade);
 		for (const order of [...this.makers])
 			if (this.$tradeShouldTakeOpenOrder($trade, order)) {
 				this.$tradeTakesOrderQueue($trade, order);

@@ -16,7 +16,7 @@ let DefaultAvailableAssetsCalculator = class DefaultAvailableAssetsCalculator ex
         const position = this.marginAssets.getPosition();
         const totalFrozen = this.makers.getTotalFrozen();
         const totalUnfilled = this.makers.getTotalUnfilled();
-        const $final = this.vMCTX.DataTypes.balanceFactory.new({
+        const $final = this.vMCTX.DataTypes.balanceFactory.create({
             [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
             [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
         });

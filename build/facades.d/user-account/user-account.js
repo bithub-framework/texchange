@@ -28,7 +28,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             try {
                 await this.vMCTX.timeline.sleep(this.config.processing);
                 await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('positions', this.vMCTX.DataTypes.positionsFactory.new(positions));
+                this.emit('positions', this.vMCTX.DataTypes.positionsFactory.create(positions));
             }
             catch (err) { }
         });
@@ -36,19 +36,19 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             try {
                 await this.vMCTX.timeline.sleep(this.config.processing);
                 await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('balances', this.vMCTX.DataTypes.balancesFactory.new(balances));
+                this.emit('balances', this.vMCTX.DataTypes.balancesFactory.create(balances));
             }
             catch (err) { }
         });
     }
     async makeOrders($orders) {
         try {
-            const orders = $orders.map(order => this.vMCTX.DataTypes.limitOrderFactory.new(order));
+            const orders = $orders.map(order => this.vMCTX.DataTypes.limitOrderFactory.create(order));
             await this.vMCTX.timeline.sleep(this.config.ping);
             await this.vMCTX.timeline.sleep(this.config.processing);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.new(order));
+                : this.vMCTX.DataTypes.openOrderFactory.create(order));
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);
@@ -56,12 +56,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async amendOrders($amendments) {
         try {
-            const amendments = $amendments.map(amendment => this.vMCTX.DataTypes.amendmentFactory.new(amendment));
+            const amendments = $amendments.map(amendment => this.vMCTX.DataTypes.amendmentFactory.create(amendment));
             await this.vMCTX.timeline.sleep(this.config.ping);
             await this.vMCTX.timeline.sleep(this.config.processing);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.new(order));
+                : this.vMCTX.DataTypes.openOrderFactory.create(order));
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);
@@ -69,12 +69,12 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async cancelOrders($orders) {
         try {
-            const orders = $orders.map(order => this.vMCTX.DataTypes.openOrderFactory.new(order));
+            const orders = $orders.map(order => this.vMCTX.DataTypes.openOrderFactory.create(order));
             await this.vMCTX.timeline.sleep(this.config.ping);
             await this.vMCTX.timeline.sleep(this.config.processing);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.new(order));
+                : this.vMCTX.DataTypes.openOrderFactory.create(order));
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);
@@ -84,7 +84,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.vMCTX.timeline.sleep(this.config.ping);
             await this.vMCTX.timeline.sleep(this.config.processing);
-            return this.vMCTX.DataTypes.balancesFactory.new(this.instant.getBalances());
+            return this.vMCTX.DataTypes.balancesFactory.create(this.instant.getBalances());
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);
@@ -94,7 +94,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.vMCTX.timeline.sleep(this.config.ping);
             await this.vMCTX.timeline.sleep(this.config.processing);
-            return this.vMCTX.DataTypes.positionsFactory.new(this.instant.getPositions());
+            return this.vMCTX.DataTypes.positionsFactory.create(this.instant.getPositions());
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);
@@ -106,7 +106,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             await this.vMCTX.timeline.sleep(this.config.processing);
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.new(order));
+                : this.vMCTX.DataTypes.openOrderFactory.create(order));
         }
         finally {
             await this.vMCTX.timeline.sleep(this.config.ping);

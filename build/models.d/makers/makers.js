@@ -39,7 +39,7 @@ let Makers = class Makers {
     }
     getOrder(oid) {
         const $order = this.$getOrder(oid);
-        return this.vMCTX.DataTypes.openMakerFactory.new($order);
+        return this.vMCTX.DataTypes.openMakerFactory.create($order);
     }
     $getOrder(oid) {
         const order = this.$orders.get(oid);
@@ -65,7 +65,7 @@ let Makers = class Makers {
     appendOrder(order, behind) {
         assert(order.unfilled.gt(0));
         const toFreeze = this.toFreeze(order);
-        const $order = this.vMCTX.DataTypes.openMakerFactory.new({
+        const $order = this.vMCTX.DataTypes.openMakerFactory.create({
             price: order.price,
             quantity: order.quantity,
             length: order.length,
@@ -87,7 +87,7 @@ let Makers = class Makers {
         assert(volume.lte($order.unfilled));
         assert($order.behind.eq(0));
         this.forcedlyRemoveOrder(oid);
-        const newOrder = this.vMCTX.DataTypes.openOrderFactory.new({
+        const newOrder = this.vMCTX.DataTypes.openOrderFactory.create({
             price: $order.price,
             quantity: $order.quantity,
             length: $order.length,

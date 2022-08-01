@@ -21,7 +21,7 @@ let Book = class Book {
         this.marketSpec = marketSpec;
         this.Decrements = new decrements_1.DecrementsFactory(this.vMCTX.DataTypes.hFactory);
         this.time = Number.NEGATIVE_INFINITY;
-        this.basebook = this.vMCTX.DataTypes.orderbookFactory.new({
+        this.basebook = this.vMCTX.DataTypes.orderbookFactory.create({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: Number.NEGATIVE_INFINITY,
@@ -51,7 +51,7 @@ let Book = class Book {
     tryApply() {
         if (this.finalbookCache)
             return this.finalbookCache;
-        const $final = this.vMCTX.DataTypes.orderbookFactory.new({
+        const $final = this.vMCTX.DataTypes.orderbookFactory.create({
             [secretary_like_1.Side.BID]: [],
             [secretary_like_1.Side.ASK]: [],
             time: this.time,
@@ -76,7 +76,7 @@ let Book = class Book {
                     this.decrements[side].delete(priceString);
             }
             // 文档说 Map 的迭代顺序等于插入顺序，所以不用排序
-            $final[side] = [...$total[side]].map(([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.new({
+            $final[side] = [...$total[side]].map(([priceString, quantity]) => this.vMCTX.DataTypes.bookOrderFactory.create({
                 price: this.vMCTX.DataTypes.hFactory.from(priceString),
                 quantity,
                 side,

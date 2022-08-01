@@ -19,7 +19,7 @@ export declare class OpenMakerFactory<H extends HLike<H>> implements CompositeDa
     private frozenFactory;
     private openOrderFactory;
     constructor(hFactory: HFactory<H>, frozenFactory: FrozenFactory<H>, openOrderFactory: OpenOrderFactory<H>);
-    new(source: OpenMaker.Source<H>): OpenMaker<H>;
+    create(source: OpenMaker.Source<H>): OpenMaker<H>;
     capture(order: OpenMaker<H>): OpenMaker.Snapshot;
     restore(snapshot: OpenMaker.Snapshot): OpenMaker<H>;
 }

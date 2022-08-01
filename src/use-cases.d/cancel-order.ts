@@ -27,7 +27,7 @@ export class UseCaseCancelOrder<H extends HLike<H>> {
 			filled = order.quantity;
 		}
 
-		return this.vMCTX.DataTypes.openOrderFactory.new({
+		return this.vMCTX.DataTypes.openOrderFactory.create({
 			...order,
 			filled,
 			unfilled: order.quantity.minus(filled),

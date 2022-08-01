@@ -78,14 +78,14 @@ export class AdminFacade<H extends HLike<H>>
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
-				trade => this.vMCTX.DataTypes.databaseTradeFactory.new(trade),
+				trade => this.vMCTX.DataTypes.databaseTradeFactory.create(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
-			this.vMCTX.DataTypes.databaseOrderbookFactory.new($orderbook),
+			this.vMCTX.DataTypes.databaseOrderbookFactory.create($orderbook),
 		);
 	}
 

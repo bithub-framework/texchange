@@ -15,7 +15,7 @@ class ConcreteOpenMaker {
             id: this.id,
             behind: this.behind,
         } = source);
-        this.frozen = frozenFactory.new(source.frozen);
+        this.frozen = frozenFactory.create(source.frozen);
     }
     toJSON() {
         return this.factory.capture(this);
@@ -30,7 +30,7 @@ class OpenMakerFactory {
         this.frozenFactory = frozenFactory;
         this.openOrderFactory = openOrderFactory;
     }
-    new(source) {
+    create(source) {
         return new ConcreteOpenMaker(source, this, this.frozenFactory);
     }
     capture(order) {
@@ -41,7 +41,7 @@ class OpenMakerFactory {
         };
     }
     restore(snapshot) {
-        return this.new({
+        return this.create({
             ...this.openOrderFactory.restore(snapshot),
             behind: this.hFactory.restore(snapshot.behind),
             frozen: this.frozenFactory.restore(snapshot.frozen),

@@ -42,7 +42,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 			try {
 				await this.vMCTX.timeline.sleep(this.config.processing);
 				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.new(orderbook));
+				this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.create(orderbook));
 			} catch (err) { }
 		});
 
@@ -50,7 +50,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 			try {
 				await this.vMCTX.timeline.sleep(this.config.processing);
 				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.new(trade)));
+				this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.create(trade)));
 			} catch (err) { }
 		});
 

@@ -5,8 +5,8 @@ const secretary_like_1 = require("secretary-like");
 class ConcreteFrozen {
     constructor(source, factory, balanceFactory, positionFactory) {
         this.factory = factory;
-        this.balance = balanceFactory.new(source.balance);
-        this.position = positionFactory.new(source.position);
+        this.balance = balanceFactory.create(source.balance);
+        this.position = positionFactory.create(source.position);
     }
     toJSON() {
         return this.factory.capture(this);
@@ -20,7 +20,7 @@ class FrozenFactory {
         this.balanceFactory = balanceFactory;
         this.positionFactory = positionFactory;
     }
-    new(source) {
+    create(source) {
         return new ConcreteFrozen(source, this, this.balanceFactory, this.positionFactory);
     }
     capture(frozen) {
@@ -30,7 +30,7 @@ class FrozenFactory {
         };
     }
     restore(snapshot) {
-        return this.new({
+        return this.create({
             balance: this.balanceFactory.restore(snapshot.balance),
             position: this.positionFactory.restore(snapshot.position),
         });
@@ -41,7 +41,7 @@ class FrozenStatic {
     constructor(frozenFactory, hFactory) {
         this.frozenFactory = frozenFactory;
         this.hFactory = hFactory;
-        this.ZERO = this.frozenFactory.new({
+        this.ZERO = this.frozenFactory.create({
             balance: {
                 [secretary_like_1.Length.LONG]: this.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.hFactory.from(0),
@@ -53,7 +53,7 @@ class FrozenStatic {
         });
     }
     plus(x, y) {
-        return this.frozenFactory.new({
+        return this.frozenFactory.create({
             balance: {
                 [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].plus(y.balance[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].plus(y.balance[secretary_like_1.Length.SHORT]),
@@ -69,7 +69,7 @@ class FrozenStatic {
             y = x;
             x = this.ZERO;
         }
-        return this.frozenFactory.new({
+        return this.frozenFactory.create({
             balance: {
                 [secretary_like_1.Length.LONG]: x.balance[secretary_like_1.Length.LONG].minus(y.balance[secretary_like_1.Length.LONG]),
                 [secretary_like_1.Length.SHORT]: x.balance[secretary_like_1.Length.SHORT].minus(y.balance[secretary_like_1.Length.SHORT]),

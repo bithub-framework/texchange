@@ -14,7 +14,7 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
     // 默认单向持仓模式
     toFreeze(order) {
         if (order.action === secretary_like_1.Action.OPEN) {
-            const balance = this.vMCTX.DataTypes.balanceFactory.new({
+            const balance = this.vMCTX.DataTypes.balanceFactory.create({
                 [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
             });
@@ -22,19 +22,19 @@ let DefaultMakers = class DefaultMakers extends makers_1.Makers {
                 .dollarVolume(order.price, order.unfilled)
                 .div(this.accountSpec.LEVERAGE, this.marketSpec.CURRENCY_SCALE);
             balance[secretary_like_1.Length.invert(order.length)] = this.vMCTX.DataTypes.hFactory.from(0);
-            return this.vMCTX.DataTypes.frozenFactory.new({
+            return this.vMCTX.DataTypes.frozenFactory.create({
                 balance,
                 position: this.vMCTX.DataTypes.Frozen.ZERO.position,
             });
         }
         else {
-            const position = this.vMCTX.DataTypes.positionFactory.new({
+            const position = this.vMCTX.DataTypes.positionFactory.create({
                 [secretary_like_1.Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
                 [secretary_like_1.Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
             });
             position[order.length] = order.unfilled;
             position[secretary_like_1.Length.invert(order.length)] = this.vMCTX.DataTypes.hFactory.from(0);
-            return this.vMCTX.DataTypes.frozenFactory.new({
+            return this.vMCTX.DataTypes.frozenFactory.create({
                 balance: this.vMCTX.DataTypes.Frozen.ZERO.balance,
                 position: position,
             });

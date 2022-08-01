@@ -21,7 +21,7 @@ class BalanceFactory {
     constructor(hFactory) {
         this.hFactory = hFactory;
     }
-    new(source) {
+    create(source) {
         return new ConcreteBalance(source, this);
     }
     capture(balance) {
@@ -31,7 +31,7 @@ class BalanceFactory {
         };
     }
     restore(snapshot) {
-        return this.new({
+        return this.create({
             [secretary_like_1.Length.LONG]: this.hFactory.restore(snapshot.long),
             [secretary_like_1.Length.SHORT]: this.hFactory.restore(snapshot.short),
         });

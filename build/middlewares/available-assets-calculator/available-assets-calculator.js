@@ -28,7 +28,7 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();
         const position = this.marginAssets.getPosition();
-        return this.vMCTX.DataTypes.positionFactory.new({
+        return this.vMCTX.DataTypes.positionFactory.create({
             [secretary_like_1.Length.LONG]: position[secretary_like_1.Length.LONG]
                 .minus(totalFrozen.position[secretary_like_1.Length.LONG]),
             [secretary_like_1.Length.SHORT]: position[secretary_like_1.Length.SHORT]
@@ -36,14 +36,14 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
         });
     }
     getBalances() {
-        return this.vMCTX.DataTypes.balancesFactory.new({
+        return this.vMCTX.DataTypes.balancesFactory.create({
             balance: this.marginAssets.getBalance(),
             available: this.getAvailable(),
             time: this.vMCTX.timeline.now(),
         });
     }
     getPositions() {
-        return this.vMCTX.DataTypes.positionsFactory.new({
+        return this.vMCTX.DataTypes.positionsFactory.create({
             position: this.marginAssets.getPosition(),
             closable: this.getClosable(),
             time: this.vMCTX.timeline.now(),

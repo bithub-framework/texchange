@@ -31,7 +31,7 @@ class ConcreteDatabaseOrderbook<H extends HLike<H>> implements DatabaseOrderbook
 	) {
 		for (const side of [Side.BID, Side.ASK])
 			this[side] = source[side].map(
-				order => bookOrderFactory.new(order),
+				order => bookOrderFactory.create(order),
 			);
 		this.time = source.time;
 		this.id = source.id;
@@ -67,7 +67,7 @@ export class DatabaseOrderbookFactory<H extends HLike<H>> implements
 		private orderbookFactory: OrderbookFactory<H>,
 	) { }
 
-	public new(source: DatabaseOrderbook.Source<H>): DatabaseOrderbook<H> {
+	public create(source: DatabaseOrderbook.Source<H>): DatabaseOrderbook<H> {
 		return new ConcreteDatabaseOrderbook(
 			source,
 			this,
@@ -83,7 +83,7 @@ export class DatabaseOrderbookFactory<H extends HLike<H>> implements
 	}
 
 	public restore(snapshot: DatabaseOrderbook.Snapshot): DatabaseOrderbook<H> {
-		return this.new({
+		return this.create({
 			...this.orderbookFactory.restore(snapshot),
 			id: snapshot.id,
 		});

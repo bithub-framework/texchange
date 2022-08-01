@@ -32,9 +32,9 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
             this.makers.removeOrder(order.id);
         const allTrades = [];
         for (const order of orders) {
-            const $order = this.vMCTX.DataTypes.openOrderFactory.new(order);
+            const $order = this.vMCTX.DataTypes.openOrderFactory.create(order);
             const trades = this.matcher.$match($order);
-            const maker = this.vMCTX.DataTypes.openOrderFactory.new($order);
+            const maker = this.vMCTX.DataTypes.openOrderFactory.create($order);
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);
             allTrades.push(...trades);

@@ -26,7 +26,7 @@ let UseCaseCancelOrder = class UseCaseCancelOrder {
         catch (err) {
             filled = order.quantity;
         }
-        return this.vMCTX.DataTypes.openOrderFactory.new({
+        return this.vMCTX.DataTypes.openOrderFactory.create({
             ...order,
             filled,
             unfilled: order.quantity.minus(filled),

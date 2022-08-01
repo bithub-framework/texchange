@@ -51,7 +51,7 @@ export class Matcher<H extends HLike<H>> {
 				volume = volume.plus(quantity);
 				dollarVolume = dollarVolume
 					.plus(this.marketSpec.dollarVolume(maker.price, quantity));
-				trades.push(this.vMCTX.DataTypes.tradeFactory.new({
+				trades.push(this.vMCTX.DataTypes.tradeFactory.create({
 					side: $taker.side,
 					price: maker.price,
 					quantity,

@@ -58,7 +58,7 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public getOrder(oid: OrderId): OpenMaker<H> {
 		const $order = this.$getOrder(oid);
-		return this.vMCTX.DataTypes.openMakerFactory.new($order);
+		return this.vMCTX.DataTypes.openMakerFactory.create($order);
 	}
 
 	protected $getOrder(oid: OrderId): OpenMaker<H> {
@@ -101,7 +101,7 @@ export abstract class Makers<H extends HLike<H>> implements
 	): void {
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.toFreeze(order);
-		const $order = this.vMCTX.DataTypes.openMakerFactory.new({
+		const $order = this.vMCTX.DataTypes.openMakerFactory.create({
 			price: order.price,
 			quantity: order.quantity,
 			length: order.length,
@@ -124,7 +124,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(volume.lte($order.unfilled));
 		assert($order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
-		const newOrder = this.vMCTX.DataTypes.openOrderFactory.new({
+		const newOrder = this.vMCTX.DataTypes.openOrderFactory.create({
 			price: $order.price,
 			quantity: $order.quantity,
 			length: $order.length,

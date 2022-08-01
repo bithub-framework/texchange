@@ -15,7 +15,7 @@ export declare class DatabaseOrderbookFactory<H extends HLike<H>> implements Com
     private bookOrderFactory;
     private orderbookFactory;
     constructor(bookOrderFactory: BookOrderFactory<H>, orderbookFactory: OrderbookFactory<H>);
-    new(source: DatabaseOrderbook.Source<H>): DatabaseOrderbook<H>;
+    create(source: DatabaseOrderbook.Source<H>): DatabaseOrderbook<H>;
     capture(databaseOrderbook: DatabaseOrderbook<H>): DatabaseOrderbook.Snapshot;
     restore(snapshot: DatabaseOrderbook.Snapshot): DatabaseOrderbook<H>;
 }

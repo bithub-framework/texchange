@@ -28,7 +28,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         @inject(TYPES.MODELS.initialBalance)
         protected balance: H,
     ) {
-        this.$position = this.vMCTX.DataTypes.positionFactory.new({
+        this.$position = this.vMCTX.DataTypes.positionFactory.create({
             [Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
             [Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
         });
@@ -43,7 +43,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
     }
 
     public getPosition(): Position<H> {
-        return this.vMCTX.DataTypes.positionFactory.new(this.$position);
+        return this.vMCTX.DataTypes.positionFactory.create(this.$position);
     }
 
     public getCost(): Cost<H> {

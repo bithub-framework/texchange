@@ -24,16 +24,16 @@ let UseCaseMakeOrder = class UseCaseMakeOrder {
         this.matcher = matcher;
     }
     makeOrder(limitOrder) {
-        const order = this.vMCTX.DataTypes.openOrderFactory.new({
+        const order = this.vMCTX.DataTypes.openOrderFactory.create({
             ...limitOrder,
             id: ++this.progress.userOrderCount,
             filled: this.vMCTX.DataTypes.hFactory.from(0),
             unfilled: limitOrder.quantity,
         });
         this.validator.validateOrder(order);
-        const $order = this.vMCTX.DataTypes.openOrderFactory.new(order);
+        const $order = this.vMCTX.DataTypes.openOrderFactory.create(order);
         const trades = this.matcher.$match($order);
-        const maker = this.vMCTX.DataTypes.openOrderFactory.new($order);
+        const maker = this.vMCTX.DataTypes.openOrderFactory.create($order);
         if ($order.unfilled.gt(0)) {
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);

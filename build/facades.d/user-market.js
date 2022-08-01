@@ -29,7 +29,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
             try {
                 await this.vMCTX.timeline.sleep(this.config.processing);
                 await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.new(orderbook));
+                this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.create(orderbook));
             }
             catch (err) { }
         });
@@ -37,7 +37,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
             try {
                 await this.vMCTX.timeline.sleep(this.config.processing);
                 await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.new(trade)));
+                this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.create(trade)));
             }
             catch (err) { }
         });

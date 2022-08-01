@@ -14,7 +14,7 @@ export class DefaultAvailableAssetsCalculator<H extends HLike<H>> extends Availa
 		const position = this.marginAssets.getPosition();
 		const totalFrozen = this.makers.getTotalFrozen();
 		const totalUnfilled = this.makers.getTotalUnfilled();
-		const $final = this.vMCTX.DataTypes.balanceFactory.new({
+		const $final = this.vMCTX.DataTypes.balanceFactory.create({
 			[Length.LONG]: this.vMCTX.DataTypes.hFactory.from(0),
 			[Length.SHORT]: this.vMCTX.DataTypes.hFactory.from(0),
 		});
