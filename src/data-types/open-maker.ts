@@ -16,6 +16,8 @@ export interface OpenMaker<H extends HLike<H>> extends
 	OpenOrder<H>,
 	OpenMaker.Source<H>,
 	CompositeDataLike {
+	price: H;
+	quantity: H;
 	behind: H;
 	frozen: Frozen<H>;
 }
@@ -35,11 +37,10 @@ class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
 	public constructor(
 		source: OpenMaker.Source<H>,
 		private factory: OpenMakerFactory<H>,
+		hFactory: HFactory<H>,
 		frozenFactory: FrozenFactory<H>,
 	) {
 		({
-			price: this.price,
-			quantity: this.quantity,
 			side: this.side,
 			length: this.length,
 			action: this.action,
@@ -48,6 +49,8 @@ class ConcreteOpenMaker<H extends HLike<H>> implements OpenMaker<H> {
 			id: this.id,
 			behind: this.behind,
 		} = source);
+		this.price = hFactory.from(source.price);
+		this.quantity = hFactory.from(source.quantity);
 		this.frozen = frozenFactory.create(source.frozen);
 	}
 
@@ -88,6 +91,7 @@ export class OpenMakerFactory<H extends HLike<H>> implements
 		return new ConcreteOpenMaker(
 			source,
 			this,
+			this.hFactory,
 			this.frozenFactory,
 		);
 	}

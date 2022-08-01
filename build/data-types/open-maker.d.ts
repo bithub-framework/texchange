@@ -1,6 +1,8 @@
 import { HLike, H, HFactory, OpenOrder, OpenOrderFactory, CompositeDataFactoryLike, CompositeDataLike } from 'secretary-like';
 import { FrozenFactory, Frozen } from './frozen';
 export interface OpenMaker<H extends HLike<H>> extends OpenOrder<H>, OpenMaker.Source<H>, CompositeDataLike {
+    price: H;
+    quantity: H;
     behind: H;
     frozen: Frozen<H>;
 }
