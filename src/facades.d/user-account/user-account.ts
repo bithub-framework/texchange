@@ -59,6 +59,14 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 				this.emit('balances', this.vMCTX.DataTypes.balancesFactory.create(balances));
 			} catch (err) { }
 		});
+
+		this.useCaseSubscription.on('error', async err => {
+			try {
+				await this.vMCTX.timeline.sleep(this.config.processing);
+				await this.vMCTX.timeline.sleep(this.config.ping);
+				this.emit('error', err);
+			} catch (err) { }
+		});
 	}
 
 	public async makeOrders($orders: LimitOrder.Source<H>[]): Promise<(OpenOrder<H> | Error)[]> {

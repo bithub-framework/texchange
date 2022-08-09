@@ -40,6 +40,14 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             }
             catch (err) { }
         });
+        this.useCaseSubscription.on('error', async (err) => {
+            try {
+                await this.vMCTX.timeline.sleep(this.config.processing);
+                await this.vMCTX.timeline.sleep(this.config.ping);
+                this.emit('error', err);
+            }
+            catch (err) { }
+        });
     }
     async makeOrders($orders) {
         try {
