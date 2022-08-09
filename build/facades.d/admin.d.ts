@@ -27,7 +27,7 @@ export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Sna
     private useCaseUpdateTrades;
     private useCaseUpdateOrderbook;
     private useCaseGetProgress;
-    $s: import("startable").Startable<[]>;
+    $s: import("startable").Startable;
     constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, marginAssets: MarginAssets<H>, book: Book<H>, makers: Makers<H>, pricing: Pricing<H, unknown>, progress: Progress<H>, broadcast: Broadcast<H>, mtm: Mtm<H> | null, useCaseUpdateTrades: UseCaseUpdateTrades<H>, useCaseUpdateOrderbook: UseCaseUpdateOrderbook<H>, useCaseGetProgress: UseCaseGetProgress<H>);
     getMarketSpec(): MarketSpec<H>;
     getAccountSpec(): AccountSpec;

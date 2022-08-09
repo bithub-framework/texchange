@@ -1,4 +1,4 @@
-import { createStartable, StartableLike } from 'startable';
+import { createStartable } from 'startable';
 import { HLike } from 'secretary-like';
 
 

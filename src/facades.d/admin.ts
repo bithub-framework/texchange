@@ -5,7 +5,7 @@ import {
 	AccountSpec,
 	ConnectionClosed,
 } from 'secretary-like';
-import { createStartable, StartableLike } from 'startable';
+import { createStartable } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
@@ -99,7 +99,7 @@ export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
 
 	private async rawStart() {
 		if (this.mtm)
-			await this.mtm.$s.start([], this.$s.stop);
+			await this.mtm.$s.start(this.$s.stop);
 	}
 
 	private async rawStop() {

@@ -5,10 +5,10 @@
     "main": "./build/index.js",
     "types": "./build/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsc -b ./src/tsconfig.json",
-        "clean": "rm -rf ./build",
-        "rebuild": "npm run clean && npm run build"
+        "clean": "rm -rf ./build && rm -rf ./test/build",
+        "rebuild": "npm run clean && npm run build",
+        "test": "tsc -b ./test/src/tsconfig.json && ava"
     },
     "author": "Zim",
     "license": "SEE LICENSE IN ./LICENSE",
