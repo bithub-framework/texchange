@@ -3,7 +3,7 @@ import {
 	HLike,
 	MarketSpec,
 	AccountSpec,
-	ConnectionClosed,
+	ExchangeUnavailable,
 } from 'secretary-like';
 import { createStartable } from 'startable';
 import { StatefulLike } from '../stateful-like';
@@ -103,7 +103,7 @@ export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
 	}
 
 	private async rawStop() {
-		this.broadcast.emit('error', new ConnectionClosed('Texchange closed.'));
+		this.broadcast.emit('error', new ExchangeUnavailable('Texchange closed.'));
 		if (this.mtm)
 			await this.mtm.$s.stop();
 	}

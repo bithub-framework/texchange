@@ -8,11 +8,15 @@ import {
 	OpenOrder,
 	Amendment,
 	AccountEvents,
+	ExchangeUnavailable,
 } from 'secretary-like';
+import { ReadyState } from 'startable';
 import { EventEmitter } from 'events';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { Instant } from './instant';
+import { AdminFacade } from '../admin';
 import { LatencyConfig } from '../latency-config';
+import assert = require('assert');
 
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
 
@@ -39,6 +43,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.instant)
 		private instant: Instant<H>,
+		@inject(TYPES.FACADES.admin)
+		private admin: AdminFacade<H>,
 		@inject(TYPES.FACADES.config)
 		private config: LatencyConfig,
 	) {
@@ -74,6 +80,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			const orders = $orders.map(order => this.vmctx.DataTypes.limitOrderFactory.create(order));
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.instant.makeOrders(orders).map(order =>
 				order instanceof Error
 					? order
@@ -89,6 +99,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			const amendments = $amendments.map(amendment => this.vmctx.DataTypes.amendmentFactory.create(amendment));
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.instant.amendOrders(amendments).map(order =>
 				order instanceof Error
 					? order
@@ -104,6 +118,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			const orders = $orders.map(order => this.vmctx.DataTypes.openOrderFactory.create(order));
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.instant.cancelOrders(orders).map(order =>
 				order instanceof Error
 					? order
@@ -118,6 +136,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		try {
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.vmctx.DataTypes.balancesFactory.create(this.instant.getBalances());
 		} finally {
 			await this.vmctx.timeline.sleep(this.config.ping);
@@ -128,6 +150,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		try {
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.vmctx.DataTypes.positionsFactory.create(this.instant.getPositions());
 		} finally {
 			await this.vmctx.timeline.sleep(this.config.ping);
@@ -139,6 +165,10 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
+			assert(
+				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				new ExchangeUnavailable(),
+			);
 			return this.instant.getOpenOrders().map(order =>
 				order instanceof Error
 					? order

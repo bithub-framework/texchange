@@ -2,6 +2,7 @@ import { LimitOrder, Balances, Positions, AccountApiLike, AccountSpec, HLike, Op
 import { EventEmitter } from 'events';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { Instant } from './instant';
+import { AdminFacade } from '../admin';
 import { LatencyConfig } from '../latency-config';
 import { UseCaseSubscription } from '../../use-cases.d/subscription';
 export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter implements AccountApiLike<H> {
@@ -9,6 +10,7 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     private accountSpec;
     private useCaseSubscription;
     private instant;
+    private admin;
     private config;
     on: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
     once: <Event extends keyof AccountEvents<H>>(event: Event, listener: (...args: AccountEvents<H>[Event]) => void) => this;
@@ -17,7 +19,7 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     LEVERAGE: number;
     TAKER_FEE_RATE: number;
     MAKER_FEE_RATE: number;
-    constructor(vmctx: VirtualMachineContextLike<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, config: LatencyConfig);
+    constructor(vmctx: VirtualMachineContextLike<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, admin: AdminFacade<H>, config: LatencyConfig);
     makeOrders($orders: LimitOrder.Source<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment.Source<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     cancelOrders($orders: OpenOrder.Source<H>[]): Promise<OpenOrder<H>[]>;

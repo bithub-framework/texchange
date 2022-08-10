@@ -61,7 +61,7 @@ let AdminFacade = class AdminFacade {
             await this.mtm.$s.start(this.$s.stop);
     }
     async rawStop() {
-        this.broadcast.emit('error', new secretary_like_1.ConnectionClosed('Texchange closed.'));
+        this.broadcast.emit('error', new secretary_like_1.ExchangeUnavailable('Texchange closed.'));
         if (this.mtm)
             await this.mtm.$s.stop();
     }
