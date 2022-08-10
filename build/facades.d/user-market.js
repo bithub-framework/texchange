@@ -14,11 +14,10 @@ const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
-    constructor(vmctx, marketSpec, adminFacade, useCaseSubscription, config) {
+    constructor(vmctx, marketSpec, useCaseSubscription, config) {
         super();
         this.vmctx = vmctx;
         this.marketSpec = marketSpec;
-        this.adminFacade = adminFacade;
         this.useCaseSubscription = useCaseSubscription;
         this.config = config;
         this.PRICE_SCALE = this.marketSpec.PRICE_SCALE;
@@ -26,7 +25,6 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
         this.CURRENCY_SCALE = this.marketSpec.CURRENCY_SCALE;
         this.TICK_SIZE = this.marketSpec.TICK_SIZE;
         this.MARKET_NAME = this.marketSpec.MARKET_NAME;
-        this.$s = this.adminFacade.$s;
         this.useCaseSubscription.on('orderbook', async (orderbook) => {
             try {
                 await this.vmctx.timeline.sleep(this.config.processing);
@@ -63,9 +61,8 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
 UserMarketFacade = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
-    __param(2, (0, injektor_1.inject)(types_1.TYPES.FACADES.admin)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
-    __param(4, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
+    __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.config))
 ], UserMarketFacade);
 exports.UserMarketFacade = UserMarketFacade;
 //# sourceMappingURL=user-market.js.map

@@ -27,16 +27,11 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 	public TICK_SIZE = this.marketSpec.TICK_SIZE;
 	public MARKET_NAME = this.marketSpec.MARKET_NAME;
 
-
-	public $s = this.adminFacade.$s;
-
 	public constructor(
 		@inject(TYPES.vmctx)
 		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
-		@inject(TYPES.FACADES.admin)
-		private adminFacade: AdminFacade<H>,
 		@inject(TYPES.USE_CASES.subscription)
 		private useCaseSubscription: UseCaseSubscription<H>,
 		@inject(TYPES.FACADES.config)

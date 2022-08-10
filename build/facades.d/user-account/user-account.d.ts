@@ -19,7 +19,6 @@ export declare class UserAccountFacade<H extends HLike<H>> extends EventEmitter 
     LEVERAGE: number;
     TAKER_FEE_RATE: number;
     MAKER_FEE_RATE: number;
-    $s: import("startable").Startable;
     constructor(vmctx: VirtualMachineContextLike<H>, accountSpec: AccountSpec, useCaseSubscription: UseCaseSubscription<H>, instant: Instant<H>, adminFacade: AdminFacade<H>, config: LatencyConfig);
     makeOrders($orders: LimitOrder.Source<H>[]): Promise<(OpenOrder<H> | Error)[]>;
     amendOrders($amendments: Amendment.Source<H>[]): Promise<(OpenOrder<H> | Error)[]>;

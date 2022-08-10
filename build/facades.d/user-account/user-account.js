@@ -27,7 +27,6 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         this.LEVERAGE = this.accountSpec.LEVERAGE;
         this.TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
         this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
-        this.$s = this.adminFacade.$s;
         this.useCaseSubscription.on('positions', async (positions) => {
             try {
                 await this.vmctx.timeline.sleep(this.config.processing);

@@ -34,8 +34,6 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	public TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
 	public MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
 
-	public $s = this.adminFacade.$s;
-
 	public constructor(
 		@inject(TYPES.vmctx)
 		private vmctx: VirtualMachineContextLike<H>,
