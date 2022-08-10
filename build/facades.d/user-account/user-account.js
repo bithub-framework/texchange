@@ -16,17 +16,18 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
-    constructor(vmctx, accountSpec, useCaseSubscription, instant, admin, config) {
+    constructor(vmctx, accountSpec, useCaseSubscription, instant, adminFacade, config) {
         super();
         this.vmctx = vmctx;
         this.accountSpec = accountSpec;
         this.useCaseSubscription = useCaseSubscription;
         this.instant = instant;
-        this.admin = admin;
+        this.adminFacade = adminFacade;
         this.config = config;
         this.LEVERAGE = this.accountSpec.LEVERAGE;
         this.TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
         this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
+        this.$s = this.adminFacade.$s;
         this.useCaseSubscription.on('positions', async (positions) => {
             try {
                 await this.vmctx.timeline.sleep(this.config.processing);
@@ -57,7 +58,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             const orders = $orders.map(order => this.vmctx.DataTypes.limitOrderFactory.create(order));
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
                 : this.vmctx.DataTypes.openOrderFactory.create(order));
@@ -71,7 +72,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             const amendments = $amendments.map(amendment => this.vmctx.DataTypes.amendmentFactory.create(amendment));
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
                 : this.vmctx.DataTypes.openOrderFactory.create(order));
@@ -85,7 +86,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
             const orders = $orders.map(order => this.vmctx.DataTypes.openOrderFactory.create(order));
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
                 : this.vmctx.DataTypes.openOrderFactory.create(order));
@@ -98,7 +99,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.vmctx.DataTypes.balancesFactory.create(this.instant.getBalances());
         }
         finally {
@@ -109,7 +110,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.vmctx.DataTypes.positionsFactory.create(this.instant.getPositions());
         }
         finally {
@@ -120,7 +121,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         try {
             await this.vmctx.timeline.sleep(this.config.ping);
             await this.vmctx.timeline.sleep(this.config.processing);
-            assert(this.admin.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
+            assert(this.adminFacade.$s.getReadyState() === "STARTED" /* STARTED */, new secretary_like_1.ExchangeUnavailable());
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
                 : this.vmctx.DataTypes.openOrderFactory.create(order));

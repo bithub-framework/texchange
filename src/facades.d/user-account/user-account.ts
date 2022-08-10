@@ -34,6 +34,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	public TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
 	public MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
 
+	public $s = this.adminFacade.$s;
+
 	public constructor(
 		@inject(TYPES.vmctx)
 		private vmctx: VirtualMachineContextLike<H>,
@@ -44,7 +46,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		@inject(TYPES.FACADES.instant)
 		private instant: Instant<H>,
 		@inject(TYPES.FACADES.admin)
-		private admin: AdminFacade<H>,
+		private adminFacade: AdminFacade<H>,
 		@inject(TYPES.FACADES.config)
 		private config: LatencyConfig,
 	) {
@@ -81,7 +83,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.instant.makeOrders(orders).map(order =>
@@ -100,7 +102,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.instant.amendOrders(amendments).map(order =>
@@ -119,7 +121,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.instant.cancelOrders(orders).map(order =>
@@ -137,7 +139,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.vmctx.DataTypes.balancesFactory.create(this.instant.getBalances());
@@ -151,7 +153,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.vmctx.DataTypes.positionsFactory.create(this.instant.getPositions());
@@ -166,7 +168,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 			await this.vmctx.timeline.sleep(this.config.ping);
 			await this.vmctx.timeline.sleep(this.config.processing);
 			assert(
-				this.admin.$s.getReadyState() === ReadyState.STARTED,
+				this.adminFacade.$s.getReadyState() === ReadyState.STARTED,
 				new ExchangeUnavailable(),
 			);
 			return this.instant.getOpenOrders().map(order =>

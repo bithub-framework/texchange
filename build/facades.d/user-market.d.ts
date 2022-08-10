@@ -2,10 +2,12 @@ import { MarketApiLike, MarketSpec, HLike, MarketEvents } from 'secretary-like';
 import { EventEmitter } from 'events';
 import { VirtualMachineContextLike } from '../vmctx';
 import { LatencyConfig } from './latency-config';
+import { AdminFacade } from './admin';
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter implements MarketApiLike<H> {
     private vmctx;
     private marketSpec;
+    private adminFacade;
     private useCaseSubscription;
     private config;
     on: <Event extends keyof MarketEvents<H>>(event: Event, listener: (...args: MarketEvents<H>[Event]) => void) => this;
@@ -17,7 +19,8 @@ export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter i
     CURRENCY_SCALE: number;
     TICK_SIZE: H;
     MARKET_NAME: string;
-    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, useCaseSubscription: UseCaseSubscription<H>, config: LatencyConfig);
+    $s: import("startable").Startable;
+    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, adminFacade: AdminFacade<H>, useCaseSubscription: UseCaseSubscription<H>, config: LatencyConfig);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }
