@@ -54,14 +54,6 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 				this.emit('trades', trades.map(trade => this.vmctx.DataTypes.tradeFactory.create(trade)));
 			} catch (err) { }
 		});
-
-		this.useCaseSubscription.on('error', async err => {
-			try {
-				await this.vmctx.timeline.sleep(this.config.processing);
-				await this.vmctx.timeline.sleep(this.config.ping);
-				this.emit('error', err);
-			} catch (err) { }
-		});
 	}
 
 	public quantity(price: H, dollarVolume: H): H {
