@@ -3,14 +3,14 @@ import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
 import { Decrements } from './decrements';
 export declare class Book<H extends HLike<H>> implements StatefulLike<Book.Snapshot> {
-    private vMCTX;
+    private vmctx;
     private marketSpec;
     private Decrements;
     private time;
     private basebook;
     private decrements;
     private finalbookCache;
-    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>);
+    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>);
     setBasebook(basebook: Orderbook<H>): void;
     decQuantity(side: Side, price: H, decrement: H): void;
     private tryApply;

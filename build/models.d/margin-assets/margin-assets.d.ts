@@ -6,13 +6,13 @@ import { Assets } from './assets/assets';
 import { Margin, MarginFactory } from './margin';
 import { Cost } from './assets/cost';
 export declare abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
-    protected vMCTX: VirtualMachineContextLike<H>;
+    protected vmctx: VirtualMachineContextLike<H>;
     protected marketSpec: MarketSpec<H>;
     protected accountSpec: AccountSpec;
     protected assets: Assets<H>;
     protected marginFactory: MarginFactory<H>;
     protected $margin: Margin<H>;
-    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, assets: Assets<H>);
+    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, accountSpec: AccountSpec, assets: Assets<H>);
     open({ length, volume, dollarVolume, }: Executed<H>): void;
     close({ length, volume, dollarVolume, }: Executed<H>): void;
     abstract getFinalMargin(): H;

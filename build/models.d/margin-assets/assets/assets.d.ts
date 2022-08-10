@@ -4,13 +4,13 @@ import { VirtualMachineContextLike } from '../../../vmctx';
 import { StatefulLike } from '../../../stateful-like';
 import { Executed } from '../../../data-types/executed';
 export declare class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
-    protected vMCTX: VirtualMachineContextLike<H>;
+    protected vmctx: VirtualMachineContextLike<H>;
     protected marketSpec: MarketSpec<H>;
     protected balance: H;
     private Cost;
     private $position;
     private $cost;
-    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, balance: H);
+    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, balance: H);
     getBalance(): H;
     getPosition(): Position<H>;
     getCost(): Cost<H>;

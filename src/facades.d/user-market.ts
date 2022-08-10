@@ -27,8 +27,8 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 	public MARKET_NAME = this.marketSpec.MARKET_NAME;
 
 	public constructor(
-		@inject(TYPES.vMCTX)
-		private vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.USE_CASES.subscription)
@@ -40,24 +40,24 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 
 		this.useCaseSubscription.on('orderbook', async orderbook => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('orderbook', this.vMCTX.DataTypes.orderbookFactory.create(orderbook));
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('orderbook', this.vmctx.DataTypes.orderbookFactory.create(orderbook));
 			} catch (err) { }
 		});
 
 		this.useCaseSubscription.on('trades', async trades => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('trades', trades.map(trade => this.vMCTX.DataTypes.tradeFactory.create(trade)));
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('trades', trades.map(trade => this.vmctx.DataTypes.tradeFactory.create(trade)));
 			} catch (err) { }
 		});
 
 		this.useCaseSubscription.on('error', async err => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
 				this.emit('error', err);
 			} catch (err) { }
 		});

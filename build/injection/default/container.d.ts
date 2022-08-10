@@ -9,7 +9,7 @@ import { AvailableAssetsCalculator } from '../../middlewares/available-assets-ca
 import { Mtm } from '../../mark-to-market/mtm';
 import { LatencyConfig as DelayConfig } from '../../facades.d/latency-config';
 export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
-    [TYPES.vMCTX]: () => VirtualMachineContextLike<H>;
+    [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
     [TYPES.marketSpec]: () => MarketSpec<H>;
     [TYPES.accountSpec]: () => AccountSpec;
     [TYPES.MODELS.initialBalance]: () => H;

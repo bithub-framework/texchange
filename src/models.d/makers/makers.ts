@@ -29,19 +29,19 @@ export abstract class Makers<H extends HLike<H>> implements
 	private totalFrozen: Frozen<H>;
 
 	public constructor(
-		@inject(TYPES.vMCTX)
-		protected vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		protected vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
 		protected accountSpec: AccountSpec,
 	) {
 		this.$totalUnfilled = {
-			[Side.BID]: vMCTX.DataTypes.hFactory.from(0),
-			[Side.ASK]: vMCTX.DataTypes.hFactory.from(0),
+			[Side.BID]: vmctx.DataTypes.hFactory.from(0),
+			[Side.ASK]: vmctx.DataTypes.hFactory.from(0),
 		};
 		this.totalUnfilledFactory = new TotalUnfilledFactory();
-		this.totalFrozen = vMCTX.DataTypes.Frozen.ZERO;
+		this.totalFrozen = vmctx.DataTypes.Frozen.ZERO;
 	}
 
 	public getTotalUnfilled(): TotalUnfilled<H> {
@@ -58,7 +58,7 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public getOrder(oid: OrderId): OpenMaker<H> {
 		const $order = this.$getOrder(oid);
-		return this.vMCTX.DataTypes.openMakerFactory.create($order);
+		return this.vmctx.DataTypes.openMakerFactory.create($order);
 	}
 
 	protected $getOrder(oid: OrderId): OpenMaker<H> {
@@ -69,13 +69,13 @@ export abstract class Makers<H extends HLike<H>> implements
 
 	public capture(): Makers.Snapshot {
 		return [...this.$orders.keys()].map(
-			oid => this.vMCTX.DataTypes.openMakerFactory.capture(this.$orders.get(oid)!),
+			oid => this.vmctx.DataTypes.openMakerFactory.capture(this.$orders.get(oid)!),
 		);
 	}
 
 	public restore(snapshot: Makers.Snapshot): void {
 		for (const orderSnapshot of snapshot) {
-			const order = this.vMCTX.DataTypes.openMakerFactory.restore(orderSnapshot);
+			const order = this.vmctx.DataTypes.openMakerFactory.restore(orderSnapshot);
 			this.$orders.set(order.id, order);
 		}
 		for (const side of [Side.ASK, Side.BID]) {
@@ -83,13 +83,13 @@ export abstract class Makers<H extends HLike<H>> implements
 				.filter(order => order.side === side)
 				.reduce(
 					(total, order) => total.plus(order.unfilled),
-					this.vMCTX.DataTypes.hFactory.from(0),
+					this.vmctx.DataTypes.hFactory.from(0),
 				);
 		}
 		this.totalFrozen = [...this.$orders.values()]
 			.reduce(
-				(total, order) => this.vMCTX.DataTypes.Frozen.plus(total, order.frozen),
-				this.vMCTX.DataTypes.Frozen.ZERO,
+				(total, order) => this.vmctx.DataTypes.Frozen.plus(total, order.frozen),
+				this.vmctx.DataTypes.Frozen.ZERO,
 			);
 	}
 
@@ -101,7 +101,7 @@ export abstract class Makers<H extends HLike<H>> implements
 	): void {
 		assert(order.unfilled.gt(0));
 		const toFreeze = this.toFreeze(order);
-		const $order = this.vMCTX.DataTypes.openMakerFactory.create({
+		const $order = this.vmctx.DataTypes.openMakerFactory.create({
 			price: order.price,
 			quantity: order.quantity,
 			length: order.length,
@@ -114,7 +114,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			frozen: toFreeze,
 		});
 		this.$orders.set(order.id, $order);
-		this.totalFrozen = this.vMCTX.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
+		this.totalFrozen = this.vmctx.DataTypes.Frozen.plus(this.totalFrozen, toFreeze);
 		this.$totalUnfilled[order.side] = this.$totalUnfilled[order.side]
 			.plus(order.unfilled);
 	}
@@ -124,7 +124,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		assert(volume.lte($order.unfilled));
 		assert($order.behind.eq(0));
 		this.forcedlyRemoveOrder(oid);
-		const newOrder = this.vMCTX.DataTypes.openOrderFactory.create({
+		const newOrder = this.vmctx.DataTypes.openOrderFactory.create({
 			price: $order.price,
 			quantity: $order.quantity,
 			length: $order.length,
@@ -135,7 +135,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			unfilled: $order.unfilled.minus(volume),
 		});
 		if (newOrder.unfilled.gt(0))
-			this.appendOrder(newOrder, this.vMCTX.DataTypes.hFactory.from(0));
+			this.appendOrder(newOrder, this.vmctx.DataTypes.hFactory.from(0));
 	}
 
 	public takeOrderQueue(oid: OrderId, volume?: H): void {
@@ -144,7 +144,7 @@ export abstract class Makers<H extends HLike<H>> implements
 			assert(volume.lte($order.behind));
 		$order.behind = typeof volume !== 'undefined'
 			? $order.behind.minus(volume)
-			: this.vMCTX.DataTypes.hFactory.from(0);
+			: this.vmctx.DataTypes.hFactory.from(0);
 		this.$orders.set(oid, $order);
 	}
 
@@ -153,7 +153,7 @@ export abstract class Makers<H extends HLike<H>> implements
 		this.$orders.delete(oid);
 		this.$totalUnfilled[$order.side] = this.$totalUnfilled[$order.side]
 			.minus($order.unfilled);
-		this.totalFrozen = this.vMCTX.DataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
+		this.totalFrozen = this.vmctx.DataTypes.Frozen.minus(this.totalFrozen, $order.frozen);
 	}
 
 	public forcedlyRemoveOrder(oid: OrderId): void {

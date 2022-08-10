@@ -31,8 +31,8 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 	public MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
 
 	public constructor(
-		@inject(TYPES.vMCTX)
-		private vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.accountSpec)
 		private accountSpec: AccountSpec,
 		@inject(TYPES.USE_CASES.subscription)
@@ -46,24 +46,24 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 		this.useCaseSubscription.on('positions', async positions => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('positions', this.vMCTX.DataTypes.positionsFactory.create(positions));
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('positions', this.vmctx.DataTypes.positionsFactory.create(positions));
 			} catch (err) { }
 		});
 
 		this.useCaseSubscription.on('balances', async balances => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
-				this.emit('balances', this.vMCTX.DataTypes.balancesFactory.create(balances));
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('balances', this.vmctx.DataTypes.balancesFactory.create(balances));
 			} catch (err) { }
 		});
 
 		this.useCaseSubscription.on('error', async err => {
 			try {
-				await this.vMCTX.timeline.sleep(this.config.processing);
-				await this.vMCTX.timeline.sleep(this.config.ping);
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
 				this.emit('error', err);
 			} catch (err) { }
 		});
@@ -71,81 +71,81 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 
 	public async makeOrders($orders: LimitOrder.Source<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const orders = $orders.map(order => this.vMCTX.DataTypes.limitOrderFactory.create(order));
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
+			const orders = $orders.map(order => this.vmctx.DataTypes.limitOrderFactory.create(order));
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
 			return this.instant.makeOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.vMCTX.DataTypes.openOrderFactory.create(order),
+					: this.vmctx.DataTypes.openOrderFactory.create(order),
 			);
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 
 	public async amendOrders($amendments: Amendment.Source<H>[]): Promise<(OpenOrder<H> | Error)[]> {
 		try {
-			const amendments = $amendments.map(amendment => this.vMCTX.DataTypes.amendmentFactory.create(amendment));
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
+			const amendments = $amendments.map(amendment => this.vmctx.DataTypes.amendmentFactory.create(amendment));
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
 			return this.instant.amendOrders(amendments).map(order =>
 				order instanceof Error
 					? order
-					: this.vMCTX.DataTypes.openOrderFactory.create(order),
+					: this.vmctx.DataTypes.openOrderFactory.create(order),
 			);
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 
 	public async cancelOrders($orders: OpenOrder.Source<H>[]): Promise<OpenOrder<H>[]> {
 		try {
-			const orders = $orders.map(order => this.vMCTX.DataTypes.openOrderFactory.create(order));
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
+			const orders = $orders.map(order => this.vmctx.DataTypes.openOrderFactory.create(order));
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
 			return this.instant.cancelOrders(orders).map(order =>
 				order instanceof Error
 					? order
-					: this.vMCTX.DataTypes.openOrderFactory.create(order),
+					: this.vmctx.DataTypes.openOrderFactory.create(order),
 			);
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 
 	public async getBalances(): Promise<Balances<H>> {
 		try {
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
-			return this.vMCTX.DataTypes.balancesFactory.create(this.instant.getBalances());
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
+			return this.vmctx.DataTypes.balancesFactory.create(this.instant.getBalances());
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 
 	public async getPositions(): Promise<Positions<H>> {
 		try {
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
-			return this.vMCTX.DataTypes.positionsFactory.create(this.instant.getPositions());
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
+			return this.vmctx.DataTypes.positionsFactory.create(this.instant.getPositions());
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 
 	public async getOpenOrders(): Promise<OpenOrder<H>[]> {
 		try {
 
-			await this.vMCTX.timeline.sleep(this.config.ping);
-			await this.vMCTX.timeline.sleep(this.config.processing);
+			await this.vmctx.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.processing);
 			return this.instant.getOpenOrders().map(order =>
 				order instanceof Error
 					? order
-					: this.vMCTX.DataTypes.openOrderFactory.create(order),
+					: this.vmctx.DataTypes.openOrderFactory.create(order),
 			);
 		} finally {
-			await this.vMCTX.timeline.sleep(this.config.ping);
+			await this.vmctx.timeline.sleep(this.config.ping);
 		}
 	}
 }

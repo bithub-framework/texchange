@@ -14,15 +14,15 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let DatabaseTradeHandler = class DatabaseTradeHandler {
-    constructor(vMCTX, marketSpec, accountSpec, marginAssets, makers) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marketSpec, accountSpec, marginAssets, makers) {
+        this.vmctx = vmctx;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.marginAssets = marginAssets;
         this.makers = makers;
     }
     tradeTakesOpenMakers(trade) {
-        const $trade = this.vMCTX.DataTypes.tradeFactory.create(trade);
+        const $trade = this.vmctx.DataTypes.tradeFactory.create(trade);
         for (const order of [...this.makers])
             if (this.$tradeShouldTakeOpenOrder($trade, order)) {
                 this.$tradeTakesOrderQueue($trade, order);
@@ -40,7 +40,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
     }
     $tradeTakesOrderQueue($trade, maker) {
         if ($trade.price.eq(maker.price)) {
-            const volume = this.vMCTX.DataTypes.H.min($trade.quantity, maker.behind);
+            const volume = this.vmctx.DataTypes.H.min($trade.quantity, maker.behind);
             $trade.quantity = $trade.quantity.minus(volume);
             this.makers.takeOrderQueue(maker.id, volume);
         }
@@ -48,7 +48,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
             this.makers.takeOrderQueue(maker.id);
     }
     $tradeTakesOpenMaker($trade, maker) {
-        const volume = this.vMCTX.DataTypes.H.min($trade.quantity, maker.unfilled);
+        const volume = this.vmctx.DataTypes.H.min($trade.quantity, maker.unfilled);
         const dollarVolume = this.marketSpec
             .dollarVolume(maker.price, volume);
         $trade.quantity = $trade.quantity.minus(volume);
@@ -71,7 +71,7 @@ let DatabaseTradeHandler = class DatabaseTradeHandler {
     }
 };
 DatabaseTradeHandler = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),

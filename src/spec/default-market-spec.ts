@@ -20,10 +20,10 @@ export class DefaultMarketSpec<H extends HLike<H>> implements MarketSpec<H> {
 	public TICK_SIZE: H;
 
 	public constructor(
-		@inject(TYPES.vMCTX)
-		vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		vmctx: VirtualMachineContextLike<H>,
 	) {
-		this.TICK_SIZE = vMCTX.DataTypes.hFactory.from('.01');
+		this.TICK_SIZE = vmctx.DataTypes.hFactory.from('.01');
 	}
 
 	public quantity(price: H, dollarVolume: H): H {

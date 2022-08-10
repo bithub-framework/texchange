@@ -13,8 +13,8 @@ exports.UseCaseAmendOrder = void 0;
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseAmendOrder = class UseCaseAmendOrder {
-    constructor(vMCTX, book, makers, validator, broadcast, calculator, matcher) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, book, makers, validator, broadcast, calculator, matcher) {
+        this.vmctx = vmctx;
         this.book = book;
         this.makers = makers;
         this.validator = validator;
@@ -31,7 +31,7 @@ let UseCaseAmendOrder = class UseCaseAmendOrder {
         catch (err) {
             filled = amendment.quantity;
         }
-        const order = this.vMCTX.DataTypes.openOrderFactory.create({
+        const order = this.vmctx.DataTypes.openOrderFactory.create({
             ...amendment,
             filled,
             price: amendment.newPrice,
@@ -39,9 +39,9 @@ let UseCaseAmendOrder = class UseCaseAmendOrder {
             quantity: amendment.newUnfilled.plus(filled),
         });
         this.validator.validateOrder(order);
-        const $order = this.vMCTX.DataTypes.openOrderFactory.create(order);
+        const $order = this.vmctx.DataTypes.openOrderFactory.create(order);
         const trades = this.matcher.$match($order);
-        const maker = this.vMCTX.DataTypes.openOrderFactory.create($order);
+        const maker = this.vmctx.DataTypes.openOrderFactory.create($order);
         const behind = this.book.lineUp(maker);
         this.makers.appendOrder(maker, behind);
         if (trades.length) {
@@ -54,7 +54,7 @@ let UseCaseAmendOrder = class UseCaseAmendOrder {
     }
 };
 UseCaseAmendOrder = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MIDDLEWARES.orderValidator)),

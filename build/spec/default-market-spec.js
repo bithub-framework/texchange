@@ -17,12 +17,12 @@ const types_1 = require("../injection/types");
  * 默认正向合约
  */
 let DefaultMarketSpec = class DefaultMarketSpec {
-    constructor(vMCTX) {
+    constructor(vmctx) {
         this.PRICE_SCALE = 2;
         this.QUANTITY_SCALE = 3;
         this.CURRENCY_SCALE = 2;
         this.MARKET_NAME = 'test';
-        this.TICK_SIZE = vMCTX.DataTypes.hFactory.from('.01');
+        this.TICK_SIZE = vmctx.DataTypes.hFactory.from('.01');
     }
     quantity(price, dollarVolume) {
         assert(price.neq(0));
@@ -34,7 +34,7 @@ let DefaultMarketSpec = class DefaultMarketSpec {
     }
 };
 DefaultMarketSpec = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX))
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx))
 ], DefaultMarketSpec);
 exports.DefaultMarketSpec = DefaultMarketSpec;
 //# sourceMappingURL=default-market-spec.js.map

@@ -14,9 +14,9 @@ const events_1 = require("events");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
-    constructor(vMCTX, accountSpec, useCaseSubscription, instant, config) {
+    constructor(vmctx, accountSpec, useCaseSubscription, instant, config) {
         super();
-        this.vMCTX = vMCTX;
+        this.vmctx = vmctx;
         this.accountSpec = accountSpec;
         this.useCaseSubscription = useCaseSubscription;
         this.instant = instant;
@@ -26,24 +26,24 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
         this.useCaseSubscription.on('positions', async (positions) => {
             try {
-                await this.vMCTX.timeline.sleep(this.config.processing);
-                await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('positions', this.vMCTX.DataTypes.positionsFactory.create(positions));
+                await this.vmctx.timeline.sleep(this.config.processing);
+                await this.vmctx.timeline.sleep(this.config.ping);
+                this.emit('positions', this.vmctx.DataTypes.positionsFactory.create(positions));
             }
             catch (err) { }
         });
         this.useCaseSubscription.on('balances', async (balances) => {
             try {
-                await this.vMCTX.timeline.sleep(this.config.processing);
-                await this.vMCTX.timeline.sleep(this.config.ping);
-                this.emit('balances', this.vMCTX.DataTypes.balancesFactory.create(balances));
+                await this.vmctx.timeline.sleep(this.config.processing);
+                await this.vmctx.timeline.sleep(this.config.ping);
+                this.emit('balances', this.vmctx.DataTypes.balancesFactory.create(balances));
             }
             catch (err) { }
         });
         this.useCaseSubscription.on('error', async (err) => {
             try {
-                await this.vMCTX.timeline.sleep(this.config.processing);
-                await this.vMCTX.timeline.sleep(this.config.ping);
+                await this.vmctx.timeline.sleep(this.config.processing);
+                await this.vmctx.timeline.sleep(this.config.ping);
                 this.emit('error', err);
             }
             catch (err) { }
@@ -51,78 +51,78 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
     }
     async makeOrders($orders) {
         try {
-            const orders = $orders.map(order => this.vMCTX.DataTypes.limitOrderFactory.create(order));
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
+            const orders = $orders.map(order => this.vmctx.DataTypes.limitOrderFactory.create(order));
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
             return this.instant.makeOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.create(order));
+                : this.vmctx.DataTypes.openOrderFactory.create(order));
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
     async amendOrders($amendments) {
         try {
-            const amendments = $amendments.map(amendment => this.vMCTX.DataTypes.amendmentFactory.create(amendment));
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
+            const amendments = $amendments.map(amendment => this.vmctx.DataTypes.amendmentFactory.create(amendment));
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
             return this.instant.amendOrders(amendments).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.create(order));
+                : this.vmctx.DataTypes.openOrderFactory.create(order));
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
     async cancelOrders($orders) {
         try {
-            const orders = $orders.map(order => this.vMCTX.DataTypes.openOrderFactory.create(order));
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
+            const orders = $orders.map(order => this.vmctx.DataTypes.openOrderFactory.create(order));
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
             return this.instant.cancelOrders(orders).map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.create(order));
+                : this.vmctx.DataTypes.openOrderFactory.create(order));
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
     async getBalances() {
         try {
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
-            return this.vMCTX.DataTypes.balancesFactory.create(this.instant.getBalances());
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
+            return this.vmctx.DataTypes.balancesFactory.create(this.instant.getBalances());
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
     async getPositions() {
         try {
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
-            return this.vMCTX.DataTypes.positionsFactory.create(this.instant.getPositions());
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
+            return this.vmctx.DataTypes.positionsFactory.create(this.instant.getPositions());
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
     async getOpenOrders() {
         try {
-            await this.vMCTX.timeline.sleep(this.config.ping);
-            await this.vMCTX.timeline.sleep(this.config.processing);
+            await this.vmctx.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.processing);
             return this.instant.getOpenOrders().map(order => order instanceof Error
                 ? order
-                : this.vMCTX.DataTypes.openOrderFactory.create(order));
+                : this.vmctx.DataTypes.openOrderFactory.create(order));
         }
         finally {
-            await this.vMCTX.timeline.sleep(this.config.ping);
+            await this.vmctx.timeline.sleep(this.config.ping);
         }
     }
 };
 UserAccountFacade = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.USE_CASES.subscription)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.FACADES.instant)),

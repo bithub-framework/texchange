@@ -8,13 +8,13 @@ import { Makers } from '../models.d/makers/makers';
 import { AvailableAssetsCalculator } from '../middlewares/available-assets-calculator/available-assets-calculator';
 import { Matcher } from '../middlewares/matcher';
 export declare class UseCaseUpdateOrderbook<H extends HLike<H>> {
-    private vMCTX;
+    private vmctx;
     private book;
     private progress;
     private makers;
     private broadcast;
     private calculator;
     private matcher;
-    constructor(vMCTX: VirtualMachineContextLike<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
+    constructor(vmctx: VirtualMachineContextLike<H>, book: Book<H>, progress: Progress<H>, makers: Makers<H>, broadcast: Broadcast<H>, calculator: AvailableAssetsCalculator<H>, matcher: Matcher<H>);
     updateOrderbook(orderbook: DatabaseOrderbook<H>): void;
 }

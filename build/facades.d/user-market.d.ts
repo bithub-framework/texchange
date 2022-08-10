@@ -4,7 +4,7 @@ import { VirtualMachineContextLike } from '../vmctx';
 import { LatencyConfig } from './latency-config';
 import { UseCaseSubscription } from '../use-cases.d/subscription';
 export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter implements MarketApiLike<H> {
-    private vMCTX;
+    private vmctx;
     private marketSpec;
     private useCaseSubscription;
     private config;
@@ -17,7 +17,7 @@ export declare class UserMarketFacade<H extends HLike<H>> extends EventEmitter i
     CURRENCY_SCALE: number;
     TICK_SIZE: H;
     MARKET_NAME: string;
-    constructor(vMCTX: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, useCaseSubscription: UseCaseSubscription<H>, config: LatencyConfig);
+    constructor(vmctx: VirtualMachineContextLike<H>, marketSpec: MarketSpec<H>, useCaseSubscription: UseCaseSubscription<H>, config: LatencyConfig);
     quantity(price: H, dollarVolume: H): H;
     dollarVolume(price: H, quantity: H): H;
 }

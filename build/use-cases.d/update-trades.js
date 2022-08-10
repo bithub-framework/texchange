@@ -15,8 +15,8 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateTrades = class UseCaseUpdateTrades {
-    constructor(vMCTX, marginAssets, progress, pricing, broadcast, databaseTradeHandler, mtm) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marginAssets, progress, pricing, broadcast, databaseTradeHandler, mtm) {
+        this.vmctx = vmctx;
         this.marginAssets = marginAssets;
         this.progress = progress;
         this.pricing = pricing;
@@ -26,7 +26,7 @@ let UseCaseUpdateTrades = class UseCaseUpdateTrades {
     }
     updateTrades(trades) {
         assert(trades.length);
-        const now = this.vMCTX.timeline.now();
+        const now = this.vmctx.timeline.now();
         for (const trade of trades)
             assert(trade.time === now);
         this.progress.updateDatabaseTrades(trades);
@@ -41,7 +41,7 @@ let UseCaseUpdateTrades = class UseCaseUpdateTrades {
     }
 };
 UseCaseUpdateTrades = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.pricing)),

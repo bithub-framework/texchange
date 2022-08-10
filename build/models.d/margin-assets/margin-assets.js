@@ -15,15 +15,15 @@ const margin_1 = require("./margin");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 let MarginAssets = class MarginAssets {
-    constructor(vMCTX, marketSpec, accountSpec, assets) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marketSpec, accountSpec, assets) {
+        this.vmctx = vmctx;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.assets = assets;
-        this.marginFactory = new margin_1.MarginFactory(vMCTX.DataTypes.hFactory);
+        this.marginFactory = new margin_1.MarginFactory(vmctx.DataTypes.hFactory);
         this.$margin = {
-            [secretary_like_1.Length.LONG]: vMCTX.DataTypes.hFactory.from(0),
-            [secretary_like_1.Length.SHORT]: vMCTX.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.LONG]: vmctx.DataTypes.hFactory.from(0),
+            [secretary_like_1.Length.SHORT]: vmctx.DataTypes.hFactory.from(0),
         };
     }
     open({ length, volume, dollarVolume, }) {
@@ -35,7 +35,7 @@ let MarginAssets = class MarginAssets {
     }
     close({ length, volume, dollarVolume, }) {
         if (volume.eq(this.assets.getPosition()[length])) {
-            this.$margin[length] = this.vMCTX.DataTypes.hFactory.from(0);
+            this.$margin[length] = this.vmctx.DataTypes.hFactory.from(0);
         }
         const decrement = this.$margin[length]
             .times(volume)
@@ -68,7 +68,7 @@ let MarginAssets = class MarginAssets {
     }
 };
 MarginAssets = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets))

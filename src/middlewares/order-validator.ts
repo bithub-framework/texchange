@@ -17,8 +17,8 @@ import { TYPES } from '../injection/types';
 
 export class OrderValidator<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vMCTX)
-		private vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
@@ -38,7 +38,7 @@ export class OrderValidator<H extends HLike<H>> {
 		const closable = this.calculator.getClosable();
 		this.makers.appendOrder(
 			order,
-			this.vMCTX.DataTypes.hFactory.from(0),
+			this.vmctx.DataTypes.hFactory.from(0),
 		);
 		try {
 			const enoughPosition =

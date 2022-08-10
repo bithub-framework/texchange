@@ -58,7 +58,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.marketSpec]: () => MarketSpec<H>;
 	public abstract [TYPES.accountSpec]: () => AccountSpec;
 
-	public abstract [TYPES.vMCTX]: () => VirtualMachineContextLike<H>;
+	public abstract [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
 
 	public abstract [TYPES.MODELS.initialBalance]: () => H;
 	public abstract [TYPES.MODELS.makers]: () => Makers<H>;

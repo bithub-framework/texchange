@@ -4,12 +4,12 @@ import { StatefulLike } from '../stateful-like';
 import { DatabaseOrderbookId, DatabaseOrderbook } from '../data-types/database-orderbook';
 import { DatabaseTradeId, DatabaseTrade } from '../data-types/database-trade';
 export declare class Progress<H extends HLike<H>> implements StatefulLike<Progress.Snapshot> {
-    private vMCTX;
+    private vmctx;
     userTradeCount: number;
     userOrderCount: number;
     private latestDatabaseTradeId;
     private latestDatabaseOrderbookId;
-    constructor(vMCTX: VirtualMachineContextLike<H>);
+    constructor(vmctx: VirtualMachineContextLike<H>);
     updateDatabaseTrades(trades: DatabaseTrade<H>[]): void;
     getLatestDatabaseOrderbookId(): DatabaseOrderbookId | null;
     updateDatabaseOrderbook(orderbook: DatabaseOrderbook<H>): void;

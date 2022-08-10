@@ -31,8 +31,8 @@ export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
 	);
 
 	public constructor(
-		@inject(TYPES.vMCTX)
-		private vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		private marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
@@ -70,14 +70,14 @@ export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
 	public updateTrades($trades: DatabaseTrade<H>[]): void {
 		this.useCaseUpdateTrades.updateTrades(
 			$trades.map(
-				trade => this.vMCTX.DataTypes.databaseTradeFactory.create(trade),
+				trade => this.vmctx.DataTypes.databaseTradeFactory.create(trade),
 			),
 		);
 	}
 
 	public updateOrderbook($orderbook: DatabaseOrderbook<H>): void {
 		this.useCaseUpdateOrderbook.updateOrderbook(
-			this.vMCTX.DataTypes.databaseOrderbookFactory.create($orderbook),
+			this.vmctx.DataTypes.databaseOrderbookFactory.create($orderbook),
 		);
 	}
 

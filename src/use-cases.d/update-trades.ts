@@ -18,8 +18,8 @@ import { TYPES } from '../injection/types';
 
 export class UseCaseUpdateTrades<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vMCTX)
-		private vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		private vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.MODELS.marginAssets)
 		private marginAssets: MarginAssets<H>,
 		@inject(TYPES.MODELS.progress)
@@ -36,7 +36,7 @@ export class UseCaseUpdateTrades<H extends HLike<H>> {
 
 	public updateTrades(trades: DatabaseTrade<H>[]): void {
 		assert(trades.length);
-		const now = this.vMCTX.timeline.now();
+		const now = this.vmctx.timeline.now();
 		for (const trade of trades) assert(trade.time === now);
 		this.progress.updateDatabaseTrades(trades);
 

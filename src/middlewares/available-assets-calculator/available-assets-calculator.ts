@@ -16,8 +16,8 @@ import { TYPES } from '../../injection/types';
 
 export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	public constructor(
-		@inject(TYPES.vMCTX)
-		protected vMCTX: VirtualMachineContextLike<H>,
+		@inject(TYPES.vmctx)
+		protected vmctx: VirtualMachineContextLike<H>,
 		@inject(TYPES.marketSpec)
 		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.MODELS.marginAssets)
@@ -37,7 +37,7 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	public getClosable(): Position<H> {
 		const totalFrozen = this.makers.getTotalFrozen();
 		const position = this.marginAssets.getPosition();
-		return this.vMCTX.DataTypes.positionFactory.create({
+		return this.vmctx.DataTypes.positionFactory.create({
 			[Length.LONG]: position[Length.LONG]
 				.minus(totalFrozen.position[Length.LONG]),
 			[Length.SHORT]: position[Length.SHORT]
@@ -46,18 +46,18 @@ export abstract class AvailableAssetsCalculator<H extends HLike<H>> {
 	}
 
 	public getBalances(): Balances<H> {
-		return this.vMCTX.DataTypes.balancesFactory.create({
+		return this.vmctx.DataTypes.balancesFactory.create({
 			balance: this.marginAssets.getBalance(),
 			available: this.getAvailable(),
-			time: this.vMCTX.timeline.now(),
+			time: this.vmctx.timeline.now(),
 		});
 	}
 
 	public getPositions(): Positions<H> {
-		return this.vMCTX.DataTypes.positionsFactory.create({
+		return this.vmctx.DataTypes.positionsFactory.create({
 			position: this.marginAssets.getPosition(),
 			closable: this.getClosable(),
-			time: this.vMCTX.timeline.now(),
+			time: this.vmctx.timeline.now(),
 		});
 	}
 }

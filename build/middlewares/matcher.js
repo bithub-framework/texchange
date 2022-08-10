@@ -14,8 +14,8 @@ const secretary_like_1 = require("secretary-like");
 const types_1 = require("../injection/types");
 const injektor_1 = require("@zimtsui/injektor");
 let Matcher = class Matcher {
-    constructor(vMCTX, marketSpec, accountSpec, book, marginAssets, progress) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marketSpec, accountSpec, book, marginAssets, progress) {
+        this.vmctx = vmctx;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.book = book;
@@ -25,23 +25,23 @@ let Matcher = class Matcher {
     $match($taker) {
         const orderbook = this.book.getOrderbook();
         const trades = [];
-        let volume = this.vMCTX.DataTypes.hFactory.from(0);
-        let dollarVolume = this.vMCTX.DataTypes.hFactory.from(0);
+        let volume = this.vmctx.DataTypes.hFactory.from(0);
+        let dollarVolume = this.vmctx.DataTypes.hFactory.from(0);
         for (const maker of orderbook[secretary_like_1.Side.invert($taker.side)])
             if (($taker.side === secretary_like_1.Side.BID && $taker.price.gte(maker.price) ||
                 $taker.side === secretary_like_1.Side.ASK && $taker.price.lte(maker.price)) && $taker.unfilled.gt(0)) {
-                const quantity = this.vMCTX.DataTypes.H.min($taker.unfilled, maker.quantity);
+                const quantity = this.vmctx.DataTypes.H.min($taker.unfilled, maker.quantity);
                 this.book.decQuantity(maker.side, maker.price, quantity);
                 $taker.filled = $taker.filled.plus(quantity);
                 $taker.unfilled = $taker.unfilled.minus(quantity);
                 volume = volume.plus(quantity);
                 dollarVolume = dollarVolume
                     .plus(this.marketSpec.dollarVolume(maker.price, quantity));
-                trades.push(this.vMCTX.DataTypes.tradeFactory.create({
+                trades.push(this.vmctx.DataTypes.tradeFactory.create({
                     side: $taker.side,
                     price: maker.price,
                     quantity,
-                    time: this.vMCTX.timeline.now(),
+                    time: this.vmctx.timeline.now(),
                     id: ++this.progress.userTradeCount,
                 }));
             }
@@ -64,7 +64,7 @@ let Matcher = class Matcher {
     }
 };
 Matcher = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),

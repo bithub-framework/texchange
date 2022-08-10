@@ -14,8 +14,8 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
-    constructor(vMCTX, book, progress, makers, broadcast, calculator, matcher) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, book, progress, makers, broadcast, calculator, matcher) {
+        this.vmctx = vmctx;
         this.book = book;
         this.progress = progress;
         this.makers = makers;
@@ -24,7 +24,7 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
         this.matcher = matcher;
     }
     updateOrderbook(orderbook) {
-        assert(orderbook.time === this.vMCTX.timeline.now());
+        assert(orderbook.time === this.vmctx.timeline.now());
         this.progress.updateDatabaseOrderbook(orderbook);
         this.book.setBasebook(orderbook);
         const orders = [...this.makers];
@@ -32,9 +32,9 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
             this.makers.removeOrder(order.id);
         const allTrades = [];
         for (const order of orders) {
-            const $order = this.vMCTX.DataTypes.openOrderFactory.create(order);
+            const $order = this.vmctx.DataTypes.openOrderFactory.create(order);
             const trades = this.matcher.$match($order);
-            const maker = this.vMCTX.DataTypes.openOrderFactory.create($order);
+            const maker = this.vmctx.DataTypes.openOrderFactory.create($order);
             const behind = this.book.lineUp(maker);
             this.makers.appendOrder(maker, behind);
             allTrades.push(...trades);
@@ -48,7 +48,7 @@ let UseCaseUpdateOrderbook = class UseCaseUpdateOrderbook {
     }
 };
 UseCaseUpdateOrderbook = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.book)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.progress)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),

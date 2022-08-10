@@ -15,9 +15,9 @@ const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/default/types");
 // 默认以最新价格作为结算价。
 let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
-    constructor(vMCTX, settlementPrice) {
+    constructor(vmctx, settlementPrice) {
         super();
-        this.vMCTX = vMCTX;
+        this.vmctx = vmctx;
         this.settlementPrice = settlementPrice;
     }
     updateTrades(trades) {
@@ -27,14 +27,14 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
         return this.settlementPrice;
     }
     capture() {
-        return this.vMCTX.DataTypes.hFactory.capture(this.settlementPrice);
+        return this.vmctx.DataTypes.hFactory.capture(this.settlementPrice);
     }
     restore(snapshot) {
-        this.settlementPrice = this.vMCTX.DataTypes.hFactory.restore(snapshot);
+        this.settlementPrice = this.vmctx.DataTypes.hFactory.restore(snapshot);
     }
 };
 DefaultPricing = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.initialSettlementPrice))
 ], DefaultPricing);
 exports.DefaultPricing = DefaultPricing;

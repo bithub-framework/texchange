@@ -35,7 +35,7 @@ import { LatencyConfig as DelayConfig } from '../../facades.d/latency-config';
 
 
 export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.vMCTX]: () => VirtualMachineContextLike<H>;
+	public [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
 
 	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
@@ -60,7 +60,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		initialSettlementPrice: H,
 	) {
 		super();
-		this[TYPES.vMCTX] = this.rv(vmctx);
+		this[TYPES.vmctx] = this.rv(vmctx);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
 		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}

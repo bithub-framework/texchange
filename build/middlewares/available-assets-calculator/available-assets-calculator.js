@@ -14,8 +14,8 @@ const secretary_like_1 = require("secretary-like");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../../injection/types");
 let AvailableAssetsCalculator = class AvailableAssetsCalculator {
-    constructor(vMCTX, marketSpec, marginAssets, makers) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marketSpec, marginAssets, makers) {
+        this.vmctx = vmctx;
         this.marketSpec = marketSpec;
         this.marginAssets = marginAssets;
         this.makers = makers;
@@ -28,7 +28,7 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
     getClosable() {
         const totalFrozen = this.makers.getTotalFrozen();
         const position = this.marginAssets.getPosition();
-        return this.vMCTX.DataTypes.positionFactory.create({
+        return this.vmctx.DataTypes.positionFactory.create({
             [secretary_like_1.Length.LONG]: position[secretary_like_1.Length.LONG]
                 .minus(totalFrozen.position[secretary_like_1.Length.LONG]),
             [secretary_like_1.Length.SHORT]: position[secretary_like_1.Length.SHORT]
@@ -36,22 +36,22 @@ let AvailableAssetsCalculator = class AvailableAssetsCalculator {
         });
     }
     getBalances() {
-        return this.vMCTX.DataTypes.balancesFactory.create({
+        return this.vmctx.DataTypes.balancesFactory.create({
             balance: this.marginAssets.getBalance(),
             available: this.getAvailable(),
-            time: this.vMCTX.timeline.now(),
+            time: this.vmctx.timeline.now(),
         });
     }
     getPositions() {
-        return this.vMCTX.DataTypes.positionsFactory.create({
+        return this.vmctx.DataTypes.positionsFactory.create({
             position: this.marginAssets.getPosition(),
             closable: this.getClosable(),
-            time: this.vMCTX.timeline.now(),
+            time: this.vmctx.timeline.now(),
         });
     }
 };
 AvailableAssetsCalculator = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.MODELS.marginAssets)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers))

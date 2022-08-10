@@ -15,8 +15,8 @@ const assert = require("assert");
 const injektor_1 = require("@zimtsui/injektor");
 const types_1 = require("../injection/types");
 let OrderValidator = class OrderValidator {
-    constructor(vMCTX, marketSpec, accountSpec, makers, calculator) {
-        this.vMCTX = vMCTX;
+    constructor(vmctx, marketSpec, accountSpec, makers, calculator) {
+        this.vmctx = vmctx;
         this.marketSpec = marketSpec;
         this.accountSpec = accountSpec;
         this.makers = makers;
@@ -28,7 +28,7 @@ let OrderValidator = class OrderValidator {
     }
     validateQuantity(order) {
         const closable = this.calculator.getClosable();
-        this.makers.appendOrder(order, this.vMCTX.DataTypes.hFactory.from(0));
+        this.makers.appendOrder(order, this.vmctx.DataTypes.hFactory.from(0));
         try {
             const enoughPosition = closable[secretary_like_1.Length.LONG].gte(0) &&
                 closable[secretary_like_1.Length.SHORT].gte(0);
@@ -52,7 +52,7 @@ let OrderValidator = class OrderValidator {
     }
 };
 OrderValidator = __decorate([
-    __param(0, (0, injektor_1.inject)(types_1.TYPES.vMCTX)),
+    __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
     __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.makers)),

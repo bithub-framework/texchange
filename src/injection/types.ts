@@ -45,7 +45,7 @@ export class TYPES {
 	public static readonly marketSpec = Symbol('marketSpec');
 	public static readonly accountSpec = Symbol('accountSpec');
 
-	public static readonly vMCTX = Symbol('virtualMachineContext');
+	public static readonly vmctx = Symbol('virtualMachineContext');
 
 	public static readonly MODELS = MODELS;
 

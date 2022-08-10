@@ -16,8 +16,8 @@ export class Progress<H extends HLike<H>>
     private latestDatabaseOrderbookId: DatabaseOrderbookId | null = null;
 
     public constructor(
-        @inject(TYPES.vMCTX)
-        private vMCTX: VirtualMachineContextLike<H>,
+        @inject(TYPES.vmctx)
+        private vmctx: VirtualMachineContextLike<H>,
     ) { }
 
     public updateDatabaseTrades(trades: DatabaseTrade<H>[]): void {
