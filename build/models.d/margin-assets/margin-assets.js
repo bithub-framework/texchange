@@ -42,16 +42,16 @@ let MarginAssets = class MarginAssets {
             .div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
         this.$margin[length] = this.$margin[length]
             .minus(decrement);
-        this.assets.close({ length, volume, dollarVolume });
+        return this.assets.close({ length, volume, dollarVolume });
     }
     capture() {
         return {
-            assets: this.assets.capture(),
+            creditAssets: this.assets.capture(),
             margin: this.marginFactory.capture(this.$margin),
         };
     }
     restore(snapshot) {
-        this.assets.restore(snapshot.assets);
+        this.assets.restore(snapshot.creditAssets);
         this.$margin = this.marginFactory.restore(snapshot.margin);
     }
     getPosition() {
@@ -71,7 +71,7 @@ MarginAssets = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
     __param(1, (0, injektor_1.inject)(types_1.TYPES.marketSpec)),
     __param(2, (0, injektor_1.inject)(types_1.TYPES.accountSpec)),
-    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.assets))
+    __param(3, (0, injektor_1.inject)(types_1.TYPES.MODELS.creditAssets))
 ], MarginAssets);
 exports.MarginAssets = MarginAssets;
 //# sourceMappingURL=margin-assets.js.map

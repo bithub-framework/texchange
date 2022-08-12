@@ -9,12 +9,14 @@ import { VirtualMachineContextLike } from '../../../vmctx';
 import assert = require('assert');
 import { StatefulLike } from '../../../stateful-like';
 import { Executed } from '../../../data-types/executed';
+import { CreditAssetsLike } from './credit-assets-like';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../../injection/types';
 
 
-export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot> {
+export class CreditAssets<H extends HLike<H>>
+    implements CreditAssetsLike<H>, StatefulLike<CreditAssets.Snapshot> {
     private Cost = new CostFactory<H>(this.vmctx.DataTypes.hFactory);
 
     private $position: Position<H>;
@@ -50,7 +52,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         return this.Cost.copy(this.$cost);
     }
 
-    public capture(): Assets.Snapshot {
+    public capture(): CreditAssets.Snapshot {
         return {
             position: this.vmctx.DataTypes.positionFactory.capture(this.$position),
             cost: this.Cost.capture(this.$cost),
@@ -58,7 +60,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
         };
     }
 
-    public restore(snapshot: Assets.Snapshot): void {
+    public restore(snapshot: CreditAssets.Snapshot): void {
         this.balance = this.vmctx.DataTypes.hFactory.restore(snapshot.balance);
         this.$position = this.vmctx.DataTypes.positionFactory.restore(snapshot.position);
         this.$cost = this.Cost.restore(snapshot.cost);
@@ -121,7 +123,7 @@ export class Assets<H extends HLike<H>> implements StatefulLike<Assets.Snapshot>
     }
 }
 
-export namespace Assets {
+export namespace CreditAssets {
     export interface Snapshot {
         position: Position.Snapshot;
         balance: H.Snapshot;

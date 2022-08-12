@@ -1,6 +1,6 @@
 declare class MODELS {
     static readonly initialBalance: unique symbol;
-    static readonly assets: unique symbol;
+    static readonly creditAssets: unique symbol;
     static readonly marginAssets: unique symbol;
     static readonly book: unique symbol;
     static readonly progress: unique symbol;

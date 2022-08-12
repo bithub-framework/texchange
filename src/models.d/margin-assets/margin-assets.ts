@@ -8,16 +8,18 @@ import {
 import { Executed } from '../../data-types/executed';
 import { VirtualMachineContextLike } from '../../vmctx';
 import { StatefulLike } from '../../stateful-like';
-import { Assets } from './assets/assets';
+import { CreditAssets } from './credit-assets/credit-assets';
 import { Margin, MarginFactory } from './margin';
-import { Cost } from './assets/cost';
+import { Cost } from './credit-assets/cost';
+import { CreditAssetsLike } from './credit-assets/credit-assets-like';
 
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../../injection/default/types';
 
 
 
-export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<MarginAssets.Snapshot> {
+export abstract class MarginAssets<H extends HLike<H>>
+	implements CreditAssetsLike<H>, StatefulLike<MarginAssets.Snapshot> {
 	protected marginFactory: MarginFactory<H>;
 	protected $margin: Margin<H>;
 
@@ -28,8 +30,8 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		protected marketSpec: MarketSpec<H>,
 		@inject(TYPES.accountSpec)
 		protected accountSpec: AccountSpec,
-		@inject(TYPES.MODELS.assets)
-		protected assets: Assets<H>,
+		@inject(TYPES.MODELS.creditAssets)
+		protected assets: CreditAssets<H>,
 	) {
 		this.marginFactory = new MarginFactory<H>(vmctx.DataTypes.hFactory);
 		this.$margin = {
@@ -54,7 +56,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 		length,
 		volume,
 		dollarVolume,
-	}: Executed<H>): void {
+	}: Executed<H>): H {
 		if (volume.eq(this.assets.getPosition()[length])) {
 			this.$margin[length] = this.vmctx.DataTypes.hFactory.from(0);
 		}
@@ -63,7 +65,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 			.div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
 		this.$margin[length] = this.$margin[length]
 			.minus(decrement);
-		this.assets.close({ length, volume, dollarVolume });
+		return this.assets.close({ length, volume, dollarVolume });
 	}
 
 	public abstract getFinalMargin(): H;
@@ -71,19 +73,19 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 	public abstract settle(
 		length: Length,
 		settlementPrice: H,
-	): void;
+	): H;
 
 	public abstract assertEnoughBalance(): void;
 
 	public capture(): MarginAssets.Snapshot {
 		return {
-			assets: this.assets.capture(),
+			creditAssets: this.assets.capture(),
 			margin: this.marginFactory.capture(this.$margin),
 		};
 	}
 
 	public restore(snapshot: MarginAssets.Snapshot): void {
-		this.assets.restore(snapshot.assets);
+		this.assets.restore(snapshot.creditAssets);
 		this.$margin = this.marginFactory.restore(snapshot.margin);
 	}
 
@@ -106,7 +108,7 @@ export abstract class MarginAssets<H extends HLike<H>> implements StatefulLike<M
 
 export namespace MarginAssets {
 	export interface Snapshot {
-		assets: Assets.Snapshot;
+		creditAssets: CreditAssets.Snapshot;
 		margin: Margin.Snapshot;
 	}
 }

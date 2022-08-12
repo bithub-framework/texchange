@@ -4,7 +4,7 @@ import { TYPES } from './types';
 import { VirtualMachineContextLike } from '../vmctx';
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
-import { Assets } from '../models.d/margin-assets/assets/assets';
+import { CreditAssets } from '../models.d/margin-assets/credit-assets/credit-assets';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets/margin-assets';
@@ -37,7 +37,7 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     abstract [TYPES.MODELS.initialBalance]: () => H;
     abstract [TYPES.MODELS.makers]: () => Makers<H>;
     abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
-    [TYPES.MODELS.assets]: () => Assets<H>;
+    [TYPES.MODELS.creditAssets]: () => CreditAssets<H>;
     abstract [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
     [TYPES.MODELS.book]: () => Book<H>;
     [TYPES.MODELS.progress]: () => Progress<H>;

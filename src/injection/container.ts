@@ -12,7 +12,7 @@ import { VirtualMachineContextLike } from '../vmctx';
 // Models
 import { Makers } from '../models.d/makers/makers';
 import { Pricing } from '../models.d/pricing/pricing';
-import { Assets } from '../models.d/margin-assets/assets/assets';
+import { CreditAssets } from '../models.d/margin-assets/credit-assets/credit-assets';
 import { Book } from '../models.d/book';
 import { Progress } from '../models.d/progress';
 import { MarginAssets } from '../models.d/margin-assets/margin-assets';
@@ -63,7 +63,7 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public abstract [TYPES.MODELS.initialBalance]: () => H;
 	public abstract [TYPES.MODELS.makers]: () => Makers<H>;
 	public abstract [TYPES.MODELS.pricing]: () => Pricing<H, any>;
-	public [TYPES.MODELS.assets] = this.rcs<Assets<H>>(Assets);
+	public [TYPES.MODELS.creditAssets] = this.rcs<CreditAssets<H>>(CreditAssets);
 	public abstract [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
 	public [TYPES.MODELS.book] = this.rcs<Book<H>>(Book);
 	public [TYPES.MODELS.progress] = this.rcs<Progress<H>>(Progress);

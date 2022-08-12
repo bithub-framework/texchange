@@ -16,6 +16,7 @@ let DefaultMarginAssets = class DefaultMarginAssets extends margin_assets_1.Marg
     settle(length, settlementPrice) {
         const profit = this.assets.settle(length, settlementPrice);
         this.$margin[length] = this.$margin[length].plus(profit);
+        return profit;
     }
     // public settle(
     // 	length: Length,

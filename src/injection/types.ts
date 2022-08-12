@@ -1,6 +1,6 @@
 class MODELS {
 	public static readonly initialBalance = Symbol('initialBalance');
-	public static readonly assets = Symbol('assets');
+	public static readonly creditAssets = Symbol('creditAssets');
 	public static readonly marginAssets = Symbol('marginAssets');
 	public static readonly book = Symbol('book');
 	public static readonly progress = Symbol('progress');

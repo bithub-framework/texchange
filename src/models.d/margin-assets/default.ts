@@ -14,12 +14,13 @@ export class DefaultMarginAssets<H extends HLike<H>> extends MarginAssets<H> {
 	public settle(
 		length: Length,
 		settlementPrice: H,
-	): void {
+	): H {
 		const profit = this.assets.settle(
 			length,
 			settlementPrice,
 		);
 		this.$margin[length] = this.$margin[length].plus(profit);
+		return profit;
 	}
 
 	// public settle(

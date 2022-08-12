@@ -4,7 +4,7 @@ exports.TYPES = exports.FACADES = void 0;
 class MODELS {
 }
 MODELS.initialBalance = Symbol('initialBalance');
-MODELS.assets = Symbol('assets');
+MODELS.creditAssets = Symbol('creditAssets');
 MODELS.marginAssets = Symbol('marginAssets');
 MODELS.book = Symbol('book');
 MODELS.progress = Symbol('progress');
