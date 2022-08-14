@@ -35,7 +35,7 @@ let DefaultPricing = class DefaultPricing extends pricing_1.Pricing {
 };
 DefaultPricing = __decorate([
     __param(0, (0, injektor_1.inject)(types_1.TYPES.vmctx)),
-    __param(1, (0, injektor_1.inject)(types_1.TYPES.initialSettlementPrice))
+    __param(1, (0, injektor_1.inject)(types_1.TYPES.MODELS.initialSettlementPrice))
 ], DefaultPricing);
 exports.DefaultPricing = DefaultPricing;
 //# sourceMappingURL=default.js.map

@@ -15,6 +15,7 @@ export declare class Container<H extends HLike<H>> extends BaseContainer<H> {
     [TYPES.MODELS.initialBalance]: () => H;
     [TYPES.MODELS.makers]: () => Makers<H>;
     [TYPES.MODELS.pricing]: () => Pricing<H, any>;
+    [TYPES.MODELS.initialSettlementPrice]: () => H;
     [TYPES.MODELS.marginAssets]: () => MarginAssets<H>;
     [TYPES.MIDDLEWARES.availableAssetsCalculator]: () => AvailableAssetsCalculator<H>;
     [TYPES.mtm]: () => Mtm<H> | null;

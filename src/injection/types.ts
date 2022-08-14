@@ -1,4 +1,4 @@
-class MODELS {
+export class MODELS {
 	public static readonly initialBalance = Symbol('initialBalance');
 	public static readonly creditAssets = Symbol('creditAssets');
 	public static readonly marginAssets = Symbol('marginAssets');
@@ -9,7 +9,7 @@ class MODELS {
 }
 
 
-class MIDDLEWARES {
+export class MIDDLEWARES {
 	public static readonly broadcast = Symbol('broadcast');
 	public static readonly availableAssetsCalculator = Symbol('availableAssetsCalculator');
 	public static readonly databaseTradeHandler = Symbol('databaseTradeHandler');
@@ -18,7 +18,7 @@ class MIDDLEWARES {
 }
 
 
-class USE_CASES {
+export class USE_CASES {
 	public static readonly makeOrder = Symbol('makeOrder');
 	public static readonly cancelOrder = Symbol('cancelOrder');
 	public static readonly amendOrder = Symbol('amendOrder');

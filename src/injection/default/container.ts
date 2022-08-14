@@ -43,6 +43,7 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
+	public [TYPES.MODELS.initialSettlementPrice]: () => H;
 	public [TYPES.MODELS.marginAssets] = this.rcs<MarginAssets<H>>(DefaultMarginAssets);
 
 	public [TYPES.MIDDLEWARES.availableAssetsCalculator] = this.rcs<AvailableAssetsCalculator<H>>(DefaultAvailableAssetsCalculator);
@@ -62,6 +63,6 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		super();
 		this[TYPES.vmctx] = this.rv(vmctx);
 		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
-		this[TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
+		this[TYPES.MODELS.initialSettlementPrice] = this.rv(initialSettlementPrice);
 	}
 }

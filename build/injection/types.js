@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TYPES = exports.FACADES = void 0;
+exports.TYPES = exports.FACADES = exports.USE_CASES = exports.MIDDLEWARES = exports.MODELS = void 0;
 class MODELS {
 }
+exports.MODELS = MODELS;
 MODELS.initialBalance = Symbol('initialBalance');
 MODELS.creditAssets = Symbol('creditAssets');
 MODELS.marginAssets = Symbol('marginAssets');
@@ -12,6 +13,7 @@ MODELS.pricing = Symbol('pricing');
 MODELS.makers = Symbol('makers');
 class MIDDLEWARES {
 }
+exports.MIDDLEWARES = MIDDLEWARES;
 MIDDLEWARES.broadcast = Symbol('broadcast');
 MIDDLEWARES.availableAssetsCalculator = Symbol('availableAssetsCalculator');
 MIDDLEWARES.databaseTradeHandler = Symbol('databaseTradeHandler');
@@ -19,6 +21,7 @@ MIDDLEWARES.matcher = Symbol('matcher');
 MIDDLEWARES.orderValidator = Symbol('orderValidator');
 class USE_CASES {
 }
+exports.USE_CASES = USE_CASES;
 USE_CASES.makeOrder = Symbol('makeOrder');
 USE_CASES.cancelOrder = Symbol('cancelOrder');
 USE_CASES.amendOrder = Symbol('amendOrder');

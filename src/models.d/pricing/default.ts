@@ -17,7 +17,7 @@ export class DefaultPricing<H extends HLike<H>>
 	public constructor(
 		@inject(TYPES.vmctx)
 		private vmctx: VirtualMachineContextLike<H>,
-		@inject(TYPES.initialSettlementPrice)
+		@inject(TYPES.MODELS.initialSettlementPrice)
 		private settlementPrice: H,
 	) { super(); }
 

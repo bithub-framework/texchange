@@ -27,9 +27,9 @@ class Container extends container_1.Container {
         });
         this[types_1.TYPES.vmctx] = this.rv(vmctx);
         this[types_1.TYPES.MODELS.initialBalance] = this.rv(initialBalance);
-        this[types_1.TYPES.initialSettlementPrice] = this.rv(initialSettlementPrice);
+        this[types_1.TYPES.MODELS.initialSettlementPrice] = this.rv(initialSettlementPrice);
     }
 }
 exports.Container = Container;
-types_1.TYPES.vmctx, _a = types_1.TYPES.marketSpec, _b = types_1.TYPES.accountSpec, types_1.TYPES.MODELS.initialBalance, _c = types_1.TYPES.MODELS.makers, _d = types_1.TYPES.MODELS.pricing, _e = types_1.TYPES.MODELS.marginAssets, _f = types_1.TYPES.MIDDLEWARES.availableAssetsCalculator, _g = types_1.TYPES.mtm, _h = types_1.TYPES.FACADES.config;
+types_1.TYPES.vmctx, _a = types_1.TYPES.marketSpec, _b = types_1.TYPES.accountSpec, types_1.TYPES.MODELS.initialBalance, _c = types_1.TYPES.MODELS.makers, _d = types_1.TYPES.MODELS.pricing, types_1.TYPES.MODELS.initialSettlementPrice, _e = types_1.TYPES.MODELS.marginAssets, _f = types_1.TYPES.MIDDLEWARES.availableAssetsCalculator, _g = types_1.TYPES.mtm, _h = types_1.TYPES.FACADES.config;
 //# sourceMappingURL=container.js.map

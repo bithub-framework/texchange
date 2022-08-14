@@ -1,4 +1,4 @@
-declare class MODELS {
+export declare class MODELS {
     static readonly initialBalance: unique symbol;
     static readonly creditAssets: unique symbol;
     static readonly marginAssets: unique symbol;
@@ -7,14 +7,14 @@ declare class MODELS {
     static readonly pricing: unique symbol;
     static readonly makers: unique symbol;
 }
-declare class MIDDLEWARES {
+export declare class MIDDLEWARES {
     static readonly broadcast: unique symbol;
     static readonly availableAssetsCalculator: unique symbol;
     static readonly databaseTradeHandler: unique symbol;
     static readonly matcher: unique symbol;
     static readonly orderValidator: unique symbol;
 }
-declare class USE_CASES {
+export declare class USE_CASES {
     static readonly makeOrder: unique symbol;
     static readonly cancelOrder: unique symbol;
     static readonly amendOrder: unique symbol;
@@ -44,4 +44,3 @@ export declare class TYPES {
     static readonly FACADES: typeof FACADES;
     static readonly texchange: unique symbol;
 }
-export {};
