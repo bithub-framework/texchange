@@ -1,8 +1,8 @@
-import { createStartable } from 'startable';
+import { createStartable, DaemonLike } from 'startable';
 import { HLike } from 'secretary-like';
 
 
-export abstract class Mtm<H extends HLike<H>> {
+export abstract class Mtm<H extends HLike<H>> implements DaemonLike {
     protected abstract rawStart(): Promise<void>;
     protected abstract rawStop(): Promise<void>;
     public $s = createStartable(

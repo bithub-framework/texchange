@@ -5,7 +5,7 @@ import {
 	AccountSpec,
 	ExchangeUnavailable,
 } from 'secretary-like';
-import { createStartable } from 'startable';
+import { createStartable, DaemonLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
@@ -24,7 +24,8 @@ import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
 
 
-export class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
+export class AdminFacade<H extends HLike<H>>
+	implements StatefulLike<Snapshot>, DaemonLike {
 	public $s = createStartable(
 		() => this.rawStart(),
 		() => this.rawStop(),

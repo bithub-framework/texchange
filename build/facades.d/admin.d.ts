@@ -1,5 +1,6 @@
 import { VirtualMachineContextLike } from '../vmctx';
 import { HLike, MarketSpec, AccountSpec } from 'secretary-like';
+import { DaemonLike } from 'startable';
 import { StatefulLike } from '../stateful-like';
 import { MarginAssets } from '../models.d/margin-assets';
 import { Makers } from '../models.d/makers/makers';
@@ -13,7 +14,7 @@ import { UseCaseUpdateOrderbook } from '../use-cases.d/update-orderbook';
 import { DatabaseTrade, DatabaseTradeId } from '../data-types/database-trade';
 import { UseCaseUpdateTrades } from '../use-cases.d/update-trades';
 import { UseCaseGetProgress } from '../use-cases.d/get-progress';
-export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot> {
+export declare class AdminFacade<H extends HLike<H>> implements StatefulLike<Snapshot>, DaemonLike {
     private vmctx;
     private marketSpec;
     private accountSpec;

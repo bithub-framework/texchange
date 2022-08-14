@@ -1,5 +1,6 @@
+import { DaemonLike } from 'startable';
 import { HLike } from 'secretary-like';
-export declare abstract class Mtm<H extends HLike<H>> {
+export declare abstract class Mtm<H extends HLike<H>> implements DaemonLike {
     protected abstract rawStart(): Promise<void>;
     protected abstract rawStop(): Promise<void>;
     $s: import("startable").Startable;
