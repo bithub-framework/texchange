@@ -24,11 +24,11 @@ export class CreditAssets<H extends HLike<H>>
 
     public constructor(
         @inject(TYPES.vmctx)
-        protected vmctx: VirtualMachineContextLike<H>,
+        private vmctx: VirtualMachineContextLike<H>,
         @inject(TYPES.marketSpec)
-        protected marketSpec: MarketSpec<H>,
+        private marketSpec: MarketSpec<H>,
         @inject(TYPES.MODELS.initialBalance)
-        protected balance: H,
+        private balance: H,
     ) {
         this.$position = this.vmctx.DataTypes.positionFactory.create({
             [Length.LONG]: this.vmctx.DataTypes.hFactory.from(0),

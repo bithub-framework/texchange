@@ -5,9 +5,9 @@ import { StatefulLike } from '../../../stateful-like';
 import { Executed } from '../../../data-types/executed';
 import { CreditAssetsLike } from './credit-assets-like';
 export declare class CreditAssets<H extends HLike<H>> implements CreditAssetsLike<H>, StatefulLike<CreditAssets.Snapshot> {
-    protected vmctx: VirtualMachineContextLike<H>;
-    protected marketSpec: MarketSpec<H>;
-    protected balance: H;
+    private vmctx;
+    private marketSpec;
+    private balance;
     private Cost;
     private $position;
     private $cost;
