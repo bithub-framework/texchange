@@ -30,8 +30,8 @@ const user_account_1 = require("../facades.d/user-account");
 // Texchange
 const texchange_1 = require("../texchange");
 class Container extends injektor_1.BaseContainer {
-    constructor() {
-        super(...arguments);
+    constructor(vmctx) {
+        super();
         this[_a] = this.rcs(credit_assets_1.CreditAssets);
         this[_b] = this.rcs(book_1.Book);
         this[_c] = this.rcs(progress_1.Progress);
@@ -54,6 +54,7 @@ class Container extends injektor_1.BaseContainer {
         this[_v] = this.rcs(user_account_1.UserAccountFacade);
         this[_w] = this.rcs(admin_1.AdminFacade);
         this[_x] = this.rcs(texchange_1.Texchange);
+        this[types_1.TYPES.vmctx] = this.rv(vmctx);
     }
 }
 exports.Container = Container;

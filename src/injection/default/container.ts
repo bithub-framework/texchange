@@ -2,13 +2,10 @@ import { Container as BaseContainer } from '../container';
 import { TYPES } from './types';
 import {
 	HLike,
-	TimelineLike,
 	MarketSpec,
 	AccountSpec,
 } from 'secretary-like';
 
-// Vmctx
-import { VirtualMachineContextLike } from '../../vmctx';
 
 // Spec
 import { DefaultMarketSpec } from '../../spec/default-market-spec';
@@ -34,16 +31,14 @@ import { DefaultMtm } from '../../mark-to-market/default';
 import { LatencyConfig as DelayConfig } from '../../facades.d/latency-config';
 
 
-export class Container<H extends HLike<H>> extends BaseContainer<H> {
-	public [TYPES.vmctx]: () => VirtualMachineContextLike<H>;
-
+export abstract class Container<H extends HLike<H>> extends BaseContainer<H> {
 	public [TYPES.marketSpec] = this.rcs<MarketSpec<H>>(DefaultMarketSpec);
 	public [TYPES.accountSpec] = this.rcs<AccountSpec>(DefaultAccountSpec);
 
-	public [TYPES.MODELS.initialBalance]: () => H;
+	public abstract [TYPES.MODELS.initialBalance]: () => H;
 	public [TYPES.MODELS.makers] = this.rcs<Makers<H>>(DefaultMakers);
 	public [TYPES.MODELS.pricing] = this.rcs<Pricing<H, any>>(DefaultPricing);
-	public [TYPES.MODELS.initialSettlementPrice]: () => H;
+	public abstract [TYPES.MODELS.initialSettlementPrice]: () => H;
 	public [TYPES.MODELS.marginAssets] = this.rcs<MarginAssets<H>>(DefaultMarginAssets);
 
 	public [TYPES.MIDDLEWARES.availableAssetsCalculator] = this.rcs<AvailableAssetsCalculator<H>>(DefaultAvailableAssetsCalculator);
@@ -54,15 +49,4 @@ export class Container<H extends HLike<H>> extends BaseContainer<H> {
 		ping: 20,
 		processing: 20,
 	});
-
-	public constructor(
-		vmctx: VirtualMachineContextLike<H>,
-		initialBalance: H,
-		initialSettlementPrice: H,
-	) {
-		super();
-		this[TYPES.vmctx] = this.rv(vmctx);
-		this[TYPES.MODELS.initialBalance] = this.rv(initialBalance);
-		this[TYPES.MODELS.initialSettlementPrice] = this.rv(initialSettlementPrice);
-	}
 }

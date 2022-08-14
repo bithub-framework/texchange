@@ -63,4 +63,8 @@ export declare abstract class Container<H extends HLike<H>> extends BaseContaine
     [TYPES.FACADES.userAccount]: () => UserAccountFacade<H>;
     [TYPES.FACADES.admin]: () => AdminFacade<H>;
     [TYPES.texchange]: () => Texchange<H>;
+    constructor(vmctx: VirtualMachineContextLike<H>);
+}
+export interface CreateTexchange<H extends HLike<H>> {
+    (vmctx: VirtualMachineContextLike<H>): Texchange<H>;
 }

@@ -94,4 +94,13 @@ export abstract class Container<H extends HLike<H>> extends BaseContainer {
 	public [TYPES.FACADES.admin] = this.rcs<AdminFacade<H>>(AdminFacade);
 
 	public [TYPES.texchange] = this.rcs<Texchange<H>>(Texchange);
+
+	public constructor(vmctx: VirtualMachineContextLike<H>) {
+		super();
+		this[TYPES.vmctx] = this.rv(vmctx);
+	}
+}
+
+export interface CreateTexchange<H extends HLike<H>> {
+	(vmctx: VirtualMachineContextLike<H>): Texchange<H>;
 }
