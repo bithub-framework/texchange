@@ -13,7 +13,7 @@
     "author": "Zim",
     "license": "SEE LICENSE IN ./LICENSE",
     "peerDependencies": {
-        "@zimtsui/injektor": "^0.0.9",
+        "@zimtsui/injektor": "^0.0.10",
         "secretary-like": "file:../secretary-like",
         "startable": "github:zimtsui/startable"
     },
