@@ -25,6 +25,7 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
         this.CURRENCY_SCALE = this.marketSpec.CURRENCY_SCALE;
         this.TICK_SIZE = this.marketSpec.TICK_SIZE;
         this.MARKET_NAME = this.marketSpec.MARKET_NAME;
+        this.on('error', () => { });
         this.useCaseSubscription.on('orderbook', async (orderbook) => {
             try {
                 await this.vmctx.timeline.sleep(this.config.processing);
@@ -38,6 +39,14 @@ let UserMarketFacade = class UserMarketFacade extends events_1.EventEmitter {
                 await this.vmctx.timeline.sleep(this.config.processing);
                 await this.vmctx.timeline.sleep(this.config.ping);
                 this.emit('trades', trades.map(trade => this.vmctx.DataTypes.tradeFactory.create(trade)));
+            }
+            catch (err) { }
+        });
+        this.useCaseSubscription.on('error', async (error) => {
+            try {
+                await this.vmctx.timeline.sleep(this.config.processing);
+                await this.vmctx.timeline.sleep(this.config.ping);
+                this.emit('error', error);
             }
             catch (err) { }
         });

@@ -5,6 +5,8 @@ import {
 	Orderbook,
 	Positions,
 	Balances,
+	MarketEvents,
+	AccountEvents,
 } from 'secretary-like';
 import { inject } from '@zimtsui/injektor';
 import { TYPES } from '../injection/types';
@@ -19,6 +21,7 @@ export class UseCaseSubscription<H extends HLike<H>>
 		private broadcast: Broadcast<H>,
 	) {
 		super();
+		this.on('error', () => { });
 
 		this.broadcast.on('balances', balances => this.emit('balances', balances));
 		this.broadcast.on('positions', positions => this.emit('positions', positions));
@@ -28,16 +31,9 @@ export class UseCaseSubscription<H extends HLike<H>>
 	}
 }
 
-export namespace UseCaseSubscription {
-	export interface Events<H extends HLike<H>> {
-		trades: [readonly Trade<H>[]];
-		orderbook: [Orderbook<H>];
-		positions: [Positions<H>];
-		balances: [Balances<H>];
-		error: [Error];
-	}
+export interface Events<H extends HLike<H>>
+	extends MarketEvents<H>, AccountEvents<H> {
 }
-import Events = UseCaseSubscription.Events;
 
 export interface UseCaseSubscription<H extends HLike<H>> extends EventEmitter {
 	on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

@@ -17,6 +17,7 @@ let UseCaseSubscription = class UseCaseSubscription extends events_1.EventEmitte
     constructor(broadcast) {
         super();
         this.broadcast = broadcast;
+        this.on('error', () => { });
         this.broadcast.on('balances', balances => this.emit('balances', balances));
         this.broadcast.on('positions', positions => this.emit('positions', positions));
         this.broadcast.on('trades', trades => this.emit('trades', trades));

@@ -27,6 +27,7 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
         this.LEVERAGE = this.accountSpec.LEVERAGE;
         this.TAKER_FEE_RATE = this.accountSpec.TAKER_FEE_RATE;
         this.MAKER_FEE_RATE = this.accountSpec.MAKER_FEE_RATE;
+        this.on('error', () => { });
         this.useCaseSubscription.on('positions', async (positions) => {
             try {
                 await this.vmctx.timeline.sleep(this.config.processing);
@@ -40,6 +41,14 @@ let UserAccountFacade = class UserAccountFacade extends events_1.EventEmitter {
                 await this.vmctx.timeline.sleep(this.config.processing);
                 await this.vmctx.timeline.sleep(this.config.ping);
                 this.emit('balances', this.vmctx.DataTypes.balancesFactory.create(balances));
+            }
+            catch (err) { }
+        });
+        this.useCaseSubscription.on('error', async (error) => {
+            try {
+                await this.vmctx.timeline.sleep(this.config.processing);
+                await this.vmctx.timeline.sleep(this.config.ping);
+                this.emit('error', error);
             }
             catch (err) { }
         });

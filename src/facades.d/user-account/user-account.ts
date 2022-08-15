@@ -49,6 +49,7 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 		private config: LatencyConfig,
 	) {
 		super();
+		this.on('error', () => { });
 
 		this.useCaseSubscription.on('positions', async positions => {
 			try {
@@ -63,6 +64,14 @@ export class UserAccountFacade<H extends HLike<H>> extends EventEmitter implemen
 				await this.vmctx.timeline.sleep(this.config.processing);
 				await this.vmctx.timeline.sleep(this.config.ping);
 				this.emit('balances', this.vmctx.DataTypes.balancesFactory.create(balances));
+			} catch (err) { }
+		});
+
+		this.useCaseSubscription.on('error', async error => {
+			try {
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('error', error);
 			} catch (err) { }
 		});
 	}

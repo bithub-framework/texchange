@@ -8,18 +8,20 @@ import {
 } from 'secretary-like';
 
 
-export class Broadcast<H extends HLike<H>> extends EventEmitter { }
-
-export namespace Broadcast {
-	export interface Events<H extends HLike<H>> {
-		trades: [Trade<H>[]];
-		orderbook: [Orderbook<H>];
-		positions: [Positions<H>];
-		balances: [Balances<H>];
-		error: [Error];
+export class Broadcast<H extends HLike<H>> extends EventEmitter {
+	public constructor() {
+		super();
+		this.on('error', () => { });
 	}
 }
-import Events = Broadcast.Events;
+
+export interface Events<H extends HLike<H>> {
+	trades: [Trade<H>[]];
+	orderbook: [Orderbook<H>];
+	positions: [Positions<H>];
+	balances: [Balances<H>];
+	error: [Error];
+}
 
 export interface Broadcast<H extends HLike<H>> extends EventEmitter {
 	on<Event extends keyof Events<H>>(event: Event, listener: (...args: Events<H>[Event]) => void): this;

@@ -1,1 +1,1 @@
-{"version":3,"file":"broadcast.js","sourceRoot":"","sources":["../../src/middlewares/broadcast.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAUtC,MAAa,SAA8B,SAAQ,qBAAY;CAAI;AAAnE,8BAAmE"}
+{"version":3,"file":"broadcast.js","sourceRoot":"","sources":["../../src/middlewares/broadcast.ts"],"names":[],"mappings":";;;AAAA,mCAAsC;AAUtC,MAAa,SAA8B,SAAQ,qBAAY;IAC9D;QACC,KAAK,EAAE,CAAC;QACR,IAAI,CAAC,EAAE,CAAC,OAAO,EAAE,GAAG,EAAE,GAAG,CAAC,CAAC,CAAC;IAC7B,CAAC;CACD;AALD,8BAKC"}

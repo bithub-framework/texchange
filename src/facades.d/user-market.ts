@@ -38,6 +38,7 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 		private config: LatencyConfig,
 	) {
 		super();
+		this.on('error', () => { });
 
 		this.useCaseSubscription.on('orderbook', async orderbook => {
 			try {
@@ -52,6 +53,14 @@ export class UserMarketFacade<H extends HLike<H>> extends EventEmitter implement
 				await this.vmctx.timeline.sleep(this.config.processing);
 				await this.vmctx.timeline.sleep(this.config.ping);
 				this.emit('trades', trades.map(trade => this.vmctx.DataTypes.tradeFactory.create(trade)));
+			} catch (err) { }
+		});
+
+		this.useCaseSubscription.on('error', async error => {
+			try {
+				await this.vmctx.timeline.sleep(this.config.processing);
+				await this.vmctx.timeline.sleep(this.config.ping);
+				this.emit('error', error);
 			} catch (err) { }
 		});
 	}
