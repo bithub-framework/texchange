@@ -35,12 +35,12 @@ export class OrderValidator<H extends HLike<H>> {
 	}
 
 	private validateQuantity(order: OpenOrder<H>): void {
-		const closable = this.calculator.getClosable();
 		this.makers.appendOrder(
 			order,
 			this.vmctx.DataTypes.hFactory.from(0),
 		);
 		try {
+			const closable = this.calculator.getClosable();
 			const enoughPosition =
 				closable[Length.LONG].gte(0) &&
 				closable[Length.SHORT].gte(0);

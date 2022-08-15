@@ -60,9 +60,11 @@ export abstract class MarginAssets<H extends HLike<H>>
 		if (volume.eq(this.assets.getPosition()[length])) {
 			this.$margin[length] = this.vmctx.DataTypes.hFactory.from(0);
 		}
-		const decrement = this.$margin[length]
-			.times(volume)
-			.div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
+		const decrement = volume.eq(0)
+			? this.vmctx.DataTypes.hFactory.from(0)
+			: this.$margin[length]
+				.times(volume)
+				.div(this.assets.getPosition()[length], this.marketSpec.CURRENCY_SCALE);
 		this.$margin[length] = this.$margin[length]
 			.minus(decrement);
 		return this.assets.close({ length, volume, dollarVolume });
